@@ -1,6 +1,8 @@
 import type { Aquarium } from "@/types/aquarium";
+import type { WaterParameters } from "@/types/aquarium";
 
 const STORAGE_KEY = "aquamind:aquariums:v1";
+const WATER_STORAGE_KEY = "aquamind:water-readings:v1";
 
 export function loadAquariums(fallback: Aquarium[]): Aquarium[] {
   if (typeof window === "undefined") return fallback;
@@ -14,6 +16,18 @@ export function loadAquariums(fallback: Aquarium[]): Aquarium[] {
 
 export function saveAquariums(aquariums: Aquarium[]) {
   window.localStorage.setItem(STORAGE_KEY, JSON.stringify(aquariums));
+}
+
+export function loadWaterReadings(fallback: WaterParameters[]): WaterParameters[] {
+  if (typeof window === "undefined") return fallback;
+  try {
+    const saved = window.localStorage.getItem(WATER_STORAGE_KEY);
+    return saved ? (JSON.parse(saved) as WaterParameters[]) : fallback;
+  } catch { return fallback; }
+}
+
+export function saveWaterReadings(readings: WaterParameters[]) {
+  window.localStorage.setItem(WATER_STORAGE_KEY, JSON.stringify(readings));
 }
 
 export function calculateGrossVolume(lengthCm: number, widthCm: number, heightCm: number) {

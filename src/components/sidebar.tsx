@@ -1,7 +1,7 @@
 import { Box, Calculator, CalendarCheck, Droplets, Fish, Gauge, Leaf, Settings, SlidersHorizontal, Waves } from "lucide-react";
 
 const items = [
-  [Gauge, "Genel Bakış", "/"], [Box, "Akvaryumlarım", "/aquariums"], [Droplets, "Su Değerleri", "#"],
+  [Gauge, "Genel Bakış", "/"], [Box, "Akvaryumlarım", "/aquariums"], [Droplets, "Su Değerleri", "/water"],
   [CalendarCheck, "Bakım Günlüğü", "#"], [Fish, "Canlılar", "#"], [Leaf, "Bitkiler", "#"],
   [SlidersHorizontal, "Ekipmanlar", "#"], [Calculator, "Hesaplayıcılar", "#"],
 ] as const;

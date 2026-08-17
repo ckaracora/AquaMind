@@ -4,7 +4,7 @@ import { useParams } from "next/navigation";
 import { Activity, ArrowLeft, CalendarDays, ChevronRight, Droplets, Fish, Leaf, Pencil, Plus, Ruler, SlidersHorizontal, Thermometer } from "lucide-react";
 import { AppShell } from "@/components/app-shell";
 import { PageHeader } from "@/components/page-header";
-import { equipment, livestock, maintenanceTasks, plants, waterReadings } from "@/data/mock-data";
+import { equipment, livestock, maintenanceTasks, plants } from "@/data/mock-data";
 import { calculateGrossVolume } from "@/lib/aquarium-storage";
 import { useAquariums } from "@/providers/aquarium-provider";
 
@@ -13,7 +13,7 @@ const tabs = ["Genel Bakış", "Su Değerleri", "Bakım", "Canlılar", "Bitkiler
 
 export default function AquariumDetailPage() {
   const { id } = useParams<{ id: string }>();
-  const { aquariums, hydrated } = useAquariums();
+  const { aquariums, hydrated, waterReadings } = useAquariums();
   const aquarium = aquariums.find((item) => item.id === id);
 
   if (!hydrated) return <AppShell><PageHeader title="Akvaryum Detayı"/><div className="grid min-h-[60vh] place-items-center text-sm text-[#71858d]">Akvaryum yükleniyor…</div></AppShell>;
@@ -39,7 +39,7 @@ export default function AquariumDetailPage() {
 
     <div className="grid gap-5 xl:grid-cols-[1.4fr_.85fr]">
       <div className="space-y-5">
-        <section className="surface p-5 sm:p-6"><div className="mb-5 flex items-center justify-between"><div><p className="eyebrow">Anlık durum</p><h2 className="mt-1 text-lg font-extrabold">Son su değerleri</h2></div><a href="#" className="flex items-center gap-1 text-[10px] font-bold text-aqua">Tümünü gör<ChevronRight size={13}/></a></div>
+        <section className="surface p-5 sm:p-6"><div className="mb-5 flex items-center justify-between"><div><p className="eyebrow">Anlık durum</p><h2 className="mt-1 text-lg font-extrabold">Son su değerleri</h2></div><a href={`/water?aquarium=${id}`} className="flex items-center gap-1 text-[10px] font-bold text-aqua">Tümünü gör<ChevronRight size={13}/></a></div>
           {latest ? <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">{[
             [Thermometer, "Sıcaklık", `${latest.temperature}°C`, "İdeal"], [Activity, "pH", `${latest.ph}`, "Dengeli"], [Droplets, "TDS", `${latest.tds} ppm`, "Normal"], [Activity, "NO₃", `${latest.nitrate} ppm`, "Güvenli"],
           ].map(([Icon, label, value, status]) => { const ParameterIcon = Icon as typeof Thermometer; return <div key={String(label)} className="rounded-xl border border-white/[.06] bg-white/[.02] p-4"><div className="mb-5 flex justify-between"><span className="grid size-8 place-items-center rounded-lg bg-aqua/10 text-aqua"><ParameterIcon size={16}/></span><span className="text-[8px] font-extrabold uppercase text-emerald-400">{String(status)}</span></div><p className="text-[10px] font-bold text-[#647981]">{String(label)}</p><p className="mt-1 text-lg font-extrabold">{String(value)}</p></div>})}</div> : <EmptyLine text="Henüz su ölçümü eklenmemiş."/>}
