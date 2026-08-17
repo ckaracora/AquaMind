@@ -58,6 +58,7 @@ export interface Livestock {
   addedAt: string;
   notes?: string;
   imageUrl?: string;
+  catalogId?: string;
 }
 
 export interface Plant {
@@ -81,4 +82,5 @@ export interface Equipment {
   installedAt: string;
   specifications?: string;
   notes?: string;
+  catalogId?: string;
 }

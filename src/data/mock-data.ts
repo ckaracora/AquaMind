@@ -25,9 +25,9 @@ export const maintenanceTasks: MaintenanceTask[] = [
 ];
 
 export const livestock: Livestock[] = [
-  { id: "l1", aquariumId: "aqua-1", commonName: "Neon tetra", scientificName: "Paracheirodon innesi", category: "fish", quantity: 16, gender: "mixed", addedAt: "2024-03-28" },
-  { id: "l2", aquariumId: "aqua-1", commonName: "Cüce vatoz", scientificName: "Ancistrus sp.", category: "fish", quantity: 2, gender: "mixed", addedAt: "2024-04-02" },
-  { id: "l3", aquariumId: "aqua-1", commonName: "Amano karides", scientificName: "Caridina multidentata", category: "shrimp", quantity: 6, gender: "unknown", addedAt: "2024-04-12" },
+  { id: "l1", aquariumId: "aqua-1", commonName: "Neon tetra", scientificName: "Paracheirodon innesi", category: "fish", quantity: 16, gender: "mixed", addedAt: "2024-03-28", catalogId:"neon-tetra" },
+  { id: "l2", aquariumId: "aqua-1", commonName: "Cüce vatoz", scientificName: "Ancistrus sp.", category: "fish", quantity: 2, gender: "mixed", addedAt: "2024-04-02", catalogId:"ancistrus" },
+  { id: "l3", aquariumId: "aqua-1", commonName: "Amano karides", scientificName: "Caridina multidentata", category: "shrimp", quantity: 6, gender: "unknown", addedAt: "2024-04-12", catalogId:"amano-shrimp" },
 ];
 
 export const plants: Plant[] = [
@@ -37,7 +37,7 @@ export const plants: Plant[] = [
 ];
 
 export const equipment: Equipment[] = [
-  { id: "e1", aquariumId: "aqua-1", category: "filter", brand: "Oase", model: "BioMaster 350", installedAt: "2024-03-12", specifications: "1100 L/saat" },
-  { id: "e2", aquariumId: "aqua-1", category: "lighting", brand: "Chihiros", model: "WRGB II 90", installedAt: "2024-03-12", specifications: "100 W" },
+  { id: "e1", aquariumId: "aqua-1", category: "filter", brand: "Oase", model: "BioMaster 350", installedAt: "2024-03-12", specifications: "1100 L/saat", catalogId:"oase-biomaster-350" },
+  { id: "e2", aquariumId: "aqua-1", category: "lighting", brand: "Chihiros", model: "WRGB II 90", installedAt: "2024-03-12", specifications: "100 W", catalogId:"chihiros-wrgb2-90" },
   { id: "e3", aquariumId: "aqua-1", category: "co2", brand: "ISTA", model: "2L Set", installedAt: "2024-03-18" },
 ];
