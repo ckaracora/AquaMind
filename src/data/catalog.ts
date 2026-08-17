@@ -2,6 +2,7 @@ import type { Equipment, Livestock } from "@/types/aquarium";
 
 export interface SpeciesProfile {
   id: string; commonName: string; scientificName: string; category: Livestock["category"];
+  group?: "livebearer"|"tetra"|"rasbora"|"barb"|"cichlid"|"labyrinth"|"bottom"|"monster"|"coldwater"|"shrimp"|"snail"|"other";
   adultSizeCm: number; minVolumeL: number; minTankLengthCm: number; minGroup: number;
   temperature: [number, number]; ph: [number, number]; flow: "low"|"medium"|"high"; wasteFactor: number;
 }
@@ -22,6 +23,28 @@ export const speciesCatalog: SpeciesProfile[] = [
   { id:"amano-shrimp", commonName:"Amano karides", scientificName:"Caridina multidentata", category:"shrimp", adultSizeCm:5, minVolumeL:25, minTankLengthCm:30, minGroup:4, temperature:[18,27], ph:[6,7.8], flow:"medium", wasteFactor:.25 },
   { id:"cherry-shrimp", commonName:"Kiraz karides", scientificName:"Neocaridina davidi", category:"shrimp", adultSizeCm:3, minVolumeL:15, minTankLengthCm:25, minGroup:6, temperature:[18,28], ph:[6.5,8], flow:"low", wasteFactor:.15 },
   { id:"nerite-snail", commonName:"Nerite salyangoz", scientificName:"Neritina natalensis", category:"snail", adultSizeCm:3, minVolumeL:20, minTankLengthCm:25, minGroup:1, temperature:[20,28], ph:[7,8.5], flow:"medium", wasteFactor:.4 },
+  { id:"molly", commonName:"Moli", scientificName:"Poecilia sphenops", category:"fish", group:"livebearer", adultSizeCm:10, minVolumeL:80, minTankLengthCm:70, minGroup:4, temperature:[23,28], ph:[7,8.5], flow:"medium", wasteFactor:1.4 },
+  { id:"platy", commonName:"Plati", scientificName:"Xiphophorus maculatus", category:"fish", group:"livebearer", adultSizeCm:6, minVolumeL:60, minTankLengthCm:60, minGroup:4, temperature:[20,26], ph:[7,8.2], flow:"medium", wasteFactor:1 },
+  { id:"swordtail", commonName:"Kılıçkuyruk", scientificName:"Xiphophorus hellerii", category:"fish", group:"livebearer", adultSizeCm:12, minVolumeL:100, minTankLengthCm:80, minGroup:4, temperature:[22,28], ph:[7,8.3], flow:"medium", wasteFactor:1.3 },
+  { id:"ember-tetra", commonName:"Ember tetra", scientificName:"Hyphessobrycon amandae", category:"fish", group:"tetra", adultSizeCm:2, minVolumeL:35, minTankLengthCm:45, minGroup:10, temperature:[23,29], ph:[5,7.5], flow:"low", wasteFactor:.45 },
+  { id:"rummy-nose", commonName:"Kırmızı burun tetra", scientificName:"Hemigrammus bleheri", category:"fish", group:"tetra", adultSizeCm:5, minVolumeL:80, minTankLengthCm:80, minGroup:10, temperature:[24,28], ph:[5,7.5], flow:"medium", wasteFactor:.75 },
+  { id:"harlequin-rasbora", commonName:"Harlequin rasbora", scientificName:"Trigonostigma heteromorpha", category:"fish", group:"rasbora", adultSizeCm:5, minVolumeL:60, minTankLengthCm:60, minGroup:8, temperature:[22,28], ph:[6,7.5], flow:"low", wasteFactor:.75 },
+  { id:"chili-rasbora", commonName:"Chili rasbora", scientificName:"Boraras brigittae", category:"fish", group:"rasbora", adultSizeCm:2, minVolumeL:30, minTankLengthCm:40, minGroup:10, temperature:[20,28], ph:[4,7], flow:"low", wasteFactor:.35 },
+  { id:"cherry-barb", commonName:"Kiraz barb", scientificName:"Puntius titteya", category:"fish", group:"barb", adultSizeCm:5, minVolumeL:60, minTankLengthCm:60, minGroup:8, temperature:[22,27], ph:[6,8], flow:"medium", wasteFactor:.8 },
+  { id:"tiger-barb", commonName:"Sumatra barb", scientificName:"Puntigrus tetrazona", category:"fish", group:"barb", adultSizeCm:7, minVolumeL:100, minTankLengthCm:80, minGroup:8, temperature:[20,27], ph:[6,8], flow:"medium", wasteFactor:1.1 },
+  { id:"angelfish", commonName:"Melek balığı", scientificName:"Pterophyllum scalare", category:"fish", group:"cichlid", adultSizeCm:15, minVolumeL:150, minTankLengthCm:80, minGroup:2, temperature:[24,30], ph:[6,7.5], flow:"low", wasteFactor:1.8 },
+  { id:"discus", commonName:"Diskus", scientificName:"Symphysodon aequifasciatus", category:"fish", group:"cichlid", adultSizeCm:20, minVolumeL:300, minTankLengthCm:120, minGroup:6, temperature:[28,31], ph:[5,7], flow:"low", wasteFactor:2 },
+  { id:"ramirezi", commonName:"Ramirezi", scientificName:"Mikrogeophagus ramirezi", category:"fish", group:"cichlid", adultSizeCm:7, minVolumeL:70, minTankLengthCm:60, minGroup:2, temperature:[26,30], ph:[5,7], flow:"low", wasteFactor:1 },
+  { id:"dwarf-gourami", commonName:"Cüce gurami", scientificName:"Trichogaster lalius", category:"fish", group:"labyrinth", adultSizeCm:9, minVolumeL:70, minTankLengthCm:60, minGroup:1, temperature:[24,28], ph:[6,7.5], flow:"low", wasteFactor:1.2 },
+  { id:"pearl-gourami", commonName:"İnci gurami", scientificName:"Trichopodus leerii", category:"fish", group:"labyrinth", adultSizeCm:12, minVolumeL:120, minTankLengthCm:80, minGroup:2, temperature:[24,28], ph:[6,8], flow:"low", wasteFactor:1.4 },
+  { id:"kuhli-loach", commonName:"Kuhli çöpçü", scientificName:"Pangio kuhlii", category:"fish", group:"bottom", adultSizeCm:10, minVolumeL:70, minTankLengthCm:70, minGroup:6, temperature:[24,30], ph:[5.5,7.5], flow:"low", wasteFactor:.8 },
+  { id:"clown-loach", commonName:"Makrakanta", scientificName:"Chromobotia macracanthus", category:"fish", group:"bottom", adultSizeCm:30, minVolumeL:450, minTankLengthCm:150, minGroup:5, temperature:[25,30], ph:[6,7.5], flow:"medium", wasteFactor:2.5 },
+  { id:"oscar", commonName:"Astronot", scientificName:"Astronotus ocellatus", category:"fish", group:"monster", adultSizeCm:35, minVolumeL:300, minTankLengthCm:120, minGroup:1, temperature:[23,28], ph:[6,8], flow:"medium", wasteFactor:3.5 },
+  { id:"arowana", commonName:"Gümüş arowana", scientificName:"Osteoglossum bicirrhosum", category:"fish", group:"monster", adultSizeCm:90, minVolumeL:1000, minTankLengthCm:250, minGroup:1, temperature:[24,30], ph:[6,7.5], flow:"medium", wasteFactor:5 },
+  { id:"flowerhorn", commonName:"Flowerhorn", scientificName:"Cichlasoma hybrid", category:"fish", group:"monster", adultSizeCm:35, minVolumeL:300, minTankLengthCm:120, minGroup:1, temperature:[26,30], ph:[7,8], flow:"medium", wasteFactor:3 },
+  { id:"caridina-crystal", commonName:"Crystal Red karides", scientificName:"Caridina cantonensis", category:"shrimp", group:"shrimp", adultSizeCm:3, minVolumeL:20, minTankLengthCm:30, minGroup:6, temperature:[20,24], ph:[5.5,6.8], flow:"low", wasteFactor:.15 },
+  { id:"rabbit-snail", commonName:"Tavşan salyangoz", scientificName:"Tylomelania sp.", category:"snail", group:"snail", adultSizeCm:10, minVolumeL:60, minTankLengthCm:50, minGroup:1, temperature:[24,30], ph:[7,8.5], flow:"medium", wasteFactor:.7 },
+  { id:"apple-snail", commonName:"Elma salyangozu", scientificName:"Pomacea diffusa", category:"snail", group:"snail", adultSizeCm:6, minVolumeL:40, minTankLengthCm:40, minGroup:1, temperature:[20,28], ph:[7,8.5], flow:"medium", wasteFactor:1 },
 ];
 
 export const equipmentCatalog: EquipmentProfile[] = [
@@ -34,10 +57,47 @@ export const equipmentCatalog: EquipmentProfile[] = [
   { id:"eheim-thermo-100", category:"heater", brand:"Eheim", model:"Thermocontrol 100 W", specifications:"Ayarlı ısıtıcı · 100 W", powerW:100, recommendedMinL:100, recommendedMaxL:150 },
   { id:"aquael-ultra-75", category:"heater", brand:"Aquael", model:"Ultra Heater 75 W", specifications:"Elektronik ısıtıcı · 75 W", powerW:75, recommendedMinL:35, recommendedMaxL:75 },
   { id:"chihiros-wrgb2-90", category:"lighting", brand:"Chihiros", model:"WRGB II 90", specifications:"LED aydınlatma · 100 W", powerW:100, recommendedMinL:150, recommendedMaxL:250 },
+  { id:"eheim-classic-150", category:"filter", brand:"Eheim", model:"Classic 150 (2211)", specifications:"Dış filtre · 300 L/saat", ratedFlowLph:300, recommendedMaxL:150 },
+  { id:"eheim-classic-350", category:"filter", brand:"Eheim", model:"Classic 350 (2215)", specifications:"Dış filtre · 620 L/saat", ratedFlowLph:620, recommendedMaxL:350 },
+  { id:"eheim-classic-600", category:"filter", brand:"Eheim", model:"Classic 600 (2217)", specifications:"Dış filtre · 1000 L/saat", ratedFlowLph:1000, recommendedMaxL:600 },
+  { id:"fluval-207", category:"filter", brand:"Fluval", model:"207", specifications:"Dış filtre · 780 L/saat", ratedFlowLph:780, recommendedMinL:60, recommendedMaxL:220 },
+  { id:"fluval-307", category:"filter", brand:"Fluval", model:"307", specifications:"Dış filtre · 1150 L/saat", ratedFlowLph:1150, recommendedMinL:90, recommendedMaxL:330 },
+  { id:"fluval-407", category:"filter", brand:"Fluval", model:"407", specifications:"Dış filtre · 1450 L/saat", ratedFlowLph:1450, recommendedMinL:150, recommendedMaxL:500 },
+  { id:"oase-biomaster-250", category:"filter", brand:"Oase", model:"BioMaster 250", specifications:"Dış filtre · 900 L/saat", ratedFlowLph:900, recommendedMaxL:250, adjustableFlow:true },
+  { id:"oase-biomaster-600", category:"filter", brand:"Oase", model:"BioMaster 600", specifications:"Dış filtre · 1250 L/saat", ratedFlowLph:1250, recommendedMaxL:600, adjustableFlow:true },
+  { id:"jbl-e702", category:"filter", brand:"JBL", model:"CristalProfi e702", specifications:"Dış filtre · 700 L/saat", ratedFlowLph:700, recommendedMinL:60, recommendedMaxL:200 },
+  { id:"jbl-e902", category:"filter", brand:"JBL", model:"CristalProfi e902", specifications:"Dış filtre · 900 L/saat", ratedFlowLph:900, recommendedMinL:90, recommendedMaxL:300 },
+  { id:"jbl-e1502", category:"filter", brand:"JBL", model:"CristalProfi e1502", specifications:"Dış filtre · 1400 L/saat", ratedFlowLph:1400, recommendedMinL:160, recommendedMaxL:600 },
+  { id:"sunsun-hw302", category:"filter", brand:"SunSun", model:"HW-302", specifications:"Dış filtre · 1000 L/saat", ratedFlowLph:1000, recommendedMaxL:250 },
+  { id:"sunsun-hw303b", category:"filter", brand:"SunSun", model:"HW-303B", specifications:"UV'li dış filtre · 1400 L/saat", ratedFlowLph:1400, recommendedMaxL:400 },
+  { id:"dophin-cf300", category:"filter", brand:"Dophin", model:"CF-300", specifications:"Dış filtre · 410 L/saat", ratedFlowLph:410, recommendedMaxL:80 },
+  { id:"dophin-cf600", category:"filter", brand:"Dophin", model:"CF-600", specifications:"Dış filtre · 650 L/saat", ratedFlowLph:650, recommendedMaxL:150 },
+  { id:"aquael-ultramax-1000", category:"filter", brand:"Aquael", model:"UltraMax 1000", specifications:"Dış filtre · 1000 L/saat", ratedFlowLph:1000, recommendedMaxL:300 },
+  { id:"aquael-ultramax-1500", category:"filter", brand:"Aquael", model:"UltraMax 1500", specifications:"Dış filtre · 1500 L/saat", ratedFlowLph:1500, recommendedMaxL:450 },
+  { id:"tetra-ex-1000", category:"filter", brand:"Tetra", model:"EX 1000 Plus", specifications:"Dış filtre · 1150 L/saat", ratedFlowLph:1150, recommendedMinL:100, recommendedMaxL:300 },
+  { id:"tetra-ex-1500", category:"filter", brand:"Tetra", model:"EX 1500 Plus", specifications:"Dış filtre · 1900 L/saat", ratedFlowLph:1900, recommendedMinL:300, recommendedMaxL:600 },
+  { id:"chihiros-a2-601", category:"lighting", brand:"Chihiros", model:"A II 601", specifications:"Ayarlanabilir LED aydınlatma", recommendedMinL:60, recommendedMaxL:140 },
+  { id:"twinstar-e-line-600", category:"lighting", brand:"Twinstar", model:"E-Line 600", specifications:"Full spectrum LED aydınlatma", recommendedMinL:60, recommendedMaxL:140 },
+  { id:"netlea-at5s-60", category:"lighting", brand:"Netlea", model:"AT5S 60", specifications:"RGB akvaryum aydınlatması", recommendedMinL:60, recommendedMaxL:160 },
+  { id:"orionled-plant-60", category:"lighting", brand:"OrionLED", model:"Plant 60", specifications:"Bitkili akvaryum LED aydınlatması", recommendedMinL:60, recommendedMaxL:150 },
+  { id:"eheim-thermo-150", category:"heater", brand:"Eheim", model:"Thermocontrol 150 W", specifications:"Ayarlı ısıtıcı · 150 W", powerW:150, recommendedMinL:200, recommendedMaxL:300 },
+  { id:"eheim-thermo-200", category:"heater", brand:"Eheim", model:"Thermocontrol 200 W", specifications:"Ayarlı ısıtıcı · 200 W", powerW:200, recommendedMinL:300, recommendedMaxL:400 },
+  { id:"aquael-ultra-100", category:"heater", brand:"Aquael", model:"Ultra Heater 100 W", specifications:"Elektronik ısıtıcı · 100 W", powerW:100, recommendedMinL:60, recommendedMaxL:100 },
+  { id:"jbl-protemp-s100", category:"heater", brand:"JBL", model:"ProTemp S 100", specifications:"Ayarlı ısıtıcı · 100 W", powerW:100, recommendedMinL:90, recommendedMaxL:150 },
+  { id:"ista-co2-2l", category:"co2", brand:"ISTA", model:"2L CO₂ Set", specifications:"Basınçlı CO₂ sistemi · 2 L tüp" },
+  { id:"co2art-pro-se", category:"co2", brand:"CO2Art", model:"Pro-SE Series", specifications:"Çift kademeli CO₂ regülatörü" },
+  { id:"mufan-dual-gauge", category:"co2", brand:"Mufan", model:"Dual Gauge Regulator", specifications:"Çift göstergeli CO₂ regülatörü" },
+  { id:"eheim-air-200", category:"air_pump", brand:"Eheim", model:"air200", specifications:"Hava motoru · 200 L/saat", ratedFlowLph:200 },
+  { id:"sobo-sb-860a", category:"air_pump", brand:"Sobo", model:"SB-860A", specifications:"Çift çıkışlı hava motoru" },
+  { id:"resun-air-2000", category:"air_pump", brand:"Resun", model:"AIR-2000", specifications:"Hava motoru" },
+  { id:"eheim-reef-control", category:"dosing_pump", brand:"Eheim", model:"Reeflex dosing", specifications:"Programlanabilir dozaj pompası" },
+  { id:"jebo-uv-9w", category:"uv", brand:"Jingye", model:"UV 9 W", specifications:"UV sterilizatör · 9 W", powerW:9 },
 ];
 
 export const speciesById = (id?: string) => speciesCatalog.find(item=>item.id===id);
 export const equipmentById = (id?: string) => equipmentCatalog.find(item=>item.id===id);
+export const speciesGroupLabels: Record<NonNullable<SpeciesProfile["group"]>,string> = {livebearer:"Canlı doğuranlar",tetra:"Tetralar",rasbora:"Rasboralar",barb:"Barblar",cichlid:"Cichlidler",labyrinth:"Labirentliler",bottom:"Dip balıkları ve vatozlar",monster:"Monster / büyük türler",coldwater:"Soğuk su balıkları",shrimp:"Karidesler",snail:"Salyangozlar",other:"Diğer canlılar"};
+export const speciesGroup = (item: SpeciesProfile): NonNullable<SpeciesProfile["group"]> => item.group ?? (item.category==="shrimp"?"shrimp":item.category==="snail"?"snail":item.id.includes("tetra")?"tetra":item.id==="guppy"?"livebearer":item.id==="betta"?"labyrinth":["ancistrus","corydoras-panda"].includes(item.id)?"bottom":item.id==="goldfish"?"coldwater":"other");
 const normalize = (value?: string) => value?.trim().toLocaleLowerCase("tr-TR");
 export const speciesForLivestock = (item: Livestock) => speciesById(item.catalogId) ?? speciesCatalog.find(profile =>
   normalize(profile.scientificName) === normalize(item.scientificName) || normalize(profile.commonName) === normalize(item.commonName)
