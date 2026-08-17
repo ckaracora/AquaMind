@@ -1,4 +1,4 @@
-import type { Aquarium, MaintenanceTask, WaterParameters } from "@/types/aquarium";
+import type { Aquarium, Equipment, Livestock, MaintenanceTask, Plant, WaterParameters } from "@/types/aquarium";
 
 export const aquariums: Aquarium[] = [{
   id: "aqua-1",
@@ -22,4 +22,22 @@ export const maintenanceTasks: MaintenanceTask[] = [
   { id: "m1", aquariumId: "aqua-1", type: "water_change", title: "%30 su değişimi", dueAt: "2026-08-19T18:00:00+03:00", recurrenceDays: 7, amountPercent: 30 },
   { id: "m2", aquariumId: "aqua-1", type: "filter_cleaning", title: "Filtre ön süngerini temizle", dueAt: "2026-08-23T12:00:00+03:00", recurrenceDays: 21 },
   { id: "m3", aquariumId: "aqua-1", type: "trimming", title: "Arka plan bitkilerini buda", dueAt: "2026-08-26T19:00:00+03:00", recurrenceDays: 14 },
+];
+
+export const livestock: Livestock[] = [
+  { id: "l1", aquariumId: "aqua-1", commonName: "Neon tetra", scientificName: "Paracheirodon innesi", category: "fish", quantity: 16, gender: "mixed", addedAt: "2024-03-28" },
+  { id: "l2", aquariumId: "aqua-1", commonName: "Cüce vatoz", scientificName: "Ancistrus sp.", category: "fish", quantity: 2, gender: "mixed", addedAt: "2024-04-02" },
+  { id: "l3", aquariumId: "aqua-1", commonName: "Amano karides", scientificName: "Caridina multidentata", category: "shrimp", quantity: 6, gender: "unknown", addedAt: "2024-04-12" },
+];
+
+export const plants: Plant[] = [
+  { id: "p1", aquariumId: "aqua-1", name: "Amazon kılıcı", scientificName: "Echinodorus grisebachii", quantity: 2, position: "Arka plan", addedAt: "2024-03-12" },
+  { id: "p2", aquariumId: "aqua-1", name: "Anubias Nana", scientificName: "Anubias barteri var. nana", quantity: 4, position: "Orta plan", addedAt: "2024-03-12" },
+  { id: "p3", aquariumId: "aqua-1", name: "Java moss", scientificName: "Taxiphyllum barbieri", quantity: 2, position: "Kök üzeri", addedAt: "2024-03-15" },
+];
+
+export const equipment: Equipment[] = [
+  { id: "e1", aquariumId: "aqua-1", category: "filter", brand: "Oase", model: "BioMaster 350", installedAt: "2024-03-12", specifications: "1100 L/saat" },
+  { id: "e2", aquariumId: "aqua-1", category: "lighting", brand: "Chihiros", model: "WRGB II 90", installedAt: "2024-03-12", specifications: "100 W" },
+  { id: "e3", aquariumId: "aqua-1", category: "co2", brand: "ISTA", model: "2L Set", installedAt: "2024-03-18" },
 ];
