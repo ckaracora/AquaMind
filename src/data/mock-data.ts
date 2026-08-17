@@ -26,7 +26,7 @@ export const maintenanceTasks: MaintenanceTask[] = [
 
 export const livestock: Livestock[] = [
   { id: "l1", aquariumId: "aqua-1", commonName: "Neon tetra", scientificName: "Paracheirodon innesi", category: "fish", quantity: 16, gender: "mixed", addedAt: "2024-03-28", catalogId:"neon-tetra" },
-  { id: "l2", aquariumId: "aqua-1", commonName: "Cüce vatoz", scientificName: "Ancistrus sp.", category: "fish", quantity: 2, gender: "mixed", addedAt: "2024-04-02", catalogId:"ancistrus" },
+  { id: "l2", aquariumId: "aqua-1", commonName: "Cüce vatoz", scientificName: "Ancistrus cirrhosus", category: "fish", quantity: 2, gender: "mixed", addedAt: "2024-04-02", catalogId:"ancistrus" },
   { id: "l3", aquariumId: "aqua-1", commonName: "Amano karides", scientificName: "Caridina multidentata", category: "shrimp", quantity: 6, gender: "unknown", addedAt: "2024-04-12", catalogId:"amano-shrimp" },
 ];
 

@@ -1,12 +1,12 @@
 "use client";
 
-import { Box, Calculator, CalendarCheck, Droplets, Fish, Gauge, Leaf, Settings, SlidersHorizontal, Waves } from "lucide-react";
+import { Box, Calculator, CalendarCheck, Droplets, Fish, Gauge, Leaf, PackageSearch, Settings, SlidersHorizontal, Waves } from "lucide-react";
 import { usePathname } from "next/navigation";
 
 const items = [
   [Gauge, "Genel Bakış", "/"], [Box, "Akvaryumlarım", "/aquariums"], [Droplets, "Su Değerleri", "/water"],
   [CalendarCheck, "Bakım Günlüğü", "/maintenance"], [Fish, "Canlılar", "/livestock"], [Leaf, "Bitkiler", "/plants"],
-  [SlidersHorizontal, "Ekipmanlar", "/equipment"], [Calculator, "Hesaplayıcılar", "/calculators"],
+  [SlidersHorizontal, "Ekipmanlar", "/equipment"], [PackageSearch, "Ürün Kataloğu", "/products"], [Calculator, "Hesaplayıcılar", "/calculators"],
 ] as const;
 
 export function Sidebar() {

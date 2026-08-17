@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import "./globals.css";
 import { AquariumProvider } from "@/providers/aquarium-provider";
+import "@/data/catalog-coverage";
 
 export const metadata: Metadata = {
   title: "AquaMind — Akvaryum yönetimi",
