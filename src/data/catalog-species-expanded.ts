@@ -4,8 +4,21 @@ type FishGroup = NonNullable<SpeciesProfile["group"]>;
 type Flow = SpeciesProfile["flow"];
 const verifiedAt = "2026-08-17";
 const fishSource = (scientificName:string) => `https://www.fishbase.se/summary/${scientificName.replaceAll(" ","-")}.html`;
-const f = (id:string,commonName:string,scientificName:string,group:FishGroup,adultSizeCm:number,minVolumeL:number,minTankLengthCm:number,minGroup:number,temperature:[number,number],ph:[number,number],flow:Flow,wasteFactor:number):SpeciesProfile => ({id,commonName,scientificName,category:"fish",group,adultSizeCm,minVolumeL,minTankLengthCm,minGroup,temperature,ph,flow,wasteFactor,sourceUrl:fishSource(scientificName),verifiedAt});
-const i = (id:string,commonName:string,scientificName:string,category:"shrimp"|"snail",adultSizeCm:number,minVolumeL:number,minTankLengthCm:number,minGroup:number,temperature:[number,number],ph:[number,number],flow:Flow,wasteFactor:number):SpeciesProfile => ({id,commonName,scientificName,category,group:category,adultSizeCm,minVolumeL,minTankLengthCm,minGroup,temperature,ph,flow,wasteFactor,sourceUrl:"https://www.seriouslyfish.com/knowledge-base/",verifiedAt});
+const f = (id:string,commonName:string,scientificName:string,group:FishGroup,adultSizeCm:number,minVolumeL:number,minTankLengthCm:number,minGroup:number,temperature:[number,number],ph:[number,number],flow:Flow,wasteFactor:number,traits:Pick<SpeciesProfile,"predatory">={}):SpeciesProfile => ({id,commonName,scientificName,category:"fish",group,adultSizeCm,minVolumeL,minTankLengthCm,minGroup,temperature,ph,flow,wasteFactor,...traits,sourceUrl:fishSource(scientificName),verifiedAt});
+const invertebrateSources:Record<string,string>={
+  "Caridina cantonensis":"https://shrimpguide.com/caridina-water-parameters/",
+  "Caridina mariae":"https://shrimpcent.com/en/species/tiger-shrimp",
+  "Atyopsis moluccensis":"https://shrimpcent.com/en/species/bamboo-shrimp",
+  "Atya gabonensis":"https://aquendium.com/species/vampire-shrimp/",
+  "Palaemonetes paludosus":"https://app-aquatic.com/species/ghost-shrimp/",
+  "Pomacea diffusa":"https://www.aquasnailbio.com/",
+  "Planorbella duryi":"https://melbournetropical.com/fish/ramshorn-snail",
+  "Melanoides tuberculata":"https://tankandtendril.com/invertebrates/malaysian-trumpet-snail/",
+  "Anentome helena":"https://www.fishkeeping.co.uk/modules/caresheets/caresheet.php?caresheetID=199",
+  "Clithon corona":"https://www.fishkeeper.co.uk/fish/freshwater/miscellaneous/bumblebee-horn-snail-",
+};
+const invertebrateSource=(scientificName:string)=>{const source=invertebrateSources[scientificName];if(!source)throw new Error(`Omurgasız için türe özel kaynak eksik: ${scientificName}`);return source};
+const i = (id:string,commonName:string,scientificName:string,category:"shrimp"|"snail",adultSizeCm:number,minVolumeL:number,minTankLengthCm:number,minGroup:number,temperature:[number,number],ph:[number,number],flow:Flow,wasteFactor:number):SpeciesProfile => ({id,commonName,scientificName,category,group:category,adultSizeCm,minVolumeL,minTankLengthCm,minGroup,temperature,ph,flow,wasteFactor,sourceUrl:invertebrateSource(scientificName),verifiedAt});
 
 export const expandedSpeciesCatalog: SpeciesProfile[] = [
   f("endler","Endler lepistes","Poecilia wingei","livebearer",4,45,50,6,[22,28],[7,8.5],"medium",.7),
@@ -55,9 +68,9 @@ export const expandedSpeciesCatalog: SpeciesProfile[] = [
   f("yoyo-loach","Yoyo loach","Botia almorhae","bottom",15,200,120,6,[24,30],[6,7.5],"medium",1.6),
   f("zebra-loach","Zebra loach","Botia striata","bottom",10,150,100,6,[23,28],[6,7.5],"medium",1.2),
   f("siamese-algae-eater","Siamese algae eater","Crossocheilus oblongus","bottom",15,180,120,6,[22,28],[6,8],"high",1.4),
-  f("senegal-bichir","Senegal bichir","Polypterus senegalus","monster",35,350,150,1,[24,28],[6,8],"low",3.2),
-  f("clown-knifefish","Palyaço bıçak balığı","Chitala ornata","monster",100,1500,300,1,[24,28],[6,8],"low",6),
-  f("redtail-catfish","Kırmızı kuyruk kedi balığı","Phractocephalus hemioliopterus","monster",120,3000,400,1,[22,28],[6,7.5],"medium",8),
+  f("senegal-bichir","Senegal bichir","Polypterus senegalus","monster",35,350,150,1,[24,28],[6,8],"low",3.2,{predatory:true}),
+  f("clown-knifefish","Palyaço bıçak balığı","Chitala ornata","monster",100,1500,300,1,[24,28],[6,8],"low",6,{predatory:true}),
+  f("redtail-catfish","Kırmızı kuyruk kedi balığı","Phractocephalus hemioliopterus","monster",120,3000,400,1,[22,28],[6,7.5],"medium",8,{predatory:true}),
   f("giant-gourami","Dev gurami","Osphronemus goramy","monster",70,1200,250,1,[22,30],[6.5,8],"low",5),
   f("red-bellied-pacu","Kırmızı karınlı pacu","Piaractus brachypomus","monster",80,2000,300,3,[24,28],[5.5,7.5],"medium",6),
   f("white-cloud","Beyaz bulut dağı balığı","Tanichthys albonubes","coldwater",4,60,60,10,[16,24],[6,8],"medium",.6),
@@ -66,13 +79,13 @@ export const expandedSpeciesCatalog: SpeciesProfile[] = [
   f("dojo-loach","Hava durumu loach","Misgurnus anguillicaudatus","coldwater",25,250,120,3,[10,25],[6,8],"low",2.2),
   i("crystal-black-shrimp","Crystal Black karides","Caridina cantonensis","shrimp",3,20,30,6,[20,24],[5.5,6.8],"low",.15),
   i("blue-bolt-shrimp","Blue Bolt karides","Caridina cantonensis","shrimp",3,20,30,6,[20,24],[5.5,6.8],"low",.15),
-  i("tiger-shrimp","Tiger karides","Caridina mariae","shrimp",3,25,30,6,[20,25],[6,7.5],"low",.18),
+  i("tiger-shrimp","Tiger karides","Caridina mariae","shrimp",3,40,40,6,[19,24],[6.2,7.4],"low",.18),
   i("bamboo-shrimp","Bambu karides","Atyopsis moluccensis","shrimp",9,80,60,3,[23,28],[6.5,7.8],"high",.5),
   i("vampire-shrimp","Vampir karides","Atya gabonensis","shrimp",15,120,80,2,[23,28],[6.5,7.8],"high",.7),
   i("ghost-shrimp","Hayalet karides","Palaemonetes paludosus","shrimp",4,25,30,6,[18,28],[6.5,8],"low",.2),
-  i("mystery-snail","Mystery salyangoz","Pomacea diffusa","snail",6,40,40,1,[20,28],[7,8.5],"low",.9),
-  i("ramshorn-snail","Ramshorn salyangoz","Planorbella duryi","snail",2.5,15,25,1,[18,28],[7,8.5],"low",.3),
-  i("malaysian-trumpet-snail","Malezya borazan salyangozu","Melanoides tuberculata","snail",3,20,25,1,[20,30],[7,8.5],"low",.25),
-  i("assassin-snail","Katil salyangoz","Anentome helena","snail",3,25,30,1,[22,28],[7,8.5],"low",.35),
-  i("horned-nerite","Boynuzlu nerite","Clithon corona","snail",2,20,25,1,[20,28],[7,8.5],"medium",.3),
+  i("mystery-snail","Mystery salyangoz","Pomacea diffusa","snail",6,40,40,1,[20,28],[7.2,7.8],"low",.9),
+  i("ramshorn-snail","Ramshorn salyangoz","Planorbella duryi","snail",2.5,20,25,1,[18,28],[6.5,8],"low",.3),
+  i("malaysian-trumpet-snail","Malezya borazan salyangozu","Melanoides tuberculata","snail",3,20,25,1,[20,28],[7,8.3],"low",.25),
+  i("assassin-snail","Katil salyangoz","Anentome helena","snail",3,25,30,1,[22,27],[6.8,8],"low",.35),
+  i("horned-nerite","Boynuzlu nerite","Clithon corona","snail",2,20,25,1,[22,27],[7.2,8.2],"medium",.3),
 ];

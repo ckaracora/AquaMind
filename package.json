@@ -7,7 +7,8 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "test:health": "node scripts/test-health.cjs"
   },
   "dependencies": {
     "@fontsource-variable/manrope": "^5.2.6",

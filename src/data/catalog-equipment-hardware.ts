@@ -129,6 +129,27 @@ const jenecaVerified:Record<string,Partial<EquipmentProfile>>={
 };
 for(const item of jenecaFilters){Object.assign(item,jenecaVerified[item.model]??{});}
 
+// Jeneca/ALEAS'ın güncel üretici kataloğunda bulunan ek seriler. Üreticinin
+// parametre tablosu boş olan modellerde debi ve güç değeri özellikle yazılmaz.
+const jenecaOfficialSource="https://www.aleas.cn/product/20/";
+const jenecaCurrentFilters:EquipmentProfile[]=[
+  ...["LT-300","LT-400","LT-500","LT-600"].map(model=>({id:`jeneca-${model.toLowerCase()}`,category:"filter" as const,brand:"Jeneca",model,specifications:"Ayarlanabilir askı filtre",adjustableFlow:true,sourceUrl:"https://www.aleas.cn/product/688.html",verifiedAt})),
+  ...["XP-02","XP-06","XP-06L","XP-605","XP-606","XP-07","XP-08","XP-11","XP-13","XP-05","XP-09"].map(model=>({id:`jeneca-${model.toLowerCase()}`,category:"filter" as const,brand:"Jeneca",model,specifications:"Şelale çıkışlı askı filtre",adjustableFlow:true,sourceUrl:model==="XP-07"||model==="XP-08"?"https://www.aleas.cn/product/731.html":jenecaOfficialSource,verifiedAt})),
+  {id:"jeneca-xp-33-pro",category:"filter",brand:"Jeneca",model:"XP-33 Pro",specifications:"Yüzey emişli ayarlanabilir askı filtre",adjustableFlow:true,sourceUrl:jenecaOfficialSource,verifiedAt},
+  {id:"jeneca-xp-36-pro",category:"filter",brand:"Jeneca",model:"XP-36 Pro",specifications:"Yüzey emişli ayarlanabilir askı filtre",adjustableFlow:true,sourceUrl:jenecaOfficialSource,verifiedAt},
+  ...["XP-33 Ultra","XP-36 Ultra","XP-33D","XP-36D","XP-006 Ultra","XP-007 Ultra"].map(model=>({id:`jeneca-${model.toLowerCase().replace(/[^a-z0-9]+/g,"-")}`,category:"filter" as const,brand:"Jeneca",model,specifications:"Üretici kataloğundaki dış/askı filtrasyon sistemi",sourceUrl:jenecaOfficialSource,verifiedAt})),
+  ...["TGD-15","TGD-16","TGD-17","TGD-18","TGD-19","XGD-15","XGD-16","XGD-17","XGD-18","XGD-19"].map(model=>({id:`jeneca-${model.toLowerCase()}`,category:"filter" as const,brand:"Jeneca",model,specifications:"Çok işlevli üst filtre",sourceUrl:jenecaOfficialSource,verifiedAt})),
+  ...["GD-402","GD-403","GD-502","GD-503","GD-602","GD-603"].map(model=>({id:`jeneca-${model.toLowerCase()}`,category:"filter" as const,brand:"Jeneca",model,specifications:"Ayarlanabilir çok katmanlı damlama üst filtresi",adjustableFlow:true,sourceUrl:jenecaOfficialSource,verifiedAt})),
+];
+const jenecaAirPumps:EquipmentProfile[]=["AP-970","AP-980","AP-960","AP-548","AP-648","AP-9801","AP-9802","AP-9804","DC-001","DC-003"].map(model=>({
+  id:`jeneca-${model.toLowerCase()}`,category:"air_pump",brand:"Jeneca",model,
+  specifications:model.startsWith("DC-")?"DC hava motoru":"Sessiz hava motoru",
+  sourceUrl:model.startsWith("AP-980")?"https://www.aleas.cn/product/711.html":jenecaOfficialSource,verifiedAt,
+}));
+const jenecaHeaters:EquipmentProfile[]=[
+  {id:"jeneca-bx-20",category:"heater",brand:"Jeneca",model:"BX-20",specifications:"Üreticinin güncel kataloğundaki akvaryum ısıtıcısı",sourceUrl:jenecaOfficialSource,verifiedAt},
+];
+
 const eurostarFilters: EquipmentProfile[] = [
   { id:"eurostar-hbl802", category:"filter", brand:"Eurostar", model:"HBL802", specifications:"Ayarlanabilir askı filtre · 500 L/saat · 6 W", ratedFlowLph:500, powerW:6, recommendedMinL:60, recommendedMaxL:100, adjustableFlow:true, sourceUrl:"https://www.karacaakvaryum.com/urun/eurostar-hbl802-aski-filtre-sistemi/", verifiedAt },
   { id:"eurostar-sponge-production-small", category:"filter", brand:"Eurostar", model:"Sünger Üretim Filtresi Small", specifications:"Hava motoru veya filtre emiş hattıyla çalışan ağırlıklı sünger filtre · Small", sourceUrl:"https://atakanpetshop.com/eurostar-sunger-uretim-filtresi-medium", verifiedAt },
@@ -219,6 +240,18 @@ const yikedaEquipment:EquipmentProfile[]=[
 
 const haqosEquipment:EquipmentProfile[]=[
   {id:"haqos-expro-500",category:"filter",brand:"Haqos",model:"EXPRO-500",specifications:"Ayarlanabilir askı dış filtre · 510 L/saat · 6,9 W",ratedFlowLph:510,powerW:6.9,recommendedMaxL:100,adjustableFlow:true,sourceUrl:"https://www.haqos.com/",verifiedAt},
+  {id:"haqos-ex500at",category:"filter",brand:"Haqos",model:"EX-500AT",specifications:"Beş sepetli slim askı dış filtre · 510 L/saat · 7 W · 250 litreye kadar",ratedFlowLph:510,powerW:7,recommendedMaxL:250,sourceUrl:"https://www.evcilsepetim.com/ex-500at-haqos-slim-aski-dis-filitre-500-lt-21550",verifiedAt},
+  {id:"haqos-exp-500",category:"filter",brand:"Haqos",model:"EXP-500",specifications:"Askı mini dış filtre · 510 L/saat · 7 W",ratedFlowLph:510,powerW:7,sourceUrl:"https://www.kumovapet.com.tr/dis-filtreler/marka/328/haqos-marka-urunler.html",verifiedAt},
+  {id:"haqos-expad-500",category:"filter",brand:"Haqos",model:"EXPAD-500",specifications:"EXPRO/EXP serisiyle kullanılabilen harici ön filtre modülü",sourceUrl:"https://www.haqos.com/",verifiedAt},
+  {id:"haqos-expro-230",category:"filter",brand:"Haqos",model:"EXPRO-230",specifications:"Üreticinin resmi ürün kataloğundaki kompakt filtrasyon sistemi",sourceUrl:"https://www.haqos.com/",verifiedAt},
+  {id:"haqos-expro-1000",category:"filter",brand:"Haqos",model:"EXPRO-1000",specifications:"Üreticinin resmi ürün kataloğundaki dış filtrasyon sistemi",sourceUrl:"https://www.haqos.com/",verifiedAt},
+  {id:"haqos-ex1000at",category:"filter",brand:"Haqos",model:"EX1000AT",specifications:"Üreticinin resmi ürün kataloğundaki dış filtrasyon sistemi",sourceUrl:"https://www.haqos.com/",verifiedAt},
+  {id:"haqos-easy-1000at",category:"filter",brand:"Haqos",model:"EASY-1000AT",specifications:"Üreticinin resmi ürün kataloğundaki filtrasyon sistemi",sourceUrl:"https://www.haqos.com/",verifiedAt},
+  {id:"haqos-aqua-flow-250",category:"filter",brand:"Haqos",model:"Aqua Flow 250",specifications:"Üreticinin resmi ürün kataloğundaki akvaryum filtresi",sourceUrl:"https://www.haqos.com/",verifiedAt},
+  {id:"haqos-exc-500",category:"filter",brand:"Haqos",model:"EXC-500",specifications:"Üreticinin resmi ürün kataloğundaki akvaryum filtresi",sourceUrl:"https://www.haqos.com/",verifiedAt},
+  {id:"haqos-hec-600",category:"filter",brand:"Haqos",model:"HEC-600",specifications:"Üreticinin resmi ürün kataloğundaki akvaryum filtresi",sourceUrl:"https://www.haqos.com/",verifiedAt},
+  {id:"haqos-ex-1200at",category:"filter",brand:"Haqos",model:"EX-1200AT",specifications:"1200 L/saat sınıfı dış filtre",ratedFlowLph:1200,sourceUrl:"https://www.evcilsepetim.com/dis-filtre",verifiedAt},
+  {id:"haqos-ex-1500at",category:"filter",brand:"Haqos",model:"EX-1500AT",specifications:"1500 L/saat sınıfı dış filtre",ratedFlowLph:1500,sourceUrl:"https://www.evcilsepetim.com/dis-filtre",verifiedAt},
 ];
 
 const jingyeSource="https://atakanpetshop.com/jingye";
@@ -240,11 +273,38 @@ const jingyeEquipment:EquipmentProfile[]=[
 const accessoryEquipment:EquipmentProfile[]=[
   {id:"liya-ly1009h",category:"other",brand:"Liya",model:"LY-1009H",specifications:"95 cm üçgen keçeli cam sileceği",sourceUrl:"https://www.akvaryumexpress.com/liya",verifiedAt},
   {id:"liya-ly1820",category:"other",brand:"Liya",model:"LY-1820",specifications:"Kare yemleme aparatı",sourceUrl:"https://www.akvaryumexpress.com/liya",verifiedAt},
+  {id:"liya-dx6",category:"other",brand:"Liya",model:"D-X6",specifications:"12–16 mm hortum ve ısıtıcı için vantuz",sourceUrl:"https://www.akvaryumexpress.com/liya",verifiedAt},
+  {id:"liya-hose-brush-30",category:"other",brand:"Liya",model:"Esnek Hortum Fırçası 30 cm",specifications:"Esnek akvaryum hortumu temizleme fırçası · 30 cm",sourceUrl:"https://www.akvaryumexpress.com/liya",verifiedAt},
+  {id:"liya-lcd-thermometer",category:"other",brand:"Liya",model:"LCD Yapıştırmalı Termometre",specifications:"Akvaryum camına yapıştırılan LCD termometre",sourceUrl:"https://www.akvaryumexpress.com/liya",verifiedAt},
+  {id:"liya-lcd-thermometer-long",category:"other",brand:"Liya",model:"LCD Uzun Termometre",specifications:"Uzun tip yapıştırmalı LCD akvaryum termometresi",sourceUrl:"https://www.akvaryumexpress.com/liya",verifiedAt},
+  {id:"liya-glass-thermometer",category:"other",brand:"Liya",model:"Tombul Cam Termometre",specifications:"Cam akvaryum termometresi",sourceUrl:"https://www.akvaryumexpress.com/liya",verifiedAt},
+  {id:"liya-air-stone-cylinder",category:"other",brand:"Liya",model:"Silindir Hava Taşı",specifications:"Silindir biçimli akvaryum hava taşı",sourceUrl:"https://www.akvaryumexpress.com/liya",verifiedAt},
+  {id:"liya-air-stone-round-25",category:"other",brand:"Liya",model:"Yuvarlak Hava Taşı 25 mm",specifications:"Yuvarlak akvaryum hava taşı · 25 mm",sourceUrl:"https://www.akvaryumexpress.com/liya",verifiedAt},
+  {id:"liya-air-stone-20",category:"other",brand:"Liya",model:"Hava Taşı 20 cm",specifications:"Çubuk akvaryum hava taşı · 20 cm",sourceUrl:"https://www.akvaryumexpress.com/liya",verifiedAt},
+  {id:"liya-air-stone-50",category:"other",brand:"Liya",model:"Hava Taşı 50 cm",specifications:"Çubuk akvaryum hava taşı · 50 cm",sourceUrl:"https://www.akvaryumexpress.com/liya",verifiedAt},
+  ...[3,4,5,6].map(size=>({id:`liya-net-${size}`,category:"other" as const,brand:"Liya",model:`Balık Kepçesi ${size} inç`,specifications:`Balık yakalama kepçesi · ${size} inç`,sourceUrl:"https://www.akvaryumexpress.com/liya",verifiedAt})),
   {id:"nubios-kdsm01-mini",category:"other",brand:"Nubios",model:"KDSM01 Mini",specifications:"Mıknatıslı nano akvaryum cam sileceği",sourceUrl:"https://atakanpetshop.com/nubios-miknatisli-akvaryum-cam-silecegi-mini-771-kdsm01",verifiedAt},
+  {id:"nubios-kdsm01-small",category:"other",brand:"Nubios",model:"KDSM01 Small",specifications:"Mıknatıslı küçük akvaryum cam sileceği",sourceUrl:"https://atakanpetshop.com/nubios-miknatisli-akvaryum-cam-silecegi-mini-771-kdsm01",verifiedAt},
   {id:"nubios-fpd51b",category:"other",brand:"Nubios",model:"FPD51B 5in1",specifications:"67 cm beş parçalı akvaryum bakım kiti",sourceUrl:"https://atakanpetshop.com/nubios-5in1-akvaryum-cam-temizleme-ve-bakim-kiti-67cm-771-fpd51b",verifiedAt},
+  {id:"nubios-xy1038",category:"other",brand:"Nubios",model:"XY1038 Filtre Süngeri",specifications:"Siyah biyolojik filtre süngeri · 45 × 45 × 5 cm",sourceUrl:"https://atakanpetshop.com/nubios-filtre-sungeri-siyah-45x45x5-cm-771-xy1038",verifiedAt},
   {id:"aquapro-smart-bubble-counter",category:"co2",brand:"Aquapro",model:"Smart Bubble Counter",specifications:"Hortum giriş-çıkışlı akıllı CO₂ damla sayacı",sourceUrl:"https://atakanpetshop.com/aquapro",verifiedAt},
+  {id:"aquapro-bubble-counter",category:"co2",brand:"Aquapro",model:"Bubble Counter",specifications:"Hortum giriş-çıkışlı CO₂ damla sayacı",sourceUrl:"https://atakanpetshop.com/aquapro",verifiedAt},
+  {id:"aquapro-metal-check-valve",category:"co2",brand:"Aquapro",model:"Alüminyum Metal Check Valve 4/6 mm",specifications:"CO₂ sistemi için alüminyum geri dönüşsüz valf · 4/6 mm hortum",sourceUrl:"https://atakanpetshop.com/aquapro",verifiedAt},
   {id:"aquapro-co2-diffuser-medium",category:"co2",brand:"Aquapro",model:"CO₂ Diffuser Medium",specifications:"Orta boy CO₂ difüzörü",sourceUrl:"https://atakanpetshop.com/aquapro",verifiedAt},
   {id:"aquapro-co2-diffuser-large",category:"co2",brand:"Aquapro",model:"CO₂ Diffuser Large",specifications:"Büyük boy CO₂ difüzörü",sourceUrl:"https://atakanpetshop.com/aquapro",verifiedAt},
+  {id:"aquapro-nano-air-diffuser-large",category:"other",brand:"Aquapro",model:"Nano Air Diffuser Large",specifications:"Mikro gözenekli seramik hava difüzörü · 90–150 cm akvaryumlar",recommendedTankLengthCm:[90,150],sourceUrl:"https://atakanpetshop.com/aquapro-nano-air-difuzor-large-hava-tasi",verifiedAt},
+  {id:"aquapro-lily-pipe-glass-9",category:"other",brand:"Aquapro",model:"Lily Pipe Glass 9 mm",specifications:"Dış filtre için cam emiş ve basış takımı · 9 mm",sourceUrl:"https://atakanpetshop.com/aquapro",verifiedAt},
+  {id:"aquapro-lily-pipe-glass-16",category:"other",brand:"Aquapro",model:"Lily Pipe Glass 16 mm",specifications:"Dış filtre için cam emiş ve basış takımı · 16 mm",sourceUrl:"https://atakanpetshop.com/aquapro",verifiedAt},
+  {id:"aquapro-lily-flow-s-12",category:"other",brand:"Aquapro",model:"Lily Flow S 12 mm",specifications:"Dış filtre için akışı yumuşatan şeffaf çıkış borusu · 12 mm",sourceUrl:"https://atakanpetshop.com/aquapro-lily-flow-s-12mm-6975017512171",verifiedAt},
+  {id:"aquapro-inlet-strainer-12",category:"other",brand:"Aquapro",model:"Inlet Emiş Süzgeci 12 mm",specifications:"Yavru ve karides korumalı dış filtre emiş süzgeci · 12 mm",sourceUrl:"https://atakanpetshop.com/aquapro-inlet-emis-borusu-suzgeci-16mm",verifiedAt},
+  {id:"aquapro-inlet-strainer-16",category:"other",brand:"Aquapro",model:"Inlet Emiş Süzgeci 16 mm",specifications:"Yavru ve karides korumalı dış filtre emiş süzgeci · 16 mm",sourceUrl:"https://atakanpetshop.com/aquapro-inlet-emis-borusu-suzgeci-16mm",verifiedAt},
+  {id:"aquapro-inlet-12",category:"other",brand:"Aquapro",model:"Inlet 12 mm",specifications:"Dış filtre emiş süzgeci · 12 mm",sourceUrl:"https://atakanpetshop.com/aquapro",verifiedAt},
+  {id:"aquapro-inlet-16",category:"other",brand:"Aquapro",model:"Inlet 16 mm",specifications:"Dış filtre emiş süzgeci · 16 mm",sourceUrl:"https://atakanpetshop.com/aquapro",verifiedAt},
+  {id:"aquapro-inout-16-22",category:"other",brand:"Aquapro",model:"Emiş Basış Takımı 16/22 mm",specifications:"Yüzey temizleyicili ve 0,8 mm yavru korumalı dış filtre emiş-basış takımı · 16/22 mm",sourceUrl:"https://atakanpetshop.com/aquapro-emis-basis-takimi-1622-mm-6975017511709",verifiedAt},
+  {id:"aquapro-mini-pro-16-22",category:"other",brand:"Aquapro",model:"Mini Pro 16/22 mm",specifications:"Paslanmaz çelik dış filtre emiş ve basış takımı · 16/22 mm",sourceUrl:"https://atakanpetshop.com/aquapro",verifiedAt},
+  {id:"aquapro-pipe-holder-s",category:"other",brand:"Aquapro",model:"Metal Pipe Holder S 12–16 mm",specifications:"Alüminyum filtre hortumu tutucu · 12–16 mm",sourceUrl:"https://atakanpetshop.com/aquapro",verifiedAt},
+  {id:"aquapro-pipe-holder-l",category:"other",brand:"Aquapro",model:"Metal Pipe Holder L 16–22 mm",specifications:"Alüminyum filtre hortumu tutucu · 16–22 mm",sourceUrl:"https://atakanpetshop.com/aquapro",verifiedAt},
+  {id:"aquapro-pipe-brush-150",category:"other",brand:"Aquapro",model:"Pipe Brush 150 cm",specifications:"Dış filtre hortumu temizleme fırçası · 150 cm",sourceUrl:"https://atakanpetshop.com/aquapro",verifiedAt},
 ];
 
 const waterbearEquipment:EquipmentProfile[]=[
@@ -256,8 +316,8 @@ const waterbearEquipment:EquipmentProfile[]=[
 ];
 
 const regentEquipment:EquipmentProfile[]=[
-  ["6500",2.4,"Tek çıkış"],["7500",3,"Çift çıkış"],["8500",4,"Çift çıkış"],["9500",4,"Çift çıkış"],
-].map(([model,powerW,outlet])=>({id:`regent-${model}`,category:"air_pump",brand:"Regent",model:String(model),specifications:`${outlet} hava motoru · ${powerW} W`,powerW:Number(powerW),sourceUrl:"https://atakanpetshop.com/regent",verifiedAt}));
+  ["6500",2.4,"Tek çıkış",6500],["7500",3,"Çift çıkış",7500],["8500",4,"Çift çıkış",8500],["9500",4,"Çift çıkış",9500],
+].map(([model,powerW,outlet,airCcMin])=>({id:`regent-${model}`,category:"air_pump",brand:"Regent",model:String(model),specifications:`${outlet} hava motoru · ${airCcMin} cc/dakika · ${powerW} W`,powerW:Number(powerW),sourceUrl:"https://atakanpetshop.com/regent",verifiedAt}));
 
 const sharkEquipment:EquipmentProfile[]=[
   ["Shark Pro 500",530,4],["Shark Pro 700",720,7],["Shark Pro 900",910,10],
@@ -269,8 +329,10 @@ const armaturkEquipment:EquipmentProfile[]=[
 
 const mecEquipment:EquipmentProfile[]=[
   {id:"mec-heater-suction-cup",category:"other",brand:"Meç",model:"İsıtıcı Vantuzu",specifications:"İsıtıcı sabitleme vantuzu · tekli ve 10'lu paket"},
+  {id:"mec-heater-suction-cup-black",category:"other",brand:"Meç",model:"Siyah Isıtıcı Vantuzu",specifications:"Siyah ısıtıcı sabitleme vantuzu · tekli"},
   {id:"mec-airline-t-splitter",category:"other",brand:"Meç",model:"Hava Hortumu T Dağıtıcı",specifications:"Hava hortumu T bağlantısı · tekli ve 10'lu paket"},
   {id:"mec-airline-valve",category:"other",brand:"Meç",model:"Hava Hortumu Musluğu",specifications:"Hava hortumu akış vanası · tekli ve 10'lu paket"},
+  {id:"mec-airline-suction-cup",category:"other",brand:"Meç",model:"Hava Hortumu Vantuzu",specifications:"Hava hortumu sabitleme vantuzu · 10'lu paket"},
   {id:"mec-brine-shrimp-net",category:"other",brand:"Meç",model:"Artemia Süzgeci 9 cm",specifications:"Artemia çıkartma süzgeci/kepçesi"},
 ].map((item):EquipmentProfile=>({...item,category:"other",sourceUrl:"https://atakanpetshop.com/mec",verifiedAt}));
 
@@ -299,6 +361,41 @@ const soboExpandedEquipment:EquipmentProfile[]=[
   {id:"sobo-wp-700d",category:"other",brand:"Sobo",model:"WP-700D",specifications:"Alttan emişli sump motoru · 5500 L/saat · 110 W",ratedFlowLph:5500,powerW:110,sourceUrl:soboSource,verifiedAt},
 ];
 
+const sunsunHblSource="https://www.sunsun-china.com/product/aquarium-equipment/hang-on-filter/hbl-series-hang-on-filter.html";
+const sunsunHangOnFilters:EquipmentProfile[]=[
+  ["HBL-301",300,2],["HBL-501",400,5],["HBL-701",600,8],["HBL-302",350,3],["HBL-303",350,3],
+  ["HBL-402",300,2],["HBL-403",400,5],["HBL-502",500,4],["HBL-702",800,7],
+].map(([model,ratedFlowLph,powerW])=>({id:`sunsun-${String(model).toLowerCase()}`,category:"filter",brand:"SunSun",model:String(model),specifications:`Askı şelale filtre · ${ratedFlowLph} L/saat · ${powerW} W`,ratedFlowLph:Number(ratedFlowLph),powerW:Number(powerW),sourceUrl:sunsunHblSource,verifiedAt}));
+
+const sunsunHw700Source="https://www.sunsun-china.com/product/aquarium-equipment/out-side-filter/hw-series-out-side-filter.html";
+const sunsunHw700Filters:EquipmentProfile[]=[
+  ["HW-702A",1000,24,0],["HW-702B",1000,24,9],["HW-703A",1400,30,0],
+  ["HW-703B",1400,30,9],["HW-704A",2000,45,0],["HW-704B",2000,45,9],
+].map(([model,ratedFlowLph,powerW,uvW])=>({id:`sunsun-${String(model).toLowerCase()}`,category:"filter",brand:"SunSun",model:String(model),specifications:`${uvW?"UV'li ":""}dış filtre · ${ratedFlowLph} L/saat · ${powerW} W${uvW?` + ${uvW} W UV`:""}`,ratedFlowLph:Number(ratedFlowLph),powerW:Number(powerW),...(uvW?{integratedUvcW:Number(uvW)}:{}),sourceUrl:sunsunHw700Source,verifiedAt}));
+
+const sunsunCompactFilters:EquipmentProfile[]=[
+  {id:"sunsun-503b",category:"filter",brand:"SunSun",model:"503B",specifications:"Kompakt dış filtre · 600 L/saat · 6 W",ratedFlowLph:600,powerW:6,sourceUrl:"https://atakanpetshop.com/sunsun-503b-dis-filtre-600lh-6w",verifiedAt},
+  {id:"sunsun-602b",category:"filter",brand:"SunSun",model:"602B",specifications:"Kompakt dış filtre · 400 L/saat · 6 W",ratedFlowLph:400,powerW:6,sourceUrl:"https://atakanpetshop.com/sunsun-603b-dis-filtre-400-lt-h-6w",verifiedAt},
+  {id:"sunsun-603b",category:"filter",brand:"SunSun",model:"603B",specifications:"Kompakt dış filtre · 400 L/saat · 6 W · 80 litreye kadar",ratedFlowLph:400,powerW:6,recommendedMaxL:80,sourceUrl:"https://atakanpetshop.com/sunsun-603b-dis-filtre-400-lt-h-6w",verifiedAt},
+];
+
+const sunsunFiltrationPumpSource="https://www.sunsun-china.com/product/aquarium-equipment/multi-function-submersible-filtration-pump/hj-series-multi-function-submersible-filtration-pump-2.html";
+const sunsunInternalFilters:EquipmentProfile[]=[
+  ["HJ-111B",200,2],["HJ-311B",300,2],["HJ-411B",300,2],["HJ-611B",450,6],["HJ-532",350,5],
+  ["HJ-732",550,8],["HJ-752",600,10],["HJ-952",800,16],["HJ-1152",1200,22],
+].map(([model,ratedFlowLph,powerW])=>({id:`sunsun-${String(model).toLowerCase()}`,category:"filter",brand:"SunSun",model:String(model),specifications:`Çok işlevli iç filtre · ${ratedFlowLph} L/saat · ${powerW} W`,ratedFlowLph:Number(ratedFlowLph),powerW:Number(powerW),sourceUrl:sunsunFiltrationPumpSource,verifiedAt}));
+
+const sunsunPumpSource="https://www.sunsun-china.com/product/aquarium-equipment/multi-function-submersible-pump/hj-series-multi-function-submersible-pump-2.html";
+const sunsunWaterPumps:EquipmentProfile[]=[
+  ["HJ-500",500,7],["HJ-600",600,8],["HJ-1100",900,20],["HJ-1500",1500,25],["HJ-2200",2000,35],
+  ["HJ-2500",2500,45],["HJ-3000",3000,55],["HJ-4500",5000,80],["HJ-5500",6000,100],["HJ-6000",6800,150],
+].map(([model,ratedFlowLph,powerW])=>({id:`sunsun-${String(model).toLowerCase()}`,category:"other",brand:"SunSun",model:String(model),specifications:`Çok işlevli dalgıç pompa · ${ratedFlowLph} L/saat · ${powerW} W`,ratedFlowLph:Number(ratedFlowLph),powerW:Number(powerW),sourceUrl:sunsunPumpSource,verifiedAt}));
+
+const sunsunUvSource="https://www.sunsun-china.com/product/aquarium-equipment/uv-filtration-pump/jup-series-uv-filtration-pump.html";
+const sunsunUvFilters:EquipmentProfile[]=[
+  ["JUP-01",800,8,9],["JUP-02",500,5,5],["JUP-21",800,8,7],["JUP-22",800,8,9],["JUP-23",800,8,13],
+].map(([model,ratedFlowLph,powerW,integratedUvcW])=>({id:`sunsun-${String(model).toLowerCase()}`,category:"filter",brand:"SunSun",model:String(model),specifications:`UV sterilizasyonlu iç filtre · ${ratedFlowLph} L/saat · ${powerW} W pompa + ${integratedUvcW} W UV`,ratedFlowLph:Number(ratedFlowLph),powerW:Number(powerW),integratedUvcW:Number(integratedUvcW),sourceUrl:sunsunUvSource,verifiedAt}));
+
 export const hardwareEquipmentCatalog: EquipmentProfile[] = [
   ...seraFilters,
   ...dennerleFilters,
@@ -311,6 +408,9 @@ export const hardwareEquipmentCatalog: EquipmentProfile[] = [
   ...adaFilters,
   ...adaCo2,
   ...jenecaFilters,
+  ...jenecaCurrentFilters,
+  ...jenecaAirPumps,
+  ...jenecaHeaters,
   ...eurostarFilters,
   ...xlproFilters,
   ...ejetFilters,
@@ -328,4 +428,10 @@ export const hardwareEquipmentCatalog: EquipmentProfile[] = [
   ...mecEquipment,
   ...netleaPumps,
   ...soboExpandedEquipment,
+  ...sunsunHangOnFilters,
+  ...sunsunHw700Filters,
+  ...sunsunCompactFilters,
+  ...sunsunInternalFilters,
+  ...sunsunWaterPumps,
+  ...sunsunUvFilters,
 ];

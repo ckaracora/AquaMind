@@ -9,6 +9,7 @@ export interface SpeciesProfile {
   group?: "livebearer"|"tetra"|"rasbora"|"barb"|"cichlid"|"labyrinth"|"bottom"|"monster"|"coldwater"|"shrimp"|"snail"|"other";
   adultSizeCm: number; minVolumeL: number; minTankLengthCm: number; minGroup: number;
   temperature: [number, number]; ph: [number, number]; flow: "low"|"medium"|"high"; wasteFactor: number;
+  predatory?: boolean;
   sourceUrl?: string; verifiedAt?: string;
 }
 
@@ -48,9 +49,9 @@ const rawSpeciesCatalog: SpeciesProfile[] = [
   { id:"pearl-gourami", commonName:"İnci gurami", scientificName:"Trichopodus leerii", category:"fish", group:"labyrinth", adultSizeCm:12, minVolumeL:120, minTankLengthCm:80, minGroup:2, temperature:[24,28], ph:[6,8], flow:"low", wasteFactor:1.4 },
   { id:"kuhli-loach", commonName:"Kuhli çöpçü", scientificName:"Pangio kuhlii", category:"fish", group:"bottom", adultSizeCm:10, minVolumeL:70, minTankLengthCm:70, minGroup:6, temperature:[24,30], ph:[5.5,7.5], flow:"low", wasteFactor:.8 },
   { id:"clown-loach", commonName:"Makrakanta", scientificName:"Chromobotia macracanthus", category:"fish", group:"bottom", adultSizeCm:30, minVolumeL:450, minTankLengthCm:150, minGroup:5, temperature:[25,30], ph:[6,7.5], flow:"medium", wasteFactor:2.5 },
-  { id:"oscar", commonName:"Astronot", scientificName:"Astronotus ocellatus", category:"fish", group:"monster", adultSizeCm:35, minVolumeL:300, minTankLengthCm:120, minGroup:1, temperature:[23,28], ph:[6,8], flow:"medium", wasteFactor:3.5 },
-  { id:"arowana", commonName:"Gümüş arowana", scientificName:"Osteoglossum bicirrhosum", category:"fish", group:"monster", adultSizeCm:90, minVolumeL:1000, minTankLengthCm:250, minGroup:1, temperature:[24,30], ph:[6,7.5], flow:"medium", wasteFactor:5 },
-  { id:"flowerhorn", commonName:"Flowerhorn", scientificName:"Flowerhorn hybrid", category:"fish", group:"monster", adultSizeCm:30, minVolumeL:400, minTankLengthCm:150, minGroup:1, temperature:[25,29], ph:[6,7.5], flow:"medium", wasteFactor:3, sourceUrl:"https://www.fishkeeping.co.uk/modules/caresheets/caresheet.php?caresheetID=174", verifiedAt:"2026-08-18" },
+  { id:"oscar", commonName:"Astronot", scientificName:"Astronotus ocellatus", category:"fish", group:"monster", adultSizeCm:35, minVolumeL:300, minTankLengthCm:120, minGroup:1, temperature:[23,28], ph:[6,8], flow:"medium", wasteFactor:3.5, predatory:true },
+  { id:"arowana", commonName:"Gümüş arowana", scientificName:"Osteoglossum bicirrhosum", category:"fish", group:"monster", adultSizeCm:90, minVolumeL:1000, minTankLengthCm:250, minGroup:1, temperature:[24,30], ph:[6,7.5], flow:"medium", wasteFactor:5, predatory:true },
+  { id:"flowerhorn", commonName:"Flowerhorn", scientificName:"Flowerhorn hybrid", category:"fish", group:"monster", adultSizeCm:30, minVolumeL:400, minTankLengthCm:150, minGroup:1, temperature:[25,29], ph:[6,7.5], flow:"medium", wasteFactor:3, predatory:true, sourceUrl:"https://www.fishkeeping.co.uk/modules/caresheets/caresheet.php?caresheetID=174", verifiedAt:"2026-08-18" },
   { id:"caridina-crystal", commonName:"Crystal Red karides", scientificName:"Caridina cantonensis", category:"shrimp", group:"shrimp", adultSizeCm:3, minVolumeL:20, minTankLengthCm:30, minGroup:6, temperature:[20,24], ph:[5.5,6.8], flow:"low", wasteFactor:.15 },
   { id:"rabbit-snail", commonName:"Tavşan salyangoz", scientificName:"Tylomelania sp.", category:"snail", group:"snail", adultSizeCm:10, minVolumeL:60, minTankLengthCm:50, minGroup:1, temperature:[24,30], ph:[7,8.5], flow:"medium", wasteFactor:.7 },
   { id:"apple-snail", commonName:"Elma salyangozu", scientificName:"Pomacea diffusa", category:"snail", group:"snail", adultSizeCm:6, minVolumeL:40, minTankLengthCm:40, minGroup:1, temperature:[20,28], ph:[7,8.5], flow:"medium", wasteFactor:1 },
