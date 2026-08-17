@@ -25,7 +25,7 @@ export function analyzeAquarium(aquarium:Aquarium,animals:Livestock[],equipment:
  const filterScore=!filters.length?35:!filtersWithFlow.length?60:turnover<targetMin?clamp(70-(targetMin-turnover)*15):turnover>targetMax?clamp(75-(turnover-targetMax)*8):95;
  const heaters=verifiedEquipment.filter(p=>p.category==="heater"||p.integratedHeaterW); const heatersWithRange=heaters.filter(h=>h.recommendedMinL||h.recommendedMaxL); const heaterFit=heatersWithRange.some(h=>(!h.recommendedMinL||aquarium.netVolumeLiters>=h.recommendedMinL)&&(!h.recommendedMaxL||aquarium.netVolumeLiters<=h.recommendedMaxL)); const heaterScore=heaters.length?(heatersWithRange.length?(heaterFit?95:45):60):profiles.some(x=>x.profile!.temperature[0]>=23)?35:75;
  const waterChecks=profiles.flatMap(({profile})=>latest?[latest.temperature!==undefined&&latest.temperature>=profile!.temperature[0]&&latest.temperature<=profile!.temperature[1],latest.ph!==undefined&&latest.ph>=profile!.ph[0]&&latest.ph<=profile!.ph[1]].filter(x=>typeof x==="boolean") as boolean[]:[]); const waterScore=waterChecks.length?clamp(waterChecks.filter(Boolean).length/waterChecks.length*100):65;
- const matchedDataCount=matchedProfiles.length+matchedEquipment.length; const verifiedDataCount=profiles.length+verifiedEquipment.length; const confidenceScore=matchedDataCount?clamp(verifiedDataCount/matchedDataCount*100):50;
+ const totalDataCount=animals.length+equipment.length; const verifiedDataCount=profiles.length+verifiedEquipment.length; const confidenceScore=totalDataCount?clamp(verifiedDataCount/totalDataCount*100):50;
  const metrics:HealthMetric[]=[
   {key:"load",label:"Biyolojik yük",score:loadScore,status:status(loadScore),detail:`Tahmini yük oranı %${Math.round(loadRatio*100)}`},
   {key:"space",label:"Yüzme alanı",score:spaceScore,status:status(spaceScore),detail:spaceIssues.length?`${spaceIssues.length} tür için alan sınırda`:"Kayıtlı türler için uygun"},
@@ -34,10 +34,13 @@ export function analyzeAquarium(aquarium:Aquarium,animals:Livestock[],equipment:
   {key:"filter",label:"Filtrasyon uygunluğu",score:filterScore,status:status(filterScore),detail:filtersWithFlow.length?`Tahmini ${turnover.toFixed(1)} çevrim/saat`:filters.length?"Debi bilgisi doğrulanmayı bekliyor":"Katalogdan filtre bulunamadı"},
   {key:"heater",label:"Isıtıcı uygunluğu",score:heaterScore,status:status(heaterScore),detail:heatersWithRange.length?(heaterFit?"Hacim aralığı uygun":"Hacim aralığı dışında"):heaters.length?"Hacim aralığı doğrulanmayı bekliyor":"Katalogdan ısıtıcı bulunamadı"},
   {key:"water",label:"Su değeri uyumu",score:waterScore,status:status(waterScore),detail:latest?"Son ölçüme göre":"Ölçüm eklenmesi gerekli"},
-  {key:"confidence",label:"Veri güveni",score:confidenceScore,status:status(confidenceScore),detail:matchedDataCount?`${verifiedDataCount}/${matchedDataCount} kayıt kaynak doğrulamalı`:"Katalog kaydı bulunamadı"},
+  {key:"confidence",label:"Veri güveni",score:confidenceScore,status:status(confidenceScore),detail:totalDataCount?`${verifiedDataCount}/${totalDataCount} kayıt kaynak doğrulamalı`:"Katalog kaydı bulunamadı"},
  ];
  const warnings:HealthAnalysis["warnings"]=[];
+ const unmatchedAnimalCount=animals.length-matchedProfiles.length; const unmatchedEquipmentCount=equipment.length-matchedEquipment.length;
  const unverifiedAnimalCount=matchedProfiles.length-profiles.length; const unverifiedEquipmentCount=matchedEquipment.length-verifiedEquipment.length;
+ if(unmatchedAnimalCount)warnings.push({level:"warning",title:"Katalogla eşleşmeyen canlı kaydı var",message:`${unmatchedAnimalCount} canlı kaydı tanınmadığı için biyolojik yük ve uyumluluk hesabına dahil edilmedi.`});
+ if(unmatchedEquipmentCount)warnings.push({level:"warning",title:"Katalogla eşleşmeyen ekipman kaydı var",message:`${unmatchedEquipmentCount} ekipmanın kapasitesi tanınmadığı için filtrasyon veya ısıtıcı hesabına dahil edilmedi.`});
  if(unverifiedAnimalCount)warnings.push({level:"warning",title:"Bazı canlı verileri doğrulanmayı bekliyor",message:`${unverifiedAnimalCount} canlı kaydı güvenlik hesabına dahil edilmedi; doğrulanmış katalog kaydı seçilmeli.`});
  if(unverifiedEquipmentCount)warnings.push({level:"warning",title:"Bazı ekipman verileri doğrulanmayı bekliyor",message:`${unverifiedEquipmentCount} ekipman kaydının teknik değerleri otomatik kapasite hesabında kullanılmadı.`});
  if(loadScore<75)warnings.push({level:loadScore<50?"danger":"warning",title:"Biyolojik yük yüksek olabilir",message:"Canlı eklemeden önce filtrasyon ve bakım sıklığını gözden geçir."});

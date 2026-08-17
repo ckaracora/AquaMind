@@ -285,6 +285,20 @@ const netleaPumps:EquipmentProfile[]=[
   {id:"netlea-s5500",category:"other",brand:"Netlea",model:"S5500",specifications:"Ayarlanabilir DC kafa motoru · 6000 L/saat · 35 W · 5 m basma yüksekliği",ratedFlowLph:6000,powerW:35,adjustableFlow:true,sourceUrl:netleaPumpSource,verifiedAt},
 ];
 
+const soboSource="https://atakanpetshop.com/sobo";
+const soboExpandedEquipment:EquipmentProfile[]=[
+  {id:"sobo-wp-190f-uv",category:"filter",brand:"Sobo",model:"WP-190F UV",specifications:"UV lambalı iç filtre · 500 L/saat · 12 W",ratedFlowLph:500,powerW:12,sourceUrl:soboSource,verifiedAt},
+  {id:"sobo-909f-uv",category:"filter",brand:"Sobo",model:"909F UV",specifications:"UV lambalı dış filtre · 1800 L/saat · 9 W UV",ratedFlowLph:1800,integratedUvcW:9,sourceUrl:soboSource,verifiedAt},
+  {id:"sobo-wp-1300f",category:"filter",brand:"Sobo",model:"WP-1300F",specifications:"İç filtre · 600 L/saat · 10 W",ratedFlowLph:600,powerW:10,sourceUrl:soboSource,verifiedAt},
+  {id:"sobo-wp-1301f",category:"filter",brand:"Sobo",model:"WP-1301F",specifications:"İç filtre · 600 L/saat · 10 W",ratedFlowLph:600,powerW:10,sourceUrl:soboSource,verifiedAt},
+  {id:"sobo-wp-310f",category:"filter",brand:"Sobo",model:"WP-310F",specifications:"İç filtre · 300 L/saat · 3 W",ratedFlowLph:300,powerW:3,sourceUrl:soboSource,verifiedAt},
+  {id:"sobo-motorized-sponge-350",category:"filter",brand:"Sobo",model:"Motorlu Pipo Filtre 350",specifications:"Motorlu biyolojik pipo filtre · 350 L/saat · 3 W · 70 litreye kadar",ratedFlowLph:350,powerW:3,recommendedMaxL:70,sourceUrl:"https://atakanpetshop.com/sobo-pompali-pipo-filtre-350lh-3w",verifiedAt},
+  {id:"sobo-sf-2000",category:"other",brand:"Sobo",model:"SF-2000",specifications:"Debi kontrollü DC kafa/sump pompası · 1800 L/saat · 18 W · 3 m basma yüksekliği",ratedFlowLph:1800,powerW:18,adjustableFlow:true,sourceUrl:"https://atakanpetshop.com/sobo-debi-kontrollu-dc-pompa-18w-1800lh-3m",verifiedAt},
+  {id:"sobo-wp-4000-pump",category:"other",brand:"Sobo",model:"WP-4000",specifications:"Sump motoru · 2000 L/saat · 40 W · 2 m basma yüksekliği",ratedFlowLph:2000,powerW:40,sourceUrl:soboSource,verifiedAt},
+  {id:"sobo-wp-500d",category:"other",brand:"Sobo",model:"WP-500D",specifications:"Alttan emişli sump motoru · 4500 L/saat · 55 W",ratedFlowLph:4500,powerW:55,sourceUrl:soboSource,verifiedAt},
+  {id:"sobo-wp-700d",category:"other",brand:"Sobo",model:"WP-700D",specifications:"Alttan emişli sump motoru · 5500 L/saat · 110 W",ratedFlowLph:5500,powerW:110,sourceUrl:soboSource,verifiedAt},
+];
+
 export const hardwareEquipmentCatalog: EquipmentProfile[] = [
   ...seraFilters,
   ...dennerleFilters,
@@ -313,4 +327,5 @@ export const hardwareEquipmentCatalog: EquipmentProfile[] = [
   ...armaturkEquipment,
   ...mecEquipment,
   ...netleaPumps,
+  ...soboExpandedEquipment,
 ];
