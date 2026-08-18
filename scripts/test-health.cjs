@@ -89,14 +89,33 @@ const metric = (analysis, key) => analysis.metrics.find(item => item.key === key
     [animal("neon-tetra", "Neon tetra", 8)],
     [device("eheim-thermo-50", "heater", "Eheim", "Thermocontrol 50 W")],
   );
-  assert(warningTitles(analysis).includes("Isıtıcı hacimle eşleşmiyor"), "Küçük ısıtıcı uyarılmalı");
+  assert(warningTitles(analysis).includes("Isıtıcı gücü yetersiz olabilir"), "Küçük ısıtıcı uyarılmalı");
+}
+
+{
+  const analysis = analyzeAquarium(
+    aquarium({ netVolumeLiters: 30, lengthCm: 45 }),
+    [animal("betta", "Beta balığı")],
+    [device("tetra-ht-25", "heater", "Tetra", "HT 25 Electronic")],
+  );
+  assert.equal(metric(analysis, "heater").status, "good", "Watt değeri bilinen ısıtıcı otomatik değerlendirilmeli");
+  assert.equal(metric(analysis, "confidence").score, 100, "Watt tabanlı hesap veri güvenini tamamlamalı");
+}
+
+{
+  const analysis = analyzeAquarium(
+    aquarium({ netVolumeLiters: 20, lengthCm: 35 }),
+    [animal("betta", "Beta balığı")],
+    [device("fluval-t100", "heater", "Fluval", "T100")],
+  );
+  assert(warningTitles(analysis).includes("Isıtıcı akvaryuma göre güçlü olabilir"), "Aşırı güçlü ısıtıcı uyarılmalı");
 }
 
 {
   const analysis = analyzeAquarium(
     aquarium({ netVolumeLiters: 100, lengthCm: 80 }),
     [animal("neon-tetra", "Neon tetra", 8)],
-    [device("jeneca-lt-300", "filter", "Jeneca", "LT-300")],
+    [device("jeneca-xp-605", "filter", "Jeneca", "XP-605")],
   );
   assert(warningTitles(analysis).includes("Ekipman kapasite bilgisi eksik"));
   assert(metric(analysis, "confidence").score < 100, "Debisi bilinmeyen filtre tam güven vermemeli");
@@ -122,4 +141,38 @@ const metric = (analysis, key) => analysis.metrics.find(item => item.key === key
   assert(metric(analysis, "confidence").score < 100, "Eşleşmeyen filtre güven puanını düşürmeli");
 }
 
-console.log("Sağlık analizi: 6 senaryo başarıyla doğrulandı.");
+{
+  const analysis = analyzeAquarium(
+    aquarium(),
+    [animal("neon-tetra", "Neon tetra", 8)],
+    [device("ista-bio-sponge-mini", "filter", "ISTA", "Bio Sponge Mini")],
+  );
+  assert(warningTitles(analysis).includes("Sünger filtre için hava motoru gerekli"), "Hava motorsuz pipo filtre uyarılmalı");
+  assert.equal(metric(analysis, "filter").status, "danger");
+}
+
+{
+  const analysis = analyzeAquarium(
+    aquarium(),
+    [animal("neon-tetra", "Neon tetra", 8)],
+    [
+      device("ista-bio-sponge-mini", "filter", "ISTA", "Bio Sponge Mini"),
+      device("resun-air-500", "air_pump", "Resun", "AIR-500"),
+    ],
+  );
+  assert(!warningTitles(analysis).includes("Sünger filtre için hava motoru gerekli"), "Hava motoru eklenince pipo filtre bağlantısı hazır olmalı");
+  assert.equal(metric(analysis, "filter").status, "good");
+  assert.equal(metric(analysis, "confidence").score, 100);
+}
+
+{
+  const analysis = analyzeAquarium(
+    aquarium({ netVolumeLiters: 75, lengthCm: 60 }),
+    [animal("pea-puffer", "Cüce puffer"), animal("neon-tetra", "Neon tetra", 8)],
+    [],
+  );
+  assert(warningTitles(analysis).includes("Cüce puffer için tür akvaryumu önerilir"), "Tür akvaryumu gereksinimi uyarılmalı");
+  assert.equal(metric(analysis, "compatibility").status, "danger");
+}
+
+console.log("Sağlık analizi: 11 senaryo başarıyla doğrulandı.");

@@ -4,7 +4,7 @@ type FishGroup = NonNullable<SpeciesProfile["group"]>;
 type Flow = SpeciesProfile["flow"];
 const verifiedAt = "2026-08-17";
 const fishSource = (scientificName:string) => `https://www.fishbase.se/summary/${scientificName.replaceAll(" ","-")}.html`;
-const f = (id:string,commonName:string,scientificName:string,group:FishGroup,adultSizeCm:number,minVolumeL:number,minTankLengthCm:number,minGroup:number,temperature:[number,number],ph:[number,number],flow:Flow,wasteFactor:number,traits:Pick<SpeciesProfile,"predatory">={}):SpeciesProfile => ({id,commonName,scientificName,category:"fish",group,adultSizeCm,minVolumeL,minTankLengthCm,minGroup,temperature,ph,flow,wasteFactor,...traits,sourceUrl:fishSource(scientificName),verifiedAt});
+const f = (id:string,commonName:string,scientificName:string,group:FishGroup,adultSizeCm:number,minVolumeL:number,minTankLengthCm:number,minGroup:number,temperature:[number,number],ph:[number,number],flow:Flow,wasteFactor:number,traits:Pick<SpeciesProfile,"predatory"|"speciesOnly"|"sourceUrl">={}):SpeciesProfile => ({id,commonName,scientificName,category:"fish",group,adultSizeCm,minVolumeL,minTankLengthCm,minGroup,temperature,ph,flow,wasteFactor,...traits,sourceUrl:traits.sourceUrl??fishSource(scientificName),verifiedAt});
 const invertebrateSources:Record<string,string>={
   "Caridina cantonensis":"https://shrimpguide.com/caridina-water-parameters/",
   "Caridina mariae":"https://shrimpcent.com/en/species/tiger-shrimp",
@@ -19,6 +19,13 @@ const invertebrateSources:Record<string,string>={
 };
 const invertebrateSource=(scientificName:string)=>{const source=invertebrateSources[scientificName];if(!source)throw new Error(`Omurgasız için türe özel kaynak eksik: ${scientificName}`);return source};
 const i = (id:string,commonName:string,scientificName:string,category:"shrimp"|"snail",adultSizeCm:number,minVolumeL:number,minTankLengthCm:number,minGroup:number,temperature:[number,number],ph:[number,number],flow:Flow,wasteFactor:number):SpeciesProfile => ({id,commonName,scientificName,category,group:category,adultSizeCm,minVolumeL,minTankLengthCm,minGroup,temperature,ph,flow,wasteFactor,sourceUrl:invertebrateSource(scientificName),verifiedAt});
+const otherSources:Record<string,string>={
+  "Limnopilos naiyanetri":"https://melbournetropical.com/fish/thai-micro-crab",
+  "Cambarellus patzcuarensis":"https://aquairi.app/learn/en/dwarf-mexican-crayfish-care-guide",
+  "Procambarus alleni":"https://www.aquariumcoop.com/blogs/aquarium/30-gallon-oddball-fish",
+  "Hymenochirus boettgeri":"https://www.fishkeeping.co.uk/modules/caresheets/caresheet.php?caresheetID=96",
+};
+const o = (id:string,commonName:string,scientificName:string,adultSizeCm:number,minVolumeL:number,minTankLengthCm:number,minGroup:number,temperature:[number,number],ph:[number,number],flow:Flow,wasteFactor:number,group:FishGroup="other"):SpeciesProfile => ({id,commonName,scientificName,category:"other",group,adultSizeCm,minVolumeL,minTankLengthCm,minGroup,temperature,ph,flow,wasteFactor,sourceUrl:otherSources[scientificName],verifiedAt:"2026-08-18"});
 
 export const expandedSpeciesCatalog: SpeciesProfile[] = [
   f("endler","Endler lepistes","Poecilia wingei","livebearer",4,45,50,6,[22,28],[7,8.5],"medium",.7),
@@ -36,8 +43,10 @@ export const expandedSpeciesCatalog: SpeciesProfile[] = [
   f("congo-tetra","Kongo tetra","Phenacogrammus interruptus","tetra",9,150,100,8,[23,27],[6,7.5],"medium",1.2),
   f("lambchop-rasbora","Kuzu pirzola rasbora","Trigonostigma espei","rasbora",3.5,50,60,10,[23,28],[5.5,7.5],"low",.55),
   f("hengeli-rasbora","Hengeli rasbora","Trigonostigma hengeli","rasbora",3.5,50,60,10,[23,28],[5,7.5],"low",.55),
-  f("galaxy-rasbora","Galaxy rasbora","Danio margaritatus","rasbora",2.5,40,45,8,[20,26],[6.5,7.5],"low",.45),
-  f("emerald-dwarf-rasbora","Zümrüt cüce rasbora","Danio erythromicron","rasbora",3,45,50,10,[20,25],[7,8],"low",.5),
+  f("galaxy-rasbora","Galaxy danio","Danio margaritatus","danio",2.5,40,45,8,[20,26],[6.5,7.5],"low",.45),
+  f("emerald-dwarf-rasbora","Zümrüt cüce danio","Danio erythromicron","danio",3,45,50,10,[20,25],[7,8],"low",.5),
+  f("glowlight-danio","Glowlight danio","Celestichthys choprae","danio",3,60,60,8,[20,25],[6,7.5],"medium",.55,{sourceUrl:"https://www.seriouslyfish.com/species/celestichthys-choprae/"}),
+  f("giant-danio","Dev danio","Devario aequipinnatus","danio",10,180,120,8,[22,26],[6,8],"high",1.2,{sourceUrl:"https://aquairi.app/learn/en/giant-danio-care-guide"}),
   f("kubotai-rasbora","Neon yeşil rasbora","Microdevario kubotai","rasbora",3,50,60,10,[22,27],[6,7.5],"medium",.5),
   f("scissortail-rasbora","Makas kuyruk rasbora","Rasbora trilineata","rasbora",12,180,120,8,[23,27],[5,8],"high",1.2),
   f("rosy-barb","Gül barb","Pethia conchonius","barb",10,120,90,8,[18,25],[6,8],"medium",1.2),
@@ -53,6 +62,11 @@ export const expandedSpeciesCatalog: SpeciesProfile[] = [
   f("severum","Severum","Heros efasciatus","cichlid",25,300,120,2,[24,29],[5.5,7.5],"medium",2.8),
   f("yellow-lab","Sarı prenses","Labidochromis caeruleus","cichlid",12,200,100,5,[24,28],[7.5,8.6],"medium",1.8),
   f("frontosa","Frontosa","Cyphotilapia frontosa","cichlid",35,600,180,6,[24,27],[7.8,9],"medium",3),
+  f("boesemani-rainbow","Boesemani gökkuşağı","Melanotaenia boesemani","rainbowfish",10,200,120,6,[24,28],[7,8],"medium",1.3,{sourceUrl:"https://www.aquariumcoop.com/blogs/aquarium/boesemani-rainbowfish"}),
+  f("dwarf-neon-rainbow","Cüce neon gökkuşağı","Melanotaenia praecox","rainbowfish",8,110,75,6,[23,27],[6.5,8],"medium",1,{sourceUrl:"https://www.aquariumcoop.com/blogs/aquarium/dwarf-neon-rainbowfish"}),
+  f("forktail-rainbow","Furcata gökkuşağı","Pseudomugil furcatus","rainbowfish",5,75,60,6,[24,27],[7,8],"medium",.65,{sourceUrl:"https://www.aquariumcoop.com/blogs/aquarium/forktail-rainbowfish"}),
+  f("clown-killifish","Palyaço killifish","Epiplatys annulatus","killifish",3.5,25,40,6,[19,26],[5,7.5],"low",.4,{sourceUrl:"https://www.aquariumcoop.com/blogs/aquarium/clown-killifish"}),
+  f("lyretail-killifish","Lyretail killifish","Aphyosemion australe","killifish",6,40,45,2,[20,24],[6,7.5],"low",.7,{sourceUrl:"https://www.aquariumcoop.com/blogs/aquarium/top-10-fish-for-10-gallon-aquarium"}),
   f("honey-gourami","Bal gurami","Trichogaster chuna","labyrinth",5,60,60,2,[22,28],[6,7.5],"low",.8),
   f("sparkling-gourami","Cüce gurami","Trichopsis pumila","labyrinth",4,45,50,6,[24,28],[5,7.5],"low",.6),
   f("thicklip-gourami","Kalın dudak gurami","Trichogaster labiosa","labyrinth",10,100,80,2,[22,28],[6,7.5],"low",1.2),
@@ -74,9 +88,13 @@ export const expandedSpeciesCatalog: SpeciesProfile[] = [
   f("giant-gourami","Dev gurami","Osphronemus goramy","monster",70,1200,250,1,[22,30],[6.5,8],"low",5),
   f("red-bellied-pacu","Kırmızı karınlı pacu","Piaractus brachypomus","monster",80,2000,300,3,[24,28],[5.5,7.5],"medium",6),
   f("white-cloud","Beyaz bulut dağı balığı","Tanichthys albonubes","coldwater",4,60,60,10,[16,24],[6,8],"medium",.6),
-  f("zebra-danio","Zebra danio","Danio rerio","coldwater",5,70,75,8,[18,26],[6.5,8],"high",.75),
+  f("zebra-danio","Zebra danio","Danio rerio","danio",5,75,75,6,[18,24],[6,8],"medium",.75,{sourceUrl:"https://www.aquariumcoop.com/blogs/aquarium/zebra-danio"}),
   f("medaka","Medaka pirinç balığı","Oryzias latipes","coldwater",4,60,60,8,[15,28],[6.5,8.5],"low",.7),
   f("dojo-loach","Hava durumu loach","Misgurnus anguillicaudatus","coldwater",25,250,120,3,[10,25],[6,8],"low",2.2),
+  f("white-cheek-goby","Beyaz yanak goby","Rhinogobius duospilus","goby",6,60,60,3,[18,24],[7,8],"high",.7,{sourceUrl:"https://www.practicalfishkeeping.co.uk/features/how-to-keep-rhinogobius-gobies/"}),
+  f("cobalt-goby","Kobalt goby","Stiphodon semoni","goby",5,60,60,3,[22,26],[6.5,8],"high",.6,{sourceUrl:"https://www.aquarium-dietzenbach.de/descriptions_stiphodon_semoni"}),
+  f("pea-puffer","Cüce puffer","Carinotetraodon travancoricus","puffer",2.5,20,35,1,[23,28],[6.5,8.4],"low",.8,{predatory:true,speciesOnly:true,sourceUrl:"https://www.aquariumcoop.com/blogs/aquarium/pea-puffer"}),
+  f("amazon-puffer","Amazon puffer","Colomesus asellus","puffer",8,115,90,1,[22,28],[6,8],"medium",1.4,{predatory:true,sourceUrl:"https://www.aquariumcoop.com/blogs/aquarium/amazon-puffer-care-guide"}),
   i("crystal-black-shrimp","Crystal Black karides","Caridina cantonensis","shrimp",3,20,30,6,[20,24],[5.5,6.8],"low",.15),
   i("blue-bolt-shrimp","Blue Bolt karides","Caridina cantonensis","shrimp",3,20,30,6,[20,24],[5.5,6.8],"low",.15),
   i("tiger-shrimp","Tiger karides","Caridina mariae","shrimp",3,40,40,6,[19,24],[6.2,7.4],"low",.18),
@@ -88,4 +106,8 @@ export const expandedSpeciesCatalog: SpeciesProfile[] = [
   i("malaysian-trumpet-snail","Malezya borazan salyangozu","Melanoides tuberculata","snail",3,20,25,1,[20,28],[7,8.3],"low",.25),
   i("assassin-snail","Katil salyangoz","Anentome helena","snail",3,25,30,1,[22,27],[6.8,8],"low",.35),
   i("horned-nerite","Boynuzlu nerite","Clithon corona","snail",2,20,25,1,[22,27],[7.2,8.2],"medium",.3),
+  o("thai-micro-crab","Tayland mikro yengeci","Limnopilos naiyanetri",1,20,30,1,[22,28],[7,8],"low",.15),
+  o("mexican-dwarf-crayfish","Meksika cüce kereviti","Cambarellus patzcuarensis",5,30,40,1,[18,26],[6.5,8],"low",.6,"crayfish"),
+  o("electric-blue-crayfish","Elektrik mavi kerevit","Procambarus alleni",12,115,90,1,[18,24],[7,8.5],"low",1.8,"crayfish"),
+  o("african-dwarf-frog","Afrika cüce kurbağası","Hymenochirus boettgeri",7,50,45,1,[24,26],[7.2,7.6],"low",1),
 ];

@@ -10,6 +10,18 @@ const seraFilters: EquipmentProfile[] = [
   { id:"sera-fil-bioactive-250-uv", category:"filter", brand:"Sera", model:"fil bioactive 250 + UV", specifications:"UV'li dış filtre · 750 L/saat · 32 W · 5 W UV-C", ratedFlowLph:750, powerW:32, integratedUvcW:5, recommendedMaxL:250 },
   { id:"sera-fil-bioactive-400-uv", category:"filter", brand:"Sera", model:"fil bioactive 400 + UV", specifications:"UV'li dış filtre · 1100 L/saat · 36 W · 5 W UV-C", ratedFlowLph:1100, powerW:36, integratedUvcW:5, recommendedMaxL:400 },
 ].map((item): EquipmentProfile => ({ ...item, category:"filter", sourceUrl:seraSource, verifiedAt }));
+seraFilters.push(
+  {id:"sera-x-edge-300",category:"filter",brand:"Sera",model:"X-Edge 300",specifications:"Ayarlanabilir köşe filtre · 300 L/saat · 4,2 W · 50–100 L",ratedFlowLph:300,powerW:4.2,recommendedMinL:50,recommendedMaxL:100,adjustableFlow:true,sourceUrl:"https://www.sera.de/us/product/freshwater-aquarium/sera-x-edge-corner-filter/",verifiedAt:"2026-08-18"},
+  {id:"sera-x-edge-450",category:"filter",brand:"Sera",model:"X-Edge 450",specifications:"Ayarlanabilir köşe filtre · 450 L/saat · 5 W · 80–200 L",ratedFlowLph:450,powerW:5,recommendedMinL:80,recommendedMaxL:200,adjustableFlow:true,sourceUrl:"https://www.sera.de/us/product/freshwater-aquarium/sera-x-edge-corner-filter/",verifiedAt:"2026-08-18"},
+  {id:"sera-x-edge-700",category:"filter",brand:"Sera",model:"X-Edge 700",specifications:"Ayarlanabilir köşe filtre · 700 L/saat · 8,5 W · 100–300 L",ratedFlowLph:700,powerW:8.5,recommendedMinL:100,recommendedMaxL:300,adjustableFlow:true,sourceUrl:"https://www.sera.de/us/product/freshwater-aquarium/sera-x-edge-corner-filter/",verifiedAt:"2026-08-18"},
+  {id:"sera-fil-60",category:"filter",brand:"Sera",model:"fil 60",specifications:"Modüler iç filtre · 380 L/saat · 7 W · 60 litreye kadar",ratedFlowLph:380,powerW:7,recommendedMaxL:60,sourceUrl:"https://www.sera.de/fileadmin/user_upload/manuals/sourcefiles/80030_80031_80032_80033_-INT-_sera-fil-60-120_12-2017.pdf",verifiedAt:"2026-08-18"},
+  {id:"sera-fil-120",category:"filter",brand:"Sera",model:"fil 120",specifications:"Modüler iç filtre · 700 L/saat · 10 W · 120 litreye kadar",ratedFlowLph:700,powerW:10,recommendedMaxL:120,sourceUrl:"https://www.sera.de/fileadmin/user_upload/manuals/sourcefiles/80030_80031_80032_80033_-INT-_sera-fil-60-120_12-2017.pdf",verifiedAt:"2026-08-18"},
+  ...([25,50,75,100,150,200,300] as const).map(powerW=>({id:`sera-heater-thermostat-${powerW}`,category:"heater" as const,brand:"Sera",model:`Aquarium Heater Thermostat ${powerW} W`,specifications:`Kuvars camlı ayarlı ısıtıcı · ${powerW} W`,powerW,sourceUrl:"https://www.sera.de/en/product/freshwater-aquarium/sera-aquarium-heater-thermostats/",verifiedAt:"2026-08-18"})),
+  ...([100,150,200,300] as const).map(powerW=>({id:`sera-delta-dh${powerW}`,category:"heater" as const,brand:"Sera",model:`Delta Heater DH${powerW}`,specifications:`18–32 °C ayarlı, aşırı ısınma korumalı ince ısıtıcı · ${powerW} W`,powerW,sourceUrl:"https://www.sera.de/en/product/freshwater-aquarium/sera-delta-heater/",verifiedAt:"2026-08-18"})),
+  {id:"sera-air-110-plus",category:"air_pump",brand:"Sera",model:"air 110 plus",specifications:"Tek çıkışlı hava motoru · 110 L/saat · 3 W · 100 litreye kadar",ratedFlowLph:110,powerW:3,recommendedMaxL:100,sourceUrl:"https://www.sera.de/en/service/info/fresh-air-in-the-aquarium-air-pumps/",verifiedAt:"2026-08-18"},
+  {id:"sera-air-275-r-plus",category:"air_pump",brand:"Sera",model:"air 275 R plus",specifications:"Ayarlanabilir çift çıkışlı hava motoru · 275 L/saat · 4 W · 300 litreye kadar",ratedFlowLph:275,powerW:4,recommendedMaxL:300,adjustableFlow:true,sourceUrl:"https://www.sera.de/en/service/info/fresh-air-in-the-aquarium-air-pumps/",verifiedAt:"2026-08-18"},
+  {id:"sera-air-550-r-plus",category:"air_pump",brand:"Sera",model:"air 550 R plus",specifications:"Ayarlanabilir dört çıkışlı hava motoru · 550 L/saat · 8 W · 300 litre üzeri",ratedFlowLph:550,powerW:8,recommendedMinL:300,adjustableFlow:true,sourceUrl:"https://www.sera.de/en/service/info/fresh-air-in-the-aquarium-air-pumps/",verifiedAt:"2026-08-18"},
+);
 
 const dennerleSource = "https://dennerle.com/en/products/corner-filter";
 const dennerleFilters: EquipmentProfile[] = [
@@ -25,6 +37,21 @@ const dennerleHeaters: EquipmentProfile[] = [35,50,75].map(powerW => ({
 }));
 dennerleHeaters.push({ id:"dennerle-nano-heater-compact-150", category:"heater", brand:"Dennerle", model:"Nano Heater Compact 150 W", specifications:"20–33 °C ayarlanabilir elektronik ısıtıcı · 150 W", powerW:150, recommendedMinL:10, recommendedMaxL:230, sourceUrl:"https://dennerle.com/en/products/nano-heater-compact", verifiedAt });
 
+const dennerleExpandedEquipment: EquipmentProfile[] = [
+  {id:"dennerle-scapers-flow",category:"filter",brand:"Dennerle",model:"Scaper's Flow",specifications:"Sırt tipi dış filtre · 450 L/saat · 60 cm basma yüksekliği",ratedFlowLph:450,adjustableFlow:true,sourceUrl:"https://dennerle.com/en/products/scapers-flow",verifiedAt:"2026-08-18"},
+  ...([[40,18],[70,36],[110,60],[140,78]] as const).map(([lengthCm,powerW])=>({id:`dennerle-trocal-led-${lengthCm}`,category:"lighting" as const,brand:"Dennerle",model:`Trocal LED ${lengthCm} cm`,specifications:`Bitkili akvaryum LED aydınlatma · ${lengthCm} cm · ${powerW} W`,powerW,sourceUrl:"https://dennerle.com/en/products/trocal-led",verifiedAt:"2026-08-18"})),
+  {id:"dennerle-trocal-style-two-6",category:"lighting",brand:"Dennerle",model:"Trocal Style Two 6 W",specifications:"6500 K nano LED · 800 lm · 6 W",powerW:6,sourceUrl:"https://dennerle.com/en/products/trocal-style-two",verifiedAt:"2026-08-18"},
+  {id:"dennerle-trocal-style-two-8",category:"lighting",brand:"Dennerle",model:"Trocal Style Two 8 W",specifications:"6500 K nano LED · 1280 lm · 8 W",powerW:8,sourceUrl:"https://dennerle.com/en/products/trocal-style-two",verifiedAt:"2026-08-18"},
+  {id:"dennerle-carbo-bio-start-60",category:"co2",brand:"Dennerle",model:"Carbo Bio Start 60",specifications:"Biyolojik CO₂ tam set · en az 40 gün · 60 litreye kadar",recommendedMaxL:60,sourceUrl:"https://dennerle.com/en/products/carbo-bio-start",verifiedAt:"2026-08-18"},
+  {id:"dennerle-carbo-bio-start-80",category:"co2",brand:"Dennerle",model:"Carbo Bio Start 80",specifications:"Biyolojik CO₂ tam set · 2 × en az 40 gün · 80 litreye kadar",recommendedMaxL:80,sourceUrl:"https://dennerle.com/en/products/carbo-bio-start",verifiedAt:"2026-08-18"},
+  {id:"dennerle-carbo-start-e200",category:"co2",brand:"Dennerle",model:"Carbo Start E200",specifications:"Tek kullanımlık tüplü hassas CO₂ tam seti · 200 litreye kadar",recommendedMaxL:200,sourceUrl:"https://dennerle.com/en/products/carbo-start-e200",verifiedAt:"2026-08-18"},
+  {id:"dennerle-carbo-start-e200-special",category:"co2",brand:"Dennerle",model:"Carbo Start E200 Special Edition",specifications:"Solenoid valfli tek kullanımlık tüp CO₂ tam seti · 200 litreye kadar",recommendedMaxL:200,sourceUrl:"https://dennerle.com/en/products/carbo-start-e200",verifiedAt:"2026-08-18"},
+  {id:"dennerle-carbo-start-m200",category:"co2",brand:"Dennerle",model:"Carbo Start M200",specifications:"Yeniden doldurulabilir tüplü hassas CO₂ tam seti · 200 litreye kadar",recommendedMaxL:200,sourceUrl:"https://dennerle.com/en/products/carbo-start-m200",verifiedAt:"2026-08-18"},
+  {id:"dennerle-carbo-start-flex200",category:"co2",brand:"Dennerle",model:"Carbo Start Flex200",specifications:"Tek ve yeniden doldurulabilir tüple uyumlu CO₂ teknik seti · 200 litreye kadar",recommendedMaxL:200,sourceUrl:"https://dennerle.com/en/products/carbo-start-flex200",verifiedAt:"2026-08-18"},
+  {id:"dennerle-carbo-night-m400",category:"co2",brand:"Dennerle",model:"Carbo Night M400",specifications:"Gece kapatma solenoidli, yeniden doldurulabilir tüplü CO₂ tam seti · 400 litreye kadar",recommendedMaxL:400,sourceUrl:"https://dennerle.com/en/products/carbo-night-m400",verifiedAt:"2026-08-18"},
+  {id:"dennerle-carbo-night-m600",category:"co2",brand:"Dennerle",model:"Carbo Night M600",specifications:"Gece kapatma solenoidli, yeniden doldurulabilir tüplü CO₂ tam seti · 600 litreye kadar",recommendedMaxL:600,sourceUrl:"https://dennerle.com/en/products/carbo-night-m600",verifiedAt:"2026-08-18"},
+];
+
 const ferplastFilterSource = "https://www.ferplast.com/products/bluextreme-700";
 const ferplastFilters: EquipmentProfile[] = [
   [700,700,12,150], [1100,1100,16,300], [1500,1500,32,500],
@@ -33,12 +60,39 @@ const ferplastFilters: EquipmentProfile[] = [
   specifications:`Dış filtre · ${ratedFlowLph} L/saat · ${powerW} W`, ratedFlowLph, powerW, recommendedMaxL,
   adjustableFlow:true, sourceUrl:ferplastFilterSource, verifiedAt,
 }));
+ferplastFilters.push(
+  ...([[250,800,12],[350,1100,16],[450,1300,22]] as const).map(([model,flow,power])=>({id:`ferplast-professional-2-${model}`,category:"filter" as const,brand:"Ferplast",model:`Professional 2.0 ${model}`,specifications:`Dört aşamalı dış filtre · ${flow} L/saat · en çok ${power} W · entegre CO₂ difüzörü`,ratedFlowLph:flow,powerW:power,recommendedMaxL:model,sourceUrl:"https://www.ferplast.com/products/filter-professional-2-0-250-eu",verifiedAt})),
+  {id:"ferplast-prime-10",category:"filter",brand:"Ferplast",model:"Prime 10",specifications:"Dış filtre · 580 L/saat · 9 W · 80–150 L",ratedFlowLph:580,powerW:9,recommendedMinL:80,recommendedMaxL:150,sourceUrl:"https://www.ferplast.com/products/prime-10-eu",verifiedAt},
+  {id:"ferplast-prime-20",category:"filter",brand:"Ferplast",model:"Prime 20",specifications:"Dış filtre · 1000 L/saat · 21 W · 100–250 L",ratedFlowLph:1000,powerW:21,recommendedMinL:100,recommendedMaxL:250,sourceUrl:"https://www.ferplast.com/products/prime-10-eu",verifiedAt},
+  {id:"ferplast-prime-30",category:"filter",brand:"Ferplast",model:"Prime 30",specifications:"Dış filtre · 1320 L/saat · 25 W · 200–450 L",ratedFlowLph:1320,powerW:25,recommendedMinL:200,recommendedMaxL:450,sourceUrl:"https://www.ferplast.com/products/prime-10-eu",verifiedAt},
+  {id:"ferplast-bravo-200",category:"filter",brand:"Ferplast",model:"Bravo 200",specifications:"Askı filtre · 750 L/saat · 8 W · 60–120 L",ratedFlowLph:750,powerW:8,recommendedMinL:60,recommendedMaxL:120,adjustableFlow:true,sourceUrl:"https://www.ferplast.com/products/bravo-200-eu",verifiedAt},
+  {id:"ferplast-bravo-300",category:"filter",brand:"Ferplast",model:"Bravo 300",specifications:"Askı filtre · 1050 L/saat · 8 W · 100–200 L",ratedFlowLph:1050,powerW:8,recommendedMinL:100,recommendedMaxL:200,adjustableFlow:true,sourceUrl:"https://www.ferplast.com/products/bravo-200-eu",verifiedAt},
+  {id:"ferplast-blumodular-1",category:"filter",brand:"Ferplast",model:"Blumodular 1",specifications:"Modüler iç filtre · 900 L/saat · 12 W",ratedFlowLph:900,powerW:12,adjustableFlow:true,sourceUrl:"https://www.ferplast.com/products/blumodular-1",verifiedAt},
+  {id:"ferplast-blumodular-2",category:"filter",brand:"Ferplast",model:"Blumodular 2",specifications:"İki modüllü iç filtre · 900 L/saat · 12 W",ratedFlowLph:900,powerW:12,adjustableFlow:true,sourceUrl:"https://www.ferplast.com/products/blumodular-1",verifiedAt},
+  {id:"ferplast-blumodular-3",category:"filter",brand:"Ferplast",model:"Blumodular 3",specifications:"Üç modüllü iç filtre · 1200 L/saat",ratedFlowLph:1200,adjustableFlow:true,sourceUrl:"https://www.ferplast.com/products/blumodular-1",verifiedAt},
+  {id:"ferplast-bluwave-01",category:"filter",brand:"Ferplast",model:"Bluwave 01",specifications:"İç filtre · 500 L/saat · 70 litreye kadar",ratedFlowLph:500,recommendedMaxL:70,sourceUrl:"https://www.ferplast.com/collections/all/bluwave",verifiedAt},
+  {id:"ferplast-bluwave-01-bioflo",category:"filter",brand:"Ferplast",model:"Bluwave 01 Bioflo",specifications:"Aerobik iç filtre · 500 L/saat",ratedFlowLph:500,sourceUrl:"https://www.ferplast.com/collections/all/bluwave",verifiedAt},
+  {id:"ferplast-bluwave-03",category:"filter",brand:"Ferplast",model:"Bluwave 03",specifications:"Üç aşamalı iç filtre · 500 L/saat · 4,5 W · 150 litreye kadar",ratedFlowLph:500,powerW:4.5,recommendedMaxL:150,sourceUrl:"https://www.ferplast.com/products/bluwave-03",verifiedAt},
+  {id:"ferplast-bluwave-05",category:"filter",brand:"Ferplast",model:"Bluwave 05",specifications:"Üç aşamalı iç filtre · 500 L/saat · 4,5 W · 150 litreye kadar",ratedFlowLph:500,powerW:4.5,recommendedMaxL:150,sourceUrl:"https://www.ferplast.com/products/bluwave-05",verifiedAt},
+  {id:"ferplast-bluwave-07",category:"filter",brand:"Ferplast",model:"Bluwave 07",specifications:"Üç aşamalı iç filtre · 900 L/saat · 13 W · 300 litreye kadar",ratedFlowLph:900,powerW:13,recommendedMaxL:300,sourceUrl:"https://www.ferplast.com/products/bluwave-07",verifiedAt},
+  {id:"ferplast-pico-filter",category:"filter",brand:"Ferplast",model:"Pico Filter",specifications:"Ayarlanabilir mini iç filtre · 350 L/saat · 6,5 W · 30 litreye kadar",ratedFlowLph:350,powerW:6.5,recommendedMaxL:30,adjustableFlow:true,sourceUrl:"https://www.ferplast.com/products/pico-filter-eu",verifiedAt},
+  {id:"ferplast-pico-pro",category:"filter",brand:"Ferplast",model:"Pico Pro",specifications:"Üç aşamalı iç filtre · 300 L/saat · 4,5 W · 45 litreye kadar",ratedFlowLph:300,powerW:4.5,recommendedMaxL:45,adjustableFlow:true,sourceUrl:"https://www.ferplast.com/products/pico-pro-eu",verifiedAt},
+  ...([[50,170,4,20,50],[90,450,5,40,90],[150,650,10,80,150],[200,800,11,120,200],[300,900,12,200,500]] as const).map(([model,flow,power,minL,maxL])=>({id:`ferplast-crystal-${model}`,category:"filter" as const,brand:"Ferplast",model:`Crystal ${model}`,specifications:`İki aşamalı iç filtre · ${flow} L/saat · ${power} W`,ratedFlowLph:flow,powerW:power,recommendedMinL:minL,recommendedMaxL:maxL,sourceUrl:"https://www.ferplast.com/products/crystal-50-eu",verifiedAt})),
+);
 
 const ferplastHeaterSource = "https://www.ferplast.com/products/bluclima-8299";
 const ferplastHeaters: EquipmentProfile[] = [50,75,100,150,200,300].map(powerW => ({
   id:`ferplast-bluclima-${powerW}`, category:"heater", brand:"Ferplast", model:`Bluclima ${powerW}`,
   specifications:`Ayarlanabilir dalgıç ısıtıcı · ${powerW} W`, powerW, sourceUrl:ferplastHeaterSource, verifiedAt,
 }));
+ferplastHeaters.push(
+  ...([[25,10,25],[50,20,50],[100,50,100],[150,90,150],[200,100,200],[300,200,300]] as const).map(([power,minL,maxL])=>({id:`ferplast-theo-${power}`,category:"heater" as const,brand:"Ferplast",model:`Theo ${power} W`,specifications:`PTC korumalı ayarlanabilir dalgıç ısıtıcı · ${power} W · ${minL}–${maxL} L`,powerW:power,recommendedMinL:minL,recommendedMaxL:maxL,sourceUrl:"https://www.ferplast.com/products/theo-25-eu",verifiedAt})),
+  {id:"ferplast-eth-200-12",category:"heater",brand:"Ferplast",model:"ETH 200 — 12 mm",specifications:"Dış filtre hattı ısıtıcısı · 200 W · 12 mm · 100–200 L",powerW:200,recommendedMinL:100,recommendedMaxL:200,sourceUrl:"https://www.ferplast.com/products/eth-200-12-mm-eu",verifiedAt},
+  {id:"ferplast-eth-200-16",category:"heater",brand:"Ferplast",model:"ETH 200 — 16 mm",specifications:"Dış filtre hattı ısıtıcısı · 200 W · 16 mm · 100–200 L",powerW:200,recommendedMinL:100,recommendedMaxL:200,sourceUrl:"https://www.ferplast.com/products/eth-200-12-mm-eu",verifiedAt},
+  {id:"ferplast-eth-300-16",category:"heater",brand:"Ferplast",model:"ETH 300 — 16 mm",specifications:"Dış filtre hattı ısıtıcısı · 300 W · 16 mm · 200–300 L",powerW:300,recommendedMinL:200,recommendedMaxL:300,sourceUrl:"https://www.ferplast.com/products/eth-200-12-mm-eu",verifiedAt},
+  {id:"ferplast-fixheat-25",category:"heater",brand:"Ferplast",model:"Fixheat 25 W",specifications:"26 °C sabit sıcaklıklı kompakt ısıtıcı · 25 W · 30 litreye kadar",powerW:25,recommendedMaxL:30,sourceUrl:"https://www.ferplast.com/products/fixheat-25-eu",verifiedAt},
+  ...([[15,25,40],[25,40,65],[50,60,125],[75,120,200],[100,160,250]] as const).map(([power,minL,maxL])=>({id:`ferplast-hydrokable-${power}`,category:"heater" as const,brand:"Ferplast",model:`Hydrokable ${power} W`,specifications:`Taban ısıtma kablosu · ${power} W · ${minL}–${maxL} L`,powerW:power,recommendedMinL:minL,recommendedMaxL:maxL,sourceUrl:"https://www.ferplast.com/products/hydrokable-15-eu",verifiedAt})),
+);
 
 const boyuSource = "https://www.boyuaquarium.com/En_Pr_d_gci_39_id_39.html";
 const boyuFilters: EquipmentProfile[] = ["EF-25","EF-35","EF-45"].map(model => ({
@@ -61,14 +115,54 @@ boyuFilters.push(
   {id:"boyu-wf-400",category:"filter",brand:"Boyu",model:"WF-400",specifications:"İç filtre · 400 L/saat · 7 W",ratedFlowLph:400,powerW:7,sourceUrl:"https://atakanpetshop.com/boyu",verifiedAt},
   {id:"boyu-wf-2055",category:"filter",brand:"Boyu",model:"WF-2055",specifications:"Askı şelale filtre · 720 L/saat · 8,6 W",ratedFlowLph:720,powerW:8.6,sourceUrl:"https://atakanpetshop.com/boyu",verifiedAt},
   {id:"boyu-dgn-410a",category:"filter",brand:"Boyu",model:"DGN-410A",specifications:"Dış filtre · 1610 L/saat · 30 W",ratedFlowLph:1610,powerW:30,sourceUrl:"https://atakanpetshop.com/boyu",verifiedAt},
-  ...["SF-100","SF-101","SF-102","SF-103","SF-104"].map(model=>({id:`boyu-${model.toLowerCase()}`,category:"filter" as const,brand:"Boyu",model,specifications:"Hava motoruyla çalışan ağırlıklı biyolojik sünger üretim filtresi",sourceUrl:"https://atakanpetshop.com/boyu-sf-103-uretim-filtresi-sf-103",verifiedAt})),
-  ...["SF-02","SF-03"].map(model=>({id:`boyu-${model.toLowerCase()}`,category:"filter" as const,brand:"Boyu",model,specifications:"Hava motoruyla çalışan biyolojik sünger üretim filtresi",sourceUrl:"https://atakanpetshop.com/boyu",verifiedAt})),
+  ...["SF-100","SF-101","SF-102","SF-103","SF-104"].map(model=>({id:`boyu-${model.toLowerCase()}`,category:"filter" as const,brand:"Boyu",model,specifications:"Hava motoruyla çalışan ağırlıklı biyolojik sünger üretim filtresi",requiresAirPump:true,sourceUrl:"https://atakanpetshop.com/boyu-sf-103-uretim-filtresi-sf-103",verifiedAt})),
+  ...["SF-02","SF-03"].map(model=>({id:`boyu-${model.toLowerCase()}`,category:"filter" as const,brand:"Boyu",model,specifications:"Hava motoruyla çalışan biyolojik sünger üretim filtresi",requiresAirPump:true,sourceUrl:"https://atakanpetshop.com/boyu",verifiedAt})),
+);
+boyuFilters.push(
+  {id:"boyu-dgn-410",category:"filter",brand:"Boyu",model:"DGN-410",specifications:"Ayarlanabilir dış filtre · 300–1610 L/saat · en fazla 30 W",ratedFlowLph:1610,powerW:30,adjustableFlow:true,sourceUrl:"https://thietbibeca.com/loc-thung-boyu-dgn-410.html",verifiedAt:"2026-08-18"},
+  {id:"boyu-dgn-460",category:"filter",brand:"Boyu",model:"DGN-460",specifications:"Ayarlanabilir dış filtre · 300–1610 L/saat · en fazla 30 W · 4 W UV-C",ratedFlowLph:1610,powerW:30,adjustableFlow:true,integratedUvcW:4,recommendedMinL:120,recommendedMaxL:480,sourceUrl:"https://www.shop.aqvadesign.ru/catalogue/filtry_i_nagrevateli_dlja_akvariuma/vneshnij_reguliruemyj_akvariumnyj_filtr_boyu_dgn_460_s_uv_sterilizatorom_i_napolniteljami_ot_120do_480l/",verifiedAt:"2026-08-18"},
+  {id:"boyu-dgn-520",category:"filter",brand:"Boyu",model:"DGN-520",specifications:"Ayarlanabilir dış filtre · 300–1610 L/saat · en fazla 30 W · 4 W UV-C",ratedFlowLph:1610,powerW:30,adjustableFlow:true,integratedUvcW:4,recommendedMinL:100,recommendedMaxL:650,sourceUrl:"https://rozetka.com.ua/ua/boyu-dgn-520/p317101675/",verifiedAt:"2026-08-18"},
+  {id:"boyu-dgn-520a",category:"filter",brand:"Boyu",model:"DGN-520A",specifications:"Ayarlanabilir dış filtre · 1610 L/saat · 30 W",ratedFlowLph:1610,powerW:30,adjustableFlow:true,sourceUrl:"https://atakanpetshop.com/boyu-dgn-520a-dis-filtre-30w-1610ls-dgn-520a",verifiedAt:"2026-08-18"},
+  {id:"boyu-dgn-80",category:"filter",brand:"Boyu",model:"DGN-80",specifications:"Çok katmanlı kutu dış filtre · 800 L/saat · 35 W",ratedFlowLph:800,powerW:35,sourceUrl:"https://minipuraaqua.lk/product/boyu-dgn-80-canister-filter/",verifiedAt:"2026-08-18"},
+  {id:"boyu-dgn-80a",category:"filter",brand:"Boyu",model:"DGN-80A",specifications:"UV-C'li çok katmanlı kutu dış filtre · 800 L/saat · 35 W + 7 W UV-C",ratedFlowLph:800,powerW:35,integratedUvcW:7,sourceUrl:"https://aquadelsa.com/product/dgn-80a/",verifiedAt:"2026-08-18"},
+  ...["DGN-120","DGN-120A"].map(model=>({id:`boyu-${model.toLowerCase()}`,category:"filter" as const,brand:"Boyu",model,specifications:"DGN serisi kutu dış filtre · üretici teknik tablosu doğrulanmayı bekliyor",sourceUrl:"https://www.boyuaquarium.com/En_Pr_d_gci_27_id_151.html",verifiedAt:"2026-08-18"})),
+  ...[
+    {model:"EF-10",flow:602,power:11,max:95},
+    {model:"EF-15",flow:700,power:13,max:190},
+    {model:"EF-20",flow:799,power:15,max:285},
+  ].map(({model,flow,power,max})=>({id:`boyu-${model.toLowerCase()}`,category:"filter" as const,brand:"Boyu",model,specifications:`Çok kademeli dış filtre · ${flow} L/saat · ${power} W`,ratedFlowLph:flow,powerW:power,recommendedMaxL:max,sourceUrl:"https://jbjaquarium.com/wp-content/uploads/2019/03/EFU-253545_Manual.pdf",verifiedAt:"2026-08-18"})),
+  ...[
+    {model:"EFU-10",flow:300,power:11,min:100,max:300,uv:5},
+    {model:"EFU-15",flow:350,power:13,min:150,max:350,uv:5},
+    {model:"EFU-20",flow:400,power:15,min:200,max:400,uv:5},
+    {model:"EFU-25",flow:750,power:22,min:250,max:450,uv:5},
+    {model:"EFU-35",flow:950,power:24,min:350,max:550,uv:6},
+    {model:"EFU-45",flow:1100,power:26,min:450,max:650,uv:7},
+  ].map(({model,flow,power,min,max,uv})=>({id:`boyu-${model.toLowerCase()}`,category:"filter" as const,brand:"Boyu",model,specifications:`UV-C sistemli dış filtre · ${flow} L/saat · ${power} W · ${uv} W UV-C`,ratedFlowLph:flow,powerW:power,recommendedMinL:min,recommendedMaxL:max,integratedUvcW:uv,sourceUrl:"https://ondaaquarios.com.br/catalgos/boyu/CATALOGO%20BOYU%20GRUPO%20ONDA%20V1.26.pdf",verifiedAt:"2026-08-18"})),
+  ...["FEF-230","FEF-230A"].map(model=>({id:`boyu-${model.toLowerCase()}`,category:"filter" as const,brand:"Boyu",model,specifications:"Dış filtre · 800 L/saat · 15 W · 100–300 litre",ratedFlowLph:800,powerW:15,recommendedMinL:100,recommendedMaxL:300,sourceUrl:"https://ondaaquarios.com.br/catalgos/boyu/CATALOGO%20BOYU%20GRUPO%20ONDA%20V1.26.pdf",verifiedAt:"2026-08-18"})),
+  ...["FEF-280","FEF-280A"].map(model=>({id:`boyu-${model.toLowerCase()}`,category:"filter" as const,brand:"Boyu",model,specifications:"Dış filtre · 1000 L/saat · 18 W · 150–400 litre",ratedFlowLph:1000,powerW:18,recommendedMinL:150,recommendedMaxL:400,sourceUrl:"https://ondaaquarios.com.br/catalgos/boyu/CATALOGO%20BOYU%20GRUPO%20ONDA%20V1.26.pdf",verifiedAt:"2026-08-18"})),
+  ...[
+    {model:"SP-601E",flow:150},{model:"SP-602E",flow:340},{model:"SP-603E",flow:400},{model:"SP-604E",flow:750},
+    {model:"SP-601F",flow:150},{model:"SP-602F",flow:340},{model:"SP-800F",flow:300},{model:"SP-1800B",flow:700},
+  ].map(({model,flow})=>({id:`boyu-${model.toLowerCase()}`,category:"filter" as const,brand:"Boyu",model,specifications:`Dalgıç iç filtre · ${flow} L/saat`,ratedFlowLph:flow,sourceUrl:"https://www.sanisvet.es/photos/PECES-SURTROPIC.pdf",verifiedAt:"2026-08-18"})),
+  {id:"boyu-sp-1000c",category:"filter",brand:"Boyu",model:"SP-1000C",specifications:"Dalgıç iç filtre · 300 L/saat",ratedFlowLph:300,sourceUrl:"https://www.sanisvet.es/photos/PECES-SURTROPIC.pdf",verifiedAt:"2026-08-18"},
+  {id:"boyu-sp-1300c",category:"filter",brand:"Boyu",model:"SP-1300C",specifications:"SP serisi dalgıç iç filtre · yayımlanmış teknik tablo bulunamadı",sourceUrl:"https://www.boyuaquarium.com/En_Pr_index_gci_27.html",verifiedAt:"2026-08-18"},
+  {id:"boyu-sp-2300b",category:"filter",brand:"Boyu",model:"SP-2300B",specifications:"Dalgıç iç filtre · 1200 L/saat · 28 W · 300–450 litre",ratedFlowLph:1200,powerW:28,recommendedMinL:300,recommendedMaxL:450,sourceUrl:"https://ideasmarinas.com/archivo/catalogos/BOYU/catalogo_boyu.pdf",verifiedAt:"2026-08-18"},
+  {id:"boyu-sp-2500b",category:"filter",brand:"Boyu",model:"SP-2500B",specifications:"Dalgıç iç filtre · 1400 L/saat · 32 W · 350–500 litre",ratedFlowLph:1400,powerW:32,recommendedMinL:350,recommendedMaxL:500,sourceUrl:"https://ideasmarinas.com/archivo/catalogos/BOYU/catalogo_boyu.pdf",verifiedAt:"2026-08-18"},
+  {id:"boyu-wf-2015",category:"filter",brand:"Boyu",model:"WF-2015",specifications:"Askı şelale filtre · 150 L/saat · 6 W",ratedFlowLph:150,powerW:6,adjustableFlow:true,sourceUrl:"https://boyu.com.mx/producto/filtros-de-cascada-boyu-wf-compactos/",verifiedAt:"2026-08-18"},
+  {id:"boyu-wf-2025",category:"filter",brand:"Boyu",model:"WF-2025",specifications:"Askı şelale filtre · 300 L/saat · 11 W",ratedFlowLph:300,powerW:11,adjustableFlow:true,sourceUrl:"https://boyu.com.mx/producto/filtros-de-cascada-boyu-wf-compactos/",verifiedAt:"2026-08-18"},
 );
 const boyuAirAndCo2:EquipmentProfile[]=[
-  {id:"boyu-acq-009",category:"air_pump",brand:"Boyu",model:"ACQ-009",specifications:"Elektromanyetik hava kompresörü · 160 L/dakika · 105 W",powerW:105,sourceUrl:"https://atakanpetshop.com/boyu",verifiedAt},
-  {id:"boyu-electromagnetic-110",category:"air_pump",brand:"Boyu",model:"Electro Magnetic 110 L/min",specifications:"Elektromanyetik hava kompresörü · 110 L/dakika · 100 W",powerW:100,sourceUrl:"https://atakanpetshop.com/boyu",verifiedAt},
+  {id:"boyu-acq-009",category:"air_pump",brand:"Boyu",model:"ACQ-009",specifications:"Elektromanyetik hava kompresörü · 160 L/dakika · 105 W",ratedFlowLph:9600,powerW:105,sourceUrl:"https://www.toolsvilla.com/air-pump-power-f-ul-motor",verifiedAt},
+  {id:"boyu-electromagnetic-110",category:"air_pump",brand:"Boyu",model:"Electro Magnetic 110 L/min",specifications:"ACQ-008 elektromanyetik hava kompresörü · 110 L/dakika · 100 W",ratedFlowLph:6600,powerW:100,sourceUrl:"https://atakanpetshop.com/boyu-electro-magnetic-hava-kompresoru-100w-110l-min",verifiedAt},
   ...["CO-100","CO-150","CO-170"].map(model=>({id:`boyu-${model.toLowerCase()}`,category:"co2" as const,brand:"Boyu",model,specifications:"Bitkili akvaryum için cam CO₂ difüzörü",sourceUrl:"https://atakanpetshop.com/boyu",verifiedAt})),
 ];
+boyuAirAndCo2.push(
+  ...([50,100,150,200,250,300] as const).map(powerW=>({id:`boyu-ht-6${powerW}`,category:"heater" as const,brand:"Boyu",model:`HT-6${powerW}`,specifications:`Termostatlı dalgıç ısıtıcı · ${powerW} W`,powerW,sourceUrl:"https://www.boyuaquarium.com/En_Pr_index_gci_57.html",verifiedAt:"2026-08-18"})),
+  ...([50,100,150,200,250,300] as const).map(powerW=>({id:`boyu-dr-${powerW}`,category:"heater" as const,brand:"Boyu",model:`DR-${powerW}`,specifications:`Ayarlanabilir cam akvaryum ısıtıcısı · ${powerW} W`,powerW,sourceUrl:"https://www.boyuaquarium.com/En_Pr_index_gci_57.html",verifiedAt:"2026-08-18"})),
+  ...([100,150,200,250,300] as const).map(powerW=>({id:`boyu-tr-${powerW}a`,category:"heater" as const,brand:"Boyu",model:`TR-${powerW}A`,specifications:`Titanyum akvaryum ısıtıcısı · ${powerW} W`,powerW,sourceUrl:"https://www.boyuaquarium.com/En_Pr_index_gci_57.html",verifiedAt:"2026-08-18"})),
+  ...([100,150,200,250,300] as const).map(powerW=>({id:`boyu-gr-${powerW}`,category:"heater" as const,brand:"Boyu",model:`GR-${powerW}`,specifications:`Termostatlı akvaryum ısıtıcısı · ${powerW} W`,powerW,sourceUrl:"https://www.boyuaquarium.com/En_Pr_index_gci_57.html",verifiedAt:"2026-08-18"})),
+);
 const boyuEfVerified:Record<string,Partial<EquipmentProfile>>={
   "EF-25":{specifications:"Çok kademeli dış filtre · 750 L/saat · 22 W · 250–450 litre",ratedFlowLph:750,powerW:22,recommendedMinL:250,recommendedMaxL:450,sourceUrl:"https://ideasmarinas.com/archivo/fichas/BOYU/Filtracion/filtros_canister_ef-efu_25-35-45_ft.pdf"},
   "EF-35":{specifications:"Çok kademeli dış filtre · 950 L/saat · 24 W · 350–550 litre",ratedFlowLph:950,powerW:24,recommendedMinL:350,recommendedMaxL:550,sourceUrl:"https://ideasmarinas.com/archivo/fichas/BOYU/Filtracion/filtros_canister_ef-efu_25-35-45_ft.pdf"},
@@ -86,7 +180,7 @@ const xinyouFilters: EquipmentProfile[] = [
   ["XY-2812",250], ["XY-2813",380],
 ].map(([model,maxL]) => ({
   id:`xinyou-${String(model).toLowerCase()}`, category:"filter", brand:"Xinyou", model:String(model),
-  specifications:`Hava ile çalışan biyolojik sünger filtre · ${maxL} litreye kadar`, recommendedMaxL:Number(maxL),
+  specifications:`Hava ile çalışan biyolojik sünger filtre · ${maxL} litreye kadar`, recommendedMaxL:Number(maxL), requiresAirPump:true,
   sourceUrl:xinyouSource, verifiedAt,
 }));
 
@@ -141,44 +235,138 @@ const jenecaCurrentFilters:EquipmentProfile[]=[
   ...["TGD-15","TGD-16","TGD-17","TGD-18","TGD-19","XGD-15","XGD-16","XGD-17","XGD-18","XGD-19"].map(model=>({id:`jeneca-${model.toLowerCase()}`,category:"filter" as const,brand:"Jeneca",model,specifications:"Çok işlevli üst filtre",sourceUrl:jenecaOfficialSource,verifiedAt})),
   ...["GD-402","GD-403","GD-502","GD-503","GD-602","GD-603"].map(model=>({id:`jeneca-${model.toLowerCase()}`,category:"filter" as const,brand:"Jeneca",model,specifications:"Ayarlanabilir çok katmanlı damlama üst filtresi",adjustableFlow:true,sourceUrl:jenecaOfficialSource,verifiedAt})),
 ];
+const jenecaXpVerified:Record<string,Partial<EquipmentProfile>>={
+  "LT-300":{specifications:"Yüzey emişli, geri yıkamalı askı filtre · 300 L/saat · 5 W · iki filtre sepeti",ratedFlowLph:300,powerW:5,sourceUrl:"https://www.fishmit.com/products/backwash-hang-on-filter"},
+  "LT-400":{specifications:"Yüzey emişli, geri yıkamalı askı filtre · 300 L/saat · 5 W · üç filtre sepeti",ratedFlowLph:300,powerW:5,sourceUrl:"https://onyxaqua.com/products/jeneca-lt-400-hang-on-canister-filter-5w-300l-h-external-filter-with-surface-skimmer/"},
+  "LT-500":{specifications:"Yüzey emişli, geri yıkamalı askı filtre · 500 L/saat · 7 W · üç filtre sepeti",ratedFlowLph:500,powerW:7,sourceUrl:"https://www.fishmit.com/products/backwash-hang-on-filter"},
+  "LT-600":{specifications:"Yüzey emişli, geri yıkamalı askı filtre · 600 L/saat · 7 W · dört filtre sepeti",ratedFlowLph:600,powerW:7,sourceUrl:"https://www.fishmit.com/products/backwash-hang-on-filter"},
+  "XP-05":{specifications:"Şelale çıkışlı askı filtre · 180 L/saat · 3 W",ratedFlowLph:180,powerW:3,sourceUrl:"https://www.artemia.vn/loc-thac-treo-jeneca-ket-hop-hut-vang-mat-nuoc-ho-ca-xp-03-xp-05-xp-06-xp-07-xp-08-xp-09-xp-011-xp-013"},
+  "XP-02":{specifications:"Yüzey emişli ayarlanabilir mini askı filtre · 160 L/saat · 2,5 W · 25 litre altı akvaryumlar",ratedFlowLph:160,powerW:2.5,recommendedMaxL:25,adjustableFlow:true,sourceUrl:"https://koyaquarium.com/san-pham/may-loc-nuoc/loc-thac-jeneca-xp-02/"},
+  "XP-06":{specifications:"Şelale çıkışlı askı filtre · 250 L/saat · 3,5 W",ratedFlowLph:250,powerW:3.5,sourceUrl:"https://www.artemia.vn/loc-thac-treo-jeneca-ket-hop-hut-vang-mat-nuoc-ho-ca-xp-03-xp-05-xp-06-xp-07-xp-08-xp-09-xp-011-xp-013"},
+  "XP-06L":{specifications:"Döner çarklı mini askı filtre · 250 L/saat · 3,5 W",ratedFlowLph:250,powerW:3.5,sourceUrl:"https://shop-vn.tiktok.com/pdp/1730509348745415412"},
+  "XP-07":{specifications:"Yüzey emişli ayarlanabilir askı filtre · 500 L/saat · 4,5 W",ratedFlowLph:500,powerW:4.5,sourceUrl:"https://www.aquariumshopgt.com/producto/xp-07/"},
+  "XP-08":{specifications:"Yüzey emişli ayarlanabilir askı filtre · 680 L/saat · 6,5 W",ratedFlowLph:680,powerW:6.5,sourceUrl:"https://www.artemia.vn/loc-thac-treo-jeneca-ket-hop-hut-vang-mat-nuoc-ho-ca-xp-03-xp-05-xp-06-xp-07-xp-08-xp-09-xp-011-xp-013"},
+  "XP-09":{specifications:"Şelale çıkışlı askı filtre · 200 L/saat · 3,5 W",ratedFlowLph:200,powerW:3.5,sourceUrl:"https://www.artemia.vn/loc-thac-treo-jeneca-ket-hop-hut-vang-mat-nuoc-ho-ca-xp-03-xp-05-xp-06-xp-07-xp-08-xp-09-xp-011-xp-013"},
+  "XP-11":{specifications:"Yüzey emişli ayarlanabilir askı filtre · 260 L/saat · 4,2 W",ratedFlowLph:260,powerW:4.2,sourceUrl:"https://www.acuaticaperu.com/wp-content/uploads/2024/08/ACUATICA-PUBLICO-AGOSTO-2024.pdf"},
+  "XP-13":{specifications:"Yüzey emişli ayarlanabilir askı filtre · 290 L/saat · 4,8 W",ratedFlowLph:290,powerW:4.8,sourceUrl:"https://www.acuaticaperu.com/wp-content/uploads/2024/08/ACUATICA-PUBLICO-AGOSTO-2024.pdf"},
+  "XP-606":{specifications:"Yüzey emişli ince gövdeli askı filtre · 300 L/saat · 4 W",ratedFlowLph:300,powerW:4,adjustableFlow:true,sourceUrl:"https://store.betezion.com/products/jeneca-xp-606-slim-aquarium-hang-on-filter-4w-300lh-with-int/234978710/"},
+  "XP-006 Ultra":{specifications:"Kuru/ıslak çok aşamalı yüzey emişli askı filtre · 500 L/saat · 6 W",ratedFlowLph:500,powerW:6,sourceUrl:"https://eastoceansg.com/products/jeneca-external-hang-on-power-filter-xp-006-007-ultra-high-flow-aquarium-filter-with-surface-skimmer-multi-stage-filtration"},
+  "XP-007 Ultra":{specifications:"Kuru/ıslak çok aşamalı yüzey emişli askı filtre · 800 L/saat · 8 W",ratedFlowLph:800,powerW:8,sourceUrl:"https://eastoceansg.com/products/jeneca-external-hang-on-power-filter-xp-006-007-ultra-high-flow-aquarium-filter-with-surface-skimmer-multi-stage-filtration"},
+  "XP-33 Ultra":{specifications:"Yüzey emişli, üç aşamalı ayarlanabilir askı filtre · 1200 L/saat · 10 W",ratedFlowLph:1200,powerW:10,adjustableFlow:true,sourceUrl:"https://eastoceansg.com/products/jeneca-external-hang-on-power-filter-xp-33-36-ultra-high-flow-aquarium-filter-with-surface-skimmer-multi-stage-filtration"},
+  "XP-36 Ultra":{specifications:"Yüzey emişli, üç aşamalı ayarlanabilir askı filtre · 1500 L/saat · 15 W",ratedFlowLph:1500,powerW:15,adjustableFlow:true,sourceUrl:"https://eastoceansg.com/products/jeneca-external-hang-on-power-filter-xp-33-36-ultra-high-flow-aquarium-filter-with-surface-skimmer-multi-stage-filtration"},
+  "XP-33D":{specifications:"Kuru/ıslak ayrımlı, yüzey emişli ayarlanabilir askı filtre · 1200 L/saat · 10 W",ratedFlowLph:1200,powerW:10,adjustableFlow:true,sourceUrl:"https://eastoceansg.com/products/jeneca-external-hang-on-power-filter-xp-33-36-ultra-high-flow-aquarium-filter-with-surface-skimmer-multi-stage-filtration"},
+  "XP-36D":{specifications:"Kuru/ıslak ayrımlı, yüzey emişli ayarlanabilir askı filtre · 1500 L/saat · 15 W",ratedFlowLph:1500,powerW:15,adjustableFlow:true,sourceUrl:"https://eastoceansg.com/products/jeneca-external-hang-on-power-filter-xp-33-36-ultra-high-flow-aquarium-filter-with-surface-skimmer-multi-stage-filtration"},
+  "XP-33 Pro":{specifications:"Balık dışkısı ayırma hazneli, çift valfli ayarlanabilir askı filtre · 1000 L/saat",ratedFlowLph:1000,adjustableFlow:true,sourceUrl:"https://www.fishmit.com/products/xp-pro-fish-waste-filter"},
+  "XP-36 Pro":{specifications:"Balık dışkısı ayırma hazneli, çift valfli ayarlanabilir askı filtre · 1200 L/saat · 15 W",ratedFlowLph:1200,powerW:15,adjustableFlow:true,sourceUrl:"https://thaiaquariumcenter.tarad.com/products_detail/view/7914997"},
+  "XGD-15":{specifications:"Kuru/ıslak üst filtre · 400 L/saat · 6 W · bir filtre kutusu",ratedFlowLph:400,powerW:6,sourceUrl:"https://www.fishmit.com/products/dry-wet-top-filter"},
+  "XGD-16":{specifications:"Kuru/ıslak üst filtre · 400 L/saat · 6 W · iki filtre kutusu",ratedFlowLph:400,powerW:6,sourceUrl:"https://www.fishmit.com/products/dry-wet-top-filter"},
+  "XGD-17":{specifications:"Kuru/ıslak üst filtre · 400 L/saat · 6 W · üç filtre kutusu",ratedFlowLph:400,powerW:6,sourceUrl:"https://www.fishmit.com/products/dry-wet-top-filter"},
+  "XGD-18":{specifications:"Kuru/ıslak üst filtre · 400 L/saat · 6 W · dört filtre kutusu",ratedFlowLph:400,powerW:6,sourceUrl:"https://www.fishmit.com/products/dry-wet-top-filter"},
+  "XGD-19":{specifications:"Kuru/ıslak üst filtre · 400 L/saat · 6 W · beş filtre kutusu",ratedFlowLph:400,powerW:6,sourceUrl:"https://www.fishmit.com/products/dry-wet-top-filter"},
+  "GD-403":{specifications:"Üç katmanlı ayarlanabilir üst filtre · 800 L/saat · 10 W",ratedFlowLph:800,powerW:10,adjustableFlow:true,sourceUrl:"https://yellowtail.shop/product/jeneca-gd-403-aquarium-top-filter-2-feet-tank/"},
+  "GD-503":{specifications:"Üç katmanlı ayarlanabilir üst filtre · 1500 L/saat · 20 W",ratedFlowLph:1500,powerW:20,adjustableFlow:true,sourceUrl:"https://greenfinaqua.com/products/jeneca-aquarium-top-filters-gd-series"},
+  "GD-603":{specifications:"Üç katmanlı ayarlanabilir üst filtre · 1800 L/saat · 25 W",ratedFlowLph:1800,powerW:25,adjustableFlow:true,sourceUrl:"https://seasunaquarium.com/shop/index.php?category_id=96&flypage=flypage.tpl&option=com_virtuemart&page=shop.product_details&product_id=1685&vmcchk=1"},
+};
+for(const item of jenecaCurrentFilters){Object.assign(item,jenecaXpVerified[item.model]??{});}
 const jenecaAirPumps:EquipmentProfile[]=["AP-970","AP-980","AP-960","AP-548","AP-648","AP-9801","AP-9802","AP-9804","DC-001","DC-003"].map(model=>({
   id:`jeneca-${model.toLowerCase()}`,category:"air_pump",brand:"Jeneca",model,
   specifications:model.startsWith("DC-")?"DC hava motoru":"Sessiz hava motoru",
   sourceUrl:model.startsWith("AP-980")?"https://www.aleas.cn/product/711.html":jenecaOfficialSource,verifiedAt,
 }));
+const jenecaAirVerified:Record<string,Partial<EquipmentProfile>>={
+  "AP-548":{specifications:"Sessiz tek çıkışlı hava motoru · 3,5 L/dak · 3 W",ratedFlowLph:210,powerW:3,sourceUrl:"https://tieuguppy.vn/may-oxy-ho-ca-jeneca-ap568-ap648-may-oxy-the-he-moi"},
+  "AP-648":{specifications:"Sessiz çift çıkışlı hava motoru · 2 × 4 L/dak · 5 W",ratedFlowLph:480,powerW:5,sourceUrl:"https://tieuguppy.vn/may-oxy-ho-ca-jeneca-ap568-ap648-may-oxy-the-he-moi"},
+  "AP-960":{specifications:"Sessiz tek çıkışlı hava motoru · 1,65 L/dak · 2,8 W",ratedFlowLph:99,powerW:2.8,sourceUrl:"https://asiaoptom.com/item/789123137401/"},
+  "AP-970":{specifications:"Sessiz tek çıkışlı hava motoru · 3,5 L/dak · 3,5 W",ratedFlowLph:210,powerW:3.5,sourceUrl:"https://www.aleas.cn/product/449.html"},
+  "AP-980":{specifications:"Sessiz çift çıkışlı hava motoru · toplam 7 L/dak · 4 W",ratedFlowLph:420,powerW:4,sourceUrl:"https://www.aleas.cn/product/449.html"},
+  "AP-9801":{specifications:"Ayarlanabilir sessiz tek çıkışlı hava motoru · 2,5 L/dak · 3 W",ratedFlowLph:150,powerW:3,adjustableFlow:true,sourceUrl:"https://aquabornworld.com/product/bomba-de-aire-silenciosa-jeneca-ap-9801/"},
+  "AP-9802":{specifications:"Ayarlanabilir sessiz çift çıkışlı hava motoru · toplam 5 L/dak · 3 W",ratedFlowLph:300,powerW:3,adjustableFlow:true,sourceUrl:"https://www.goldsupplier.com/provide/p124206961.html"},
+  "AP-9804":{specifications:"Ayarlanabilir sessiz çift çıkışlı hava motoru · toplam 6 L/dak · 4 W",ratedFlowLph:360,powerW:4,adjustableFlow:true,sourceUrl:"https://www.goldsupplier.com/provide/p124206961.html"},
+};
+for(const item of jenecaAirPumps){Object.assign(item,jenecaAirVerified[item.model]??{});}
+const jenecaBx20Source="https://www.jd.com/brand/69942b14a8a7bb507928.html";
 const jenecaHeaters:EquipmentProfile[]=[
-  {id:"jeneca-bx-20",category:"heater",brand:"Jeneca",model:"BX-20",specifications:"Üreticinin güncel kataloğundaki akvaryum ısıtıcısı",sourceUrl:jenecaOfficialSource,verifiedAt},
+  {id:"jeneca-bx-20-25w",category:"heater",brand:"Jeneca",model:"BX-20 25 W",specifications:"304 paslanmaz çelik otomatik termostatlı ısıtıcı · 25 W · yaklaşık 20 litre",powerW:25,recommendedMaxL:20,sourceUrl:jenecaBx20Source,verifiedAt:"2026-08-18"},
+  {id:"jeneca-bx-20-50w",category:"heater",brand:"Jeneca",model:"BX-20 50 W",specifications:"304 paslanmaz çelik otomatik termostatlı ısıtıcı · 50 W · yaklaşık 30 litre",powerW:50,recommendedMaxL:30,sourceUrl:jenecaBx20Source,verifiedAt:"2026-08-18"},
+  ...[100,200,300,500].map(powerW=>({id:`jeneca-bx-20-${powerW}w`,category:"heater" as const,brand:"Jeneca",model:`BX-20 ${powerW} W`,specifications:`304 paslanmaz çelik otomatik termostatlı ısıtıcı · ${powerW} W · üretici/satıcı hacim aralığı yayımlamamış`,powerW,sourceUrl:"https://shopee.com.my/%F0%9F%8C%B1-JENECA-304-Stainless-Steel-Heater-for-Fish-Tank-Automatic-Constant-Temperature-BX-20-Series-%E9%87%91%E5%88%A9%E4%BD%B3-304%E4%B8%8D%E9%94%88%E9%92%A2%E8%87%AA%E5%8A%A8%E6%81%92%E6%B8%A9%E9%B1%BC%E7%BC%B8%E5%8A%A0%E6%B8%A9%E6%A3%92-EVO-i.327591138.27381083056",verifiedAt:"2026-08-18"})),
+];
+
+// Üreticinin güncel çevrim içi kataloğunda bulunan Jeneca serileri. Sayısal
+// parametre tablosu yayımlanmayan ürünler katalogda bulunur, ancak sağlık
+// analizinde varsayımsal debi/güç kullanılmaz.
+const jenecaOfficialCatalogSource="https://www.aleas.cn/product/20/";
+const jenecaOfficialAdditional:EquipmentProfile[]=[
+  {id:"jeneca-cda-200l",category:"filter",brand:"Jeneca",model:"CDA-200L",specifications:"Çok işlevli iç filtre · 280 L/saat · 3,5 W",ratedFlowLph:280,powerW:3.5,sourceUrl:"https://www.jd.com/jiage/6994e92af22db77e076c.html?brand=%E9%87%91%E5%88%A9%E4%BD%B3%EF%BC%88Jeneca%EF%BC%89",verifiedAt:"2026-08-18"},
+  {id:"jeneca-cda-300l",category:"filter",brand:"Jeneca",model:"CDA-300L",specifications:"Çok işlevli iç filtre · 370 L/saat · 5,5 W",ratedFlowLph:370,powerW:5.5,sourceUrl:"https://www.jd.com/jiage/6994e92af22db77e076c.html?brand=%E9%87%91%E5%88%A9%E4%BD%B3%EF%BC%88Jeneca%EF%BC%89",verifiedAt:"2026-08-18"},
+  {id:"jeneca-cda-500l",category:"filter",brand:"Jeneca",model:"CDA-500L",specifications:"Çok işlevli iç filtre · 500 L/saat · 7 W",ratedFlowLph:500,powerW:7,sourceUrl:"https://www.jd.com/brand/98558c1a5c66c7569a28.html",verifiedAt:"2026-08-18"},
+  {id:"jeneca-cda-1000l",category:"filter",brand:"Jeneca",model:"CDA-1000L",specifications:"Çok işlevli iç filtre · 1000 L/saat · 15 W",ratedFlowLph:1000,powerW:15,sourceUrl:"https://www.jd.com/jiage/6994e92af22db77e076c.html?brand=%E9%87%91%E5%88%A9%E4%BD%B3%EF%BC%88Jeneca%EF%BC%89",verifiedAt:"2026-08-18"},
+  ...["CDA-200","CDA-300","CDA-500","CDA-1000","CDA-1500","CDA-2500","PB-260A","PB-360A","PB-460A","PB-560A"].map(model=>({
+    id:`jeneca-${model.toLowerCase()}`,category:"other" as const,brand:"Jeneca",model,
+    specifications:model.startsWith("PB-")?"İç sirkülasyon pompası · üretici teknik tablosu yayımlanmamış":"Dalgıç/devirdaim su pompası · üretici teknik tablosu yayımlanmamış",
+    sourceUrl:jenecaOfficialCatalogSource,verifiedAt,
+  })),
+  ...["GLS-21","GLS-21D","GLS-22","GLS-22D","GLS-31","GLS-31D","GLS-32","GLS-32D"].map(model=>({
+    id:`jeneca-${model.toLowerCase()}`,category:"other" as const,brand:"Jeneca",model,
+    specifications:"Ultra ince filtre emiş süzgeci/aksesuarı",sourceUrl:jenecaOfficialCatalogSource,verifiedAt,
+  })),
+  ...[60,80,100,120,150,180].map(length=>({
+    id:`jeneca-t8-ts${length}`,category:"lighting" as const,brand:"Jeneca",model:`T8-TS${length}`,
+    specifications:`RGB ayarlanabilir akvaryum aydınlatması · ${length} cm seri`,sourceUrl:jenecaOfficialCatalogSource,verifiedAt,
+  })),
+  ...[20,30,40,50,60,80,100,120].flatMap(length=>([
+    {id:`jeneca-sc-${length}-standard`,category:"lighting" as const,brand:"Jeneca",model:`SC-${length} Standard`,specifications:`Beyaz / mavi-beyaz / renk geçişli akvaryum aydınlatması · ${length} cm seri`,sourceUrl:"https://www.aleas.cn/product/704.html",verifiedAt},
+    {id:`jeneca-sc-${length}-rgb`,category:"lighting" as const,brand:"Jeneca",model:`SC-${length} RGB`,specifications:`RGB akvaryum aydınlatması · ${length} cm seri`,sourceUrl:jenecaOfficialCatalogSource,verifiedAt},
+  ])),
+  ...["D-1","D-1S","D-2","D-15","D-16"].map(model=>({
+    id:`jeneca-${model.toLowerCase()}`,category:"lighting" as const,brand:"Jeneca",model,
+    specifications:"Enerji tasarruflu akvaryum LED aydınlatması",sourceUrl:jenecaOfficialCatalogSource,verifiedAt,
+  })),
 ];
 
 const eurostarFilters: EquipmentProfile[] = [
   { id:"eurostar-hbl802", category:"filter", brand:"Eurostar", model:"HBL802", specifications:"Ayarlanabilir askı filtre · 500 L/saat · 6 W", ratedFlowLph:500, powerW:6, recommendedMinL:60, recommendedMaxL:100, adjustableFlow:true, sourceUrl:"https://www.karacaakvaryum.com/urun/eurostar-hbl802-aski-filtre-sistemi/", verifiedAt },
-  { id:"eurostar-sponge-production-small", category:"filter", brand:"Eurostar", model:"Sünger Üretim Filtresi Small", specifications:"Hava motoru veya filtre emiş hattıyla çalışan ağırlıklı sünger filtre · Small", sourceUrl:"https://atakanpetshop.com/eurostar-sunger-uretim-filtresi-medium", verifiedAt },
-  { id:"eurostar-sponge-production-medium", category:"filter", brand:"Eurostar", model:"Sünger Üretim Filtresi Medium", specifications:"Hava motoru veya filtre emiş hattıyla çalışan ağırlıklı sünger filtre · 12 cm çap · 10 cm yükseklik", sourceUrl:"https://atakanpetshop.com/eurostar-sunger-uretim-filtresi-medium", verifiedAt },
-  { id:"eurostar-sponge-production-large", category:"filter", brand:"Eurostar", model:"Sünger Üretim Filtresi Large", specifications:"Hava motoru veya filtre emiş hattıyla çalışan ağırlıklı sünger filtre · Large", sourceUrl:"https://atakanpetshop.com/eurostar-sunger-uretim-filtresi-medium", verifiedAt },
+  { id:"eurostar-n708", category:"filter", brand:"Eurostar", model:"N708", specifications:"Ayarlanabilir askı dış filtre · 500 L/saat · 6 W", ratedFlowLph:500, powerW:6, adjustableFlow:true, sourceUrl:"https://www.akakce.com/akvaryum-filtresi/eurostar.html", verifiedAt:"2026-08-18" },
+  { id:"eurostar-ege-sp200", category:"filter", brand:"Eurostar", model:"Ege SP200", specifications:"Kompakt iç filtre · 200 L/saat · 2 W", ratedFlowLph:200, powerW:2, sourceUrl:"https://www.hepsiburada.com/eurostar-ege-sp200-ic-filtre-200-lth-2w-p-HBV000001V3ZE", verifiedAt:"2026-08-18" },
+  { id:"eurostar-ege-sp300", category:"filter", brand:"Eurostar", model:"Ege SP300", specifications:"Kompakt iç filtre · 300 L/saat · 2 W", ratedFlowLph:300, powerW:2, sourceUrl:"https://www.hepsiburada.com/eurostar-ege-sp300-ic-filtre-300-lth-2w-p-HBV000001V3ZG", verifiedAt:"2026-08-18" },
+  { id:"eurostar-ege-2200f", category:"filter", brand:"Eurostar", model:"Ege 2200F", specifications:"İç filtre · 1000 L/saat · 20 W", ratedFlowLph:1000, powerW:20, sourceUrl:"https://www.akakce.com/akvaryum-filtresi/eurostar.html", verifiedAt:"2026-08-18" },
+  { id:"eurostar-marmara-single", category:"air_pump", brand:"Eurostar", model:"Marmara Tek Çıkış", specifications:"Tek çıkışlı hava motoru · 3,5 L/dakika · 3 W", ratedFlowLph:210, powerW:3, sourceUrl:"https://www.petcanlar.com/akvaryum-hava-motorlari", verifiedAt:"2026-08-18" },
+  { id:"eurostar-marmara-double", category:"air_pump", brand:"Eurostar", model:"Marmara Çift Çıkış", specifications:"Çift çıkışlı hava motoru · 2 × 4 L/dakika · 5 W", ratedFlowLph:480, powerW:5, sourceUrl:"https://www.petcanlar.com/akvaryum-hava-motorlari", verifiedAt:"2026-08-18" },
+  { id:"eurostar-sponge-production-small", category:"filter", brand:"Eurostar", model:"Sünger Üretim Filtresi Small", specifications:"Hava motoru veya filtre emiş hattıyla çalışan ağırlıklı sünger filtre · Small", requiresAirPump:true, sourceUrl:"https://atakanpetshop.com/eurostar-sunger-uretim-filtresi-medium", verifiedAt },
+  { id:"eurostar-sponge-production-medium", category:"filter", brand:"Eurostar", model:"Sünger Üretim Filtresi Medium", specifications:"Hava motoru veya filtre emiş hattıyla çalışan ağırlıklı sünger filtre · 12 cm çap · 10 cm yükseklik", requiresAirPump:true, sourceUrl:"https://atakanpetshop.com/eurostar-sunger-uretim-filtresi-medium", verifiedAt },
+  { id:"eurostar-sponge-production-large", category:"filter", brand:"Eurostar", model:"Sünger Üretim Filtresi Large", specifications:"Hava motoru veya filtre emiş hattıyla çalışan ağırlıklı sünger filtre · Large", requiresAirPump:true, sourceUrl:"https://atakanpetshop.com/eurostar-sunger-uretim-filtresi-medium", verifiedAt },
 ];
 
 const xlproSource = "https://www.akvaryumexpress.com/xlpro";
 const xlproFilters: EquipmentProfile[] = [
-  ["230 Mini",210], ["Mini-500",510], ["EX-1000",1000], ["EX-1200",1200], ["EX-1500",1500],
-].map(([model,flow]) => ({id:`xlpro-${String(model).toLowerCase().replace(/[^a-z0-9]+/g,"-")}`,category:"filter",brand:"XLPro",model:String(model),specifications:`Dış filtre · ${flow} L/saat`,ratedFlowLph:Number(flow),sourceUrl:xlproSource,verifiedAt}));
+  {id:"xlpro-230-mini",category:"filter",brand:"XLPro",model:"230 Mini",specifications:"Mini dış filtre · 210 L/saat · 1,7 W",ratedFlowLph:210,powerW:1.7,sourceUrl:"https://www.dogasan.com.tr/xlpro-230-mini-selale-filtre-210-lt-h",verifiedAt},
+  {id:"xlpro-mini-500",category:"filter",brand:"XLPro",model:"Mini-500",specifications:"Mini dış filtre · 510 L/saat",ratedFlowLph:510,sourceUrl:xlproSource,verifiedAt},
+  {id:"xlpro-500at-mini",category:"filter",brand:"XLPro",model:"500AT Mini",specifications:"Mini dış filtre · 450 L/saat",ratedFlowLph:450,sourceUrl:"https://akvaryumbalikavm.com.tr/xlpro",verifiedAt},
+  {id:"xlpro-ex-1000",category:"filter",brand:"XLPro",model:"EX-1000",specifications:"Dış filtre · 1000 L/saat",ratedFlowLph:1000,sourceUrl:xlproSource,verifiedAt},
+  {id:"xlpro-ex-1200",category:"filter",brand:"XLPro",model:"EX-1200",specifications:"Dış filtre · 1200 L/saat · 28 W",ratedFlowLph:1200,powerW:28,sourceUrl:"https://www.akakce.com/akvaryum-filtresi/xlpro.html",verifiedAt},
+  {id:"xlpro-ex-1500",category:"filter",brand:"XLPro",model:"EX-1500",specifications:"Dış filtre · 1500 L/saat · 36 W",ratedFlowLph:1500,powerW:36,sourceUrl:"https://www.akakce.com/akvaryum-filtresi/xlpro.html",verifiedAt},
+];
 
 const ejetSource = "https://atakanpetshop.com/ejet";
 const ejetFilters: EquipmentProfile[] = [
   ["3358",750], ["3368",1650], ["3378",1850], ["3388",2000],
 ].map(([model,flow]) => ({id:`ejet-${model}`,category:"filter",brand:"Ejet",model:String(model),specifications:`Dış filtre · ${flow} L/saat`,ratedFlowLph:Number(flow),sourceUrl:ejetSource,verifiedAt}));
 ejetFilters.push(
-  {id:"ejet-j103",category:"filter",brand:"Ejet",model:"J103",specifications:"Hava ile çalışan sünger filtre",sourceUrl:ejetSource,verifiedAt},
-  {id:"ejet-102",category:"filter",brand:"Ejet",model:"102",specifications:"Hava ile çalışan pipo filtre",sourceUrl:ejetSource,verifiedAt},
-  {id:"ejet-bp3",category:"air_pump",brand:"Ejet",model:"BP3",specifications:"Pilli hava motoru",sourceUrl:ejetSource,verifiedAt},
-  {id:"ejet-905f",category:"filter",brand:"Ejet",model:"905F",specifications:"İç filtre · 1000 L/saat",ratedFlowLph:1000,sourceUrl:"https://malawiizmir.com/e---jet-905-f-ic-filtre",verifiedAt},
+  {id:"ejet-j103",category:"filter",brand:"Ejet",model:"J103",specifications:"Hava ile çalışan sünger filtre",requiresAirPump:true,sourceUrl:ejetSource,verifiedAt},
+  {id:"ejet-102",category:"filter",brand:"Ejet",model:"102",specifications:"Hava ile çalışan pipo filtre",requiresAirPump:true,sourceUrl:ejetSource,verifiedAt},
+  {id:"ejet-104",category:"filter",brand:"Ejet",model:"104",specifications:"Hava ile çalışan üretim filtresi",requiresAirPump:true,sourceUrl:"https://www.akvaryem.com.tr/marka/jet",verifiedAt:"2026-08-18"},
+  {id:"ejet-bp3",category:"air_pump",brand:"Ejet",model:"BP3",specifications:"Tek çıkışlı pilli hava motoru · 120 L/saat",ratedFlowLph:120,sourceUrl:"https://www.akvaryem.com.tr/urun/jet-bp3-pilli-hava-motoru",verifiedAt},
+  {id:"ejet-905f",category:"filter",brand:"Ejet",model:"905F",specifications:"İç filtre · 470 L/saat · 7 W",ratedFlowLph:470,powerW:7,sourceUrl:"https://esvaryum.com/urun-kategori/akvaryum-ekipmanlari/filtreler/ic-filtreler/",verifiedAt:"2026-08-18"},
+  {id:"ejet-906f",category:"filter",brand:"Ejet",model:"906F",specifications:"İç filtre · 1000 L/saat · 16 W",ratedFlowLph:1000,powerW:16,sourceUrl:"https://esvaryum.com/urun/e-jet-906f-ic-filtre-1050-l-h/",verifiedAt},
+  {id:"ejet-907f",category:"filter",brand:"Ejet",model:"907F",specifications:"İç filtre · 1350 L/saat · 23 W",ratedFlowLph:1350,powerW:23,sourceUrl:"https://www.fiyatperformans.com.tr/evcil-hayvan-urunleri/en-ucuz-e-jet-907-f-1350-lts-ic-filtre%2C2139087360",verifiedAt},
+  {id:"ejet-908f",category:"filter",brand:"Ejet",model:"908F",specifications:"İç filtre · 1400 L/saat",ratedFlowLph:1400,sourceUrl:"https://www.netxpazar.com/jet",verifiedAt:"2026-08-18"},
 );
 
 const dophinRetailSource="https://atakanpetshop.com/dophin";
 const dophinCurrentFilters:EquipmentProfile[]=[
-  {id:"dophin-h200",category:"filter",brand:"Dophin",model:"H200",specifications:"Askı şelale filtre · 250 L/saat · 4 W",ratedFlowLph:250,powerW:4,sourceUrl:dophinRetailSource,verifiedAt},
-  {id:"dophin-h300",category:"filter",brand:"Dophin",model:"H300",specifications:"Askı şelale filtre · 360 L/saat · 5,2 W",ratedFlowLph:360,powerW:5.2,sourceUrl:dophinRetailSource,verifiedAt},
-  {id:"dophin-h500",category:"filter",brand:"Dophin",model:"H500",specifications:"Askı şelale filtre · 510 L/saat",ratedFlowLph:510,sourceUrl:dophinRetailSource,verifiedAt},
-  {id:"dophin-h800",category:"filter",brand:"Dophin",model:"H800",specifications:"Askı şelale filtre · 1000 L/saat · 9,3 W",ratedFlowLph:1000,powerW:9.3,sourceUrl:dophinRetailSource,verifiedAt},
+  {id:"dophin-h200",category:"filter",brand:"Dophin",model:"H200",specifications:"Askı şelale filtre · 370 L/saat · 3,4 W · 75 litreye kadar",ratedFlowLph:370,powerW:3.4,recommendedMaxL:75,sourceUrl:"https://www.qimeigroup.com/Products_detail/dophin-aquarium-slim-hanging-filter-h80.html",verifiedAt:"2026-08-18"},
+  {id:"dophin-h300",category:"filter",brand:"Dophin",model:"H300",specifications:"Askı şelale filtre · 440 L/saat · 5,2 W · 100 litreye kadar",ratedFlowLph:440,powerW:5.2,recommendedMaxL:100,sourceUrl:"https://www.qimeigroup.com/Products_detail/dophin-aquarium-slim-hanging-filter-h80.html",verifiedAt:"2026-08-18"},
+  {id:"dophin-h500",category:"filter",brand:"Dophin",model:"H500",specifications:"Askı şelale filtre · 580 L/saat · 6,2 W · 150 litreye kadar",ratedFlowLph:580,powerW:6.2,recommendedMaxL:150,sourceUrl:"https://www.qimeigroup.com/Products_detail/dophin-aquarium-slim-hanging-filter-h80.html",verifiedAt:"2026-08-18"},
+  {id:"dophin-h800",category:"filter",brand:"Dophin",model:"H800",specifications:"Askı şelale filtre · 1000 L/saat · 8,1 W · 200 litreye kadar",ratedFlowLph:1000,powerW:8.1,recommendedMaxL:200,sourceUrl:"https://www.qimeigroup.com/Products_detail/dophin-aquarium-slim-hanging-filter-h80.html",verifiedAt:"2026-08-18"},
   {id:"dophin-kf150",category:"filter",brand:"Dophin",model:"KF150",specifications:"İç filtre · 150 L/saat",ratedFlowLph:150,sourceUrl:dophinRetailSource,verifiedAt},
   {id:"dophin-kf160",category:"filter",brand:"Dophin",model:"KF160",specifications:"İç filtre · 150 L/saat",ratedFlowLph:150,sourceUrl:dophinRetailSource,verifiedAt},
   {id:"dophin-kf200",category:"filter",brand:"Dophin",model:"KF200",specifications:"İç filtre · 180 L/saat",ratedFlowLph:180,sourceUrl:dophinRetailSource,verifiedAt},
@@ -186,11 +374,24 @@ const dophinCurrentFilters:EquipmentProfile[]=[
   {id:"dophin-fb1000f",category:"filter",brand:"Dophin",model:"FB1000 F",specifications:"Aktif karbon kartuşlu iç filtre · 300 L/saat",ratedFlowLph:300,sourceUrl:dophinRetailSource,verifiedAt},
   {id:"dophin-fb3000f",category:"filter",brand:"Dophin",model:"FB3000 F",specifications:"Aktif karbon kartuşlu iç filtre · 500 L/saat · 50–90 litre",ratedFlowLph:500,recommendedMinL:50,recommendedMaxL:90,sourceUrl:"https://atakanpetshop.com/dophin-fb3000-f-ic-filtre-500-l-s",verifiedAt},
   {id:"dophin-fb4000f",category:"filter",brand:"Dophin",model:"FB4000 F",specifications:"Aktif karbon kartuşlu iç filtre · 600 L/saat",ratedFlowLph:600,sourceUrl:dophinRetailSource,verifiedAt},
-  {id:"dophin-sf15",category:"filter",brand:"Dophin",model:"SF15",specifications:"Hava motoruyla çalışan biyolojik pipo filtre",sourceUrl:dophinRetailSource,verifiedAt},
-  {id:"dophin-sf33",category:"filter",brand:"Dophin",model:"SF33",specifications:"Hava motoruyla çalışan biyolojik pipo filtre",sourceUrl:dophinRetailSource,verifiedAt},
-  {id:"dophin-cf300",category:"filter",brand:"Dophin",model:"CF-300",specifications:"Nano akvaryumlar için mini dış filtre",sourceUrl:dophinRetailSource,verifiedAt},
-  {id:"dophin-ap1302",category:"air_pump",brand:"Dophin",model:"AP1302",specifications:"Akvaryum hava motoru",sourceUrl:dophinRetailSource,verifiedAt},
+  {id:"dophin-sf15",category:"filter",brand:"Dophin",model:"SF15",specifications:"Hava motoruyla çalışan biyolojik pipo filtre",requiresAirPump:true,sourceUrl:dophinRetailSource,verifiedAt},
+  {id:"dophin-sf33",category:"filter",brand:"Dophin",model:"SF33",specifications:"Hava motoruyla çalışan biyolojik pipo filtre",requiresAirPump:true,sourceUrl:dophinRetailSource,verifiedAt},
+  {id:"dophin-cf300",category:"filter",brand:"Dophin",model:"CF-300",specifications:"Mini dış filtre · 410 L/saat · 6,7 W · 40 litreye kadar",ratedFlowLph:410,powerW:6.7,recommendedMaxL:40,sourceUrl:"https://www.avmatik.com/dophin-cf-300-dis-filtre-300-l-h-200-cf300",verifiedAt},
+  {id:"dophin-ap1302",category:"air_pump",brand:"Dophin",model:"AP1302",specifications:"Akvaryum hava motoru · 96 L/saat · 2 W",ratedFlowLph:96,powerW:2,sourceUrl:"https://www.flipkart.com/dophin-ap-1302-air-aquarium-pump/p/itmfhnxdzyy7ccgd",verifiedAt},
 ];
+dophinCurrentFilters.push(
+  {id:"dophin-h80",category:"filter",brand:"Dophin",model:"H80",specifications:"Askı şelale filtre · 190 L/saat · 2,7 W · 25 litreye kadar",ratedFlowLph:190,powerW:2.7,recommendedMaxL:25,sourceUrl:"https://www.qimeigroup.com/Products_detail/dophin-aquarium-slim-hanging-filter-h80.html",verifiedAt:"2026-08-18"},
+  {id:"dophin-h100",category:"filter",brand:"Dophin",model:"H100",specifications:"Askı şelale filtre · 350 L/saat · 3,4 W · 50 litreye kadar",ratedFlowLph:350,powerW:3.4,recommendedMaxL:50,sourceUrl:"https://www.qimeigroup.com/Products_detail/dophin-aquarium-slim-hanging-filter-h80.html",verifiedAt:"2026-08-18"},
+  ...([[2000,300,3.1,40],[3000,350,3.1,60],[5000,400,4.5,80],[6000,500,4.5,100]] as const).map(([model,flow,power,maxL])=>({id:`dophin-a-${model}`,category:"filter" as const,brand:"Dophin",model:`A-${model}`,specifications:`Medya kutulu ayarlanabilir askı filtre · ${flow} L/saat · ${String(power).replace(".",",")} W`,ratedFlowLph:flow,powerW:power,recommendedMaxL:maxL,adjustableFlow:true,sourceUrl:"https://www.qimeigroup.com/Products_detail/dophin-aquarium-hanging-filter-a2000.html",verifiedAt:"2026-08-18"})),
+  ...([[300,300,4.5,50],[500,450,6,100],[800,650,12,150]] as const).map(([model,flow,power,maxL])=>({id:`dophin-tf-${model}`,category:"filter" as const,brand:"Dophin",model:`TF-${model}`,specifications:`Yatay kullanıma uygun iç filtre · ${flow} L/saat · ${String(power).replace(".",",")} W`,ratedFlowLph:flow,powerW:power,recommendedMaxL:maxL,sourceUrl:"https://www.qimeigroup.com/Products_detail/dophin-aquarium-internal-filter-tf300.html",verifiedAt:"2026-08-18"})),
+  ...([25,50,100,150,200,300,500] as const).flatMap(powerW=>(["1006","1008"] as const).map(series=>({id:`dophin-ah-${series}-${powerW}`,category:"heater" as const,brand:"Dophin",model:`AH-${series} ${powerW} W`,specifications:`Termostatlı ayarlanabilir cam ısıtıcı · ${powerW} W · ${powerW} litreye kadar`,powerW,recommendedMaxL:powerW,sourceUrl:`https://www.qimeigroup.com/Products_detail/dophin-aquarium-${series==="1006"?"heater-ah1006":"submersible-heater-ah1008"}.html`,verifiedAt:"2026-08-18"}))),
+  ...([[2030,9.5,"27–36"],[2045,13.5,"42–51"],[2060,18,"57–66"],[2080,22,"77–86"],[2090,24.5,"87–96"],[20120,29.5,"117–126"]] as const).map(([model,power,length])=>({id:`dophin-led-${model}`,category:"lighting" as const,brand:"Dophin",model:`LED${model}`,specifications:`IP67, RA95 ince LED armatür · ${length} cm akvaryum · ${String(power).replace(".",",")} W`,powerW:power,sourceUrl:"https://www.qimeigroup.com/Products_detail/dophin-aquarium-slim-led-light-led2030.html",verifiedAt:"2026-08-18"})),
+  {id:"dophin-led-106",category:"lighting",brand:"Dophin",model:"LED 106",specifications:"Dokunmatik, kısılabilir ince LED · 4 W",powerW:4,sourceUrl:"https://www.qimeigroup.com/Products_detail/dophin-aquarium-led-light-led106-led108.html",verifiedAt:"2026-08-18"},
+  {id:"dophin-led-108",category:"lighting",brand:"Dophin",model:"LED 108",specifications:"Dokunmatik, kısılabilir ince LED · 5 W",powerW:5,sourceUrl:"https://www.qimeigroup.com/Products_detail/dophin-aquarium-led-light-led106-led108.html",verifiedAt:"2026-08-18"},
+  ...([[300,300,4.5,50],[500,500,undefined,100],[1000,1000,10,300],[2000,2000,32,400],[3000,3000,45,500],[4000,4000,75,600],[5000,5000,125,800]] as const).map(([model,flow,power,maxL])=>({id:`dophin-pc-${model}`,category:"other" as const,brand:"Dophin",model:`PC-${model}`,specifications:`Ayarlanabilir dalgıç sirkülasyon pompası · ${flow} L/saat${power?` · ${String(power).replace(".",",")} W`:""}`,ratedFlowLph:flow,...(power?{powerW:power}:{}),recommendedMaxL:maxL,adjustableFlow:true,sourceUrl:"https://www.qimeigroup.com/Products_detail/128.html",verifiedAt:"2026-08-18"})),
+  {id:"dophin-wp-1000",category:"other",brand:"Dophin",model:"WP-1000",specifications:"Yönlendirilebilir dalga motoru · 2000 L/saat · 3,8 W · 30–190 L",ratedFlowLph:2000,powerW:3.8,recommendedMinL:30,recommendedMaxL:190,sourceUrl:"https://www.qimeigroup.com/Products_detail/dophin-aquarium-wave-pump-wave-maker-wp1000.html",verifiedAt:"2026-08-18"},
+  {id:"dophin-wp-3000",category:"other",brand:"Dophin",model:"WP-3000",specifications:"Yönlendirilebilir dalga motoru · 5000 L/saat · 6 W · 190–380 L",ratedFlowLph:5000,powerW:6,recommendedMinL:190,recommendedMaxL:380,sourceUrl:"https://www.qimeigroup.com/Products_detail/dophin-aquarium-wave-pump-wave-maker-wp1000.html",verifiedAt:"2026-08-18"},
+);
 
 const rsSource = "https://www.petadana01.com/akvaryum-ic-filtre/";
 const rsFilters: EquipmentProfile[] = ["RS602","RS605","RS2004","RS800","RS604","RS712","RS2002","RS760","RS-04B"].map(model=>({
@@ -201,7 +402,7 @@ const rsVerified:Record<string,Partial<EquipmentProfile>>={
   "RS602":{model:"RS-602",specifications:"İç filtre · 300 L/saat · 3 W · 20–40 litre",ratedFlowLph:300,powerW:3,recommendedMinL:20,recommendedMaxL:40,sourceUrl:"https://kaspi.kz/shop/p/rs-electrical-vnutrennii-rs-602-130650929/"},
   "RS605":{model:"RS-605",specifications:"İç filtre · 450 L/saat · 6 W · 90 litreye kadar",ratedFlowLph:450,powerW:6,recommendedMaxL:90,sourceUrl:"https://www.trendyol.com/en/rs-electrical/aquarium-internal-filter-rs-605-6w-450-l-h-p-335528547"},
   "RS2004":{model:"RS-2004",specifications:"İç filtre · 1750 L/saat · 25 W",ratedFlowLph:1750,powerW:25,sourceUrl:"https://www.dayaaquatics.com/index.php?cat=Aquarium-Filter-Categories&products_id=2165910&subcat=Internal-Filter&ws=showproducts"},
-  "RS800":{model:"RS-800",category:"air_pump",specifications:"Çift çıkışlı hava motoru · 3 L/dakika",sourceUrl:"https://www.mercadolibre.com.uy/oxigenador-bomba-de-aire-acuario-rs800-3lmin-2-salidas/up/MLUU3171039318"},
+  "RS800":{model:"RS-800",category:"air_pump",specifications:"Çift çıkışlı hava motoru · 3 L/dakika · 3,5 W",ratedFlowLph:180,powerW:3.5,sourceUrl:"https://m-once.com/producto/rs-800-j004rs800/"},
   "RS604":{model:"RS-604",specifications:"Üç işlevli iç filtre · 350 L/saat · 4 W",ratedFlowLph:350,powerW:4,sourceUrl:"https://www.daraz.com.bd/i304500232-s1358956807.html"},
   "RS2002":{model:"RS-2002",specifications:"İç filtre · 1500 L/saat · 18 W",ratedFlowLph:1500,powerW:18,sourceUrl:"https://www.ciceksepeti.com/rs-electrical-rs-2002-akvaryum-ic-filtre-18w-1500-lh-kcm63436178"},
   "RS760":{model:"RS-760",specifications:"Dalgıç iç filtre · 650 L/saat · 10 W",ratedFlowLph:650,powerW:10,sourceUrl:"https://aqualink-shop.com/products/rs-760"},
@@ -223,6 +424,7 @@ rsFilters.push(
 
 const lifetechSource="https://atakanpetshop.com/lifetech";
 const lifetechEquipment:EquipmentProfile[]=[
+  {id:"lifetech-jebo-mini-420",category:"filter",brand:"Lifetech",model:"Jebo Mini 420",specifications:"Kompakt dış filtre · 420 L/saat · 5 W · 60–200 litre",ratedFlowLph:420,powerW:5,recommendedMinL:60,recommendedMaxL:200,sourceUrl:"https://atakanpetshop.com/jebo-mini-dis-filtre-420-l-s-5w",verifiedAt:"2026-08-18"},
   {id:"lifetech-635",category:"filter",brand:"Lifetech",model:"635",specifications:"Dış filtre · 600 L/saat · 13 W",ratedFlowLph:600,powerW:13,recommendedMinL:100,recommendedMaxL:200,sourceUrl:"https://atakanpetshop.com/lifetech-635-dis-filtre-600-l-s",verifiedAt},
   {id:"lifetech-835",category:"filter",brand:"Lifetech",model:"835",specifications:"Üç sepetli dış filtre · 1000 L/saat · 22 W · 100–300 litre",ratedFlowLph:1000,powerW:22,recommendedMinL:100,recommendedMaxL:300,sourceUrl:"https://atakanpetshop.com/lifetech-835-dis-filtre-1000-l-s",verifiedAt},
   {id:"lifetech-838",category:"filter",brand:"Lifetech",model:"838",specifications:"Dış filtre · 1200 L/saat",ratedFlowLph:1200,recommendedMinL:200,recommendedMaxL:400,sourceUrl:"https://atakanpetshop.com/lifetech-838-dis-filtre-1200-l-s?page=1",verifiedAt},
@@ -231,28 +433,59 @@ const lifetechEquipment:EquipmentProfile[]=[
 ];
 Object.assign(lifetechEquipment.find(item=>item.model==="Jebo UV-H9")!,{specifications:"UV sterilizatör · 9 W · azami 500 L/saat akış · 1000 litreye kadar",ratedFlowLph:500,recommendedMaxL:1000,sourceUrl:"https://atakanpetshop.com/jebo-uv-h9-ultraviole-filtre-9w"});
 
+const jblExpandedEquipment:EquipmentProfile[]=[
+  {id:"jbl-procristal-i30",category:"filter",brand:"JBL",model:"ProCristal i30",specifications:"Karides güvenli ayarlanabilir iç filtre · 200 L/saat · 3,7 W · 10–60 L",ratedFlowLph:200,powerW:3.7,recommendedMinL:10,recommendedMaxL:60,adjustableFlow:true,sourceUrl:"https://www.jbl.de/en/products/detail/7324/jbl-procristal-i30",verifiedAt},
+  {id:"jbl-cristalprofi-i60",category:"filter",brand:"JBL",model:"CristalProfi i60 greenline",specifications:"Modüler iç filtre · 150–420 L/saat · 4 W · 40–80 L",ratedFlowLph:420,powerW:4,recommendedMinL:40,recommendedMaxL:80,adjustableFlow:true,sourceUrl:"https://www.jbl.de/en/products/detail/5956/jbl-cristalprofi-i60-greenline",verifiedAt},
+  {id:"jbl-cristalprofi-i80",category:"filter",brand:"JBL",model:"CristalProfi i80 greenline",specifications:"Modüler ayarlanabilir iç filtre · 150–420 L/saat · 4 W · 60–110 L",ratedFlowLph:420,powerW:4,recommendedMinL:60,recommendedMaxL:110,adjustableFlow:true,sourceUrl:"https://www.jbl.de/de/produkte/group/1079/innenfilter",verifiedAt},
+  {id:"jbl-cristalprofi-i100",category:"filter",brand:"JBL",model:"CristalProfi i100 greenline",specifications:"Modüler iç filtre · 300–720 L/saat · 8 W · 90–160 L",ratedFlowLph:720,powerW:8,recommendedMinL:90,recommendedMaxL:160,adjustableFlow:true,sourceUrl:"https://www.jbl.de/en/products/detail/5960/jbl-cristalprofi-i100-greenline",verifiedAt},
+  {id:"jbl-cristalprofi-i200",category:"filter",brand:"JBL",model:"CristalProfi i200 greenline",specifications:"Modüler iç filtre · 300–720 L/saat · 8 W · 130–200 L",ratedFlowLph:720,powerW:8,recommendedMinL:130,recommendedMaxL:200,adjustableFlow:true,sourceUrl:"https://www.jbl.de/en/products/detail/5962/jbl-cristalprofi-i200-greenline",verifiedAt},
+  {id:"jbl-protemp-e300",category:"heater",brand:"JBL",model:"ProTemp e300",specifications:"Dış filtre hattı dijital ısıtıcısı · 300 W · 90–300 L",powerW:300,recommendedMinL:90,recommendedMaxL:300,sourceUrl:"https://www.jbl.de/en/blog/detail/473/video-jbl-protemp-e-external-heater-for-aquariums-keeping-electricity-and-technology-outside-the-aquarium",verifiedAt},
+  {id:"jbl-protemp-e500",category:"heater",brand:"JBL",model:"ProTemp e500",specifications:"Dış filtre hattı dijital ısıtıcısı · 500 W · 160–600 L",powerW:500,recommendedMinL:160,recommendedMaxL:600,sourceUrl:"https://www.jbl.de/en/products/detail/8744/jbl-protemp-e500",verifiedAt},
+  {id:"jbl-proair-a60",category:"air_pump",brand:"JBL",model:"ProAir a60",specifications:"Tek çıkışlı hava motoru · 60 L/saat · 120 litreye kadar",ratedFlowLph:60,recommendedMaxL:120,sourceUrl:"https://www.jbl.de/en/products-beta/jbl-shop-for-aquarium-pond-terrarium",verifiedAt},
+  {id:"jbl-proair-a100",category:"air_pump",brand:"JBL",model:"ProAir a100",specifications:"Elektronik ayarlı hava motoru · 100 L/saat · 2,5 W · 200 litreye kadar",ratedFlowLph:100,powerW:2.5,recommendedMaxL:200,sourceUrl:"https://www.jbl.de/en-us/productsv2/detail/25136630",verifiedAt},
+  {id:"jbl-proair-a200",category:"air_pump",brand:"JBL",model:"ProAir a200",specifications:"Elektronik ayarlı hava motoru · 200 L/saat · 3,2 W · 300 litreye kadar",ratedFlowLph:200,powerW:3.2,recommendedMaxL:300,sourceUrl:"https://www.jbl.de/en-mt/productsv2/detail/25141072",verifiedAt},
+  {id:"jbl-proair-a400",category:"air_pump",brand:"JBL",model:"ProAir a400",specifications:"İki çıkışlı elektronik ayarlı hava motoru · 400 L/saat · 5 W · 400 litreye kadar",ratedFlowLph:400,powerW:5,recommendedMaxL:400,sourceUrl:"https://www.jbl.de/en-ie/productsv2/detail/25148678",verifiedAt},
+  {id:"jbl-proair-a600",category:"air_pump",brand:"JBL",model:"ProAir a600",specifications:"İki çıkışlı elektronik ayarlı hava motoru · 600 L/saat · 10 W · 800 litreye kadar",ratedFlowLph:600,powerW:10,recommendedMaxL:800,sourceUrl:"https://www.jbl.de/en-fi/productsv2/detail/25149347",verifiedAt},
+];
+
 const yikedaEquipment:EquipmentProfile[]=[
   {id:"yikeda-sd48ab",category:"lighting",brand:"Yikeda",model:"SD-48A-B",specifications:"Full spectrum klipsli LED · 15,2 W",powerW:15.2,sourceUrl:"https://atakanpetshop.com/yikeda-led-akvaryum-aydinlatmasi-beyaz-152w-sd-48a-b",verifiedAt},
   {id:"yikeda-sd1055",category:"lighting",brand:"Yikeda",model:"SD-1055 RGB",specifications:"RGB LED · 55 W · 4920 lm · 3 kademe dimmer",powerW:55,recommendedTankLengthCm:[90,110],sourceUrl:"https://atakanpetshop.com/yikeda-sd-1055-rgb-led-aydinlatma-55w-90-110-cm",verifiedAt},
   {id:"yikeda-dy10w",category:"lighting",brand:"Yikeda",model:"DY-10W",specifications:"Mavi-beyaz ayaklı LED · 10 W",powerW:10,sourceUrl:"https://atakanpetshop.com/yikeda-dy-10w-ayakli-led-aydinlatma-10w-mavi-beyaz",verifiedAt},
   ...[85,100,120].map(powerW=>({id:`yikeda-smart-ufo-${powerW}`,category:"lighting" as const,brand:"Yikeda",model:`Smart UFO ${powerW} W`,specifications:`Tam spectrum UFO LED · ${powerW} W`,powerW,sourceUrl:"https://atakanpetshop.com/yikeda-smart-ufo-led-lamba-100w",verifiedAt})),
+  {id:"yikeda-full-spectrum-rgb-30",category:"lighting",brand:"Yikeda",model:"Full Spektrum RGB 48,8 cm / 30 W",specifications:"Full spektrum RGB LED armatür · 30 W · 48,8 cm gövde",powerW:30,recommendedTankLengthCm:[50,60],sourceUrl:"https://www.karacaakvaryum.com/marka/yikeda/",verifiedAt:"2026-08-18"},
+  {id:"yikeda-full-spectrum-rgb-35",category:"lighting",brand:"Yikeda",model:"Full Spektrum RGB 58,8 cm / 35 W",specifications:"Full spektrum RGB LED armatür · 35 W · 58,8 cm gövde",powerW:35,recommendedTankLengthCm:[60,70],sourceUrl:"https://www.denatural.com.tr/marka/yikeda/",verifiedAt:"2026-08-18"},
+  {id:"yikeda-full-spectrum-rgb-40",category:"lighting",brand:"Yikeda",model:"Full Spektrum RGB 68,8 cm / 40 W",specifications:"Full spektrum RGB LED armatür · 40 W · 68,8 cm gövde",powerW:40,recommendedTankLengthCm:[70,80],sourceUrl:"https://aquashop.com.tr/urun/yikeda-full-spekturum-40-led-aydinlatma",verifiedAt:"2026-08-18"},
+  {id:"yikeda-full-spectrum-rgb-45",category:"lighting",brand:"Yikeda",model:"Full Spektrum RGB 78,8 cm / 45 W",specifications:"Full spektrum RGB LED armatür · 45 W · 78,8 cm gövde",powerW:45,recommendedTankLengthCm:[80,90],sourceUrl:"https://www.karacaakvaryum.com/marka/yikeda/",verifiedAt:"2026-08-18"},
+  {id:"yikeda-full-spectrum-rgb-65",category:"lighting",brand:"Yikeda",model:"Full Spektrum RGB 118,8 cm / 65 W",specifications:"Full spektrum RGB LED armatür · 65 W · 118,8 cm gövde",powerW:65,recommendedTankLengthCm:[120,140],sourceUrl:"https://www.aquashop.com.tr/urunler/yikeda-full-spekturum-rgb-led-118-8-120-140-cm-65w-akvaryum-aydinlatma",verifiedAt:"2026-08-18"},
+  {id:"yikeda-sd-t8-13",category:"lighting",brand:"Yikeda",model:"SD-T8-13 W",specifications:"Çift kanatlı, ayarlanabilir gövdeli LED · 13,6 W",powerW:13.6,sourceUrl:"https://www.karacaakvaryum.com/marka/yikeda/",verifiedAt:"2026-08-18"},
+  {id:"yikeda-dy10-spot",category:"lighting",brand:"Yikeda",model:"DY-10 Spot",specifications:"Ayarlanabilir açılı cam lensli spot LED · 16,8 W",powerW:16.8,sourceUrl:"https://www.karacaakvaryum.com/marka/yikeda/",verifiedAt:"2026-08-18"},
+  {id:"yikeda-mini-clip",category:"lighting",brand:"Yikeda",model:"Mini Klipsli LED",specifications:"Nano akvaryumlar için klipsli LED aydınlatma",sourceUrl:"https://aquarubi.com/yikeda",verifiedAt:"2026-08-18"},
 ];
 
 const haqosEquipment:EquipmentProfile[]=[
   {id:"haqos-expro-500",category:"filter",brand:"Haqos",model:"EXPRO-500",specifications:"Ayarlanabilir askı dış filtre · 510 L/saat · 6,9 W",ratedFlowLph:510,powerW:6.9,recommendedMaxL:100,adjustableFlow:true,sourceUrl:"https://www.haqos.com/",verifiedAt},
   {id:"haqos-ex500at",category:"filter",brand:"Haqos",model:"EX-500AT",specifications:"Beş sepetli slim askı dış filtre · 510 L/saat · 7 W · 250 litreye kadar",ratedFlowLph:510,powerW:7,recommendedMaxL:250,sourceUrl:"https://www.evcilsepetim.com/ex-500at-haqos-slim-aski-dis-filitre-500-lt-21550",verifiedAt},
   {id:"haqos-exp-500",category:"filter",brand:"Haqos",model:"EXP-500",specifications:"Askı mini dış filtre · 510 L/saat · 7 W",ratedFlowLph:510,powerW:7,sourceUrl:"https://www.kumovapet.com.tr/dis-filtreler/marka/328/haqos-marka-urunler.html",verifiedAt},
-  {id:"haqos-expad-500",category:"filter",brand:"Haqos",model:"EXPAD-500",specifications:"EXPRO/EXP serisiyle kullanılabilen harici ön filtre modülü",sourceUrl:"https://www.haqos.com/",verifiedAt},
-  {id:"haqos-expro-230",category:"filter",brand:"Haqos",model:"EXPRO-230",specifications:"Üreticinin resmi ürün kataloğundaki kompakt filtrasyon sistemi",sourceUrl:"https://www.haqos.com/",verifiedAt},
-  {id:"haqos-expro-1000",category:"filter",brand:"Haqos",model:"EXPRO-1000",specifications:"Üreticinin resmi ürün kataloğundaki dış filtrasyon sistemi",sourceUrl:"https://www.haqos.com/",verifiedAt},
-  {id:"haqos-ex1000at",category:"filter",brand:"Haqos",model:"EX1000AT",specifications:"Üreticinin resmi ürün kataloğundaki dış filtrasyon sistemi",sourceUrl:"https://www.haqos.com/",verifiedAt},
+  {id:"haqos-expad-500",category:"other",brand:"Haqos",model:"EXPAD-500",specifications:"EXPRO/EXP serisiyle kullanılan, kendi pompası bulunmayan harici ön filtre modülü",sourceUrl:"https://www.haqos.com/",verifiedAt},
+  {id:"haqos-expro-230",category:"filter",brand:"Haqos",model:"EXPRO-230",specifications:"Nano askı filtre · 210 L/saat · 2 W · 30–80 litre",ratedFlowLph:210,powerW:2,recommendedMinL:30,recommendedMaxL:80,sourceUrl:"https://akvarijni-filtry.heureka.cz/invital-expro-230/",verifiedAt:"2026-08-18"},
+  {id:"haqos-expro-1000",category:"filter",brand:"Haqos",model:"EXPRO-1000",specifications:"Dış filtre · 1000 L/saat · 22 W",ratedFlowLph:1000,powerW:22,sourceUrl:"https://www.akvaryum.com/haqos_expro_1000_siyah_dis_filtre__urunr_38_4790.asp",verifiedAt:"2026-08-18"},
+  {id:"haqos-ex1000at",category:"filter",brand:"Haqos",model:"EX1000AT",specifications:"Otomatik su emişli dış filtre · 1000 L/saat · 22 W · 250 litreye kadar",ratedFlowLph:1000,powerW:22,recommendedMaxL:250,sourceUrl:"https://www.ecoarium.pt/filtros-externos/2557-haqos-ex1000at",verifiedAt:"2026-08-18"},
   {id:"haqos-easy-1000at",category:"filter",brand:"Haqos",model:"EASY-1000AT",specifications:"Üreticinin resmi ürün kataloğundaki filtrasyon sistemi",sourceUrl:"https://www.haqos.com/",verifiedAt},
   {id:"haqos-aqua-flow-250",category:"filter",brand:"Haqos",model:"Aqua Flow 250",specifications:"Üreticinin resmi ürün kataloğundaki akvaryum filtresi",sourceUrl:"https://www.haqos.com/",verifiedAt},
-  {id:"haqos-exc-500",category:"filter",brand:"Haqos",model:"EXC-500",specifications:"Üreticinin resmi ürün kataloğundaki akvaryum filtresi",sourceUrl:"https://www.haqos.com/",verifiedAt},
-  {id:"haqos-hec-600",category:"filter",brand:"Haqos",model:"HEC-600",specifications:"Üreticinin resmi ürün kataloğundaki akvaryum filtresi",sourceUrl:"https://www.haqos.com/",verifiedAt},
-  {id:"haqos-ex-1200at",category:"filter",brand:"Haqos",model:"EX-1200AT",specifications:"1200 L/saat sınıfı dış filtre",ratedFlowLph:1200,sourceUrl:"https://www.evcilsepetim.com/dis-filtre",verifiedAt},
-  {id:"haqos-ex-1500at",category:"filter",brand:"Haqos",model:"EX-1500AT",specifications:"1500 L/saat sınıfı dış filtre",ratedFlowLph:1500,sourceUrl:"https://www.evcilsepetim.com/dis-filtre",verifiedAt},
+  {id:"haqos-exc-500",category:"filter",brand:"Haqos",model:"EXC-500",specifications:"Dış filtre · 430 L/saat · 17 W · 2 m basma yüksekliği",ratedFlowLph:430,powerW:17,sourceUrl:"https://www.akvaryem.com.tr/urun/aqua-magic",verifiedAt:"2026-08-18"},
+  {id:"haqos-hec-600",category:"other",brand:"Haqos",model:"HEC-600",specifications:"Pilli teleskopik dip süpürgesi · 520 L/saat · 40–52 cm su seviyesi",ratedFlowLph:520,sourceUrl:"https://malawiizmir.com/haqos-hec-600-pilli-dip-supurgesi",verifiedAt:"2026-08-18"},
+  {id:"haqos-ex-1200at",category:"filter",brand:"Haqos",model:"EX-1200AT",specifications:"Otomatik su emişli dış filtre · 1200 L/saat · 28 W · 300 litreye kadar",ratedFlowLph:1200,powerW:28,recommendedMaxL:300,sourceUrl:"https://www.evcilsepetim.com/ex-1200at-haqos-dis-filitre-1200-lt-15721",verifiedAt:"2026-08-18"},
+  {id:"haqos-ex-1500at",category:"filter",brand:"Haqos",model:"EX-1500AT",specifications:"Beş sepetli otomatik su emişli dış filtre · 1500 L/saat · 36 W · 400 litreye kadar",ratedFlowLph:1500,powerW:36,recommendedMaxL:400,sourceUrl:"https://www.ecoarium.pt/filtros-externos/2559-haqos-ex1500at",verifiedAt:"2026-08-18"},
+  {id:"haqos-hf-900",category:"filter",brand:"Haqos",model:"HF-900",specifications:"İç filtre · 900 L/saat · 8,5 W · 250–300 litre",ratedFlowLph:900,powerW:8.5,recommendedMinL:250,recommendedMaxL:300,sourceUrl:"https://www.canlipetshop.com/ornek-alt-kategori4/ic-filtreler?limit=75&page=2&sort=pd.name",verifiedAt:"2026-08-18"},
+  {id:"haqos-jular-230",category:"filter",brand:"Haqos",model:"Jular-230",specifications:"Kompakt iç filtre · 210 L/saat · 1,7 W",ratedFlowLph:210,powerW:1.7,sourceUrl:"https://www.canlipetshop.com/ornek-alt-kategori4/ic-filtreler?limit=75&page=2&sort=pd.name",verifiedAt:"2026-08-18"},
 ];
+const haqosHeaterSource="https://www.animalshop.co.il/product/%D7%98%D7%A8%D7%9E%D7%95%D7%A1%D7%98%D7%98-%D7%9C%D7%97%D7%99%D7%9E%D7%95%D7%9D-%D7%94%D7%90%D7%A7%D7%95%D7%95%D7%A8%D7%99%D7%95%D7%9D-%D7%94%D7%A7%D7%95%D7%A1-haqos-%D7%91%D7%94%D7%A1%D7%A4%D7%A7-300-25w-0";
+haqosEquipment.push(...[25,50,75,100,150,200,300].map(powerW=>({
+  id:`haqos-heater-${powerW}`,category:"heater" as const,brand:"Haqos",model:`Thermostat Heater ${powerW} W`,
+  specifications:`Tam daldırılabilir termostatlı cam ısıtıcı · ${powerW} W · ${powerW} litreye kadar`,
+  powerW,recommendedMaxL:powerW,sourceUrl:haqosHeaterSource,verifiedAt:"2026-08-18",
+})));
 
 const jingyeSource="https://atakanpetshop.com/jingye";
 const jingyeEquipment:EquipmentProfile[]=[
@@ -264,10 +497,10 @@ const jingyeEquipment:EquipmentProfile[]=[
   {id:"jingye-9100dx",category:"other",brand:"Jingye",model:"9100DX",specifications:"Sump motoru · 500 L/saat · 6 W",ratedFlowLph:500,powerW:6,sourceUrl:jingyeSource,verifiedAt},
   {id:"jingye-lv1500dx",category:"other",brand:"Jingye",model:"LV-1500DX",specifications:"Sump motoru · 1000 L/saat · 15 W · 200 litreye kadar",ratedFlowLph:1000,powerW:15,recommendedMaxL:200,sourceUrl:"https://atakanpetshop.com/jingye-sump-motoru-15w-1000lh-lv-1500dx",verifiedAt},
   {id:"jingye-jy104",category:"other",brand:"Jingye",model:"JY-104",specifications:"Sump motoru · 3000 L/saat · 40 W · 500 litreye kadar",ratedFlowLph:3000,powerW:40,recommendedMaxL:500,sourceUrl:"https://atakanpetshop.com/jingye-104-sump-motoru-siyah-40w-3000ls-jy-104",verifiedAt},
-  {id:"jingye-911",category:"air_pump",brand:"Jingye",model:"911",specifications:"Tek çıkışlı hava motoru · 3 L/dakika · 2 W",powerW:2,sourceUrl:jingyeSource,verifiedAt},
-  {id:"jingye-921",category:"air_pump",brand:"Jingye",model:"921",specifications:"Çift çıkışlı hava motoru · 2 × 3,4 L/dakika · 3 W",powerW:3,sourceUrl:jingyeSource,verifiedAt},
-  {id:"jingye-ye621",category:"air_pump",brand:"Jingye",model:"YE-621",specifications:"Çift çıkışlı sessiz hava motoru · 2 × 3,4 L/dakika · 5 W",powerW:5,sourceUrl:jingyeSource,verifiedAt},
-  {id:"jingye-cd200",category:"air_pump",brand:"Jingye",model:"CD200",specifications:"Şarjlı tek çıkışlı hava motoru · 2 L/dakika · 1,8 W",powerW:1.8,sourceUrl:"https://atakanpetshop.com/akvaryum-pilli-sarjli-hava-motorlari",verifiedAt},
+  {id:"jingye-911",category:"air_pump",brand:"Jingye",model:"911",specifications:"Tek çıkışlı hava motoru · 3 L/dakika · 2 W",ratedFlowLph:180,powerW:2,sourceUrl:jingyeSource,verifiedAt},
+  {id:"jingye-921",category:"air_pump",brand:"Jingye",model:"921",specifications:"Çift çıkışlı hava motoru · 2 × 3,4 L/dakika · 3 W",ratedFlowLph:408,powerW:3,sourceUrl:jingyeSource,verifiedAt},
+  {id:"jingye-ye621",category:"air_pump",brand:"Jingye",model:"YE-621",specifications:"Çift çıkışlı sessiz hava motoru · 2 × 3,4 L/dakika · 5 W",ratedFlowLph:408,powerW:5,sourceUrl:jingyeSource,verifiedAt},
+  {id:"jingye-cd200",category:"air_pump",brand:"Jingye",model:"CD200",specifications:"Şarjlı tek çıkışlı hava motoru · 2 L/dakika · 1,8 W",ratedFlowLph:120,powerW:1.8,sourceUrl:"https://atakanpetshop.com/akvaryum-pilli-sarjli-hava-motorlari",verifiedAt},
 ];
 
 const accessoryEquipment:EquipmentProfile[]=[
@@ -287,6 +520,17 @@ const accessoryEquipment:EquipmentProfile[]=[
   {id:"nubios-kdsm01-small",category:"other",brand:"Nubios",model:"KDSM01 Small",specifications:"Mıknatıslı küçük akvaryum cam sileceği",sourceUrl:"https://atakanpetshop.com/nubios-miknatisli-akvaryum-cam-silecegi-mini-771-kdsm01",verifiedAt},
   {id:"nubios-fpd51b",category:"other",brand:"Nubios",model:"FPD51B 5in1",specifications:"67 cm beş parçalı akvaryum bakım kiti",sourceUrl:"https://atakanpetshop.com/nubios-5in1-akvaryum-cam-temizleme-ve-bakim-kiti-67cm-771-fpd51b",verifiedAt},
   {id:"nubios-xy1038",category:"other",brand:"Nubios",model:"XY1038 Filtre Süngeri",specifications:"Siyah biyolojik filtre süngeri · 45 × 45 × 5 cm",sourceUrl:"https://atakanpetshop.com/nubios-filtre-sungeri-siyah-45x45x5-cm-771-xy1038",verifiedAt},
+  {id:"nubios-nw-450f",category:"filter",brand:"Nubios",model:"NW-450F",specifications:"Kompakt iç filtre · 4 W · üretici/satıcı debi değeri yayımlamamış",powerW:4,sourceUrl:"https://www.ozumakvaryum.com.tr/ic-filtreler",verifiedAt:"2026-08-18"},
+  {id:"nubios-nw-600f",category:"filter",brand:"Nubios",model:"NW-600F",specifications:"İç filtre · 6 W · yayımlanmış debi değeri bulunamadı",powerW:6,sourceUrl:"https://www.ozumakvaryum.com.tr/ic-filtreler",verifiedAt:"2026-08-18"},
+  {id:"nubios-nw-800f",category:"filter",brand:"Nubios",model:"NW-800F",specifications:"İç filtre · 15 W · yayımlanmış debi değeri bulunamadı",powerW:15,sourceUrl:"https://www.ozumakvaryum.com.tr/ic-filtreler",verifiedAt:"2026-08-18"},
+  {id:"nubios-nb-800f",category:"filter",brand:"Nubios",model:"NB-800F",specifications:"Üç işlevli iç filtre · 800 L/saat · 15 W",ratedFlowLph:800,powerW:15,sourceUrl:"https://www.mascoteriachile.cl/docs/CAT%C3%81LOGO-ACUARISTICA-24%2BOCTUBRE%2B2024.pdf",verifiedAt:"2026-08-18"},
+  {id:"nubios-nw-1500f",category:"filter",brand:"Nubios",model:"NW-1500F",specifications:"İç filtre · 20 W · yayımlanmış debi değeri bulunamadı",powerW:20,sourceUrl:"https://www.ozumakvaryum.com.tr/ic-filtreler",verifiedAt:"2026-08-18"},
+  {id:"nubios-nb-1500f",category:"filter",brand:"Nubios",model:"NB-1500F",specifications:"İç filtre · 20 W · yayımlanmış debi değeri bulunamadı",powerW:20,sourceUrl:"https://www.ozumakvaryum.com.tr/ic-filtreler",verifiedAt:"2026-08-18"},
+  {id:"nubios-n201",category:"filter",brand:"Nubios",model:"N-201 Mini Pipo",specifications:"Mini sünger/pipo filtre · hava motoruyla çalışır",requiresAirPump:true,sourceUrl:"https://www.akvaryem.com.tr/urun/nubios-n201-mini-pipo-filtre",verifiedAt:"2026-08-18"},
+  {id:"nubios-yu001",category:"filter",brand:"Nubios",model:"YU-001 Büyük Pipo",specifications:"Büyük boy sünger/pipo üretim filtresi · hava motoruyla çalışır",requiresAirPump:true,sourceUrl:"https://www.ozelyem.com/nubios",verifiedAt:"2026-08-18"},
+  {id:"nubios-yu002",category:"filter",brand:"Nubios",model:"YU-002 Orta Pipo",specifications:"Orta boy sünger/pipo üretim filtresi · hava motoruyla çalışır",requiresAirPump:true,sourceUrl:"https://www.ozelyem.com/nubios",verifiedAt:"2026-08-18"},
+  {id:"nubios-yu003",category:"filter",brand:"Nubios",model:"YU-003 Küçük Pipo",specifications:"Küçük boy sünger/pipo üretim filtresi · hava motoruyla çalışır",requiresAirPump:true,sourceUrl:"https://www.ozelyem.com/nubios",verifiedAt:"2026-08-18"},
+  {id:"nubios-ch-729",category:"other",brand:"Nubios",model:"CH-729 Elektrikli Dip Süpürgesi",specifications:"Pilli dip şifonu ve kum temizleyici · 45–75 cm ayarlanabilir gövde",sourceUrl:"https://www.cikletistpetshop.com/nubios-elektrikli-dip-supurge-seti-45-75-cm-sifon",verifiedAt:"2026-08-18"},
   {id:"aquapro-smart-bubble-counter",category:"co2",brand:"Aquapro",model:"Smart Bubble Counter",specifications:"Hortum giriş-çıkışlı akıllı CO₂ damla sayacı",sourceUrl:"https://atakanpetshop.com/aquapro",verifiedAt},
   {id:"aquapro-bubble-counter",category:"co2",brand:"Aquapro",model:"Bubble Counter",specifications:"Hortum giriş-çıkışlı CO₂ damla sayacı",sourceUrl:"https://atakanpetshop.com/aquapro",verifiedAt},
   {id:"aquapro-metal-check-valve",category:"co2",brand:"Aquapro",model:"Alüminyum Metal Check Valve 4/6 mm",specifications:"CO₂ sistemi için alüminyum geri dönüşsüz valf · 4/6 mm hortum",sourceUrl:"https://atakanpetshop.com/aquapro",verifiedAt},
@@ -309,15 +553,18 @@ const accessoryEquipment:EquipmentProfile[]=[
 
 const waterbearEquipment:EquipmentProfile[]=[
   {id:"waterbear-wb-g04",category:"filter",brand:"WaterBear",model:"WB-G04",specifications:"Biyo-tekerlekli askı filtre · 250 L/saat · 3 W",ratedFlowLph:250,powerW:3,sourceUrl:"https://atakanpetshop.com/waterbear-wb-g04-aski-filtre-3w-250ls",verifiedAt},
+  {id:"waterbear-wb-g220",category:"filter",brand:"WaterBear",model:"WB-G220",specifications:"Askı filtre · 500 L/saat · 8 W",ratedFlowLph:500,powerW:8,sourceUrl:"https://atakanpetshop.com/eurogold?page=3",verifiedAt:"2026-08-18"},
+  {id:"waterbear-q448",category:"air_pump",brand:"WaterBear",model:"Q448",specifications:"Dört çıkışlı hava motoru · 4 × 3 L/dakika · 8 W",ratedFlowLph:720,powerW:8,sourceUrl:"https://atakanpetshop.com/akvaryum-hava-motorlari",verifiedAt:"2026-08-18"},
   ...[["880F",650,15],["1880F",880,25],["2880F",1800,30],["3880F",2500,40]].map(([model,ratedFlowLph,powerW])=>({id:`waterbear-${String(model).toLowerCase()}`,category:"filter" as const,brand:"WaterBear",model:String(model),specifications:`Tepe filtre · ${ratedFlowLph} L/saat · ${powerW} W`,ratedFlowLph:Number(ratedFlowLph),powerW:Number(powerW),sourceUrl:"https://atakanpetshop.com/akvaryum-ust-filtreler",verifiedAt})),
   ...[["WB-2771",900,12],["WB-3771",1200,18],["WB-4771",1600,25]].map(([model,ratedFlowLph,powerW])=>({id:`waterbear-${String(model).toLowerCase()}`,category:"other" as const,brand:"WaterBear",model:String(model),specifications:`Dalgıç/sump pompası · ${ratedFlowLph} L/saat · ${powerW} W`,ratedFlowLph:Number(ratedFlowLph),powerW:Number(powerW),sourceUrl:"https://atakanpetshop.com/akvaryum-kafa-ve-sump-motoru",verifiedAt})),
-  {id:"waterbear-sd01",category:"filter",brand:"WaterBear",model:"SD-01",specifications:"Hava ile çalışan pipo filtre",sourceUrl:"https://atakanpetshop.com/akvaryum-sunger-filtreler-pipo-filtre-dophin-sfp",verifiedAt},
+  {id:"waterbear-sd01",category:"filter",brand:"WaterBear",model:"SD-01",specifications:"Hava ile çalışan pipo filtre",requiresAirPump:true,sourceUrl:"https://atakanpetshop.com/akvaryum-sunger-filtreler-pipo-filtre-dophin-sfp",verifiedAt},
   {id:"waterbear-sd02",category:"filter",brand:"WaterBear",model:"SD-02",specifications:"Motorlu pipo filtre · 200 L/saat · 2 W",ratedFlowLph:200,powerW:2,sourceUrl:"https://atakanpetshop.com/akvaryum-sunger-filtreler-pipo-filtre-dophin-sfp",verifiedAt},
 ];
 
 const regentEquipment:EquipmentProfile[]=[
-  ["6500",2.4,"Tek çıkış",6500],["7500",3,"Çift çıkış",7500],["8500",4,"Çift çıkış",8500],["9500",4,"Çift çıkış",9500],
-].map(([model,powerW,outlet,airCcMin])=>({id:`regent-${model}`,category:"air_pump",brand:"Regent",model:String(model),specifications:`${outlet} hava motoru · ${airCcMin} cc/dakika · ${powerW} W`,powerW:Number(powerW),sourceUrl:"https://atakanpetshop.com/regent",verifiedAt}));
+  ["5500",2,"Tek çıkış",80],["6500",2.4,"Tek çıkış, iki kademeli",100],["7500",3,"Çift çıkış, iki kademeli",150],["8500",4,"Çift çıkış, iki kademeli",210],["9500",4,"Çift çıkış, ayarlanabilir",240],
+].map(([model,powerW,outlet,ratedFlowLph])=>({id:`regent-${model}`,category:"air_pump",brand:"Regent",model:String(model),specifications:`${outlet} hava motoru · ${ratedFlowLph} L/saat · ${powerW} W`,ratedFlowLph:Number(ratedFlowLph),powerW:Number(powerW),adjustableFlow:String(outlet).includes("kademeli")||String(outlet).includes("ayarlanabilir"),sourceUrl:"https://www.nirvanashop.co.za/grow-shop/regent-6500-air-pump-100-litre-hour.html",verifiedAt:"2026-08-18"}));
+regentEquipment.push({id:"regent-calm-rc-006",category:"air_pump",brand:"Regent",model:"Calm RC-006",specifications:"Çift çıkışlı hava motoru · 180 L/saat · 3 W · 200 litreye kadar",ratedFlowLph:180,powerW:3,recommendedMaxL:200,adjustableFlow:true,sourceUrl:"https://rozetka.com.ua/kwzone_6938104010394/p16905500/",verifiedAt:"2026-08-18"});
 
 const sharkEquipment:EquipmentProfile[]=[
   ["Shark Pro 500",530,4],["Shark Pro 700",720,7],["Shark Pro 900",910,10],
@@ -335,6 +582,19 @@ const mecEquipment:EquipmentProfile[]=[
   {id:"mec-airline-suction-cup",category:"other",brand:"Meç",model:"Hava Hortumu Vantuzu",specifications:"Hava hortumu sabitleme vantuzu · 10'lu paket"},
   {id:"mec-brine-shrimp-net",category:"other",brand:"Meç",model:"Artemia Süzgeci 9 cm",specifications:"Artemia çıkartma süzgeci/kepçesi"},
 ].map((item):EquipmentProfile=>({...item,category:"other",sourceUrl:"https://atakanpetshop.com/mec",verifiedAt}));
+
+const mecAirDrivenFilters:EquipmentProfile[]=[
+  {id:"mec-pipo-5",model:"Pipo 5",specifications:"Küçük boy sünger pipo filtre · yaklaşık 9 × 16 cm",sourceUrl:"https://cukurovapet.com.tr/urun/mec-akvaryum-pi%CC%87po-fi%CC%87ltre-kucuk-boy-5-3015"},
+  {id:"mec-pipo-10",model:"Pipo 10",specifications:"Orta boy sünger pipo filtre",sourceUrl:"https://emirakvaryum.com/index.php?path=109&route=product%2Fcategory"},
+  {id:"mec-pipo-15",model:"Pipo 15",specifications:"Büyük boy sünger pipo filtre",sourceUrl:"https://emirakvaryum.com/index.php?path=109&route=product%2Fcategory"},
+  {id:"mec-hamburg-pipo",model:"Modüler Hamburg Pipo Filtre",specifications:"Modüler biyolojik Hamburg tipi sünger filtre",sourceUrl:"https://cukurovapet.com.tr/marka/mec"},
+  {id:"mec-turbo-pipo",model:"Turbo Pipo Filtre",specifications:"25 cm gövdeli biyolojik sünger pipo filtre",sourceUrl:"https://www.trendyol.com/mec/mec-turbo-pipo-filtre-nostaljik-p-802855493"},
+  {id:"mec-f002",model:"F002 Tekli Pipo Filtre",specifications:"Tek süngerli biyolojik pipo filtre",sourceUrl:"https://www.cmticaret.com/filtreler-motorlar-ve-isiticilar/"},
+  {id:"mec-f003",model:"F003 Çiftli Pipo Filtre",specifications:"Çift süngerli biyolojik pipo filtre",sourceUrl:"https://www.cmticaret.com/filtreler-motorlar-ve-isiticilar/"},
+  {id:"mec-f008",model:"F008 Box Filtre",specifications:"Üretim ve yavru akvaryumları için kutu filtre",sourceUrl:"https://www.cmticaret.com/filtreler-motorlar-ve-isiticilar/"},
+].map((item):EquipmentProfile=>({
+  ...item,category:"filter",brand:"Meç",requiresAirPump:true,verifiedAt:"2026-08-18",
+}));
 
 const netleaPumpSource="https://atakanpetshop.com/netlea";
 const netleaPumps:EquipmentProfile[]=[
@@ -354,6 +614,15 @@ const soboExpandedEquipment:EquipmentProfile[]=[
   {id:"sobo-wp-1300f",category:"filter",brand:"Sobo",model:"WP-1300F",specifications:"İç filtre · 600 L/saat · 10 W",ratedFlowLph:600,powerW:10,sourceUrl:soboSource,verifiedAt},
   {id:"sobo-wp-1301f",category:"filter",brand:"Sobo",model:"WP-1301F",specifications:"İç filtre · 600 L/saat · 10 W",ratedFlowLph:600,powerW:10,sourceUrl:soboSource,verifiedAt},
   {id:"sobo-wp-310f",category:"filter",brand:"Sobo",model:"WP-310F",specifications:"İç filtre · 300 L/saat · 3 W",ratedFlowLph:300,powerW:3,sourceUrl:soboSource,verifiedAt},
+  {id:"sobo-aq-500f",category:"filter",brand:"Sobo",model:"AQ-500F",specifications:"Kompakt iç filtre · 500 L/saat · 6 W · 60 cm ve altı akvaryumlar",ratedFlowLph:500,powerW:6,recommendedTankLengthCm:[20,60],sourceUrl:"https://www.karacaakvaryum.com/urun/sobo-aq-500f-ic-filtre/",verifiedAt:"2026-08-18"},
+  {id:"sobo-wp-950f",category:"filter",brand:"Sobo",model:"WP-950F",specifications:"İç filtre · 500 L/saat · 6 W",ratedFlowLph:500,powerW:6,sourceUrl:"https://www.amigospet.com.tr/gallery/AM%C4%B0GOS%20KATALOG22.pdf",verifiedAt:"2026-08-18"},
+  {id:"sobo-wp-1000f",category:"filter",brand:"Sobo",model:"WP-1000F",specifications:"İç filtre · 650 L/saat · 15 W · 200 litreye kadar",ratedFlowLph:650,powerW:15,recommendedMaxL:200,sourceUrl:"https://www.sobo.com.tr/sobo-akvaryum-ic-filtre-wp-1000f",verifiedAt:"2026-08-18"},
+  {id:"sobo-wp-4001",category:"filter",brand:"Sobo",model:"WP-4001",specifications:"İç filtre · 2000 L/saat · 30 W",ratedFlowLph:2000,powerW:30,sourceUrl:"https://www.amigospet.com.tr/gallery/AM%C4%B0GOS%20KATALOG22.pdf",verifiedAt:"2026-08-18"},
+  {id:"sobo-wp-6001",category:"filter",brand:"Sobo",model:"WP-6001",specifications:"Sessiz iç filtre · 2800 L/saat · 40 W · 380 litreye kadar",ratedFlowLph:2800,powerW:40,recommendedMaxL:380,sourceUrl:"https://www.sobo.com.tr/sobo-akvaryum-ic-filtre-wp-6001",verifiedAt:"2026-08-18"},
+  {id:"sobo-wp-280f",category:"filter",brand:"Sobo",model:"WP-280F",specifications:"Şelale aparatlı kompakt iç filtre · 500 L/saat · 5 W",ratedFlowLph:500,powerW:5,sourceUrl:"https://www.sobo.com.tr/sobo-akvaryum-selale-aparatli-ic-filtre-wp-280f",verifiedAt:"2026-08-18"},
+  {id:"sobo-aq-16h",category:"filter",brand:"Sobo",model:"AQ-16H",specifications:"Biyolojik medya hazneli askı şelale filtre · 400 L/saat · 4 W",ratedFlowLph:400,powerW:4,sourceUrl:"https://www.sobo.com.tr/selale-filtreler",verifiedAt:"2026-08-18"},
+  {id:"sobo-aq-17h",category:"filter",brand:"Sobo",model:"AQ-17H",specifications:"Biyolojik medya hazneli askı şelale filtre · 500 L/saat · 6 W",ratedFlowLph:500,powerW:6,sourceUrl:"https://www.sobo.com.tr/selale-filtreler",verifiedAt:"2026-08-18"},
+  {id:"sobo-aq-18h",category:"filter",brand:"Sobo",model:"AQ-18H",specifications:"Biyolojik medya hazneli askı şelale filtre · 500 L/saat · 6 W",ratedFlowLph:500,powerW:6,sourceUrl:"https://www.sobo.com.tr/selale-filtreler",verifiedAt:"2026-08-18"},
   {id:"sobo-motorized-sponge-350",category:"filter",brand:"Sobo",model:"Motorlu Pipo Filtre 350",specifications:"Motorlu biyolojik pipo filtre · 350 L/saat · 3 W · 70 litreye kadar",ratedFlowLph:350,powerW:3,recommendedMaxL:70,sourceUrl:"https://atakanpetshop.com/sobo-pompali-pipo-filtre-350lh-3w",verifiedAt},
   {id:"sobo-sf-2000",category:"other",brand:"Sobo",model:"SF-2000",specifications:"Debi kontrollü DC kafa/sump pompası · 1800 L/saat · 18 W · 3 m basma yüksekliği",ratedFlowLph:1800,powerW:18,adjustableFlow:true,sourceUrl:"https://atakanpetshop.com/sobo-debi-kontrollu-dc-pompa-18w-1800lh-3m",verifiedAt},
   {id:"sobo-wp-4000-pump",category:"other",brand:"Sobo",model:"WP-4000",specifications:"Sump motoru · 2000 L/saat · 40 W · 2 m basma yüksekliği",ratedFlowLph:2000,powerW:40,sourceUrl:soboSource,verifiedAt},
@@ -396,10 +665,41 @@ const sunsunUvFilters:EquipmentProfile[]=[
   ["JUP-01",800,8,9],["JUP-02",500,5,5],["JUP-21",800,8,7],["JUP-22",800,8,9],["JUP-23",800,8,13],
 ].map(([model,ratedFlowLph,powerW,integratedUvcW])=>({id:`sunsun-${String(model).toLowerCase()}`,category:"filter",brand:"SunSun",model:String(model),specifications:`UV sterilizasyonlu iç filtre · ${ratedFlowLph} L/saat · ${powerW} W pompa + ${integratedUvcW} W UV`,ratedFlowLph:Number(ratedFlowLph),powerW:Number(powerW),integratedUvcW:Number(integratedUvcW),sourceUrl:sunsunUvSource,verifiedAt}));
 
+const resunKingSource="https://okosgazdi.hu/index.php/resun-king-fejszettes-vizpumpa-sorozat";
+const resunWaterPumps:EquipmentProfile[]=[
+  ["KING-1",380,5],["KING-1A",700,10],["KING-2",1000,20],["KING-3",2300,40],
+  ["KING-5",6200,100],["KING-6",8200,150],
+].map(([model,ratedFlowLph,powerW])=>({
+  id:`resun-${String(model).toLowerCase()}`,category:"other",brand:"Resun",model:String(model),
+  specifications:`Dalgıç kafa/devirdaim pompası · ${ratedFlowLph} L/saat · ${powerW} W`,
+  ratedFlowLph:Number(ratedFlowLph),powerW:Number(powerW),sourceUrl:resunKingSource,verifiedAt:"2026-08-18",
+}));
+resunWaterPumps.push(
+  {id:"resun-sp-5000",category:"other",brand:"Resun",model:"SP-5000",specifications:"Dalgıç devirdaim pompası · 2500 L/saat · 35 W",ratedFlowLph:2500,powerW:35,sourceUrl:"https://www.shanvis.store/products/resun-sp-9000as-120w-fountain-pond-aquarium-suction-water-pump-submersible-water-circulation-pump",verifiedAt:"2026-08-18"},
+  {id:"resun-sp-6000",category:"other",brand:"Resun",model:"SP-6000",specifications:"Dalgıç devirdaim pompası · 2800 L/saat · 40 W",ratedFlowLph:2800,powerW:40,sourceUrl:"https://www.shanvis.store/products/resun-sp-9000as-120w-fountain-pond-aquarium-suction-water-pump-submersible-water-circulation-pump",verifiedAt:"2026-08-18"},
+  {id:"resun-sp-7800s",category:"other",brand:"Resun",model:"SP-7800S",specifications:"Dalgıç devirdaim pompası · 3000 L/saat · 75 W",ratedFlowLph:3000,powerW:75,sourceUrl:"https://www.shanvis.store/products/resun-sp-9000as-120w-fountain-pond-aquarium-suction-water-pump-submersible-water-circulation-pump",verifiedAt:"2026-08-18"},
+  {id:"resun-sp-9000as",category:"other",brand:"Resun",model:"SP-9000AS",specifications:"Dalgıç devirdaim pompası · 3800 L/saat · 120 W",ratedFlowLph:3800,powerW:120,sourceUrl:"https://www.shanvis.store/products/resun-sp-9000as-120w-fountain-pond-aquarium-suction-water-pump-submersible-water-circulation-pump",verifiedAt:"2026-08-18"},
+  {id:"resun-sp-9000s",category:"other",brand:"Resun",model:"SP-9000S",specifications:"Dalgıç devirdaim pompası · 4500 L/saat · 130 W",ratedFlowLph:4500,powerW:130,sourceUrl:"https://www.shanvis.store/products/resun-sp-9000as-120w-fountain-pond-aquarium-suction-water-pump-submersible-water-circulation-pump",verifiedAt:"2026-08-18"},
+  {id:"resun-sp-10000s",category:"other",brand:"Resun",model:"SP-10000S",specifications:"Dalgıç devirdaim pompası · 5500 L/saat · 160 W",ratedFlowLph:5500,powerW:160,sourceUrl:"https://www.shanvis.store/products/resun-sp-9000as-120w-fountain-pond-aquarium-suction-water-pump-submersible-water-circulation-pump",verifiedAt:"2026-08-18"},
+);
+
+const resunFilters:EquipmentProfile[]=[
+  {id:"resun-mini",category:"filter",brand:"Resun",model:"Mini Filter",specifications:"Kompakt iç filtre · 400 L/saat · 5 W",ratedFlowLph:400,powerW:5,sourceUrl:"https://atakanpetshop.com/resun",verifiedAt:"2026-08-18"},
+  {id:"resun-sf-400",category:"filter",brand:"Resun",model:"SF-400",specifications:"Askı filtre · 400 L/saat · 5 W · 60 litreye kadar",ratedFlowLph:400,powerW:5,recommendedMaxL:60,sourceUrl:"https://produto.mercadolivre.com.br/MLB-2901672634-filtro-resun-hang-on-sf-400-360h-5w-para-aquarios-ate-60lt-_JM",verifiedAt:"2026-08-18"},
+  {id:"resun-uv07-11w",category:"uv",brand:"Resun",model:"UV-07 11 W",specifications:"Hat üstü UV-C sterilizatör · 11 W",powerW:11,integratedUvcW:11,sourceUrl:"https://www.cikletistpetshop.com/resun-uv-filtre-11-wt-100-uv07-11w-566",verifiedAt:"2026-08-18"},
+  {id:"resun-uv07-24w",category:"uv",brand:"Resun",model:"UV-07 24 W",specifications:"Hat üstü UV-C sterilizatör · 24 W",powerW:24,integratedUvcW:24,sourceUrl:"https://www.cikletistpetshop.com/uv-filtreler-140",verifiedAt:"2026-08-18"},
+];
+
+const resunLpAdditional:EquipmentProfile[]=[
+  {id:"resun-lp20",category:"air_pump",brand:"Resun",model:"LP-20",specifications:"Düşük sesli üretim tipi hava motoru · 1500 L/saat · 17 W",ratedFlowLph:1500,powerW:17,sourceUrl:"https://www.isw.co.id/pompa-resun",verifiedAt:"2026-08-18"},
+  {id:"resun-lp40",category:"air_pump",brand:"Resun",model:"LP-40",specifications:"Düşük sesli üretim tipi hava motoru · 3000 L/saat · 35 W",ratedFlowLph:3000,powerW:35,sourceUrl:"https://www.isw.co.id/pompa-resun",verifiedAt:"2026-08-18"},
+];
+
 export const hardwareEquipmentCatalog: EquipmentProfile[] = [
   ...seraFilters,
   ...dennerleFilters,
   ...dennerleHeaters,
+  ...dennerleExpandedEquipment,
   ...ferplastFilters,
   ...ferplastHeaters,
   ...boyuFilters,
@@ -411,12 +711,14 @@ export const hardwareEquipmentCatalog: EquipmentProfile[] = [
   ...jenecaCurrentFilters,
   ...jenecaAirPumps,
   ...jenecaHeaters,
+  ...jenecaOfficialAdditional,
   ...eurostarFilters,
   ...xlproFilters,
   ...ejetFilters,
   ...dophinCurrentFilters,
   ...rsFilters,
   ...lifetechEquipment,
+  ...jblExpandedEquipment,
   ...yikedaEquipment,
   ...haqosEquipment,
   ...jingyeEquipment,
@@ -426,6 +728,7 @@ export const hardwareEquipmentCatalog: EquipmentProfile[] = [
   ...sharkEquipment,
   ...armaturkEquipment,
   ...mecEquipment,
+  ...mecAirDrivenFilters,
   ...netleaPumps,
   ...soboExpandedEquipment,
   ...sunsunHangOnFilters,
@@ -434,4 +737,7 @@ export const hardwareEquipmentCatalog: EquipmentProfile[] = [
   ...sunsunInternalFilters,
   ...sunsunWaterPumps,
   ...sunsunUvFilters,
+  ...resunWaterPumps,
+  ...resunFilters,
+  ...resunLpAdditional,
 ];

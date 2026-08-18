@@ -7,7 +7,7 @@ const requiredBrands = [
   "Eurostar", "Ferplast", "Fluval", "Haqos", "ISTA", "JBL", "Jeneca",
   "Jingye", "Lifetech", "Liya", "MasterLine", "Meç", "Mufan", "Netlea",
   "Nubios", "Oase", "OrionLED", "Regent", "Resun", "RS Electrical",
-  "Seachem", "Sera", "Shark (Sicce)", "Shrimps Forever", "Sobo", "SunSun",
+  "Seachem", "Sera", "Shark", "Shrimps Forever", "Sobo", "SunSun",
   "Tetra", "The 2Hr Aquarist", "Tropica", "Tropical", "Twinstar", "WaterBear",
   "Xinyou", "XLPro", "Yikeda",
 ] as const;
@@ -36,4 +36,3 @@ export const catalogBrandCoverage = requiredBrands.map(brand=>({
   equipmentCount:equipmentCatalog.filter(item=>normalizeBrand(item.brand)===normalizeBrand(brand)).length,
   careProductCount:careProductCatalog.filter(item=>normalizeBrand(item.brand)===normalizeBrand(brand)).length,
 }));
-
