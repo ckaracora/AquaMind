@@ -305,7 +305,7 @@ const documentedCapacityGaps = new Set([
   "nubios-yu118c","nubios-yu119c",
 ]);
 for(const item of equipmentCatalog){
-  if(documentedCapacityGaps.has(item.id))item.capacityDataNote="Üretici ve incelenen güvenilir satıcı kaynaklarında kapasite/debi değeri yayımlanmamış; tahmini değer kullanılmıyor.";
+  if(documentedCapacityGaps.has(item.id)&&!item.capacityDataNote)item.capacityDataNote="Üretici ve incelenen güvenilir satıcı kaynaklarında kapasite/debi değeri yayımlanmamış; tahmini değer kullanılmıyor.";
 }
 
 const hasCapacityData = (profile:EquipmentProfile) => {

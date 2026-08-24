@@ -46,9 +46,9 @@ for (const model of ["WRGB II Pro 60", "WRGB II Pro 120", "Dosing Pump System (4
 }
 assert.equal(chihiros.find((item) => item.model === "Heater Pro 12/16 mm (EU)")?.recommendedMaxL, 650, "Chihiros Heater Pro resmî 650 L kapasite sınırını taşımalı");
 assert.equal(chihiros.find((item) => item.model === "Dosing Pump System (4 Head)")?.category, "other", "Chihiros dozaj sistemi filtre veya ısıtıcı hesabına karışmamalı");
-const sharkCustomSeries = equipmentCatalog.find((item) => item.id === "shark-full-spectrum-4-row-series");
-assert.equal(sharkCustomSeries?.category, "lighting", "Shark özel ölçülü armatür serisi aydınlatma kategorisinde bulunmalı");
-assert.match(sharkCustomSeries?.specifications || "", /15 .*seçeneği/, "Shark tek ürün ilanındaki on beş uzunluk seçeneği kullanıcıya açıklanmalı");
+const sharkFourRow23 = equipmentCatalog.find((item) => item.id === "shark-fs-23-4row");
+assert.equal(sharkFourRow23?.category, "lighting", "Shark ayrı ölçülü armatür modelleri aydınlatma kategorisinde bulunmalı");
+assert.deepEqual(sharkFourRow23?.recommendedTankLengthCm, [30, 35], "Shark 23 cm armatürün doğrulanmış akvaryum uyumu korunmalı");
 
 assert.equal(
   new Set(equipmentCatalog.map((item) => item.id)).size,
@@ -229,6 +229,26 @@ for (const [model, flow, power] of [["906F", 1000, 16], ["907F", 1350, 25], ["90
   assert(item?.sourceUrl.includes(`/urun/e-jet-j${model.toLowerCase()}-`), `Ejet ${model} doğrudan ürün sayfasına bağlanmalı`);
 }
 
+const yikedaEquipment = equipmentCatalog.filter((entry) => entry.brand === "Yikeda");
+assert.equal(yikedaEquipment.length, 23, "Yikeda'nın doğrulanmış güncel aydınlatma portföyü 23 seçilebilir model içermeli");
+const yikedaModels = new Set(yikedaEquipment.map((entry) => entry.model));
+for (const model of ["SD-48A-B", "SD-48A-S", "YKD-6124 Optik LED Beyaz", "YKD-6124 Optik LED Siyah", "YKD-6126 Optik LED Beyaz", "YKD-6126 Optik LED Siyah", "SD-T8-1200JL RGB", "SD-1030 RGB", "SD-1040 RGB", "SD-1045 RGB", "SD-1055 RGB", "TP-3,6WHB Tray Light", "TP-3,6WLB Tray Light", "TP-5,6WHB Tray Light"]) {
+  assert(yikedaModels.has(model), `Yikeda ${model} katalogda bulunmalı`);
+}
+const yikedaSd1045 = yikedaEquipment.find((entry) => entry.model === "SD-1045 RGB");
+assert.deepEqual([yikedaSd1045?.powerW, yikedaSd1045?.recommendedTankLengthCm], [45, [80, 90]], "Yikeda SD-1045 güç ve akvaryum uzunluğu korunmalı");
+assert(yikedaSd1045?.specifications.includes("3940 lm"), "Yikeda SD-1045 doğrulanmış ışık akısını taşımalı");
+
+const sharkLights = equipmentCatalog.filter((entry) => entry.brand === "Shark");
+assert.equal(sharkLights.length, 22, "Shark doğrulanmış aydınlatma seçenekleri tek seri kaydı yerine 22 ayrı model içermeli");
+const sharkLightModels = new Set(sharkLights.map((entry) => entry.model));
+for (const model of ["Full Spectrum 23 cm / 4 Sıra", "Full Spectrum 33 cm / 4 Sıra", "Full Spectrum 43 cm / 4 Sıra", "Full Spectrum 63 cm / 4 Sıra", "Full Spectrum 83 cm / 4 Sıra", "Full Spectrum 93 cm / 4 Sıra", "Full Spectrum 33 cm / 3 Sıra", "Full Spectrum 73 cm / 3 Sıra", "Full Spectrum 113 cm / 3 Sıra", "Grolux 3 Renk Bar LED 60 cm", "Full Spectrum 4 Renk Bar LED 70 cm", "Beyaz Bar LED 100 cm"]) {
+  assert(sharkLightModels.has(model), `Shark ${model} katalogda ayrı seçilebilir olmalı`);
+}
+assert(!sharkLightModels.has("Full Spectrum 4 Sıra Osram LED (15 uzunluk seçeneği)"), "Shark modelleri tek ve belirsiz seri seçeneğinde birleştirilmemeli");
+const sharkFourRow93 = sharkLights.find((entry) => entry.model === "Full Spectrum 93 cm / 4 Sıra");
+assert.deepEqual([sharkFourRow93?.recommendedTankLengthCm, sharkFourRow93?.specifications.includes("5940 lm")], [[100, 105], true], "Shark 93 cm dört sıra modelinin doğrulanmış ölçü ve ışık akısı korunmalı");
+
 const netlea530 = equipmentCatalog.find((entry) => entry.brand === "Netlea" && entry.model === "530S-AT5");
 assert.equal(netlea530?.powerW, 35, "Netlea 530S-AT5 doğrulanmış 35 W bilgisini taşımalı");
 assert.deepEqual(netlea530?.recommendedTankLengthCm, [30, 40], "Netlea 530S-AT5 30–40 cm akvaryum aralığını taşımalı");
@@ -406,6 +426,7 @@ for (const model of ["EASY-1000AT", "Aqua Flow 250"]) {
   assert.equal(item.category, "filter", `Haqos ${model} filtre kategorisinde bulunmalı`);
   assert.equal(item.ratedFlowLph, undefined, `Haqos ${model} debisi benzer model kodlarından türetilmemeli`);
   assert.equal(item.powerW, undefined, `Haqos ${model} gücü doğrulanmadan katalogda kullanılmamalı`);
+  assert(item.capacityDataNote?.includes("otomatik kapasite hesabına katılmaz"), `Haqos ${model} eksik teknik veri nedeniyle kapasite hesabından açıkça dışlanmalı`);
 }
 
 for (const model of ["NW-450F", "NW-600F", "NW-800F", "NW-1500F", "NB-1500F", "YU-118C", "YU-119C"]) {
@@ -413,6 +434,7 @@ for (const model of ["NW-450F", "NW-600F", "NW-800F", "NW-1500F", "NB-1500F", "Y
   assert(item, `Nubios ${model} katalogda bulunmalı`);
   assert.equal(item.category, "filter", `Nubios ${model} filtre kategorisinde bulunmalı`);
   assert.equal(item.ratedFlowLph, undefined, `Nubios ${model} debisi doğrudan ürün kaynağı olmadan tahmin edilmemeli`);
+  assert(item.capacityDataNote?.includes("otomatik filtrasyon hesabına katılmaz"), `Nubios ${model} yayımlanmamış debi nedeniyle kapasite hesabından açıkça dışlanmalı`);
 }
 assert.equal(equipmentCatalog.find((entry) => entry.id === "nubios-ch-729")?.ratedFlowLph, 520, "Nubios elektrikli dip süpürgesi doğrulanmış 520 L/saat pompa debisini taşımalı");
 for (const [model, flow, volume] of [["Nano Easy Tank 4,5 L", 180, 4.5], ["Masaüstü Akvaryum Seti 12 L", 250, 12], ["Masaüstü Akvaryum Seti Fanus 12 L", 150, 12]]) {
