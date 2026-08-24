@@ -302,11 +302,10 @@ for (const [model, flow, power] of [["WP-3880F", 2500, 40], ["WP-1105F", 200, 5]
   const item = equipmentCatalog.find((entry) => entry.brand === "Sobo" && entry.model === model);
   assert.deepEqual([item?.category, item?.ratedFlowLph, item?.powerW], ["filter", flow, power], `Sobo ${model} ikinci kaynak taramasındaki doğrulanmış değerleri taşımalı`);
 }
-for (const model of ["WP-780F", "WP-303H", "WP-607H", "SF-550F", "FG-1204"]) {
-  const item = equipmentCatalog.find((entry) => entry.brand === "Sobo" && entry.model === model);
-  assert.equal(item?.ratedFlowLph, undefined, `Sobo ${model} için yayımlanmayan debi tahmin edilmemeli`);
-  assert(item?.capacityDataNote, `Sobo ${model} kapasite hesabından çıkarılma gerekçesini taşımalı`);
-}
+assert.equal(equipmentCatalog.find((entry) => entry.brand === "Sobo" && entry.model === "WP-1105F")?.recommendedMaxL, 40, "Sobo WP-1105F yayımlanmış 30–40 litre aralığını taşımalı");
+assert(equipmentCatalog.find((entry) => entry.brand === "Sobo" && entry.model === "WP-1105F")?.sourceUrl.includes("sobo-wp-1105f"), "Sobo WP-1105F ilgisiz Eheim görseline bağlanmamalı");
+assert(equipmentCatalog.find((entry) => entry.brand === "Sobo" && entry.model === "WP-377F")?.sourceUrl.includes("cikletistpetshop.com"), "Sobo WP-377F güvenilir doğrudan ürün kaynağına bağlanmalı");
+assert(equipmentCatalog.find((entry) => entry.brand === "Sobo" && entry.model === "WP-3200F")?.sourceUrl.includes("sobo.com.tr"), "Sobo WP-3200F farklı güçteki başka ürüne bağlanmamalı");
 for (const model of ["AF2003", "AF2005", "AF2005D", "AF2009D", "AF2020"]) {
   const item = equipmentCatalog.find((entry) => entry.brand === "Resun" && entry.model === model);
   assert.equal(item?.category, "other", `Resun ${model} diğer ekipman kategorisinde listelenmeli`);
@@ -330,13 +329,25 @@ for (const [model, flow, power] of [["WP-850F", 400, 4], ["WP-330F", 800, 12]]) 
   assert.deepEqual([item?.category, item?.ratedFlowLph, item?.powerW], ["filter", flow, power], `Sobo ${model} doğrulanmış filtre kapasitesini taşımalı`);
 }
 const soboSb848 = equipmentCatalog.find((entry) => entry.brand === "Sobo" && entry.model === "SB-848");
-assert.equal(soboSb848?.ratedFlowLph, undefined, "Sobo SB-848 hava debisi güç değerinden tahmin edilmemeli");
-assert(soboSb848?.capacityDataNote, "Sobo SB-848 kapasite boşluğu açıklanmalı");
+assert.deepEqual([soboSb848?.ratedFlowLph, soboSb848?.powerW, soboSb848?.adjustableFlow], [540, 12, true], "Sobo SB-848 toplam 2 × 4,5 L/dak doğrulanmış hava debisini taşımalı");
+assert.equal(soboSb848?.capacityDataNote, undefined, "Sobo SB-848 doğrulanmış debiye rağmen kapasite dışı bırakılmamalı");
 const soboSb3330 = equipmentCatalog.find((entry) => entry.brand === "Sobo" && entry.model === "SB-3330 Pipo Filtre");
 assert.equal(soboSb3330?.requiresAirPump, true, "Sobo SB-3330 harici hava motoru gereksinimini taşımalı");
+assert(soboSb3330?.sourceUrl.includes("sobo-sb-3330"), "Sobo SB-3330 ilgisiz bitki ürününe bağlanmamalı");
 const soboSb8808 = equipmentCatalog.find((entry) => entry.brand === "Sobo" && entry.model === "SB-8808");
-assert.equal(soboSb8808?.ratedFlowLph, undefined, "Sobo SB-8808 hava debisi güç değerinden tahmin edilmemeli");
-assert(soboSb8808?.capacityDataNote, "Sobo SB-8808 kapasite boşluğu açıklanmalı");
+assert.deepEqual([soboSb8808?.ratedFlowLph, soboSb8808?.adjustableFlow], [720, true], "Sobo SB-8808 toplam 2 × 6 L/dak doğrulanmış hava debisini taşımalı");
+assert.equal(soboSb8808?.powerW, undefined, "Sobo SB-8808 çelişkili 5,8/10 W kaynaklarından birini kesin güç değeri saymamalı");
+assert.equal(soboSb8808?.capacityDataNote, undefined, "Sobo SB-8808 doğrulanmış hava debisine rağmen kapasite dışı bırakılmamalı");
+for (const [model, flow, power] of [["WP-303H", 280, 5], ["WP-607H", 600, 12], ["SF-550F", 500, 7]]) {
+  const item = equipmentCatalog.find((entry) => entry.brand === "Sobo" && entry.model === model);
+  assert.deepEqual([item?.category, item?.ratedFlowLph, item?.powerW], ["filter", flow, power], `Sobo ${model} doğrulanmış debi ve güç değerlerini taşımalı`);
+  assert.equal(item?.capacityDataNote, undefined, `Sobo ${model} doğrulanmış teknik veriye rağmen kapasite dışı bırakılmamalı`);
+}
+for (const [model, flow, power] of [["WP-780F", 800, 10], ["FG-1204", 880, 12]]) {
+  const item = equipmentCatalog.find((entry) => entry.brand === "Sobo" && entry.model === model);
+  assert.deepEqual([item?.category, item?.ratedFlowLph, item?.powerW], ["filter", flow, power], `Sobo ${model} doğrulanmış debi ve güç değerlerini taşımalı`);
+  assert.equal(item?.capacityDataNote, undefined, `Sobo ${model} doğrulanmış teknik veriye rağmen kapasite dışı bırakılmamalı`);
+}
 const soboAq7500 = equipmentCatalog.find((entry) => entry.brand === "Sobo" && entry.model === "AQ7500");
 assert.deepEqual([soboAq7500?.category, soboAq7500?.ratedFlowLph, soboAq7500?.powerW], ["other", 5000, 100], "Sobo AQ7500 sump pompası filtre çevrimine karışmadan teknik verileri taşımalı");
 const boyuSes10 = equipmentCatalog.find((entry) => entry.brand === "Boyu" && entry.model === "SES-10");
@@ -419,6 +430,22 @@ assert.equal(
   undefined,
   "Jeneca XP-605 debisi güvenilir kaynak olmadan tahmin edilmemeli",
 );
+for (const model of ["XP-605", "TGD-15", "TGD-16", "TGD-17", "TGD-18", "TGD-19", "GD-402", "GD-502", "GD-602"]) {
+  const item = equipmentCatalog.find((entry) => entry.brand === "Jeneca" && entry.model === model);
+  assert(item, `Jeneca ${model} resmî üretici kataloğunda bulunduğu için katalogda yer almalı`);
+  assert.equal(item.category, "filter", `Jeneca ${model} filtre kategorisinde bulunmalı`);
+  assert.equal(item.ratedFlowLph, undefined, `Jeneca ${model} debisi benzer seriden türetilmemeli`);
+  assert.equal(item.powerW, undefined, `Jeneca ${model} gücü benzer seriden türetilmemeli`);
+  assert(item.capacityDataNote?.includes("otomatik filtrasyon hesabına katılmaz"), `Jeneca ${model} eksik teknik veri nedeniyle kapasite hesabından açıkça dışlanmalı`);
+}
+for (const model of ["DC-001", "DC-003"]) {
+  const item = equipmentCatalog.find((entry) => entry.brand === "Jeneca" && entry.model === model);
+  assert(item, `Jeneca ${model} resmî üretici kataloğunda bulunduğu için katalogda yer almalı`);
+  assert.equal(item.category, "air_pump", `Jeneca ${model} hava motoru kategorisinde bulunmalı`);
+  assert.equal(item.ratedFlowLph, undefined, `Jeneca ${model} hava debisi model kodundan tahmin edilmemeli`);
+  assert.equal(item.powerW, undefined, `Jeneca ${model} gücü doğrulanmadan kullanılmamalı`);
+  assert(item.capacityDataNote?.includes("otomatik hava kapasitesi hesabına katılmaz"), `Jeneca ${model} eksik teknik veri nedeniyle hava kapasitesi hesabından açıkça dışlanmalı`);
+}
 
 for (const model of ["EASY-1000AT", "Aqua Flow 250"]) {
   const item = equipmentCatalog.find((entry) => entry.brand === "Haqos" && entry.model === model);
@@ -437,6 +464,15 @@ for (const model of ["NW-450F", "NW-600F", "NW-800F", "NW-1500F", "NB-1500F", "Y
   assert(item.capacityDataNote?.includes("otomatik filtrasyon hesabına katılmaz"), `Nubios ${model} yayımlanmamış debi nedeniyle kapasite hesabından açıkça dışlanmalı`);
 }
 assert.equal(equipmentCatalog.find((entry) => entry.id === "nubios-ch-729")?.ratedFlowLph, 520, "Nubios elektrikli dip süpürgesi doğrulanmış 520 L/saat pompa debisini taşımalı");
+const waterBearG220 = equipmentCatalog.find((entry) => entry.brand === "WaterBear" && entry.model === "WB-G220");
+assert.deepEqual([waterBearG220?.ratedFlowLph, waterBearG220?.powerW, waterBearG220?.adjustableFlow], [500, 8, true], "WaterBear WB-G220 Türkiye varyantının doğrulanmış teknik değerlerini taşımalı");
+assert(waterBearG220?.sourceUrl.includes("aquarubi.com/waterbear-wb-g220"), "WaterBear WB-G220 ilgisiz Eurogold kategori sayfasına bağlanmamalı");
+
+const aquaproInlet12 = equipmentCatalog.find((entry) => entry.id === "aquapro-inlet-strainer-12");
+const aquaproInlet16 = equipmentCatalog.find((entry) => entry.id === "aquapro-inlet-strainer-16");
+assert(aquaproInlet12?.sourceUrl.includes("aquapro-inlet-12mm-emis-suzgec-6975017512225"), "Aquapro 12 mm emiş süzgeci kendi ürün sayfasına bağlanmalı");
+assert(aquaproInlet16?.sourceUrl.includes("aquapro-inlet-emis-borusu-suzgeci-16mm"), "Aquapro 16 mm emiş süzgeci kendi ürün sayfasına bağlanmalı");
+assert.notEqual(aquaproInlet12?.sourceUrl, aquaproInlet16?.sourceUrl, "Aquapro 12 ve 16 mm varyantları aynı kaynak sayfasını paylaşmamalı");
 for (const [model, flow, volume] of [["Nano Easy Tank 4,5 L", 180, 4.5], ["Masaüstü Akvaryum Seti 12 L", 250, 12], ["Masaüstü Akvaryum Seti Fanus 12 L", 150, 12]]) {
   const set = equipmentCatalog.find((entry) => entry.brand === "Nubios" && entry.model === model);
   assert.deepEqual([set?.category, set?.ratedFlowLph, set?.recommendedMaxL], ["other", flow, volume], `Nubios ${model} entegre sistem verilerini taşımalı`);
