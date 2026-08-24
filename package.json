@@ -10,7 +10,8 @@
     "typecheck": "tsc --noEmit",
     "test:health": "node scripts/test-health.cjs",
     "test:catalog-flow": "node scripts/test-catalog-flow.cjs",
-    "audit:catalog": "node scripts/audit-catalog.cjs"
+    "audit:catalog": "node scripts/audit-catalog.cjs",
+    "verify": "tsc --noEmit && node scripts/test-catalog-flow.cjs && node scripts/test-health.cjs && node scripts/audit-catalog.cjs && next build"
   },
   "dependencies": {
     "@fontsource-variable/manrope": "^5.2.6",

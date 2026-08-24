@@ -73,9 +73,11 @@ const missingCapacityRows = equipmentCatalog
     if (item.category === "filter" && item.requiresAirPump) return false;
     return item.ratedFlowLph == null && item.recommendedMaxL == null;
   })
-  .map((item) => ({ marka: item.brand, kategori: item.category, model: item.model }));
+  .map((item) => ({ id: item.id, marka: item.brand, kategori: item.category, model: item.model, durum: item.capacityDataNote ? "kaynakta yayımlanmamış" : "açıklanmamış" }));
 
 if (missingCapacityRows.length) console.table(missingCapacityRows);
+const unexplainedCapacityRows = missingCapacityRows.filter((item) => item.durum === "açıklanmamış");
+if (unexplainedCapacityRows.length) throw new Error(`Açıklanmamış kapasite boşlukları: ${unexplainedCapacityRows.map((item) => item.id).join(", ")}`);
 
 const emptyBrands = rows.filter((row) => row.ekipman + row.urun === 0);
 if (emptyBrands.length) {

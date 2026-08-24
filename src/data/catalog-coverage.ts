@@ -2,7 +2,7 @@ import { careProductCatalog } from "./care-product-catalog";
 import { equipmentCatalog } from "./catalog";
 
 const requiredBrands = [
-  "ADA", "Aquael", "Aquamin", "Aquapro", "Aquawing", "Armatürk", "Boyu",
+  "ADA", "Aquael", "Aquamins", "Aquapro", "Aquawing", "Armatürk", "Boyu",
   "Chihiros", "CO2Art", "Creaqua", "Dennerle", "Dophin", "Eheim", "Ejet",
   "Eurostar", "Ferplast", "Fluval", "Haqos", "ISTA", "JBL", "Jeneca",
   "Jingye", "Lifetech", "Liya", "MasterLine", "Meç", "Mufan", "Netlea",

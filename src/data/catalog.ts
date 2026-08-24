@@ -6,11 +6,14 @@ import { expandedSpeciesCatalog } from "./catalog-species-expanded";
 
 export interface SpeciesProfile {
   id: string; commonName: string; scientificName: string; category: Livestock["category"];
+  aliases?: string[];
   group?: "livebearer"|"tetra"|"rasbora"|"danio"|"barb"|"rainbowfish"|"killifish"|"cichlid"|"labyrinth"|"bottom"|"goby"|"puffer"|"monster"|"coldwater"|"shrimp"|"snail"|"crayfish"|"other";
   adultSizeCm: number; minVolumeL: number; minTankLengthCm: number; minGroup: number;
   temperature: [number, number]; ph: [number, number]; flow: "low"|"medium"|"high"; wasteFactor: number;
   predatory?: boolean;
   speciesOnly?: boolean;
+  communityCaution?: string;
+  husbandryCaution?: string;
   sourceUrl?: string; verifiedAt?: string;
 }
 
@@ -21,32 +24,33 @@ export interface EquipmentProfile {
   recommendedTankLengthCm?: [number,number];
   integratedHeaterW?: number;
   integratedUvcW?: number;
+  capacityDataNote?: string;
   sourceUrl?: string; verifiedAt?: string;
 }
 
 const rawSpeciesCatalog: SpeciesProfile[] = [
   { id:"neon-tetra", commonName:"Neon tetra", scientificName:"Paracheirodon innesi", category:"fish", adultSizeCm:4, minVolumeL:50, minTankLengthCm:60, minGroup:8, temperature:[21,27], ph:[4,7.5], flow:"low", wasteFactor:.7 },
   { id:"cardinal-tetra", commonName:"Kardinal tetra", scientificName:"Paracheirodon axelrodi", category:"fish", adultSizeCm:5, minVolumeL:70, minTankLengthCm:70, minGroup:8, temperature:[24,29], ph:[3.5,7.5], flow:"low", wasteFactor:.75 },
-  { id:"guppy", commonName:"Lepistes", scientificName:"Poecilia reticulata", category:"fish", adultSizeCm:5, minVolumeL:45, minTankLengthCm:50, minGroup:3, temperature:[22,28], ph:[7,8.2], flow:"medium", wasteFactor:1 },
-  { id:"betta", commonName:"Beta balığı", scientificName:"Betta splendens", category:"fish", adultSizeCm:7, minVolumeL:25, minTankLengthCm:40, minGroup:1, temperature:[24,28], ph:[6,7.5], flow:"low", wasteFactor:1.1 },
+  { id:"guppy", commonName:"Lepistes", scientificName:"Poecilia reticulata", aliases:["Guppy","Full Red","Moscow Blue","Blue Grass","Red Dragon","Cobra","Tuxedo","Koi lepistes","Dumbo Ear","Albino Full Red"], category:"fish", adultSizeCm:5, minVolumeL:45, minTankLengthCm:50, minGroup:3, temperature:[22,28], ph:[7,8.2], flow:"medium", wasteFactor:1 },
+  { id:"betta", commonName:"Beta balığı", scientificName:"Betta splendens", aliases:["Betta","Halfmoon","Crowntail","Veiltail","Plakat","Double Tail","Dumbo Betta","Koi Betta"], category:"fish", adultSizeCm:7, minVolumeL:25, minTankLengthCm:40, minGroup:1, temperature:[24,28], ph:[6,7.5], flow:"low", wasteFactor:1.1 },
   { id:"corydoras-panda", commonName:"Panda çöpçü", scientificName:"Corydoras panda", category:"fish", adultSizeCm:5, minVolumeL:60, minTankLengthCm:60, minGroup:6, temperature:[20,26], ph:[6,7.5], flow:"medium", wasteFactor:1 },
-  { id:"ancistrus", commonName:"Cüce vatoz", scientificName:"Ancistrus cirrhosus", category:"fish", group:"bottom", adultSizeCm:13, minVolumeL:80, minTankLengthCm:80, minGroup:1, temperature:[22,26], ph:[5.8,7.6], flow:"medium", wasteFactor:2.2, sourceUrl:"https://www.fishbase.se/summary/Ancistrus_cirrhosus.html", verifiedAt:"2026-08-18" },
-  { id:"goldfish", commonName:"Japon balığı", scientificName:"Carassius auratus", category:"fish", adultSizeCm:25, minVolumeL:100, minTankLengthCm:90, minGroup:1, temperature:[18,24], ph:[6.5,8], flow:"medium", wasteFactor:3 },
+  { id:"ancistrus", commonName:"Cüce vatoz", scientificName:"Ancistrus cirrhosus", aliases:["Bristlenose pleco","Boynuzlu vatoz","Albino cüce vatoz","L144 vatoz","Limon mavi göz vatoz","Longfin ancistrus"], category:"fish", group:"bottom", adultSizeCm:13, minVolumeL:80, minTankLengthCm:80, minGroup:1, temperature:[22,26], ph:[5.8,7.6], flow:"medium", wasteFactor:2.2, sourceUrl:"https://www.fishbase.se/summary/Ancistrus_cirrhosus.html", verifiedAt:"2026-08-18" },
+  { id:"goldfish", commonName:"Japon balığı", scientificName:"Carassius auratus", aliases:["Goldfish","Fantail Japon","Oranda","Ranchu","Ryukin","Teleskop Japon","Black Moor","İnci gövde Japon"], category:"fish", adultSizeCm:25, minVolumeL:100, minTankLengthCm:90, minGroup:1, temperature:[18,24], ph:[6.5,8], flow:"medium", wasteFactor:3 },
   { id:"amano-shrimp", commonName:"Amano karides", scientificName:"Caridina multidentata", category:"shrimp", adultSizeCm:5, minVolumeL:25, minTankLengthCm:30, minGroup:4, temperature:[18,27], ph:[6,7.8], flow:"medium", wasteFactor:.25 },
   { id:"cherry-shrimp", commonName:"Kiraz karides", scientificName:"Neocaridina davidi", category:"shrimp", adultSizeCm:3, minVolumeL:15, minTankLengthCm:25, minGroup:6, temperature:[18,28], ph:[6.5,8], flow:"low", wasteFactor:.15 },
   { id:"nerite-snail", commonName:"Nerite salyangoz", scientificName:"Neritina natalensis", category:"snail", adultSizeCm:3, minVolumeL:20, minTankLengthCm:25, minGroup:1, temperature:[20,28], ph:[7,8.5], flow:"medium", wasteFactor:.4 },
-  { id:"molly", commonName:"Moli", scientificName:"Poecilia sphenops", category:"fish", group:"livebearer", adultSizeCm:10, minVolumeL:80, minTankLengthCm:70, minGroup:4, temperature:[23,28], ph:[7,8.5], flow:"medium", wasteFactor:1.4 },
-  { id:"platy", commonName:"Plati", scientificName:"Xiphophorus maculatus", category:"fish", group:"livebearer", adultSizeCm:6, minVolumeL:60, minTankLengthCm:60, minGroup:4, temperature:[20,26], ph:[7,8.2], flow:"medium", wasteFactor:1 },
-  { id:"swordtail", commonName:"Kılıçkuyruk", scientificName:"Xiphophorus hellerii", category:"fish", group:"livebearer", adultSizeCm:12, minVolumeL:100, minTankLengthCm:80, minGroup:4, temperature:[22,28], ph:[7,8.3], flow:"medium", wasteFactor:1.3 },
+  { id:"molly", commonName:"Moli", scientificName:"Poecilia sphenops", aliases:["Molly","Siyah moli","Black Molly","Dalmaçyalı moli","Gold Dust moli","Lyretail moli"], category:"fish", group:"livebearer", adultSizeCm:10, minVolumeL:80, minTankLengthCm:70, minGroup:4, temperature:[23,28], ph:[7,8.5], flow:"medium", wasteFactor:1.4 },
+  { id:"platy", commonName:"Plati", scientificName:"Xiphophorus maculatus", aliases:["Platy","Mickey Mouse plati","Wagtail plati","Tuxedo plati","Sunset plati","Koi plati"], category:"fish", group:"livebearer", adultSizeCm:6, minVolumeL:60, minTankLengthCm:60, minGroup:4, temperature:[20,26], ph:[7,8.2], flow:"medium", wasteFactor:1 },
+  { id:"swordtail", commonName:"Kılıçkuyruk", scientificName:"Xiphophorus hellerii", aliases:["Swordtail","Kırmızı kılıçkuyruk","Koi kılıçkuyruk","Tuxedo kılıçkuyruk","Ananas kılıçkuyruk","Lyretail kılıçkuyruk"], category:"fish", group:"livebearer", adultSizeCm:12, minVolumeL:100, minTankLengthCm:80, minGroup:4, temperature:[22,28], ph:[7,8.3], flow:"medium", wasteFactor:1.3 },
   { id:"ember-tetra", commonName:"Ember tetra", scientificName:"Hyphessobrycon amandae", category:"fish", group:"tetra", adultSizeCm:2, minVolumeL:35, minTankLengthCm:45, minGroup:10, temperature:[23,29], ph:[5,7.5], flow:"low", wasteFactor:.45 },
   { id:"rummy-nose", commonName:"Kırmızı burun tetra", scientificName:"Hemigrammus bleheri", category:"fish", group:"tetra", adultSizeCm:5, minVolumeL:80, minTankLengthCm:80, minGroup:10, temperature:[24,28], ph:[5,7.5], flow:"medium", wasteFactor:.75 },
   { id:"harlequin-rasbora", commonName:"Harlequin rasbora", scientificName:"Trigonostigma heteromorpha", category:"fish", group:"rasbora", adultSizeCm:5, minVolumeL:60, minTankLengthCm:60, minGroup:8, temperature:[22,28], ph:[6,7.5], flow:"low", wasteFactor:.75 },
   { id:"chili-rasbora", commonName:"Chili rasbora", scientificName:"Boraras brigittae", category:"fish", group:"rasbora", adultSizeCm:2, minVolumeL:30, minTankLengthCm:40, minGroup:10, temperature:[20,28], ph:[4,7], flow:"low", wasteFactor:.35 },
   { id:"cherry-barb", commonName:"Kiraz barb", scientificName:"Puntius titteya", category:"fish", group:"barb", adultSizeCm:5, minVolumeL:60, minTankLengthCm:60, minGroup:8, temperature:[22,27], ph:[6,8], flow:"medium", wasteFactor:.8 },
   { id:"tiger-barb", commonName:"Sumatra barb", scientificName:"Puntigrus tetrazona", category:"fish", group:"barb", adultSizeCm:7, minVolumeL:100, minTankLengthCm:80, minGroup:8, temperature:[20,27], ph:[6,8], flow:"medium", wasteFactor:1.1 },
-  { id:"angelfish", commonName:"Melek balığı", scientificName:"Pterophyllum scalare", category:"fish", group:"cichlid", adultSizeCm:15, minVolumeL:150, minTankLengthCm:80, minGroup:2, temperature:[24,30], ph:[6,7.5], flow:"low", wasteFactor:1.8 },
-  { id:"discus", commonName:"Diskus", scientificName:"Symphysodon aequifasciatus", category:"fish", group:"cichlid", adultSizeCm:20, minVolumeL:300, minTankLengthCm:120, minGroup:6, temperature:[28,31], ph:[5,7], flow:"low", wasteFactor:2 },
-  { id:"ramirezi", commonName:"Ramirezi", scientificName:"Mikrogeophagus ramirezi", category:"fish", group:"cichlid", adultSizeCm:7, minVolumeL:70, minTankLengthCm:60, minGroup:2, temperature:[26,30], ph:[5,7], flow:"low", wasteFactor:1 },
+  { id:"angelfish", commonName:"Melek balığı", scientificName:"Pterophyllum scalare", aliases:["Angelfish","Koi melek","Mermer melek","Siyah melek","Altum görünümlü melek","Zebra melek"], category:"fish", group:"cichlid", adultSizeCm:15, minVolumeL:150, minTankLengthCm:80, minGroup:2, temperature:[24,30], ph:[6,7.5], flow:"low", wasteFactor:1.8 },
+  { id:"discus", commonName:"Diskus", scientificName:"Symphysodon aequifasciatus", aliases:["Discus","Blue Diamond discus","Red Melon discus","Pigeon Blood discus","Turquoise discus"], category:"fish", group:"cichlid", adultSizeCm:20, minVolumeL:300, minTankLengthCm:120, minGroup:6, temperature:[28,31], ph:[5,7], flow:"low", wasteFactor:2 },
+  { id:"ramirezi", commonName:"Ramirezi", scientificName:"Mikrogeophagus ramirezi", aliases:["German Blue Ram","Electric Blue Ram","Gold Ramirezi","Mavi Ramirezi"], category:"fish", group:"cichlid", adultSizeCm:7, minVolumeL:70, minTankLengthCm:60, minGroup:2, temperature:[26,30], ph:[5,7], flow:"low", wasteFactor:1 },
   { id:"dwarf-gourami", commonName:"Cüce gurami", scientificName:"Trichogaster lalius", category:"fish", group:"labyrinth", adultSizeCm:9, minVolumeL:70, minTankLengthCm:60, minGroup:1, temperature:[24,28], ph:[6,7.5], flow:"low", wasteFactor:1.2 },
   { id:"pearl-gourami", commonName:"İnci gurami", scientificName:"Trichopodus leerii", category:"fish", group:"labyrinth", adultSizeCm:12, minVolumeL:120, minTankLengthCm:80, minGroup:2, temperature:[24,28], ph:[6,8], flow:"low", wasteFactor:1.4 },
   { id:"kuhli-loach", commonName:"Kuhli çöpçü", scientificName:"Pangio kuhlii", category:"fish", group:"bottom", adultSizeCm:10, minVolumeL:70, minTankLengthCm:70, minGroup:6, temperature:[24,30], ph:[5.5,7.5], flow:"low", wasteFactor:.8 },
@@ -292,6 +296,25 @@ export const equipmentCatalog: EquipmentProfile[] = [
   ...hardwareEquipmentCatalog,
 ];
 
+const documentedCapacityGaps = new Set([
+  "aquawing-aqa3000","boyu-sp-1300c","jeneca-xp-605",
+  "jeneca-tgd-15","jeneca-tgd-16","jeneca-tgd-17","jeneca-tgd-18","jeneca-tgd-19",
+  "jeneca-gd-402","jeneca-gd-502","jeneca-gd-602","jeneca-dc-001","jeneca-dc-003",
+  "haqos-easy-1000at","haqos-aqua-flow-250",
+  "nubios-nw-450f","nubios-nw-600f","nubios-nw-800f","nubios-nw-1500f","nubios-nb-1500f",
+  "nubios-yu118c","nubios-yu119c",
+]);
+for(const item of equipmentCatalog){
+  if(documentedCapacityGaps.has(item.id))item.capacityDataNote="Üretici ve incelenen güvenilir satıcı kaynaklarında kapasite/debi değeri yayımlanmamış; tahmini değer kullanılmıyor.";
+}
+
+const hasCapacityData = (profile:EquipmentProfile) => {
+  if(profile.category==="heater")return Boolean(profile.powerW||profile.recommendedMinL||profile.recommendedMaxL);
+  if(profile.category==="filter")return Boolean(profile.ratedFlowLph||profile.recommendedMaxL||profile.requiresAirPump);
+  if(profile.category==="air_pump")return Boolean(profile.ratedFlowLph);
+  return true;
+};
+
 function assertUniqueIds<T extends {id:string}>(label:string,items:T[]){const seen=new Set<string>();for(const item of items){if(seen.has(item.id))throw new Error(`${label} kataloğunda yinelenen kimlik: ${item.id}`);seen.add(item.id)}}
 function assertUniqueEquipmentModels(items:EquipmentProfile[]){const seen=new Set<string>();for(const item of items){const key=[item.category,item.brand,item.model].map(value=>value.trim().toLocaleLowerCase("tr-TR")).join("|");if(seen.has(key))throw new Error(`Ekipman kataloğunda yinelenen kategori/marka/model: ${item.category} / ${item.brand} / ${item.model}`);seen.add(key)}}
 function assertCatalogIntegrity(){
@@ -310,6 +333,8 @@ function assertCatalogIntegrity(){
     if(item.recommendedMinL&&item.recommendedMaxL&&item.recommendedMinL>item.recommendedMaxL)throw new Error(`Ters ekipman hacim aralığı: ${item.id}`);
     if(item.recommendedTankLengthCm&&(item.recommendedTankLengthCm[0]<=0||item.recommendedTankLengthCm[0]>item.recommendedTankLengthCm[1]))throw new Error(`Geçersiz ekipman uzunluk aralığı: ${item.id}`);
     if(Boolean(item.sourceUrl)!==Boolean(item.verifiedAt))throw new Error(`Eksik ekipman kaynak/tarih çifti: ${item.id}`);
+    if(!hasCapacityData(item)&&!item.capacityDataNote)throw new Error(`Açıklanmamış ekipman kapasite boşluğu: ${item.id}`);
+    if(hasCapacityData(item)&&item.capacityDataNote)throw new Error(`Teknik verisi bulunan ekipmanda gereksiz kapasite notu: ${item.id}`);
     if(!item.sourceUrl||!item.verifiedAt||item.specifications.toLocaleLowerCase("tr-TR").includes("doğrulama bekliyor"))unverifiedEquipmentIds.push(item.id);
   }
   if(unverifiedEquipmentIds.length)throw new Error(`Doğrulanmamış ekipman kayıtları: ${unverifiedEquipmentIds.join(", ")}`);
@@ -319,12 +344,15 @@ assertCatalogIntegrity();
 export const speciesById = (id?: string) => speciesCatalog.find(item=>item.id===id);
 export const equipmentById = (id?: string) => equipmentCatalog.find(item=>item.id===id);
 export const isVerifiedEquipmentProfile = (profile?: EquipmentProfile): profile is EquipmentProfile => Boolean(profile?.sourceUrl&&profile?.verifiedAt&&!profile.specifications.toLocaleLowerCase("tr-TR").includes("doğrulama bekliyor"));
+export const hasStandaloneCapacityData = (profile?: EquipmentProfile) => {
+  return profile?hasCapacityData(profile):false;
+};
 export const isVerifiedSpeciesProfile = (profile?: SpeciesProfile): profile is SpeciesProfile => Boolean(profile?.sourceUrl&&profile?.verifiedAt);
 export const speciesGroupLabels: Record<NonNullable<SpeciesProfile["group"]>,string> = {livebearer:"Canlı doğuranlar",tetra:"Tetralar",rasbora:"Rasboralar",danio:"Daniolar",barb:"Barblar",rainbowfish:"Gökkuşağı balıkları",killifish:"Killifishler",cichlid:"Cichlidler",labyrinth:"Labirentliler",bottom:"Dip balıkları ve vatozlar",goby:"Goby ve kaya balıkları",puffer:"Puffer / balon balıkları",monster:"Monster / büyük türler",coldwater:"Soğuk su balıkları",shrimp:"Karidesler",snail:"Salyangozlar",crayfish:"Kerevitler",other:"Diğer canlılar"};
 export const speciesGroup = (item: SpeciesProfile): NonNullable<SpeciesProfile["group"]> => item.group ?? (item.category==="shrimp"?"shrimp":item.category==="snail"?"snail":item.id.includes("tetra")?"tetra":item.id==="guppy"?"livebearer":item.id==="betta"?"labyrinth":["ancistrus","corydoras-panda"].includes(item.id)?"bottom":item.id==="goldfish"?"coldwater":"other");
 const normalize = (value?: string) => value?.trim().toLocaleLowerCase("tr-TR");
 export const speciesForLivestock = (item: Livestock) => speciesById(item.catalogId) ?? speciesCatalog.find(profile =>
-  normalize(profile.scientificName) === normalize(item.scientificName) || normalize(profile.commonName) === normalize(item.commonName)
+  normalize(profile.scientificName) === normalize(item.scientificName) || normalize(profile.commonName) === normalize(item.commonName) || profile.aliases?.some(alias=>normalize(alias)===normalize(item.commonName))
 );
 export const profileForEquipment = (item: Equipment) => equipmentById(item.catalogId) ?? equipmentCatalog.find(profile =>
   normalize(profile.brand) === normalize(item.brand) && normalize(profile.model) === normalize(item.model)
