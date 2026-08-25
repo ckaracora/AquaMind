@@ -24,4 +24,9 @@ Ardından `http://localhost:3000` adresini açın.
 ```bash
 pnpm typecheck
 pnpm build
+pnpm verify
 ```
+
+## Ortak geliştirme
+
+Projede çalışmadan önce `AGENTS.md`, `PROJECT_STATUS.md` ve `CONTRIBUTING.md` dosyalarını okuyun. Claude Code ayrıca `CLAUDE.md` talimatlarını izler.
