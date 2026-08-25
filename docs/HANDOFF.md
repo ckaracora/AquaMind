@@ -1,5 +1,7 @@
 # AquaMind görev ve devir sistemi
 
+Görev panosu: `https://github.com/users/ckaracora/projects/1`
+
 ## Temel kural
 
 Aynı anda yalnızca bir kişi çalışır ve yalnızca bir GitHub Issue aktif geliştirmededir. Görev numarası olmadan ürün kodu veya katalog verisi değiştirilmez.
@@ -72,3 +74,15 @@ Sıradaki Issue: #NUMARA
 Çalışmayı devralabilirsin: Evet/Hayır
 ```
 
+## Kısa devir komutu
+
+Kullanıcı **“AquaMind'i GitHub'a devret”** dediğinde çalışan araç:
+
+- mevcut Issue ve branch'i doğrular,
+- `PROJECT_STATUS.md` dosyasını günceller,
+- `pnpm verify` çalıştırır,
+- başarılıysa açıklayıcı commit oluşturur,
+- yalnızca mevcut görev branch'ini GitHub'a gönderir,
+- commit ve uzak branch sonucunu raporlar.
+
+Bu komut `main` birleştirmesi veya Vercel yayını yapmaz.

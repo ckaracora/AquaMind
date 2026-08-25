@@ -8,6 +8,7 @@ Son güncelleme: 2026-08-26
 - Ana dal: `main`
 - Başlangıç commit'i: `7d8fb01 fix: approve sharp build dependency`
 - Canlı önizleme: `https://aqua-mind-three.vercel.app/`
+- Görev panosu: `https://github.com/users/ckaracora/projects/1`
 - Teknoloji: Next.js 15, React 19, TypeScript, Tailwind CSS, pnpm
 - `pnpm verify`: 2026-08-26 tarihinde yerelde başarılı
 - Arkadaş kurulumu: `buraksenfx` hesabı collaborator; Windows kopyasında kurulum ve tüm doğrulamalar başarılı
@@ -25,7 +26,7 @@ Son güncelleme: 2026-08-26
 - [x] Proje arkadaşın Windows bilgisayarına klonlandı
 - [x] Bağımlılıklar kuruldu ve `pnpm verify` geçti
 - [x] Ortak talimat belgeleri hazırlandı ve GitHub'a gönderildi
-- [ ] Görev ve devir dosyaları hazırlandı; GitHub şablonları ve görev panosu etkinleştirilecek
+- [x] GitHub görev şablonları, devir sistemi, etiketler ve ortak görev panosu etkinleştirildi
 - [ ] GitHub Actions otomatik doğrulaması kurulacak
 - [ ] Ortak katalog araştırma tablosu hazırlanacak
 - [ ] Supabase tasarımı ve geçişi yapılacak
@@ -33,7 +34,7 @@ Son güncelleme: 2026-08-26
 
 ## Sıradaki tek iş
 
-Görev ve devir dosyalarını Codex ile doğrulamak, kullanıcı onayından sonra GitHub'a göndermek ve görev panosunu kurmak.
+Pull request açıldığında `pnpm verify` çalıştıran GitHub Actions otomatik doğrulamasını kurmak.
 
 ## Oturum sonu devir şablonu
 

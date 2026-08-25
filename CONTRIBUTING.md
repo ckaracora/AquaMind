@@ -33,6 +33,10 @@ Yerel değişiklik varsa pull yapma. Dosyaları silme veya resetleme; önce diğ
 
 Devir mesajı `docs/HANDOFF.md` içindeki standart şablonla gönderilir.
 
+## Kısa devir sözü
+
+**“AquaMind'i GitHub'a devret”** komutu; durum belgesini güncelleme, test, commit ve mevcut görev branch'ini GitHub'a push etme iznidir. `main` birleştirmesi ve Vercel yayını ayrıca açıkça istenir.
+
 ## Kesinlikle yapılmayacaklar
 
 - Aynı anda iki bilgisayardan geliştirme yapmak

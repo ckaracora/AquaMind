@@ -30,6 +30,18 @@ AquaMind, akvaryum hobisini kolaylaştıran mobil öncelikli bir yönetim uygula
 - Commit, GitHub push, pull request birleştirme ve Vercel yayını ancak kullanıcı açıkça istediğinde yapılır.
 - Gizli anahtarları, parolaları ve `.env*` içeriklerini GitHub'a ekleme veya mesajlarda paylaşma.
 
+## Kullanıcı devir sözü
+
+Kullanıcı **“AquaMind'i GitHub'a devret”** dediğinde bu, mevcut görev branch'i için şu işlemlere açık izin verir:
+
+1. Çalışma alanını ve görev kapsamını kontrol et.
+2. `PROJECT_STATUS.md` ve devir notunu gerçek durumla güncelle.
+3. `pnpm verify` çalıştır.
+4. Testler başarılıysa ilgili değişiklikleri açıklayıcı commit ile kaydet.
+5. Mevcut görev branch'ini GitHub'a push et ve uzak sonucu doğrula.
+
+Test başarısızsa veya kapsam dışı/riskli değişiklik varsa push yapma ve kullanıcıya bildir. Bu söz `main` dalına birleştirme, zorla push veya Vercel/canlı yayın izni değildir.
+
 ## Teknik çalışma düzeni
 
 - Teknoloji: Next.js 15, React 19, TypeScript ve Tailwind CSS.
