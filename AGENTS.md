@@ -64,4 +64,4 @@ Bu komut TypeScript, katalog akışı, sağlık senaryoları, katalog denetimi v
 - Veri kaynakları: `docs/DATA_SOURCES.md`
 - Güncel devir noktası: `PROJECT_STATUS.md`
 - İnsan çalışma akışı: `CONTRIBUTING.md`
-
+- Görev ve devir şablonları: `docs/HANDOFF.md`

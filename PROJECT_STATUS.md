@@ -25,7 +25,7 @@ Son güncelleme: 2026-08-26
 - [x] Proje arkadaşın Windows bilgisayarına klonlandı
 - [x] Bağımlılıklar kuruldu ve `pnpm verify` geçti
 - [x] Ortak talimat belgeleri hazırlandı ve GitHub'a gönderildi
-- [ ] Görev ve devir sistemi kurulacak
+- [ ] Görev ve devir dosyaları hazırlandı; GitHub şablonları ve görev panosu etkinleştirilecek
 - [ ] GitHub Actions otomatik doğrulaması kurulacak
 - [ ] Ortak katalog araştırma tablosu hazırlanacak
 - [ ] Supabase tasarımı ve geçişi yapılacak
@@ -33,7 +33,7 @@ Son güncelleme: 2026-08-26
 
 ## Sıradaki tek iş
 
-Arkadaşın bilgisayarında güncel `main` dalını çekmek ve Claude Code'un ortak belgeleri okuyup proje durumunu doğru özetlediğini doğrulamak.
+Görev ve devir dosyalarını Codex ile doğrulamak, kullanıcı onayından sonra GitHub'a göndermek ve görev panosunu kurmak.
 
 ## Oturum sonu devir şablonu
 

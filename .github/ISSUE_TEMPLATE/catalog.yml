@@ -1,0 +1,65 @@
+name: Katalog verisi görevi
+description: Ekipman, bakım ürünü veya canlı verisi ekleme ve doğrulama
+title: "[Katalog]: "
+labels:
+  - catalog
+body:
+  - type: dropdown
+    id: catalog_type
+    attributes:
+      label: Katalog türü
+      options:
+        - Ekipman
+        - Bakım ürünü
+        - Canlı
+        - Bitki
+    validations:
+      required: true
+  - type: input
+    id: target
+    attributes:
+      label: Marka, kategori veya canlı grubu
+      placeholder: Aquael filtreler
+    validations:
+      required: true
+  - type: textarea
+    id: models
+    attributes:
+      label: Araştırılacak modeller veya türler
+      description: Biliniyorsa listeleyin; kapsamı açık tutun.
+    validations:
+      required: true
+  - type: input
+    id: primary_source
+    attributes:
+      label: Birincil kaynak
+      description: Tercihen üreticinin doğrudan ürün sayfası veya kılavuzu.
+  - type: textarea
+    id: secondary_sources
+    attributes:
+      label: İkincil kaynaklar
+      description: Kullanılan doğrudan ürün bağlantılarını yazın.
+  - type: checkboxes
+    id: data_rules
+    attributes:
+      label: Veri kuralları
+      options:
+        - label: Teknik değerleri tahmin etmeyeceğim.
+          required: true
+        - label: Her kayıt için HTTPS sourceUrl ve verifiedAt ekleyeceğim.
+          required: true
+        - label: Kaynak çelişkilerini gizlemeyeceğim.
+          required: true
+        - label: Görsel kullanım hakkını ayrıca kontrol edeceğim.
+          required: true
+  - type: dropdown
+    id: owner
+    attributes:
+      label: Uygulayıcı
+      options:
+        - Canberk / Codex
+        - Burak / Claude Code
+        - Henüz atanmadı
+    validations:
+      required: true
+

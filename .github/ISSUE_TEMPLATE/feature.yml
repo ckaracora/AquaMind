@@ -1,0 +1,56 @@
+name: Özellik görevi
+description: Yeni özellik veya kullanıcı deneyimi geliştirmesi
+title: "[Özellik]: "
+labels:
+  - feature
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Bir görev yalnızca tek, anlaşılır sonuç üretmelidir. Büyük işleri ayrı görevlere bölün.
+  - type: textarea
+    id: goal
+    attributes:
+      label: Amaç
+      description: Kullanıcı için hangi sorun çözülecek?
+      placeholder: Kullanıcı ... yapabilmeli.
+    validations:
+      required: true
+  - type: textarea
+    id: scope
+    attributes:
+      label: Kapsam
+      description: Bu görevde yapılacak işleri kısa maddelerle yazın.
+    validations:
+      required: true
+  - type: textarea
+    id: out_of_scope
+    attributes:
+      label: Kapsam dışı
+      description: Bu görevde özellikle yapılmayacaklar.
+  - type: textarea
+    id: acceptance
+    attributes:
+      label: Kabul ölçütleri
+      description: Görevin tamamlandığını hangi somut kontroller gösterecek?
+      placeholder: |
+        - [ ] Mobil ekranda çalışıyor
+        - [ ] Hata durumunda anlaşılır mesaj gösteriyor
+        - [ ] pnpm verify geçiyor
+    validations:
+      required: true
+  - type: dropdown
+    id: owner
+    attributes:
+      label: Uygulayıcı
+      options:
+        - Canberk / Codex
+        - Burak / Claude Code
+        - Henüz atanmadı
+    validations:
+      required: true
+  - type: input
+    id: references
+    attributes:
+      label: İlgili bağlantılar veya ekranlar
+

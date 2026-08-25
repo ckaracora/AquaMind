@@ -1,0 +1,60 @@
+name: Hata bildirimi
+description: Uygulamada görülen bir sorunu yeniden üretmek ve düzeltmek için
+title: "[Hata]: "
+labels:
+  - bug
+body:
+  - type: textarea
+    id: summary
+    attributes:
+      label: Hata özeti
+      description: Ne yanlış çalışıyor?
+    validations:
+      required: true
+  - type: textarea
+    id: steps
+    attributes:
+      label: Tekrarlama adımları
+      placeholder: |
+        1. ... sayfasını aç
+        2. ... düğmesine bas
+        3. ... seç
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: Beklenen sonuç
+    validations:
+      required: true
+  - type: textarea
+    id: actual
+    attributes:
+      label: Gerçek sonuç
+    validations:
+      required: true
+  - type: dropdown
+    id: device
+    attributes:
+      label: Görüldüğü ekran
+      options:
+        - Mobil
+        - Masaüstü
+        - Mobil ve masaüstü
+    validations:
+      required: true
+  - type: textarea
+    id: evidence
+    attributes:
+      label: Ekran görüntüsü veya hata metni
+  - type: dropdown
+    id: owner
+    attributes:
+      label: Uygulayıcı
+      options:
+        - Canberk / Codex
+        - Burak / Claude Code
+        - Henüz atanmadı
+    validations:
+      required: true
+

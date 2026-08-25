@@ -15,7 +15,8 @@ Yerel değişiklik varsa pull yapma. Dosyaları silme veya resetleme; önce diğ
 
 ## Görev üzerinde çalışma
 
-- Bir seferde yalnızca bir açık görev üzerinde çalış.
+- Bir seferde yalnızca bir GitHub Issue üzerinde çalış.
+- Görev durumları ve kopyalanabilir komutlar için `docs/HANDOFF.md` dosyasını kullan.
 - Claude Code kodu hazırlar.
 - Claude işi bitirince dosya değiştirmeyi bırakır.
 - Codex aynı değişiklikleri inceler ve `pnpm verify` çalıştırır.
@@ -30,6 +31,8 @@ Yerel değişiklik varsa pull yapma. Dosyaları silme veya resetleme; önce diğ
 5. Push sonrasında GitHub'daki commit doğrulanmalı.
 6. Diğer kişiye “çalışmayı devralabilirsin” denmeli.
 
+Devir mesajı `docs/HANDOFF.md` içindeki standart şablonla gönderilir.
+
 ## Kesinlikle yapılmayacaklar
 
 - Aynı anda iki bilgisayardan geliştirme yapmak
@@ -38,4 +41,3 @@ Yerel değişiklik varsa pull yapma. Dosyaları silme veya resetleme; önce diğ
 - GitHub'dan çekmeden eski kopya üzerinde çalışmak
 - Test geçmeden işi tamamlandı saymak
 - Parola, API anahtarı veya `.env` dosyasını GitHub'a yüklemek
-

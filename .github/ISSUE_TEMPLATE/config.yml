@@ -1,0 +1,6 @@
+blank_issues_enabled: false
+contact_links:
+  - name: AquaMind çalışma kuralları
+    url: https://github.com/ckaracora/AquaMind/blob/main/CONTRIBUTING.md
+    about: Yeni görev açmadan önce ortak çalışma düzenini okuyun.
+
