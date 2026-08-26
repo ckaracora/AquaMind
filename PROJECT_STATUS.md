@@ -12,6 +12,7 @@ Son güncelleme: 2026-08-26
 - Teknoloji: Next.js 15, React 19, TypeScript, Tailwind CSS, pnpm
 - `pnpm verify`: 2026-08-26 tarihinde yerelde başarılı
 - Arkadaş kurulumu: `buraksenfx` hesabı collaborator; Windows kopyasında kurulum ve tüm doğrulamalar başarılı
+- GitHub Actions: Issue #2 ve Pull Request #3 tamamlandı; `main` dalına gönderilen değişikliklerde `pnpm verify` otomatik çalışıyor
 
 ## Mevcut veri durumu
 
@@ -27,14 +28,20 @@ Son güncelleme: 2026-08-26
 - [x] Bağımlılıklar kuruldu ve `pnpm verify` geçti
 - [x] Ortak talimat belgeleri hazırlandı ve GitHub'a gönderildi
 - [x] GitHub görev şablonları, devir sistemi, etiketler ve ortak görev panosu etkinleştirildi
-- [ ] GitHub Actions otomatik doğrulaması (Issue #2): `.github/workflows/verify.yml` hazırlandı, Codex denetiminden geçti ve `codex/github-actions-ci` dalıyla GitHub'a gönderildi; `main` dalına birleştirilince etkinleşecek
-- [ ] Ortak katalog araştırma tablosu hazırlanacak
-- [ ] Supabase tasarımı ve geçişi yapılacak
-- [ ] İki bilgisayarlı devir provası yapılacak
+- [x] GitHub Actions otomatik doğrulaması kuruldu ve `main` dalında başarıyla çalıştı
+- [x] İki bilgisayarlı devir provası kayıp veya çakışma olmadan tamamlandı
+
+Google Sheets ortak çalışmanın ön şartı değildir. Kataloglar şimdilik GitHub'daki sürüm kontrollü TypeScript dosyalarında yönetilecek. Harici araştırma tablosu ancak katalog yönetimi darboğaza dönüşürse yeniden değerlendirilecek.
+
+Supabase de ortak çalışma kurulumunun parçası değildir. Kullanıcı hesabı, bulut senkronizasyonu ve kalıcı veri ihtiyacı ürün geliştirme aşamasında ayrı bir Issue olarak ele alınacaktır.
+
+## Ortak çalışma kurulum sonucu
+
+Ortak çalışma kurulumu tamamlandı. İki bilgisayar da GitHub üzerinden sırayla çalışabilir; Claude kod yazabilir, Codex denetleyebilir ve kullanıcı isterse bu roller görev bazında değişebilir.
 
 ## Sıradaki tek iş
 
-Issue #2 için `codex/github-actions-ci` dalından pull request açmak, otomatik doğrulamanın pull request üzerinde başarılı çalıştığını doğrulamak ve kullanıcı onayıyla `main` dalına birleştirmek.
+Görev panosundan sıradaki ürün geliştirme işini seçmek veya yeni bir Issue açmak; yalnızca seçilen görev üzerinde çalışmaya başlamak.
 
 ## Oturum sonu devir şablonu
 

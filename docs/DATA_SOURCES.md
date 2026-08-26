@@ -44,11 +44,10 @@ Bu liste otomatik doğruluk garantisi değildir. Her bağlantı doğru marka, mo
 - Tercih sırası: üretici tarafından kullanıma sunulan medya, izinli görsel, kendi çekimimiz veya yalnızca kaynak bağlantısı.
 - Mağaza görseli indirilip yeniden yayımlanmadan önce izin durumu kontrol edilir.
 
-## Ortak araştırma tablosu
+## İsteğe bağlı harici araştırma tablosu
 
-Google Sheets aşamasında en az şu sütunlar bulunmalıdır:
+Katalog yönetimi ileride Google Sheets veya benzeri bir tabloya taşınırsa en az şu sütunlar bulunmalıdır:
 
 `Tür`, `Marka`, `Kategori`, `Model`, `Teknik bilgiler`, `Birincil kaynak`, `İkincil kaynak`, `Doğrulama tarihi`, `Kontrol eden`, `Durum`, `Not`, `Görsel hakkı`.
 
 Yalnızca `Doğrulandı` durumundaki satırlar uygulamaya aktarılır.
-
