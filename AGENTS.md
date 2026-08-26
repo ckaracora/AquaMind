@@ -39,8 +39,20 @@ Kullanıcı **“AquaMind'i GitHub'a devret”** dediğinde bu, mevcut görev br
 3. `pnpm verify` çalıştır.
 4. Testler başarılıysa ilgili değişiklikleri açıklayıcı commit ile kaydet.
 5. Mevcut görev branch'ini GitHub'a push et ve uzak sonucu doğrula.
+6. Sonuç mesajında görev branch'i veya Pull Request bağlantısını kullanıcıya ilet.
+7. `PROJECT_STATUS.md` içindeki güncel canlı uygulama bağlantısını ve bu yayının yeni değişiklikleri içerip içermediğini açıkça bildir.
 
 Test başarısızsa veya kapsam dışı/riskli değişiklik varsa push yapma ve kullanıcıya bildir. Bu söz `main` dalına birleştirme, zorla push veya Vercel/canlı yayın izni değildir.
+
+Kullanıcı **“AquaMind'i GitHub'dan devral”** dediğinde:
+
+1. Yerel çalışma alanını kontrol et; kaydedilmemiş değişiklik varsa üzerine yazmadan durumu bildir.
+2. Uzak dalları yenile ve devredilen görev branch'i ile commit'i doğrula.
+3. Devir belgelerini ve değişiklikleri oku; güvenliyse görev branch'ini `--ff-only` yöntemiyle devral.
+4. `pnpm verify` çalıştır ve kaldığı noktayı özetle.
+5. Sonuç mesajında görev branch'i veya Pull Request bağlantısını, güncel canlı uygulama bağlantısını ve canlı yayının devredilen değişiklikleri içerip içermediğini açıkça bildir.
+
+Bu devralma sözü commit, push, `main` birleştirmesi veya Vercel/canlı yayın izni değildir.
 
 ## Teknik çalışma düzeni
 

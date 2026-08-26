@@ -35,7 +35,11 @@ Devir mesajı `docs/HANDOFF.md` içindeki standart şablonla gönderilir.
 
 ## Kısa devir sözü
 
-**“AquaMind'i GitHub'a devret”** komutu; durum belgesini güncelleme, test, commit ve mevcut görev branch'ini GitHub'a push etme iznidir. `main` birleştirmesi ve Vercel yayını ayrıca açıkça istenir.
+**“AquaMind'i GitHub'a devret”** komutu; durum belgesini güncelleme, test, commit ve mevcut görev branch'ini GitHub'a push etme iznidir.
+
+**“AquaMind'i GitHub'dan devral”** komutu; temiz çalışma alanını doğrulama, devredilen görev branch'ini çekme, devir belgelerini okuma ve test etme iznidir. Commit, push, `main` birleştirmesi veya yayın izni değildir.
+
+Her iki komutun sonunda görev branch'i veya Pull Request bağlantısı, güncel canlı uygulama bağlantısı ve canlı yayının görevdeki son değişiklikleri içerip içermediği kullanıcıya bildirilir. `main` birleştirmesi ve Vercel yayını ayrıca açıkça istenir.
 
 ## Kesinlikle yapılmayacaklar
 
