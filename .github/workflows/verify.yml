@@ -1,0 +1,50 @@
+name: Doğrulama
+
+# Ana dala her gönderimde ve açılan her pull request'te `pnpm verify` çalıştırır.
+# Bu komut: TypeScript kontrolü, katalog akışı testi, sağlık senaryoları,
+# katalog denetimi ve üretim derlemesini sırayla yürütür.
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+
+# Aynı dala arka arkaya gönderim yapılırsa eski çalışma iptal edilir.
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+# İş akışının depoya yazma yetkisi yoktur; yalnızca okur ve test eder.
+permissions:
+  contents: read
+
+jobs:
+  verify:
+    name: pnpm verify
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+
+    steps:
+      - name: Depoyu indir
+        uses: actions/checkout@v4
+        with:
+          # GitHub erişim anahtarı çalışma sonrasında ortamda bırakılmaz.
+          persist-credentials: false
+
+      - name: pnpm kur
+        uses: pnpm/action-setup@v4
+        with:
+          version: 11.11.0
+
+      - name: Node.js kur
+        uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: pnpm
+
+      - name: Bağımlılıkları kur
+        run: pnpm install --frozen-lockfile
+
+      - name: Doğrulamayı çalıştır
+        run: pnpm verify

@@ -27,14 +27,14 @@ Son güncelleme: 2026-08-26
 - [x] Bağımlılıklar kuruldu ve `pnpm verify` geçti
 - [x] Ortak talimat belgeleri hazırlandı ve GitHub'a gönderildi
 - [x] GitHub görev şablonları, devir sistemi, etiketler ve ortak görev panosu etkinleştirildi
-- [ ] GitHub Actions otomatik doğrulaması kurulacak
+- [ ] GitHub Actions otomatik doğrulaması (Issue #2): `.github/workflows/verify.yml` hazırlandı, Codex denetiminden geçti ve `codex/github-actions-ci` dalıyla GitHub'a gönderildi; `main` dalına birleştirilince etkinleşecek
 - [ ] Ortak katalog araştırma tablosu hazırlanacak
 - [ ] Supabase tasarımı ve geçişi yapılacak
 - [ ] İki bilgisayarlı devir provası yapılacak
 
 ## Sıradaki tek iş
 
-Pull request açıldığında `pnpm verify` çalıştıran GitHub Actions otomatik doğrulamasını kurmak.
+Issue #2 için `codex/github-actions-ci` dalından pull request açmak, otomatik doğrulamanın pull request üzerinde başarılı çalıştığını doğrulamak ve kullanıcı onayıyla `main` dalına birleştirmek.
 
 ## Oturum sonu devir şablonu
 
