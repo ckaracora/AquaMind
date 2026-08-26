@@ -1,5 +1,7 @@
 # AquaMind görev ve devir sistemi
 
+Görev panosu: `https://github.com/users/ckaracora/projects/1`
+
 ## Temel kural
 
 Aynı anda yalnızca bir kişi çalışır ve yalnızca bir GitHub Issue aktif geliştirmededir. Görev numarası olmadan ürün kodu veya katalog verisi değiştirilmez.
@@ -67,8 +69,40 @@ Son commit: HASH VE BAŞLIK
 main GitHub'a gönderildi: Evet/Hayır
 pnpm verify: Başarılı/Başarısız/Çalıştırılmadı
 Vercel: Güncellendi/Güncellenmedi/Kontrol edilmedi
+Canlı uygulama: BAĞLANTI
+Canlı uygulama bu değişiklikleri içeriyor: Evet/Hayır/Bilinmiyor
+Görev branch'i veya Pull Request: BAĞLANTI
 Yerel çalışma alanı: Temiz/Değişiklik var
 Sıradaki Issue: #NUMARA
 Çalışmayı devralabilirsin: Evet/Hayır
 ```
 
+## Kısa devir komutu
+
+Kullanıcı **“AquaMind'i GitHub'a devret”** dediğinde çalışan araç:
+
+- mevcut Issue ve branch'i doğrular,
+- `PROJECT_STATUS.md` dosyasını günceller,
+- `pnpm verify` çalıştırır,
+- başarılıysa açıklayıcı commit oluşturur,
+- yalnızca mevcut görev branch'ini GitHub'a gönderir,
+- commit ve uzak branch sonucunu raporlar,
+- görev branch'i veya Pull Request bağlantısını raporlar,
+- sonuç mesajına `PROJECT_STATUS.md` içindeki güncel canlı uygulama bağlantısını ekler,
+- canlı yayının görevdeki son değişiklikleri içerip içermediğini açıkça belirtir.
+
+Bu komut `main` birleştirmesi veya Vercel yayını yapmaz.
+
+## Kısa devralma komutu
+
+Kullanıcı **“AquaMind'i GitHub'dan devral”** dediğinde çalışan araç:
+
+- yerel çalışma alanının temiz olduğunu doğrular,
+- uzak dalları yeniler ve devredilen görev branch'i ile commit'i doğrular,
+- devir belgelerini ve değişiklikleri okur,
+- güvenliyse görev branch'ini `--ff-only` yöntemiyle devralır,
+- `pnpm verify` çalıştırır ve sıradaki işi özetler,
+- görev branch'i veya Pull Request bağlantısını raporlar,
+- güncel canlı uygulama bağlantısını ve bu yayının devredilen değişiklikleri içerip içermediğini açıkça belirtir.
+
+Yerel değişiklik varsa hiçbir dosyanın üzerine yazılmaz. Bu komut commit, push, `main` birleştirmesi veya Vercel yayını yapmaz.
