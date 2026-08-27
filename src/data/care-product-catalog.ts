@@ -29,7 +29,6 @@ const seachemPlantSource = "https://www.seachem.com/planted.php";
 const seachemSubstrateSource = "https://www.seachem.com/substrates.php";
 const seachemProbioticFoodSource = "https://www.seachem.com/nutridiet.php";
 const seachemFoodSource = "https://www.seachem.com/nutridiet-international.php";
-const tropicaSource = "https://tropica.com/en/plant-care/";
 const aptSource = "https://www.2hraquarist.com/collections/all";
 const shrimpsForeverSource = "https://shrimpsforever.com/";
 const masterLineSource = "https://www.acvaristic.ro/";
@@ -42,6 +41,7 @@ const adaSoilSource = "https://www.adana.co.jp/en/contents/products/na_substrate
 const adaPowerSandSource = "https://www.adana.co.jp/en/contents/products/na_substrate/detail01.html/1000";
 const adaSubstrateAdditiveSource = "https://www.adana.co.jp/en/contents/products/na_substrate/detail05.html/1000";
 const adaTestSource = "https://www.adana.co.jp/en/contents/products/na_condition/detail03.html";
+const adaFilterMediaSource = "https://www.adana.co.jp/en/contents/products/na_filter/detail03.html";
 const aquaminsSource = "https://atakanpetshop.com/aquamins";
 
 const catalogSlug = (value:string) => value
@@ -56,8 +56,14 @@ const catalogSlug = (value:string) => value
   .replace(/[^a-z0-9]+/g,"-")
   .replace(/(^-|-$)/g,"");
 
-const products = (brand:string, category:CareProductCategory, sourceUrl:string, names:Array<[string,string]>): CareProductProfile[] =>
-  names.map(([model,description]) => ({ id:catalogSlug(`${brand}-${model}`), brand, model, category, description, sourceUrl, verifiedAt }));
+const products = (brand:string, category:CareProductCategory, sourceUrl:string, names:Array<[string,string]>, verifiedDate = verifiedAt): CareProductProfile[] =>
+  names.map(([model,description]) => ({ id:catalogSlug(`${brand}-${model}`), brand, model, category, description, sourceUrl, verifiedAt:verifiedDate }));
+
+const dennerleProducts = (category:CareProductCategory, entries:Array<[string,string,string]>): CareProductProfile[] =>
+  entries.map(([handle,model,description]) => ({
+    id:catalogSlug(`Dennerle-${model}`), brand:"Dennerle", model, category, description,
+    sourceUrl:`https://dennerle.com/en/products/${handle}`, verifiedAt:"2026-08-27",
+  }));
 
 export const careProductCatalog: CareProductProfile[] = [
   ...products("Tropical","food",tropicalSource,[
@@ -367,14 +373,14 @@ export const careProductCatalog: CareProductProfile[] = [
   ...products("Seachem","test",seachemPlantSource,[
     ["CO2 Indicator Solution","Drop checker ile çözünmüş CO₂ düzeyini renk üzerinden izleyen gösterge sıvısı"],
   ]),
-  ...products("Tropica","fertilizer",tropicaSource,[
-    ["Premium Nutrition","Makro içermeyen mikro elementli sıvı gübre"], ["Specialised Nutrition","NPK, demir ve mikro elementli sıvı gübre"],
-    ["Carbon Nutrition","Günlük sıvı karbon desteği"], ["Nutrition Capsules","Kökten beslenen bitkiler için yavaş salınımlı kapsül"],
-  ]),
-  ...products("Tropica","water_conditioner",tropicaSource,[["Water Conditioner","Klor ve ağır metal bağlayan su düzenleyici"]]),
-  ...products("Tropica","substrate",tropicaSource,[
-    ["Aquarium Soil","Aktif volkanik bitki toprağı"], ["Aquarium Soil Powder","İnce taneli aktif bitki toprağı"], ["Substrate","Taban altı besleyici katman"],
-  ]),
+  ...products("Tropica","fertilizer","https://tropica.com/en/plant-care/liquid-fertilisers/premium-nutrition/",[["Premium Nutrition","Az veya yavaş büyüyen bitkili akvaryumlar için azot ve fosfor içermeyen mikro elementli sıvı gübre"]],"2026-08-26"),
+  ...products("Tropica","fertilizer","https://tropica.com/en/plant-care/liquid-fertilisers/specialised-nutrition/",[["Specialised Nutrition","Yoğun bitkili akvaryumlar için azot, fosfor, demir, magnezyum ve mikro elementli sıvı gübre"]],"2026-08-26"),
+  ...products("Tropica","fertilizer","https://tropica.com/en/plant-care/liquid-fertilisers/carbon-nutrition/",[["Carbon Nutrition","Bitkiler için günlük sıvı karbon desteği"]],"2026-08-26"),
+  ...products("Tropica","fertilizer","https://tropica.com/en/plant-care/nutrition-capsules/",[["Nutrition Capsules","Kökten beslenen bitkiler için yavaş salınımlı besin kapsülü"]],"2026-08-26"),
+  ...products("Tropica","water_conditioner","https://tropica.com/en/plant-care/liquid-fertilisers/water-conditioner/",[["Water Conditioner","Musluk suyundaki kloru etkisizleştiren ve ağır metalleri bağlayan su düzenleyici"]],"2026-08-26"),
+  ...products("Tropica","substrate","https://tropica.com/en/plant-care/aquarium-soil/",[["Aquarium Soil","Doğal volkanik minerallerden oluşan, su kimyasını etkileyen tam aktif bitki toprağı"]],"2026-08-26"),
+  ...products("Tropica","substrate","https://tropica.com/en/plant-care/aquarium-soil/aquarium-soil-powder/",[["Aquarium Soil Powder","Ön plan bitkileri için 1–2 mm taneli tam aktif bitki toprağı"]],"2026-08-26"),
+  ...products("Tropica","substrate","https://tropica.com/en/plant-care/substrate/",[["Substrate","Çakılın altına serilen, KH veya pH değerini etkilemeyen konsantre besleyici taban katmanı"]],"2026-08-26"),
   ...products("The 2Hr Aquarist","fertilizer",aptSource,[
     ["APT 1 / Zero","Nitrat ve fosfat içermeyen günlük kapsamlı sıvı gübre"], ["APT 3 / Complete","Makro ve mikro element içeren günlük tam sıvı gübre"],
     ["APT e","EI yöntemi için yoğun sıvı gübre"], ["APT Jazz","Soil için katı kök besini"],
@@ -445,35 +451,132 @@ export const careProductCatalog: CareProductProfile[] = [
     ["Purity","Çözünmüş organik maddeleri adsorbe eden yenilenebilir filtre medyası"],
     ["FilterMax","Amonyak ve nitrit azaltımını destekleyen, bakteri kolonizasyonuna uygun doğal filtre medyası"],
   ]),
-  ...products("Dennerle","food",dennerleSource,[
-    ["Shrimp King Complete","Karidesler için günlük tam yem"], ["Shrimp King Protein","Üreme ve büyüme için protein yemi"],
-    ["Shrimp King Mineral","Kabuk gelişimi için mineral yemi"], ["Shrimp King Snow Pops","Soya kepeği bazlı karides yemi"],
-    ["Shrimp King Color","Renk destekleyici karides yemi"], ["Shrimp King 5in1","Beş Shrimp King yeminden oluşan karma paket"],
-    ["CrustaGran","Karides ve cüce kerevit için temel granül yem"],
-    ["Shrimp King Baby","Karides larvaları ve genç karidesler için yaklaşık 1 mm mikro granül büyütme yemi"],
-    ["Shrimp King Atyopsis","Yelpaze karidesleri için uygun parçacık boyutlu toz temel yem"],
-    ["Cookies Special Menu","Dip balıkları için probiyotik ve prebiyotik içerikli batan yem cipsi"],
-    ["Shrimp King Dadap Leaves","Karides ve kerevitler için protein ve kalsiyumca zengin doğal yaprak yemi"],
-    ["Shrimp King SnailStixx","Tatlı su salyangozları için kalsiyum destekli temel çubuk yem"],
+  ...dennerleProducts("food",[
+    ["betta-booster","Betta Booster","Betta ve diğer labirent balıkları için böcek ve kabuklu içerikli temel yem"],
+    ["cichlid-carny","Cichlid Carny","Etçil Malawi ve Tanganika cikletleri için hayvansal içerikli temel yem"],
+    ["cichlid-veggy","Cichlid Veggy","Aufwuchs ile beslenen otçul cikletler için alg ve sebze içerikli yem"],
+    ["color-booster","Color Booster","Astaksantin içeren 0,5 mm renk destekleyici granül yem"],
+    ["complete-gourmet-flakes","Complete Gourmet Flakes","Karma türlerin bulunduğu topluluk akvaryumları için dengeli pul yem"],
+    ["complete-gourmet-menu","Complete Gourmet Menu","Doğal beslenme örüntüsünü temel alan çok bileşenli granül yem"],
+    ["cookies-special-menu","Cookies Special Menu","Dip balıkları için probiyotik ve prebiyotik içerikli batan yem cipsi"],
+    ["crusta-brennnessel-stixx","Crusta Brennnessel Stixx","Karidesler için ısırgan otu bazlı mineral ve vitamin desteği"],
+    ["crusta-spinat-stixx","Crusta Spinat Stixx","Karidesler için yüzde yüz ıspanaktan üretilen tamamlayıcı yem"],
+    ["crustagran","CrustaGran","Karides ve cüce kerevit için alg içerikli batan temel granül yem"],
+    ["crustagran-baby","CrustaGran Baby","Yavru karidesler için 0,1–0,8 mm, suyu bulandırmayan mikro granül yem"],
+    ["diskus-soft","Diskus Soft","Diskus balıkları için yumuşak ve dengeli granül yem"],
+    ["goldy-booster","Goldy Booster","Japon balığı ve varyeteleri için hayvansal ve bitkisel içerikli yem"],
+    ["guppy-booster","Guppy Booster","Guppy, plati ve moliler için biyolojik olarak dengeli temel yem"],
+    ["nano-algenfutterblaetter","Nano Algae Food Leaves","Karidesler için yüzde yüz doğal alg yaprakları"],
+    ["nano-gran","Nano Gran","Üç santimetreye kadar nano balıklar için suya dayanıklı granül yem"],
+    ["neon-booster","Neon Booster","Neon tetra ve diğer küçük süs balıkları için ince granül temel yem"],
+    ["pleco-menu","Pleco Menu","Alg ve bitki yiyen vatozlar için yaprak ve bitkisel içerikli temel yem"],
+    ["shrimp-king-5in1","Shrimp King 5in1","Beş Shrimp King yeminden oluşan karides karma paketi"],
+    ["shrimp-king-atyopsis","Shrimp King Atyopsis","Yelpaze karidesleri için uygun parçacık boyutlu toz temel yem"],
+    ["shrimp-king-baby","Shrimp King Baby","Karides larvaları ve genç karidesler için mikro granül büyütme yemi"],
+    ["shrimp-king-cambarellus","Shrimp King Cambarellus","Cüce kerevitlerin hepçil beslenmesine uygun temel yem"],
+    ["shrimp-king-color","Shrimp King Color","Karideslerde doğal renk oluşumunu destekleyen karotenoidli yem"],
+    ["shrimp-king-complete","Shrimp King Complete","Karidesler için günlük, suya dayanıklı tam yem çubuğu"],
+    ["shrimp-king-dadap-leaves","Shrimp King Dadap Leaves","Karides ve kerevitler için doğal yaprak yemi"],
+    ["shrimp-king-mineral","Shrimp King Mineral","Yüzde 7 kalsiyum ve yüzde 10 montmorillonit içeren mineral yem"],
+    ["shrimp-king-protein","Shrimp King Protein","Artan protein gereksinimi dönemleri için yüzde 42,2 proteinli yem"],
+    ["shrimp-king-snailstixx","Shrimp King SnailStixx","Tatlı su salyangozları için kalsiyum destekli temel çubuk yem"],
+    ["shrimp-king-snow-pops","Shrimp King Snow Pops","Organik soya kepeğinden üretilen dağılan karides yem çubuğu"],
+    ["shrimp-king-yummy-gum","Shrimp King Yummy Gum","Taş, kök veya cama yapışabilen karides yem hamuru"],
   ]),
-  ...products("Dennerle","fertilizer",dennerleSource,[
-    ["Plant Care Pro","Yoğun bitkili akvaryum için kapsamlı mikro gübre"], ["Plant Care NPK","Azot, fosfor ve potasyum gübresi"],
-    ["Plant Care P","Tek bileşenli fosfat gübresi"], ["Plant System V30","Kapsamlı bitki gübresi"],
-    ["Plant System E15","Demir gübresi"], ["Plant System S7","Vitamin ve iz element desteği"],
-    ["Plant Elixir Basic","Genel bitki bakım gübresi"], ["All in One Elixir","Bitki, su ve filtre için birleşik bakım ürünü"],
-    ["Plant System Set Nano","Küçük bitkili akvaryumlar için üç bileşenli gübre sistemi"],
-    ["Plant Care Pro Daily","Yoğun bitkili akvaryumlar için günlük mikro besin ve demir gübresi"],
-    ["Plant System Set","V30, E15 ve S7 bileşenlerinden oluşan üç parçalı gübre sistemi"],
-    ["Plant Care N","Hedefli nitrat ve azot desteği"],
-    ["Plant Care K","Hedefli potasyum desteği"],
+  ...dennerleProducts("fertilizer",[
+    ["all-in-one-elixir","All in One Elixir","Balık, karides ve bitkili akvaryumlar için birleşik temel bakım ürünü"],
+    ["carbo-care-bio","Carbo Care Bio","Kolay ve orta düzey bitkili akvaryumlar için biyolojik karbon bakım ürünü"],
+    ["carbo-care-pro","Carbo Care Pro","Yoğun bitkili akvaryumlar için yüksek performanslı karbon bakım ürünü"],
+    ["carbo-elixier-bio","Carbo Elixir Bio","Akvaryum bitkilerine biyolojik kullanılabilir karbon sağlayan sıvı bakım ürünü"],
+    ["dosator","Dosator","V30 ve S7 gübrelerini osmozla düzenli veren elektriksiz dozlayıcı"],
+    ["plant-active-enzymes","Plant Active Enzymes","Bitki besinlerinin kullanımını destekleyen enzim bakım ürünü"],
+    ["plant-care-basic-root","Plant Care Basic Root","Kökten beslenen bitkiler için kil tabanlı besin deposu"],
+    ["plant-care-k","Plant Care K","Hedefli potasyum desteği sağlayan makro gübre"],
+    ["plant-care-n","Plant Care N","Hedefli azot ve nitrat desteği sağlayan makro gübre"],
+    ["plant-care-npk","Plant Care NPK","Azot, fosfat, potasyum ve magnezyum içeren makro gübre"],
+    ["plant-care-p","Plant Care P","Hedefli fosfat desteği sağlayan tek besinli gübre"],
+    ["plant-care-pro","Plant Care Pro","Yoğun bitkili ve CO₂ destekli akvaryumlar için mikro besin gübresi"],
+    ["plant-care-pro-daily","Plant Care Pro Daily","Yoğun bitkili akvaryumlar için günlük mikro besin ve demir gübresi"],
+    ["plant-care-pro-root","Plant Care Pro Root","Güçlü köklenen bitkiler için kök bölgesi besin tableti"],
+    ["plant-elixir-basic","Plant Elixir Basic","Tüm bitkili akvaryumlar için genel amaçlı sıvı gübre"],
+    ["plant-system-e15","Plant System E15","Uzun dönemli demir desteği sağlayan sistem bileşeni"],
+    ["plant-system-s7","Plant System S7","Haftalık vitamin ve iz element desteği sağlayan sistem bileşeni"],
+    ["plant-system-set-de","Plant System Set","V30, E15 ve S7 bileşenlerinden oluşan büyük akvaryum gübre sistemi"],
+    ["plant-system-set-nano","Plant System Set Nano","Nano akvaryumlar için üç bileşenli gübre sistemi"],
+    ["plant-system-v30","Plant System V30","Aylık kapsamlı bitki besini sağlayan sistem bileşeni"],
   ]),
-  ...products("Dennerle","water_conditioner",dennerleSource,[
-    ["Shrimp King Shrimp Salt GH/KH+","Neocaridina ve tiger karidesler için mineral tuzu"], ["Shrimp King Bee Salt GH+","Bee karidesler için GH mineral tuzu"],
+  ...dennerleProducts("test",[
+    ["aqua-dest","Aqua Dest","CO₂ ve pH testlerinin hazırlanmasında kullanılan saflaştırılmış test suyu"],
+    ["aqua-test","Aqua Test","Dennerle sürekli CO₂ testleri için test çözeltisi"],
+    ["carbo-test-indicator","Carbo Test Indicator","CO₂ seviyesini renk değişimiyle gösteren indikatör çözeltisi"],
+    ["carbo-test-precision","Carbo Test Precision","Small, Medium ve Large boy sürekli CO₂ ölçüm cihazı"],
+    ["co2-langzeittest-correct","CO₂ Long-Term Test Correct","Akvaryumdaki CO₂ seviyesini sürekli izleyen test"],
+    ["co2-langzeittest-crystal","Carbo Test Crystal","Nano ve standart boy cam sürekli CO₂ testi"],
+    ["co2-quick-test","CO₂ QuickTest","Akvaryum suyundaki CO₂ yeterliliğini hızlı kontrol eden test"],
+    ["kcl-losung","KCL Solution","pH elektrodu saklama ve bakım çözeltisi"],
+    ["ph-eichloesung-4","pH Calibration Solution 4","pH elektrotları için pH 4 kalibrasyon çözeltisi"],
+    ["ph-eichloesung-7","pH Calibration Solution 7","pH elektrotları için pH 7 kalibrasyon çözeltisi"],
+    ["water-test-6in1","Water Test 6in1","Altı temel tatlı su parametresini birlikte ölçen şerit test"],
   ]),
-  ...products("Dennerle","substrate",dennerleSource,[
-    ["Scaper's Soil","Bitkili ve yumuşak su karides akvaryumları için aktif soil"],
-    ["Shrimp King Active Soil","Bee karidesleri için pH'ı yaklaşık 6,0–6,5 aralığına çeken aktif volkanik soil"],
-    ["NutriBasis","Kum veya çakıl altında kullanılan uzun etkili besleyici taban katmanı"],
+  ...dennerleProducts("filter_media",[
+    ["corner-filter-element-40-60","Corner Filter Element 40/60","Corner Filter 40 ve 60 için tekli ve üçlü yedek filtre elemanı"],
+    ["corner-filter-element-100","Corner Filter Element 100","Corner Filter 100 için yedek filtre elemanı"],
+    ["nano-active-carbon","Nano Active Carbon","İlaç kalıntısı ve organik maddeleri adsorbe eden aktif karbon medya"],
+    ["nano-algenstop","Nano Algae Stop","Nano filtreler için alg besinlerini bağlayan özel filtre medyası"],
+    ["nano-biofiltergranulat","Nano Bio Filter Granules","Bakteri kolonizasyonu için yüksek yüzeyli biyolojik filtre granülü"],
+    ["nano-filtertubes","Nano Filtertubes","Nano filtreler için biyolojik seramik tüp medya"],
+    ["osmose-feinfilter","Osmose Fine Filter","Osmose Professional sistemi için ince ön filtre kartuşu"],
+    ["osmose-kohlefilter","Osmose Carbon Filter","Osmose Professional sistemi için aktif karbon ön filtre kartuşu"],
+    ["scapers-flow-filter-schwamm","Scaper's Flow Filter Sponge","Scaper's Flow için yedek mekanik filtre süngeri"],
+    ["scapers-flow-pad","Scaper's Flow Pad","Scaper's Flow için yedek ince filtre pedi"],
+  ]),
+  ...dennerleProducts("water_conditioner",[
+    ["aqua-elixir","Aqua Elixir","Klor ve ağır metalleri nötralize eden genel su düzenleyici"],
+    ["betta-water","Betta Water","Betta akvaryumları için klor ve ağır metalleri nötralize eden su düzenleyici"],
+    ["clear-water-elixir","Clear Water Elixir","Bulanıklık, renk ve kokuyu bağlamaya yardımcı mineral esaslı berraklaştırıcı"],
+    ["humin-elixir","Humin Elixir","Balık ve omurgasız bakımı için humik ve fulvik asit karışımı"],
+    ["osmose-remineral","Osmose Remineral+","Ozmoz suyuna gerekli mineralleri geri kazandıran mineral karışımı"],
+    ["shrimp-king-bee-salt-gh","Shrimp King Bee Salt GH+","Bee karidesler için iletkenlik ve genel sertlik sağlayan mineral tuzu"],
+    ["shrimp-king-shrimp-salt-gh-kh","Shrimp King Shrimp Salt GH/KH+","Neocaridina ve tiger karidesler için GH/KH mineral tuzu"],
+    ["shrimp-king-sulawesi-salt","Shrimp King Sulawesi Salt","Sulawesi karidesleri için mineral tuzu"],
+  ]),
+  ...dennerleProducts("bacteria",[
+    ["aquarium-starter-rapid","Aquarium Starter Rapid","Yeni akvaryumların hızlı başlangıcı için canlı filtre bakterisi sistemi"],
+    ["bacto-elixir-bio","Bacto Elixir Bio","Filtre temizliği ve canlı ekleme sonrasında kullanılan yoğun bakteri kültürü"],
+    ["bacto-elixir-fb7","Bacto Elixir FB7","Atık parçalanmasını başlatan canlı temizleme bakterileri karışımı"],
+  ]),
+  ...dennerleProducts("treatment",[
+    ["all-for-betta","All for Betta","Betta için yem, su düzenleme ve bakım ürünlerinden oluşan üçlü set"],
+    ["betta-care","Betta Care","Humik ve fulvik asitli Betta su bakım ürünü"],
+    ["black-cones","Black Cones","Humik ve tanen desteği sağlayan doğal kızılağaç kozalakları"],
+    ["care-protect-set","Care & Protect Set","Genel akvaryum bakımı ve koruması için üçlü ürün seti"],
+    ["catappa-leaves","Catappa Leaves","Balık ve omurgasız bakımı için doğal badem yaprakları"],
+    ["nano-catappa-barks","Nano Catappa Barks","Uzun süreli humik ve tanen desteği sağlayan badem ağacı kabuğu"],
+    ["nano-crusta-fit","Nano Crusta Fit","Karides ve kerevitler için vitamin ve iz element bakım ürünü"],
+    ["nano-crusta-mineral","Nano Crusta Mineral","Karides ve kerevitler için mineral bakım ürünü"],
+    ["vital-elixir","Vital Elixir","Tatlı su balıklarına fizyolojik iz element ve mineral desteği"],
+  ]),
+  ...dennerleProducts("substrate",[
+    ["deponit-mix-pro","Deponit Mix Pro","Kum veya çakıl altında kullanılan uzun etkili besleyici taban katmanı · 1–9,6 kg"],
+    ["deponit-mix-pro-black","Deponit Mix Pro Black","Koyu renkli akvaryumlar için besleyici taban katmanı · 1–9,6 kg"],
+    ["kristall-quarzkies-diamantschwarz","Kristall Quartz Gravel Diamond Black","Elmas siyahı kristal kuvars çakıl · 5 ve 10 kg"],
+    ["kristall-quarzkies-dunkelbraun","Kristall Quartz Gravel Dark Brown","Koyu kahverengi kristal kuvars çakıl · 10 kg"],
+    ["kristall-quarzkies-naturweiss","Kristall Quartz Gravel Natural White","Doğal beyaz kristal kuvars çakıl · 10 kg"],
+    ["kristall-quarzkies-rehbraun","Kristall Quartz Gravel Deer Brown","Açık kahverengi kristal kuvars çakıl · 10 kg"],
+    ["kristall-quarzkies-schiefergrau","Kristall Quartz Gravel Slate Grey","Arduvaz gri kristal kuvars çakıl · 10 kg"],
+    ["nano-garnelenkies","Nano Shrimp Gravel","Sulawesi siyah, Arkansas gri, Borneo kahverengi ve Sunda beyaz nano çakıl"],
+    ["naturkies-bairaman","Natural Gravel Bairaman 0,1–0,6 mm","0,1–0,6 mm doğal akvaryum kumu · 0,5–5 kg"],
+    ["naturkies-kongo-10-30mm","Natural Gravel Congo 10–30 mm","10–30 mm iri doğal akvaryum çakılı · 0,5–5 kg"],
+    ["naturkies-kongo-3-8mm","Natural Gravel Congo 3–8 mm","3–8 mm doğal akvaryum çakılı · 0,5–5 kg"],
+    ["naturkies-mekong","Natural Gravel Mekong 0,1–1,4 mm","0,1–1,4 mm doğal akvaryum kumu · 0,5 ve 2,5 kg"],
+    ["naturkies-okavango-4-8mm","Natural Gravel Okavango 4–8 mm","4–8 mm doğal akvaryum çakılı · 0,5–5 kg"],
+    ["naturkies-okavango-8-12mm","Natural Gravel Okavango 8–12 mm","8–12 mm doğal akvaryum çakılı · 0,5–5 kg"],
+    ["naturkies-rio-branco","Natural Gravel Rio Branco 0,1–2 mm","0,1–2 mm doğal akvaryum kumu · 0,5 ve 2,5 kg"],
+    ["naturkies-rio-xingu","Natural Gravel Rio Xingu 2–22 mm","2–22 mm karma taneli doğal akvaryum çakılı · 0,5–5 kg"],
+    ["nutribasis","NutriBasis","Kum veya çakıl altında kullanılan besleyici taban katmanı · 2,4–9,6 kg"],
+    ["scapers-soil","Scaper's Soil","Bitkili ve yumuşak su karides akvaryumları için aktif soil · 4 ve 8 L"],
+    ["scapers-soil-natural-mix","Scaper's Soil Natural Mix","Doğal karışım görünümlü aktif aquascaping soil · 4 ve 8 L"],
+    ["shrimp-king-active-soil","Shrimp King Active Soil","Bee karidesleri için pH düşürücü aktif volkanik soil · 4 ve 8 L"],
   ]),
   ...products("ADA","food",adaFoodSource,[
     ["AP-1 Premium","Yüzeyden beslenen küçük balıklar için yüzen premium yem"], ["AP-2 Premium","Küçük ve orta boy balıklar için yavaş batan premium yem"],
@@ -525,6 +628,34 @@ export const careProductCatalog: CareProductProfile[] = [
     ["Pack Checker COD","Organik kirlilik göstergesi COD düzeyini ölçen tüp test"],
     ["Pack Checker PO4","Fosfat düzeyini ölçen tek kullanımlık tüp test"],
   ]),
+  ...products("ADA","filter_media",adaFilterMediaSource,[
+    ["Bio Rio G","pH ve sertliği belirgin biçimde etkilemeden biyolojik filtrasyon sağlayan gözenekli sinterlenmiş cam medya · 1 L"],
+    ["Bio Cube","Uzun süreli biyolojik filtrasyon için geniş yüzeyli siyah poliüretan medya · 2 L"],
+    ["NA Carbon","Su sararmasını azaltan, asitle işlenmiş yüksek emiş kapasiteli aktif karbon · 750 ml"],
+    ["Bamboo Charcoal","Emiş etkisi sonrasında da biyolojik medya olarak kullanılabilen rafine bambu kömürü · 1 L"],
+  ],"2026-08-27"),
+  ...products("Netlea","substrate","https://www.netlea.com/xqy-scn.html",[
+    ["Aquatic Plant Soil","Zayıf asidik siyah-kahverengi topraktan üretilen, organik madde, demir ve iz elementler içeren bitkili akvaryum taban malzemesi"],
+  ],"2026-08-27"),
+  ...products("Netlea","fertilizer","https://www.netlea.com/xqy-scyf.html",[
+    ["Aquatic Plant Liquid Fertilizer","Su bitkilerine besin ve enerji desteği sağlayan sıvı bitki gübresi"],
+  ],"2026-08-27"),
+  ...products("Netlea","filter_media","https://www.netlea.com/xqy-xwh.html",[
+    ["Microbial Fiber Ring","Diyatomlu toprağın yüksek sıcaklıkta pişirilmesiyle üretilen, nötr ve çok gözenekli biyolojik filtre medyası"],
+  ],"2026-08-27"),
+  ...products("Netlea","bacteria","https://www.sxi.com.tw/product/%E5%B0%BC%E7%89%B9%E5%88%A9Netlea%E7%A1%9D%E5%8C%96%E8%8F%8C",[
+    ["Supreme Nitrifying Bacteria Bottle","Akvaryum döngüsünü kurmayı destekleyen yoğun canlı bakteri kültürü"],
+    ["Supreme Nitrifying Bacteria Capsule","İlk kurulumda 150 litreye bir kapsül önerisi yayımlanan yoğun canlı bakteri kültürü"],
+  ],"2026-08-27"),
+  ...products("Netlea","filter_media","https://www.sxi.com.tw/product/%E5%B0%BC%E7%89%B9%E5%88%A9NetleaNOV",[
+    ["Technology Hollow Colored Ball S 1 L","Biyolojik filtrasyon için teknoloji tipi boşluklu renkli küresel medya"],
+    ["Microporous Fiber Ring M 1 L","Biyolojik filtrasyon için mikro gözenekli orta boy lif halka"],
+    ["Small Hollow Quartz Ball S 1 L","Biyolojik filtrasyon için küçük boşluklu kuvars küre"],
+    ["Fiber Ring S 1 L","Biyolojik filtrasyon için küçük boy lif halka"],
+    ["Fiber Ring M 1 L","Biyolojik filtrasyon için orta boy lif halka"],
+    ["Fiber Ball 1 L","Biyolojik filtrasyon için lif küre"],
+    ["Fiber Triangle 1 L","Biyolojik filtrasyon için üçgen lif medya"],
+  ],"2026-08-27"),
   ...products("Aquamins","fertilizer",aquaminsSource,[["Potasflow 100 ml","Potasyum ağırlıklı bitki gübresi"],["Plants All Included 100 ml","Kapsamlı bitki gübresi"],["Plants All Included 250 ml","Kapsamlı bitki gübresi"]]),
   ...products("Aquamins","water_conditioner",aquaminsSource,[
     ["H2O 100 ml","Klor ve ağır metalleri nötralize eden musluk suyu düzenleyici"],
@@ -620,6 +751,18 @@ export const careProductCatalog: CareProductProfile[] = [
     description:`Mekanik ve biyolojik filtrasyon için kesilerek kullanılabilen, yıkanabilir altı katmanlı filtre süngeri · ${size} · satıcı başlığı ile seçenek alanındaki kalınlık değerleri çeliştiğinden kalınlık belirtilmedi`,
     sourceUrl:"https://atakanpetshop.com/mufan-6-katli-biyolojik-filtre-sungeri-30x30x18-cm", verifiedAt:"2026-08-24",
   })),
+  ...products("Resun","filter_media","https://www.resun-china.com/h-pd-268.html",[
+    ["FTP01 Ammonia Filter Pad","Yeni canlı ekleme, fazla yemleme ve aşırı yük kaynaklı amonyak kontrolüne yardımcı kesilebilir filtre pedi"],
+    ["FTP02 Carbon Filter Pad","Koku, renk ve toksinlerin tutulmasına yardımcı kesilebilir karbon filtre pedi"],
+    ["FTP03 Phosphate Filter Pad","Fosfat seviyesini ve alg gelişimini azaltmaya yardımcı kesilebilir filtre pedi"],
+    ["FTP04 Polyfiber Filter Pad","Suda yüzen atık ve parçacıkları mekanik olarak tutan kesilebilir polyfiber filtre pedi"],
+    ["FTP05 Nitrate Filter Pad","Fazla yemleme, aşırı yük ve yetersiz su değişimi kaynaklı nitrat kontrolüne yardımcı kesilebilir filtre pedi"],
+  ],"2026-08-27"),
+  {
+    id:"ferplast-co2-energy-ingredients",brand:"Ferplast",model:"CO₂ ENERGY INGREDIENTS",category:"fertilizer",
+    description:"CO₂ Energy Classic sistemi için uzun süreli karbondioksit üretimine yönelik doğal bileşen kiti",
+    sourceUrl:"https://www.ferplast.com/products/co2-energy-ingredients",verifiedAt:"2026-08-27",
+  },
 ];
 
 const careCatalogIds = new Set<string>();
