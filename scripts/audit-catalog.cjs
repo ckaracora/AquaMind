@@ -45,7 +45,7 @@ const normalized = (value) => value
 
 const rows = catalogBrandCoverage.map((coverage) => {
   const equipment = equipmentCatalog.filter((item) => normalized(item.brand) === normalized(coverage.brand));
-  const capacityEquipment = equipment.filter((item) => ["filter", "heater", "air_pump"].includes(item.category));
+  const capacityEquipment = equipment.filter((item) => ["filter", "heater", "air_pump"].includes(item.category) && !item.passiveComponent);
   const technicalCount = capacityEquipment.filter((item) => {
     if (item.category === "heater") return item.powerW != null || item.recommendedMaxL != null;
     if (item.category === "filter" && item.requiresAirPump) return true;
@@ -67,7 +67,7 @@ rows.sort((a, b) => (a.ekipman + a.urun) - (b.ekipman + b.urun) || a.marka.local
 console.table(rows);
 
 const missingCapacityRows = equipmentCatalog
-  .filter((item) => ["filter", "heater", "air_pump"].includes(item.category))
+  .filter((item) => ["filter", "heater", "air_pump"].includes(item.category) && !item.passiveComponent)
   .filter((item) => {
     if (item.category === "heater") return item.powerW == null && item.recommendedMaxL == null;
     if (item.category === "filter" && item.requiresAirPump) return false;

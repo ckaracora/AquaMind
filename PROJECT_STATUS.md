@@ -34,7 +34,7 @@ Son güncelleme: 2026-08-29
 
 ## Sıradaki tek iş
 
-`codex/catalog-capacity-batch` dalındaki kapsamlı ekipman ve canlı katalog paketi GitHub devrine hazırlandı. Son tamamlanan grup Cikletist Tropheus/Tanganyika kategorisidir; 5 satış başlığının 4'ü doğrulanmış profile bağlandı, belirsiz `Tropheus Red Belly` adı tahminle eşleştirilmedi. Sıradaki tek iş; Cikletist'in iki sayfalık Karides/Kerevit kategorisini tam satış envanteri regresyonuna alıp mevcut 38 karides ve 4 kerevit profiliyle güvenilir bilimsel kaynaklar üzerinden karşılaştırmaktır.
+`codex/catalog-capacity-batch` dalındaki katalog çalışması sürüyor. Son güvenli kapasite paketi Netlea No.2B, No.3B ve iki ayrı No.4B alt modelini doğrulanmış debileriyle otomatik hava kapasitesi hesabına kattı; pasif G1, G2 ve Flower Cartridge ön filtreleri motorlu kapasite eksiği gibi sayılmayacak biçimde işaretlendi. Netlea kapasite denetimi 14/14 (%100) oldu. Teknik değeri yayımlanmayan Aquawing, Boyu, Eurostar ve Haqos kayıtlarında tahmin yapılmadı. Sıradaki güvenli iş Nubios'un yedi açıklamalı filtre debisi boşluğunu doğrudan ürün kaynaklarıyla yeniden denetlemektir. Canlı kataloğundaki son grup `Tuzlu Su Canlıları`dır; akvaryum türü, tuzluluk ve deniz canlısı gereksinimleri için ayrı veri/sağlık modeli kararı verilene kadar tatlı su profillerine eklenmeyecektir.
 
 ## Oturum sonu devir şablonu
 
@@ -63,7 +63,7 @@ Son güncelleme: 2026-08-29
 - Aktif dal: `codex/catalog-capacity-batch`
 - Boyu SES-10 hava kompresörünün 10 L/dakika (600 L/saat), 10 W ve 0,02 MPa teknik verileri iki güvenilir Türkiye kaynağında doğrulandı; doğrudan ürün kaynağı katalog kaydına işlendi.
 - Nubios NW-450F, NW-600F, NW-800F, NW-1500F, NB-1500F, YU-118C ve YU-119C için güvenilir debi verisi bulunamadı. YU-118C adıyla yayımlanan bir sayfanın Xinyou XY-2900 verisini yanlış kopyaladığı görüldüğü için bu değerler kullanılmadı.
-- Aquawing AQ-A3000 için 25 W güç doğrulandı ancak hava debisi; Boyu SP-1300C içinse kapasite verileri yayımlanmadı. İki kayıt da otomatik kapasite hesabının dışında bırakıldı.
+- Aquawing AQ-A3000 için 25 W güç doğrulandı ancak hava debisi; Boyu SP-1300C içinse kapasite verileri yayımlanmadı. İki kayıt da otomatik kapasite hesabının dışında bırakıldı. Haqos EASY-1000AT, Aqua Flow 250 ve Thermo-Sprite resmî katalogda doğrulandı; resmî sayfalarda teknik değerler metin olarak yayımlanmadığı ve görsel sunucusu erişilemediği için başka markalara ait benzer model değerleri kopyalanmadı.
 - `pnpm verify`: başarılı; TypeScript, katalog akışı, 35 sağlık senaryosu, katalog denetimi ve 14 sayfalık üretim derlemesi geçti.
 - GitHub/Vercel: bu paket henüz gönderilmedi ve yayımlanmadı.
 - Regent'in güncel Türkiye portföyündeki 6500, 7500, 8500 ve 9500 modellerinin katalogda bulunduğu doğrulandı. Eski/yurt dışı 5500 kaydının yanlışlıkla 9500 ürününe giden kaynağı, 2 W ve 80 L/saat değerlerini yayımlayan doğrudan 5500 sayfasıyla değiştirildi; Calm RC-006 bağımsız kaynağıyla korundu.
@@ -72,7 +72,7 @@ Son güncelleme: 2026-08-29
 - Meç'in güncel Türkiye marka sayfasındaki dokuz satış kalemi, paket adetleri birleştirildiğinde altı aksesuar ailesidir ve altısı da katalogda bulunuyor. Ayrı kaynaklarla doğrulanan sekiz pipo/üretim filtresinin tamamı hava motoru gerektiren filtre olarak korunuyor.
 - RS Electrical'ın Türkiye yetkili satıcı marka sayfasındaki 29 güncel satış kaleminin tamamı katalogda doğrulandı: yedi FA askı filtre, üç tepe/UV filtre, üç hava motoru, altı I399 çelik ısıtıcı, dört 758 cam ısıtıcı ve beş bakım/soğutma ürünü. Eski/yurt dışı doğrulanmış modeller ayrıca korundu; marka toplamı 42 ekipmana ulaştı.
 - RS-288 tepe filtrenin eski 1000 L/saat değeri doğrudan ürün sayfasındaki 1200 L/saat, 15 W ve 240 litre verisiyle düzeltildi. FA serisinin debi, güç, hacim üst sınırı ve ayarlanabilir akış bilgileri doğrudan ürün kaynaklarına bağlandı.
-- RS 313 ve RS 960 hava motorları otomatik kapasite hesabına girecek doğrulanmış debilerle eklendi. RS 1000 sayfasında teknik tablo toplam 9 L/dakika, açıklama ise çıkış başına 9 L/dakika dediği için debi tahmin edilmedi; çelişki kullanıcıya gösterilecek notla otomatik hava kapasitesi hesabının dışında bırakıldı.
+- RS 313 ve RS 960 hava motorları otomatik kapasite hesabına girecek doğrulanmış debilerle eklendi. RS 1000 için yetkili satıcının teknik tablosundaki toplam 9 L/dakika değeri aynı model serisini listeleyen bağımsız kaynaklarla doğrulandı; 540 L/saat, 8 W, 200 litre ve ayarlanabilir akış bilgileri otomatik hava kapasitesi hesabına alındı.
 - RS Electrical katalog denetimi: kapasite gerektiren 38 kaydın 38'i hazır (%100); güncel 29 ürün için regresyon kapsamı eklendi ve hedefli katalog testi geçti.
 - Tropica'nın resmî Plant Care sayfasındaki güncel aileler karşılaştırıldı: iki CO₂ sistemi, üç CO₂ aksesuarı, üç bakım aleti, dört bitki besini, bir su düzenleyici ve üç taban ürünü olmak üzere 16 ürün ailesinin tamamı katalogda bulunuyor.
 - Tropica bakım ürünlerindeki genel marka bağlantıları doğrudan resmî ürün sayfalarıyla değiştirildi. Ayrı ürün sayfası yayımlanmayan CO₂ System Bio, resmî genel sayfadaki 60 litre sınırına bağlandı; eski cımbız bağlantısı güncel Tweezers sayfasıyla yenilendi.
@@ -102,8 +102,8 @@ Son güncelleme: 2026-08-29
 - SunSun'ın güvenilir Türkiye marka sayfasındaki 44 güncel ürün bağlantısının tamamı katalogla karşılaştırıldı. Önceden katalogda bulunmayan 28 ürün/model eklendi; mevcut uluslararası ve eski doğrulanmış modeller korunarak marka toplamı 77 ekipman ve dört kategoriye ulaştı.
 - Yeni kapsam; 502, 503 ve 604B kompakt dış filtreler, AD120/AD200/AD260 aydınlatmalar, ACO-006 ve PG blower hava motorları, JP iç filtreler, JVP dalga motorları, nano akvaryumlar ile emiş/basış setleri ve bakım aksesuarlarını içeriyor.
 - 604B için 800 L/saat ve 14 W değerleri Türkiye kullanım kılavuzundan; JP-025F için 1600 L/saat, 35 W ve 120–600 litre; ACO-006, PG-180 ve PG-250 için yayımlanan hava debileri doğrudan ürün sayfalarından işlendi. m³/saat ve L/dakika değerleri L/saat birimine açık biçimde dönüştürüldü.
-- SunSun 502 ve 503 sayfalarında debi, güç veya önerilen hacim yayımlanmadığı için değer tahmin edilmedi; iki model açıklamalı kapasite boşluğuyla otomatik filtrasyon hesabının dışında bırakıldı. JVP dalga motorları da filtrasyon ekipmanı gibi değerlendirilmedi.
-- SunSun katalog denetimi: kapasite gerektiren 48 kaydın 46'sı hazır (%96). 77 kayıt toplamı, 28 güncel Türkiye eki, kaynak/tarih zorunluluğu ve kritik teknik değerler regresyon kapsamına alındı.
+- SunSun 502 için iki bağımsız kaynakta ortak yayımlanan 320 L/saat ve 60 litre değerleri işlendi; güç kaynaklarda 5 W ve 6 W olarak çeliştiği için boş bırakıldı. Güncel Türkiye 503 modeli iki güncel ürün kaynağında doğrulanan 600 L/saat ve 6 W değerleriyle otomatik filtrasyon hesabına alındı. JVP dalga motorları filtrasyon ekipmanı gibi değerlendirilmedi.
+- SunSun katalog denetimi: kapasite gerektiren 48 kaydın 48'i hazır (%100). 77 kayıt toplamı, 28 güncel Türkiye eki, çapraz kaynaklar, kaynak/tarih zorunluluğu ve kritik teknik değerler regresyon kapsamına alındı.
 - SunSun sonrasında `pnpm verify` 2026-08-27 tarihinde başarılı: TypeScript, yedi ekipman kategorili ve 512 bakım ürünlü katalog akışı, 35 sağlık senaryosu, katalog denetimi ve 14 sayfalık üretim derlemesi geçti.
 - Dennerle'nin resmî mağazasındaki 240 güncel ürün ailesi toplu ürün verisi ve kategori sayfalarıyla karşılaştırıldı. Uygulamanın kurulu ekipman, bakım ürünü ve sarf malzemesi akışına giren ürünler aile ve teknik varyant düzeyinde ayrıldı; mobilya, promosyon ürünü, salt yedek parça ve boş akvaryumlar ekipman seçicisini gereksiz kalabalıklaştırmamak için kurulu cihaz gibi gösterilmedi.
 - Dennerle ekipman kapsamı 22'den 87 kayda çıktı. Beş daytime onex black varyantı, Trocal Flat 35, üç güç kaynağı, güncel Carbo Bio/Soda/Power/Night sistemleri, basınç düşürücüler, tüpler, difüzörler, dört Flipper kapasitesi, ozmoz sistemi, temizlik araçları ve filtre aksesuarları doğrudan resmî ürün sayfalarıyla eklendi.
@@ -157,9 +157,9 @@ Son güncelleme: 2026-08-29
 - Ferplast'ın resmî güncel 69 cihaz/ekipman ürün ailesi, yayımlanan model varyantları düzeyinde karşılaştırıldı. Önceden filtre ve ısıtıcı ağırlıklı 47 kayıt içeren kapsam; aydınlatma, su ve dalga pompaları, hava motorları, skimmer, otomatik yemleyici, kontrol cihazı ve yardımcı ekipmanlarla 143 ekipmana çıkarıldı. CO₂ Energy Ingredients ayrıca bakım kataloğuna eklendi.
 - Güncel Ferplast dağılımı 26 filtre, 21 ısıtıcı, dört hava motoru, 39 aydınlatma ve 53 yardımcı cihaz/aksesuar olmak üzere beş kategoridir. Renk seçenekleri ayrı teknik cihaz olarak çoğaltılmadı; gerçek güç veya ölçü varyantları ayrı seçilebilir model olarak işlendi.
 - LED BAR FRESHLIFE, TOPLIFE, SEALIFE ve PRO TOPLIFE ailelerinin yayımlanan güçleri; HY-LED MINI'nin 5 W değeri; BLUSKIMMER, SLIM SKIM NANO, PICO SKIM ve BIOFLO'nun yayımlanan hacim üst sınırları resmî doğrudan ürün sayfalarından işlendi.
-- AQAMAI ve AQ-LUX sayfalarının erişilebilir metninde model bazında güç tablosu yayımlanmadığı için güç değeri tahmin edilmedi. SELTZ, PICO, BLUPOWER ve KORALIA pompalarında model numarası doğrulanmış debi gibi kullanılmadı; AIRFIZZ modelleri de açık model bazlı toplam hava debisi bulunana kadar açıklamalı biçimde otomatik hava kapasitesi hesabının dışında tutuluyor.
+- AQAMAI ve AQ-LUX sayfalarının erişilebilir metninde model bazında güç tablosu yayımlanmadığı için güç değeri tahmin edilmedi. SELTZ, PICO, BLUPOWER ve KORALIA pompalarında model numarası doğrulanmış debi gibi kullanılmadı. AIRFIZZ 50/100/200/400 modellerinin resmî sayfada yayımlanan toplam 50/100/200/400 L/saat debileri, 2/3/4/5 W güçleri, çıkış sayıları ve basınçları işlendi.
 - Ferplast regresyon kapsamı 143 ekipman/1 bakım ürünü toplamını, beş kategori dağılımını, kritik LED güçlerini, pasif BIOFLO güvenliğini, doğrudan resmî kaynakları ve teknik değer uydurulmamasını doğruluyor.
-- Ferplast sonrasında `pnpm verify` 2026-08-27 tarihinde başarılı: TypeScript, yedi ekipman kategorili ve 610 bakım ürünlü katalog akışı, 35 sağlık senaryosu, katalog denetimi ve 14 sayfalık üretim derlemesi geçti. Kapasite gerektiren 51 Ferplast kaydının 47'si otomatik hesaba hazır (%92).
+- Ferplast sonrasında `pnpm verify` 2026-08-27 tarihinde başarılı: TypeScript, yedi ekipman kategorili ve 610 bakım ürünlü katalog akışı, 35 sağlık senaryosu, katalog denetimi ve 14 sayfalık üretim derlemesi geçti. AIRFIZZ doğrulamasıyla kapasite gerektiren 51 Ferplast kaydının 51'i otomatik hesaba hazır (%100).
 - GitHub/Vercel: Ferplast paketi ve önceki yerel katalog değişiklikleri henüz gönderilmedi veya yayımlanmadı.
 - Sonraki marka paketi: Shark ve Armatürk'ün mevcut aydınlatma kayıtlarını güncel resmî/güvenilir Türkiye portföyleriyle yeniden karşılaştırmak.
 - Shark'ın güncel güvenilir Türkiye satıcı portföyündeki 22 aydınlatma seçeneği model düzeyinde yeniden karşılaştırıldı. Dört sıralı sekiz, üç sıralı üç, iki sıralı üç ve bar tipi sekiz güncel seçenek ayrı seçilebilir kayıtlar olarak tutuldu.
@@ -350,7 +350,55 @@ Son güncelleme: 2026-08-29
 ## 2026-08-29 GitHub devir hazırlığı — katalog kapasite ve canlı paketi
 
 - Görev dalı: `codex/catalog-capacity-batch`. GitHub'da bu paketle ilişkilendirilmiş açık bir Issue bulunmadı; mevcut dal korunarak devredilecek.
-- Devir kapsamı yalnızca `PROJECT_STATUS.md`, `docs/DATA_SOURCES.md`, katalog denetim ve regresyon betikleri ile `src/data/` altındaki canlı katalog dosyalarıdır.
+- Devir kapsamı yalnızca `PROJECT_STATUS.md`, `scripts/audit-catalog.cjs`, `scripts/test-catalog-flow.cjs`, `src/data/catalog-equipment-hardware.ts`, `src/data/catalog-species-expanded.ts` ve `src/data/catalog.ts` dosyalarıdır.
 - Kullanıcıya ait izlenmeyen `Codex Görseli 27 Ağu 2026 02_52_04.png` dosyası kapsam dışıdır ve commit'e eklenmeyecektir.
-- Son doğrulama ve uzak commit bilgisi push tamamlandıktan sonra devir mesajında bildirilecektir.
+- Devir öncesi tam `pnpm verify` başarılıdır; son uzak commit bilgisi push tamamlandıktan sonra devir mesajında bildirilecektir.
 - `main` birleştirmesi ve Vercel yayını bu devir kapsamında değildir. Canlı uygulama `https://aqua-mind-three.vercel.app/` bu yerel katalog paketini henüz içermez.
+
+## 2026-08-29 Cikletist Karides/Kerevit — iki sayfalık kategori tamamlandı
+
+- Birinci sayfadaki güncel 24 satış başlığı ile kategori bağlantısında bulunan ikinci sayfadaki dokuz satır birlikte regresyon envanterine alındı. İkinci sayfada tekrar listelenen Amano karides ve Diminutus kerevit satırları da sayfa yapısını birebir korumak için test kapsamındadır.
+- Kırmızı Rili, Turuncu Rili, Karbon Rili, Yeşil Jelly ve Çikolata renk formları ayrı tür gibi gösterilmeden `Neocaridina davidi` bilimsel kimliğiyle eklendi. Kimlik ve bakım verisi Aquarium Co-Op, Aquairi, Shrimp Science, Buce Plant ve uzman karides kaynaklarıyla; Türkiye'deki tam satış adları Cikletist sayfalarıyla doğrulandı.
+- Sakura, Bloody Mary, Yellow Fire, Black Rose, Blue Angel, Blue Jelly, Blue Bolt, Tiger, PRL, Black Pinto, Black/Red Fancy, Snow White, Amano ve Diminutus satış adları mevcut doğru biyolojik profillere bağlandı.
+- 33 satış satırının 24'ü güvenilir profile bağlıdır. Tür belirtmeyen `Amerikan Kerevitleri`, stok içeriği değişen karışık paket, renk kimliği belirsiz genel Pinto/Galaxy adları ile akvaryum yerine kara alanlı paludaryum gerektiren dört vampir yengeç başlığı mevcut sağlık modeline tahminle bağlanmadı.
+- Tam `pnpm verify` başarılıdır: TypeScript, 33 satırlık Karides/Kerevit regresyonu, 43 karides ve 4 kerevit profilinin kaynak/bakım denetimi, 35 sağlık senaryosu ve 14 sayfalık üretim derlemesi geçti.
+- GitHub/Vercel'e bu yeni paket için gönderim yapılmadı. Canlı uygulama bu değişiklikleri henüz içermez.
+- Sonraki tek iş: Cikletist Salyangoz Türleri kategorisini aynı tam envanter ve güvenilir kaynak yöntemiyle denetlemek.
+
+## 2026-08-29 Cikletist Salyangoz Türleri — kategori tamamlandı
+
+- Kategori sayfasındaki 10 satış başlığının tamamı tek regresyon envanterine alındı. Ramshorn, Poso Orange Rabbit, Helena/Katil, Yeşil Boynuzlu Nerite ve Zebra Nerite başlıkları doğrulanmış mevcut bakım profillerine bağlandı.
+- Beş güvenli eşleşmeye ürün sayfasının tam Türkçe satış adı ve Cikletist bağlantısı eklendi. Zebra Nerite profilinin ana bakım kaynağı, sıcaklık, alkali su, erişkin boy ve bakır hassasiyetini açıkça yayımlayan Fishkeeper tür sayfasına yükseltildi.
+- `Elma Salyangozu` adı birden çok `Pomacea` türünü; `Tatlı Su Midyesi` adı birden çok familyayı kapsayabildiği için bilimsel kimlik tahmin edilmedi. `Spotted Nerite Çeşitleri` karışık ürün olduğu için tek türe bağlanmadı.
+- `Tricolor Horn` kaynaklarda hem `Clithon corona` hem `Clithon diadema` adıyla satılıyor; `Ring Snail` ise bilimsel kaynak ve resmî ticaret değerlendirmelerinde yalnızca `Nerita/Neritina sp.` düzeyinde kalıyor. Bu iki başlık kesin türe zorlanmadı.
+- Tam `pnpm verify` başarılıdır: TypeScript, 10 satırlık salyangoz güvenlik regresyonu, yedi ekipman kategorili katalog akışı, 35 sağlık senaryosu, kaynak/bakım denetimi ve 14 sayfalık üretim derlemesi geçti.
+- GitHub/Vercel'e gönderim yapılmadı; canlı uygulama bu değişiklikleri henüz içermez.
+- Güncel Cikletist kategori ağacıyla karşılaştırmada kalan son grup `Tuzlu Su Canlıları`dır. Sayfada palyaço balıkları yanında anemon, deniz hıyarı, nudibranch ve denizyıldızı bulunduğundan; mevcut tatlı su ağırlıklı modelde tuzluluk ve deniz akvaryumu türü olmadan bu kayıtlar eklenmeyecektir.
+- Sonraki tek iş: tuzlu su desteğini bu sürüme ekleme veya sonraki faza erteleme ürün kararını almak; eklenirse önce akvaryum türü/tuzluluk veri modelini ve sağlık analizini tasarlamak.
+
+## 2026-08-29 Netlea hava motorları — kapasite paketi tamamlandı
+
+- Netlea No.2B ve No.3B için ürün sayfasındaki model bazlı değerler, aynı ürün ailesinin NETLEA markalı teknik tablo görseliyle karşılaştırıldı. No.2B 10 L/dakika (600 L/saat), azami 6,5 W, 0,020 MPa ve 3550 mAh/17,75 Wh; No.3B 12 L/dakika (720 L/saat), azami 9,5 W, 0,024 MPa ve 9750 mAh/48,75 Wh değerleriyle otomatik hava kapasitesi hesabına alındı.
+- Genel `No.4B` kaydının tek bir cihaz olmadığı, teknik tabloda `Q2/4` ve `Q9/4` olarak iki alt modele ayrıldığı doğrulandı. Q2/4 16 L/dakika (960 L/saat), 0,027 MPa; Q9/4 14 L/dakika (840 L/saat), 0,022 MPa değerleriyle ayrı katalog kayıtlarına dönüştürüldü. İki alt model de azami 9,5 W, iki çıkış ve 14600 mAh/73 Wh batarya verisini taşıyor.
+- G1, G2 ve Flower Cartridge ön filtrelerine motor debisi atanmadı. Bu üç pasif bileşen `passiveComponent` ile işaretlendi; otomatik filtrasyon hesabına tek başına katılmıyor ve katalog denetiminde motorlu kapasite eksiği olarak sayılmıyor.
+- Hedefli katalog akışı ve denetimi başarılıdır. Netlea 65 ekipman ve 12 bakım ürününe ulaştı; motorlu kapasite gerektiren 14 kaydın 14'ü hazırdır (%100).
+- GitHub/Vercel'e gönderim yapılmadı; canlı uygulama bu paketi henüz içermez.
+- Nubios NW-450F, NW-600F, NW-800F, NW-1500F ve NB-1500F ürün sayfalarındaki kutu teknik tabloları incelendi. Sırasıyla 450, 600, 800, 1500 ve 1500 L/saat debi; 4, 6, 15, 20 ve 20 W güç değerleri doğrudan modele ait ambalajdan doğrulanarak otomatik filtrasyon hesabına alındı. Ambalajda ayrıca 0,6; 0,8; 1,0; 1,2 ve 1,2 m azami basma yüksekliği yayımlanıyor.
+- YU-118C ve YU-119C için kendi motorlu sünger filtre yapısı ve ürün ailesinin 5 W gücü doğrulandı; ancak model bazlı debi yayımlanmıyor. Başka modele ait 450 L/saat değerini kopyalayan hatalı satıcı metni kullanılmadı; iki ürün güvenli biçimde otomatik filtrasyon hesabının dışında kaldı.
+- Hedefli katalog akışı ve denetimi başarılıdır. Nubios'ta motorlu kapasite gerektiren 16 kaydın 14'ü hazırdır (%88); kalan iki kayıt yalnızca yayımlanmamış YU-118C/YU-119C debileridir.
+- GitHub/Vercel'e gönderim yapılmadı; canlı uygulama bu paketi henüz içermez.
+- Sonraki tek iş: Resun'un kapasite denetiminde eksik görünen modellerini seri aileleri halinde doğrulamak; yalnızca yayımlanmış model bazlı teknik verileri otomatik hesaba almak.
+- Resun'un 12 resmî filtre seri sayfasındaki görsel teknik tablolar doğrudan incelendi. BC, EFC, GF, CX, CS, MAGI, HS, CY, BF, EVF ve EF/Xtreme ailelerindeki 29 modelin model bazlı debi ve güç değerleri; tabloda varsa önerilen akvaryum aralıkları ve EF1600U/EF2800U için 220–240 V sürümündeki 11 W UV gücü işlendi.
+- Türkiye kaynağında yalnızca 340 L/saat debiyle kayıtlı CX-400, resmî tabloda yayımlanan 5,5 W ve 38–57 litre aralığıyla tamamlandı. Resun'un kapasite gerektiren 75 kaydında otomatik hesaba hazır kayıt sayısı 15'ten 44'e yükseldi; filtre ailesindeki bu paket %100 hazırdır.
+- Hedefli katalog akışı ve kapasite denetimi başarılıdır. GitHub/Vercel'e gönderim yapılmadı; canlı uygulama bu paketi henüz içermez.
+- Sonraki tek iş: Resun'un 22 hava motoru ve dokuz ısıtıcı kaydındaki resmî görsel teknik tabloları model bazında işlemek.
+- Resun HCB, HCA, AP, HLP, DC, PLP, NLP ve QSW/QSB hava motoru ailelerinin dokuz resmî seri sayfasındaki teknik tablolar işlendi. 22 mevcut kaydın debi ve güçleri tamamlandı; HCA2000 ve HCA3000 seri tablosunda doğrulanıp eksik katalog modelleri olarak eklendi. DC120/DC160 için yayımlanan 80/120 litre üst sınırları da otomatik hava kapasitesi hesabına alındı.
+- Hava debileri yalnızca tabloda yayımlanan birimlerden dönüştürüldü: L/dakika değerleri 60 ile çarpıldı, çift çıkış tablolarındaki toplam debi açıkça toplandı. NLP200'de Türkiye'nin 220–240 V sürümüne ait 14.000 L/saat değeri kullanıldı.
+- Hedefli katalog akışı ve kapasite denetimi çalıştırılmayı bekliyor. GitHub/Vercel'e gönderim yapılmadı.
+- Sonraki tek iş: Resun'un dokuz ısıtıcı kaydındaki resmî görsel teknik tabloları model bazında işlemek.
+- Resun'un Sunlike, Digital Smart, Thermo, Rising Heat, Delta, HT Mini ve MH ısıtıcı ailelerinin yedi resmî sayfasındaki model tabloları işlendi. Kullanıcının seçemeyeceği altı genel “Series” kaydı kaldırılıp SUNLIKE25–300, DSH100–300, TM25–300, RH9000 25–300W, DT50–300, HT10/HT25 ve MH75/MH150/MH250 olmak üzere 36 gerçek varyanta ayrıldı.
+- Her varyant yayımlanmış güç ve hacim sınırını taşıyor. HT ve MH tablolarındaki sıcaklık artışının akvaryum hacmi ile değiştiği bilgi açıklamasında korundu; olmayan bir sıcaklık performansı tahmin edilmedi.
+- Resun filtresi, hava motoru ve ısıtıcı kapasite paketi tamamlandı. Resun 209 ekipman ve beş bakım ürününe ulaştı; kapasite gerektiren 104 kaydın 104'ü otomatik hesaba hazırdır (%100).
+- `pnpm verify` 2026-08-29 tarihinde başarılı: TypeScript, yedi ekipman kategorili ve 610 bakım ürünlü katalog akışı, 35 sağlık senaryosu, katalog denetimi ve 14 sayfalık üretim derlemesi geçti.
+- GitHub/Vercel'e gönderim yapılmadı; canlı uygulama bu paketi henüz içermez.
+- Sonraki tek iş: Jeneca'nın kapasite denetiminde eksik görünen filtre, hava motoru ve ısıtıcı kayıtlarını seri aileleri halinde resmî/güvenilir teknik tablolardan doğrulamak.

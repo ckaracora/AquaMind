@@ -26,8 +26,9 @@ export interface EquipmentProfile {
   recommendedTankLengthCm?: [number,number];
   integratedHeaterW?: number;
   integratedUvcW?: number;
+  passiveComponent?: boolean;
   capacityDataNote?: string;
-  sourceUrl?: string; verifiedAt?: string;
+  sourceUrl?: string; additionalSourceUrls?: string[]; verifiedAt?: string;
 }
 
 const rawSpeciesCatalog: SpeciesProfile[] = [
@@ -38,9 +39,9 @@ const rawSpeciesCatalog: SpeciesProfile[] = [
   { id:"corydoras-panda", commonName:"Panda çöpçü", scientificName:"Corydoras panda", aliases:["Corydoras Panda"], category:"fish", adultSizeCm:5, minVolumeL:60, minTankLengthCm:60, minGroup:6, temperature:[20,26], ph:[6,7.5], flow:"medium", wasteFactor:1 },
   { id:"ancistrus", commonName:"Cüce vatoz", scientificName:"Ancistrus cirrhosus", aliases:["Bristlenose pleco","Boynuzlu vatoz","Siyah Cüce Vatoz","SİYAH CÜCE VATOZ","CÜCE VATOZ SİYAH YAVRU","Albino cüce vatoz","L144 vatoz","L144 Cüce Vatoz","L144 Albino Cüce Vatoz","L144 Longfin Cüce Vatoz","Süper Red Tül Kuyruk Cüce Vatoz","L144 TÜL DAMIZLIK","CÜCE VATOZ L144 TÜL YAVRU","Limon mavi göz vatoz","Longfin ancistrus"], category:"fish", group:"bottom", adultSizeCm:13, minVolumeL:80, minTankLengthCm:80, minGroup:1, temperature:[22,26], ph:[5.8,7.6], flow:"medium", wasteFactor:2.2, sourceUrl:"https://www.fishbase.se/summary/Ancistrus_cirrhosus.html", verifiedAt:"2026-08-18" },
   { id:"goldfish", commonName:"Japon balığı", scientificName:"Carassius auratus", aliases:["Goldfish","Fantail Japon","Oranda","Red Cap Oranda","Ranchu","Ranchu Japon Balıkları","Black Ranchu Japon Balığı","Ryukin","Ryukin Japon Balıkları","RYUKİN CALİCO","Teleskop Japon","TELESKOP JAPON","Black Moor","İnci gövde Japon","JAPON BALIKLAR M BOY 7 CM","JAPON BALIKLARI XL BOY 12 CM","JAPON BALIKLARI S BOY 5 CM","Oranda Japon Balıkları","Oranda Japon Balığı","A+ İTHAL ORANDALAR","BALONGÖZ JAPON","ORANDALAR YERLİ"], category:"fish", adultSizeCm:25, minVolumeL:100, minTankLengthCm:90, minGroup:1, temperature:[18,24], ph:[6.5,8], flow:"medium", wasteFactor:3 },
-  { id:"amano-shrimp", commonName:"Amano karides", scientificName:"Caridina multidentata", aliases:["Amano Karides"], category:"shrimp", adultSizeCm:5, minVolumeL:25, minTankLengthCm:30, minGroup:4, temperature:[18,27], ph:[6,7.8], flow:"medium", wasteFactor:.25 },
-  { id:"cherry-shrimp", commonName:"Kiraz karides", scientificName:"Neocaridina davidi", aliases:["Kiraz Karides"], category:"shrimp", adultSizeCm:3, minVolumeL:15, minTankLengthCm:25, minGroup:6, temperature:[18,28], ph:[6.5,8], flow:"low", wasteFactor:.15 },
-  { id:"nerite-snail", commonName:"Nerite salyangoz", scientificName:"Neritina natalensis", aliases:["Zebra Nerite Salyangoz"], category:"snail", adultSizeCm:3, minVolumeL:20, minTankLengthCm:25, minGroup:1, temperature:[20,28], ph:[7,8.5], flow:"medium", wasteFactor:.4 },
+  { id:"amano-shrimp", commonName:"Amano karides", scientificName:"Caridina multidentata", aliases:["Amano Karides","Amano Karides Yosun Avcısı Straforlu Gönderim 3 Adet"], category:"shrimp", adultSizeCm:5, minVolumeL:25, minTankLengthCm:30, minGroup:4, temperature:[18,27], ph:[6,7.8], flow:"medium", wasteFactor:.25 },
+  { id:"cherry-shrimp", commonName:"Kiraz karides", scientificName:"Neocaridina davidi", aliases:["Kiraz Karides","KİRAZ KARİDES 4 ADET"], category:"shrimp", adultSizeCm:3, minVolumeL:15, minTankLengthCm:25, minGroup:6, temperature:[18,28], ph:[6.5,8], flow:"low", wasteFactor:.15 },
+  { id:"nerite-snail", commonName:"Nerite salyangoz", scientificName:"Neritina natalensis", aliases:["Zebra Nerite Salyangoz","Nerite Zebra Salyangoz(Yosun Yiyici) 4 ADET STRAFORLU GÖNDERİM"], category:"snail", adultSizeCm:3, minVolumeL:20, minTankLengthCm:25, minGroup:1, temperature:[20,28], ph:[7,8.5], flow:"medium", wasteFactor:.4, sourceUrl:"https://www.fishkeeper.co.uk/fish/freshwater/miscellaneous/zebra-snail", additionalSourceUrls:["https://www.cikletistpetshop.com/nerite-salyangozyosun-yiyici-1924"], verifiedAt:"2026-08-29" },
   { id:"molly", commonName:"Moli", scientificName:"Poecilia sphenops", aliases:["Molly","Moli Balığı","Siyah moli","Black Molly","Dalmaçyalı moli","Gold Dust moli","Lyretail moli"], category:"fish", group:"livebearer", adultSizeCm:10, minVolumeL:80, minTankLengthCm:70, minGroup:4, temperature:[23,28], ph:[7,8.5], flow:"medium", wasteFactor:1.4 },
   { id:"platy", commonName:"Plati", scientificName:"Xiphophorus maculatus", aliases:["Platy","Plati Balıkları","Mickey Mouse plati","Wagtail plati","Tuxedo plati","Sunset plati","Koi plati"], category:"fish", group:"livebearer", adultSizeCm:6, minVolumeL:60, minTankLengthCm:60, minGroup:4, temperature:[20,26], ph:[7,8.2], flow:"medium", wasteFactor:1 },
   { id:"swordtail", commonName:"Kılıçkuyruk", scientificName:"Xiphophorus hellerii", aliases:["Swordtail","Kırmızı kılıçkuyruk","Koi kılıçkuyruk","Koi Kılıç Kuyruk","Tuxedo kılıçkuyruk","Ananas kılıçkuyruk","Lyretail kılıçkuyruk"], category:"fish", group:"livebearer", adultSizeCm:12, minVolumeL:100, minTankLengthCm:80, minGroup:4, temperature:[22,28], ph:[7,8.3], flow:"medium", wasteFactor:1.3 },
@@ -303,7 +304,6 @@ const documentedCapacityGaps = new Set([
   "jeneca-tgd-15","jeneca-tgd-16","jeneca-tgd-17","jeneca-tgd-18","jeneca-tgd-19",
   "jeneca-gd-402","jeneca-gd-502","jeneca-gd-602","jeneca-dc-001","jeneca-dc-003",
   "haqos-easy-1000at","haqos-aqua-flow-250",
-  "nubios-nw-450f","nubios-nw-600f","nubios-nw-800f","nubios-nw-1500f","nubios-nb-1500f",
   "nubios-yu118c","nubios-yu119c",
 ]);
 for(const item of equipmentCatalog){

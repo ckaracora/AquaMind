@@ -191,11 +191,11 @@ const ferplastCurrentEquipment: EquipmentProfile[] = [
   {id:"ferplast-slim-skim-nano",category:"other",brand:"Ferplast",model:"SLIM SKIM NANO",specifications:"Nano ve mini resif akvaryumları için iç protein skimmer · 140 litreye kadar",recommendedMaxL:140,sourceUrl:"https://www.ferplast.com/products/slim-skim-nano-eu",verifiedAt:"2026-08-27"},
   {id:"ferplast-pico-skim",category:"other",brand:"Ferplast",model:"PICO SKIM",specifications:"Yüzeydeki yağ tabakasını ve yüzen kalıntıları toplayan dalgıç skimmer · 30 litreye kadar",recommendedMaxL:30,sourceUrl:"https://www.ferplast.com/products/pico-skim-eu",verifiedAt:"2026-08-27"},
   {id:"ferplast-pico-evomag",category:"other",brand:"Ferplast",model:"PICO EVOMAG 650",specifications:"Küre mafsallı, akış yönü ve debisi ayarlanabilen sirkülasyon pompası",sourceUrl:"https://www.ferplast.com/products/pico-evomag-650-eu",verifiedAt:"2026-08-27"},
-  ...([50,100,200,400] as const).map(model=>({
+  ...([[50,50,2,120],[100,100,3,150],[200,200,4,150],[400,400,5,200]] as const).map(([model,ratedFlowLph,powerW,pressureMbar])=>({
     id:`ferplast-airfizz-${model}`,category:"air_pump" as const,brand:"Ferplast",model:`AIRFIZZ ${model}`,
-    specifications:`Ayarlanabilir sessiz hava motoru · ${model<=100?"tek":"çift"} çıkış`,
-    adjustableFlow:true,capacityDataNote:"Resmî sayfa model bazında toplam hava debisini açık ve çelişkisiz bir tabloyla yayımlamıyor.",
-    sourceUrl:"https://www.ferplast.com/products/airfizz-50",verifiedAt:"2026-08-27",
+    specifications:`Ayarlanabilir sessiz hava motoru · ${model<=100?`${ratedFlowLph} L/saat, tek çıkış`:`${ratedFlowLph/2} L/saat × 2 çıkış (toplam ${ratedFlowLph} L/saat)`} · ${powerW} W · ${pressureMbar} mbar`,
+    ratedFlowLph,powerW,adjustableFlow:true,
+    sourceUrl:"https://www.ferplast.com/products/airfizz-50",verifiedAt:"2026-08-29",
   })),
   ...([250,400,600,750,1000,1150] as const).map(model=>({
     id:`ferplast-pico-pump-${model}`,category:"other" as const,brand:"Ferplast",model:`PICO ${model}`,
@@ -838,7 +838,7 @@ rsFilters.push(
   {id:"rs-613",category:"filter",brand:"RS Electrical",model:"RS 613",specifications:"İç filtre · 450 L/saat · 5 W",ratedFlowLph:450,powerW:5,sourceUrl:"https://malawiizmir.com/rs-613-ic-filtre-5w-450-l-h",verifiedAt},
   {id:"rs-313-air",category:"air_pump",brand:"RS Electrical",model:"RS 313",specifications:"Tek çıkışlı şarjlı hava motoru · 1,5 L/dakika (90 L/saat) · 1 W · 40 litreye kadar",ratedFlowLph:90,powerW:1,recommendedMaxL:40,sourceUrl:"https://atakanpetshop.com/rs-313-tek-cikisli-sarjli-hava-motoru-1-5l-min-1w",verifiedAt:"2026-08-26"},
   {id:"rs-960-air",category:"air_pump",brand:"RS Electrical",model:"RS 960",specifications:"Tek çıkışlı pilli hava motoru · 2 L/dakika (120 L/saat) · 50 litreye kadar",ratedFlowLph:120,recommendedMaxL:50,sourceUrl:"https://atakanpetshop.com/rs-960-tek-cikisli-pilli-hava-motoru-sari-2l-min",verifiedAt:"2026-08-26"},
-  {id:"rs-1000-air",category:"air_pump",brand:"RS Electrical",model:"RS 1000",specifications:"Dört çıkışlı hava motoru · kaynak tablosunda toplam 9 L/dakika, açıklama metninde çıkış başına 9 L/dakika · 8 W · 200 litreye kadar",powerW:8,recommendedMaxL:200,capacityDataNote:"Yetkili satıcı sayfasındaki teknik tablo toplam debiyi 9 L/dakika, açıklama metni ise her çıkışı 9 L/dakika olarak verdiği için güvenli debi seçilemedi; otomatik hava kapasitesi hesabına katılmaz.",sourceUrl:"https://atakanpetshop.com/rs-1000-4-cikisli-hava-motoru-9l-min-8w",verifiedAt:"2026-08-26"},
+  {id:"rs-1000-air",category:"air_pump",brand:"RS Electrical",model:"RS 1000",specifications:"Dört çıkışlı ayarlanabilir hava motoru · toplam 9 L/dakika (540 L/saat) · 8 W · 200 litreye kadar",ratedFlowLph:540,powerW:8,recommendedMaxL:200,adjustableFlow:true,sourceUrl:"https://atakanpetshop.com/rs-1000-4-cikisli-hava-motoru-9l-min-8w",verifiedAt:"2026-08-29"},
   {id:"rs-fu430k",category:"filter",brand:"RS Electrical",model:"FU430K",specifications:"Hava motoruyla çalışan biyolojik sünger filtre · 12 × 14 cm",requiresAirPump:true,sourceUrl:"https://atakanpetshop.com/rs-fu430k-biyolojik-sunger-filtre-12x14cm",verifiedAt:"2026-08-26"},
   {id:"rs-sf331",category:"other",brand:"RS Electrical",model:"SF331 Soğutucu Fan",specifications:"Akvaryum su yüzeyi için tekli soğutucu fan",sourceUrl:"https://atakanpetshop.com/rs-sf331-akvaryum-sogutucu-fan-tekli",verifiedAt:"2026-08-26"},
   {id:"rs-sf332",category:"other",brand:"RS Electrical",model:"SF332 Soğutucu Fan",specifications:"Akvaryum su yüzeyi için tekli soğutucu fan",sourceUrl:"https://atakanpetshop.com/rs-sf332-akvaryum-sogutucu-fan-tekli",verifiedAt:"2026-08-26"},
@@ -1045,13 +1045,13 @@ const accessoryEquipment:EquipmentProfile[]=[
   {id:"nubios-fpd51a",category:"other",brand:"Nubios",model:"FPD-51A 5in1",specifications:"58 cm beş fonksiyonlu akvaryum temizlik seti",sourceUrl:"https://www.akvaryem.com.tr/marka/nubios",verifiedAt:"2026-08-24"},
   {id:"nubios-fpd51b",category:"other",brand:"Nubios",model:"FPD51B 5in1",specifications:"67 cm beş parçalı akvaryum bakım kiti",sourceUrl:"https://atakanpetshop.com/nubios-5in1-akvaryum-cam-temizleme-ve-bakim-kiti-67cm-771-fpd51b",verifiedAt},
   {id:"nubios-xy1038",category:"other",brand:"Nubios",model:"XY1038 Filtre Süngeri",specifications:"Siyah biyolojik filtre süngeri · 45 × 45 × 5 cm",sourceUrl:"https://atakanpetshop.com/nubios-filtre-sungeri-siyah-45x45x5-cm-771-xy1038",verifiedAt},
-  {id:"nubios-nw-450f",category:"filter",brand:"Nubios",model:"NW-450F",specifications:"Kompakt iç filtre · 4 W · üretici/satıcı debi değeri yayımlamamış",powerW:4,capacityDataNote:"Güvenilir satıcı kaynaklarında debi yayımlanmamış; otomatik filtrasyon hesabına katılmaz.",sourceUrl:"https://www.ozumakvaryum.com.tr/ic-filtreler",verifiedAt:"2026-08-25"},
-  {id:"nubios-nw-600f",category:"filter",brand:"Nubios",model:"NW-600F",specifications:"İç filtre · 6 W · yayımlanmış debi değeri bulunamadı",powerW:6,capacityDataNote:"Güvenilir satıcı kaynaklarında debi yayımlanmamış; otomatik filtrasyon hesabına katılmaz.",sourceUrl:"https://www.ozumakvaryum.com.tr/ic-filtreler",verifiedAt:"2026-08-25"},
-  {id:"nubios-nw-800f",category:"filter",brand:"Nubios",model:"NW-800F",specifications:"İç filtre · 15 W · yayımlanmış debi değeri bulunamadı",powerW:15,capacityDataNote:"Güvenilir satıcı kaynaklarında debi yayımlanmamış; otomatik filtrasyon hesabına katılmaz.",sourceUrl:"https://www.ozumakvaryum.com.tr/ic-filtreler",verifiedAt:"2026-08-25"},
+  {id:"nubios-nw-450f",category:"filter",brand:"Nubios",model:"NW-450F",specifications:"Üç işlevli iç filtre · 450 L/saat · 4 W · 0,6 m azami basma yüksekliği",ratedFlowLph:450,powerW:4,sourceUrl:"https://www.ozumakvaryum.com.tr/nubios-nw-450f-4w",verifiedAt:"2026-08-29"},
+  {id:"nubios-nw-600f",category:"filter",brand:"Nubios",model:"NW-600F",specifications:"Üç işlevli iç filtre · 600 L/saat · 6 W · 0,8 m azami basma yüksekliği",ratedFlowLph:600,powerW:6,sourceUrl:"https://www.ozumakvaryum.com.tr/nubios-nw-600f-6w",verifiedAt:"2026-08-29"},
+  {id:"nubios-nw-800f",category:"filter",brand:"Nubios",model:"NW-800F",specifications:"Üç işlevli iç filtre · 800 L/saat · 15 W · 1 m azami basma yüksekliği",ratedFlowLph:800,powerW:15,sourceUrl:"https://www.ozumakvaryum.com.tr/nubios-nw-800f-15w",verifiedAt:"2026-08-29"},
   {id:"nubios-nb-800f",category:"filter",brand:"Nubios",model:"NB-800F",specifications:"Üç işlevli iç filtre · 800 L/saat · 15 W",ratedFlowLph:800,powerW:15,sourceUrl:"https://www.mascoteriachile.cl/docs/CAT%C3%81LOGO-ACUARISTICA-24%2BOCTUBRE%2B2024.pdf",verifiedAt:"2026-08-18"},
   ...([["MY03",300,3,50],["MY05",450,5,100],["MY07",600,7,150],["MY10",800,10,250]] as const).map(([model,flow,power,maxL])=>({id:`nubios-${model.toLowerCase()}`,category:"filter" as const,brand:"Nubios",model,specifications:`Üç aşamalı kompakt iç filtre · ${flow} L/saat · ${power} W · ${maxL} litreye kadar`,ratedFlowLph:flow,powerW:power,recommendedMaxL:maxL,sourceUrl:"https://creatureculture.co.nz/products/nubios-internal-filter",verifiedAt:"2026-08-25"})),
-  {id:"nubios-nw-1500f",category:"filter",brand:"Nubios",model:"NW-1500F",specifications:"İç filtre · 20 W · yayımlanmış debi değeri bulunamadı",powerW:20,capacityDataNote:"Güvenilir satıcı kaynaklarında debi yayımlanmamış; otomatik filtrasyon hesabına katılmaz.",sourceUrl:"https://www.ozumakvaryum.com.tr/ic-filtreler",verifiedAt:"2026-08-25"},
-  {id:"nubios-nb-1500f",category:"filter",brand:"Nubios",model:"NB-1500F",specifications:"İç filtre · 20 W · yayımlanmış debi değeri bulunamadı",powerW:20,capacityDataNote:"Güvenilir satıcı kaynaklarında debi yayımlanmamış; otomatik filtrasyon hesabına katılmaz.",sourceUrl:"https://www.ozumakvaryum.com.tr/ic-filtreler",verifiedAt:"2026-08-25"},
+  {id:"nubios-nw-1500f",category:"filter",brand:"Nubios",model:"NW-1500F",specifications:"Üç işlevli iç filtre · 1500 L/saat · 20 W · 1,2 m azami basma yüksekliği",ratedFlowLph:1500,powerW:20,sourceUrl:"https://www.ozumakvaryum.com.tr/nubios-nw-1500f-20w",verifiedAt:"2026-08-29"},
+  {id:"nubios-nb-1500f",category:"filter",brand:"Nubios",model:"NB-1500F",specifications:"Üç işlevli iç filtre · 1500 L/saat · 20 W · 1,2 m azami basma yüksekliği",ratedFlowLph:1500,powerW:20,sourceUrl:"https://www.ozumakvaryum.com.tr/nubios-nb-1500f-20w",verifiedAt:"2026-08-29"},
   {id:"nubios-n201",category:"filter",brand:"Nubios",model:"N-201 Mini Pipo",specifications:"Fanus ve nano akvaryumlar için biyolojik sünger/pipo filtre · hava motoruyla çalışır",requiresAirPump:true,sourceUrl:"https://aquarubi.com/nubios-n-201-hava-ile-calisan-faunus-ic-filtresi",verifiedAt:"2026-08-25"},
   {id:"nubios-yu001",category:"filter",brand:"Nubios",model:"YU-001 Büyük Pipo",specifications:"Büyük boy sünger/pipo üretim filtresi · hava motoruyla çalışır",requiresAirPump:true,sourceUrl:"https://www.ozelyem.com/nubios",verifiedAt:"2026-08-18"},
   {id:"nubios-yu002",category:"filter",brand:"Nubios",model:"YU-002 Orta Pipo",specifications:"Orta boy sünger/pipo üretim filtresi · hava motoruyla çalışır",requiresAirPump:true,sourceUrl:"https://www.ozelyem.com/nubios",verifiedAt:"2026-08-18"},
@@ -1276,10 +1276,13 @@ const netleaFilters:EquipmentProfile[]=[
   {id:"netlea-aquatic-time-no1-canister",category:"filter",brand:"Netlea",model:"Aquatic Time No.1 Variable Canister Filter",specifications:"Ayarlanabilir dış filtre · 400–960 L/saat · 14 W · 4 L filtre malzemesi hacmi",ratedFlowLph:960,powerW:14,adjustableFlow:true,sourceUrl:"https://www.smzdm.com/p/138819390/",verifiedAt:"2026-08-25"},
   {id:"netlea-2fl-complete",category:"filter",brand:"Netlea",model:"2F-L Complete",specifications:"Dış filtre sistemi · 1100 L/saat",ratedFlowLph:1100,sourceUrl:"https://jafaraquatics.com/Product/Details/2179",verifiedAt:"2026-08-25"},
   {id:"netlea-no2s-hang-on",category:"filter",brand:"Netlea",model:"No.2S Hang-on Back Filter",specifications:"Debi ayarlı askı filtre · yüzey emici ve CO₂ girişi · 600 L/saat · 7 W · 25–60 cm akvaryum",ratedFlowLph:600,powerW:7,recommendedTankLengthCm:[25,60],adjustableFlow:true,sourceUrl:"https://www.aquazones.in/netlea-hang-on-back-no-2s/",verifiedAt:"2026-08-25"},
-  {id:"netlea-g1-prefilter",category:"filter",brand:"Netlea",model:"G1 Prefilter",specifications:"Pompasız pasif ön filtre · 3,8 L hazne · 80.042 mm² filtre yüzeyi · 16 mm bağlantı",capacityDataNote:"Pasif ön filtre kendi pompasına sahip değildir; ana filtrenin debisi ayrıca değerlendirilir ve otomatik filtrasyon hesabına tek başına katılmaz.",sourceUrl:"https://aquarockscolorado.com/products/netlea-prefilter",verifiedAt:"2026-08-25"},
-  {id:"netlea-g2-prefilter",category:"filter",brand:"Netlea",model:"G2 Prefilter",specifications:"Pompasız pasif ön filtre · 6,9 L hazne · 171.449 mm² filtre yüzeyi · 22 mm bağlantı",capacityDataNote:"Pasif ön filtre kendi pompasına sahip değildir; ana filtrenin debisi ayrıca değerlendirilir ve otomatik filtrasyon hesabına tek başına katılmaz.",sourceUrl:"https://aquarockscolorado.com/products/netlea-prefilter",verifiedAt:"2026-08-25"},
+  {id:"netlea-g1-prefilter",category:"filter",brand:"Netlea",model:"G1 Prefilter",specifications:"Pompasız pasif ön filtre · 3,8 L hazne · 80.042 mm² filtre yüzeyi · 16 mm bağlantı",passiveComponent:true,capacityDataNote:"Pasif ön filtre kendi pompasına sahip değildir; ana filtrenin debisi ayrıca değerlendirilir ve otomatik filtrasyon hesabına tek başına katılmaz.",sourceUrl:"https://aquarockscolorado.com/products/netlea-prefilter",verifiedAt:"2026-08-25"},
+  {id:"netlea-g2-prefilter",category:"filter",brand:"Netlea",model:"G2 Prefilter",specifications:"Pompasız pasif ön filtre · 6,9 L hazne · 171.449 mm² filtre yüzeyi · 22 mm bağlantı",passiveComponent:true,capacityDataNote:"Pasif ön filtre kendi pompasına sahip değildir; ana filtrenin debisi ayrıca değerlendirilir ve otomatik filtrasyon hesabına tek başına katılmaz.",sourceUrl:"https://aquarockscolorado.com/products/netlea-prefilter",verifiedAt:"2026-08-25"},
 ];
 
+const netleaAirPumpSource="https://aquazonefish.vn/products/may-sui-oxy-sieu-em-cao-cap-2-voi-netlea";
+const netleaAirPumpTableSource="https://shopee.co.th/Netlea-Air-Pump-NO.2B-NO.3B-NO.4B-i.826328.26858731364";
+const netleaAirPumpFamilySource="https://www.sxi.com.tw/product/%E5%B0%BC%E7%89%B9%E5%88%A9Netle%E7%A9%BA%E6%B0%A3%E6%B3%B5%E6%97%97%E8%89%A6%E7%B4%9A";
 const netleaCurrentEquipment:EquipmentProfile[]=[
   {id:"netlea-v1500",category:"other",brand:"Netlea",model:"V1500",specifications:"Değişken hızlı, sessiz DC su/kafa motoru · su içinde veya dışında kullanılabilir",adjustableFlow:true,sourceUrl:"https://www.sxi.com.tw/product/%E5%B0%BC%E7%89%B9%E5%88%A9Netlea%E6%B0%B4%E9%99%B8%E9%A6%AC%E9%81%94",verifiedAt:"2026-08-27"},
   {id:"netlea-v3000",category:"other",brand:"Netlea",model:"V3000",specifications:"Değişken hızlı, sessiz DC su/kafa motoru · su içinde veya dışında kullanılabilir",adjustableFlow:true,sourceUrl:"https://www.sxi.com.tw/product/%E5%B0%BC%E7%89%B9%E5%88%A9Netlea%E6%B0%B4%E9%99%B8%E9%A6%AC%E9%81%94",verifiedAt:"2026-08-27"},
@@ -1287,14 +1290,15 @@ const netleaCurrentEquipment:EquipmentProfile[]=[
   {id:"netlea-c2500s",category:"other",brand:"Netlea",model:"C2500S",specifications:"Değişken hızlı, sessiz DC su/kafa motoru · su içinde veya dışında kullanılabilir",adjustableFlow:true,sourceUrl:"https://www.sxi.com.tw/product/%E5%B0%BC%E7%89%B9%E5%88%A9Netlea%E6%B0%B4%E9%99%B8%E9%A6%AC%E9%81%94",verifiedAt:"2026-08-27"},
   {id:"netlea-c5000s",category:"other",brand:"Netlea",model:"C5000S",specifications:"Değişken hızlı, sessiz DC su/kafa motoru · su içinde veya dışında kullanılabilir",adjustableFlow:true,sourceUrl:"https://www.sxi.com.tw/product/%E5%B0%BC%E7%89%B9%E5%88%A9Netlea%E6%B0%B4%E9%99%B8%E9%A6%AC%E9%81%94",verifiedAt:"2026-08-27"},
   {id:"netlea-c9000s",category:"other",brand:"Netlea",model:"C9000S",specifications:"Değişken hızlı, sessiz DC su/kafa motoru · su içinde veya dışında kullanılabilir",adjustableFlow:true,sourceUrl:"https://www.sxi.com.tw/product/%E5%B0%BC%E7%89%B9%E5%88%A9Netlea%E6%B0%B4%E9%99%B8%E9%A6%AC%E9%81%94",verifiedAt:"2026-08-27"},
-  {id:"netlea-no2b-air-pump",category:"air_pump",brand:"Netlea",model:"No.2B Bluetooth Air Pump",specifications:"Bluetooth ve uygulama kontrollü, Type-C şarjlı, dahili yedek bataryalı hava motoru",adjustableFlow:true,capacityDataNote:"Üretici veya doğrulanmış satıcı metninde hava debisi yayımlanmadığı için otomatik hava kapasitesi hesabına katılmaz.",sourceUrl:"https://www.sxi.com.tw/product/%E5%B0%BC%E7%89%B9%E5%88%A9Netle%E7%A9%BA%E6%B0%A3%E6%B3%B5%E6%97%97%E8%89%A6%E7%B4%9A",verifiedAt:"2026-08-27"},
-  {id:"netlea-no3b-air-pump",category:"air_pump",brand:"Netlea",model:"No.3B Bluetooth Air Pump",specifications:"Bluetooth ve uygulama kontrollü, Type-C şarjlı, dahili yedek bataryalı hava motoru",adjustableFlow:true,capacityDataNote:"Üretici veya doğrulanmış satıcı metninde hava debisi yayımlanmadığı için otomatik hava kapasitesi hesabına katılmaz.",sourceUrl:"https://www.sxi.com.tw/product/%E5%B0%BC%E7%89%B9%E5%88%A9Netle%E7%A9%BA%E6%B0%A3%E6%B3%B5%E6%97%97%E8%89%A6%E7%B4%9A",verifiedAt:"2026-08-27"},
-  {id:"netlea-no4b-air-pump",category:"air_pump",brand:"Netlea",model:"No.4B Bluetooth Air Pump",specifications:"Bluetooth ve uygulama kontrollü, Type-C şarjlı, dahili yedek bataryalı hava motoru",adjustableFlow:true,capacityDataNote:"Üretici veya doğrulanmış satıcı metninde hava debisi yayımlanmadığı için otomatik hava kapasitesi hesabına katılmaz.",sourceUrl:"https://www.sxi.com.tw/product/%E5%B0%BC%E7%89%B9%E5%88%A9Netle%E7%A9%BA%E6%B0%A3%E6%B3%B5%E6%97%97%E8%89%A6%E7%B4%9A",verifiedAt:"2026-08-27"},
+  {id:"netlea-no2b-air-pump",category:"air_pump",brand:"Netlea",model:"No.2B Bluetooth Air Pump",specifications:"Bluetooth ve uygulama kontrollü, Type-C şarjlı hava motoru · 10 L/dakika (600 L/saat) · azami giriş 6,5 W · 2 çıkış · 0,020 MPa · 3550 mAh / 17,75 Wh batarya",ratedFlowLph:600,powerW:6.5,adjustableFlow:true,sourceUrl:netleaAirPumpSource,additionalSourceUrls:[netleaAirPumpTableSource,netleaAirPumpFamilySource],verifiedAt:"2026-08-29"},
+  {id:"netlea-no3b-air-pump",category:"air_pump",brand:"Netlea",model:"No.3B Bluetooth Air Pump",specifications:"Bluetooth ve uygulama kontrollü, Type-C şarjlı hava motoru · 12 L/dakika (720 L/saat) · azami giriş 9,5 W · 2 çıkış · 0,024 MPa · 9750 mAh / 48,75 Wh batarya",ratedFlowLph:720,powerW:9.5,adjustableFlow:true,sourceUrl:netleaAirPumpSource,additionalSourceUrls:[netleaAirPumpTableSource,netleaAirPumpFamilySource],verifiedAt:"2026-08-29"},
+  {id:"netlea-no4b-q2-air-pump",category:"air_pump",brand:"Netlea",model:"No.4B Q2/4 Bluetooth Air Pump",specifications:"Bluetooth ve uygulama kontrollü, Type-C şarjlı hava motoru · 16 L/dakika (960 L/saat) · azami giriş 9,5 W · 2 çıkış · 0,027 MPa · 14600 mAh / 73 Wh batarya",ratedFlowLph:960,powerW:9.5,adjustableFlow:true,sourceUrl:netleaAirPumpTableSource,additionalSourceUrls:[netleaAirPumpFamilySource],verifiedAt:"2026-08-29"},
+  {id:"netlea-no4b-q9-air-pump",category:"air_pump",brand:"Netlea",model:"No.4B Q9/4 Bluetooth Air Pump",specifications:"Bluetooth ve uygulama kontrollü, Type-C şarjlı hava motoru · 14 L/dakika (840 L/saat) · azami giriş 9,5 W · 2 çıkış · 0,022 MPa · 14600 mAh / 73 Wh batarya",ratedFlowLph:840,powerW:9.5,adjustableFlow:true,sourceUrl:netleaAirPumpTableSource,additionalSourceUrls:[netleaAirPumpFamilySource],verifiedAt:"2026-08-29"},
   {id:"netlea-no1-sf",category:"filter",brand:"Netlea",model:"No.1 SF Stainless Canister Filter",specifications:"Pozitif basınçlı paslanmaz dış filtre · 5 L hazne · ayarlanabilir 105–290 US gal/saat (yaklaşık 397–1098 L/saat) · 15 W",ratedFlowLph:1098,powerW:15,adjustableFlow:true,sourceUrl:"https://www.aquaelva.com/product/netlea-stainless-steel-canister-filter/",verifiedAt:"2026-08-27"},
   {id:"netlea-no2-sf",category:"filter",brand:"Netlea",model:"No.2 SF Stainless Canister Filter",specifications:"Pozitif basınçlı paslanmaz dış filtre · 5 L hazne · ayarlanabilir 145–396 US gal/saat (yaklaşık 549–1499 L/saat) · 28 W",ratedFlowLph:1499,powerW:28,adjustableFlow:true,sourceUrl:"https://www.aquaelva.com/product/netlea-stainless-steel-canister-filter/",verifiedAt:"2026-08-27"},
   {id:"netlea-no3-sf",category:"filter",brand:"Netlea",model:"No.3 SF Stainless Canister Filter",specifications:"Pozitif basınçlı paslanmaz dış filtre · ayarlanabilir 211–713 US gal/saat (yaklaşık 799–2699 L/saat) · 35 W",ratedFlowLph:2699,powerW:35,adjustableFlow:true,sourceUrl:"https://www.aquaelva.com/product/netlea-stainless-steel-canister-filter/",verifiedAt:"2026-08-27"},
   {id:"netlea-no4-sf",category:"filter",brand:"Netlea",model:"No.4 SF Stainless Canister Filter",specifications:"Pozitif basınçlı paslanmaz dış filtre · ayarlanabilir 211–834 US gal/saat (yaklaşık 799–3157 L/saat) · 40 W",ratedFlowLph:3157,powerW:40,adjustableFlow:true,sourceUrl:"https://www.aquaelva.com/product/netlea-stainless-steel-canister-filter/",verifiedAt:"2026-08-27"},
-  {id:"netlea-flower-prefilter",category:"filter",brand:"Netlea",model:"Flower Cartridge Prefilter 16/22",specifications:"Şeffaf gövdeli, 16/22 mm bağlantılı, değiştirilebilir filtre pamuklu pasif ön filtre",capacityDataNote:"Pasif ön filtre kendi pompasına sahip değildir; ana filtrenin debisi ayrıca değerlendirilir ve otomatik filtrasyon hesabına tek başına katılmaz.",sourceUrl:"https://www.sxi.com.tw/product/%E5%B0%BC%E7%89%B9%E5%88%A9Netlea%E5%89%8D%E7%BD%AE%E8%8F%8A%E8%8A%B1%E6%A1%B6",verifiedAt:"2026-08-27"},
+  {id:"netlea-flower-prefilter",category:"filter",brand:"Netlea",model:"Flower Cartridge Prefilter 16/22",specifications:"Şeffaf gövdeli, 16/22 mm bağlantılı, değiştirilebilir filtre pamuklu pasif ön filtre",passiveComponent:true,capacityDataNote:"Pasif ön filtre kendi pompasına sahip değildir; ana filtrenin debisi ayrıca değerlendirilir ve otomatik filtrasyon hesabına tek başına katılmaz.",sourceUrl:"https://www.sxi.com.tw/product/%E5%B0%BC%E7%89%B9%E5%88%A9Netlea%E5%89%8D%E7%BD%AE%E8%8F%8A%E8%8A%B1%E6%A1%B6",verifiedAt:"2026-08-27"},
   {id:"netlea-l-single-arm-stand",category:"other",brand:"Netlea",model:"L-Type Single-Arm Light Stand",specifications:"Netlea aydınlatmaları için L tipi tek kollu montaj ayağı",sourceUrl:"https://www.netlea.com/cpzx-szyp.html",verifiedAt:"2026-08-27"},
   {id:"netlea-light-panel-connector",category:"other",brand:"Netlea",model:"Light Panel Connector",specifications:"Uyumlu Netlea aydınlatma panellerini birleştirme aksesuarı",sourceUrl:"https://www.netlea.com/cpzx-szyp.html",verifiedAt:"2026-08-27"},
   {id:"netlea-light-panel-stand",category:"other",brand:"Netlea",model:"Dedicated Light Panel Stand",specifications:"Netlea ışık panelleri için özel montaj standı",sourceUrl:"https://www.netlea.com/cpzx-szyp.html",verifiedAt:"2026-08-27"},
@@ -1407,8 +1411,8 @@ const sunsunTurkeyVerifiedAt="2026-08-27";
 const sunsunTurkeyCurrentExtras:EquipmentProfile[]=[
   {id:"sunsun-16-22-outlet-set",category:"other",brand:"SunSun",model:"16/22 mm Dış Filtre Basış Seti",specifications:"16/22 mm dış filtre basış borusu seti",sourceUrl:"https://malawiizmir.com/sunsun-16-22mm-dis-filtre-basis-seti",verifiedAt:sunsunTurkeyVerifiedAt},
   {id:"sunsun-16-22-inlet-set",category:"other",brand:"SunSun",model:"16/22 mm Dış Filtre Emiş Seti",specifications:"16/22 mm dış filtre emiş borusu seti",sourceUrl:"https://malawiizmir.com/sunsun-16-22mm-dis-filtre-emis-seti",verifiedAt:sunsunTurkeyVerifiedAt},
-  {id:"sunsun-502",category:"filter",brand:"SunSun",model:"502",specifications:"Kompakt dış filtre · satıcı sayfasında debi, güç ve hacim yayımlanmamış",capacityDataNote:"Onaylı Türkiye satıcı sayfası modelin varlığını doğruluyor; debi veya önerilen hacim yayımlanmadığı için otomatik filtrasyon hesabına katılmaz.",sourceUrl:"https://malawiizmir.com/sunsun-502-dis-filtre",verifiedAt:sunsunTurkeyVerifiedAt},
-  {id:"sunsun-503",category:"filter",brand:"SunSun",model:"503",specifications:"Kompakt dış filtre · satıcı sayfasında debi, güç ve hacim yayımlanmamış",capacityDataNote:"Onaylı Türkiye satıcı sayfası modelin varlığını doğruluyor; debi veya önerilen hacim yayımlanmadığı için otomatik filtrasyon hesabına katılmaz.",sourceUrl:"https://malawiizmir.com/sunsun-503-dis-filtre",verifiedAt:sunsunTurkeyVerifiedAt},
+  {id:"sunsun-502",category:"filter",brand:"SunSun",model:"502",specifications:"Kompakt dış filtre · 320 L/saat · 60 litreye kadar · kaynaklar güç değerini 5 W ve 6 W olarak farklı yayımladığı için güç belirtilmedi",ratedFlowLph:320,recommendedMaxL:60,sourceUrl:"https://e-catalog.com/SUNSUN-HW-502.htm",additionalSourceUrls:["https://manuals.plus/ae/1005007451551630","https://malawiizmir.com/sunsun-502-dis-filtre"],verifiedAt:"2026-08-29"},
+  {id:"sunsun-503",category:"filter",brand:"SunSun",model:"503",specifications:"Kompakt dış filtre · 600 L/saat · 6 W",ratedFlowLph:600,powerW:6,sourceUrl:"https://www.aquashop.com.tr/urunler/sunsun-dis-filtre-600-lt-h-6w",additionalSourceUrls:["https://www.trendyol.com/sunsun/503-dis-filtre-600l-h-6w-p-1144414509","https://malawiizmir.com/sunsun-503-dis-filtre"],verifiedAt:"2026-08-29"},
   {id:"sunsun-604b",category:"filter",brand:"SunSun",model:"604B",specifications:"Kompakt dış filtre · 800 L/saat · 14 W",ratedFlowLph:800,powerW:14,sourceUrl:"https://cdn.malawiizmir.com/pdf/sunsun_602-603-604_tr.pdf",verifiedAt:sunsunTurkeyVerifiedAt},
   {id:"sunsun-ad260",category:"lighting",brand:"SunSun",model:"AD260",specifications:"Dokunmatik kontrollü LED akvaryum aydınlatması · 8,5 W",powerW:8.5,sourceUrl:"https://malawiizmir.com/sunsun-8-5w-led-aydinlatma-ad260-dokunmatik-panel",verifiedAt:sunsunTurkeyVerifiedAt},
   {id:"sunsun-aco006",category:"air_pump",brand:"SunSun",model:"ACO-006",specifications:"Yüksek basınçlı hava motoru · 85 L/dakika (5100 L/saat) · 105 W",ratedFlowLph:5100,powerW:105,sourceUrl:"https://malawiizmir.com/sunsun-aco-006-yuksek-basincli-hava-motoru-105w-85-l-dk",verifiedAt:sunsunTurkeyVerifiedAt},
@@ -1456,10 +1460,36 @@ resunWaterPumps.push(
 const resunFilters:EquipmentProfile[]=[
   {id:"resun-mini",category:"filter",brand:"Resun",model:"Mini Filter",specifications:"Kompakt iç filtre · 400 L/saat · 5 W",ratedFlowLph:400,powerW:5,sourceUrl:"https://atakanpetshop.com/resun",verifiedAt:"2026-08-18"},
   {id:"resun-sf-400",category:"filter",brand:"Resun",model:"SF-400",specifications:"Askı filtre · 400 L/saat · 5 W · 60 litreye kadar",ratedFlowLph:400,powerW:5,recommendedMaxL:60,sourceUrl:"https://produto.mercadolivre.com.br/MLB-2901672634-filtro-resun-hang-on-sf-400-360h-5w-para-aquarios-ate-60lt-_JM",verifiedAt:"2026-08-18"},
-  {id:"resun-cx-400",category:"filter",brand:"Resun",model:"CX-400 ClearMax",specifications:"Alçak su seviyesine uygun biyolojik ve mekanik iç filtre · 340 L/saat",ratedFlowLph:340,sourceUrl:"https://malawiizmir.com/resun-cx---400-clear-max-biyolojik-ic-filtre-340-litre-saat",verifiedAt:"2026-08-26"},
+  {id:"resun-cx-400",category:"filter",brand:"Resun",model:"CX-400 ClearMax",specifications:"Alçak su seviyesine uygun biyolojik ve mekanik iç filtre · 340 L/saat · 5,5 W · 38–57 litre",ratedFlowLph:340,powerW:5.5,recommendedMinL:38,recommendedMaxL:57,sourceUrl:"https://www.resun-china.com/h-pd-131.html",additionalSourceUrls:["https://malawiizmir.com/resun-cx---400-clear-max-biyolojik-ic-filtre-340-litre-saat"],verifiedAt:"2026-08-29"},
   {id:"resun-uv07-11w",category:"uv",brand:"Resun",model:"UV-07 11 W",specifications:"Hat üstü UV-C sterilizatör · 11 W",powerW:11,integratedUvcW:11,sourceUrl:"https://www.cikletistpetshop.com/resun-uv-filtre-11-wt-100-uv07-11w-566",verifiedAt:"2026-08-18"},
   {id:"resun-uv07-24w",category:"uv",brand:"Resun",model:"UV-07 24 W",specifications:"Hat üstü UV-C sterilizatör · 24 W",powerW:24,integratedUvcW:24,sourceUrl:"https://www.cikletistpetshop.com/uv-filtreler-140",verifiedAt:"2026-08-18"},
 ];
+
+const resunOfficialFilterSpecs:Record<string,{ratedFlowLph:number;powerW:number;recommendedMinL?:number;recommendedMaxL?:number;integratedUvcW?:number}>={
+  BC300:{ratedFlowLph:300,powerW:4.5,recommendedMinL:20,recommendedMaxL:40},
+  BC450:{ratedFlowLph:450,powerW:5.5,recommendedMinL:40,recommendedMaxL:80},
+  BC650:{ratedFlowLph:650,powerW:8.5,recommendedMinL:60,recommendedMaxL:120},
+  EFC300:{ratedFlowLph:300,powerW:4},EFC550:{ratedFlowLph:550,powerW:10},
+  GF400:{ratedFlowLph:360,powerW:4},GF800:{ratedFlowLph:820,powerW:7},
+  "CX-200 ClearMax":{ratedFlowLph:180,powerW:3,recommendedMinL:8,recommendedMaxL:30},
+  CS400:{ratedFlowLph:400,powerW:6,recommendedMinL:40,recommendedMaxL:80},
+  CS700:{ratedFlowLph:700,powerW:10,recommendedMinL:70,recommendedMaxL:140},
+  CS1000:{ratedFlowLph:1000,powerW:15,recommendedMinL:100,recommendedMaxL:200},
+  CS1500:{ratedFlowLph:1500,powerW:25,recommendedMinL:150,recommendedMaxL:300},
+  CS2000:{ratedFlowLph:2000,powerW:30,recommendedMinL:200,recommendedMaxL:400},
+  MAGI200:{ratedFlowLph:208,powerW:5,recommendedMinL:20,recommendedMaxL:40},
+  MAGI380:{ratedFlowLph:380,powerW:7,recommendedMinL:40,recommendedMaxL:80},
+  MAGI700:{ratedFlowLph:606,powerW:10,recommendedMinL:60,recommendedMaxL:120},
+  MAGI1000:{ratedFlowLph:852,powerW:20,recommendedMinL:80,recommendedMaxL:200},
+  HS300:{ratedFlowLph:300,powerW:4,recommendedMinL:40,recommendedMaxL:120},
+  CY20:{ratedFlowLph:200,powerW:3,recommendedMaxL:60},
+  BF80:{ratedFlowLph:260,powerW:5.5,recommendedMaxL:80},
+  BF100:{ratedFlowLph:300,powerW:5.8,recommendedMaxL:100},
+  BF200:{ratedFlowLph:550,powerW:10,recommendedMaxL:200},
+  EVF600:{ratedFlowLph:600,powerW:6.5},EVF900:{ratedFlowLph:900,powerW:10},EVF1200:{ratedFlowLph:1200,powerW:17.5},
+  EF1600:{ratedFlowLph:1600,powerW:35},EF1600U:{ratedFlowLph:1600,powerW:35,integratedUvcW:11},
+  EF2800:{ratedFlowLph:2800,powerW:60},EF2800U:{ratedFlowLph:2800,powerW:60,integratedUvcW:11},
+};
 
 const resunOfficialFilterSeries:EquipmentProfile[]=(
   [
@@ -1476,13 +1506,18 @@ const resunOfficialFilterSeries:EquipmentProfile[]=(
     ["EF1600",138,"Xtreme orta boy dış filtre"],["EF1600U",138,"UV yuvalı Xtreme orta boy dış filtre"],
     ["EF2800",140,"Xtreme büyük dış filtre"],["EF2800U",140,"UV yuvalı Xtreme büyük dış filtre"],
   ] as Array<[string,number,string]>
-).map(([model,page,description])=>({
-  id:`resun-${model.toLowerCase().replace(/[^a-z0-9]+/g,"-").replace(/^-|-$/g,"")}`,
-  category:"filter",brand:"Resun",model,
-  specifications:`${description} · üreticinin güncel seri sayfasında model doğrulandı; teknik tablo metin olarak yayımlanmamış`,
-  capacityDataNote:"Üreticinin güncel seri sayfasındaki teknik tablo görsel olarak yayımlandığı ve metin kaynağında debi/hacim bulunmadığı için değer tahmin edilmedi; otomatik filtrasyon hesabına katılmaz.",
-  sourceUrl:`https://www.resun-china.com/h-pd-${page}.html`,verifiedAt:"2026-08-26",
-}));
+).map(([model,page,description])=>{
+  const capacity=resunOfficialFilterSpecs[model];
+  const volume=capacity.recommendedMinL&&capacity.recommendedMaxL
+    ?` · ${capacity.recommendedMinL}–${capacity.recommendedMaxL} litre`
+    :capacity.recommendedMaxL?` · ${capacity.recommendedMaxL} litreye kadar`:"";
+  return {
+    id:`resun-${model.toLowerCase().replace(/[^a-z0-9]+/g,"-").replace(/^-|-$/g,"")}`,
+    category:"filter",brand:"Resun",model,
+    specifications:`${description} · ${capacity.ratedFlowLph} L/saat · ${capacity.powerW} W${capacity.integratedUvcW?` + ${capacity.integratedUvcW} W UV`:""}${volume}`,
+    ...capacity,sourceUrl:`https://www.resun-china.com/h-pd-${page}.html`,verifiedAt:"2026-08-29",
+  };
+});
 
 const resunOfficialUvClarifiers:EquipmentProfile[]=(
   [["U2",142],["Terminator 11",144],["Terminator 18",144],["Terminator 36",144],["Terminator 56",144]] as Array<[string,number]>
@@ -1512,10 +1547,21 @@ const resunOfficialCurrentWaterPumps:EquipmentProfile[]=(
   sourceUrl:`https://www.resun-china.com/h-pd-${page}.html`,verifiedAt:"2026-08-26",
 }));
 
+const resunOfficialAirPumpSpecs:Record<string,{ratedFlowLph:number;powerW?:number;recommendedMaxL?:number;adjustableFlow?:boolean}>={
+  HCB1000:{ratedFlowLph:60,powerW:1.5},HCB4000:{ratedFlowLph:360,powerW:3.5,adjustableFlow:true},
+  HCA1000:{ratedFlowLph:60,powerW:1.5},HCA2000:{ratedFlowLph:140,powerW:2.8},HCA3000:{ratedFlowLph:360,powerW:3.5},HCA4000:{ratedFlowLph:360,powerW:3.5,adjustableFlow:true},
+  AP72:{ratedFlowLph:72,powerW:2},AP108:{ratedFlowLph:108,powerW:2.5},AP180:{ratedFlowLph:180,powerW:3},AP216:{ratedFlowLph:216,powerW:3},
+  "HLP-4000":{ratedFlowLph:3600,powerW:28},"HLP-8000":{ratedFlowLph:7200,powerW:28},
+  DC120:{ratedFlowLph:120,recommendedMaxL:80},DC160:{ratedFlowLph:160,recommendedMaxL:120},
+  PLP40:{ratedFlowLph:3600,powerW:30},PLP60:{ratedFlowLph:4500,powerW:40},PLP100:{ratedFlowLph:9000,powerW:70},
+  NLP20:{ratedFlowLph:1500,powerW:17},NLP40:{ratedFlowLph:3000,powerW:35},NLP60:{ratedFlowLph:4200,powerW:50},NLP100:{ratedFlowLph:8400,powerW:100},NLP200:{ratedFlowLph:14000,powerW:230},
+  QSW70:{ratedFlowLph:42,powerW:1.5},QSB70:{ratedFlowLph:42,powerW:1.5},
+};
+
 const resunOfficialCurrentAirPumps:EquipmentProfile[]=(
   [
     ["HCB1000",396,"Silent Flow çift katmanlı sessiz hava motoru"],["HCB4000",396,"Ayarlanabilir Silent Flow çift çıkışlı hava motoru"],
-    ["HCA1000",300,"Hush Charm çift katmanlı sessiz hava motoru"],["HCA4000",300,"Ayarlanabilir Hush Charm çift çıkışlı hava motoru"],
+    ["HCA1000",300,"Hush Charm çift katmanlı sessiz hava motoru"],["HCA2000",300,"Hush Charm sessiz hava motoru"],["HCA3000",300,"Çift çıkışlı Hush Charm sessiz hava motoru"],["HCA4000",300,"Ayarlanabilir Hush Charm çift çıkışlı hava motoru"],
     ["AP72",145,"Titreşim azaltıcı ayaklı hava motoru"],["AP108",145,"Titreşim azaltıcı ayaklı hava motoru"],["AP180",145,"Titreşim azaltıcı ayaklı hava motoru"],["AP216",145,"Titreşim azaltıcı ayaklı hava motoru"],
     ["HLP-4000",301,"Akü destekli AC/DC düşük sesli hava motoru"],["HLP-8000",284,"Dijital ekranlı akü destekli AC/DC hava motoru"],
     ["DC120",148,"Pilli taşınabilir hava motoru"],["DC160",148,"Pilli taşınabilir hava motoru"],
@@ -1523,31 +1569,35 @@ const resunOfficialCurrentAirPumps:EquipmentProfile[]=(
     ["NLP20",397,"Alüminyum gövdeli NLP havuz hava motoru"],["NLP40",397,"Alüminyum gövdeli NLP havuz hava motoru"],["NLP60",397,"Alüminyum gövdeli NLP havuz hava motoru"],["NLP100",397,"Alüminyum gövdeli NLP havuz hava motoru"],["NLP200",397,"Alüminyum gövdeli NLP havuz hava motoru"],
     ["QSW70",151,"Süper mini sessiz hava motoru"],["QSB70",151,"Süper mini sessiz hava motoru"],
   ] as Array<[string,number,string]>
-).map(([model,page,description])=>({
-  id:`resun-current-air-${model.toLowerCase().replace(/[^a-z0-9]+/g,"-")}`,
-  category:"air_pump",brand:"Resun",model,
-  specifications:`${description} · üreticinin güncel seri sayfasında model doğrulandı; hava debisi ve güç tablosu metin olarak yayımlanmamış`,
-  capacityDataNote:"Üreticinin güncel seri sayfasındaki teknik tablo görsel olarak yayımlandığı ve metin kaynağında hava debisi bulunmadığı için değer tahmin edilmedi; otomatik hava kapasitesi hesabına katılmaz.",
-  sourceUrl:`https://www.resun-china.com/h-pd-${page}.html`,verifiedAt:"2026-08-27",
-}));
+).map(([model,page,description])=>{
+  const capacity=resunOfficialAirPumpSpecs[model];
+  return {
+    id:`resun-current-air-${model.toLowerCase().replace(/[^a-z0-9]+/g,"-")}`,
+    category:"air_pump",brand:"Resun",model,
+    specifications:`${description} · ${capacity.ratedFlowLph} L/saat${capacity.powerW?` · ${capacity.powerW} W`:""}${capacity.recommendedMaxL?` · ${capacity.recommendedMaxL} litreye kadar`:""}`,
+    ...capacity,sourceUrl:`https://www.resun-china.com/h-pd-${page}.html`,verifiedAt:"2026-08-29",
+  };
+});
 
-const resunOfficialCurrentHeaters:EquipmentProfile[]=(
-  [
-    ["Sunlike Heater Series",157,"2 mm kırılmaya dayanıklı kuvars camlı, ayarlanabilir tam daldırılabilir ısıtıcı"],
-    ["Digital Smart Heater Series",283,"Kuru çalışma korumalı, dijital ekranlı akıllı kuvars ısıtıcı"],
-    ["Thermo Heater Series",158,"2 mm kırılmaya dayanıklı kuvars camlı, ayarlanabilir tam daldırılabilir ısıtıcı"],
-    ["Rising Heat Heater Series",156,"Spiral elemanlı, eşit ısı dağılımlı ayarlanabilir ısıtıcı"],
-    ["Delta Pre-set Heater Series",154,"Kuru çalışma korumalı, 25 °C ön ayarlı daldırılabilir ısıtıcı"],
-    ["HT Mini Heater Series",153,"Sert plastik korumalı, 26 °C ön ayarlı mini ısıtıcı"],
-    ["MH75",155,"Tatlı ve tuzlu suya uygun kompakt MH mini ısıtıcı"],["MH150",155,"Tatlı ve tuzlu suya uygun kompakt MH mini ısıtıcı"],["MH250",155,"Tatlı ve tuzlu suya uygun kompakt MH mini ısıtıcı"],
-  ] as Array<[string,number,string]>
-).map(([model,page,description])=>({
-  id:`resun-current-heater-${model.toLowerCase().replace(/[^a-z0-9]+/g,"-")}`,
+const resunHeaterProfile=(model:string,powerW:number,page:number,description:string,recommendedMaxL?:number,recommendedMinL?:number):EquipmentProfile=>({
+  id:`resun-current-heater-${model.toLowerCase().replace(/[^a-z0-9]+/g,"-").replace(/^-|-$/g,"")}`,
   category:"heater",brand:"Resun",model,
-  specifications:`${description} · güç ve akvaryum hacmi seçenekleri üretici sayfasında metin olarak yayımlanmamış`,
-  capacityDataNote:"Üreticinin güncel seri sayfasındaki model/güç tablosu görsel olarak yayımlandığı ve metin kaynağında güç ile hacim seçenekleri bulunmadığı için değer tahmin edilmedi; otomatik ısıtıcı kapasitesi hesabına katılmaz.",
-  sourceUrl:`https://www.resun-china.com/h-pd-${page}.html`,verifiedAt:"2026-08-27",
-}));
+  specifications:`${description} · ${powerW} W${recommendedMinL&&recommendedMaxL?` · ${recommendedMinL}–${recommendedMaxL} litre`:recommendedMaxL?` · ${recommendedMaxL} litreye kadar`:""}`,
+  powerW,...(recommendedMinL?{recommendedMinL}:{}),...(recommendedMaxL?{recommendedMaxL}:{}),
+  sourceUrl:`https://www.resun-china.com/h-pd-${page}.html`,verifiedAt:"2026-08-29",
+});
+const resunOfficialCurrentHeaters:EquipmentProfile[]=[
+  ...([[25,20],[50,40],[75,60],[100,100],[150,160],[200,200],[250,240],[300,300]] as const).map(([power,maxL])=>resunHeaterProfile(`SUNLIKE${power}`,power,157,"Ayarlanabilir, kırılmaya dayanıklı kuvars camlı Sunlike ısıtıcı",maxL)),
+  ...([[100,75],[150,110],[200,170],[300,245]] as const).map(([power,maxL])=>resunHeaterProfile(`DSH${power}`,power,283,"Kuru çalışma korumalı, dijital ekranlı akıllı kuvars ısıtıcı",maxL)),
+  ...([[25,20],[50,40],[100,75],[150,110],[200,170],[300,245]] as const).map(([power,maxL])=>resunHeaterProfile(`TM${power}`,power,158,"Ayarlanabilir, kırılmaya dayanıklı kuvars camlı Thermo ısıtıcı",maxL)),
+  ...([[25,20],[50,40],[75,60],[100,100],[150,160],[200,200],[250,240],[300,300]] as const).map(([power,maxL])=>resunHeaterProfile(`RH9000 ${power}W`,power,156,"Spiral elemanlı, eşit ısı dağılımlı Rising Heat ısıtıcı",maxL)),
+  ...([[50,20,50],[100,50,100],[150,100,150],[200,100,200],[300,200,300]] as const).map(([power,minL,maxL])=>resunHeaterProfile(`DT${power}`,power,154,"Kuru çalışma korumalı, 25 °C ön ayarlı Delta ısıtıcı",maxL,minL)),
+  resunHeaterProfile("HT10",10,153,"26 °C ön ayarlı, sert plastik korumalı mini ısıtıcı; tabloda 10 L'de kapaklı 6 °C ve 20 L'de 4 °C sıcaklık artışı",20),
+  resunHeaterProfile("HT25",25,153,"26 °C ön ayarlı, sert plastik korumalı mini ısıtıcı; tabloda 20 L'de kapaklı 8 °C ve 40 L'de 5 °C sıcaklık artışı",40),
+  resunHeaterProfile("MH75",7.5,155,"Tatlı ve tuzlu suya uygun kompakt MH mini ısıtıcı; tabloda 5–10 L için 6–4 °C sıcaklık artışı",10),
+  resunHeaterProfile("MH150",15,155,"Tatlı ve tuzlu suya uygun kompakt MH mini ısıtıcı; tabloda 20–40 L için 4–2 °C sıcaklık artışı",40),
+  resunHeaterProfile("MH250",25,155,"Tatlı ve tuzlu suya uygun kompakt MH mini ısıtıcı; tabloda 30–60 L için 5–3 °C sıcaklık artışı",60),
+];
 
 const resunOfficialCurrentLighting:EquipmentProfile[]=[
   {id:"resun-slm-series",category:"lighting",brand:"Resun",model:"SLM Super Slim LED Series",specifications:"Dokunmatik gündüz/ay ışığı modlu, uzatılabilir alüminyum gövdeli LED armatür · güç ve uzunluk seçenekleri metin olarak yayımlanmamış",sourceUrl:"https://www.resun-china.com/h-pd-94.html",verifiedAt:"2026-08-27"},
