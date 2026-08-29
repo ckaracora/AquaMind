@@ -108,6 +108,10 @@ const incompleteSpecies = speciesCatalog.filter((item) =>
   || item.minTankLengthCm <= 0 || item.minGroup <= 0 || item.temperature?.length !== 2
   || item.ph?.length !== 2 || item.wasteFactor <= 0
 );
+const invalidAdditionalSpeciesSources = speciesCatalog.filter((item) =>
+  item.additionalSourceUrls?.some((url) => !/^https:\/\//.test(url))
+);
 
 if (missingSpeciesGroups.length) throw new Error(`Boş canlı grupları: ${missingSpeciesGroups.join(", ")}`);
 if (incompleteSpecies.length) throw new Error(`Eksik canlı bakım profilleri: ${incompleteSpecies.map((item) => item.id).join(", ")}`);
+if (invalidAdditionalSpeciesSources.length) throw new Error(`Geçersiz ek canlı kaynağı: ${invalidAdditionalSpeciesSources.map((item) => item.id).join(", ")}`);

@@ -20,6 +20,16 @@ Arama sonucu özeti, yapay zekâ cevabı, forum yorumu veya ilgisiz kategori say
 
 Bu liste otomatik doğruluk garantisi değildir. Her bağlantı doğru marka, model ve varyanta ait olmalıdır.
 
+## Canlı verisi için özel kaynak kuralı
+
+- Yerel mağazalar yalnızca Türkiye'de kullanılan satış adını, varyeteyi ve güncel bulunabilirliği karşılaştırmak için kullanılabilir.
+- Bilimsel kimlik için FishBase, Catalog of Fishes, GBIF veya hakemli taksonomi yayını tercih edilir.
+- Yetişkin boyu, minimum akvaryum, sıcaklık, pH, sosyal yapı ve özel bakım riskleri için kurumsal bakım rehberi veya yerleşik tür uzmanı veri tabanı kullanılmalıdır. Örnekler: Seriously Fish, Practical Fishkeeping, OATA, Fishipedia, Maidenhead Aquatics/Fishkeeper; kedi balıklarında ScotCat, Welsfans ve Corydoras World.
+- Yerel mağazanın bakım metni, bilimsel kimlik veya zorunlu bakım eşikleri için tek başına yeterli kanıt sayılmaz.
+- Ticari ad birden fazla türe uyuyorsa ya da mağaza adı ile uzman kaynak çelişiyorsa eşleme yapılmaz; kayıt çözülmemiş tutulur.
+- Tek bir güvenilir sayfa tüm eşikleri yayımlamıyorsa ana bağlantı `sourceUrl`, kimlik/boy/özel bakım gibi bağımsız doğrulamalar `additionalSourceUrls` alanında HTTPS bağlantılarıyla saklanır.
+- Tatlı su adıyla satılan acı su veya deniz canlısı, salinite gereksinimi uygulamanın sağlık analizinde modellenmeden sıradan tatlı su profiline bağlanmaz.
+
 ## Zorunlu kayıt alanları
 
 - Benzersiz kimlik
@@ -27,6 +37,7 @@ Bu liste otomatik doğruluk garantisi değildir. Her bağlantı doğru marka, mo
 - Model, yaygın ad ve gerekiyorsa bilimsel ad
 - Doğru kategori
 - Doğrudan HTTPS kaynak bağlantısı (`sourceUrl`)
+- Gerekiyorsa bağımsız çapraz doğrulama bağlantıları (`additionalSourceUrls`)
 - `YYYY-MM-DD` biçiminde doğrulama tarihi (`verifiedAt`)
 - Yalnızca kaynakta açıkça yayımlanan teknik/bakım değerleri
 

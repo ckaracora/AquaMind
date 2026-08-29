@@ -1,6 +1,6 @@
 # AquaMind proje durumu
 
-Son güncelleme: 2026-08-27
+Son güncelleme: 2026-08-29
 
 ## Doğrulanmış temel
 
@@ -10,7 +10,7 @@ Son güncelleme: 2026-08-27
 - Canlı önizleme: `https://aqua-mind-three.vercel.app/`
 - Görev panosu: `https://github.com/users/ckaracora/projects/1`
 - Teknoloji: Next.js 15, React 19, TypeScript, Tailwind CSS, pnpm
-- `pnpm verify`: 2026-08-27 tarihinde yerelde başarılı
+- `pnpm verify`: 2026-08-29 tarihinde yerelde başarılı
 - Arkadaş kurulumu: `buraksenfx` hesabı collaborator; Windows kopyasında kurulum ve tüm doğrulamalar başarılı
 
 ## Mevcut veri durumu
@@ -34,7 +34,7 @@ Son güncelleme: 2026-08-27
 
 ## Sıradaki tek iş
 
-`codex/catalog-capacity-batch` dalında canlı katalog denetimi sürüyor. AquaRubi'deki güncel barb, Güney Amerika cichlid, Corydoras, Pleco, cüce kerevit, tetra/rasbora, Betta/Japon, karides ve salyangoz listeleri karşılaştırıldı. Sıradaki tek iş; kalan yerel canlı kategorilerini grup grup denetleyip yalnızca bilimsel kimliği ve bakım değerleri doğrulanan eksikleri eklemek.
+`codex/catalog-capacity-batch` dalındaki kapsamlı ekipman ve canlı katalog paketi GitHub devrine hazırlandı. Son tamamlanan grup Cikletist Tropheus/Tanganyika kategorisidir; 5 satış başlığının 4'ü doğrulanmış profile bağlandı, belirsiz `Tropheus Red Belly` adı tahminle eşleştirilmedi. Sıradaki tek iş; Cikletist'in iki sayfalık Karides/Kerevit kategorisini tam satış envanteri regresyonuna alıp mevcut 38 karides ve 4 kerevit profiliyle güvenilir bilimsel kaynaklar üzerinden karşılaştırmaktır.
 
 ## Oturum sonu devir şablonu
 
@@ -46,6 +46,17 @@ Son güncelleme: 2026-08-27
 - GitHub'a gönderildi mi:
 - Vercel'e yayımlandı mı:
 - Sonraki tek iş:
+
+## 2026-08-28 Cikletist vatoz ve kedi balığı karşılaştırması
+
+- Cikletist'in güncel `Vatoz Kedi Balıkları` kategorisindeki üç sayfa doğrudan karşılaştırıldı; toplam 56 satış başlığı regresyon kapsamına alındı.
+- Mevcut güvenli profillere bağlanan Ancistrus varyeteleri, Otocinclus ticari adları, SAE, Red Tail Catfish, Red Lizard, Senegal bichir, Sterbai ve L106 adlarıyla birlikte 43 başlık doğrulanmış sağlık profiline bağlandı.
+- Yirmi yedi eksik profil kaynaklı bakım eşikleriyle eklendi: Delhezi bichir (`Polypterus delhezi`), Hujeta gar (`Ctenolucius hujeta`), L128 Blue Phantom (`Hemiancistrus sp. L128`), L129 Kolombiya Zebra (`Hypancistrus debilittera`), L190 Royal Pleco (`Panaque nigrolineatus`), L201 Orinoco Angel (`Hypancistrus sp. L201`), L239 Blue Panaque (`Baryancistrus beggini`), L340 Mega Clown (`Hypancistrus sp. L340`), L091 Three Beacon (`Leporacanthicus triactis`), L240 Vampir (`Leporacanthicus sp. L240`), L052 Kelebek (`Dekeyseria picta`), L243 Orange Tiger (`Peckoltia wernekei`), L116 Red Fin Thresher (`Aphanotorulus emarginatus`), LDA72 Three-ray Bristlenose (`Ancistrus triradiatus`), L149 Cucuta Bristlenose (`Ancistrus sp. L149`), L191 Brokenline Royal (`Panaque sp. L191`), L244 Black Spotted Flyer (`Pseudolithoxus dumus`), L200A High-fin Green Phantom (`Baryancistrus demantoides`), L059A Blue-spotted Bristlenose (`Ancistrus hoplogenys`), L235 Anthrax Flyer (`Pseudolithoxus anthrax`), L127 Lujan vatozu (`Peckoltia lujani`), Orange Venezuela Cory (`Osteogaster venezuelanus`), Green Laser CW009 (`Corydoras sp. CW009`), Rabauti Cory (`Osteogaster rabauti`), Highfin Spotted CW027 (`Hoplisoma sp. CW027`), White Spotted Doras (`Agamyxis pectinifrons`) ve LDA38 Orinoco Wood Pleco (`Hypostomus plecostomoides`). Büyük/avcı türlerde akvaryum uzunluğu, sosyal grup, kaçış, yüksek atık ve avlanma riskleri kullanıcı uyarılarına işlendi.
+- L201 mağaza başlığındaki `Hypancistrus inspector` ifadesi kesin bilimsel kimlik olarak kullanılmadı; bu adın benzer benekli Hypancistruslarla karışabildiği kullanıcı uyarısına işlendi.
+- Kalan 13 ticari ad; mağaza sayfası bilimsel kimlik vermediği, L-numarası ile yazılı ad çelişebildiği veya güvenli bakım eşiği henüz doğrulanmadığı için tahminle eşleştirilmedi. `L-069 Peckoltia Ucayalensis` başlığı özellikle çözülmemiş tutuldu: güncel L-numarası kaynakları L069'u `Ancistrini sp.` olarak verirken `Peckoltia ucayalensis` başka numaralarla ilişkilendiriliyor. `L-103 CLOWN PLECO` da L103'ün güvenilir kaynaklarda `Peckoltia sp.` olarak geçmesi ve palyaço vatoz ticari adının başka türler için kullanılması nedeniyle `Panaqolus maccus` profiline bağlanmadı. Pangasius ve goby gibi yalnızca genel ticari ad taşıyan başlıklar da satıcı bilimsel kimlik yayımlamadığı için çözülmemiş durumda. Bu başlıkların yanlış profile bağlanmaması ayrıca test ediliyor.
+- Tam doğrulama: `pnpm verify` başarılı; TypeScript, 56 başlıklı Cikletist regresyonu dahil katalog akışı, 35 sağlık senaryosu, katalog denetimi ve 14 sayfalık üretim derlemesi geçti.
+- GitHub/Vercel: bu paket henüz gönderilmedi ve yayımlanmadı.
+- Sonraki tek iş: Cikletist listesindeki kalan 13 çözülmemiş başlığı, bilimsel kimliği açık olanlardan başlayarak küçük gruplar halinde doğrulamak.
 
 ## 2026-08-26 katalog kapasite paketi
 
@@ -178,4 +189,168 @@ Son güncelleme: 2026-08-27
 - Karides/salyangoz paketi sonrasında `pnpm verify` başarılı: TypeScript, katalog akışı, 35 sağlık senaryosu, katalog denetimi ve 14 sayfalık üretim derlemesi geçti. Canlı denetimi 38 karides ve 20 salyangoz profilinin tamamında kaynak ve bakım verisi bulunduğunu doğruladı.
 - Kullanıcının onayıyla Atakan Petshop, BettaMarketim, AquaRubi, Cikletist Petshop, Malawi İzmir ve AkvaryumExpress tüm ürünlerde resmî kaynaktan sonraki ikinci doğrulama katmanı olarak kullanılacak; çelişkili değerler kesin veri gibi seçilmeyecek.
 - GitHub devir noktası: bu doğrulanmış katalog paketi `codex/catalog-capacity-batch` görev dalına aktarılacak; `main` dalı ve Vercel/canlı uygulama bu pakette güncellenmeyecek.
+- AquaRubi'nin ana balık kategorisindeki 38 güncel satış kaleminin tamamı herkese açık mağaza verisinden karşılaştırıldı. Yeni biyolojik tür açığı bulunmadı; mağaza adları mevcut 24 doğru bakım profiline bağlandı.
+- Siyah Cüce Vatoz, L144 Longfin, Halfmoon Red/White, Kardinal Neon, Electric Blue Ramirezi, Apistogramma Kakadu, Pigme/Habrosus Cory, C125 Red, Black Venezuela, Royal Farlowella, Red Lizard Whiptail, SAE ve Otocinclus Affinis gibi yerel adlar yeni tür gibi çoğaltılmadan aranabilir takma ad olarak eklendi.
+- `Otocinclus affinis` ve `SAE` ticari adlarının birden fazla benzer türle karışabildiği kullanıcı uyarısına işlendi. Ticari ad nedeniyle bilimsel kimlik değiştirilmedi; mevcut doğrulanmış bakım profilleri korundu.
+- AquaRubi'nin 38 güncel balık adının doğru sağlık profiline bağlanması regresyon kapsamına alındı; hedefli katalog akışı testi başarılı.
+- AquaRubi ana balık listesi sonrasında tam `pnpm verify` başarılı: TypeScript, katalog akışı, 35 sağlık senaryosu, katalog denetimi ve 14 sayfalık üretim derlemesi geçti.
+- Cikletist'in güncel canlı doğuran kategorisindeki 24 satış kalemi karşılaştırıldı. Bilimsel kimliği açık olan 18 lepistes varyetesi ile Plati, Moli ve Koi Kılıç Kuyruk mevcut doğru biyolojik profillere bağlandı; renk varyeteleri ayrı tür gibi çoğaltılmadı.
+- `VELİFERA BALIKLARI`, `VELİFERA TÜRLERİ` ve `ALBİNO SKY BLUE` sayfalarında bilimsel tür yayımlanmadığı için bu üç ticari ad tahminle bir profile bağlanmadı. FishBase, `Poecilia velifera` ile mevcut `Poecilia latipinna` profilinin ayrı türler olduğunu doğruluyor; satıcı kimliği açıklanana kadar yanlış sağlık önerisi üretmemek için kayıtlar çözülmemiş tutuldu.
+- Cikletist canlı doğuran paketi sonrasında `pnpm verify` başarılı: TypeScript, yedi ekipman kategorili katalog akışı, 35 sağlık senaryosu, 18 canlı grubunun kaynak/bakım denetimi ve 14 sayfalık üretim derlemesi geçti.
+- Cikletist Betta kategorisindeki 14 canlı kayıt karşılaştırıldı. On bir `Betta splendens` varyetesi ile Dev Gurami ve Çikolata Gurami mevcut doğru profillere bağlandı; mağazadaki Tetra Betta Menü canlı listesine dahil edilmedi.
+- `MEYAN KÖKÜ GURAMİ` adı birden fazla `Parosphromenus` türünü kapsayabildiği ve mağaza bilimsel kimlik yayımlamadığı için tahminle eşleştirilmedi. Bu ayrım regresyon testinde korunuyor.
+- Cikletist Betta/labirentli paketi sonrasında `pnpm verify` başarılı: TypeScript, katalog akışı, 35 sağlık senaryosu, tüm canlı gruplarının kaynak/bakım denetimi ve 14 sayfalık üretim derlemesi geçti.
+- Cikletist Japon/Oranda kategorisindeki 17 benzersiz satış başlığı karşılaştırıldı: 13 Japon/Oranda/Ranchu/Ryukin/Teleskop varyetesi mevcut `Carassius auratus` profiline, dört koi başlığı yeni ve ayrı `Cyprinus carpio` profiline bağlandı.
+- Koi profili FishBase, OATA ve Australian Koi Association verileriyle doğrulandı: 75 cm yetişkin boyu, en az 4.500 litre uzman havuzu, yaklaşık 3 metre yüzme alanı, en az üçlü sosyal grup, 4–24 °C ve pH 6,5–8,5. Akvaryuma uygun olmadığı, güçlü filtrasyon/oksijen/karantina gerektiği ve doğaya bırakılamayacağı görünür uyarılara işlendi.
+- Koi/Japon paketi sonrasında `pnpm verify` başarılı: TypeScript, katalog akışı, 35 sağlık senaryosu, artık yedi profilli soğuk su grubu dahil tüm katalog denetimi ve 14 sayfalık üretim derlemesi geçti.
 - Sonraki tek iş: yerel canlı listelerinde henüz denetlenmeyen grupları mevcut biyolojik profiller ve mağaza varyantlarıyla karşılaştırmak.
+
+## 2026-08-28 Cikletist yılan ve müren karşılaştırması
+
+- Cikletist'in güncel `Yılan ve Müren Balıkları` kategorisindeki 12 satış başlığı regresyon kapsamına alındı.
+- Bilimsel kimliği ve zorunlu bakım eşikleri güçlü bilimsel/uzman kaynaklarda açık olan sekiz tür eklendi: Andrao yılanbaş (`Channa andrao`), Assam yılanbaş (`Channa stewartii`), Ornate yılanbaş (`Channa ornatipinnis`), Gökkuşağı yılanbaş (`Channa bleheri`), Peacock yılanbaş (`Channa pulchra`), İmparator yılanbaş (`Channa marulioides`), Dev kırmızı yılanbaş (`Channa micropeltes`) ve Yarım bantlı dikenli yılan balığı (`Macrognathus circumcinctus`).
+- Bu profillerde yetişkin boyu, minimum hacim ve akvaryum uzunluğu, sıcaklık, pH, avcılık, topluluk/tür akvaryumu, mevsimsel serinleme, yüzey havası, hassas kum ve kaçışa dayanıklı kapak gereksinimleri kaynaklı eşiklerle işlendi. Büyük tür grubu 23 profile ulaştı.
+- Yerel mağaza sayfaları yalnızca Türkiye'de kullanılan satış adlarını karşılaştırmak için kullanıldı. Bakım değerleri Seriously Fish, Fishipedia, Practical Fishkeeping, Maidenhead Aquatics/Fishkeeper ve tür uzmanı Aquarium Dietzenbach gibi daha güvenilir kaynaklarla denetlendi.
+- `Channa marulioides` için bilimsel tür geçerliliği Eschmeyer's Catalog of Fishes, 65 cm erişkin boyu USGS yayınındaki tür monografisi ve bakım eşiği Fishipedia ile çapraz doğrulandı. Daha düşük hacim yayımlayan kaynaklar bulunmasına rağmen 65 cm erişkin boya uygun, koruyucu 1000 litre/200 cm eşik kullanıldı.
+- `Channa micropeltes` bilimsel 130 cm boy, 5000–6000 litre bakım kaynağı ve 400–500 cm uzman yüzme alanı önerisiyle; `Macrognathus circumcinctus` ise 20 cm boy, koruyucu 215 litre/90 cm taban ve kum/kaçış gereksinimleriyle çapraz doğrulandı. Birden çok kaynağın kayda izlenebilir biçimde bağlanması için `additionalSourceUrls` alanı ve HTTPS denetimi eklendi.
+- `ZİGZAK TARAK BALIKLARI`, `WHITE CHECK EEL MÜREN`, `CHANNA GOLDEN LİMBATA` ve birbiriyle çelişen `CHANNA ASIATICA GÖKKUŞAĞI YILANBAŞ BLEHERİ` adları kesin kimlik tamamlanana kadar tahminle eşleştirilmiyor. White Cheek/Check Moray adı `Echidna rhodochilus` ile ilişkili görünse de acı su-deniz salinitesi mevcut tatlı su sağlık modelinde temsil edilmediği için güvenli profil oluşturulmadı.
+- Tam `pnpm verify` başarılı: TypeScript, yedi ekipman kategorili ve dört canlı sınıflı katalog akışı, 35 sağlık senaryosu, çoklu HTTPS kaynak denetimi, 23 profilli büyük tür grubu ve 14 sayfalık üretim derlemesi geçti.
+- GitHub/Vercel: bu paket henüz gönderilmedi veya yayımlanmadı.
+- Sonraki tek iş: kategoride çözülemeyen dört adı güvenli biçimde çözülmemiş tutup sıradaki yerel canlı kategorisini güvenilir tür kaynaklarıyla karşılaştırmak.
+
+## 2026-08-28 Cikletist Amerikan tetra ve rainbowfish karşılaştırması
+
+- Yerel mağazanın Amerikan tetra kategorisindeki beş sayfada bulunan 46 satış başlığı yalnızca Türkiye'de kullanılan ticari adları tespit etmek için kullanıldı; bilimsel kimlik ve bakım eşikleri mağaza açıklamalarından alınmadı.
+- Flame tetra (`Hyphessobrycon flammeus`), Mavi imparator tetra (`Inpaichthys kerri`), Buenos Aires tetra (`Psalidodon anisitsi`), Kolombiya tetra (`Hyphessobrycon columbianus`), Kırmızı göz tetra (`Bario sanctaefilomenae`) ve Celebes gökkuşağı (`Marosatherina ladigesi`) güvenilir bilimsel/uzman kaynaklarla eklendi. Kimlik, yetişkin boyu, sürü sayısı, sıcaklık, pH, minimum hacim ve yüzme alanı eşikleri FishBase ile Fishkeeper, Fluval, Practical Fishkeeping ve tür odaklı uzman kaynaklar üzerinden çapraz doğrulandı.
+- Furcata, Gertrudae, Madagaskar, Werneri, Neon Rainbow, Serpae, Silvertip, Ember, Lamp Eye, Penguin, makas kuyruk, transgenetik tetra, Black Palmeri, Boesemani, Congo, Gardneri ve Green Neon satış adları yeni biyolojik türler gibi çoğaltılmadan mevcut doğru profillere bağlandı.
+- `BLUE KING TETRA` adı güvenilir ticaret listelerinde hem `Inpaichthys kerri` hem `Boehlkea fredcochui` için kullanıldığı için çözülmemiş bırakıldı. `KIRMIZI KALEM TETRA BALIKLARI`, `BUZ BALIĞI`, `ROSY TETRA BALIKLARI`, `Gül Tetra`, `Siyah Simpson Tetra` ve `Kiraz Tetra` başlıkları da bilimsel kimlik netleşmeden tahminle eşleştirilmedi.
+- Tamamı büyük yazılan İngilizce/Türkçe satış adlarındaki `I/İ/ı/i` farklarının kullanıcı aramasını bozmasını önlemek için canlı adı normalizasyonu dotless-I toleranslı hale getirildi; belirsiz adların eşleşmemesi regresyon testinde korunuyor.
+- Tam `pnpm verify` 46 başlıklı tamamlanmış paket için başarılı: TypeScript, yedi ekipman kategorili ve dört canlı sınıflı katalog akışı, 35 sağlık senaryosu, çoklu HTTPS kaynak/bakım denetimi ve 14 sayfalık üretim derlemesi geçti. Tetra grubu 23, rainbowfish grubu 11 doğrulanmış profile ulaştı.
+- GitHub/Vercel: bu paket henüz gönderilmedi veya yayımlanmadı.
+- Sonraki tek iş: Cikletist'in üç sayfalık Sazansıgiller kategorisindeki ticari adları mevcut biyolojik profillerle karşılaştırıp gerçek tür açıklarını güvenilir kaynaklarla doğrulamak.
+
+## 2026-08-28 Cikletist Sazansıgiller karşılaştırması — ilk güvenilir tür paketi
+
+- Kategorinin üç sayfasındaki güncel satış başlıkları çıkarıldı. Yerel mağaza bu aşamada yalnızca Türkiye'deki ticari adları tespit etmek için kullanıldı; bilimsel kimlik ve bakım eşikleri mağaza metninden alınmadı.
+- İlk gerçek tür açığı paketi dört doğrulanmış profille tamamlandı: Sekiz bantlı barb (`Eirmotus octozona`), Daisy's Blue Ricefish (`Oryzias woworae`), Pacific Blue-eye (`Pseudomugil signifer`) ve Kırmızı fantom tetra (`Megalamphodus sweglesi`).
+- Tür kimliği ve doğal boy bilgileri FishBase, Smithsonian'ın tür tanımlama yayını ve Australian Museum gibi bilimsel/kurumsal kaynaklarla; sürü, hacim, akvaryum uzunluğu ve su eşikleri Fishkeeper, Fishipedia ve bağımsız karşılaştırmalı bakım kaynaklarıyla çapraz doğrulandı. Her kayıt en az üç HTTPS kaynağa izlenebilir.
+- Ticari ad eşleştirmeleri regresyon testine alındı. Grup toplamları tetra 24, barb 13, rainbowfish 12 ve killifish sekiz doğrulanmış profile ulaştı.
+- Tam `pnpm verify` başarılı: TypeScript, katalog akışı, 35 sağlık senaryosu, kaynak/bakım denetimi ve 14 sayfalık üretim derlemesi geçti.
+- Genel veya birden çok türe işaret edebilen `BIÇAK BALIKLARI`, `PUFFER BALIKLARI`, `Rasbora`, `GÖKKUŞAĞI GOBY`, `PIPE FISH NEEDLE` ve benzeri adlar bilimsel kimlik doğrulanmadan eşleştirilmeyecek.
+- GitHub/Vercel: bu paket henüz gönderilmedi veya yayımlanmadı.
+- Sonraki tek iş: Sazansıgiller envanterindeki kalan bilimsel olarak açık türleri küçük güvenilir paketlerle doğrulamak; belirsiz ve acı su/deniz gereksinimli adları mevcut tatlı su sağlık modeline zorla bağlamamak.
+
+## 2026-08-28 Cikletist Sazansıgiller karşılaştırması — ikinci güvenilir tür paketi
+
+- Canlı bakım verisinde kaynak sırası kesinleştirildi: yerel mağazalar yalnızca Türkiye'deki ticari adı ve bulunabilirliği gösterecek; bilimsel kimlik FishBase, kurumsal koleksiyonlar veya taksonomi yayınlarından, bakım eşikleri ise kurumsal ve köklü uzman kaynaklardan alınacak.
+- Phoenix rasbora (`Boraras merah`), Asya kırmızı burun (`Sawbwa resplendens`) ve Yeşil ateş tetra (`Aphyocharax rathbuni`) güvenilir bilimsel ve bakım kaynaklarıyla eklendi. Her kayıt bilimsel kimlik, yetişkin boyu, minimum hacim/uzunluk, sürü sayısı, sıcaklık, pH ve özel bakım uyarılarıyla en az üç HTTPS kaynağa izlenebilir.
+- Red Neon Blue-eye kaydındaki farklı bir `Pseudomugil` türüne ait eski kaynak kaldırıldı; doğru `Pseudomugil luminatus` FishBase, Fishkeeper ve Avustralya hükûmeti raporuyla bağlandı. Yetişkin boyu ve sürü eşiği güvenli profile göre düzeltildi.
+- Kategoride bilimsel kimliği zaten açık olan 28 yerel satış adı mevcut doğru biyolojik profillere bağlandı. Renk/varyete adları yeni tür gibi çoğaltılmadı.
+- `BIÇAK BALIKLARI`, `PUFFER BALIKLARI`, `Rasbora`, `GÖKKUŞAĞI GOBY`, `PIPE FISH NEEDLE`, `RED BELLY TETRA`, `TATLI SU DİL BALIKLARI`, `SİLVER ARGUS BALIKLARI` ve benzeri 19 belirsiz ya da mevcut tatlı su modeli açısından eksik adın tahminle eşleşmemesi regresyon testinde korunuyor.
+- Tam `pnpm verify` başarılı: TypeScript, yedi ekipman kategorili ve dört canlı sınıflı katalog akışı, 35 sağlık senaryosu, kaynak/bakım denetimi ve 14 sayfalık üretim derlemesi geçti. Güncel gruplar tetra 25, rasbora 14 ve rainbowfish 12 doğrulanmış profildir.
+- GitHub/Vercel: bu paket ve önceki yerel katalog değişiklikleri henüz gönderilmedi veya yayımlanmadı.
+- Sonraki tek iş: Sazansıgiller listesindeki bilimsel adı açık kalan az sayıdaki türü aynı kaynak standardıyla tamamlamak; bilimsel kimliği veya tatlı/acı su gereksinimi kesinleşmeyen başlıkları çözülmemiş tutmak.
+
+## 2026-08-28 Cikletist Sazansıgiller karşılaştırması — kategori tamamlandı
+
+- Üç sayfadaki 64 satış başlığının tamamı tek bir envanter regresyonuna alındı. 42 başlık doğrulanmış biyolojik profile bağlandı; 22 başlık bilimsel kimliği, güvenli bakım eşiği veya tatlı/acı su modeli tamamlanmadığı için bilinçli olarak eşleşmeden bırakıldı.
+- Ninja woodcat (`Tatia musaica`), Kırmızı karınlı piranha (`Pygocentrus nattereri`), Endlicheri bichir (`Polypterus endlicherii`) ve Monoculus peacock bass (`Cichla monoculus`) güvenilir bilimsel ve uzman kaynaklarla eklendi.
+- Tatia için en az beşli grup, 60 litre/60 cm, gececilik, yumuşak kum ve küçük yavruları avlama riski; Natterer piranhası için altılı grup, 600 litre/200 cm, tür akvaryumu ve ciddi yaralanma riski işlendi.
+- Endlicheri bichir için 75 cm yetişkin boyu, yaklaşık 2.000 litre/200 cm uzman sistemi, hava alma ve kaçış kapağı; Monoculus için 71 cm yetişkin boyu, 1.200 litre/200 cm uzman sistemi, güçlü filtrasyon ve doğaya bırakmama uyarıları görünür hale getirildi.
+- `ALLIGATOR GAR TİMSAH BALIKLARI`, `BLUE AZUL PEACOCK BASS`, `PURPLE SPOTTED GUDGEON MOGURNDA BALIĞI`, `RED TAİLED HEMİODUS`, `SİLVER ARGUS BALIKLARI` ve diğer genel/çelişkili adlar yalnızca ticari addan bilimsel tür tahmin edilerek eşleştirilmedi.
+- Tam `pnpm verify` başarılı: TypeScript, 64 başlıklı kategori regresyonu, yedi ekipman kategorili ve dört canlı sınıflı katalog akışı, 35 sağlık senaryosu, kaynak/bakım denetimi ve 14 sayfalık üretim derlemesi geçti. Güncel toplamlar bottom 64, monster 26, tetra 25, rasbora 14 ve rainbowfish 12 doğrulanmış profildir.
+- GitHub/Vercel: bu kategori paketi ve önceki yerel katalog değişiklikleri henüz gönderilmedi veya yayımlanmadı.
+- Sonraki tek iş: Cikletist'in sıradaki denetlenmemiş canlı kategorisini aynı güvenilir kaynak ve tam envanter regresyonu yöntemiyle karşılaştırmak.
+
+## 2026-08-28 Cikletist Arowanalar karşılaştırması — kategori tamamlandı
+
+- Arowanalar kategorisindeki dört satış başlığının tamamı regresyon kapsamına alındı. Üç ilan aynı biyolojik tür olan gümüş arowanaya (`Osteoglossum bicirrhosum`) bağlandı; satış boyunu ifade eden `UFAK` kaydı ayrı tür veya daha düşük yetişkin gereksinimi gibi değerlendirilmedi.
+- Yerel mağaza yalnızca Türkiye'deki satış adlarını belirlemek için kullanıldı. Bilimsel kimlik ve 90 cm erişkin boy FishBase, bakım eşikleri Fishipedia ve B-Aqua, büyük yüzme alanı gereksinimi ise EMBRAPA yayınındaki Amazon süs balıkları rehberiyle çapraz doğrulandı.
+- Eski 1.000 litre/250 cm gümüş arowana profili daha koruyucu yetişkin bakım eşiğine yükseltildi: en az 4.500 litre, 500 cm uzunluk, 24–28 °C ve pH 6–7,2. Güçlü sıçrama nedeniyle tam kapak, avcılık ve sıradan topluluk akvaryumuna uygun olmama uyarıları görünür hale getirildi.
+- `AFRİKAN AROWANA` adı `Heterotis niloticus` ile ilişkili görünse de FishBase bilimsel boy verisini yayımlarken güvenilir uzman kaynaklarda yetişkin minimum akvaryum ve tam bakım eşikleri yeterince tutarlı bulunmadı. Yerel mağaza verisinden eşik uydurulmadı; kayıt güvenli doğrulama tamamlanana kadar bilinçli olarak eşleşmeden bırakıldı.
+- Tam `pnpm verify` başarılı: TypeScript, dört başlıklı Arowanalar regresyonu, katalog akışı, 35 sağlık senaryosu, kaynak/bakım denetimi ve 14 sayfalık üretim derlemesi geçti.
+- GitHub/Vercel: bu paket ve önceki yerel katalog değişiklikleri henüz gönderilmedi veya yayımlanmadı.
+- Sonraki tek iş: Cikletist Monster Balık Türleri ana kategorisindeki satış başlıklarını mevcut yılan/müren, arowana ve büyük tür profilleriyle karşılaştırıp gerçek açıkları aynı güvenilir kaynak standardıyla tamamlamak.
+
+## 2026-08-28 Cikletist Monster Balık Türleri ana kategori — güncel envanter tamamlandı
+
+- Güncel Monster ana sayfasındaki 21 satış başlığının tamamı tek regresyon envanterine alındı. Yılanbaş, arowana, dikenli yılan balığı, fahaka, Astronot ve Flowerhorn tekrarları mevcut doğru biyolojik profillere bağlandı; satış sayfalarındaki tekrarlar ayrı tür gibi çoğaltılmadı.
+- Astronot (`Astronotus ocellatus`) kaydı FishBase, Fishkeeper, bağımsız karşılaştırmalı bakım rehberi ve Güney Afrika çevre kurumunun çalışmasıyla güçlendirildi. 35 cm yetişkin boy, 300 litre/120 cm, 23–28 °C, pH 6–8, güçlü filtrasyon ve küçük canlıları avlama uyarıları izlenebilir kaynaklara bağlandı.
+- Flowerhorn hibrit kaydı 400 litre/150 cm, 25–29 °C, pH 6–7,5, tek balıklı tür akvaryumu, yüksek biyolojik yük ve güvenli dekor gereksinimleriyle güncellendi. `Shortbody` satış formundaki yapısal sağlık riski görünür bakım uyarısına eklendi.
+- `AFRİKAN AROWANA`, `ZİGZAK TARAK BALIKLARI`, `CHANNA GOLDEN LİMBATA`, `ÇİN EJDERİ`, `WHITE CHECK EEL MÜREN` ve çelişkili `CHANNA ASIATICA GÖKKUŞAĞI YILANBAŞ BLEHERİ` adlarının bilimsel kimlik veya mevcut tatlı su bakım modeli tamamlanmadığı için eşleşmemesi regresyonla korunuyor.
+- Tam `pnpm verify` başarılı: TypeScript, 21 başlıklı Monster ana kategori regresyonu, katalog akışı, 35 sağlık senaryosu, kaynak/bakım denetimi ve 14 sayfalık üretim derlemesi geçti.
+- GitHub/Vercel: bu paket ve önceki yerel katalog değişiklikleri henüz gönderilmedi veya yayımlanmadı.
+- Sonraki tek iş: Monster alt kategorilerinden `Kedi Balıkları` ve ardından `Amerikan Tetra Monster` güncel envanterlerini aynı güvenilir kaynak standardıyla karşılaştırmak.
+
+## 2026-08-28 Cikletist Monster alt kategorileri — tamamlandı
+
+- Monster altındaki `Kedi Balıkları` kategori sayfasının güncel olarak ürün içermediği doğrulandı; eski veya başka kategorideki kayıtlar güncel satış ürünü gibi yeniden eklenmedi.
+- `Amerikan Tetra Monster` kategorisindeki beş güncel başlığın tamamı regresyon envanterine alındı. Astronot, iki Flowerhorn ilanı ve Fahaka mevcut güvenilir bakım profillerine bağlandı.
+- `ÇİN EJDERİ` satış adı birden fazla farklı büyük balık için kullanılabildiği ve mağaza bilimsel kimlik yayımlamadığı için bilinçli olarak eşleşmeden bırakıldı.
+- Tam `pnpm verify` başarılı: TypeScript, Monster ana/alt kategori regresyonları, katalog akışı, 35 sağlık senaryosu, kaynak/bakım denetimi ve 14 sayfalık üretim derlemesi geçti.
+- Monster bölümü güncel kategori yapısıyla tamamlandı. GitHub/Vercel henüz güncellenmedi.
+- Sonraki tek iş: Cikletist'in henüz tamamlanmamış `Vatoz Kedi Balıkları` üç sayfalık envanterini güvenilir bilimsel ve kedi balığı uzmanı kaynaklarla karşılaştırmak.
+
+## 2026-08-28 Cikletist Vatoz Kedi Balıkları — üç sayfalık envanter tamamlandı
+
+- Üç güncel sayfadaki 56 satış başlığının tamamı tek regresyon envanterine alındı. 45 başlık doğrulanmış biyolojik profile bağlandı; 11 belirsiz başlık bilimsel kimlik veya güvenli yetişkin bakım eşiği tamamlanmadığı için bilinçli olarak eşleşmeden bırakıldı.
+- Yerel mağaza yalnızca Türkiye'deki satış adlarını ve bulunabilirliği saptamak için kullanıldı. Balıkların bilimsel kimliği, erişkin boyu ve doğal gereksinimleri FishBase, GBIF/taksonomi kaynakları ve kurumsal yayınlardan; akvaryum eşikleri ise kurumsal veya köklü uzman kaynaklardan alındı.
+- Pangasius köpek balığı (`Pangasianodon hypophthalmus`) 130 cm erişkin boy, 14.580 litre/450 cm koruyucu uzun süreli bakım eşiği ve açık `ev akvaryumuna uygun değildir` uyarısıyla eklendi. Pelajik/göçmen yapı, cama çarpma riski, yüksek biyolojik yük ve kamu akvaryumu/ısıtılmış kapalı havuz gereksinimi görünür hale getirildi.
+- Siyah labeo (`Labeo chrysophekadion`) FishBase ve ABD Balık ve Yaban Hayatı Kurumu verileriyle 90 cm erişkin boy, 24–27 °C ve pH 6,5–7,5 olarak doğrulandı; 2.500 litre/360 cm uzman sistemi, aşırı bölgecilik ve standart topluluk akvaryumuna uygun olmama uyarıları eklendi.
+- Kırmızı kuyruk kedi balığı (`Phractocephalus hemioliopterus`) kaydı bilimsel ve uzman ek kaynaklarla güçlendirildi; çok iri avcı, güçlü filtrasyon, güvenli kapak ve yalnızca dev uzman/kamu akvaryumu ölçeği uyarıları tamamlandı.
+- `Borneo Kelebek Vatoz`, `RED LİP STİCK GOBBY`, `BLUE NEON GOBBY`, `JULLY`, `KÜREK BURUN`, `PANDA GARRARUFA`, L146, L148, L069, L103 ve `COLOMBİAN FARLOWELLA` adları yalnızca ticari addan tür tahmin edilerek eşleştirilmedi.
+- Tam `pnpm verify` başarılı: TypeScript, 56 başlıklı Vatoz/Kedi Balıkları regresyonu, yedi ekipman kategorili ve dört canlı sınıflı katalog akışı, 35 sağlık senaryosu, kaynak/bakım denetimi ve 14 sayfalık üretim derlemesi geçti. Büyük tür grubu 28 doğrulanmış profile ulaştı.
+- GitHub/Vercel: bu paket ve önceki yerel katalog değişiklikleri henüz gönderilmedi veya yayımlanmadı.
+- Sonraki tek iş: Cikletist'in sıradaki denetlenmemiş canlı kategorisini aynı güvenilir tür kaynağı ve tam envanter regresyonu yöntemiyle karşılaştırmak.
+
+## 2026-08-29 Cikletist Amerikan Cikletleri — kategori tamamlandı
+
+- Üç güncel sayfadaki 53 satış başlığının tamamı tek envanter regresyonuna alındı. Argus'un acı su tür kimliği sonraki Malawi paketi sırasında doğrulandığı için 43 başlık doğrulanmış biyolojik profile bağlıdır; 10 genel, melez veya bilimsel kimliği açıklanmamış başlık tahminle eşleştirilmemiştir.
+- Winemiller toprak yiyen ciklet (`Geophagus winemilleri`) ve Threadfin acara (`Acarichthys heckelii`) FishBase ile bilimsel olarak doğrulandı; ince kum, grup, taban alanı, güçlü filtrasyon ve küçük balıkları avlama riskleri görünür hale getirildi.
+- Gerçek Altum melek (`Pterophyllum altum`) standart melekten ayrı profile alındı: en az dört birey, 450 litre/150 cm, en az 60 cm akvaryum yüksekliği, 27–31 °C ve çok yumuşak-asidik kararlı su gereksinimi işlendi. Kimlik FishBase, alan gereksinimi Flaman hükûmetinin hayvan refahı rehberiyle çapraz doğrulandı.
+- Black Belt (`Vieja maculicauda`) 600 litre/180 cm ve tür akvaryumu; Persei/Pantano (`Cincelichthys pearsei`) 850 litre/244 cm, bitkisel beslenme ve çok yüksek biyolojik yük; Malawi Compressiceps (`Dimidiochromis compressiceps`) 680 litre/183 cm, bir erkek-birkaç dişi ve küçük balıkları avlama uyarılarıyla eklendi.
+- Kadango (`Copadichromis borleyi`) bir erkek-dört dişilik harem için koruyucu 450 litre/120 cm; Super VC-10 Milomo (`Placidochromis milomo`) 1.000 litre/183 cm, sert-alkali su, açık kum ve sabit kayalık alan gereksinimleriyle tamamlandı.
+- Dacrya (`Guianacara dacrya`) ve Owroewefi (`Guianacara owroewefi`) ayrı tür profillerine alındı; ince kum, mağara/kaya yarığı, sosyal grup, yumuşak su ve güçlü oksijen gereksinimleri işlendi. Gerçek Johanni (`Pseudotropheus johannii`) Maingano'dan ayrıldı ve yanlış eşleşme regresyonla engellendi.
+- Gümüş Maskaheros (`Maskaheros argenteus`) 700 litre/200 cm tür akvaryumu; Elongatus Mpanga (`Chindongo elongatus`) 375 litre/120 cm, bir erkek-dört dişi ve kayalık Mbuna düzeniyle eklendi.
+- Yerel mağaza sayfaları yalnızca Türkiye'deki satış adlarını belirlemek için kullanıldı. Bilimsel kimlik FishBase, ABD Balık ve Yaban Hayatı Kurumu ve taksonomi kaynaklarından; bakım eşikleri hükûmet rehberi veya yerleşik uzman kaynaklardan alındı.
+- `Yeşil Teksas` (tür/hibrit belirsiz), `Sarı İmparator`, `Red Ruby Cichlid`, `Geophagus Hongdea`, genel `Malawi/Karışık Ciklet`, `ürün` ve boy-kalite başlıkları yanlış türe bağlanmadı. Bu 10 satış başlığının eşleşmemesi regresyonla korunuyor. `Argus Balıkları` ise FishBase ve OATA doğrulaması sonrasında ayrı acı su profiline bağlandı.
+- Tam `pnpm verify` başarılı: TypeScript, 53 başlıklı Amerikan Cikletleri regresyonu, yedi ekipman kategorili ve dört canlı sınıflı katalog akışı, 35 sağlık senaryosu, kaynak/bakım denetimi ve 14 sayfalık üretim derlemesi geçti. Ciklet grubu 53 kaynaklı ve bakım verisi tam profile ulaştı.
+- GitHub/Vercel: bu paket ve önceki yerel katalog değişiklikleri henüz gönderilmedi veya yayımlanmadı.
+- Sonraki tek iş: Cikletist'in sıradaki henüz tamamlanmamış canlı kategorisini aynı tam envanter ve güvenilir kaynak yöntemiyle denetlemek.
+
+## 2026-08-29 Cikletist Malawi Cikletleri — kategori tamamlandı
+
+- Güncel sayfadaki 13 satış başlığının tamamı regresyon envanterine alındı. Dokuz başlık güvenilir biyolojik profile bağlandı; `Şeker Pembe Ciklet`, genel `Ciklet Balıkları`, `Ciklet M Boy A Kalite` ve tür/hibrit kimliği belirsiz `Yeşil Teksas` tahminle eşleştirilmedi.
+- Sülfür Kafa Hap (`Otopharynx lithobates`) FishBase ve Malawi uzman kaynağıyla 350 litre/130 cm, bir erkek-birkaç dişi ve kayalık mağara gereksinimleriyle eklendi. Yaşayan Kaya/Livingston (`Nimbochromis livingstonii`) FishBase, Cichlid Room Companion ve Fishkeeper ile 680 litre/180 cm, avcılık ve tür akvaryumu uyarılarıyla eklendi.
+- Ahli (`Sciaenochromis fryeri`) ve Yunus (`Cyrtocara moorii`) profillerinin bilimsel kaynakları FishBase'e yükseltildi; türe özel bakım kaynakları, grup, alan, avcılık ve Malawi suyu uyarılarıyla tamamlandı. Red Borley Kadango adı mevcut `Copadichromis borleyi` profiline güvenle bağlandı.
+- Sayfada yanlış kategori altında bulunan Mono Argentus (`Monodactylus argenteus`) ve Green Argus (`Scatophagus argus`) ciklet gibi gösterilmedi. FishBase bilimsel kimliği ve veteriner onaylı OATA bakım rehberiyle ayrı acı su profilleri oluşturuldu: en az altılı grup, 600–680 litre, 180 cm, güçlü akıntı/oksijen ve erişkin dönemde yüksek tuzluluk veya deniz suyu gereksinimi açıkça işlendi.
+- Yerel satış sayfası yalnızca güncel Türkçe ticari ad envanteri için kullanıldı; bilimsel kimlik, erişkin boyu, davranış, su ve alan gereksinimleri yerel mağaza metninden alınmadı.
+- Tam `pnpm verify` başarılı: TypeScript, 13 başlıklı Malawi regresyonu dahil katalog akışı, 35 sağlık senaryosu, kaynak/bakım denetimi ve 14 sayfalık üretim derlemesi geçti. Ciklet grubu 55, acı su türlerini içeren `other` grubu yedi kaynaklı ve bakım verisi tam profile ulaştı.
+- GitHub/Vercel: bu paket ve önceki yerel katalog değişiklikleri henüz gönderilmedi veya yayımlanmadı.
+- Sonraki tek iş: sıradaki eksik `Cüce Cikletler` kategorisini aynı bilimsel kimlik ve güvenilir bakım kaynağı yöntemiyle denetlemek.
+
+## 2026-08-29 Cikletist Cüce Cikletler — kategori tamamlandı
+
+- İki güncel sayfadaki 26 satış başlığının tamamı envanter regresyonuna alındı. Yerel mağaza sayfaları yalnızca Türkiye'deki satış adlarını belirlemek için kullanıldı; bilimsel kimlik FishBase, bakım eşikleri Fishkeeper, Practical Fishkeeping ve tür bazlı TankBud sayfalarıyla çapraz doğrulandı.
+- Hongsloi, Borellii Opal, Nijsseni, Baenschi, Macmasteri, Erythrura, Trifasciata, Panduro ve Mendezi için ayrı biyolojik profiller eklendi. Ramirezi renk/yüzgeç varyantları, Electric Blue Acara ve Agassizii Rio Miua mevcut doğru tür profillerine takma ad olarak bağlandı; renk varyantları yeni tür gibi çoğaltılmadı.
+- Sajica'nın cüce ciklet olmadığı doğrulandı ve `Amatitlania sajica` olarak 150 litre/90 cm, çift, orta akıntı ve üreme bölgeciliği uyarılarıyla ayrı profile eklendi.
+- 26 başlığın 24'ü doğrulanmış profile bağlıdır. `Apistogramma commbrae` güvenilir tür bazlı minimum akvaryum eşiği tamamlanmadığı için, `Ocellaris Peacock Bass` ise 74 cm'lik dev avcı için litre ile fiziksel uzunluk eşiği aynı güvenilirlik düzeyinde tamamlanmadığı için tahminle eşleştirilmedi.
+- Tam `pnpm verify` başarılı: TypeScript, 26 başlıklı Cüce Cikletler regresyonu dahil katalog akışı, 35 sağlık senaryosu, kaynak/bakım denetimi ve 14 sayfalık üretim derlemesi geçti. Cichlid grubu 65 kaynaklı ve bakım verisi tam profile ulaştı.
+- GitHub/Vercel'e gönderim yapılmadı. Sonraki tek iş: sıradaki eksik Tropheus/Tanganika canlı kategorilerini aynı yöntemle denetlemek.
+
+## 2026-08-29 Cikletist Tropheus/Tanganyika — kategori tamamlandı
+
+- Kategorideki 5 güncel satış başlığının tamamı regresyon envanterine alındı; 4 başlık doğrulanmış bilimsel/bakım profiline bağlandı.
+- `İkola Kaiser Tropheus` ve `Tropheus Black Kriza` için ayrı, kaynaklı profiller eklendi. `Kiriza Gold`, ayrı tür gibi çoğaltılmadan Kiriza'nın üretim renk formuna bağlandı; `Demasoni Balıkları` mevcut bilimsel profile eşlendi.
+- Yerel mağaza yalnızca Türkçe satış başlıklarını karşılaştırmak için kullanıldı. Kimlik ve bakım eşikleri Ciklid.org, Cichlid Room Companion, Fishkeeper, Zoopet ve hakemli Tropheus taksonomi çalışmasıyla doğrulandı.
+- `Tropheus Red Belly` ticari adı birden fazla doğal form/melez için kullanılabildiğinden tahminle eşleştirilmedi ve güvenli biçimde çözülmemiş bırakıldı.
+- Tam `pnpm verify` başarılı: TypeScript, 5 başlıklı Tropheus/Tanganyika regresyonu dahil katalog akışı, 35 sağlık senaryosu, kaynak/bakım denetimi ve 14 sayfalık üretim derlemesi geçti. Cichlid kataloğu 67 kaynaklı ve bakım verisi tam profile ulaştı.
+- GitHub/Vercel'e gönderim yapılmadı. Sonraki tek iş: sıradaki eksik canlı kategorisini aynı güvenli kaynak yöntemiyle denetlemek.
+
+## 2026-08-29 GitHub devir hazırlığı — katalog kapasite ve canlı paketi
+
+- Görev dalı: `codex/catalog-capacity-batch`. GitHub'da bu paketle ilişkilendirilmiş açık bir Issue bulunmadı; mevcut dal korunarak devredilecek.
+- Devir kapsamı yalnızca `PROJECT_STATUS.md`, `docs/DATA_SOURCES.md`, katalog denetim ve regresyon betikleri ile `src/data/` altındaki canlı katalog dosyalarıdır.
+- Kullanıcıya ait izlenmeyen `Codex Görseli 27 Ağu 2026 02_52_04.png` dosyası kapsam dışıdır ve commit'e eklenmeyecektir.
+- Son doğrulama ve uzak commit bilgisi push tamamlandıktan sonra devir mesajında bildirilecektir.
+- `main` birleştirmesi ve Vercel yayını bu devir kapsamında değildir. Canlı uygulama `https://aqua-mind-three.vercel.app/` bu yerel katalog paketini henüz içermez.
