@@ -89,3 +89,80 @@ Bu komut TypeScript, katalog akışı, sağlık senaryoları, katalog denetimi v
 - Güncel devir noktası: `PROJECT_STATUS.md`
 - İnsan çalışma akışı: `CONTRIBUTING.md`
 - Görev ve devir şablonları: `docs/HANDOFF.md`
+
+## Mimari yönetişim
+
+Bu bölüm `docs/ARCHITECTURE.md`, `docs/DATABASE.md`, `docs/SECURITY.md` ve
+`docs/COMPATIBILITY.md` belgeleriyle birlikte okunur. Çelişki varsa kullanıcı
+talebi, sonra bu dosya, sonra ilgili belge geçerlidir.
+
+### Asla
+
+- Mimariyi sessizce değiştirme. Paket sınırlarını, veri modelini veya depolama
+  katmanını değiştiren her iş önce `docs/DECISIONS/` altında kısa bir karar
+  kaydı ister.
+- Yetkilendirmeyi atlama. Arayüzde gizlemek yetki değildir. Her kullanıcı verisi
+  tablosu veritabanı seviyesinde (RLS) politikaları ve testleri olmadan üretime
+  çıkmaz.
+- Gizli anahtar açığa çıkarma. `service_role`, yapay zekâ sağlayıcı anahtarları
+  ve ödeme anahtarları yalnızca sunucu tarafında kalır; `NEXT_PUBLIC_*` altına
+  veya mobil pakete girmez. Depoya `.env.example` dışında ortam dosyası eklenmez.
+- Uyumluluk puanını yapay zekâya hesaplatma. Puan, alt puanlar ve bulgular
+  yalnızca `packages/compatibility-engine` içindeki deterministik ve testli
+  motordan gelir. Yapay zekâ yalnızca açıklama üretir.
+- Tarihsel veriyi gereksiz yere yok etme. Canlı, bitki, ekipman, ölçüm, bakım ve
+  sahiplik kayıtları silinmez; durum değişikliğiyle kapatılır. Akvaryum silme
+  yumuşak silmedir ve kurtarma süresi vardır.
+- Kesin konum açığa çıkarma. Kullanıcının tam koordinatı yalnızca kendisine
+  görünür. Keşif ve harita özellikleri yalnızca yaklaşık hücre tablosunu kullanır.
+- Gerekçesiz bağımlılık ekleme. Yeni çalışma zamanı bağımlılığı, çözdüğü sorun ve
+  değerlendirilen alternatif yazılmadan eklenmez. Görev gerektirmedikçe sürüm
+  yükseltilmez.
+- Üretim şemasını elle değiştirme. Her şema değişikliği `supabase/migrations/`
+  altında sürümlü bir dosyadır. Supabase panelinden veya SQL editöründen üretimde
+  doğrudan değişiklik yapılmaz. Yapay zekâ araçları üretim verisine bağlanmaz.
+- Çekirdek alan tanımlarını çoğaltma. Alan tipleri ve doğrulama şemaları
+  `packages/domain` içinde tek yerde tanımlanır; uygulamalar içe aktarır,
+  kopyalamaz.
+- Kaynak bilgisini kaybetme. Mevcut `sourceUrl` ve `verifiedAt` değerleri
+  değiştirilmez, silinmez ve yeniden üretilmez. Güven veya doğrulama durumu
+  uydurulmaz; bilinmiyorsa boş bırakılır.
+
+### Her zaman
+
+- Önce mevcut mimariyi incele. İlgili paket, belge ve testleri okumadan tasarım
+  önerme.
+- Çalışan davranışı koru. `pnpm verify`, mevcut `localStorage` davranışı ve
+  katalog testleri geçmeye devam eder. Bir davranışı kaldırmak ayrı ve onaylı
+  bir görevdir.
+- Şema değişikliğinde migration kullan ve migration'ı yerel Supabase üzerinde
+  çalıştırarak doğrula.
+- Kritik davranışı test et. Uyumluluk motoru, RLS yetki matrisi, sahiplik devri,
+  ortak roller ve tarihsel bütünlük değişiklikleri testsiz teslim edilmez.
+- İlgili belgeyi aynı görevde güncelle. Mimari, veritabanı, güvenlik veya motor
+  değişince ilgili `docs/` belgesi de değişir.
+- Önemli mimari değişikliği açıkla. Neden, alternatifler ve geri alma yolu karar
+  kaydında yazılır.
+- Basit tut. 1k–10k kullanıcı için yeterli en yalın çözümü seç. Kubernetes,
+  Kafka, mikroservis ve önbellek katmanı gibi altyapılar ölçülmüş bir ihtiyaç
+  olmadan eklenmez.
+- Kaynak izini koru. Yeni bilgi kaydı `sourceUrl`, `verifiedAt` ve doğrulama
+  yöntemiyle gelir.
+- Tarihsel bütünlüğü koru. Geçmiş kayıtları etkileyen her değişiklikte "eski
+  kayıtlar ne olur?" sorusu görev özetinde yanıtlanır.
+
+### Depo düzeni
+
+- Web uygulaması depo kökündedir (`src/`). Paylaşılan kod `packages/` altındadır.
+  Uygulamayı `apps/web` altına taşımak ayrı bir onaylı görevdir.
+- `packages/domain`: alan tipleri, doğrulama şemaları ve yerel dışa aktarma biçimi.
+- `packages/compatibility-engine`: deterministik uyumluluk motoru ve testleri.
+- `src/data/`: katalog verisi. Şimdilik yerinde kalır.
+- `supabase/`: migration, fonksiyon ve politika dosyaları. Phase 1 ile oluşur.
+
+### Ortamlar
+
+- `development`: yerel Supabase (CLI) ve `.env.local`.
+- `staging`: ayrı Supabase projesi ve Vercel önizleme ortamı.
+- `production`: ayrı Supabase projesi. Yalnızca kullanıcı onayıyla ve migration
+  üzerinden değişir.

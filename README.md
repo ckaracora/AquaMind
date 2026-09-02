@@ -24,8 +24,11 @@ Ardından `http://localhost:3000` adresini açın.
 ```bash
 pnpm typecheck
 pnpm build
+pnpm test
 pnpm verify
 ```
+
+`pnpm verify`; tip denetimi, katalog akışı ve sağlık senaryosu betikleri, katalog denetimi, Vitest paket testleri ve üretim derlemesini sırayla çalıştırır. Depo düzeni için `docs/ARCHITECTURE.md` dosyasına bakın.
 
 ## Ortak geliştirme
 

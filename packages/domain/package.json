@@ -1,0 +1,18 @@
+{
+  "name": "@aquamind/domain",
+  "version": "0.1.0",
+  "private": true,
+  "description": "AquaMind paylaşılan alan tipleri, çalışma zamanı doğrulama şemaları ve yerel dışa aktarma biçimi",
+  "main": "./src/index.ts",
+  "types": "./src/index.ts",
+  "exports": {
+    ".": {
+      "types": "./src/index.ts",
+      "default": "./src/index.ts"
+    }
+  },
+  "sideEffects": false,
+  "dependencies": {
+    "zod": "^4.5.4"
+  }
+}
