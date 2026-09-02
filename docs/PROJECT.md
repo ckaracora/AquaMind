@@ -29,7 +29,9 @@ AquaMind, akvaryum hobisindeki günlük yönetimi tek yerde toplayan mobil önce
 - Yayın: GitHub bağlantılı Vercel projesi
 - Katalog: `src/data/` altındaki sürüm kontrollü TypeScript dosyaları
 - Kullanıcı verisi: `src/lib/aquarium-storage.ts` üzerinden tarayıcı `localStorage`
-- Sağlık değerlendirmesi: `src/lib/health-analysis.ts`
+- Sağlık değerlendirmesi: `packages/compatibility-engine` içindeki deterministik motor, `src/lib/health-analysis.ts` uyarlayıcısı üzerinden
+- Paylaşılan alan tipleri ve doğrulama şemaları: `packages/domain` (uygulama `src/types/aquarium.ts` köprüsüyle kullanır)
+- Paket testleri: Vitest (`pnpm test`); doğrulama betikleri ve derleme ile birlikte `pnpm verify`
 
 ## Planlanan mimari
 
@@ -38,4 +40,5 @@ AquaMind, akvaryum hobisindeki günlük yönetimi tek yerde toplayan mobil önce
 - Row Level Security ile kullanıcı verisi ayrımı
 - Onaylı katalog verisi için kontrollü içe aktarma süreci
 - Görseller için hakları doğrulanmış depolama veya kaynak bağlantısı
+- Ayrıntılı hedef mimari, veritabanı evrimi, güvenlik sınırları ve motor sözleşmesi: `docs/ARCHITECTURE.md`, `docs/DATABASE.md`, `docs/SECURITY.md`, `docs/COMPATIBILITY.md`; kararlar `docs/DECISIONS/`
 

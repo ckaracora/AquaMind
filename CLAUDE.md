@@ -1,6 +1,6 @@
 # Claude Code çalışma talimatı
 
-Önce `AGENTS.md`, `PROJECT_STATUS.md`, `CONTRIBUTING.md`, `docs/PROJECT.md` ve `docs/DATA_SOURCES.md` dosyalarının tamamını oku. Çelişki varsa kullanıcı talebi, ardından `AGENTS.md` önceliklidir.
+Önce `AGENTS.md`, `PROJECT_STATUS.md`, `CONTRIBUTING.md`, `docs/PROJECT.md`, `docs/DATA_SOURCES.md`, `docs/ARCHITECTURE.md` ve `docs/COMPATIBILITY.md` dosyalarının tamamını oku. Çelişki varsa kullanıcı talebi, ardından `AGENTS.md` önceliklidir.
 
 ## Varsayılan rolün
 
