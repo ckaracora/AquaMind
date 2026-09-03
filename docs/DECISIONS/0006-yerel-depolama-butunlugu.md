@@ -1,7 +1,7 @@
 # 0006 — Yerel depolama bütünlüğü: karantina, kaydetme askısı ve günlüklü silme
 
 - Tarih: 2026-09-03
-- Durum: Önerildi — Issue #8, `codex/local-storage-integrity` dalında; Codex yeniden denetimi ve kullanıcı onayı bekliyor. `main` dalına birleştirilene kadar kabul edilmiş sayılmaz
+- Durum: Kabul edildi (Issue #8) — PR #9 ile `main` dalına squash merge edildi (`76cabd2`, 2026-09-03). Codex denetimi temiz geçti; GitHub Actions `Doğrulama` ve Vercel üretim dağıtımı başarılı, canlı uygulama bu değişikliği içeriyor ve Issue #8 kapandı
 
 ## Bağlam
 
@@ -58,6 +58,6 @@ Ana koleksiyonlar yalnızca geçerli ve yetim olmayan kullanıcı verisini taş�
 ## Sonuçlar
 
 - Zod, doğrulama artık uygulamada kullanıldığı için istemci paketine girdi: ilk yükleme JS'i sayfa başına yaklaşık 26 kB arttı (`/settings` 110 → 138 kB, `/livestock` 188 → 214 kB). Veri bütünlüğü karşılığında kabul edilen bilinçli maliyet; ölçüm `PROJECT_STATUS.md` içinde kayıtlı.
-- `:v1` anahtar adları ve JSON biçimi değişmedi. Dal geri alınırsa eski kod aynı veriyi okumaya devam eder; yeni anahtarlar (`:corrupt:*`, `deleted-aquariums`, `journal`) eski sürümce yok sayılır.
+- `:v1` anahtar adları ve JSON biçimi değişmedi. Değişiklik geri alınırsa eski kod aynı veriyi okumaya devam eder; yeni anahtarlar (`:corrupt:*`, `deleted-aquariums`, `journal`) eski sürümce yok sayılır.
 - Silinen akvaryumlar için geri yükleme arayüzü yok; veri korunuyor, arayüz sonraki bir iştir.
 - Phase 1'deki "yerel verileri içe aktar" akışı artık doğrulanmış, yetimsiz ve demo içermeyen bir yedekle başlayabilir.

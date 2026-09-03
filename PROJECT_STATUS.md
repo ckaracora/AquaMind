@@ -5,12 +5,12 @@ Son güncelleme: 2026-09-03
 ## Doğrulanmış temel
 
 - GitHub: `https://github.com/ckaracora/AquaMind`
-- Ana dal: `main` (uzak ucu `258b600a8fd68eebb04c63d341626d98ee1eb774`, PR #6 squash merge). Yerel `main`, 2026-09-02'de `git pull --ff-only` ile `origin/main` ile senkronize edildi
+- Ana dal: `main` (uzak ucu `76cabd2f7fe5aab3a03b1bce4a7dd1d8f4dee8fa`, PR #9 squash merge). Yerel `main`, 2026-09-03'te `git pull --ff-only` ile `origin/main` ile senkronize edildi
 - Başlangıç commit'i: `7d8fb01 fix: approve sharp build dependency`
-- Canlı uygulama: `https://aqua-mind-three.vercel.app/` (Phase 0B değişikliklerini içeriyor; `main` merge sonrası Vercel üretim dağıtımı 2026-09-02'de tamamlandı)
+- Canlı uygulama: `https://aqua-mind-three.vercel.app/` (Phase 0B ve Issue #8 değişikliklerini içeriyor; `76cabd2` için Vercel üretim dağıtımı 2026-09-03'te `success` durumuyla tamamlandı, site HTTP 200 döndürdü ve yeni derlemeyi sunuyor. Tarayıcıda arayüz kontrolü ayrıca yapılmadı)
 - Görev panosu: `https://github.com/users/ckaracora/projects/1`
 - Teknoloji: Next.js 15, React 19, TypeScript, Tailwind CSS, pnpm 11.11.0 çalışma alanı, Vitest
-- `pnpm verify`: 2026-09-02 tarihinde `codex/phase-0b-foundation` dalında yerelde başarılı (tip denetimi, katalog akışı, 35 sağlık senaryosu, katalog denetimi, 19 Vitest testi, üretim derlemesi); Corepack üzerinden tam olarak pnpm 11.11.0 ile de doğrulandı (`corepack pnpm verify`). GitHub Actions `Doğrulama` workflow'u PR #5 üzerinde ve `main` push'unda başarılı
+- `pnpm verify`: 2026-09-03 tarihinde `codex/issue-8-closeout` dalında (taban `76cabd2`) yerelde başarılı (tip denetimi, katalog akışı, 35 sağlık senaryosu, katalog denetimi, 114 Vitest testi, üretim derlemesi); Corepack üzerinden tam olarak pnpm 11.11.0 ile doğrulandı (`corepack pnpm verify`). GitHub Actions `Doğrulama` workflow'u PR #9 üzerinde ve `76cabd2` `main` push'unda başarılı (çalıştırma `33708095377`)
 - Arkadaş kurulumu: `buraksenfx` hesabı collaborator; Windows kopyasında kurulum ve tüm doğrulamalar başarılı
 
 ## Mevcut veri durumu
@@ -30,7 +30,7 @@ Son güncelleme: 2026-09-03
 - [x] GitHub görev şablonları, devir sistemi, etiketler ve ortak görev panosu etkinleştirildi
 - [x] GitHub Actions otomatik doğrulaması (Issue #2): PR #3 ile 2026-08-26'da `main` dalına birleştirildi; PR #5 ve `main` push'u üzerinde başarıyla çalıştığı 2026-09-02'de doğrulandı
 - [x] Phase 0B mimari temel (Issue #4): tamamlandı; PR #5 squash merge ile `main` dalına birleştirildi (`7e8d63b`), Issue #4 kapandı (aşağıda)
-- [ ] localStorage veri bütünlüğü (Issue #8): Codex denetimi temiz geçti; görev dalı GitHub'a gönderildi. Pull request ve `main` birleştirmesi henüz yapılmadı (aşağıda)
+- [x] localStorage veri bütünlüğü (Issue #8): tamamlandı; PR #9 squash merge ile `main` dalına birleştirildi (`76cabd2`), Issue #8 kapandı (aşağıda)
 - [ ] Ortak katalog araştırma tablosu hazırlanacak
 - [ ] Supabase tasarımı ve geçişi: tasarım belgesi hazır (`docs/DATABASE.md`, `docs/SECURITY.md`), uygulama Phase 1
 - [ ] İki bilgisayarlı devir provası yapılacak
@@ -58,12 +58,14 @@ Son güncelleme: 2026-09-03
 - Bilinen riskler: Vercel önizleme (PR #5) ve üretim (`main`) dağıtımları `packageManager` ve `transpilePackages` ile başarıyla derlendi; bu risk kapandı. `scripts/test-health.cjs` Vitest içinde alt süreç olarak da çalıştığı için `pnpm verify` bu betiği iki kez çalıştırır (yaklaşık 2 sn). GitHub, `actions/checkout@v4`, `actions/setup-node@v4` ve `pnpm/action-setup@v4` için Node 20 kullanımdan kaldırma uyarısı gösteriyor; başarısızlık değil, action sürümlerinin güncellenmesi ayrı bir görev.
 - Ayrı issue adayları (Phase 0B dışında bırakıldı): panodaki sabit yer tutucular, `next lint`, `AGENTS.md` "Zorunlu doğrulama" açıklamasına Vitest'in eklenmesi, `engines` alanı, GitHub Actions action sürümlerinin güncellenmesi (Node 20 uyarısı). `aquarium-storage.ts` içindeki yetim alt kayıt ve bozuk anahtar davranışları Issue #8 ile giderildi.
 
-## Issue #8 — localStorage veri bütünlüğü (Codex denetimi temiz; devre hazır, henüz gönderilmedi)
+## Issue #8 — localStorage veri bütünlüğü (tamamlandı)
 
 - Issue: `https://github.com/ckaracora/AquaMind/issues/8`
-- Dal: `codex/local-storage-integrity` (GitHub'a gönderildi); taban `258b600` = `origin/main`
-- Durum: uygulama ve Codex bulgularının düzeltmesi yerelde bitti. Codex denetimi (4. tur) temiz geçti; iş kullanıcı onayıyla GitHub'a devredildi: değişiklikler commit edildi ve görev dalı push edildi. Yine de **tamamlanmış veya birleştirilmiş sayılmaz**: pull request açılmadı ve `main` birleştirmesi yapılmadı
-- Phase 1A (Issue #7) Docker engeli nedeniyle duraklatılmış durumda; dalına, issue'suna ve planına dokunulmadı
+- Dal: `codex/local-storage-integrity` (taban `258b600`); PR #9 (`https://github.com/ckaracora/AquaMind/pull/9`) ile squash merge edildi; `main` commit'i `76cabd2f7fe5aab3a03b1bce4a7dd1d8f4dee8fa`
+- Durum: tamamlandı (2026-09-03). Sıra: Codex denetimi (dört tur, sonuncusu temiz) → görev dalı GitHub'a gönderildi → PR #9 açıldı → GitHub Actions `Doğrulama` pull request üzerinde başarılı → kullanıcı onayıyla squash merge (`76cabd2`) → `main` push'unda `Doğrulama` yeniden başarılı → Vercel üretim dağıtımı `success` → Issue #8 otomatik kapandı (2026-09-03 02:33 UTC, PR gövdesindeki `Closes #8` ile)
+- Merge sonrası doğrulamalar: `main` push'u için `Doğrulama` çalıştırması `33708095377` başarılı (iş `pnpm verify`: success); `76cabd2` için Vercel birleşik durumu `success` ("Deployment has completed"); canlı site `https://aqua-mind-three.vercel.app/` HTTP 200 döndürdü ve Issue #8 değişikliklerini içeren `76cabd2` derlemesini sunuyor
+- Yerel depo: `main` dalı `git pull --ff-only` ile `origin/main` ile senkronize edildi (`76cabd2`); `codex/local-storage-integrity` dalı yerelde ve uzakta korunuyor (silinmedi); bu durum kapanışı `codex/issue-8-closeout` dalında hazırlandı, commit edildi ve `origin/codex/issue-8-closeout` olarak GitHub'a push edildi. Pull request açılmadı ve `main` birleştirmesi yapılmadı
+- Phase 1A (Issue #7) **hâlâ beklemede**: bu Windows bilgisayarında Docker Desktop kurulu değil ve sanallaştırma BIOS/UEFI'de kapalı (Gigabyte B450M H: `Del` → `F2` → M.I.T. → Advanced CPU Core Settings → **SVM Mode**). BIOS ayarı kullanıcı tarafından açılmadan yerel Supabase başlatılamaz. Issue #7'nin dalına, issue'suna ve planına dokunulmadı
 - Yapılanlar:
   - Adım 0: kod değişmeden koruyucu (regresyon) testleri yazıldı; geçerli veri gidiş-dönüşü, eksik anahtarda fallback, sunucu tarafı davranışı, anahtar adları, bilinmeyen ek alanların korunması ve `calculateGrossVolume` sabitlendi. `vitest.config.mts` include deseni `src/**/*.test.ts` kapsayacak şekilde genişletildi; yeni test bağımlılığı eklenmedi
   - Güvenli yükleme: altı koleksiyon ve tercihler `packages/domain` Zod şemalarıyla doğrulanıyor. Bozuk değer demo/varsayılan ile ASLA üzerine yazılmıyor; ham değer `<anahtar>:corrupt:<ISO>` altına kopyalanıyor ve birincil anahtar yalnızca kopya yazılabildiyse onarılıyor. Kısmen bozuk koleksiyonda geçerli satırlar korunuyor; doğrulamadan geçen satırlar orijinal nesneler olduğu için bilinmeyen ek alanlar kaybolmuyor
@@ -84,7 +86,7 @@ Son güncelleme: 2026-09-03
 - Codex denetimi (2. tur) bulguları ve düzeltmeleri:
   - **P1 — kaydedilemeyen kullanıcı verisi:** `saveX` sonuçları artık yok sayılmıyor. Saf ve test edilebilir iki koordinasyon fonksiyonu eklendi: `persistCollection(collection, rows)` (`saved` | `blocked-journal` | `blocked-suspended` | `failed` | `unavailable`) ve `checkMutationGate()`. Aktif günlük varken veri değiştiren işlemler **state'e hiç dokunmadan** reddediliyor. Kota hatasında değişiklik bellekte kalıyor ama sessiz kalınmıyor: `unsavedCollections` işaretleniyor ve `AppShell` içindeki yeni `StorageWarning` bileşeni kullanıcıya değişikliğin bu cihazda saklanmadığını, yenilemede kaybolacağını ve Ayarlar → Verileri dışa aktar ile yedek alabileceğini söylüyor.
   - **P2 — silinmiş akvaryum arşivi:** bozuk arşiv karantinaya güvenle alındıktan sonra ana anahtar geçerli satırlarla onarılıyor (ayrıştırılamayan arşiv boşaltılıyor), böylece aynı bozuk değer her yüklemede yeni karantina kopyası üretmiyor. Karantina yazılamazsa arşiv aynen korunuyor.
-  - **P2 — belgeler:** `docs/DATABASE.md`, `docs/DECISIONS/0006` ve `docs/ARCHITECTURE.md` Issue #8'i "Codex yeniden denetimi bekliyor" olarak gösteriyor; hiçbir belgede tamamlandı ifadesi yok.
+  - **P2 — belgeler:** merge öncesinde `docs/DATABASE.md`, `docs/DECISIONS/0006` ve `docs/ARCHITECTURE.md` Issue #8'i "Codex yeniden denetimi bekliyor" olarak gösterecek şekilde güncellendi; o aşamada hiçbir belgede tamamlandı ifadesi yoktu. Merge sonrasındaki gerçek durum aşağıdaki "Merge sonrası belge düzeltmesi" satırında yazılıdır.
   - **Kapsam notu:** P1'in "kullanıcıya açıkça bildir" gereği bir arayüz yüzeyi gerektirdiği için `src/components/app-shell.tsx` içine tek satırlık `<StorageWarning/>` eklendi ve `src/components/storage-warning.tsx` oluşturuldu. Bu iki dosya önceki turun dokunulmayacaklar listesindeydi; denetimde ayrıca değerlendirilmeli.
 - Codex denetimi (3. tur) bulguları ve düzeltmeleri:
   - **P2 — açılışta yarım günlük uyarısı:** hidrasyonda `recoverPendingJournal()` sonrası `hasPendingJournal()` sonucu `writeBlocked` olarak kullanılıyor; toparlama başarısız kaldıysa `StorageWarning` kullanıcı hiçbir işlem denemeden görünüyor, başarılı toparlamada görünmüyor. Uyarı metni her iki bağlama uyacak şekilde düzeltildi. Beş senaryo için test eklendi (günlük yok, başarılı toparlama, toparlanamadı, bozuk günlük karantinaya alındı, karantinaya alınamadı).
@@ -97,17 +99,21 @@ Son güncelleme: 2026-09-03
 - `src/components/` açık istisnası: Codex 2. tur P1 bulgusundaki "kullanıcıya açıkça bildir" gereği bir arayüz yüzeyi gerektirdiği için iki dosya kapsama alındı — `src/components/app-shell.tsx` (tek satır: `<StorageWarning/>` eklendi) ve yeni `src/components/storage-warning.tsx`. `src/components/` altındaki diğer dosyalar (sidebar, mobile-nav, page-header, parameter-card, catalog-livestock-form) değişmedi. Bu istisna denetimde ayrıca değerlendirilmelidir.
 - Geri alma: `aquamind:*:v1` anahtar adları ve JSON biçimi değişmediği için dal geri alındığında eski kod aynı veriyi okumaya devam eder. Yeni anahtarlar (`:corrupt:*`, `deleted-aquariums`, `journal`) eski sürümce yok sayılır
 - Bilinen riskler: zod nedeniyle paket büyümesi (yukarıda ölçüldü); silinen akvaryumlar için geri yükleme arayüzü yok (veri korunuyor, arayüz ayrı iş); tam çoklu-sekme eşzamanlılığı kapsam dışı, yalnızca aktif günlük görüldüğünde yazma engelleniyor
+- Merge sonrası belge düzeltmesi (aynı dalda yapıldı): `docs/DECISIONS/0006-yerel-depolama-butunlugu.md` durumu "Önerildi" yerine **"Kabul edildi (Issue #8) — PR #9 ile `main` dalına squash merge edildi (`76cabd2`)"** oldu; `docs/ARCHITECTURE.md` tarayıcı deposu bölümündeki "`main` dalında henüz yoktur" notu merge ve yayın gerçeğiyle değiştirildi; `docs/DATABASE.md` madde 1b "Codex yeniden denetimi bekliyor" yerine "tamamlandı — PR #9 ile birleştirildi" oldu
+
 ## Sıradaki tek iş
 
-Issue #8 için kullanıcı onayıyla `codex/local-storage-integrity` dalından `main` hedefli pull request açmak, GitHub Actions `Doğrulama` kontrolünün pull request üzerinde başarılı çalıştığını görmek ve kullanıcı onayıyla `main` dalına birleştirmek. Codex denetimi temiz geçti, `corepack pnpm verify` başarılı ve dal GitHub'a gönderildi. Vercel yayını ayrıca istenir. Phase 1A (Issue #7) Docker kurulumu beklemeye devam eder.
+Bu merge sonrası durum kapanışının Codex tarafından denetlenmesi ve kullanıcı onayı. Dal: `codex/issue-8-closeout` (GitHub'a push edildi); değişen dosyalar `PROJECT_STATUS.md`, `docs/ARCHITECTURE.md`, `docs/DATABASE.md`, `docs/DECISIONS/0006-yerel-depolama-butunlugu.md`. Pull request, `main` birleştirmesi, Vercel yayını ve dal silme yapılmadı.
+
+Ardından Phase 1A (Issue #7) — **engelli**: Docker Desktop kurulu değil ve BIOS/UEFI'de SVM Mode kapalı. Kullanıcı BIOS ayarını açıp Docker Desktop'ı kurana kadar bekliyor; bu iş için başka bir hazırlık yapılmayacak.
 
 ## Oturum sonu devir şablonu
 
-- Yapılan görev: Issue #8 localStorage veri bütünlüğü; Codex 1. tur (demo takibi, karantina başarısızlığında durma, tercih kaydetme hatası), 2. tur (kaydetme koordinasyonu ve kullanıcı uyarısı, arşiv onarımı, belge ifadeleri) ve 3. tur (açılışta yarım günlük uyarısı, durum belgesi doğruluğu) bulgularının düzeltmesi; 4. tur denetim temiz
-- Değişen dosyalar: `src/lib/aquarium-storage.ts`, `src/providers/aquarium-provider.tsx`, `src/app/settings/page.tsx`, `packages/domain/src/{index,local-export}.ts`, `src/components/app-shell.tsx`, `vitest.config.mts`, `docs/ARCHITECTURE.md`, `docs/DATABASE.md`, `PROJECT_STATUS.md`; yeni: `packages/domain/src/{preferences,local-storage}.ts`, `src/components/storage-warning.tsx`, `src/lib/__tests__/{fake-local-storage.ts,aquarium-storage.baseline.test.ts,aquarium-storage.integrity.test.ts,aquarium-storage.demo.test.ts}`, `docs/DECISIONS/0006-yerel-depolama-butunlugu.md`
-- Çalıştırılan kontroller: her adımdan sonra `corepack pnpm verify` ve `pnpm test` (son durumda 114 test); `git diff --check`; korunan yolların değişmediğinin doğrulanması; üretim derlemesi ve paket boyutu karşılaştırması
+- Yapılan görev: Issue #8 merge sonrası durum temizliği ve belge düzeltmesi. PR #9 squash merge ile `main` dalına birleştirildi (`76cabd2`), `main` push'unda GitHub Actions `Doğrulama` ve Vercel üretim dağıtımı başarılı, Issue #8 kapandı. Yerel `main`, `git pull --ff-only` ile senkronize edildi, `codex/issue-8-closeout` dalı açıldı ve üç belgedeki "denetim bekliyor / `main` içinde değil / Önerildi" ifadeleri merge sonrası gerçek durumla değiştirildi
+- Değişen dosyalar: `PROJECT_STATUS.md`, `docs/ARCHITECTURE.md`, `docs/DATABASE.md`, `docs/DECISIONS/0006-yerel-depolama-butunlugu.md` (yalnızca belge; kod, katalog, betik, workflow ve diğer belgeler değişmedi)
+- Çalıştırılan kontroller: çalışma ağacı temizliği, `git fetch origin`, `origin/main` = `76cabd2` doğrulaması, `git pull --ff-only`, `corepack pnpm verify` (114 Vitest testi dahil)
 - Sonuç: tümü başarılı
 - Bilinen hata veya risk: yukarıdaki "Bilinen riskler"
-- GitHub'a gönderildi mi: Evet, `codex/local-storage-integrity` dalı (pull request açılmadı, `main` birleştirilmedi)
-- Vercel'e yayımlandı mı: Hayır. Canlı uygulama (`https://aqua-mind-three.vercel.app/`) Issue #8 değişikliklerini içermiyor
-- Sonraki tek iş: kullanıcı onayıyla pull request ve `main` birleştirmesi (yukarıda)
+- GitHub'a gönderildi mi: Evet. Issue #8 çalışması PR #9 ile `main` dalına birleştirildi; bu durum kapanışı ise `codex/issue-8-closeout` görev dalı olarak push edildi (pull request açılmadı, `main` birleştirilmedi)
+- Vercel'e yayımlandı mı: Evet. `76cabd2` için üretim dağıtımı `success` ve canlı uygulama (`https://aqua-mind-three.vercel.app/`) Issue #8 değişikliklerini içeriyor
+- Sonraki tek iş: bu kapanış dalının Codex denetimi ve kullanıcı onayı (yukarıda)
