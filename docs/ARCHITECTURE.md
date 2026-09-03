@@ -35,7 +35,7 @@ Kural: paketler uygulamaya (`src/`) bağımlı olamaz. Uygulama paketlere bağı
 
 ### Tarayıcı deposu (yerel kullanıcı verisi)
 
-> Bu bölüm Issue #8'in `codex/local-storage-integrity` dalındaki durumunu anlatır. Değişiklik Codex yeniden denetimi ve kullanıcı onayı bekliyor; `main` dalında henüz yoktur.
+> Bu bölüm Issue #8 ile gelen davranışı anlatır. Değişiklik PR #9 ile `main` dalına birleştirildi (`76cabd2`, 2026-09-03); GitHub Actions `Doğrulama` ve Vercel üretim dağıtımı başarılı olduğu için canlı uygulamada da yayındadır.
 
 Kullanıcı verisi hâlâ tarayıcı `localStorage` alanındadır; anahtar adları ve JSON biçimi (`aquamind:*:v1`) geriye uyumluluk için değişmemiştir. `src/lib/aquarium-storage.ts` üç güvence sağlar (ayrıntı: `docs/DECISIONS/0006-yerel-depolama-butunlugu.md`):
 
@@ -118,7 +118,7 @@ Web'de `localStorage` hesap öncesi dönemde birincil depo olarak kalır; hesapl
 | Phase | İçerik | Durum |
 |---|---|---|
 | 0A | Depo denetimi ve mimari plan | Tamamlandı (2026-09-01) |
-| 0B | Workspace, `packages/domain`, `packages/compatibility-engine`, Vitest, belgeler, yönetişim | Bu belge; yerelde tamamlandı, Codex incelemesi bekliyor |
+| 0B | Workspace, `packages/domain`, `packages/compatibility-engine`, Vitest, belgeler, yönetişim | Tamamlandı (2026-09-02); PR #5 ile `main` dalına squash merge edildi (`7e8d63b`), GitHub Actions `Doğrulama` ve Vercel üretim dağıtımı başarılı, Issue #4 kapandı |
 | 1 | Yerel Supabase, çekirdek şema ve RLS, politika testleri, kimlik doğrulama (e-posta, Google), yerel veri içe aktarımı, plan/olay ayrımı, kalıcı uyumluluk hesaplamaları, staging | Planlanan |
 | 2 | Expo uygulaması, web'in `apps/web` altına taşınması, `packages/knowledge`, çevrimdışı önbellek | Planlanan |
 | 3 | Sosyal, yapay zekâ geçidi, AquaMap, abonelikler, yönetici uygulaması | Planlanan |
