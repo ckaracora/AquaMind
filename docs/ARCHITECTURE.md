@@ -1,6 +1,6 @@
 # AquaMind mimarisi
 
-Son güncelleme: 2026-09-02 (Phase 0B). Bu belge iki bölümden oluşur: **mevcut yapı** (depoda bugün olan) ve **hedef mimari** (planlanan, henüz uygulanmamış). Planlanan kısımlar tamamlanmış gibi gösterilmez.
+Son güncelleme: 2026-09-03 (Issue #8 — yerel depolama bütünlüğü). Bu belge iki bölümden oluşur: **mevcut yapı** (depoda bugün olan) ve **hedef mimari** (planlanan, henüz uygulanmamış). Planlanan kısımlar tamamlanmış gibi gösterilmez.
 
 ## Mevcut yapı (Phase 0B sonrası)
 
@@ -12,7 +12,7 @@ Depo, kökünde çalışan Next.js 15 web uygulamasını barındıran bir pnpm �
 | `src/data/` | Canlı, ekipman ve bakım ürünü katalogları; içe aktarma anı bütünlük denetimleri | Yerinde kaldı, tek bayt değişmedi |
 | `src/types/aquarium.ts` | Tip köprüsü: aynı adları `@aquamind/domain` üzerinden yeniden dışa aktarır | 13 tüketici değişmeden çalışır |
 | `src/lib/health-analysis.ts` | Uyarlayıcı: kataloğu motora bağlar ve `analyzeAquarium`'u aynı imzayla dışa aktarır | Sağlık sayfası ve `scripts/test-health.cjs` bu yolu kullanır |
-| `packages/domain` | `@aquamind/domain`: alan tipleri, Zod şemaları, `LocalExportV1` | Şemalar yalnızca test ve gelecekteki içe/dışa aktarma sınırı içindir; `localStorage` davranışına bağlı değildir |
+| `packages/domain` | `@aquamind/domain`: alan tipleri, Zod şemaları, tercihler, depo anahtarları ve günlük/arşiv şemaları, `LocalExportV1` | Şemalar uygulamada kullanılıyor: `src/lib/aquarium-storage.ts` yüklemeyi ve dışa aktarmayı bunlarla doğruluyor. Bu nedenle zod istemci paketine dahildir |
 | `packages/compatibility-engine` | `@aquamind/compatibility-engine`: deterministik uyumluluk/sağlık motoru, `createAnalyzer(resolver)` | Kataloğu içe aktarmaz; bilgiye `KnowledgeResolver` ile ulaşır |
 | `scripts/` | CommonJS doğrulama betikleri (katalog akışı, sağlık senaryoları, katalog denetimi) | Değişmedi; `pnpm verify` içinde kalır |
 | `vitest.config.mts` | Vitest yapılandırması; `packages/**/*.test.ts` | `@` takma adı `src/` hedefler |
@@ -32,6 +32,18 @@ scripts/*.cjs ─► src/data, src/lib/health-analysis.ts (kendi TS yükleyicile
 ```
 
 Kural: paketler uygulamaya (`src/`) bağımlı olamaz. Uygulama paketlere bağımlıdır. Katalog bugün `src/data` içinde olduğu için motor kataloğa değil, uyarlayıcının verdiği çözümleyiciye bağlıdır.
+
+### Tarayıcı deposu (yerel kullanıcı verisi)
+
+> Bu bölüm Issue #8'in `codex/local-storage-integrity` dalındaki durumunu anlatır. Değişiklik Codex yeniden denetimi ve kullanıcı onayı bekliyor; `main` dalında henüz yoktur.
+
+Kullanıcı verisi hâlâ tarayıcı `localStorage` alanındadır; anahtar adları ve JSON biçimi (`aquamind:*:v1`) geriye uyumluluk için değişmemiştir. `src/lib/aquarium-storage.ts` üç güvence sağlar (ayrıntı: `docs/DECISIONS/0006-yerel-depolama-butunlugu.md`):
+
+- **Doğrulama ve karantina.** Yükleme `packages/domain` içindeki Zod şemalarıyla doğrulanır. Bozuk veya şemaya uymayan değer asla demo/varsayılan ile değiştirilmez; ham değer `<anahtar>:corrupt:<ISO>` altına kopyalanır ve birincil anahtar yalnızca kopya yazılabildiyse onarılır. Kısmen bozuk koleksiyonda geçerli satırlar korunur.
+- **Kaydetme askısı ve aktif günlük koruması.** Normal `saveX()` çağrıları, modül içi askı bayrağı açıkken veya `aquamind:journal:v1` anahtarı varken fiziksel olarak yazamaz. Hidrasyon da askı altında yapılır; bu yüzden demo veri kalıcı olarak yazılmaz.
+- **Günlüklü silme.** `localStorage` transaction desteklemediği için akvaryum silme yazma öncesi günlükle yapılır: günlük (tam yük) → silinen akvaryum paketi (30 gün saklanır) → altı koleksiyon → günlük silinir. Yarıda kesilirse sonraki açılışta toparlama tamamlar; bağlı kayıtlar sessizce kaybolmaz.
+
+Ayarlar sayfasındaki JSON yedeği yapılandırılmıştır: ana koleksiyonlar yalnızca geçerli ve yetim olmayan kullanıcı verisini taşır; yetim kayıtlar, karantina değerleri ve silinen akvaryum paketleri ayrı bölümlerdedir. Aynı sayfada, kayıt içeriği göstermeyen bir kurtarma/karantina özeti bulunur.
 
 ### Paketlerin yayım biçimi
 

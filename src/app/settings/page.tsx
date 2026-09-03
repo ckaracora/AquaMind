@@ -1,19 +1,32 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import { Bell, Check, Database, Download, Globe2, Moon, Ruler, ShieldCheck, Trash2, UserRound } from "lucide-react";
+import { useEffect, useMemo, useState } from "react";
+import { AlertTriangle, Bell, Check, Database, Download, Globe2, Moon, Ruler, ShieldCheck, Trash2, UserRound } from "lucide-react";
+import { DEFAULT_PREFERENCES, type Preferences } from "@aquamind/domain";
 import { AppShell } from "@/components/app-shell";
 import { PageHeader } from "@/components/page-header";
+import { buildLocalExport, countOrphans, findOrphans, loadDeletedAquariums, loadPreferences, savePreferences } from "@/lib/aquarium-storage";
+import { useAquariums } from "@/providers/aquarium-provider";
 
-interface Preferences { temperature:"celsius"|"fahrenheit"; volume:"liters"|"gallons"; dateFormat:"day-first"|"month-first"; maintenance:boolean; waterAlerts:boolean; productNews:boolean; compactMode:boolean; }
-const defaults:Preferences={temperature:"celsius",volume:"liters",dateFormat:"day-first",maintenance:true,waterAlerts:true,productNews:false,compactMode:false};
 const input="mt-1.5 w-full rounded-xl border border-white/[.08] bg-[#09171e] px-3 py-3 text-sm outline-none focus:border-aqua/60";
 
 export default function SettingsPage(){
- const [prefs,setPrefs]=useState(defaults); const [saved,setSaved]=useState(false);
- useEffect(()=>{try{const data=localStorage.getItem("aquamind:preferences:v1");if(data)setPrefs(JSON.parse(data))}catch{}},[]);
- function save(){localStorage.setItem("aquamind:preferences:v1",JSON.stringify(prefs));setSaved(true);setTimeout(()=>setSaved(false),1800)}
- function exportData(){const data:Record<string,unknown>={exportedAt:new Date().toISOString(),version:1};for(let i=0;i<localStorage.length;i++){const key=localStorage.key(i);if(key?.startsWith("aquamind:")){try{data[key]=JSON.parse(localStorage.getItem(key)??"null")}catch{data[key]=localStorage.getItem(key)}}}const blob=new Blob([JSON.stringify(data,null,2)],{type:"application/json"});const url=URL.createObjectURL(blob);const a=document.createElement("a");a.href=url;a.download=`aquamind-yedek-${new Date().toISOString().slice(0,10)}.json`;a.click();URL.revokeObjectURL(url)}
+ // Yalnızca kalıcı kullanıcı verisi kullanılır; ekranda gösterilen demo kayıtlar
+ // yedeğe ve yetim sayımına girmez.
+ const {persistedSnapshot,storageIssues}=useAquariums();
+ const [prefs,setPrefs]=useState<Preferences>(DEFAULT_PREFERENCES); const [saved,setSaved]=useState(false); const [saveFailed,setSaveFailed]=useState(false); const [deletedCount,setDeletedCount]=useState(0);
+ // Bozuk tercih varsa karantinaya alınır ve bellekte varsayılanlar kullanılır;
+ // anahtarın üstüne yazılmaz. Yazma yalnızca kullanıcı "Ayarları kaydet" derse olur.
+ useEffect(()=>{setPrefs(loadPreferences());setDeletedCount(loadDeletedAquariums().length)},[]);
+ const orphanCount=useMemo(()=>countOrphans(findOrphans(persistedSnapshot)),[persistedSnapshot]);
+ const quarantined=storageIssues.filter(issue=>issue.quarantineKey);
+ const quarantineFailed=storageIssues.some(issue=>issue.kind==="quarantine-failed");
+ const deleteIncomplete=storageIssues.some(issue=>issue.kind==="delete-incomplete"||issue.kind==="delete-refused");
+ const hasRecoveryInfo=quarantined.length>0||quarantineFailed||deleteIncomplete||orphanCount>0||deletedCount>0;
+ // Kaydetme başarısız olabilir (depolama dolu veya yarım kalmış bir silme işlemi
+ // varken yazma engellidir). Bu durumda "Kaydedildi" GÖSTERİLMEZ.
+ function save(){const ok=savePreferences(prefs);setSaved(ok);setSaveFailed(!ok);if(ok)setTimeout(()=>setSaved(false),1800)}
+ function exportData(){const data=buildLocalExport(persistedSnapshot,prefs);const blob=new Blob([JSON.stringify(data,null,2)],{type:"application/json"});const url=URL.createObjectURL(blob);const a=document.createElement("a");a.href=url;a.download=`aquamind-yedek-${new Date().toISOString().slice(0,10)}.json`;a.click();URL.revokeObjectURL(url)}
  function reset(){if(!confirm("Tüm yerel AquaMind verileri silinsin mi? Bu işlem geri alınamaz."))return;Object.keys(localStorage).filter(k=>k.startsWith("aquamind:")).forEach(k=>localStorage.removeItem(k));location.reload()}
  return <AppShell><PageHeader title="Ayarlar"/><div className="mx-auto max-w-[980px] px-5 py-8 sm:px-8 lg:px-10 lg:py-10"><div className="mb-8"><p className="eyebrow mb-2 text-aqua">Tercihler</p><h1 className="text-2xl font-extrabold sm:text-3xl">Ayarlar</h1><p className="mt-2 text-sm text-[#71858d]">AquaMind deneyimini ihtiyaçlarına göre düzenle.</p></div>
   <div className="space-y-5"><Section icon={UserRound} title="Profil" description="Uygulamada görünen profil bilgilerin"><div className="grid gap-4 sm:grid-cols-2"><label className="text-xs font-bold text-[#91a3aa]">Ad soyad<input defaultValue="Mert Kaya" className={input}/></label><label className="text-xs font-bold text-[#91a3aa]">E-posta<input type="email" placeholder="ornek@email.com" className={input}/></label></div><p className="mt-3 text-[9px] text-[#586e77]">Gerçek kullanıcı hesabı eklendiğinde bu bilgiler hesabınla eşitlenecek.</p></Section>
@@ -21,7 +34,15 @@ export default function SettingsPage(){
   <Section icon={Bell} title="Bildirimler" description="Hatırlatma ve bilgilendirme tercihleri"><div className="divide-y divide-white/[.05]"><Toggle label="Bakım hatırlatmaları" description="Yaklaşan bakım görevlerinde hatırlat" checked={prefs.maintenance} onChange={v=>setPrefs({...prefs,maintenance:v})}/><Toggle label="Su değeri uyarıları" description="Değerler güvenli aralığın dışına çıktığında bildir" checked={prefs.waterAlerts} onChange={v=>setPrefs({...prefs,waterAlerts:v})}/><Toggle label="Ürün haberleri" description="Yeni özellikler hakkında bilgi ver" checked={prefs.productNews} onChange={v=>setPrefs({...prefs,productNews:v})}/></div></Section>
   <Section icon={Moon} title="Görünüm" description="Arayüz ve yoğunluk seçenekleri"><div className="grid gap-3 sm:grid-cols-2"><div className="rounded-xl border border-aqua/20 bg-aqua/[.05] p-4"><div className="flex items-center justify-between"><div><p className="text-xs font-bold">Koyu tema</p><p className="mt-1 text-[9px] text-[#647981]">AquaMind varsayılanı</p></div><Check size={17} className="text-aqua"/></div></div><Toggle label="Kompakt görünüm" description="Kartlarda daha fazla bilgi göster" checked={prefs.compactMode} onChange={v=>setPrefs({...prefs,compactMode:v})}/></div></Section>
   <Section icon={Database} title="Veri yönetimi" description="Yerel kayıtlarını yedekle veya temizle"><div className="grid gap-3 sm:grid-cols-2"><button onClick={exportData} className="flex items-center gap-3 rounded-xl border border-white/[.07] p-4 text-left hover:border-aqua/25"><span className="grid size-9 place-items-center rounded-lg bg-aqua/10 text-aqua"><Download size={17}/></span><div><p className="text-xs font-bold">Verileri dışa aktar</p><p className="mt-1 text-[9px] text-[#647981]">JSON yedeği indir</p></div></button><button onClick={reset} className="flex items-center gap-3 rounded-xl border border-red-400/10 p-4 text-left hover:border-red-400/30"><span className="grid size-9 place-items-center rounded-lg bg-red-400/10 text-red-400"><Trash2 size={17}/></span><div><p className="text-xs font-bold text-red-300">Tüm verileri sıfırla</p><p className="mt-1 text-[9px] text-[#647981]">Cihazdaki kayıtları sil</p></div></button></div></Section>
-  <div className="flex flex-col items-center justify-between gap-3 rounded-2xl border border-white/[.06] bg-white/[.02] p-4 sm:flex-row"><div className="flex items-center gap-3"><ShieldCheck size={18} className="text-emerald-400"/><div><p className="text-xs font-bold">Verilerin bu cihazda saklanıyor</p><p className="mt-1 text-[9px] text-[#647981]">Bulut senkronizasyonu hesap sistemiyle eklenecek.</p></div></div><button onClick={save} className="flex w-full items-center justify-center gap-2 rounded-xl bg-aqua px-5 py-3 text-xs font-extrabold text-ink sm:w-auto">{saved?<><Check size={16}/>Kaydedildi</>:"Ayarları kaydet"}</button></div>
+  {hasRecoveryInfo&&<Section icon={AlertTriangle} title="Veri kurtarma" description="Bozuk veya artık kayıtların özeti"><div className="space-y-2 text-[10px] leading-relaxed text-[#91a3aa]">
+   {quarantined.length>0&&<p>• {quarantined.length} anahtar karantinaya alındı. Ham içerik korunuyor ve JSON yedeğine dahil ediliyor: {quarantined.map(issue=>issue.key).join(", ")}</p>}
+   {quarantineFailed&&<p className="text-amber-300">• Bir bozuk değer karantinaya alınamadı; depolama alanı dolu olabilir. İlgili anahtara dokunulmadı.</p>}
+   {deleteIncomplete&&<p className="text-amber-300">• Bir silme işlemi tamamlanamadı. Kayıtlar korunuyor; uygulama bir sonraki açılışta işlemi tamamlar.</p>}
+   {orphanCount>0&&<p>• {orphanCount} kayıt artık var olmayan bir akvaryuma bağlı. Silinmediler; yedekte ayrı bölümde yer alıyorlar.</p>}
+   {deletedCount>0&&<p>• {deletedCount} silinmiş akvaryum 30 gün boyunca saklanıyor.</p>}
+   <p className="text-[9px] text-[#586e77]">Kayıt içerikleri burada gösterilmez.</p>
+  </div></Section>}
+  <div className="flex flex-col items-center justify-between gap-3 rounded-2xl border border-white/[.06] bg-white/[.02] p-4 sm:flex-row"><div className="flex items-center gap-3"><ShieldCheck size={18} className="text-emerald-400"/><div><p className="text-xs font-bold">Verilerin bu cihazda saklanıyor</p><p className="mt-1 text-[9px] text-[#647981]">Bulut senkronizasyonu hesap sistemiyle eklenecek.</p>{saveFailed&&<p className="mt-2 text-[10px] font-bold text-amber-300">Ayarlar kaydedilemedi; bu cihazda henüz saklanmıyor. Depolama alanı dolu olabilir veya tamamlanmamış bir silme işlemi sürüyor olabilir. Sayfayı yenileyip tekrar deneyin.</p>}</div></div><button onClick={save} className="flex w-full items-center justify-center gap-2 rounded-xl bg-aqua px-5 py-3 text-xs font-extrabold text-ink sm:w-auto">{saved?<><Check size={16}/>Kaydedildi</>:"Ayarları kaydet"}</button></div>
   <div className="flex items-center justify-center gap-2 py-3 text-[9px] text-[#40545d]"><Globe2 size={12}/>AquaMind MVP · Türkçe · v0.1</div></div></div></AppShell>
 }
 
