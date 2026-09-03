@@ -1,11 +1,11 @@
 # AquaMind proje durumu
 
-Son güncelleme: 2026-09-02
+Son güncelleme: 2026-09-03
 
 ## Doğrulanmış temel
 
 - GitHub: `https://github.com/ckaracora/AquaMind`
-- Ana dal: `main` (uzak ucu `7e8d63b6ff032f18e142490d2f307b4fe15a202d`, PR #5 squash merge). Yerel `main`, 2026-09-02'de `git pull --ff-only` ile `origin/main` ile senkronize edildi
+- Ana dal: `main` (uzak ucu `258b600a8fd68eebb04c63d341626d98ee1eb774`, PR #6 squash merge). Yerel `main`, 2026-09-02'de `git pull --ff-only` ile `origin/main` ile senkronize edildi
 - Başlangıç commit'i: `7d8fb01 fix: approve sharp build dependency`
 - Canlı uygulama: `https://aqua-mind-three.vercel.app/` (Phase 0B değişikliklerini içeriyor; `main` merge sonrası Vercel üretim dağıtımı 2026-09-02'de tamamlandı)
 - Görev panosu: `https://github.com/users/ckaracora/projects/1`
@@ -16,8 +16,8 @@ Son güncelleme: 2026-09-02
 ## Mevcut veri durumu
 
 - Kataloglar `src/data/` altında sürüm kontrollü TypeScript verisidir; Phase 0B'de tek bayt değişmedi.
-- Akvaryumlar, ölçümler, bakım, canlılar, bitkiler ve ekipmanlar şimdilik tarayıcı `localStorage` alanında saklanır; `src/lib/aquarium-storage.ts` değişmedi.
-- Alan tipleri `packages/domain` içinde tanımlıdır; uygulama `src/types/aquarium.ts` köprüsüyle aynı adları kullanır. Zod şemaları ve `LocalExportV1` yalnızca test ve gelecekteki içe/dışa aktarma sınırı içindir.
+- Akvaryumlar, ölçümler, bakım, canlılar, bitkiler ve ekipmanlar şimdilik tarayıcı `localStorage` alanında saklanır. Issue #8 ile depolama katmanı doğrulama, karantina, kaydetme askısı ve günlüklü silme kazandı; `aquamind:*:v1` anahtar adları ve JSON biçimi değişmedi.
+- Alan tipleri `packages/domain` içinde tanımlıdır; uygulama `src/types/aquarium.ts` köprüsüyle aynı adları kullanır. Zod şemaları, tercihler ve `LocalExportV1` artık uygulamada da kullanılır (yükleme doğrulaması ve dışa aktarma).
 - Kullanıcı hesabı, bulut senkronizasyonu ve gerçek veritabanı henüz yoktur.
 - Supabase geçişi gelecek aşamadır; tasarım `docs/DATABASE.md` içindedir, hiçbir Supabase projesi oluşturulmadı veya bağlanmadı.
 
@@ -30,6 +30,7 @@ Son güncelleme: 2026-09-02
 - [x] GitHub görev şablonları, devir sistemi, etiketler ve ortak görev panosu etkinleştirildi
 - [x] GitHub Actions otomatik doğrulaması (Issue #2): PR #3 ile 2026-08-26'da `main` dalına birleştirildi; PR #5 ve `main` push'u üzerinde başarıyla çalıştığı 2026-09-02'de doğrulandı
 - [x] Phase 0B mimari temel (Issue #4): tamamlandı; PR #5 squash merge ile `main` dalına birleştirildi (`7e8d63b`), Issue #4 kapandı (aşağıda)
+- [ ] localStorage veri bütünlüğü (Issue #8): Codex denetimi temiz geçti; görev dalı GitHub'a gönderildi. Pull request ve `main` birleştirmesi henüz yapılmadı (aşağıda)
 - [ ] Ortak katalog araştırma tablosu hazırlanacak
 - [ ] Supabase tasarımı ve geçişi: tasarım belgesi hazır (`docs/DATABASE.md`, `docs/SECURITY.md`), uygulama Phase 1
 - [ ] İki bilgisayarlı devir provası yapılacak
@@ -55,19 +56,58 @@ Son güncelleme: 2026-09-02
 - Dokunulmayanlar: `src/data/**`, `scripts/**`, `.github/**`, `src/app/**`, `src/components/**`, `src/providers/**`, `src/lib/aquarium-storage.ts`, `tsconfig.json`, `tailwind.config.ts`, `postcss.config.mjs`, `.gitignore`, `docs/DATA_SOURCES.md`, `docs/HANDOFF.md`, `CONTRIBUTING.md`
 - Paket boyutu: ilk yükleme JS değişmedi (sağlık 189 kB, ekipman 187 kB, canlı 188 kB, ortak 102 kB)
 - Bilinen riskler: Vercel önizleme (PR #5) ve üretim (`main`) dağıtımları `packageManager` ve `transpilePackages` ile başarıyla derlendi; bu risk kapandı. `scripts/test-health.cjs` Vitest içinde alt süreç olarak da çalıştığı için `pnpm verify` bu betiği iki kez çalıştırır (yaklaşık 2 sn). GitHub, `actions/checkout@v4`, `actions/setup-node@v4` ve `pnpm/action-setup@v4` için Node 20 kullanımdan kaldırma uyarısı gösteriyor; başarısızlık değil, action sürümlerinin güncellenmesi ayrı bir görev.
-- Ayrı issue adayları (Phase 0B dışında bırakıldı): `aquarium-storage.ts` içindeki yetim alt kayıt ve bozuk anahtar davranışları, panodaki sabit yer tutucular, `next lint`, `AGENTS.md` "Zorunlu doğrulama" açıklamasına Vitest'in eklenmesi, `engines` alanı, GitHub Actions action sürümlerinin güncellenmesi (Node 20 uyarısı)
+- Ayrı issue adayları (Phase 0B dışında bırakıldı): panodaki sabit yer tutucular, `next lint`, `AGENTS.md` "Zorunlu doğrulama" açıklamasına Vitest'in eklenmesi, `engines` alanı, GitHub Actions action sürümlerinin güncellenmesi (Node 20 uyarısı). `aquarium-storage.ts` içindeki yetim alt kayıt ve bozuk anahtar davranışları Issue #8 ile giderildi.
 
+## Issue #8 — localStorage veri bütünlüğü (Codex denetimi temiz; devre hazır, henüz gönderilmedi)
+
+- Issue: `https://github.com/ckaracora/AquaMind/issues/8`
+- Dal: `codex/local-storage-integrity` (GitHub'a gönderildi); taban `258b600` = `origin/main`
+- Durum: uygulama ve Codex bulgularının düzeltmesi yerelde bitti. Codex denetimi (4. tur) temiz geçti; iş kullanıcı onayıyla GitHub'a devredildi: değişiklikler commit edildi ve görev dalı push edildi. Yine de **tamamlanmış veya birleştirilmiş sayılmaz**: pull request açılmadı ve `main` birleştirmesi yapılmadı
+- Phase 1A (Issue #7) Docker engeli nedeniyle duraklatılmış durumda; dalına, issue'suna ve planına dokunulmadı
+- Yapılanlar:
+  - Adım 0: kod değişmeden koruyucu (regresyon) testleri yazıldı; geçerli veri gidiş-dönüşü, eksik anahtarda fallback, sunucu tarafı davranışı, anahtar adları, bilinmeyen ek alanların korunması ve `calculateGrossVolume` sabitlendi. `vitest.config.mts` include deseni `src/**/*.test.ts` kapsayacak şekilde genişletildi; yeni test bağımlılığı eklenmedi
+  - Güvenli yükleme: altı koleksiyon ve tercihler `packages/domain` Zod şemalarıyla doğrulanıyor. Bozuk değer demo/varsayılan ile ASLA üzerine yazılmıyor; ham değer `<anahtar>:corrupt:<ISO>` altına kopyalanıyor ve birincil anahtar yalnızca kopya yazılabildiyse onarılıyor. Kısmen bozuk koleksiyonda geçerli satırlar korunuyor; doğrulamadan geçen satırlar orijinal nesneler olduğu için bilinmeyen ek alanlar kaybolmuyor
+  - Demo veri artık kalıcı yazılmıyor: hidrasyon kaydetme askısı altında çalışıyor. Halihazırda depolanmış tohum kayıtları kullanıcı verisi sayıldı; silinmedi veya yeniden sınıflandırılmadı
+  - Kaydetme askısı üç katmanlı: (1) depolama modülünde askı sayacı, (2) `aquamind:journal:v1` anahtarının varlığı — aktif günlük varken normal kaydetmeler fiziksel olarak yazamıyor, başka sekmenin araya girmesi engelleniyor, (3) sağlayıcıda `useRef` koruması. Askı, altı kaydetme efektinden sonra tanımlanan serbest bırakma efektiyle kalkıyor
+  - Günlüklü silme: `localStorage` transaction desteklemediği için sıra günlük (tam yük) → silinen akvaryum paketi → altı koleksiyon → günlük silinir. Günlük yazılamazsa silme reddediliyor ve hiçbir şey değişmiyor. Açılışta yarım kalan günlük toparlanıyor; adımlar yinelenebilir. Bozuk günlükte aktif veriye dokunulmuyor, ham değer karantinada korunuyor
+  - Akvaryum silme artık bağlı ölçüm, bakım, canlı, bitki ve ekipman kayıtlarını da kaldırıyor; yetim kayıt oluşmuyor. Silinen paket 30 gün saklanıyor, süresi dolanlar yüklemede temizleniyor
+  - Mevcut yetim kayıtlar otomatik silinmiyor; sayılıyor ve raporlanıyor
+  - Dışa aktarma bölümlendi: ana koleksiyonlar yalnızca geçerli ve yetim olmayan kullanıcı verisi; yetimler, karantina ham değerleri ve silinen paketler ayrı ve etiketli bölümlerde. `LocalExportV1` sürüm 1 olarak kaldı (yeni bölümler isteğe bağlı), eski yedekler geçerli
+  - Ayarlar sayfası: tercihler ortak güvenli yükleyiciden geçiyor, doğrudan `JSON.parse` kaldırıldı, bozuk tercih varsayılanla üzerine yazılmıyor. Kayıt içeriği göstermeyen kurtarma/karantina özeti eklendi
+  - `packages/domain`: `preferences.ts` (tip, şema, varsayılanlar) ve `local-storage.ts` (anahtar adları, silinen paket ve günlük şemaları) eklendi
+  - Belgeler: `docs/DECISIONS/0006-yerel-depolama-butunlugu.md`; `docs/ARCHITECTURE.md` ve `docs/DATABASE.md` güncellendi
+- Codex denetimi (1. tur) bulguları ve düzeltmeleri:
+  - **P1 — demo veri:** her koleksiyon için verinin depodan mı geldiği artık `hydrateFromStorage` ile takip ediliyor (`DemoFlags`). Demo kayıtlar ne kalıcı depoya ne de yedeğin ana koleksiyonlarına giriyor (`persistedOnly`). Kullanıcının açık değişikliği yalnızca o kaydı gerçek veriye dönüştürüyor; bir alt kayıt yazıldığında ait olduğu demo akvaryum da yükseltiliyor, böylece kalıcı yetim oluşmuyor. Dokunulmamış demo kayıtlar taşınmıyor.
+  - **P1 — bozuk veri + karantina:** `readArrayForStep` ve `readEntries` artık `ReadOutcome` döndürüyor. Ham değer güvenle karantinaya alınamadıysa ilgili anahtar `[]` veya başka bir değerle **ezilmiyor**; silme `incomplete` durumunda duruyor ve günlük korunuyor. Silinmiş akvaryum arşivindeki şemaya uymayan satırlar da karantina başarılı olmadan filtrelenip yeniden yazılmıyor.
+  - **Ayarlar:** `savePreferences` `false` dönerse "Kaydedildi" gösterilmiyor; kullanıcıya verinin bu cihazda henüz saklanmadığını söyleyen kısa bir uyarı çıkıyor.
+  - **Belgeler:** bu dosyadaki `origin/main` bilgisi düzeltildi; `docs/ARCHITECTURE.md` tarihi ve `packages/domain` açıklaması gerçek davranışla (şemalar uygulamada kullanılıyor) uyumlandı.
+- Codex denetimi (2. tur) bulguları ve düzeltmeleri:
+  - **P1 — kaydedilemeyen kullanıcı verisi:** `saveX` sonuçları artık yok sayılmıyor. Saf ve test edilebilir iki koordinasyon fonksiyonu eklendi: `persistCollection(collection, rows)` (`saved` | `blocked-journal` | `blocked-suspended` | `failed` | `unavailable`) ve `checkMutationGate()`. Aktif günlük varken veri değiştiren işlemler **state'e hiç dokunmadan** reddediliyor. Kota hatasında değişiklik bellekte kalıyor ama sessiz kalınmıyor: `unsavedCollections` işaretleniyor ve `AppShell` içindeki yeni `StorageWarning` bileşeni kullanıcıya değişikliğin bu cihazda saklanmadığını, yenilemede kaybolacağını ve Ayarlar → Verileri dışa aktar ile yedek alabileceğini söylüyor.
+  - **P2 — silinmiş akvaryum arşivi:** bozuk arşiv karantinaya güvenle alındıktan sonra ana anahtar geçerli satırlarla onarılıyor (ayrıştırılamayan arşiv boşaltılıyor), böylece aynı bozuk değer her yüklemede yeni karantina kopyası üretmiyor. Karantina yazılamazsa arşiv aynen korunuyor.
+  - **P2 — belgeler:** `docs/DATABASE.md`, `docs/DECISIONS/0006` ve `docs/ARCHITECTURE.md` Issue #8'i "Codex yeniden denetimi bekliyor" olarak gösteriyor; hiçbir belgede tamamlandı ifadesi yok.
+  - **Kapsam notu:** P1'in "kullanıcıya açıkça bildir" gereği bir arayüz yüzeyi gerektirdiği için `src/components/app-shell.tsx` içine tek satırlık `<StorageWarning/>` eklendi ve `src/components/storage-warning.tsx` oluşturuldu. Bu iki dosya önceki turun dokunulmayacaklar listesindeydi; denetimde ayrıca değerlendirilmeli.
+- Codex denetimi (3. tur) bulguları ve düzeltmeleri:
+  - **P2 — açılışta yarım günlük uyarısı:** hidrasyonda `recoverPendingJournal()` sonrası `hasPendingJournal()` sonucu `writeBlocked` olarak kullanılıyor; toparlama başarısız kaldıysa `StorageWarning` kullanıcı hiçbir işlem denemeden görünüyor, başarılı toparlamada görünmüyor. Uyarı metni her iki bağlama uyacak şekilde düzeltildi. Beş senaryo için test eklendi (günlük yok, başarılı toparlama, toparlanamadı, bozuk günlük karantinaya alındı, karantinaya alınamadı).
+  - **P2 — durum belgesi:** bu bölümdeki "Dokunulmayanlar" listesi düzeltildi ve `src/components/` istisnası açıkça yazıldı.
+- Codex denetimi (4. tur): temiz geçti; yeni bulgu yok.
+- Testler: 114 Vitest testi geçiyor (33 koruyucu + 62 bütünlük/demo + 19 mevcut paket testi). Kapsam: açılışta yarım kalan günlük uyarısının koşulu, kaydetme koordinasyonu (aktif günlükte ekleme, kota hatasında ekleme, başarılı yazma, askı, depo yokluğu), arşiv onarımı ve karantina döngüsü, demo takibi ve taze depoda yedek içeriği, karantina kota hatasında ham değerin korunması, bozuk arşiv, tercih kaydetme başarısızlığı, bozuk JSON, dizi olmayan kök, şemaya uymayan satır, kısmen bozuk koleksiyon, bozuk tercih, karantina döngüsü olmaması, askı, aktif günlük koruması, silme sırası, kesinti (koleksiyon ve paket adımında), kota hatası (günlük yazımında silme reddi), toparlamanın yinelenebilirliği, ikinci silme, bozuk günlük, 30 günlük saklama, yetim tespiti ve dışa aktarma bölümleri
+- `corepack pnpm verify` (pnpm 11.11.0): başarılı — tip denetimi, katalog akışı, 35 sağlık senaryosu, katalog denetimi, 114 Vitest testi, üretim derlemesi
+- Paket boyutu (bilinçli maliyet): doğrulama artık uygulamada çalıştığı için zod istemci paketine girdi. Sağlayıcıyı kullanan sayfalarda ilk yükleme JS'i yaklaşık 25–28 kB arttı (`/settings` 110 → 138 kB, `/livestock` 188 → 214 kB, `/aquariums/[id]/health` 189 → 215 kB). Sağlayıcıyı kullanmayan `/calculators` (110 kB) ve `/products` (122 kB) ile ortak paket (102 kB) değişmedi
+- Dokunulmayanlar: `src/data/**`, `scripts/**`, `.github/**`, `packages/compatibility-engine/**`, ayarlar dışındaki `src/app/**`, `tsconfig.json`, `AGENTS.md`, `CONTRIBUTING.md`, `docs/HANDOFF.md`, `docs/DATA_SOURCES.md`, `docs/COMPATIBILITY.md`
+- `src/components/` açık istisnası: Codex 2. tur P1 bulgusundaki "kullanıcıya açıkça bildir" gereği bir arayüz yüzeyi gerektirdiği için iki dosya kapsama alındı — `src/components/app-shell.tsx` (tek satır: `<StorageWarning/>` eklendi) ve yeni `src/components/storage-warning.tsx`. `src/components/` altındaki diğer dosyalar (sidebar, mobile-nav, page-header, parameter-card, catalog-livestock-form) değişmedi. Bu istisna denetimde ayrıca değerlendirilmelidir.
+- Geri alma: `aquamind:*:v1` anahtar adları ve JSON biçimi değişmediği için dal geri alındığında eski kod aynı veriyi okumaya devam eder. Yeni anahtarlar (`:corrupt:*`, `deleted-aquariums`, `journal`) eski sürümce yok sayılır
+- Bilinen riskler: zod nedeniyle paket büyümesi (yukarıda ölçüldü); silinen akvaryumlar için geri yükleme arayüzü yok (veri korunuyor, arayüz ayrı iş); tam çoklu-sekme eşzamanlılığı kapsam dışı, yalnızca aktif günlük görüldüğünde yazma engelleniyor
 ## Sıradaki tek iş
 
-Phase 1 için kapsamı net bir Issue açılması ve yerel Supabase/RLS temelinin planlanması. Bu iş için henüz Issue veya dal açılmadı; tasarım girdileri `docs/DATABASE.md` ve `docs/SECURITY.md` içindedir.
+Issue #8 için kullanıcı onayıyla `codex/local-storage-integrity` dalından `main` hedefli pull request açmak, GitHub Actions `Doğrulama` kontrolünün pull request üzerinde başarılı çalıştığını görmek ve kullanıcı onayıyla `main` dalına birleştirmek. Codex denetimi temiz geçti, `corepack pnpm verify` başarılı ve dal GitHub'a gönderildi. Vercel yayını ayrıca istenir. Phase 1A (Issue #7) Docker kurulumu beklemeye devam eder.
 
 ## Oturum sonu devir şablonu
 
-- Yapılan görev: Issue #4 Phase 0B mimari temel (M1–M7); ardından merge sonrası durum temizliği ve yerel `main` senkronizasyonu
-- Değişen dosyalar: `package.json`, `pnpm-lock.yaml`, `pnpm-workspace.yaml`, `next.config.ts`, `src/types/aquarium.ts`, `src/lib/health-analysis.ts`, `README.md`, `docs/PROJECT.md`, `AGENTS.md` (yalnızca ekleme), `CLAUDE.md`, `PROJECT_STATUS.md`; yeni: `vitest.config.mts`, `packages/domain/**`, `packages/compatibility-engine/**`, `docs/ARCHITECTURE.md`, `docs/DATABASE.md`, `docs/SECURITY.md`, `docs/COMPATIBILITY.md`, `docs/DECISIONS/**` (tümü PR #5 ile `main` içinde); kapanış görevinde yalnızca `PROJECT_STATUS.md`
-- Çalıştırılan kontroller: her kilometre taşından sonra `pnpm verify`; `pnpm test`; `git diff --check`; korunan yolların blob hash karşılaştırması; devir öncesi ve kapanışta `corepack pnpm verify` (pnpm 11.11.0); GitHub Actions `Doğrulama` PR #5 ve `main` üzerinde başarılı
+- Yapılan görev: Issue #8 localStorage veri bütünlüğü; Codex 1. tur (demo takibi, karantina başarısızlığında durma, tercih kaydetme hatası), 2. tur (kaydetme koordinasyonu ve kullanıcı uyarısı, arşiv onarımı, belge ifadeleri) ve 3. tur (açılışta yarım günlük uyarısı, durum belgesi doğruluğu) bulgularının düzeltmesi; 4. tur denetim temiz
+- Değişen dosyalar: `src/lib/aquarium-storage.ts`, `src/providers/aquarium-provider.tsx`, `src/app/settings/page.tsx`, `packages/domain/src/{index,local-export}.ts`, `src/components/app-shell.tsx`, `vitest.config.mts`, `docs/ARCHITECTURE.md`, `docs/DATABASE.md`, `PROJECT_STATUS.md`; yeni: `packages/domain/src/{preferences,local-storage}.ts`, `src/components/storage-warning.tsx`, `src/lib/__tests__/{fake-local-storage.ts,aquarium-storage.baseline.test.ts,aquarium-storage.integrity.test.ts,aquarium-storage.demo.test.ts}`, `docs/DECISIONS/0006-yerel-depolama-butunlugu.md`
+- Çalıştırılan kontroller: her adımdan sonra `corepack pnpm verify` ve `pnpm test` (son durumda 114 test); `git diff --check`; korunan yolların değişmediğinin doğrulanması; üretim derlemesi ve paket boyutu karşılaştırması
 - Sonuç: tümü başarılı
 - Bilinen hata veya risk: yukarıdaki "Bilinen riskler"
-- GitHub'a gönderildi mi: Evet; PR #5 squash merge ile `main` dalına birleştirildi (`7e8d63b`), Issue #4 kapandı
-- Vercel'e yayımlandı mı: Evet, `main` merge sonrası otomatik üretim dağıtımı tamamlandı (`https://aqua-mind-three.vercel.app/`)
-- Sonraki tek iş: Phase 1 için kapsamı net bir Issue açılması ve yerel Supabase/RLS temelinin planlanması (yukarıda)
+- GitHub'a gönderildi mi: Evet, `codex/local-storage-integrity` dalı (pull request açılmadı, `main` birleştirilmedi)
+- Vercel'e yayımlandı mı: Hayır. Canlı uygulama (`https://aqua-mind-three.vercel.app/`) Issue #8 değişikliklerini içermiyor
+- Sonraki tek iş: kullanıcı onayıyla pull request ve `main` birleştirmesi (yukarıda)
