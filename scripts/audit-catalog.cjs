@@ -43,6 +43,11 @@ const normalized = (value) => value
   .toLowerCase()
   .replace(/[^a-z0-9]+/g, "");
 
+const missingCapacityStatus = (item) => {
+  if (!item.capacityDataNote) return "açıklanmamış";
+  return /çeliş/i.test(item.capacityDataNote) ? "kaynaklar çelişkili" : "kaynakta yayımlanmamış";
+};
+
 const rows = catalogBrandCoverage.map((coverage) => {
   const equipment = equipmentCatalog.filter((item) => normalized(item.brand) === normalized(coverage.brand));
   const capacityEquipment = equipment.filter((item) => ["filter", "heater", "air_pump"].includes(item.category) && !item.passiveComponent);
@@ -73,7 +78,7 @@ const missingCapacityRows = equipmentCatalog
     if (item.category === "filter" && item.requiresAirPump) return false;
     return item.ratedFlowLph == null && item.recommendedMaxL == null;
   })
-  .map((item) => ({ id: item.id, marka: item.brand, kategori: item.category, model: item.model, durum: item.capacityDataNote ? "kaynakta yayımlanmamış" : "açıklanmamış" }));
+  .map((item) => ({ id: item.id, marka: item.brand, kategori: item.category, model: item.model, durum: missingCapacityStatus(item) }));
 
 if (missingCapacityRows.length) console.table(missingCapacityRows);
 const unexplainedCapacityRows = missingCapacityRows.filter((item) => item.durum === "açıklanmamış");
@@ -92,7 +97,7 @@ const speciesRows = [...new Set(speciesCatalog.map(speciesGroup))]
       tur: species.length,
       kaynakli: species.filter((item) => item.sourceUrl && item.verifiedAt).length,
       bakimVerisiTam: species.filter((item) =>
-        item.adultSizeCm > 0 && item.minVolumeL > 0 && item.minTankLengthCm > 0 && item.minGroup > 0
+        item.adultSizeCm > 0 && item.minVolumeL > 0 && (item.category !== "fish" || item.minTankLengthCm > 0 || item.tankLengthDataNote) && item.minGroup > 0
         && item.temperature?.length === 2 && item.ph?.length === 2 && item.wasteFactor > 0
       ).length,
     };
@@ -105,7 +110,8 @@ const requiredSpeciesGroups = ["livebearer", "tetra", "rasbora", "danio", "barb"
 const missingSpeciesGroups = requiredSpeciesGroups.filter((group) => !speciesRows.some((row) => row.grup === group && row.tur > 0));
 const incompleteSpecies = speciesCatalog.filter((item) =>
   !item.sourceUrl || !item.verifiedAt || item.adultSizeCm <= 0 || item.minVolumeL <= 0
-  || item.minTankLengthCm <= 0 || item.minGroup <= 0 || item.temperature?.length !== 2
+  || (item.category === "fish" && !(item.minTankLengthCm > 0) && !item.tankLengthDataNote)
+  || (item.minTankLengthCm !== undefined && item.minTankLengthCm <= 0) || item.minGroup <= 0 || item.temperature?.length !== 2
   || item.ph?.length !== 2 || item.wasteFactor <= 0
 );
 const invalidAdditionalSpeciesSources = speciesCatalog.filter((item) =>

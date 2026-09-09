@@ -1,6 +1,6 @@
 # AquaMind proje durumu
 
-Son güncelleme: 2026-08-29
+Son güncelleme: 2026-09-09
 
 ## Doğrulanmış temel
 
@@ -10,7 +10,7 @@ Son güncelleme: 2026-08-29
 - Canlı önizleme: `https://aqua-mind-three.vercel.app/`
 - Görev panosu: `https://github.com/users/ckaracora/projects/1`
 - Teknoloji: Next.js 15, React 19, TypeScript, Tailwind CSS, pnpm
-- `pnpm verify`: 2026-08-29 tarihinde yerelde başarılı
+- `pnpm verify`: 2026-09-09 tarihinde yerelde başarılı
 - Arkadaş kurulumu: `buraksenfx` hesabı collaborator; Windows kopyasında kurulum ve tüm doğrulamalar başarılı
 
 ## Mevcut veri durumu
@@ -34,7 +34,7 @@ Son güncelleme: 2026-08-29
 
 ## Sıradaki tek iş
 
-`codex/catalog-capacity-batch` dalındaki katalog çalışması sürüyor. Son güvenli kapasite paketi Netlea No.2B, No.3B ve iki ayrı No.4B alt modelini doğrulanmış debileriyle otomatik hava kapasitesi hesabına kattı; pasif G1, G2 ve Flower Cartridge ön filtreleri motorlu kapasite eksiği gibi sayılmayacak biçimde işaretlendi. Netlea kapasite denetimi 14/14 (%100) oldu. Teknik değeri yayımlanmayan Aquawing, Boyu, Eurostar ve Haqos kayıtlarında tahmin yapılmadı. Sıradaki güvenli iş Nubios'un yedi açıklamalı filtre debisi boşluğunu doğrudan ürün kaynaklarıyla yeniden denetlemektir. Canlı kataloğundaki son grup `Tuzlu Su Canlıları`dır; akvaryum türü, tuzluluk ve deniz canlısı gereksinimleri için ayrı veri/sağlık modeli kararı verilene kadar tatlı su profillerine eklenmeyecektir.
+`codex/catalog-capacity-batch` dalındaki katalog çalışması sürüyor. Jeneca 410 ekipmana ve kapasite gerektiren 186 kaydın 183'ünde doğrulanmış otomatik hesap verisine ulaştı (%98); sayı yayımlanmayan eski/özel modeller tahmin edilmeden açıklamalı biçimde hesap dışında tutuluyor. Canlı profilleri akvaryumun freshwater / saltwater / brackish türüyle eşleştiriliyor; seçici uyumsuz canlı ve boş ana kategori göstermiyor, sağlık analizi eski/uyumsuz kayıtlarda tehlike uyarısı veriyor. Cikletist'in cüce ciklet envanterindeki 26 başlığın tamamı doğrulanmış profile bağlıdır. Vatoz/kedi balığı envanterindeki 56 başlığın 47'si doğrulanmış profile bağlıdır; bilimsel kimliği güvenle belirlenemeyen dokuz satış adı aramada açıklamalı ve eklenemez biçimde gösteriliyor. Yılan/müren kategorisindeki sekiz doğrulanmış profile ek olarak kimliği veya bakım eşiği belirsiz dört satış adı da aynı güvenlik akışına alındı. Afrika Arowanası ve Çin Ejderi güvenilir kimlik ve bakım kaynaklarıyla Monster profillerine bağlandı; Monster grubu 31 doğrulanmış profile ulaştı ve canlı sitedeki 21 başlığın tamamı yeniden doğrulandı. Cikletist Canlı Doğuranlar kategorisindeki iki sayfa ve 26 satış başlığının tamamı regresyon kapsamındadır; 25 başlık güvenli profile bağlı, tür belirtmeyen `ALBİNO SKY BLUE` açıklamalı güvenlik kaydıdır. Cikletist Betta kategorisindeki yem dışındaki 14 canlı başlığı da tam regresyon kapsamındadır; 13 başlık kaynaklı profile bağlı, türü belirsiz `MEYAN KÖKÜ GURAMİ` açıklamalı güvenlik kaydıdır. Japon/Oranda kategorisindeki 18 satış kaydının tamamı Japon balığı veya koi profiline bağlıdır; Japon balığı ek birey hacmi artık adet üzerinden otomatik hesaplanır. Labirentli Balıklar kategorisindeki 15 başlığın 13'ü kaynaklı profile bağlıdır; yalnız genel `Gurami` ve `MEYAN KÖKÜ GURAMİ` açıklamalı güvenlik kayıtlarıdır. Tetra Türleri ana kategorisinin altı güncel sayfasındaki 129 satış satırının 100'ü kaynaklı profile bağlıdır; kimliği veya güvenli su türü belirlenemeyen 29 satır, 28 benzersiz açıklamalı güvenlik kaydıyla kapsanır. Havuz Balıkları kategorisindeki sekiz güncel satış başlığının beşi koi, üçü Japon balığı profiline bağlıdır; Tül Kuyruk/Longfin koi ayrı tür olarak çoğaltılmamıştır ve mağaza başlıklarındaki yinelenen boşluklar artık güvenli eşleşmeyi bozmaz. Cikletist Balık Çeşitleri ana kategorisinin 16 güncel sayfasındaki 384 satış satırının 315'i doğrulanmış profile, 66'sı açıklamalı güvenlik kaydına bağlandı; canlı olmayan üç satır canlı kataloğundan açıkça dışlandı. Çözülmemiş görünür kayıt sayısı 61'dir. Ekipmanda kalan 10 açıklamalı kapasite boşluğunun üçü çelişkili, yedisi yayımlanmamış veridir ve tahmin edilmeden güvenlik hesabı dışında tutulur. Sıradaki iş, kalan açıklamalı canlı kayıtlarından bilimsel adı açıkça verilenleri güvenilir kimlik ve bakım kaynaklarıyla küçük gruplar halinde doğrulamaktır.
 
 ## Oturum sonu devir şablonu
 
@@ -402,3 +402,643 @@ Son güncelleme: 2026-08-29
 - `pnpm verify` 2026-08-29 tarihinde başarılı: TypeScript, yedi ekipman kategorili ve 610 bakım ürünlü katalog akışı, 35 sağlık senaryosu, katalog denetimi ve 14 sayfalık üretim derlemesi geçti.
 - GitHub/Vercel'e gönderim yapılmadı; canlı uygulama bu paketi henüz içermez.
 - Sonraki tek iş: Jeneca'nın kapasite denetiminde eksik görünen filtre, hava motoru ve ısıtıcı kayıtlarını seri aileleri halinde resmî/güvenilir teknik tablolardan doğrulamak.
+
+## 2026-08-30 Jeneca hava motorları — ilk kapasite paketi
+
+- AP-601 için 3 L/dakika (180 L/saat) ve 2 W; AP-602 için iki ayrı 3 L/dakika çıkış (360 L/saat toplam) ve 4 W doğrudan model sayfasındaki teknik verilerle doğrulandı.
+- AP-8806 için iki ayrı 4,3 L/dakika çıkış (516 L/saat toplam), 4,1 W, 300–600 litre ve ayarlanabilir akış; AP-10000 için 396 L/saat toplam, 3,3 W ve ayarlanabilir akış; AP-12000 için 360 L/saat toplam, 4 W ve ayarlanabilir akış model bazlı teknik tablolardan işlendi.
+- AP-15000 için 360 L/saat ve 6 W; AP-30000 için 600 L/saat ve 10 W; AP-40000 için 1200 L/saat, 12 W ve dört çıkış doğrulandı. Kaynakların yayımladığı ayarlanabilir akış bilgisi katalog profillerine aktarıldı.
+- Bu sekiz model doğrulanmış kapasiteyle otomatik hava hesabına alındı. AP-18000, AP-06, AP-20000, AP-22000 ve DB ailesindeki teknik değeri henüz doğrulanamayan modeller açıklamalı biçimde otomatik hesabın dışında kaldı; hiçbir değer tahmin edilmedi.
+- Jeneca 392 ekipmanda kaldı. Kapasite gerektiren 169 kaydın hazır sayısı 97'den 105'e yükseldi (%62).
+- `pnpm verify` 2026-08-30 tarihinde başarılı: TypeScript, yedi ekipman kategorili ve 610 bakım ürünlü katalog akışı, 35 sağlık senaryosu, katalog denetimi ve 14 sayfalık üretim derlemesi geçti.
+- GitHub/Vercel'e gönderim yapılmadı; canlı uygulama bu paketi henüz içermez.
+- Sonraki tek iş: Jeneca GLB, GD ve IPF filtre ailelerinin model bazlı debi, güç ve yayımlanmışsa önerilen hacim değerlerini erişilebilir resmî veya onaylı ikincil kaynaklardan doğrulamak.
+
+## 2026-08-30 Jeneca GLB, GD ve IPF filtreleri — kapasite paketi
+
+- GLB-600, GLB-800 ve GLB-1000 sırasıyla 150/180/220 L/saat ve 3,5/5,5/7,5 W; GD-400, GD-500 ve GD-600 sırasıyla 500/500/1100 L/saat ve 7/7/17 W değerleriyle doğrudan seri sayfalarından doğrulandı.
+- IPF-060, IPF-080, IPF-180, IPF-280, IPF-380, IPF-228, IPF-628, IPF-260, IPF-360, IPF-460, IPF-480 ve IPF-560 model bazlı kaynaklarla otomatik filtrasyon hesabına alındı. IPF-060 için güvenilir kaynaklarda ortak olan 500 L/saat debi kullanıldı; çelişkili güç ve hacim değerleri eklenmedi.
+- IPF-338 için güncel model sayfaları 300 ve 350 L/saat değerlerini çelişkili biçimde yayımlıyor. GD-320 için 4 W doğrulansa da debi yayımlanmıyor. İki model de kesin değer uydurulmadan otomatik kapasite hesabının dışında bırakıldı.
+- Jeneca toplamı 392 ekipmanda kaldı. Kapasite gerektiren 169 kaydın hazır sayısı 105'ten 123'e yükseldi (%73).
+- `pnpm verify` 2026-08-30 tarihinde başarılı: TypeScript, yedi ekipman kategorili ve 610 bakım ürünlü katalog akışı, 35 sağlık senaryosu, katalog denetimi ve 14 sayfalık üretim derlemesi geçti.
+- GitHub/Vercel'e gönderim yapılmadı; canlı uygulama bu paketi henüz içermez.
+- Sonraki tek iş: Jeneca XP, TGD, GD-402/502/602 ve AE filtrelerinin model bazlı debi, güç ve yayımlanmışsa önerilen hacim değerlerini doğrulamak.
+
+## 2026-08-30 Jeneca AE ve çözülemeyen XP/TGD/GD filtreleri — kapasite paketi
+
+- AE-1000 iki doğrudan seri kaynağında ortak yayımlanan 850 L/saat, 9,3 W, 170 litre üst sınırı ve ayarlanabilir akış bilgisiyle otomatik filtrasyon hesabına alındı.
+- AE-1300 için kaynaklarda ortak olan 950 L/saat debi ve ayarlanabilir akış işlendi. Güç 9,3 W ve 10,8 W; önerilen hacim 190 ve 200 litre olarak farklı yayımlandığı için bu iki alan kesin değer gibi seçilmedi ve çelişki kullanıcı açıklamasında korundu.
+- XP-18/19/31/32 için yalnızca satış arama listeleri ve eksik ürün sayfaları; XP-605, TGD-15–19 ve GD-402/502/602 içinse model varlığını gösteren ancak teknik tablo yayımlamayan sayfalar bulunabildi. Arama sonucu özeti teknik kaynak kabul edilmedi ve komşu model değerleri kopyalanmadı.
+- Jeneca toplamı 392 ekipmanda kaldı. Kapasite gerektiren 169 kaydın hazır sayısı 123'ten 125'e yükseldi (%74).
+- Hedefli katalog akışı, kapasite denetimi ve tam `pnpm verify` 2026-08-30 tarihinde başarılıdır: TypeScript, yedi ekipman kategorili ve 610 bakım ürünlü katalog akışı, 35 sağlık senaryosu, katalog denetimi ve 14 sayfalık üretim derlemesi geçti.
+- GitHub/Vercel'e gönderim yapılmadı; canlı uygulama bu paketi henüz içermez.
+- Sonraki tek iş: Jeneca AP-18000, AP-06, AP-20000, AP-22000 ve DB hava motoru ailesindeki eksik debi/güç değerlerini model bazlı resmî veya güvenilir kaynaklardan doğrulamak.
+
+## 2026-08-30 Jeneca AP/DB hava motorları — ikinci kapasite paketi
+
+- AP-22000 için iki çıkışta toplam 8 L/dakika (480 L/saat), 0,023 MPa ve ayarlanabilir akış doğrulandı. Güç bilgisi güvenilir sayfalarda 8 W ve 12 W olarak çeliştiği için otomatik profile kesin güç değeri eklenmedi; çelişki kullanıcı açıklamasında korundu.
+- DB-58 üreticinin resmî sayfasındaki 55 L/dakika (3300 L/saat), 25 W ve ayarlanabilir akış verileriyle; DB-21 ise 18 L/dakika (1080 L/saat), 10 W ve ayarlanabilir akış verileriyle otomatik hava hesabına alındı.
+- DB-31 için 30 L/dakika (1800 L/saat) ve 16 W; DB-51 için 51 L/dakika (3060 L/saat) ve 25 W; DB-81 için 80 L/dakika (4800 L/saat) ve 42 W model bazlı doğrudan ürün kaynaklarından işlendi.
+- AP-18000, AP-06, AP-20000, DB-11, DB-11 Upgrade, DB-21 Upgrade ve DB-58 Upgrade için üretici portföyünde model varlığı doğrulansa da güvenli sayısal teknik tablo bulunamadı. Normal ve Upgrade varyantların değerleri birbirine kopyalanmadı; bu yedi kayıt açıklamalı biçimde otomatik kapasite hesabının dışında kaldı.
+- Jeneca 392 ekipmanda kaldı. Kapasite gerektiren 169 kaydın hazır sayısı 125'ten 131'e yükseldi (%78).
+- Hedefli katalog akışı, kapasite denetimi ve tam `pnpm verify` 2026-08-30 tarihinde başarılıdır: TypeScript, yedi ekipman kategorili ve 610 bakım ürünlü katalog akışı, 35 sağlık senaryosu, katalog denetimi ve 14 sayfalık üretim derlemesi geçti.
+- GitHub/Vercel'e gönderim yapılmadı; canlı uygulama bu paketi henüz içermez.
+- Sonraki tek iş: Jeneca SX-366/SX-388/SX-265, AL-22/AL-28 ve BX-22/BX-28/BX-29 ısıtıcı ailelerinin model bazlı güç ve yayımlanmış hacim değerlerini doğrulamak.
+
+## 2026-08-30 Jeneca ısıtıcı varyantları — kapasite paketi
+
+- Belirsiz sekiz seri kaydı kullanıcıların gerçekten seçebileceği 26 watt varyantına ayrıldı: SX-366 ve SX-388 için 1000/1200/1500 W; SX-265 için 500 W; AL-22 için 25/50/100/200/300 W; AL-28 için 50/100/300/500 W; BX-22 için 25/50/100/200/300/500 W; BX-28 için 500 W ve BX-29 için 200/300/500 W.
+- SX-366/SX-388 güçleri ve tatlı/tuzlu su uyumu üreticinin resmî seri sayfasından; SX-265, AL-22 ve AL-28 güçleri model bazlı doğrudan satış sayfalarından doğrulandı. Bu kaynaklarda güvenilir hacim tablosu olmayan varyantlara hacim değeri atanmadı.
+- BX-22'nin 25–300 W varyantlarında yayımlanan 5–350 litre aralıkları ve 500 W sürümünün 500 litre üst sınırı işlendi. BX-28 500 W için 500 litre; BX-29 200/300/500 W için sırasıyla 200/300/500 litre üst sınırları model bazlı kaynaklardan eklendi.
+- Jeneca 392 genel kayıttan 410 gerçek ekipman varyantına yükseldi. Isıtıcı sayısı 21'den 39'a; kapasite gerektiren kayıt sayısı 169'dan 187'ye ve otomatik hesaba hazır kayıt sayısı 131'den 157'ye çıktı (%84).
+- Hedefli TypeScript, katalog akışı, kapasite denetimi ve tam `pnpm verify` 2026-08-30 tarihinde başarılıdır: yedi ekipman kategorili ve 610 bakım ürünlü katalog akışı, 35 sağlık senaryosu, katalog denetimi ve 14 sayfalık üretim derlemesi geçti.
+- GitHub/Vercel'e gönderim yapılmadı; canlı uygulama bu paketi henüz içermez.
+- Sonraki tek iş: Aquawing AQ-A3000 hava motorunun yayımlanmış debi ve güç bilgisini model bazlı güvenilir kaynaklarla doğrulamak.
+
+## 2026-08-31 açıklamalı kapasite boşlukları — güvenli kapanış
+
+- Aquawing AQ-A3000 için 25 W güç doğrulandı ancak hava debisi; Boyu SP-1300C için model varlığı doğrulandı ancak debi ve önerilen hacim yayımlanmadı.
+- Eurostar Motorlu Pipo Filtre Medium ve Large doğrudan Türkiye ürün sayfalarında 5 W güç ve ürün ölçüleriyle doğrulandı; su debisi ve önerilen hacim yayımlanmadığı için otomatik filtrasyon hesabının dışında kaldı.
+- Nubios YU-118C/YU-119C ve Haqos EASY-1000AT, Aqua Flow 250 ve Thermo-Sprite boşlukları önceki araştırmadaki açıklamalarıyla korundu. YU-118C adı altında başka markanın model verisini kopyalayan sayfa özellikle reddedildi.
+- Hiçbir kayıt için tahmini debi, güç veya hacim üretilmedi; mevcut kapasite açıklamaları ve katalog denetimi korundu.
+
+## 2026-08-31 deniz canlısı güvenlik temeli ve ilk profil
+
+- SpeciesProfile yaşam ortamı için waterTypes, deniz canlılarının tuzluluk gereksinimi için specificGravity aralığı taşıyacak biçimde genişletildi. Eski profiller geriye uyumlu olarak tatlı su kabul ediliyor.
+- Canlı seçici yalnızca seçili akvaryumun tatlı, tuzlu veya acı su türüyle uyumlu profilleri listeliyor; form dışından gönderilen uyumsuz katalog kimliği de kayıt katmanında reddediliyor.
+- Sağlık analizi, mevcut/eskiden eklenmiş uyumsuz canlılarda açık tehlike uyarısı veriyor. Deniz canlısında özgül ağırlık ölçümü yoksa ölçüm talep ediyor; ölçüm güvenli aralık dışındaysa tehlike uyarısı üretiyor.
+- Su değerleri ekranına özgül ağırlık alanı eklendi; tuzlu ve acı su akvaryumlarının özet kartında TDS yerine SG gösteriliyor.
+- Cikletist'in Ocelleris Clown (Wild) satış adı ilk güvenli deniz profili olarak Amphiprion ocellaris kimliğine bağlandı. OATA'nın 60 litre/çift, 24–26 °C, pH 7,9–8,3 ve SG 1.020–1.025 rehberi; FishBase ve Fishkeeper kimlik, boy ve bakım bilgileriyle çapraz doğrulandı.
+- Hedefli TypeScript, katalog akışı ve 38 sağlık senaryosu başarılıdır.
+- GitHub/Vercel'e gönderim yapılmadı; canlı uygulama bu paketi henüz içermez.
+- Sonraki tek iş: False Skunk-Stripe, Tomato, Saddleback ve Maroon palyaço balıklarını tür bazlı güvenilir bakım eşiği bulunanlardan başlayarak eklemek; Percula Clownfish (Full Black) ticari adını bilimsel kimlik netleşmeden tahminle eşleştirmemek.
+
+## 2026-08-31 Cikletist palyaço balıkları — güvenli tür paketi
+
+- `False Skunk-Stripe Anemonefish` satış adı ITIS'in resmî ortak ad kaydına göre `Amphiprion perideraion` kimliğine bağlandı. Fishkeeper'ın tür bazlı 10 cm erişkin boy, deniz suyu aralığı ve bakım uyarıları; Practical Fishkeeping'in 70 cm çift akvaryumu eşiğiyle birlikte kullanıldı.
+- Tomato (`Amphiprion frenatus`), Saddleback (`Amphiprion polymnus`) ve Maroon (`Amphiprion biaculeatus`) satış adları FishBase kimlik/erişkin boy verileri, Fishkeeper bakım sayfaları, OATA deniz suyu rehberi ve Practical Fishkeeping tür kompleksi eşikleriyle çapraz doğrulandı.
+- Dört profil yalnızca tuzlu su akvaryumunda listelenir; çift, minimum hacim/uzunluk, 24–26 °C, pH 8,1–8,3 ve SG 1.020–1.025 aralıklarını taşır. Tomato ve Maroon için yüksek bölgecilik, Maroon için 17 cm erişkin boy ve 100 cm yüzme alanı açık kullanıcı uyarısına işlendi.
+- `Percula Clownfish (Full Black)` başlığı renk varyetesinin bilimsel kimliğini açıkça yayımlamadığı için Ocellaris veya Percula profiline tahminle bağlanmadı; bu eşleşmeme davranışı regresyon testine alındı.
+- Canlı ekleme ekranındaki ana sınıf listesi seçili akvaryum türünde hiç profil bulunmayan kategorileri artık göstermiyor.
+- Tam `pnpm verify` başarılıdır: TypeScript, katalog akışı, 39 sağlık senaryosu, katalog denetimi ve 14 sayfalık üretim derlemesi geçti.
+- GitHub/Vercel'e gönderim yapılmadı; canlı uygulama bu paketi henüz içermez.
+- Sonraki tek iş: anemon, deniz hıyarı, nudibranch ve denizyıldızı kayıtları için bilimsel kimlik belirsizliğini koruyan deniz omurgasızı bakım modelini kurmak ve yalnızca güvenli eşleşmeleri eklemek.
+
+## 2026-08-31 ilk deniz omurgasızları — doğrulanmış güvenlik paketi
+
+- `Green Long Tentacle Anemone` satış adı güncel ihracat listeleri ve Quality Marine kataloğunda `Macrodactyla doreensis` kimliğine bağlandı. 50 cm erişkin çap, 300 litre, 24–26 °C, pH 8,1–8,4, SG 1.023–1.025 ve orta akıntı kaynaklarla doğrulandı.
+- Anemon için olgun akvaryum, 10–12 cm yumuşak kum, güçlü aydınlatma, pompa giriş koruması, bakır yasağı ve çevredeki mercan/balıklara sokma riski kullanıcı uyarılarına işlendi.
+- `Tiled Sea Star` satış adı GBIF ve uzman bakım kaynaklarıyla `Fromia monilis` kimliğine bağlandı. 13 cm erişkin boy, yaklaşık 55 galondan çevrilen 210 litre, 22–26 °C, pH 8,1–8,3 ve SG 1.023–1.025 eşikleri kullanıldı.
+- Denizyıldızı için olgun/canlı kayalı akvaryum, uzun damla alıştırması, havayla temas ettirmeme, ani su değişimlerine ve bakıra hassasiyet ile besin yetersizliği riski açıklandı.
+- Canlı veri modeli, tank uzunluğu veya akıntı değeri kaynakta yayımlanmayan omurgasızlarda bu alanları boş bırakabiliyor. Balık profillerinde tank uzunluğu zorunlu kalıyor; sağlık analizi yalnız mevcut doğrulanmış değeri değerlendiriyor.
+- `Red/Green Carpet Anemone`, `Sand Cucumber`, `Rose Corn Bulb Anemone`, `Bubble Green Anemone`, `Antenna Purple Nudibranch` ve `Blue Stripe Nudibranch` gibi renk/genel adlar bilimsel kimliği kesinleştirmediği için tahminle eşleştirilmedi. Sekiz belirsiz omurgasız adı ve Full Black Percula eşleşmeme regresyonuyla korunuyor.
+- Tam `pnpm verify` başarılıdır: TypeScript, katalog akışı, 41 sağlık senaryosu, katalog denetimi ve 14 sayfalık üretim derlemesi geçti.
+- GitHub/Vercel'e gönderim yapılmadı; canlı uygulama bu paketi henüz içermez.
+- Sonraki tek iş: kalan belirsiz deniz canlılarının doğrudan ürün/bilimsel kimlik kaynaklarını araştırmak; güvenli kimlik bulunamazsa kategori kapsamını açıklamalı eşleşmeme listesiyle kapatmak.
+
+## 2026-08-31 ikinci deniz omurgasızları — uzman tür güvenlik paketi
+
+- `Rose Corn Bulb Anemone` ve `Bubble Green Anemone` satış adları, doğrudan ürün ve ihracat listelerinde `Entacmaea quadricolor` kimliğine bağlandı. LiveAquaria'nın 30 cm erişkin çap, 30 galondan çevrilen 114 litre, 22–26 °C, pH 8,1–8,4, SG 1.020–1.025 ve orta akıntı değerleri işlendi.
+- Balon uçlu anemon için olgun/kararlı akvaryum, güçlü aydınlatma, pompa koruması, düzenli etli yem, bakır yasağı ve hareket ederken mercanları sokma riski açık kullanıcı uyarılarına eklendi.
+- `Blue Stripe Nudibranch` ihracat adı `Chelidonura varians` kimliğine; `Antenna Purple Nudibranch` ise resmî ihracat kaydı ve WoRMS taksonomisiyle güncel kabul edilen `Hypselodoris bullockii` adına bağlandı.
+- İki deniz salyangozu sıradan kolay canlı gibi sunulmuyor: tür akvaryumu/uzman bakım işareti taşıyor. `Chelidonura varians` için sürekli planarya, `Hypselodoris bullockii` için belirli canlı sünger besini sağlanamazsa açlıktan ölüm riski; pompa koruması, damla alıştırması ve tuzluluk hassasiyeti açıklanıyor.
+- Kaynakların yayımlamadığı tank uzunluğu ve tek bir akıntı sınıfı uydurulmadı. `Red Carpet Anemone (Rare)`, iki genel Green Carpet adı ve `Sand Cucumber` birden fazla bilimsel türe gidebildiği için hâlâ eşleştirilmeden korunuyor. `Percula Clownfish (Full Black)` ile birlikte toplam beş ad belirsiz durumda.
+- Tam `pnpm verify` başarılıdır: TypeScript, katalog akışı, 42 sağlık senaryosu, katalog denetimi ve 14 sayfalık üretim derlemesi geçti.
+- GitHub/Vercel'e gönderim yapılmadı; canlı uygulama bu paketi henüz içermez.
+- Sonraki tek iş: kalan dört genel omurgasız adı ve Full Black Percula için doğrudan bilimsel kimlik kanıtı aramak; bulunamazsa güvenli eşleşmeme kapsamını nihai olarak belgelemek.
+
+## 2026-08-31 Full Black Percula ve deniz adı kapanışı
+
+- `Percula Clownfish (Full Black)` adı iki doğrudan ihracat/ithalat listesinde `Amphiprion percula` olarak yayımlandığı için güvenli biçimde Percula profiline bağlandı; Cikletist satış adı yalnız Türkiye'deki tam ticari ad eşleşmesi için kullanıldı.
+- FishBase'in 11 cm erişkin boyu, OATA ve Fishkeeper'ın deniz suyu aralıkları ile Practical Fishkeeping'in çift için 100 litre eşiği işlendi. Güvenilir kaynaklar santimetre cinsinden minimum akvaryum uzunluğu yayımlamadığı için bu değer tahmin edilmedi; `tankLengthDataNote` ile seçici ve sağlık analizinde açık uyarı gösteriliyor.
+- Balık profillerinde akvaryum uzunluğu güvenliği gevşetilmedi: doğrulanmış uzunluk yoksa nedeninin açıklanması zorunlu tutuldu. Hem uzunluk hem veri notu bulunan çelişkili kayıtlar katalog bütünlüğü denetiminde reddediliyor.
+- `Red Carpet Anemone (Rare)`, `Green Carpet Anemone`, `Green Carpet Anemone L Boy` ve `Sand Cucumber` adlarının doğrudan mağaza sayfaları bilimsel kimlik yayımlamıyor; bağımsız kaynaklarda aynı genel adların birden fazla türe bağlandığı görüldü. Yanlış bakım profili üretmemek için bu dört ad eşleştirilmeden korunuyor.
+- Tam `pnpm verify` başarılıdır: TypeScript, katalog akışı, 43 sağlık senaryosu, katalog denetimi ve 14 sayfalık üretim derlemesi geçti.
+- GitHub/Vercel'e gönderim yapılmadı; canlı uygulama bu paketi henüz içermez.
+- Sonraki tek iş: önceki kategori denetimlerinde çözülmemiş kalan Cikletist satış adlarını, bilimsel kimliği doğrudan doğrulanabilenlerden başlayarak küçük gruplar halinde yeniden ele almak.
+
+## 2026-09-01 cüce ciklet envanteri kapanışı
+
+- `APİSTOGRAMMA COMMBRAE` doğrudan satış adı, ITIS ve FishBase taksonomisiyle `Apistogramma commbrae` kimliğine bağlandı. Fishipedia'nın 4 cm erişkin boy, çift, 50 litre, 23–28 °C ve pH 5–7 değerleri kullanıldı.
+- Güvenilir bakım kaynağı santimetre cinsinden minimum akvaryum uzunluğu yayımlamadığı için `Apistogramma commbrae` için uzunluk tahmin edilmedi. Bu sınırlılık `tankLengthDataNote` ile canlı seçicide ve sağlık analizinde açıkça gösteriliyor.
+- `OCELLARIS PEACOCK BASS` doğrudan tür adı ve FishBase kaydıyla `Cichla ocellaris` kimliğine bağlandı. FishBase'in 74 cm erişkin boyu ile Fishipedia'nın beşli grup, 5.000 litre, 300 cm cephe, 24–27 °C, pH 6,5–7,5 ve güçlü akıntı gereksinimleri işlendi.
+- Satıcı kategorisi kullanıcıyı yanıltmasın diye `Cichla ocellaris` cüce ciklet olarak değil Monster grubunda listeleniyor. Avlanma, tür akvaryumu, yetersiz alan ve düşük grup sayısı uyarıları sağlık regresyonuyla korunuyor.
+- Cikletist Cüce Cikletler envanterindeki 26 satış başlığının 26'sı doğrulanmış profile bağlıdır. Katalog denetiminde cichlid grubu 68/68, Monster grubu 29/29 kaynaklı ve bakım verisi tamdır.
+- Hedefli TypeScript, katalog akışı, katalog denetimi ve 44 sağlık senaryosu başarılıdır.
+- GitHub/Vercel'e gönderim yapılmadı; canlı uygulama bu paketi henüz içermez.
+- Sonraki tek iş: Cikletist vatoz/kedi balığı envanterinde çözülemeyen 11 satış adını, bilimsel kimliği doğrudan doğrulanabilenlerden başlayarak yeniden denetlemek.
+
+## 2026-09-01 L103 ve L148 güvenli kimlik paketi
+
+- `L-103 CLOWN PLECO`, mağazadaki genel palyaço vatoz adıyla `Panaqolus maccus`, L104 veya L105'e bağlanmadı. Welsfans'ın doğrudan L-numarası kaydı temel alınarak tür düzeyinde uydurma yapılmadan `Peckoltia sp. L103` profili oluşturuldu.
+- L103 için uzman kaynaktaki 12 cm erişkin boy, 80 cm akvaryum, 25–29 °C ve pH 5,5–7,5 eşikleri işlendi. Welsfans'ın 80 cm akvaryumu yaklaşık 112 litre olarak açıklayan rehberi hacim eşiğine kaynak oldu; mağara, oksijenlenme, filtrasyon ve ticari ad karışıklığı kullanıcı uyarılarına eklendi.
+- `L-148 Total Spotted Pleco`, güncel uzman veri tabanlarının ortak ataması olan `Ancistrus sp. L148` kimliğine bağlandı. 12 cm erişkin boy, 100 cm akvaryum, yaklaşık 120 litre, 25–29 °C ve pH 5–7 eşikleri işlendi.
+- L148 numarasının geçmişte iki farklı balığa verilmiş olduğu ve eski `Chaetostoma` kaydının artık L445 olarak tutulduğu sağlık/bakım uyarısında açıklandı. Böylece yalnızca satış adındaki “spotted” ifadesinden kesin tür üretilmedi.
+- `L-146 Albino Pleco` eşleştirilmedi: uzman kaynaklar L146'yı `Peckoltichthys cf. bachi` olarak tanımlarken mağaza başlığındaki “Albino” ifadesini doğrulamıyor. L069 ve diğer genel ticari adlar da aynı güvenlik ilkesiyle çözülmemiş kaldı.
+- Cikletist vatoz/kedi balığı envanterinde doğrulanmış profile bağlı başlık sayısı 45'ten 47'ye çıktı; dip balığı kataloğu 66/66 kaynaklı ve bakım verisi tam profile ulaştı.
+- Tam `pnpm verify` başarılıdır: TypeScript, 56 başlıklı Cikletist regresyonu dahil katalog akışı, 45 sağlık senaryosu, katalog denetimi ve 14 sayfalık üretim derlemesi geçti.
+- GitHub/Vercel'e gönderim yapılmadı; canlı uygulama bu paketi henüz içermez.
+- Sonraki tek iş: kalan dokuz vatoz/kedi balığı satış adını doğrudan bilimsel kimlik kanıtı olanlardan başlayarak yeniden denetlemek; kimliği doğrulanamayanları güvenli eşleşmeme listesinde tutmak.
+
+## 2026-09-01 çözülmemiş vatoz/kedi balığı adları güvenlik kapanışı
+
+- Borneo Kelebek Vatoz, Red Lip Stick Goby, Blue Neon Goby, Jully Çöpçü, Kürek Burun, Panda Garrarufa, L146 Albino, L069 Peckoltia Ucayalensis ve Colombian Farlowella satış sayfaları yeniden denetlendi. Sayfalar doğrudan bilimsel kimlik vermediği, kullanılan ticari adlar birden fazla türe gittiği veya başlıktaki kimlikler çeliştiği için tahminle profil atanmadı.
+- Dokuz ad `catalog-species-unresolved.ts` içinde doğrudan satış sayfası, kimlik belirsizliğini açıklayan uzman/taksonomi kaynakları, doğrulama tarihi ve kullanıcıya gösterilecek açık gerekçeyle kayıt altına alındı.
+- Canlı araması artık yalnız seçili grupta değil, akvaryumun su türüyle uyumlu tüm seçili ana sınıfta çalışıyor. Doğrulanmış bir tür başka grupta bulunursa grup otomatik değişiyor.
+- Kullanıcı çözülmemiş dokuz addan birini aradığında “Ad bulundu, bilimsel kimlik doğrulanamadı” uyarısını ve nedeni görüyor. Yanlış minimum hacim, sosyal grup veya uyumluluk hesabı üretmemek için ekleme düğmesi devre dışı kalıyor.
+- Regresyonlar dokuz kaydın kaynak/tarih/gerekçe bütünlüğünü, tatlı su aramasında bulunmasını, deniz akvaryumunda görünmemesini ve hiçbirinin yanlış sağlık profiline bağlanmamasını koruyor.
+- Tam `pnpm verify` başarılıdır: TypeScript, dokuz çözülmemiş adı kapsayan katalog akışı, 45 sağlık senaryosu, katalog denetimi ve 14 sayfalık üretim derlemesi geçti.
+- Yerel geliştirme sunucusu başarıyla açıldı; otomatik tarayıcı bağlantısı Windows izin katmanında iki kez engellendiği için bu oturumda görsel tıklama testi çalıştırılamadı.
+- GitHub/Vercel'e gönderim yapılmadı; canlı uygulama bu paketi henüz içermez.
+- Sonraki tek iş: diğer Cikletist canlı kategorilerindeki çözülmemiş satış adlarını aynı görünür güvenlik listesine taşımak ve kimliği doğrudan kanıtlanabilenleri kaynaklı profile dönüştürmek.
+
+## 2026-09-01 yılan ve müren belirsiz adları güvenlik kapanışı
+
+- Cikletist'in `Yılan Ve Müren Balıkları` kategorisindeki 12 satış başlığı yeniden denetlendi. Sekiz başlık mevcut doğrulanmış profile bağlıdır; `ZİGZAK TARAK BALIKLARI`, `CHANNA GOLDEN LİMBATA`, `WHITE CHECK EEL MÜREN` ve `CHANNA ASIATICA GÖKKUŞAĞI YILANBAŞ BLEHERİ` için güvenli profil kanıtı tamamlanmadı.
+- Zigzag eel adı güvenilir kaynaklarda 90 cm'lik `Mastacembelus armatus` için kullanılırken akvaryum ticaretinde 20 cm civarındaki `Macrognathus circumcinctus` için de kullanılıyor. Yalnız genel satış adıyla iki çok farklı bakım profili arasından seçim yapılmadı.
+- `Channa limbata` geçerli bir takson olsa da ürün sayfası bilimsel kimliği, köken popülasyonunu ve zorunlu akvaryum eşiklerini yayımlamıyor; türün `C. gachua` kompleksi içindeki genetik çeşitliliği nedeniyle eşikler başka popülasyondan kopyalanmadı.
+- `WHITE CHECK EEL MÜREN` sayfası bilimsel ad ve su türü vermiyor. Bilimsel literatürdeki White-cheek moray adı `Echidna rhodochilus` için kullanılsa da mağazadaki `Check` yazımının aynı canlı olduğunu gösteren doğrudan kanıt bulunmadı. Kayıt tatlı, acı ve deniz suyu aramalarında açıklamalı görünür; hiçbirinde eklenemez.
+- `CHANNA ASIATICA ... BLEHERİ` başlığı iki ayrı geçerli türü, `Channa asiatica` ve `Channa bleheri` adlarını birleştiriyor. Satıcı hangi türü sunduğunu açıklamadığı için mevcut Rainbow Snakehead profiline veya başka Channa profiline bağlanmadı.
+- Dört kayıt doğrudan satış sayfası, taksonomi/uzman kaynakları, doğrulama tarihi ve kullanıcıya gösterilen açık gerekçeyle `catalog-species-unresolved.ts` dosyasına eklendi. Çözülmemiş görünür canlı listesi dokuzdan 13'e çıktı.
+- Regresyonlar dört adın Monster grubunda bulunmasını, yazım varyantlarını, su türü görünürlüğünü ve hiçbirinin yanlış sağlık profiline bağlanmamasını koruyor.
+- Tam `pnpm verify` başarılıdır: TypeScript, 13 çözülmemiş adı kapsayan katalog akışı, 45 sağlık senaryosu, katalog denetimi ve 14 sayfalık üretim derlemesi geçti.
+- GitHub/Vercel'e gönderim yapılmadı; canlı uygulama bu paketi henüz içermez.
+- Sonraki tek iş: Cikletist Monster envanterindeki `AFRİKAN AROWANA` ve `ÇİN EJDERİ` satış adlarını güvenilir kimlik ve bakım kaynaklarıyla yeniden denetlemek.
+
+## 2026-09-01 Afrika Arowanası ve Çin Ejderi güvenli profil paketi
+
+- `AFRİKAN AROWANA` satış adı, FishBase ve uzman bakım kaynaklarıyla `Heterotis niloticus` kimliğine bağlandı. 100 cm erişkin boy, 1.000 litre güvenli alt hacim, 25–30 °C ve pH 6–7,5 eşikleri; güçlü filtrasyon, kapak ve küçük canlıları yutma riskleri işlendi.
+- Kaynaklar santimetre cinsinden güvenilir bir minimum akvaryum uzunluğu yayımlamadığı için Afrika Arowanası için uzunluk tahmin edilmedi. Bu sınırlılık `tankLengthDataNote` ile kullanıcıya ve sağlık analizine aktarılıyor.
+- `ÇİN EJDERİ` Türkiye'deki doğrudan ürün adı, FishBase ve uzman bakım kaynağıyla `Myxocyprinus asiaticus` kimliğine bağlandı. 68 cm erişkin boy, en az 300 galon/yaklaşık 1.135 litre, 15–26 °C, pH 6–8 ve güçlü akıntı gereksinimleri işlendi.
+- Çin Ejderi için de doğrulanmış santimetre uzunluğu bulunmadığından değer uydurulmadı; erişkin bakımının çoğu ev akvaryumundan çok büyük sistem veya havuz gerektirdiği görünür uyarıya eklendi.
+- Regresyonlar iki adın Cikletist Monster envanterinde doğru profile bağlanmasını; hacim, sıcaklık, akıntı, avcılık ve eksik uzunluk verisi uyarılarının üretilmesini koruyor. Monster grubu 29'dan 31 doğrulanmış profile çıktı.
+- Tam `pnpm verify` başarılıdır: TypeScript, katalog akışı, 47 sağlık senaryosu, kaynak/bakım denetimi ve 14 sayfalık üretim derlemesi geçti.
+- GitHub/Vercel'e gönderim yapılmadı; canlı uygulama bu paketi henüz içermez.
+- Sonraki tek iş: Cikletist'in güncel iki sayfalık Monster envanterini yeniden çıkarıp mevcut regresyon listesini yenilemek; yeni başlıkları doğrulanmış profillere veya kaynaklı güvenlik listesine bağlamak.
+
+## 2026-09-02 Monster yeniden doğrulama ve Canlı Doğuranlar tam envanteri
+
+- Cikletist Monster ana kategorisi canlı siteden yeniden okundu. Sayfa 2 isteği ana sayfaya yönleniyor; güncel envanter 21 başlıktır. Mevcut 21 başlıklı regresyonla birebir eşleştiği için arama motorundaki eski, daha uzun önbellek listesi güncel veri kabul edilmedi.
+- Cikletist Canlı Doğuranlar kategorisinin iki sayfasındaki 26 satış başlığının tamamı tek regresyon envanterine alındı. `YELLOW TUXEDO LEPİSTES` ve `SANTA CLAUS LEPİSTES` dahil 20 lepistes varyetesi aynı `Poecilia reticulata` biyolojik profiline bağlandı; renk adı ayrı tür olarak çoğaltılmadı.
+- Lepistes profili FishBase ve OATA kaynaklarıyla yenilendi: 6 cm erişkin dişi boyu, en az 45 litre ve 60 cm akvaryum, en az üçlü ve dişi ağırlıklı grup, 20–28 °C, pH 7–8, sert/alkali su ve nazik akıntı gereksinimleri işlendi.
+- `VELİFERA BALIKLARI` ve `VELİFERA TÜRLERİ`, `Poecilia latipinna` profiline kopyalanmadı; FishBase ve Seriously Fish kaynaklarıyla ayrı `Poecilia velifera` profiline bağlandı. 15 cm, yaklaşık 104 litre, 91 cm taban, en az üçlü grup, 22–28 °C ve pH 7–8,5 eşikleri ile ticari melezlik uyarısı eklendi.
+- Yalnız renk adı taşıyan `ALBİNO SKY BLUE` sayfası tür veya bilimsel ad yayımlamadığı için lepistes ya da moli olarak tahmin edilmedi. Canlı doğuran aramasında neden eşlenmediğini açıklayan, eklenemez güvenlik kaydı olarak gösteriliyor; çözülmemiş görünür liste 14 kayda çıktı.
+- Tam `pnpm verify` başarılıdır: TypeScript, 26 başlıklı Canlı Doğuranlar regresyonu, 48 sağlık senaryosu, kaynak/bakım denetimi ve 14 sayfalık üretim derlemesi geçti. Canlı doğuran grubu 14/14 kaynaklı ve bakım verisi tam profile ulaştı.
+- GitHub/Vercel'e gönderim yapılmadı; canlı uygulama bu paketi henüz içermez.
+- Sonraki tek iş: Cikletist Betta kategorisinin güncel satış envanterini çıkarıp tüm canlı başlıklarını kaynaklı Betta veya diğer labirentli profillerle karşılaştırmak.
+
+## 2026-09-02 Betta ve labirentli güvenlik paketi
+
+- Cikletist Betta kategorisindeki yem ürünü ayrıştırıldı; kalan 14 canlı satış başlığının tamamı tek regresyon envanterine alındı. Veiltail, Crowntail, Halfmoon, White, Galaxy Koi, Taç, Samurai ve Plakat satış adları ayrı tür üretilmeden `Betta splendens` profiline; Dev Gurami ve Çikolata Gurami kendi tür profillerine bağlandı.
+- Betta profili FishBase ve OATA kaynaklarıyla yenilendi: 6,5 cm erişkin boy, tek erkek için en az 20 litre, 20–28 °C, pH 6–8, nazik akıntı, ısıtıcı ve biyolojik filtre gereksinimleri işlendi. İki erkeğin birlikte tutulmaması, dişi grupları ve yüzgeç ısıran tank arkadaşları için açık kullanıcı uyarıları eklendi.
+- Kaynaklar santimetre cinsinden minimum tank uzunluğu yayımlamadığı için eski kaynaksız 40 cm değeri kaldırıldı. Tahmin yerine veri sınırlılığı sağlık analizinde görünür uyarı olarak gösteriliyor.
+- `MEYAN KÖKÜ GURAMİ` ürün sayfası bilimsel tür veya köken yayımlamıyor. Uzman Parosphromenus kaynağı ticarette `P. deissneri` adının çok sayıda meyan kökü guramisi için yanlış kullanıldığını doğruladığı için satış adı herhangi bir tür profiline tahminle bağlanmadı; labirentli aramasında açıklamalı ve eklenemez güvenlik kaydı olarak gösteriliyor.
+- Tam `pnpm verify` başarılıdır: TypeScript, 14 başlıklı Betta regresyonu, 15 çözülmemiş güvenlik kaydı, 49 sağlık senaryosu, katalog denetimi ve 14 sayfalık üretim derlemesi geçti. Labirentli grubu 14/14 kaynaklı ve bakım verisi tam profile sahiptir.
+- GitHub/Vercel'e gönderim yapılmadı; canlı uygulama bu paketi henüz içermez.
+- Sonraki tek iş: Cikletist Japon/Oranda kategorisinin güncel satış envanterini çıkarıp tüm canlı başlıklarını doğrulanmış Japon balığı veya koi profilleriyle karşılaştırmak.
+
+## 2026-09-02 Japon/Oranda envanteri ve adet bazlı hacim güvenliği
+
+- Cikletist Japon/Oranda kategorisindeki 18 güncel satış kaydının tamamı tek regresyon envanterine alındı. Aynı adla iki ayrı stok kaydı bulunan `Ranchu Japon Balıkları` tekrarı da envanter sayısında korunuyor; 13 süslü/genel Japon balığı kaydı `Carassius auratus`, beş koi kaydı `Cyprinus carpio` profiline bağlıdır.
+- Japon balığı profili OATA ve FishBase kaynaklarıyla yenilendi: akvaryumda yaygın 25 cm erişkin boy, ilk yetişkin için 100 litre, her ek yetişkin için 50 litre, 100 cm akvaryum, 4–25 °C, pH 6–8 ve düşük akıntı eşikleri işlendi.
+- Sağlık analizine tür bazlı `additionalVolumePerAnimalL` alanı eklendi. Böylece iki yetişkin Japon balığı 120 litrede artık uygun görünmüyor; analiz kayıtlı adede göre gereken 150 litreyi kullanıcıya açıkça gösteriyor.
+- Oranda, Ranchu, Ryukin, Balongöz ve Teleskop gibi yavaş süslü formların hızlı tek kuyruklularla yem rekabeti; yüksek atık yükü, güçlü biyolojik/mekanik filtrasyon, oksijen, haftalık test ve su değişimi gereksinimleri görünür uyarılara işlendi.
+- Tam `pnpm verify` başarılıdır: TypeScript, 18 kayıtlı Japon/Oranda envanteri, 50 sağlık senaryosu, katalog denetimi ve 14 sayfalık üretim derlemesi geçti.
+- GitHub/Vercel'e gönderim yapılmadı; canlı uygulama bu paketi henüz içermez.
+- Sonraki tek iş: Cikletist Labirentli Balıklar kategorisinin güncel satış envanterini çıkarıp Betta kategorisi dışında kalan bütün satış adlarını kaynaklı profillerle karşılaştırmak.
+
+## 2026-09-02 Labirentli Balıklar envanteri ve arama önceliği güvenliği
+
+- Cikletist Labirentli Balıklar kategorisindeki 15 canlı başlığının tamamı regresyon kapsamına alındı. Betta kategorisinden doğrulanan 14 kayda ek olarak yalnız `Gurami` adıyla yayımlanan ürün doğrudan satış sayfasından denetlendi.
+- Genel `Gurami` satış sayfası bilimsel tür, köken veya erişkin boy yayımlamıyor ve görselin temsili olduğunu belirtiyor. OATA, gurami adının yaklaşık 4 cm'lik kıvılcım guramiden 70 cm'lik dev guramiye kadar çok farklı türleri kapsadığını doğruladığı için kayıt herhangi bir mevcut gurami profiline tahminle bağlanmadı; açıklamalı ve eklenemez güvenlik kaydı olarak eklendi.
+- Çözülmemiş canlı araması tam ad eşleşmesini daha uzun kısmi eşleşmelerden önce seçiyor. Canlı ekleme formu da çözülmemiş satış adını doğrulanmış katalogdaki kısmi eşleşmeden önce kontrol ediyor; böylece `Gurami` yazıldığında Cüce, Dev veya başka bir gurami otomatik seçilmiyor.
+- Canlı ekleme ekranındaki alan uyarısı `additionalVolumePerAnimalL` değerini kullanacak şekilde yenilendi; Japon balığı gibi adet başına ilave hacim gerektiren türlerde kayıt anında doğru toplam litre gösteriliyor.
+- Tam `pnpm verify` başarılıdır: TypeScript, 15 başlıklı Labirentli envanteri, 16 çözülmemiş güvenlik kaydı, 50 sağlık senaryosu, katalog denetimi ve 14 sayfalık üretim derlemesi geçti.
+- GitHub/Vercel'e gönderim yapılmadı; canlı uygulama bu paketi henüz içermez.
+- Sonraki tek iş: Cikletist Tetra Türleri kategorisinin güncel sayfalarını çıkarıp bütün satış adlarını kaynaklı tetra, rasbora, barb veya diğer uygun profillerle karşılaştırmak.
+
+## 2026-09-03 Tetra Türleri ana kategori envanteri ve belirsiz ad güvenliği
+
+- Cikletist Tetra Türleri ana kategorisinin altı güncel sayfası doğrudan indirildi; sayfa başına 24 ve son sayfada dokuz olmak üzere toplam 129 satış satırı regresyon kapsamına alındı. Aynı adla iki ayrı stok kaydı bulunan `İTHAL SARI İMPARATOR CİKLET` tekrarı satır sayısında korundu.
+- 96 satış satırı daha önce bilimsel kimliği ve bakım eşikleri doğrulanmış tetra, rasbora, barb, rainbowfish, cichlid, monster ve diğer profillere bağlıdır. Kimliği belirlenemeyen 33 satır, 32 benzersiz açıklamalı güvenlik kaydıyla kapsandı; bu kayıtlar aramada bulunuyor fakat yanlış hacim, su türü veya uyumluluk hesabı üretmemek için eklenemiyor.
+- Eşleşmeyen ürün sayfalarının görünür açıklamaları ayrıca denetlendi: bilimsel tür veya bakım eşiği yayımlanmıyor ve balık görsellerinin temsili olduğu belirtiliyor. Bu nedenle `Blue King Tetra`, `Buz Balığı`, genel `Rasbora`, `Puffer Balıkları`, karışık ciklet ve benzeri adlar fotoğrafa ya da ticari ada bakılarak tahminle profile bağlanmadı.
+- Canlı aramasına doğrulanmış tam eşleşme önceliği eklendi. Böylece kaynaklı `ARGUS BALIKLARI` profili daha uzun çözülmemiş `SİLVER ARGUS BALIKLARI` kaydı yüzünden engellenmiyor; buna karşılık genel `Gurami` gibi kesin çözülmemiş adlar kısmi bir doğrulanmış türü seçemiyor.
+- Tam `pnpm verify` başarılıdır: TypeScript, 129 satırlık Tetra ana kategori regresyonu, 48 benzersiz çözülmemiş kayıt, 50 sağlık senaryosu, katalog denetimi ve 14 sayfalık üretim derlemesi geçti.
+- GitHub/Vercel'e gönderim yapılmadı; canlı uygulama bu paketi henüz içermez.
+- Sonraki tek iş: Cikletist Havuz Balıkları kategorisinin güncel satış envanterini çıkarıp tüm adları kaynaklı koi, Japon balığı veya diğer havuz profilleriyle karşılaştırmak.
+
+## 2026-09-03 Havuz Balıkları envanteri ve satış adı normalizasyonu
+
+- Cikletist Havuz Balıkları kategorisindeki sekiz güncel satış başlığının tamamı regresyon kapsamına alındı. Beş koi satırı `Cyprinus carpio`, üç Japon balığı satırı `Carassius auratus` profiline bağlıdır; çözülmemiş havuz balığı kaydı kalmadı.
+- `KOİ TÜL KUYRUK`, Longfin Koi ve Butterfly Koi adları ayrı bir biyolojik tür oluşturulmadan koi profiline bağlandı. Profil, bu adların aynı türün uzun yüzgeçli seçilim formunu anlattığını ve yetişkin koi bakım eşiklerinin geçerli olduğunu kullanıcıya açıklar.
+- Canlı katalog aramasındaki metin normalizasyonu yinelenen boşlukları tek boşluğa indiriyor. Böylece canlı sitedeki `KOİ BALIKLARI HAVUZ BALIKLARI  A+` başlığı gibi yazımlar güvenli eşleşmeyi bozmaz.
+- Tam `pnpm verify` başarılıdır: TypeScript, sekiz satırlık Havuz Balıkları regresyonu, 48 benzersiz çözülmemiş kayıt, 50 sağlık senaryosu, katalog denetimi ve 14 sayfalık üretim derlemesi geçti.
+- GitHub/Vercel'e gönderim yapılmadı; canlı uygulama bu paketi henüz içermez.
+- Sonraki tek iş: Cikletist Balık Çeşitleri ana kategorisinin güncel sayfalarını çıkarıp alt kategorilere yanlış yerleştirilmiş veya henüz regresyon kapsamına alınmamış satış adlarını belirlemek.
+
+## 2026-09-04 Balık Çeşitleri ana kategori tam envanteri
+
+- Cikletist Balık Çeşitleri ana kategorisinin 16 güncel sayfası doğrudan indirildi. Sayfa başına 24 olmak üzere 384 satış satırı ve 377 benzersiz satış adı kalıcı fixture ve regresyon kapsamına alındı.
+- 310 satır doğrulanmış biyolojik profile bağlandı. Rio Manacapuru Melek, Altın Balon/Ramirezi, kısaltılmış Apistogramma macmasteri, Meksika Cüce Kerevit ve Deep Blue Bolt adları mevcut doğrulanmış tür profillerine güvenli takma ad olarak eklendi; renk, boy veya yöre adı ayrı tür oluşturmadı.
+- Bilimsel kimliği veya zorunlu akvaryum eşiği tamamlanamayan 71 satır açıklamalı ve eklenemez güvenlik sonucuna bağlandı. Bu kapsam için 18 yeni benzersiz kayıt eklendi; toplam görünür güvenlik listesi 66 kayda çıktı. Green Texas adındaki iki türlü kullanım, türsüz Amerikan kereviti, karışık Nerite/Caridina hatları ve türü verilmeyen deniz omurgasızları tahminle profile atanmadı.
+- `JOKER ÜRÜN`, genel `ürün` ve `TETRA BETTA MENÜ 100ML` canlı olmadıkları için canlı ve çözülmemiş canlı sonuçlarından açıkça dışlandı.
+- Regresyon; 384 satırın tamamını, 15 alt kategori dağılımını, doğrulanmış/çözülmemiş/canlı olmayan 310/71/3 ayrımını ve tatlı su-deniz suyu görünürlük sınırlarını koruyor.
+- Tam `pnpm verify` başarılıdır: TypeScript, katalog akışı, 50 sağlık senaryosu, 49 marka katalog denetimi ve 14 sayfalık üretim derlemesi geçti.
+- GitHub/Vercel'e gönderim yapılmadı; canlı uygulama bu paketi henüz içermez.
+- Sonraki tek iş: kapasite hesabına katılması gereken fakat yayımlanmış teknik sayısı bulunmayan 37 ekipman kaydını onaylı ikincil kaynaklarda yeniden denetlemek; 28 kayıtla en büyük açık olan Jeneca'dan devam etmek.
+
+## 2026-09-04 Jeneca XP filtreleri kapasite doğrulaması
+
+- Jeneca'nın resmî XP-18/19/31/32 teknik tablosu bulundu. XP-18 ve XP-31 için 240 L/saat ile 4,2 W; XP-19 ve XP-32 için 270 L/saat ile 4,8 W değerleri doğrudan üretici sayfasından işlendi. Dört modelin ayarlanabilir akış özelliği de aynı resmî açıklamadan doğrulandı.
+- XP-18 ve XP-19 için ayrı satış seçeneği tablosunda yayımlanan 48 ve 54 litrelik akvaryum üst sınırları ikincil kaynak olarak saklandı. XP-31 ve XP-32 için yayımlanmayan hacim sınırı tahmin edilmedi.
+- XP-01A'nın ayrı resmî üretici sayfasındaki 90 L/saat ve 2,5 W değerleri işlendi; düşük su seviyeli filtre otomatik uygunluk hesabına alındı.
+- GL-3/5/7 ailesinin resmî teknik tablosu bulundu. Modeller sırasıyla 250/300/350 L/saat ve 3/3,5/4 W değerleriyle otomatik filtrasyon hesabına alındı.
+- YM-03 yüzey skimmeri iki bağımsız kaynakta ortak yayımlanan 300 L/saat, 5 W ve 300 litre üst sınırıyla doğrulandı. Yüzey filmi temizliği ana mekanik ve biyolojik filtrenin yerine geçmediği için sağlık analizi skimmer debisini ana filtre çevrimine katmıyor ve tek başına seçildiğinde `Ana filtre gerekli` uyarısı veriyor.
+- YM-01 üreticinin yüzey yağ filmi giderici ailesinde doğrulandı; bağımsız satış kaydı cihazın pompasız olduğunu açıkça gösteriyor. Bu nedenle pasif yardımcı parça olarak işaretlendi, motorlu kapasite açığı olmaktan çıkarıldı ve sağlık puanında ana filtre sayılmıyor.
+- AP-06 üreticinin AP serisi teknik tablosunda iki ayrı 7 L/dakika çıkış, toplam 840 L/saat, 7 W ve 0,02 MPa ile doğrulandı; otomatik hava kapasitesi hesabına alındı.
+- AP-20000 aynı resmî AP serisi tablosunda 8 L/dakika (480 L/saat), 8 W ve 0,023 MPa ile doğrulandı; ayarlanabilir hava çıkışıyla otomatik kapasite hesabına alındı.
+- XP-605 üreticinin güncel model tablosunda 250 L/saat ve 3,5 W ile doğrulandı; ayarlanabilir askı filtre otomatik kapasite hesabına alındı.
+- GD-402/502/602 üreticinin model bazlı tablosundaki 500/1000/1800 L/saat ve 8/15/25 W değerleriyle doğrulandı. Aynı tablo, eski ikincil kaynakların GD-403 ve GD-503 değerleriyle çeliştiği için bu iki modelin sayıları kesin değer olarak kullanılmadı; çelişki açıklanarak otomatik hesaptan çıkarıldı. GD-603'ün 1800 L/saat ve 25 W değeri iki kaynakta ortaktır.
+- IPF-338 üreticinin doğrudan ürün sayfasında 300 L/saat ve 5 W ile doğrulandı. Ürün kimliği IPF-338 iken teknik tablo satırında PF-338 yazılması açıklamada korundu; iki bağımsız ürün sayfasındaki aynı 300 L/saat ve 5 W değeri çapraz doğrulama bağlantısı olarak eklendi.
+- DB-11 üreticinin güncel DB serisi teknik tablosunda 11 L/dakika (660 L/saat), 6,5 W ve en az 0,020 MPa ile doğrulandı. DB-58 Upgrade üreticinin doğrudan model görselinde en fazla 55 L/dakika (3300 L/saat) ve 25 W ile doğrulandı; ayarlanabilir çıkış ve aynı üst değer bağımsız ürün sayfasıyla çapraz kontrol edildi. Üreticinin güncel DB serisi tablosu, DB-11 Upgrade için 11 L/dakika (660 L/saat), 6,5 W ve en az 0,020 MPa; DB-21 Upgrade için 18 L/dakika (1080 L/saat), 10 W ve en az 0,025 MPa değerlerini ve iki modelde kablolu akış ayarını ayrı ayrı yayımladığı için bu varyantlar otomatik hava kapasitesi hesabına alındı.
+- DC-003 üreticinin doğrudan ürün sayfasındaki cihaz etiketiyle çift 1,5 L/dakika çıkış, toplam 180 L/saat ve 0,018 MPa olarak doğrulandı; sürekli ve 10 saniyelik aralıklı çalışma açıklamaya işlendi. Etikette watt değeri yayımlanmadığı için `powerW` tahmin edilmedi. DC-001 üreticinin doğrudan ürün görselinde 1,3 L/dakika (78 L/saat), 0,018 MPa ve DC 3,7 V olarak doğrulandı; görseldeki 130 mAh ifadesi watt gibi yorumlanmadı.
+- AP-18000 üreticinin doğrudan model sayfasındaki teknik tabloda 8 L/dakika (480 L/saat), 6 W, 0,018 MPa ve 180 × 135 × 95 mm olarak doğrulandı. Kaynak ayarlanabilir çıkış yayımlamadığı için bu özellik tahmin edilmedi.
+- TGD-15, TGD-16, TGD-17, TGD-18 ve TGD-19 üreticinin doğrudan model görselinde ayrı ayrı 400 L/saat ve 6 W olarak yayımlandı; beş model de otomatik filtrasyon hesabına alındı.
+- Jeneca'da kapasite gerektiren kayıt sayısı 186, hazır kayıt sayısı 183 oldu (%98). Tüm katalogdaki açıklamalı kapasite boşluğu 39'dan 12'ye, Jeneca açığı 30'dan 3'e düştü.
+- Tam `pnpm verify` 2026-09-04 tarihinde başarılıdır: TypeScript, yedi ekipman kategorili ve 610 bakım ürünlü katalog akışı, 52 sağlık senaryosu, katalog denetimi ve 14 sayfalık üretim derlemesi geçti.
+- GitHub/Vercel'e gönderim yapılmadı; canlı uygulama bu paketi henüz içermez.
+- Jeneca'nın kalan üç kapasite boşluğu yeniden tarandı. GD-403/GD-503 için resmî ve ikincil tablolar birbiriyle çelişiyor; GD-320 için debi yayımlanmıyor. Bu üç kayıt tahmin edilmeden açıklamalı biçimde hesap dışında kalıyor.
+
+## 2026-09-06 Boyu SP-1300C kapasite doğrulaması
+
+- Boyu'nun doğrudan SP serisi ürün sayfasındaki model görseli SP-1300C için 400 L/saat, 9 W, 0,5 m azami basma yüksekliği ve 101 × 60 × 196 mm ölçülerini yayımlıyor. Otomatik filtrasyon profiline debi ve güç işlendi; katalog kaynağı doğrudan ürün sayfasına taşındı.
+- Boyu'nun kapasite gerektiren 87 kaydının tamamı artık otomatik hesap verisine sahiptir (%100). Tüm katalogdaki açıklamalı kapasite boşluğu 12'den 11'e düştü.
+- Hedefli katalog akışı, katalog denetimi ve tam `pnpm verify` 2026-09-06 tarihinde başarılıdır: TypeScript, yedi ekipman kategorili ve 610 bakım ürünlü katalog akışı, 52 sağlık senaryosu, katalog denetimi ve 14 sayfalık üretim derlemesi geçti.
+- GitHub/Vercel'e gönderim yapılmadı; canlı uygulama bu paketi henüz içermez.
+
+## 2026-09-06 Haqos Thermo-Sprite kapasite doğrulaması
+
+- Haqos'un doğrudan Thermo-Sprite ürün sayfası model kimliğini, onaylı yerel ikincil kaynak ise 15 W güç ile 14 × 2,5 cm ölçülerini doğruluyor. Isıtıcıya güç işlendi; yayımlanmayan önerilen akvaryum hacmi tahmin edilmedi.
+- Haqos'ta kapasite gerektiren 21 kaydın 19'u artık otomatik hesap verisine sahiptir (%90). Tüm katalogdaki açıklamalı kapasite boşluğu 11'den 10'a düştü.
+- Tam `pnpm verify` 2026-09-06 tarihinde başarılıdır: TypeScript, yedi ekipman kategorili ve 610 bakım ürünlü katalog akışı, 52 sağlık senaryosu, katalog denetimi ve 14 sayfalık üretim derlemesi geçti.
+- GitHub/Vercel'e gönderim yapılmadı; canlı uygulama bu paketi henüz içermez.
+- Sonraki tek iş: kalan 10 açıklamalı kapasite boşluğunu yeniden denetlemek. Kalanlar Aquawing AQ-A3000; Jeneca GD-403, GD-503 ve GD-320; Eurostar Motorlu Pipo Filtre Medium ve Large; Haqos EASY-1000AT ve Aqua Flow 250; Nubios YU-118C ve YU-119C'dir. Doğrulanmış sayısal değer bulunamazsa mevcut güvenlik kaydı korunacaktır.
+
+## 2026-09-06 Aquawing AQ-A3000 kaynak yenilemesi
+
+- AQ-A3000 doğrudan ürün sayfasında çift çıkışlı hava kompresörü, 25 W ve `8690000438723` barkoduyla doğrulandı; Akvaryum Express marka kataloğu da model ile 25 W bilgisini bağımsız olarak doğruluyor.
+- İki kaynak da hava debisi yayımlamadığından debi tahmin edilmedi ve kayıt otomatik hava kapasitesi hesabının dışında tutuldu. Genel marka bağlantısı ikincil kaynak olarak korunurken ana bağlantı doğrudan ürün sayfasına taşındı.
+- Bu karar katalog regresyon testine bağlandı. Tam `pnpm verify` 2026-09-06 tarihinde başarılıdır: TypeScript, katalog akışı, 52 sağlık senaryosu, katalog denetimi ve 14 sayfalık üretim derlemesi geçti. Açıklamalı kapasite boşluğu sayısı 10 olarak değişmedi.
+
+## 2026-09-06 ekipman kapasite uyarısı açıklaması
+
+- Sağlık ekranında tek bir ekipmanın kapasite verisi eksik veya çelişkiliyse katalogdaki doğrulama nedeni artık doğrudan gösterilir. Kullanıcı yalnızca genel bir “eksik” mesajı yerine, verinin yayımlanmadığını veya iki kaynağın hangi sayılarda çeliştiğini görür.
+- Jeneca GD-320 yayımlanmamış veri ve GD-403 çelişkili veri akışları sağlık regresyonuna eklendi. Tam `pnpm verify` 2026-09-06 tarihinde başarılıdır: TypeScript, katalog akışı, 52 sağlık senaryosu, katalog denetimi ve 14 sayfalık üretim derlemesi geçti.
+
+## 2026-09-06 kapasite boşluğu denetim sınıflandırması
+
+- Katalog denetimi teknik değer bulunmayan kayıtlarla birbiriyle çelişen kaynakları artık ayrı durumlar olarak raporlar. Jeneca GD-403 ve GD-503 `kaynaklar çelişkili`; kalan sekiz açık kayıt `kaynakta yayımlanmamış` olarak görünür.
+- Hedefli katalog denetimi ve tam `pnpm verify` başarılıdır: TypeScript, yedi ekipman kategorili ve 610 bakım ürünlü katalog akışı, 52 sağlık senaryosu, katalog denetimi ve 14 sayfalık üretim derlemesi geçti.
+
+## 2026-09-06 Eurostar ve Nubios açık kayıt kimliği
+
+- Eurostar Motorlu Pipo Filtre Medium ve Large için yetkili satıcıdaki ürün kodu, barkod, cihaz ölçüsü ve sünger ölçüsü kataloğa ve regresyon testine işlendi. İki modelin 5 W gücü doğrulandı; su debisi yayımlanmadığı için boşluk güvenli biçimde korundu.
+- Nubios YU-118C ve YU-119C ürün kodları doğrulandı. YU-118C adına açılmış bir sayfadaki XY-2900 teknik metninin başka markaya ait olduğu katalog açıklamasında ve regresyon testinde açıkça korunuyor; iki model için debi tahmin edilmedi.
+- Hedefli katalog akışı ve tam `pnpm verify` başarılıdır: TypeScript, yedi ekipman kategorili ve 610 bakım ürünlü katalog akışı, 52 sağlık senaryosu, katalog denetimi ve 14 sayfalık üretim derlemesi geçti.
+
+## 2026-09-06 ekipman kategori-marka-model seçici güvencesi
+
+- Ekipman ekleme ekranı kategori kayıtlarını, o kategoriye ait marka listesini ve seçilen kategori/markaya ait model listesini ortak katalog yardımcı fonksiyonlarından alıyor. Kategori değişiminde marka, arama ve seçili model yeni kategoriye göre sıfırlanıyor.
+- Yedi ekipman kategorisinin tamamında kategori, marka ve model saflığı regresyon testine bağlandı; filtre seçildiğinde ısıtıcı veya başka kategori modeli gösterilmesi test tarafından engelleniyor.
+- TypeScript, hedefli katalog akışı ve tam `pnpm verify` başarılıdır: yedi ekipman kategorili ve 610 bakım ürünlü katalog akışı, 52 sağlık senaryosu, katalog denetimi ve 14 sayfalık üretim derlemesi geçti.
+
+## 2026-09-06 canlı sınıfı-grup-su türü seçici güvencesi
+
+- Canlı ekleme ekranı artık seçilen ana sınıf ve akvaryum su türüne uygun profilleri ve grupları ortak katalog yardımcı fonksiyonlarından alıyor. Kategori değişiminde grup, arama, seçili tür ve önerilen adet yeni bağlama göre sıfırlanıyor.
+- Balık, karides, salyangoz ve diğer canlı sınıfları; freshwater, saltwater ve brackish akvaryum türlerinin tamamıyla çapraz regresyon testine bağlandı. Uyumsuz su türü veya farklı canlı sınıfı seçiciye sızarsa test başarısız olur.
+- TypeScript, hedefli katalog akışı ve tam `pnpm verify` başarılıdır: yedi ekipman kategorili ve 610 bakım ürünlü katalog akışı, 52 sağlık senaryosu, katalog denetimi ve 14 sayfalık üretim derlemesi geçti.
+
+## 2026-09-06 ortak mobil ve masaüstü menü kaynağı
+
+- Masaüstü sol menü ile mobil açılır sol menü aynı navigasyon listesinden besleniyor. Genel Bakış, Akvaryumlarım, Su Değerleri, Bakım Günlüğü, Canlılar, Bitkiler, Ekipmanlar, Ürün Kataloğu, Hesaplayıcılar ve Ayarlar bağlantıları tek kaynakta korunuyor.
+- Ortak sıra, zorunlu bağlantılar ve yinelenen bağlantı bulunmaması regresyon testine bağlandı. Böylece yeni bir başlık eklenirken veya değiştirilirken mobil menünün eksik kalması önleniyor.
+- TypeScript, hedefli katalog akışı ve tam `pnpm verify` başarılıdır: yedi ekipman kategorili ve 610 bakım ürünlü katalog akışı, 52 sağlık senaryosu, katalog denetimi ve ortak menünün bağlandığı 14 sayfalık üretim derlemesi geçti.
+
+## 2026-09-06 hesaplayıcı güvence paketi
+
+- Akvaryum hacmi, su değişimi ve kum miktarı hesapları arayüzden ayrılarak ortak, test edilebilir hesaplama fonksiyonlarına taşındı. Geçersiz negatif ve sonlu olmayan girişler güvenli biçimde sıfırlanıyor; su değişimi ve hacim kaybı yüzdeleri 0–100 aralığında tutuluyor.
+- Kum hesaplayıcı ön ve arka yükseklikten eğimli tabanın ortalama yüksekliğini, gereken litreyi ve seçilen kum türünün yaklaşık yoğunluğuna göre ağırlığı hesaplıyor. Silis kum, bazalt kum, aquasoil, mercan kırığı ve doğal çakıl seçenekleri korunuyor; kullanıcıya ağırlığın tane boyu, nem ve üreticiye göre değişebileceği belirtiliyor.
+- Hacim, su değişimi, eğimli taban, kum türüne göre ağırlık farkı, hatalı giriş koruması ve kum türü veri bütünlüğü bağımsız regresyon testine bağlandı. Tam `pnpm verify` başarılıdır: TypeScript, katalog akışı, 52 sağlık senaryosu, hesaplayıcı regresyonu, katalog denetimi ve 14 sayfalık üretim derlemesi geçti.
+- GitHub/Vercel'e gönderim yapılmadı; canlı uygulama bu hesaplayıcı güvence paketini henüz içermez.
+
+## 2026-09-06 Geophagus brasiliensis canlı profili
+
+- Cikletist'teki `GEOPHAGUS BRASİLİENSİS` başlığı bilimsel tür adını doğrudan verdiği için FishBase kimlik, 28 cm erişkin boy ve tatlı/acı su kaydıyla doğrulandı. Bağımsız bakım kaynağındaki 320 litre, 60 inç (yaklaşık 152 cm), 20–28 °C ve pH 6,0–8,0 eşikleriyle güvenli sağlık profili tamamlandı.
+- Satış adı artık açıklamalı bekleme listesinden çıkarılarak `Geophagus brasiliensis` profiline bağlanıyor. `Pearl Cichlid` ortak adı yanlışlıkla Texas ciklet profiline bağlanmayacak şekilde düzeltildi; bölgecilik, küçük balık riski, ince kum, güçlü filtrasyon ve düzenli su değişimi uyarıları eklendi.
+- Ana kategori dağılımı 311 doğrulanmış, 70 açıklamalı beklemede ve üç canlı olmayan satır oldu; görünür çözülmemiş kayıt sayısı 65'e düştü. Tam `pnpm verify` başarılıdır: TypeScript, katalog akışı, 52 sağlık senaryosu, hesaplayıcı regresyonu, katalog denetimi ve 14 sayfalık üretim derlemesi geçti.
+- Haqos EASY-1000AT ve Aqua Flow 250 ayrıca yeniden tarandı. Üreticinin sayfası teknik açıklamayı görselde yayımlıyor ancak görsel sunucusu erişilemedi; arama ve satıcı kaynakları model bazlı debi vermedi. Debi tahmin edilmedi ve iki güvenlik kaydı korundu.
+
+## 2026-09-06 Rosy Tetra canlı profili
+
+- Cikletist'teki `ROSY TETRA BALIKLARI` başlığı, uzman bakım kaynaklarının ortak adı doğrudan `Hyphessobrycon rosaceus` için kullanmasıyla doğrulandı. Kayıt 5 cm erişkin boy, en az 68 litre/60 cm akvaryum, en az sekizli sürü, 24–28 °C ve pH 5,5–7,5 eşikleriyle kaynaklı profile bağlandı.
+- Benzer `Gül Tetra` satış adı birden fazla yakın tür için kullanılabildiğinden tahminle aynı profile bağlanmadı ve açıklamalı güvenlik listesinde bırakıldı. Bu iki adın ayrımı regresyon testleriyle korunuyor.
+- Tetra ana kategorisi 97 doğrulanmış ve 32 açıklamalı satıra; genel ana kategori 312 doğrulanmış, 69 açıklamalı ve üç canlı olmayan satıra ulaştı. Görünür çözülmemiş kayıt sayısı 64'e düştü.
+- Tam `pnpm verify` başarılıdır: TypeScript, yedi ekipman kategorili ve 610 bakım ürünlü katalog akışı, 52 sağlık senaryosu, beş kum türünü kapsayan hesaplayıcı regresyonu, katalog denetimi ve 14 sayfalık üretim derlemesi geçti.
+- GitHub/Vercel'e gönderim yapılmadı; canlı uygulama bu canlı profili değişikliğini henüz içermez.
+
+## 2026-09-07 Hemiodus gracilis canlı profili
+
+- Cikletist'teki `RED TAİLED HEMİODUS` başlığı, Fishkeeper ve Seriously Fish kaynaklarının Red-tailed/Redtail Hemiodus adını doğrudan `Hemiodus gracilis` için kullanmasıyla doğrulandı. FishBase kimlik, 16,3 cm standart boy ve 23–27 °C/pH 5,8–7,2 aralığını ayrıca doğruluyor.
+- Güvenli profil 18 cm mağaza erişkin boyu, en az 243 litre ve 120 cm akvaryum, en az sekizli sürü, güçlü filtrasyon, yüksek oksijen, sıkı kapak ve geniş açık yüzme alanı eşikleriyle eklendi. Küçük ve sakin balıkları strese sokma riski kullanıcı uyarısına işlendi.
+- Satış adı açıklamalı bekleme listesinden çıkarıldı. Tetra mağaza kategorisi 98 doğrulanmış ve 31 bekleyen satıra; genel ana kategori 313 doğrulanmış, 68 bekleyen ve üç canlı olmayan satıra ulaştı. Görünür çözülmemiş kayıt sayısı 63'e düştü.
+- Tam `pnpm verify` başarılıdır: TypeScript, yedi ekipman kategorili ve 610 bakım ürünlü katalog akışı, 52 sağlık senaryosu, beş kum türünü kapsayan hesaplayıcı regresyonu, katalog denetimi ve 14 sayfalık üretim derlemesi geçti.
+- GitHub/Vercel'e gönderim yapılmadı; canlı uygulama bu canlı profili değişikliğini henüz içermez.
+
+## 2026-09-07 African Butterfly Fish profil düzeltmesi
+
+- Cikletist'teki `BUTTERFLY FISH` satırının mağazanın tatlı su `Sazansıgiller` bölümünde yer aldığı doğrulandı. Bu bağlamdaki yalın ortak ad, uzman kaynaklarda tek tür olan `Pantodon buchholzi` için kullanıldığından yalnızca tam mağaza başlığı mevcut African Butterfly Fish profiline bağlandı; genel `Kelebek Balığı` takma adı eklenmedi.
+- Mevcut profilin kaynakta doğrudan karşılığı bulunmayan 96 litre/80 cm değerleri kaldırıldı. Seriously Fish'teki 90 × 30 cm taban ve yaklaşık 81 litre, 12 cm standart boy ve 23–30 °C/pH 6,0–7,5 bilgileri; Fishkeeper'daki 15 cm üst boy ve yüzey avcısı bakım uyarılarıyla birleştirildi. Güvenli hesapta 15 cm erişkin boy ve 90 cm akvaryum uzunluğu kullanılıyor.
+- Satış adı açıklamalı bekleme listesinden çıkarıldı. Tetra mağaza kategorisi 99 doğrulanmış ve 30 bekleyen satıra; genel ana kategori 314 doğrulanmış, 67 bekleyen ve üç canlı olmayan satıra ulaştı. Görünür çözülmemiş kayıt sayısı 62'ye düştü.
+- Tam `pnpm verify` başarılıdır: TypeScript, yedi ekipman kategorili ve 610 bakım ürünlü katalog akışı, 52 sağlık senaryosu, beş kum türünü kapsayan hesaplayıcı regresyonu, katalog denetimi ve 14 sayfalık üretim derlemesi geçti.
+- GitHub/Vercel'e gönderim yapılmadı; canlı uygulama bu profil düzeltmesini henüz içermez.
+
+## 2026-09-07 belirsiz ticari ad güvenliği — Red Lipstick Goby ve Yellow Flagtail
+
+- `RED LİP STİCK GOBBY` satış sayfası bilimsel kimlik yayımlamıyor ve görsellerin temsili olduğunu belirtiyor. Red Lipstick Goby adı Kanada devlet ticaret envanterinde `Sicyopus exallisquamulus`, güncel uzman ve ticari kaynaklarda ise `S. rubicundus` ve `S. jonklaasi` için kullanıldığı için tek bir bakım profiline bağlanmadı.
+- `YELLOW FLAGTAİL` mağazada Sazansıgiller altında yaklaşık 8 cm satış boyuyla listeleniyor ancak bilimsel ad vermiyor. Aynı ticari ad kaynaklarda `Semaprochilodus kneri`, `S. taeniurus` ve `S. insignis` için kullanıldığından erişkin boy ve akvaryum eşiği tahmin edilmedi.
+- Her iki kayıt yeni doğrudan ve çapraz doğrulama kaynaklarıyla güçlendirildi; yanlış bir biyolojik profile bağlanmamaları, tür çatışmasını kullanıcıya açıklamaları ve kaynak zincirini korumaları regresyon testine eklendi.
+- Hedefli `pnpm test:catalog-flow` ve tam `pnpm verify` başarılıdır: TypeScript, yedi ekipman kategorisi, dört canlı sınıfı, 610 bakım ürünü, 52 sağlık senaryosu, beş kum türü, katalog denetimi ve 14 sayfalık üretim derlemesi doğrulandı.
+- GitHub/Vercel'e gönderim yapılmadı; canlı uygulama bu güvenlik açıklamalarını henüz içermez.
+
+## 2026-09-07 Dario tigris canlı profili
+
+- Cikletist'teki `BLACK TİGER BADİS DARİO FİSH` satış adı güncel taksonomik kaynak ve akvaryum ticaret kayıtlarında `Dario tigris` ile eşleşti. Tür 2022'de bilimsel olarak tanımlandı; daha eski bakım kaynaklarındaki `Dario sp. 'Myanmar'`, Black Tiger Dario ve Fire Red Tiger Badis adları aynı ticari kimliğin tarihsel adlarıdır.
+- Güncel tür tanımındaki yaklaşık 2 cm standart boy kullanıldı. Eski bakım kaynağındaki 3,5 cm boy bilgisi taşınmadı; aynı kaynağın 45 × 30 cm taban, yaklaşık 41 litre, 20–24 °C ve pH 7,0–9,0 bakım aralıkları koruyucu eşik olarak kullanıldı. Erkek bölgeciliği, yavaş beslenme, mikroavcı davranışı ve tür akvaryumu önerisi kullanıcı uyarılarına işlendi.
+- Satış adı açıklamalı bekleme listesinden çıkarıldı. Tetra mağaza kategorisi 100 doğrulanmış ve 29 bekleyen satıra; genel ana kategori 315 doğrulanmış, 66 bekleyen ve üç canlı olmayan satıra ulaştı. Görünür çözülmemiş kayıt sayısı 61'e düştü.
+- Hedefli `pnpm test:catalog-flow` ve tam `pnpm verify` başarılıdır: TypeScript, yedi ekipman kategorisi, dört canlı sınıfı, 610 bakım ürünü, 52 sağlık senaryosu, beş kum türü, katalog denetimi ve 14 sayfalık üretim derlemesi doğrulandı.
+- GitHub/Vercel'e gönderim yapılmadı; canlı uygulama bu yeni profili henüz içermez.
+
+## 2026-09-08 Jeneca GD-320 kaynak çelişkisi
+
+- Jeneca/ALEAS katalog kaydı ve güncel satış listeleri GD-320 motorunu 4 W olarak gösteriyor ancak su debisi yayımlamıyor. Ayrı bir model sayfası `D-320` yazımıyla 459 L/saat ve 6 W yayımladığı için bu veriler aynı modelin kesin teknik değerleri olarak birleştirilemez.
+- GD-320 açıklaması, ana ve iki çapraz kaynakla güncellendi. Debi ve güç değerleri boş bırakıldı; kullanıcı artık verinin yalnız eksik değil, model etiketi ve güç açısından çelişkili olduğunu görür. Otomatik filtrasyon hesabı güvenli biçimde devre dışı kalır.
+- Açıklamalı 10 kapasite boşluğu değişmedi; sınıflandırma üç çelişkili ve yedi yayımlanmamış kayıt olarak güncellendi. Hedefli katalog akışı, katalog denetimi ve tam `pnpm verify` başarılıdır: TypeScript, 52 sağlık senaryosu, beş kum türü ve 14 sayfalık üretim derlemesi geçti.
+- GitHub/Vercel'e gönderim yapılmadı; canlı uygulama bu açıklama güncellemesini henüz içermez.
+
+## 2026-09-08 Mogurnda adspersa güvenli tür profili
+
+- Southern Purple-spotted Gudgeon adı kurumsal Avustralya tür kaynağında `Mogurnda adspersa` ile doğrulandı. Uzman bakım kaynaklarındaki 14 cm erişkin boy, 120 × 30 cm taban / yaklaşık 108 litre, 16–24 °C ve pH 7,0–7,5 eşikleriyle ayrı bir canlı profili eklendi.
+- Küçük balıkları avlama ve tür içi bölgecilik riskleri kullanıcı uyarılarına işlendi. `Purple-spotted gudgeon` ortak adı `Mogurnda mogurnda` için de kullanıldığından, bilimsel kimlik vermeyen Cikletist satış başlığı yeni profile zorla bağlanmadı ve açıklamalı güvenlik listesinde tutuldu.
+- Hedefli katalog akışı testi ve tam `pnpm verify` başarılıdır: TypeScript, yedi ekipman kategorisi, dört canlı sınıfı, 610 bakım ürünü, 52 sağlık senaryosu, beş kum türü, katalog denetimi ve 14 sayfalık üretim derlemesi doğrulandı. GitHub/Vercel'e gönderim yapılmadı; canlı uygulama bu profili henüz içermez.
+
+## 2026-09-08 Mogurnda mogurnda güvenli tür profili
+
+- FishBase ve uzman bakım kaynağında Northern Purple-spotted / Northern Trout Gudgeon olarak tanımlanan `Mogurnda mogurnda`, `Mogurnda adspersa` ile karıştırılmayacak ayrı bir profile eklendi. Kaynaklı 17 cm erişkin boy, 120 × 30 cm taban / yaklaşık 108 litre, 24–26 °C ve pH 6,0–8,0 eşikleri kullanıldı.
+- Küçük canlıları avlama, bölgecilik, düşük akıntı, saklanma alanı ve sıkı kapak gereksinimleri kullanıcı uyarılarına işlendi. Genel `Purple Spotted Gudgeon` adı ve bilimsel kimlik vermeyen Cikletist başlığı iki profilden birine otomatik bağlanmıyor.
+- Hedefli katalog akışı testi ve tam `pnpm verify` başarılıdır: TypeScript, yedi ekipman kategorisi, dört canlı sınıfı, 610 bakım ürünü, 52 sağlık senaryosu, beş kum türü, katalog denetimi ve 14 sayfalık üretim derlemesi doğrulandı. GitHub/Vercel'e gönderim yapılmadı; canlı uygulama bu profili henüz içermez.
+
+## 2026-09-08 Alligator Gar kamusal tesis güvenliği
+
+- FishBase ve Florida Museum, Alligator Gar ortak adını `Atractosteus spatula` ile doğruluyor; Florida Museum türün yaygın olarak yaklaşık 2 metreye, kayıtlarda yaklaşık 3 metreye ulaşabildiğini bildiriyor. Seriously Fish 305 cm standart boy, 11–23 °C ve pH 6,0–8,0 aralığını yayımlıyor ancak sayısal akvaryum tabanı vermeyip türü yalnız çok büyük kamusal tesislere uygun görüyor.
+- Cikletist satış sayfası bilimsel kimlik yayımlamadığı ve uzman kaynak ticarette gar melezleri bulunduğunu belirttiği için kayıt doğrulanmış ev akvaryumu profiline bağlanmadı. Kullanıcıya 305 cm erişkin ölçeği, kamusal tesis gereksinimi ve neden otomatik hacim hesabı üretilemediği artık açıkça gösteriliyor.
+- Hedefli katalog akışı testi ve tam `pnpm verify` başarılıdır: TypeScript, yedi ekipman kategorisi, dört canlı sınıfı, 610 bakım ürünü, 52 sağlık senaryosu, beş kum türü, katalog denetimi ve 14 sayfalık üretim derlemesi doğrulandı. GitHub/Vercel'e gönderim yapılmadı; canlı uygulama bu güvenlik açıklamasını henüz içermez.
+
+## 2026-09-08 Blue Azul Peacock Bass kaynak çelişkisi
+
+- `BLUE AZUL PEACOCK BASS` satış sayfası bilimsel kimlik yayımlamadığı için kayıt otomatik olarak `Cichla piquiti` profiline bağlanmadı. Cichla türlerinin ve melezlerinin ticari adla karışabilmesi kullanıcıya açıkça belirtildi.
+- FishBase `C. piquiti` için yayımlanmış azami boyu 48 cm verirken Fishipedia 80 cm'ye kadar erişkin boy, en az 5.000 litre ve 300 cm akvaryum cephesi bildiriyor. Çelişkili erişkin boydan tek bir biyolojik yük değeri türetilmedi; koruyucu bakım ölçeği güvenlik kaydında görünür tutuldu.
+- Hedefli `pnpm test:catalog-flow` ve tam `pnpm verify` başarılıdır: TypeScript, yedi ekipman kategorisi, dört canlı sınıfı, 610 bakım ürünü, 52 sağlık senaryosu, beş kum türü, katalog denetimi ve 14 sayfalık üretim derlemesi doğrulandı. GitHub/Vercel'e gönderim yapılmadı; canlı uygulama bu güvenlik açıklamasını henüz içermez.
+
+## 2026-09-08 Jeneca GD-403 ve GD-503 çelişki zinciri
+
+- Jeneca/ALEAS tablosundaki GD-403 için 500 L/saat–8 W ve GD-503 için 1.000 L/saat–15 W değerleri, barkod ve model ayrıntısı yayımlayan bağımsız model sayfalarıyla yeniden doğrulandı.
+- Başka güncel satıcılar aynı model adları için sırasıyla 800 L/saat–10 W ve 1.500 L/saat–20 W yayımlamaya devam ediyor. Etiket, SKU veya donanım revizyonu ayrımı bulunamadığı için tek değer seçilmedi ve iki cihaz otomatik kapasite hesabının dışında tutuldu.
+- Karşılaştırma kaynakları ve güncel doğrulama tarihi katalog kayıtlarına eklendi. Hedefli katalog akışı, 52 sağlık senaryosu, kapasite denetimi ve tam `pnpm verify` başarılıdır; TypeScript, beş kum türü ve 14 sayfalık üretim derlemesi de doğrulandı. GitHub/Vercel'e gönderim yapılmadı.
+
+## 2026-09-08 Haqos teknik görsel erişim denetimi
+
+- EASY-1000AT ve Aqua Flow 250 resmî Haqos ürün sayfalarında filtre modeli olarak yeniden doğrulandı. Sayfalar teknik içeriği metin yerine harici görselde tutuyor; görsel sunucusu yeniden denendi ancak bağlantıyı kabul etmedi.
+- Güvenilir başka bir model kaynağı bulunmadı. Debi ve güç tahmin edilmedi; aynı adlı ilgisiz ürünlerin değerleri kullanılmadı ve iki filtre otomatik kapasite hesabının dışında kaldı.
+- Kullanıcı açıklamaları erişim sorununun gerçek nedenini gösterecek şekilde güncellendi. Hedefli katalog akışı ve denetimi ile tam `pnpm verify` başarılıdır: TypeScript, yedi ekipman kategorili ve 610 bakım ürünlü katalog akışı, 52 sağlık senaryosu, beş kum türünü kapsayan hesaplayıcı regresyonu, katalog denetimi ve 14 sayfalık üretim derlemesi geçti. GitHub/Vercel'e gönderim yapılmadı.
+
+## 2026-09-08 Silver Argus tür kimliği denetimi
+
+- `SİLVER ARGUS BALIKLARI` satış adı yeniden denetlendi. Satış sayfası bilimsel kimlik yayımlamazken OATA `Silver Scat` adını `Selenotoca multifasciata`, FishBase ise `Argus fish` adını `Scatophagus argus` için kullanıyor.
+- Başlık iki ayrı tür adını birleştirdiği ve satış görselleri temsili olduğu için kayıt tahminle mevcut Benekli Argus profiline bağlanmadı. Kullanıcıya iki olası kimliği ve su tipi riskini açıklayan güncel güvenlik kaydı ile kaynak zinciri eklendi.
+- Bu güvenlik kararı katalog regresyonuna bağlandı. Hedefli katalog testi ve tam `pnpm verify` başarılıdır: TypeScript, yedi ekipman kategorili ve 610 bakım ürünlü katalog akışı, 52 sağlık senaryosu, beş kum türünü kapsayan hesaplayıcı regresyonu, katalog denetimi ve 14 sayfalık üretim derlemesi geçti. GitHub/Vercel'e gönderim yapılmadı.
+
+## 2026-09-08 Red Belly Tetra tür kimliği denetimi
+
+- `RED BELLY TETRA` satış adı yeniden denetlendi. Farklı ticari kaynaklar aynı adı `Aphyocharax rathbuni` ve `Hyphessobrycon pyrrhonotus` için kullanırken satış sayfası bilimsel kimlik yayımlamıyor.
+- İki ayrı türün FishBase takson sayfaları kaynak zincirine eklendi. Kimlik kanıtlanmadan mevcut Green Fire Tetra veya başka bir tetra profiline tahminle bağlanmaması, açıklamalı güvenlik kaydı ve regresyon testiyle korundu.
+- Hedefli katalog testi ve tam `pnpm verify` başarılıdır: TypeScript, yedi ekipman kategorili ve 610 bakım ürünlü katalog akışı, 52 sağlık senaryosu, beş kum türünü kapsayan hesaplayıcı regresyonu, katalog denetimi ve 14 sayfalık üretim derlemesi geçti. GitHub/Vercel'e gönderim yapılmadı.
+
+## 2026-09-08 Hyphessobrycon pyrrhonotus profili
+
+- Belirsiz `RED BELLY TETRA` satış adı güvenlik listesinde tutulurken olası bilimsel kimliklerden `Hyphessobrycon pyrrhonotus` için bağımsız, bilimsel adla seçilebilir bakım profili eklendi.
+- Profil FishBase'teki 4,5 cm erişkin boya; Seriously Fish'teki 75 × 30 cm taban, yaklaşık 68 litre, 20–28 °C, pH 4–7 ve 8–10'lu grup verilerine; Fishipedia'daki koruyucu 10'lu grup, 100 litre ve 100 cm cephe önerisine dayanıyor. Uygulama güvenlik eşiği olarak 100 litre, 100 cm ve 10 bireyi kullanıyor.
+- Profil yalnız kesin bilimsel ad ve doğrulanmış Flame-back Bleeding Heart ortak adlarıyla eşleşiyor; belirsiz Red Belly adı otomatik eşleşmiyor. Hedefli katalog testi ve tam `pnpm verify` başarılıdır: tetra kataloğu 27 doğrulanmış profile ulaştı; TypeScript, yedi ekipman kategorili ve 610 bakım ürünlü katalog akışı, 52 sağlık senaryosu, beş kum türünü kapsayan hesaplayıcı regresyonu, katalog denetimi ve 14 sayfalık üretim derlemesi geçti. GitHub/Vercel'e gönderim yapılmadı.
+
+## 2026-09-08 Selenotoca multifasciata profili
+
+- Belirsiz `SİLVER ARGUS BALIKLARI` satış adı güvenlik listesinde tutulurken OATA'nın `Silver Scat` olarak tanımladığı `Selenotoca multifasciata` için bağımsız bilimsel bakım profili eklendi.
+- FishBase'teki 40 cm erişkin boy ile OATA'daki en az altılı grup, en az 600 litre, 24–27 °C, pH 7,5–8,5, güçlü akıntı/oksijen ve erişkinlerde orta-yüksek acı sudan tam deniz suyuna uzanan gereksinimler kullanıldı. Kaynak santimetre cinsinden tank uzunluğu vermediği için uzunluk tahmin edilmedi.
+- `Silver Scat` yalnız acı su ve deniz suyu kataloğunda kesin profile bağlanıyor; birleşik `Silver Argus` adı ve tatlı su araması eşleşmiyor. Hedefli katalog testi ve tam `pnpm verify` başarılıdır: TypeScript, 27 tetra ve 21 diğer türü içeren katalog akışı, 52 sağlık senaryosu, beş kum türünü kapsayan hesaplayıcı regresyonu, katalog denetimi ve 14 sayfalık üretim derlemesi geçti. GitHub/Vercel'e gönderim yapılmadı.
+
+## 2026-09-08 Blue Neon Goby tür ayrımı
+
+- Bilimsel adı yayımlanmayan `BLUE NEON GOBBY GOBİ` satış kaydı güvenlik listesinde tutuldu. Uzman kaynaklar Blue Neon Goby adını `Stiphodon atropurpureus` için kullanırken `Stiphodon semoni` türünün de ticarette aynı veya yakın adlarla yanlış etiketlenebildiğini açıkça belirtiyor.
+- İki olası kimlik ayrı bilimsel profiller olarak eklendi: `S. atropurpureus` için 5 cm, 54 litre/60 cm, en az üçlü grup, 22–26 °C ve pH 6,5–7,5; `S. semoni` için 5 cm, 54 litre/60 cm, en az üçlü grup, 22–28 °C ve pH 6,5–7,5. Her iki profilde olgun akarsu kurulumu, yüksek oksijen, 10–15 kat çevrim, biyofilmli taşlar ve sıkı kapak gereksinimleri kullanıcıya açıklanıyor.
+- Belirsiz mağaza adı iki profilden birine otomatik bağlanmıyor; kesin bilimsel adlar ve `Cobalt Blue Goby` tür bazlı adı doğru profili buluyor. Hedefli katalog testi, katalog denetimi ve tam `pnpm verify` başarılıdır: goby/kaya balığı grubu 10 kaynaklı ve tam bakım verili profile ulaştı; TypeScript, yedi ekipman kategorili ve 610 bakım ürünlü katalog akışı, 52 sağlık senaryosu, beş kum türünü kapsayan hesaplayıcı regresyonu ve 14 sayfalık üretim derlemesi geçti. GitHub/Vercel'e gönderim yapılmadı.
+
+## 2026-09-08 Panda Garra ve Garra rufa tür ayrımı
+
+- Bilimsel adı yayımlanmayan `PANDA GARRARUFA YOSUN YİYİCİ` birleşik satış kaydı güvenlik listesinde tutuldu. Uzman kaynaklar Panda Garra adını `Garra flavatra` için kullanırken `Garra rufa` ayrı, daha iri ve daha serin su isteyen bir türdür.
+- İki bilimsel profil ayrı eklendi: `G. flavatra` için 9 cm, 81 litre/90 cm, en az üçlü grup, 22–27 °C ve pH 6,5–7,5; `G. rufa` için 14,1 cm, 243 litre/120 cm, en az üçlü grup, 14–20 °C ve pH 6,0–8,0. Her iki profile yüksek akıntı ve oksijen, olgun akvaryum ve sıkı kapak gereksinimleri işlendi.
+- Kesin `Panda Garra` ve `Garra rufa` aramaları doğru profilleri buluyor; birleşik ve belirsiz satış adı otomatik eşleşmiyor. Hedefli katalog testi ve tam `pnpm verify` başarılıdır: dip balıkları grubu 68 kaynaklı ve tam bakım verili profile ulaştı; TypeScript, yedi ekipman kategorili ve 610 bakım ürünlü katalog akışı, 52 sağlık senaryosu, beş kum türünü kapsayan hesaplayıcı regresyonu, katalog denetimi ve 14 sayfalık üretim derlemesi geçti. GitHub/Vercel'e gönderim yapılmadı.
+
+## 2026-09-08 gerçek Julii ve False Julii ayrımı
+
+- Bilimsel adı ve kökeni yayımlanmayan `JULLY ÇÖPÇÜ BALIKLARI` satış kaydı açıklamalı güvenlik listesinde tutuldu. Uzman kaynak, gerçek `Hoplisoma julii` ile ticarette sıkça Julii adıyla sunulan `H. trilineatum` desenlerinin örtüşebildiğini ve kesin ayrım için bilimsel etiket veya köken gerektiğini bildiriyor.
+- Gerçek `H. julii` için 5,5 cm, 81 litre/90 cm, en az altılı sürü, 20–26 °C ve pH 5,5–7,5 eşikleriyle ayrı profil eklendi. İnce kum, temiz taban, gölgeli sığınak ve çeşitli batan yem gereksinimleri kullanıcı uyarılarına işlendi; mevcut False Julii profili ayrı kaldı.
+- Bilimsel `Hoplisoma julii` ve doğrulanmış `Leopard Corydoras` adı gerçek profili buluyor; genel `Julii Cory` ve belirsiz mağaza başlığı iki profilden birine otomatik bağlanmıyor. Hedefli katalog testi ve tam `pnpm verify` başarılıdır: dip balıkları grubu 69 kaynaklı ve tam bakım verili profile ulaştı; TypeScript, yedi ekipman kategorili ve 610 bakım ürünlü katalog akışı, 52 sağlık senaryosu, beş kum türünü kapsayan hesaplayıcı regresyonu, katalog denetimi ve 14 sayfalık üretim derlemesi geçti. GitHub/Vercel'e gönderim yapılmadı.
+
+## 2026-09-08 Channa asiatica ve Channa bleheri ayrımı
+
+- `CHANNA ASIATICA GÖKKUŞAĞI YILANBAŞ BLEHERİ` mağaza başlığı iki ayrı geçerli türü birleştirdiği için açıklamalı güvenlik listesinde tutuldu. `Channa asiatica` ile gökkuşağı yılanbaş `C. bleheri` erişkin ölçeği ve mevsimsel bakım gereksinimleri farklı olduğundan birleşik ad otomatik eşleşmiyor.
+- Eksik `C. asiatica` profili 35 cm koruyucu erişkin ölçeği, 160 litre/100 × 40 cm taban, uyumlu çift, 15–25 °C ve pH 6,0–8,0 eşikleriyle eklendi. FishBase'in 23,5 cm TL yayımlanmış örneklem değeri ile uzman bakım kaynağındaki 35 cm SL farkı kullanıcı açıklamasında saklandı; sağlık analizi daha koruyucu bakım ölçeğini kullanıyor.
+- Türün zorunlu avcılığı, tür akvaryumu, loş ve saklanmalı kurulum, yüzey havasına erişim ve ağır boşluksuz kapak gereksinimleri işlendi. Kesin `Channa asiatica` doğru profili bulurken birleşik `Channa asiatica bleheri` adı eşleşmiyor. Hedefli katalog testi ve tam `pnpm verify` başarılıdır: Monster grubu 32 kaynaklı ve tam bakım verili profile ulaştı; TypeScript, yedi ekipman kategorili ve 610 bakım ürünlü katalog akışı, 52 sağlık senaryosu, beş kum türünü kapsayan hesaplayıcı regresyonu, katalog denetimi ve 14 sayfalık üretim derlemesi geçti. GitHub/Vercel'e gönderim yapılmadı.
+
+## 2026-09-08 Zigzag eel ve Tire-track Eel ayrımı
+
+- Bilimsel adı yayımlanmayan `ZİGZAK TARAK BALIKLARI` kaydı açıklamalı güvenlik listesinde tutuldu. Zigzag eel adı kaynaklarda 90 cm'lik `Mastacembelus armatus` ve 20 cm'lik `Macrognathus circumcinctus` için kullanıldığından ticari ad tek başına bakım profili seçmiyor.
+- Eksik `M. armatus` profili 90 cm erişkin boy, en az 450 litre, tek birey, 24–28 °C, pH 6,5–7,5 ve nazik akıntı eşikleriyle eklendi. Kaynaklar sayısal minimum akvaryum uzunluğu yayımlamadığı için uzunluk tahmin edilmedi ve kullanıcıya açık veri notu eklendi.
+- Gece avcılığı, küçük balıkları yeme, kendi türüne bölgecilik, yumuşak derin kum, sabitlenmiş dekor, güçlü biyolojik filtrasyon ve tamamen kaçışsız kapak gereksinimleri işlendi. Kesin `Tire-track Eel` doğru iri profile bağlanırken belirsiz `Zigzag eel` iki profilden birine dönüşmüyor. Hedefli katalog testi ve tam `pnpm verify` başarılıdır: Monster grubu 33 kaynaklı ve tam bakım verili profile ulaştı; TypeScript, yedi ekipman kategorili ve 610 bakım ürünlü katalog akışı, 52 sağlık senaryosu, beş kum türünü kapsayan hesaplayıcı regresyonu, katalog denetimi ve 14 sayfalık üretim derlemesi geçti. GitHub/Vercel'e gönderim yapılmadı.
+
+## 2026-09-08 gerçek Parosphromenus deissneri profili
+
+- Bilimsel tür veya köken yayımlamayan `MEYAN KÖKÜ GURAMİ` satış kaydı açıklamalı güvenlik listesinde tutuldu. Uzman koruma ağı, Licorice Gourami adının birçok `Parosphromenus` türünü kapsadığını ve gerçek `P. deissneri`nin ticarette nadir olup sıkça yanlış etiketlendiğini bildiriyor.
+- Gerçek `P. deissneri` için 4 cm, çift başına en az 25 litre/40 cm, 22–28 °C, pH 3,0–6,5 ve düşük akıntı eşikleriyle ayrı profil eklendi. Çok yumuşak humik siyah su, olgun azot döngüsü, mağara, loş ışık, küçük canlı yem ve düzenli su değişimi gereksinimleri işlendi.
+- Kesin bilimsel ad doğru profili buluyor; genel `Licorice Gourami` ve Meyan Kökü Gurami adları otomatik eşleşmiyor. Hedefli katalog testi ve tam `pnpm verify` başarılıdır: labirentli grubu 15 kaynaklı ve tam bakım verili profile ulaştı; TypeScript, yedi ekipman kategorili ve 610 bakım ürünlü katalog akışı, 52 sağlık senaryosu, beş kum türünü kapsayan hesaplayıcı regresyonu, katalog denetimi ve 14 sayfalık üretim derlemesi geçti. GitHub/Vercel'e gönderim yapılmadı.
+
+## 2026-09-08 Echidna rhodochilus acı su güvenliği
+
+- Bilimsel ad ve su türü yayımlamayan `WHITE CHECK EEL MÜREN` mağaza kaydı açıklamalı güvenlik listesinde tutuldu. White-cheek adı `Echidna rhodochilus` için kullanılsa da mağazadaki White Check yazımı tür kimliğini kanıtlamıyor.
+- Kesin `E. rhodochilus` için 33,8 cm, en az 450 litre, tek birey, 23–28 °C, pH 7,5–8,0 ve SG 1.005–1.015 değerleriyle ayrı acı/deniz suyu profili eklendi. Saha çalışması uzun süreli tam tatlı su bakımını desteklemediği için profil tatlı su kataloğunda gösterilmiyor; kaynakta sayısal tank uzunluğu bulunmadığından uzunluk tahmin edilmedi.
+- Küçük balık ve kabukluları avlama, mağara savunması, yanlışlıkla ısırma, sağlam saklanma alanları, güçlü biyolojik filtrasyon, yem maşası ve tamamen kaçışsız ağır kapak gereksinimleri işlendi. Kesin `Pink-lipped Moray` acı su profilini bulurken genel White Cheek adı otomatik eşleşmiyor. Hedefli katalog testi ve tam `pnpm verify` başarılıdır: Monster grubu 34 kaynaklı ve tam bakım verili profile ulaştı; TypeScript, yedi ekipman kategorili ve 610 bakım ürünlü katalog akışı, 52 sağlık senaryosu, beş kum türünü kapsayan hesaplayıcı regresyonu, katalog denetimi ve 14 sayfalık üretim derlemesi geçti. GitHub/Vercel'e gönderim yapılmadı.
+
+## 2026-09-08 L146 ve Peckoltichthys ucayalensis güvenli profil ayrımı
+
+- Uzman L-numarası veri tabanı L146/LDA30 kaydını `Peckoltichthys cf. bachi` olarak; yaklaşık 15 cm, en az 100 cm akvaryum, 25–29 °C ve pH 6,0–8,0 eşikleriyle doğruluyor. Bu kesin L-numarası profili `Bola vatoz L146` adıyla eklendi.
+- `Peckoltichthys ucayalensis` aynı uzman veri tabanında ayrı bir tür profili olarak; yaklaşık 15 cm, en az 100 cm akvaryum, 25–29 °C ve pH 6,0–8,0 eşikleriyle doğrulandı ve ayrı kataloğa eklendi.
+- Güncel L-numarası listesi L069'u `Ancistomus/Ancistrini sp.` olarak verdiği için mağazadaki `L-069 Peckoltia Ucayalensis` başlığı bilimsel profile otomatik bağlanmıyor. `L-146 Albino Pleco` da kaynağın albino varyeteyi doğrulamaması nedeniyle eşleşmeden bırakılıyor. Kullanıcı kesin `L146` veya `Peckoltichthys ucayalensis` aramasıyla doğru profili seçebiliyor.
+- Dip balığı kataloğu 71 kaynaklı ve bakım verisi tam profile ulaştı. Hedefli `pnpm test:catalog-flow` ve tam `pnpm verify` başarılıdır: TypeScript, yedi ekipman kategorili ve 610 bakım ürünlü katalog akışı, 52 sağlık senaryosu, beş kum türünü kapsayan hesaplayıcı regresyonu, katalog denetimi ve 14 sayfalık üretim derlemesi geçti. GitHub/Vercel'e gönderim yapılmadı.
+
+## 2026-09-09 Sicyopus exallisquamulus güvenli profil ayrımı
+
+- Uzman tür kaynağı `Sicyopus exallisquamulus` için 5,2 cm standart boy, 60 × 30 cm taban/yaklaşık 54 litre, bir erkek ve en az iki dişilik grup, 22–28 °C, pH 6,5–7,5 ve 10–15 kat akarsu çevrimi yayımlıyor. Bu değerlerle ayrı `Kırmızı dudaklı gobi` profili eklendi.
+- Türün yosun yiyici olmadığı, küçük canlı/dondurulmuş hayvansal yem istediği, küçük omurgasızlar için avlanma riski taşıdığı; olgun, çok temiz, yüksek oksijenli akarsu kurulumu ve boşluksuz kapak gerektirdiği sağlık/bakım uyarılarına işlendi.
+- `RED LİP STİCK GOBBY` mağaza adı S. exallisquamulus yanında S. rubicundus ve S. jonklaasi için de kullanıldığı için otomatik eşleşmeden bırakıldı. Kesin bilimsel ad araması yeni profili buluyor.
+- Goby/kaya balığı grubu 11 kaynaklı ve bakım verisi tam profile ulaştı. Hedefli `pnpm test:catalog-flow` ve tam `pnpm verify` başarılıdır: TypeScript, yedi ekipman kategorili ve 610 bakım ürünlü katalog akışı, 52 sağlık senaryosu, beş kum türünü kapsayan hesaplayıcı regresyonu, katalog denetimi ve 14 sayfalık üretim derlemesi geçti. GitHub/Vercel'e gönderim yapılmadı.
+
+## 2026-09-09 Channa limbata güvenli profil ayrımı
+
+- Güncel Eschmeyer balık taksonomi kataloğu `Channa limbata` türünü geçerli kabul ediyor. Uzman bakım kaynağındaki 20 cm erişkin boy, tek birey veya uyumlu çift için 100 litre/80 × 40 cm, 22–28 °C ve pH 5,5–8,0 eşikleriyle ayrı `Kırmızı kuyruklu yılanbaş` profili eklendi.
+- Türün avcı ve bölgeci davranışı; küçük balık ve omurgasız riski, tür akvaryumu, loş ve yoğun saklanmalı kurulum, yüzey havası ile nemli hava boşluğu ve tamamen kapalı ağır kapak gereksinimleri işlendi.
+- `CHANNA GOLDEN LİMBATA` mağaza sayfası bilimsel kimlik veya Golden formun köken popülasyonunu yayımlamadığı için satış adı otomatik eşleşmeden bırakıldı. Kesin `Channa limbata` araması yeni profili bulurken yalnız `Golden Limbata` adı profile dönüşmüyor.
+- `COLOMBİAN FARLOWELLA` ayrıca incelendi: kesin `Farlowella colombiensis` kimliği bilimsel kaynaklarda doğrulansa da türe özel akvaryum bakımının yakın türlerden projeksiyon olduğu ve güvenilir minimum hacmin yayımlanmadığı görüldü. Zorunlu litre değeri tahmin edilmedi; satış adı açıklamalı güvenlik kaydında kaldı.
+- Monster grubu 35 kaynaklı ve bakım verisi tam profile ulaştı. Hedefli `pnpm test:catalog-flow` ve tam `pnpm verify` başarılıdır: TypeScript, yedi ekipman kategorili ve 610 bakım ürünlü katalog akışı, 52 sağlık senaryosu, beş kum türünü kapsayan hesaplayıcı regresyonu, katalog denetimi ve 14 sayfalık üretim derlemesi geçti. GitHub/Vercel'e gönderim yapılmadı.
+
+## 2026-09-09 Sicyopus jonklaasi koruma ve bakım profili
+
+- FishBase `Sicyopus jonklaasi` kimliğini, 4,5 cm bilimsel boyu, Sri Lanka'ya endemik hızlı akarsu habitatını, etçil beslenmesini ve Tehlikede statüsünü doğruluyor. Ayrıntılı uzman bakım kaynağının daha koruyucu 5,5 cm, en az altılı grup, 120 litre/100 cm, 20–28 °C, pH 6,0–7,5 ve çok güçlü akıntı eşikleriyle ayrı `Jonklaas ruj gobisi` profili eklendi.
+- Küçük balık ve karides avlama riski, 10–15 kat çevrim, yüksek oksijen, olgun ve çok temiz akarsu kurulumu, kayalık görüş bariyerleri, canlı yem gereksinimi, haftalık %30–50 su değişimi ve boşluksuz kapak uyarıları işlendi.
+- Türün Sri Lanka'da ihracata karşı korunduğu ve ticarette bulunmaması gerektiği için profil satın alma önerisi sunmuyor; yalnız yasal ve belgeli köken doğrulanırsa değerlendirilmesi gerektiğini açıkça bildiriyor.
+- Genel `RED LİP STİCK GOBBY` satış adı S. exallisquamulus, S. rubicundus ve S. jonklaasi arasında belirsiz kaldığından otomatik eşleşmiyor. Kesin `Sicyopus jonklaasi` araması koruma uyarılı profile bağlanıyor.
+- Goby/kaya balığı grubu 12 kaynaklı ve bakım verisi tam profile ulaştı. Hedefli `pnpm test:catalog-flow` ve tam `pnpm verify` başarılıdır: TypeScript, yedi ekipman kategorili ve 610 bakım ürünlü katalog akışı, 52 sağlık senaryosu, beş kum türünü kapsayan hesaplayıcı regresyonu, katalog denetimi ve 14 sayfalık üretim derlemesi geçti. GitHub/Vercel'e gönderim yapılmadı.
+
+## 2026-09-09 Sicyopus rubicundus güvenli profil ayrımı
+
+- FishBase ve türün bilimsel tanımı `Sicyopus rubicundus` kimliğini ve yaklaşık 5 cm bilimsel erişkin boyunu doğruluyor. Türe özel bakım kaynaklarında 54 litre ile 112 litre arasında farklı minimumlar bulunduğu için, en az beşli grubun bölge alanını koruyan 112 litre/80 cm eşiği seçildi; 22–26 °C, pH 6,0–7,5 ve güçlü akıntıyla ayrı `Kızıl ruj gobisi` profili eklendi.
+- Mikro avcılık, küçük balık/karides riski, tür akvaryumu, olgun ve çok temiz akarsu kurulumu, güçlü oksijen/akıntı, taş-kum taban, canlı veya alışırsa dondurulmuş hayvansal yem ve boşluksuz kapak gereksinimleri işlendi.
+- Amphidrom yaşam döngüsü nedeniyle ticaretteki bireylerin yabani kökenli olduğu ve sorumlu, belgeli tedarik gerektiği görünür uyarıya eklendi.
+- Genel `RED LİP STİCK GOBBY` satış adı hâlâ S. exallisquamulus, S. rubicundus ve S. jonklaasi arasında otomatik eşleşmiyor; üç bilimsel tür yalnız kesin kimlikleriyle ayrı profillere bağlanıyor.
+- Goby/kaya balığı grubu 13 kaynaklı ve bakım verisi tam profile ulaştı. Hedefli `pnpm test:catalog-flow` ve tam `pnpm verify` başarılıdır: TypeScript, yedi ekipman kategorili ve 610 bakım ürünlü katalog akışı, 52 sağlık senaryosu, beş kum türünü kapsayan hesaplayıcı regresyonu, katalog denetimi ve 14 sayfalık üretim derlemesi geçti. GitHub/Vercel'e gönderim yapılmadı.
+
+## 2026-09-09 Cichla piquiti koruyucu profil ayrımı
+
+- FishBase `Cichla piquiti` kimliğini, tatlı su yaşamını ve 48 cm yayımlanmış azami ölçümü doğruluyor. Fishipedia tür için 40–80 cm erişkin aralığı, tek yaşam, etçil ve bölgeci davranış, 21–32 °C, pH 5,8–7,3, en az 5.000 litre ve 300 cm akvaryum cephesi yayımlıyor.
+- Sağlık analizi hayvan refahı için koruyucu 80 cm üst ölçeği kullanıyor. Tek birey, tür akvaryumu, çok güçlü filtrasyon, yüksek oksijen, geniş açık yüzme alanı, küçük balık/kabuklu av riski ve doğaya bırakmama uyarılarıyla ayrı `Piquiti peacock bass` profili eklendi.
+- Satış sayfasındaki `BLUE AZUL PEACOCK BASS` başlığı bilimsel kimlik yayımlamadığı ve Cichla türleri/melezleri ticarette karışabildiği için otomatik profile bağlanmıyor. Kesin `Cichla piquiti` araması güvenli profili bulurken yalnız `Azul Peacock Bass` adı eşleşmiyor.
+- Monster grubu 36 kaynaklı ve bakım verisi tam profile ulaştı. Hedefli `pnpm test:catalog-flow` ve tam `pnpm verify` başarılıdır: TypeScript, yedi ekipman kategorili ve 610 bakım ürünlü katalog akışı, 52 sağlık senaryosu, beş kum türünü kapsayan hesaplayıcı regresyonu, katalog denetimi ve 14 sayfalık üretim derlemesi geçti. GitHub/Vercel'e gönderim yapılmadı.
+
+## 2026-09-09 Semaprochilodus kneri güvenli profil ayrımı
+
+- FishBase `Semaprochilodus kneri` kimliğini, Orinoco havzasını ve 28 cm bilimsel erişkin boyunu doğruluyor. Türe özel bakım kaynaklarındaki en az 500 litre, 200 cm cephe, 24–28 °C, pH 6,5–7,2, güçlü akıntı ve yüksek oksijen gereksinimleriyle ayrı `Kner'in sarı kuyruklu prochilodusu` profili eklendi.
+- Türün büyük ve sürekli hareketli yapısı, küçük balıklarla ölçek riski, geniş açık yüzme alanı, çok güçlü filtrasyon, sağlam kapak ve bitkisel ağırlıklı otlayıcı diyet gereksinimleri işlendi. Kaynaklar küçük grubu tercih edilmesi gereken sosyal düzen olarak açıklasa da kesin asgari sayı yayımlamadığı için grup sayısı tahmin edilmedi.
+- Genel `YELLOW FLAGTAİL` satış adı S. kneri, S. taeniurus ve S. insignis için kullanıldığı ve mağaza bilimsel kimlik vermediği için otomatik eşleşmiyor. Kesin `Semaprochilodus kneri` araması yeni profile bağlanıyor.
+- Diğer canlılar grubu 22 kaynaklı ve bakım verisi tam profile ulaştı. Hedefli `pnpm test:catalog-flow` ve tam `pnpm verify` başarılıdır: TypeScript, yedi ekipman kategorili ve 610 bakım ürünlü katalog akışı, 52 sağlık senaryosu, beş kum türünü kapsayan hesaplayıcı regresyonu, katalog denetimi ve 14 sayfalık üretim derlemesi geçti. GitHub/Vercel'e gönderim yapılmadı.
+
+## 2026-09-09 Semaprochilodus insignis koruyucu sürü profili
+
+- FishBase `Semaprochilodus insignis` kimliğini, Amazon havzasını, 29,5 cm bilimsel azami ölçümü, 22–26 °C ve pH 5,5–7,2 doğal aralığını doğruluyor. Fishipedia'nın daha koruyucu 35 cm, en az beş birey, 1.500 litre, 18–29 °C, pH 5,5–7,2 ve güçlü akıntı profili sağlık analizine işlendi.
+- Yalnız kalma stresi, erkeklerin dişileri aşırı kovalama riski, küçük balıklarla ölçek uyumsuzluğu, 10–20 kat çevrim, çok yüksek oksijen, geniş açık yüzme alanı, sağlam kapak ve bitkisel ağırlıklı beslenme gereksinimleri eklendi.
+- Kaynak beşli sürü için santimetre cinsinden güvenli minimum cephe yayımlamadığından tek bireylik 150 cm ölçü grup profiline taşınmadı ve uzunluk tahmin edilmedi. Genel `YELLOW FLAGTAİL` adı hâlâ otomatik eşleşmez; kesin `Semaprochilodus insignis` araması yeni profili bulur.
+- Diğer canlılar grubu bu adımda 23 kaynaklı ve bakım verisi tam profile ulaştı. Hedefli `pnpm test:catalog-flow` ve tam `pnpm verify` başarılıdır. GitHub/Vercel'e gönderim yapılmadı.
+
+## 2026-09-09 Semaprochilodus taeniurus güvenli sosyal düzen profili
+
+- FishBase `Semaprochilodus taeniurus` kimliğini ve 27,2 cm bilimsel erişkin boyunu doğruluyor. Seriously Fish'in koruyucu 30 cm, tek birey için 540 litre/150 × 60 cm taban, 23–29 °C ve pH 5,5–7,5 değerleriyle ayrı `Gümüş flagtail prochilodus` profili eklendi.
+- Uzman ve sektör bakım kaynaklarının belirttiği tek birey veya en az altılı sürü düzeni açık uyarıya işlendi; iki ile beş bireylik küçük grupların tür içi saldırganlığı artırabileceği belirtildi. Güçlü filtrasyon/akıntı, yüksek oksijen, kum taban, açık yüzme alanı, sıkı kapak ve bitkisel ağırlıklı diyet gereksinimleri eklendi.
+- Genel `YELLOW FLAGTAİL` başlığı hiçbir türe otomatik bağlanmıyor. Kesin `S. kneri`, `S. insignis` ve `S. taeniurus` kimliklerinin üçü de artık birbirinden ayrı güvenli profillere sahip.
+- Diğer canlılar grubu 24 kaynaklı ve bakım verisi tam profile ulaştı. Hedefli `pnpm test:catalog-flow` ve tam `pnpm verify` başarılıdır: TypeScript, yedi ekipman kategorili ve 610 bakım ürünlü katalog akışı, 52 sağlık senaryosu, beş kum türünü kapsayan hesaplayıcı regresyonu, katalog denetimi ve 14 sayfalık üretim derlemesi geçti. GitHub/Vercel'e gönderim yapılmadı.
+
+## 2026-09-09 Herichthys Green Texas tür ayrımı
+
+- Mevcut `Herichthys cyanoguttatus` kaydı doğrudan kaynaklarla yenilendi: 30 cm erişkin boy, tek birey için 255 litre/120 cm, 20–28 °C ve pH 6,0–7,5. Bölge saldırganlığı, çift/karma bakımda daha büyük sistem, kazma, güçlü filtrasyon ve haftalık %25–50 su değişimi uyarıları eklendi.
+- Ayrı `Herichthys carpintis` profili 30,5 cm, uyumlu çift için 400 litre/150 cm, 24–25 °C ve pH 7,0–7,5 eşikleriyle eklendi. Küçük balık avlama, üreme saldırganlığı, sağlam ayırıcı gereksinimi, ekipman koruması ve bölgesel formları/melezleri karıştırmama uyarıları işlendi.
+- `GREEN TEXAS CİKLET BALIKLARI` satış başlığı bilimsel kimlik vermediğinden iki türden birine otomatik bağlanmıyor. Kesin H. carpintis ve H. cyanoguttatus aramaları birbirinden ayrı profilleri buluyor.
+- Ciklet grubu 70 kaynaklı ve bakım verisi tam profile ulaştı. Hedefli `pnpm test:catalog-flow` ve tam `pnpm verify` başarılıdır: TypeScript, yedi ekipman kategorili ve 610 bakım ürünlü katalog akışı, 52 sağlık senaryosu, beş kum türünü kapsayan hesaplayıcı regresyonu, katalog denetimi ve 14 sayfalık üretim derlemesi geçti. GitHub/Vercel'e gönderim yapılmadı.
+
+## 2026-09-09 Blue King / Blue Tetra tür ayrımı
+
+- Genel `BLUE KİNG TETRA` ve `Blue Tetra` adlarının `Inpaichthys kerri`, `Boehlkea fredcochui` ve `Knodus borki` için kullanılabildiği doğrulandı. Bilimsel kimlik vermeyen satış kaydı bu üç profilden birine otomatik bağlanmıyor ve açıklamalı çözülmemiş kayıt olarak kalıyor.
+- Gerçek `Boehlkea fredcochui` profili 5,4 cm, en az altılı sürü, 60 litre/60 cm, 22–26 °C ve pH 6,0–6,5 eşikleriyle eklendi. Aktif yüzme, sakin/uzun yüzgeçli türleri rahatsız etme ve ticarette nadir olup `Knodus borki` ile karışma uyarıları işlendi.
+- `Knodus borki` ayrı profil olarak 5 cm, en az sekizli sürü, 86 litre/75 cm, 22–26 °C ve pH 5,5–7,0 eşikleriyle eklendi. Küçük grupta yüzgeç ısırma, yüksek hareketlilik, yumuşak-asidik ve iyi oksijenlenmiş su gereksinimleri açıklandı.
+- Tetra grubu 29 kaynaklı ve bakım verisi tam profile ulaştı. Hedefli `pnpm test:catalog-flow` ve tam `pnpm verify` başarılıdır: TypeScript, yedi ekipman kategorili ve 610 bakım ürünlü katalog akışı, 52 sağlık senaryosu, beş kum türünü kapsayan hesaplayıcı regresyonu, katalog denetimi ve 14 sayfalık üretim derlemesi geçti. GitHub/Vercel'e gönderim yapılmadı.
+
+## 2026-09-09 Aquawing Türkiye güncel seri genişletmesi
+
+- Eksenpet Aquawing kataloğunda yayımlanan dokuz filtre (`AQ-WP750FA`, `AQ-WP750FB`, `AQ-WP850FA`, `AQ-WP3300B`, `AQ-WP3300C`, `AQ111F`, `AQ501HF`, `AQ301HF`, `AQ302HF`) debi, güç ve barkod bilgileriyle eklendi.
+- `AQ-ECO2000`, `AQ-ECO3000` ve `AQ-ECO4000` sump dönüş motorları debi, güç, basma yüksekliği ve barkodlarıyla `Diğer sistemler` kategorisine eklendi; klasik filtre debisi hesabına karıştırılmadı.
+- `AQ708` tek çıkışlı hava motorunun 3 W gücü ve barkodu doğrulandı. Kaynak hava debisi veya önerilen akvaryum hacmi yayımlamadığı için bu değerler tahmin edilmedi ve model otomatik kapasite hesabının dışında bırakıldı.
+- Aynı güncel listede bulunan `AQ-A1000` ve `AQ-A2000` çift çıkışlı hava motorları da sırasıyla 8 W ve 12 W güçleri ile barkodları kullanılarak eklendi. Doğrudan ürün sayfaları hava debisi yayımlamadığından iki modelde de debi tahmin edilmedi.
+- Kafa motorları ve tepe filtre sayfalarının ikinci taramasında `AQ-ECO5000`, `AQ-ECO5500`, `AQ-ECO6000`, `AQ-ECO7000`, `AQ-ECO8000`, `AQ-ECO9000`, `AQ2500F`, `AQ3500`, `AQ388` ve `AQ088` modelleri debi, güç ve barkodlarıyla eklendi. Mevcut `AQ6000M`, `AQ10000M`, `AQ12000M` ve `WM1500` sirkülasyon motorlarının yayımlanmış debi ve barkodları da tamamlandı.
+- İç filtre sayfasının ürün ve ilgili-model taramasında `AQ680`, `AQ60F`, `AQ101FB`, `AQ102F`, `AQ103F`, `AQ104F` ve `AQ603F` modelleri doğrulandı. Yüzey emici `AQ680` için yayımlanan 80 litre üst sınırı işlendi; diğerlerinde yalnız debi, güç ve barkod gibi açık teknik bilgiler kullanıldı.
+- Aquawing ekipman kataloğu 83 kayıttan 115 doğrulanmış kayda çıktı. Hedefli `pnpm test:catalog-flow` ve tam `pnpm verify` başarılıdır: TypeScript, yedi ekipman kategorili ve 610 bakım ürünlü katalog akışı, 52 sağlık senaryosu, beş kum türünü kapsayan hesaplayıcı regresyonu, katalog denetimi ve 14 sayfalık üretim derlemesi geçti. Kapasite gereken 83 Aquawing kaydının 79'u otomatik hesaplamaya hazırdır; kalan dört hava motorunda üretici/satıcı debi yayımlamamıştır. GitHub/Vercel'e gönderim yapılmadı.
+- Eksenpet Aquawing marka sayfasının ikinci ila altıncı sayfaları sayfalama parametresiyle ayrıca tarandı. Katalogda bulunmayan dört iç filtre (`AQ-WP950FA` kaydı güncellendi; `AQ101F`, `AQ40F`, `AQ920FC` eklendi), on dört sump/kafa/sirkülasyon motoru (`AQ2600`, `WM1200`, `AQ4000`, `AQ5000`, `AQ6000`, `AQ6500`, `AQ901`, `AQ902`, `AQ903`, `AQ904`, `AQ3000F`, `AQ3200`, `AQ5000F`, `AQ6000F`) ve iki LED/hava cihazı (`AQ666LED`, `AQ999A`) doğrudan ürün bağlantıları, yayımlanan debi/güç ve barkodlarla işlendi.
+- Mevcut `AQ288` kaydının 1500 L/saat debisi, 25 W gücü ve barkodu tamamlandı. `AQ333` fiziksel ürününü çoğaltmak yerine güncel stok kodu `AQ333LED` olarak düzeltildi. `AQ333LED` ve `AQ666LED` üzerindeki L/saat değerleri su dolaşımı olduğundan hava motoru kapasitesi hesabına sokulmadı; `AQ999A` için yalnız dört çıkış, 8 W ve barkod yayımlandığı için hava debisi tahmin edilmedi.
+- İlk marka sayfasındaki `AQ311` tek çıkışlı hava motoru da 2,5 W güç ve barkoduyla eklendi; hava debisi yayımlanmadığından kapasite değeri tahmin edilmedi. Aynı sayfadaki `AQ008` ve `AQ930` hava motorları ile `AQ310F`, `AQ510F`, `AQ-WP850FB`, `AQ-WP950FB`, `AQ-WP1000FA`, `AQ-WP1000FB`, `AQ-WP2300A` ve `AQ-WP3300A` filtrelerinin güncel barkodları ve doğrudan ürün bağlantıları işlendi. Önceki taramada yanlışlıkla başka modele giden `AQ60F`, `AQ102F`, `AQ103F` ve `AQ104F` bağlantıları kendi doğrudan ürün sayfalarıyla düzeltildi ve bu durum regresyon testine bağlandı.
+- Aquawing kataloğu 135 doğrulanmış ekipmana ulaştı. Kapasite gerektiren 88 kaydın 82'si otomatik hesaplamaya hazırdır (%93); kalan altı hava motorunun debisi kaynakta yayımlanmadığından açıklamalı biçimde hesap dışında tutulur. Hedefli katalog akışı testi, katalog denetimi ve tam `pnpm verify` başarılıdır: TypeScript, yedi ekipman kategorili ve 610 bakım ürünlü katalog akışı, 52 sağlık senaryosu, beş kum türünü kapsayan hesaplayıcı regresyonu, katalog denetimi ve 14 sayfalık üretim derlemesi geçti. GitHub/Vercel'e gönderim yapılmadı.
+- Altı sayfalık güncel marka listesi model kodu düzeyinde katalogla karşılaştırıldı. Eksik kalan `AQMBS1` ve `AQMBM2` mıknatıslı cam silecekleri ile `07708` kodlu 20'li çekvalf paketi doğrudan ürün bağlantıları ve barkodlarıyla `Diğer sistemler` kategorisine eklendi; kapasite hesaplarına karıştırılmadı. Eksenpet'te yayımlanan 124 güncel Aquawing ürün kodunun 124'ü katalogda bulunuyor; eski veya farklı kaynaklardan doğrulanmış 14 model ayrıca korunuyor. Aquawing toplamı 138 doğrulanmış kayıttır. Hedefli katalog testi, otomatik 124/124 kod karşılaştırması ve tam `pnpm verify` başarılıdır: TypeScript, yedi ekipman kategorili ve 610 bakım ürünlü katalog akışı, 52 sağlık senaryosu, beş kum türünü kapsayan hesaplayıcı regresyonu, katalog denetimi ve 14 sayfalık üretim derlemesi geçti. GitHub/Vercel'e gönderim yapılmadı.
+
+## 2026-09-09 Oase güncel filtre aileleri
+
+- Oase'nin resmî Büyük Britanya ürün aileleri model bazında karşılaştırıldı. BioMaster² ailesindeki `BioMaster² 150` ve `BioMaster² Thermo 150`; BioPlus ailesindeki `BioPlus Thermo 50`, `100` ve `200`; BioStyle ailesindeki `BioStyle 180` eksik kayıtları doğrulanmış debi, güç, entegre ısıtıcı ve akvaryum hacmi verileriyle eklendi.
+- Mevcut `BioPlus 50` ve `BioPlus 100` kayıtlarının debi/güç bilgileri tamamlandı. `BioStyle 115` kaydının yanlışlıkla ABD modeli BioStyle 30'a giden bağlantısı kendi 89601 kodlu resmî sayfasıyla düzeltildi; BioStyle 75'in model adına rağmen üreticinin yayımladığı 70 litre üst sınırı aynen korundu.
+- FiltoSmart ailesi resmî yedi ürünlük GB listesine tamamlandı: `FiltoSmart Thermo 100`, `200` ve `300` eklendi; `FiltoSmart 200` kaydındaki eksik 800 L/saat ve 17 W değerleri tamamlandı. `BioCompact 25` ve `50` nano iç filtreleri de doğrulanmış 240 L/saat, 5 W ve hacim sınırlarıyla eklendi.
+- `CrystalSkim 350` ve `CrystalSkim 600` yüzey emicileri resmî 230 V/50 Hz değerleriyle eklendi. Su dolaşım debileri ana filtrasyon kapasitesi sanılmasın diye `Diğer sistemler` kategorisinde tutuldu ve bu sınıflandırma regresyon testine bağlandı.
+- Oase kataloğu 42 kayıttan 55 doğrulanmış ekipmana çıktı. Kapasite değerlendirmesi gereken 42 kaydın tamamı otomatik analiz için hazırdır. Güncel BioMaster² 10/10, BioPlus 6/6, BioStyle 3/3, FiltoSmart 7/7, BioCompact 2/2 ve CrystalSkim 2/2 aile kapsamı tablo tabanlı testlerle korunuyor.
+- Hedefli `pnpm test:catalog-flow`, katalog denetimi ve tam `pnpm verify` başarılıdır: TypeScript, yedi ekipman kategorili ve 610 bakım ürünlü katalog akışı, 52 sağlık senaryosu, beş kum türünü kapsayan hesaplayıcı regresyonu, katalog denetimi ve 14 sayfalık üretim derlemesi geçti. GitHub/Vercel'e gönderim yapılmadı.
+
+## 2026-09-09 Jingye askı, iç filtre, pompa ve hava motoru genişletmesi
+
+- Jingye kataloğuna onaylı yerel kaynağın doğrudan ürün sayfalarıyla 12 eksik model eklendi: `JY-W155`, `JY-W255`, `JY-W355`, `JY-6100F`, `JY-6600F`, `JY-801F`, `LV-1000DX`, `LV-2000DX`, `LV-2500DX`, `JY-920`, `CD400` ve `YE-CC1`.
+- W serisi askı filtreler ile 6100F, 6600F ve 801F iç filtrelerin yayımlanan debi, güç ve akvaryum hacmi sınırları otomatik ekipman analizine işlendi. W serisinin ayarlanabilir akış özelliği ayrıca kaydedildi.
+- `JY-920`, üst filtre haznesine su basan dalgıç pompa olduğundan bağımsız biyolojik filtre gibi değerlendirilmemesi için `Diğer sistemler` kategorisinde tutuldu. LV sump pompaları da aynı nedenle ana filtre kapasitesi hesabına karıştırılmadı.
+- CD400'ün iki çıkışının her biri için yayımlanan 2 L/dakika değeri toplam 240 L/saat olarak hava kapasitesi analizine alındı. YE-CC1 cam sileceği ve doğrudan ürün sayfasına taşınan `JY-5X` bakım seti kapasite hesabı dışında tutuldu.
+- Jingye ekipman kataloğu 30 kayıttan 43 doğrulanmış kayda çıktı. Model kodu yayımlanmayan fakat 6972934051028 ürün koduyla ayrıştırılan siyah 500 L/saat iç filtre de açıklamalı biçimde eklendi. Kapasite değerlendirmesi gereken 29 kaydın 29'u hazırdır (%100); Atakan'ın güncel marka sayfasındaki 20 satış başlığının tamamı ile model, kategori, debi, güç, hacim ve doğrudan kaynak eşleşmeleri regresyon testlerine bağlandı.
+- Hedefli `pnpm test:catalog-flow`, katalog denetimi ve tam `pnpm verify` başarılıdır: TypeScript, yedi ekipman kategorili ve 610 bakım ürünlü katalog akışı, 52 sağlık senaryosu, beş kum türünü kapsayan hesaplayıcı regresyonu, katalog denetimi ve 14 sayfalık üretim derlemesi geçti. GitHub/Vercel'e gönderim yapılmadı.
+
+## 2026-09-09 Eurostar güncel yerel portföy genişletmesi
+
+- Atakan'ın güncel Eurostar marka sayfası ürün seçenekleriyle birlikte karşılaştırıldı. İki cam termometre, 48 cm hortum temizleme harbisi ve M/L Mangrove kökü dekorları doğrudan ürün kodu, barkod ve ölçüleriyle ekipman/aksesuar kataloğuna eklendi.
+- Aquaclay bitki kumu 5 L ve 10 L varyantları, aynı markanın 500 ml filtre medyasından ayrı taban ürünleri olarak eklendi. Ürün Kataloğu'na yeni `Bitki tohumu` filtresi açıldı; Eleocharis, Glossostigma ve Hemianthus satış seçenekleri ayrı ürün kodlarıyla işlendi.
+- Bitki tohumu paketlerinin gerçek bilimsel içeriği bağımsız bir kaynakla doğrulanamadığından, satıcının ürün adı katalogda korunurken bu belirsizlik kullanıcı açıklamasında açıkça belirtilir; ürünler doğrulanmış canlı bitki profili gibi sunulmaz.
+- Eurostar ekipman/aksesuar sayısı 27'den 32'ye, bakım/ürün sayısı 17'den 22'ye çıktı. Üç teraryum ürünü AquaMind akvaryum kapsamının dışında olduğu için kataloğa alınmadı.
+- Motorlu Pipo Filtre Medium ve Large için yeni güvenilir debi veya akvaryum hacmi değeri bulunamadı; iki güvenlik boşluğu tahmin yapılmadan korunuyor. Hedefli katalog testi, katalog denetimi ve tam `pnpm verify` başarılıdır: TypeScript, yedi ekipman kategorili ve 615 bakım ürünlü katalog akışı, 52 sağlık senaryosu, beş kum türünü kapsayan hesaplayıcı regresyonu, katalog denetimi ve 14 sayfalık üretim derlemesi geçti. GitHub/Vercel'e gönderim yapılmadı.
+
+## 2026-09-09 Nubios güncel yerel portföy genişletmesi
+
+- Atakan'ın güncel Nubios marka sayfasındaki benzersiz dokuz ürün ailesi katalogla karşılaştırıldı. Mini mıknatıslı cam sileceğinin 771-KDSM01 kodu ve Small seçeneğinin ayrı 771-KDSM02 kodu doğrulandı; daha önce Small ürünü yanlışlıkla KDSM01 adı ve Mini bağlantısıyla tutulduğu için model kimliği ile kaynak düzeltildi.
+- FPD-51A 58 cm bakım seti doğrudan ürün sayfası, kodu ve barkoduyla güncellendi. Eksik FPD51-T teleskopik beş işlevli set ve NB-002 pompalı dip sifonu ayrı kayıtlar olarak eklendi.
+- Filtre ve ısıtma lambasıyla satılan ZHDG-02-B beyaz 46 cm, ZHDG-03-B beyaz 66 cm ve ZHDG-02-Y yeşil 46 cm kaplumbağa bahçeleri, yayımlanan ölçü, ürün kodu ve barkodlarıyla eklendi. Kaynak filtre debisi ve elektriksel güçleri yayımlamadığından bu değerler tahmin edilmedi.
+- Nubios ekipman/aksesuar kataloğu 43 kayıttan 48 doğrulanmış kayda çıktı. Filtre kategorisindeki 16 kayıt ile diğer sistemlerdeki 32 kayıt birbirinden ayrılıyor; güncel yerel ürün kodları regresyon kapsamındadır.
+- YU-118C ve YU-119C için yeniden güvenilir model bazlı debi bulunamadı. Başka markanın benzer ürün verisi kopyalanmadı; iki açıklamalı kapasite boşluğu korunuyor. Hedefli katalog testi, katalog denetimi ve tam `pnpm verify` başarılıdır: TypeScript, yedi ekipman kategorili ve 615 bakım ürünlü katalog akışı, 52 sağlık senaryosu, beş kum türünü kapsayan hesaplayıcı regresyonu, katalog denetimi ve 14 sayfalık üretim derlemesi geçti. GitHub/Vercel'e gönderim yapılmadı.
+
+## 2026-09-09 kırmızı kalem balığı tür ayrımı
+
+- Genel `KIRMIZI KALEM TETRA BALIKLARI` satış kaydı bilimsel ad yayımlamadığı için tek bir türe bağlanmadı. Birbirine çok benzeyen `Nannostomus mortenthaleri` ve `Nannostomus rubrocaudatus` ayrı, türe özel uzman kaynaklı profiller olarak eklendi.
+- İki profil de yayımlanan 3 cm erişkin boy, yaklaşık 81 litre/90 × 30 cm taban, en az onlu grup, 24–28 °C ve pH 4,0–7,0 eşikleriyle işlendi. Erkekler arası bölge mücadelesi, olgun ve yumuşak-asidik su gereksinimi ile iki türün bilimsel kimlik olmadan birbirine karıştırılmaması kullanıcı uyarılarına eklendi.
+- Regresyon testi iki bilimsel profili ayrı ayrı doğruluyor ve genel satış adının bunlardan birine tahminle eşleşmesini engelliyor. Hedefli katalog testi ve tam `pnpm verify` başarılıdır: TypeScript, 615 bakım ürünlü katalog akışı, 52 sağlık senaryosu, beş kum türünü kapsayan hesaplayıcı regresyonu, katalog denetimi ve 14 sayfalık üretim derlemesi geçti. Tetra grubu 31 kaynaklı ve bakım verisi tam profile ulaştı. GitHub/Vercel'e gönderim yapılmadı.
+
+## 2026-09-09 Gül Tetra ve Bentosi ayrımı
+
+- Genel `Gül Tetra` satış adı bilimsel tür yayımlamadığı için mevcut `Hyphessobrycon rosaceus` profiline veya yeni eklenen `Hyphessobrycon bentosi` profiline otomatik bağlanmadı. `H. bentosi`; Ornate, Bentosi, Bentos ve White-tipped Tetra adlarıyla ayrı seçilebilir güvenli profil olarak eklendi.
+- Türe özel uzman kaynakta yayımlanan 4,5 cm erişkin boy, 90 × 30 cm taban, yaklaşık 81 litre, 20–28 °C ve pH 5,0–7,5 eşikleri işlendi. En az sekizli sürü, olgun ve çok temiz akvaryum, gölgeli bitkili alanlar ve benzer rosy tetra türleriyle kimlik karışıklığı kullanıcı uyarılarına eklendi.
+- Regresyon testi Bentosi profilinin tüm bakım eşiklerini ve genel Gül Tetra satış adının iki profile de tahminle bağlanmamasını doğruluyor. Hedefli katalog testi ve tam `pnpm verify` başarılıdır: TypeScript, 615 bakım ürünlü katalog akışı, 52 sağlık senaryosu, beş kum türünü kapsayan hesaplayıcı regresyonu, katalog denetimi ve 14 sayfalık üretim derlemesi geçti. Tetra grubu 32 kaynaklı ve bakım verisi tam profile ulaştı. GitHub/Vercel'e gönderim yapılmadı.
+- `Kiraz Tetra` adı ayrıca denetlendi. Türkiye kaynaklarında hem `Hyphessobrycon rosaceus` hem Kiraz Barb (`Puntius titteya`), uluslararası ticarette ise henüz tür düzeyinde tanımlanmamış `Hyphessobrycon` sp. `Muzel` için kullanıldığı görüldü. Cikletist sayfası bilimsel kimlik yayımlamadığından mevcut güvenlik kaydı korundu ve otomatik profile bağlanmadı.
+
+## 2026-09-09 Celebes Halfbeak ve genel Cüce Zargana ayrımı
+
+- `Nomorhamphus liemi` ayrı bir Celebes Halfbeak profili olarak eklendi. Kaynaklardaki erişkin dişi boyu 10 cm, en az 91 cm/132 litre akvaryum, beşli grup, 24–27 °C ve pH 6,5–8,0 eşikleri işlendi; tür yalnız tatlı su profili olarak tanımlandı.
+- Erkek başına iki veya üç dişi, boşluksuz kapak, geniş yüzey alanı, iyi oksijenlenme, aşırı olmayan akıntı ve küçük canlıları avlama riski kullanıcı uyarılarına aktarıldı.
+- Genel `PLATİNİUM HALF BEAK CÜCE ZARGANA` satış adı bilimsel kimlik yayımlamadığından mevcut `Dermogenys pusilla` veya yeni `Nomorhamphus liemi` profiline tahminle bağlanmadı. İki türe özel profil seçilebilirken belirsiz mağaza adı açıklamalı güvenlik kaydı olarak korunuyor.
+- Hedefli katalog testi ve tam `pnpm verify` başarılıdır: TypeScript, 615 bakım ürünlü katalog akışı, 52 sağlık senaryosu, beş kum türünü kapsayan hesaplayıcı regresyonu, katalog denetimi ve 14 sayfalık üretim derlemesi geçti. Canlı doğuran grubu 15 kaynaklı ve bakım verisi tam profile ulaştı. GitHub/Vercel'e gönderim yapılmadı.
+
+## 2026-09-10 Grant's Peacock ve Red Ruby ayrımı
+
+- Bilimsel kimliği açık `Aulonocara stuartgranti`, Grant's Peacock adıyla ayrı seçilebilir profile eklendi. Uzman bakım kaynağındaki 13 cm boy, 120 × 45 cm/243 litre taban, bir erkek ve en az dört dişilik grup, 23–29 °C ve pH 7,5–9,0 eşikleri işlendi.
+- Erkek bölgeciliği, başka Aulonocara türleriyle melezleşme, ince kum, güçlü filtrasyon ve haftalık %30–50 su değişimi gereksinimleri kullanıcı uyarılarına taşındı.
+- Genel `RED RUBY CİKLET` doğal ve tekil bir tür adı olmadığı için A. stuartgranti profiline otomatik bağlanmadı. Seçilim hattı veya melez kimliği doğrulanmadıkça açıklamalı güvenlik kaydı olarak kalıyor.
+- Hedefli katalog testi ve tam `pnpm verify` başarılıdır: TypeScript, 615 bakım ürünlü katalog akışı, 52 sağlık senaryosu, beş kum türünü kapsayan hesaplayıcı regresyonu, katalog denetimi ve 14 sayfalık üretim derlemesi geçti. Cichlid grubu 71 kaynaklı ve bakım verisi tam profile ulaştı. GitHub/Vercel'e gönderim yapılmadı.

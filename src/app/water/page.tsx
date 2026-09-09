@@ -12,6 +12,7 @@ const inputClass = "mt-1.5 w-full rounded-xl border border-white/[.08] bg-[#0917
 const fields: Array<[keyof WaterParameters, string, string]> = [
   ["temperature", "Sıcaklık", "°C"], ["ph", "pH", ""], ["gh", "GH", "dGH"], ["kh", "KH", "dKH"], ["tds", "TDS", "ppm"],
   ["ammonia", "NH₃/NH₄", "ppm"], ["nitrite", "NO₂", "ppm"], ["nitrate", "NO₃", "ppm"], ["phosphate", "PO₄", "ppm"], ["iron", "Fe", "ppm"],
+  ["specificGravity", "Özgül ağırlık", "SG"],
 ];
 
 export default function WaterPage() {
@@ -26,6 +27,7 @@ function WaterContent() {
   const [showForm, setShowForm] = useState(false);
   const readings = useMemo(() => waterReadings.filter((item) => item.aquariumId === aquariumId).sort((a, b) => +new Date(b.measuredAt) - +new Date(a.measuredAt)), [aquariumId, waterReadings]);
   const latest = readings[0];
+  const selectedAquarium = aquariums.find((item) => item.id === aquariumId);
 
   function submit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -39,7 +41,7 @@ function WaterContent() {
     <div className="mb-7 flex flex-col justify-between gap-4 sm:flex-row sm:items-end"><div><p className="eyebrow mb-2 text-aqua">Su kimyası</p><h1 className="text-2xl font-extrabold sm:text-3xl">Su Değerleri</h1><p className="mt-2 text-sm text-[#71858d]">Değişimleri izle, dengeyi koru.</p></div><div className="flex gap-2"><label className="relative flex-1 sm:min-w-52"><select value={aquariumId} onChange={(e) => setAquariumId(e.target.value)} className="w-full appearance-none rounded-xl border border-white/[.08] bg-panel px-4 py-3 pr-9 text-xs font-bold outline-none">{aquariums.map((a) => <option key={a.id} value={a.id}>{a.name}</option>)}</select><ChevronDown size={14} className="pointer-events-none absolute right-3 top-3.5 text-[#71858d]"/></label><button onClick={() => setShowForm(true)} className="flex items-center gap-2 rounded-xl bg-aqua px-4 py-3 text-xs font-extrabold text-ink"><Plus size={16}/>Ölçüm ekle</button></div></div>
 
     {!aquariumId ? <div className="surface p-12 text-center text-sm text-[#71858d]">Önce bir akvaryum oluşturmalısın.</div> : <>
-      <div className="mb-5 grid grid-cols-2 gap-3 lg:grid-cols-4"><ValueCard icon={Thermometer} label="Sıcaklık" value={latest?.temperature} unit="°C"/><ValueCard icon={FlaskConical} label="pH" value={latest?.ph}/><ValueCard icon={CircleGauge} label="TDS" value={latest?.tds} unit="ppm"/><ValueCard icon={Activity} label="Nitrat" value={latest?.nitrate} unit="ppm"/></div>
+      <div className="mb-5 grid grid-cols-2 gap-3 lg:grid-cols-4"><ValueCard icon={Thermometer} label="Sıcaklık" value={latest?.temperature} unit="°C"/><ValueCard icon={FlaskConical} label="pH" value={latest?.ph}/>{selectedAquarium?.type==="freshwater"?<ValueCard icon={CircleGauge} label="TDS" value={latest?.tds} unit="ppm"/>:<ValueCard icon={CircleGauge} label="Özgül ağırlık" value={latest?.specificGravity} unit="SG"/>}<ValueCard icon={Activity} label="Nitrat" value={latest?.nitrate} unit="ppm"/></div>
       <div className="grid gap-5 xl:grid-cols-[1.25fr_.8fr]">
         <section className="surface p-5 sm:p-6"><div className="mb-6"><p className="eyebrow">Trend</p><h2 className="mt-1 text-lg font-extrabold">pH ve sıcaklık grafiği</h2></div><WaterChart readings={[...readings].reverse().slice(-8)}/></section>
         <section className="surface p-5 sm:p-6"><p className="eyebrow">Dağılım</p><h2 className="mt-1 text-lg font-extrabold">Son ölçüm özeti</h2><div className="mt-5 grid grid-cols-2 gap-2">{fields.slice(2).map(([key,label,unit]) => <div key={key} className="rounded-xl bg-white/[.025] p-3"><p className="text-[9px] font-bold text-[#586e77]">{label}</p><p className="mt-1 text-sm font-extrabold">{latest?.[key] ?? "—"} <span className="text-[9px] text-[#647981]">{unit}</span></p></div>)}</div></section>

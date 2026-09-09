@@ -14,6 +14,7 @@ export interface WaterParameters {
   nitrate?: number;
   phosphate?: number;
   iron?: number;
+  specificGravity?: number;
 }
 
 export type MaintenanceType =

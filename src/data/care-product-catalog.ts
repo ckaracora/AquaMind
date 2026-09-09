@@ -1,4 +1,4 @@
-export type CareProductCategory = "food" | "fertilizer" | "water_conditioner" | "bacteria" | "test" | "filter_media" | "substrate" | "treatment";
+export type CareProductCategory = "food" | "fertilizer" | "water_conditioner" | "bacteria" | "test" | "filter_media" | "substrate" | "plant_seed" | "treatment";
 
 export interface CareProductProfile {
   id: string;
@@ -732,6 +732,11 @@ export const careProductCatalog: CareProductProfile[] = [
   { id:"eurostar-hollow-bio-balls-1l", brand:"Eurostar", model:"Hollow Bio Balls 1 L", category:"filter_media", description:"pH üzerinde etkisiz biyokimyasal seramik biyolojik filtre medyası", sourceUrl:"https://atakanpetshop.com/eurostar-hollow-bio-balls-biolojik-filtre-malzemesi-1lt", verifiedAt:"2026-08-24" },
   { id:"eurostar-super-premium-carbon-300ml", brand:"Eurostar", model:"Super Premium Carbon 300 ml", category:"filter_media", description:"Klor, ağır metal, koku ve organik kirleticileri adsorbe eden aktif karbon", sourceUrl:"https://atakanpetshop.com/eurostar-super-premium-carbon-300ml-filtre-malzemesi-452-1016", verifiedAt:"2026-08-24" },
   { id:"eurostar-aquaclay-500ml", brand:"Eurostar", model:"Aquaclay 500 ml", category:"filter_media", description:"Biyolojik filtrasyon için 8–16 mm gözenekli, katkısız ve fırınlanmış kil esaslı filtre medyası", sourceUrl:"https://www.akvaryumexpress.com/eurostar-aquaclay-biyolojik-filtre-malzemesi", verifiedAt:"2026-08-25" },
+  { id:"eurostar-aquaclay-substrate-5l", brand:"Eurostar", model:"Aquaclay Bitki Kumu 5 L", category:"substrate", description:"Bitkili akvaryumlar için kil esaslı taban malzemesi · 5 L · ürün kodu 452-2001 · barkod 8681144120018", sourceUrl:"https://atakanpetshop.com/eurostar-aquaclay-bitki-kumu-5lt", verifiedAt:"2026-09-09" },
+  { id:"eurostar-aquaclay-substrate-10l", brand:"Eurostar", model:"Aquaclay Bitki Kumu 10 L", category:"substrate", description:"Bitkili akvaryumlar için kil esaslı taban malzemesi · 10 L · ürün kodu 452-2009 · barkod 8681144120094", sourceUrl:"https://atakanpetshop.com/eurostar-aquaclay-bitki-kumu-10lt", verifiedAt:"2026-09-09" },
+  { id:"eurostar-seed-eleocharis", brand:"Eurostar", model:"Bitki Tohumu Eleocharis Parvula", category:"plant_seed", description:"Satıcının Eleocharis parvula adıyla sunduğu bitki tohumu seçeneği · ürün kodu 452-1503 · barkod 8681144115038; paket içeriğinin bilimsel kimliği bağımsız olarak doğrulanmamıştır", sourceUrl:"https://atakanpetshop.com/eurostar-bitki-tohumu-eleocharis-parvula", verifiedAt:"2026-09-09" },
+  { id:"eurostar-seed-glossostigma", brand:"Eurostar", model:"Bitki Tohumu Glossostigma Elatinoides", category:"plant_seed", description:"Satıcının Glossostigma elatinoides adıyla sunduğu bitki tohumu seçeneği · ürün kodu 452-1501 · barkod 8681144115014; paket içeriğinin bilimsel kimliği bağımsız olarak doğrulanmamıştır", sourceUrl:"https://atakanpetshop.com/eurostar-bitki-tohumu-glossostigma-elatinoides", verifiedAt:"2026-09-09" },
+  { id:"eurostar-seed-hemianthus", brand:"Eurostar", model:"Bitki Tohumu Hemianthus Callitrichoides", category:"plant_seed", description:"Satıcının Hemianthus callitrichoides adıyla sunduğu bitki tohumu seçeneği · ürün kodu 452-1502 · barkod 8681144115021; paket içeriğinin bilimsel kimliği bağımsız olarak doğrulanmamıştır", sourceUrl:"https://atakanpetshop.com/eurostar-bitki-tohumu-hemianthus-callitrichoides", verifiedAt:"2026-09-09" },
   { id:"eurostar-water-clarifier-500ml", brand:"Eurostar", model:"Su Berraklaştırıcı 500 ml", category:"water_conditioner", description:"Askıdaki ince partiküllerin filtre tarafından tutulmasını destekleyen su berraklaştırıcı", sourceUrl:"https://atakanpetshop.com/eurostar", verifiedAt:"2026-08-24" },
   { id:"eurostar-ammonia-zeolite-500ml", brand:"Eurostar", model:"Amonyak Giderici Zeolit 500 ml", category:"filter_media", description:"Amonyak, nitrit ve ağır metal kontrolüne yardımcı doğal zeolit filtre medyası", sourceUrl:"https://www.akvaryumexpress.com/eurostar-amonyak-giderici-zeolite-filtre-malzemesi-500-ml", verifiedAt:"2026-08-25" },
   { id:"eurostar-micro-bio-pellets-1000ml", brand:"Eurostar", model:"Micro Bio Pellets 1000 ml", category:"filter_media", description:"Nitrat ve fosfat kontrolünü destekleyen biyolojik filtre peleti", sourceUrl:"https://atakanpetshop.com/eurostar", verifiedAt:"2026-08-24" },
@@ -779,5 +784,5 @@ for (const product of careProductCatalog) {
 
 export const careCategoryLabels: Record<CareProductCategory,string> = {
   food:"Yem", fertilizer:"Gübre", water_conditioner:"Su düzenleyici", bacteria:"Bakteri kültürü",
-  test:"Test", filter_media:"Filtre medyası", substrate:"Taban malzemesi", treatment:"Tedavi",
+  test:"Test", filter_media:"Filtre medyası", substrate:"Taban malzemesi", plant_seed:"Bitki tohumu", treatment:"Tedavi",
 };

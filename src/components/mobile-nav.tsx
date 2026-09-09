@@ -3,13 +3,9 @@
 import { useEffect, useState } from "react";
 import { Box, Calculator, CalendarCheck, Droplets, Fish, Gauge, Leaf, Menu, PackageSearch, Plus, Settings, SlidersHorizontal, Waves, X } from "lucide-react";
 import { usePathname } from "next/navigation";
+import { allNavigationItems, type NavigationKey } from "@/data/navigation";
 
-const drawerItems = [
-  [Gauge,"Genel Bakış","/"],[Box,"Akvaryumlarım","/aquariums"],[Droplets,"Su Değerleri","/water"],
-  [CalendarCheck,"Bakım Günlüğü","/maintenance"],[Fish,"Canlılar","/livestock"],[Leaf,"Bitkiler","/plants"],
-  [SlidersHorizontal,"Ekipmanlar","/equipment"],[PackageSearch,"Ürün Kataloğu","/products"],[Calculator,"Hesaplayıcılar","/calculators"],
-  [Settings,"Ayarlar","/settings"],
-] as const;
+const navIcons: Record<NavigationKey,typeof Gauge> = {overview:Gauge,aquariums:Box,water:Droplets,maintenance:CalendarCheck,livestock:Fish,plants:Leaf,equipment:SlidersHorizontal,products:PackageSearch,calculators:Calculator,settings:Settings};
 
 export function MobileNav() {
   const pathname = usePathname();
@@ -24,7 +20,7 @@ export function MobileNav() {
       <aside id="mobile-side-menu" role="dialog" aria-modal="true" aria-label="Ana menü" className="absolute inset-y-0 left-0 flex w-[min(86vw,320px)] flex-col border-r border-white/10 bg-[#09171e] px-4 py-5 shadow-2xl">
         <div className="mb-7 flex items-center gap-3 px-2"><span className="grid size-10 place-items-center rounded-xl bg-aqua text-ink"><Waves size={22}/></span><div><p className="text-base font-extrabold">AquaMind</p><p className="text-[8px] font-bold uppercase tracking-[.22em] text-aqua/70">Aquarium intelligence</p></div><button type="button" onClick={()=>setOpen(false)} aria-label="Menüyü kapat" className="ml-auto grid size-9 place-items-center rounded-xl bg-white/[.05] text-[#91a3aa]"><X size={18}/></button></div>
         <nav className="space-y-1 overflow-y-auto">
-          {drawerItems.map(([Icon,label,href])=>{const active=href==="/"?pathname==="/":pathname.startsWith(href);return <a key={href} href={href} className={`flex items-center gap-3 rounded-xl px-3 py-3 text-[13px] font-semibold ${active?"bg-aqua/10 text-aqua":"text-[#91a3aa]"}`}><Icon size={18}/>{label}{active&&<span className="ml-auto size-1.5 rounded-full bg-aqua"/>}</a>})}
+          {allNavigationItems.map(({key,label,href})=>{const Icon=navIcons[key];const active=href==="/"?pathname==="/":pathname.startsWith(href);return <a key={href} href={href} className={`flex items-center gap-3 rounded-xl px-3 py-3 text-[13px] font-semibold ${active?"bg-aqua/10 text-aqua":"text-[#91a3aa]"}`}><Icon size={18}/>{label}{active&&<span className="ml-auto size-1.5 rounded-full bg-aqua"/>}</a>})}
         </nav>
         <div className="mt-auto rounded-xl bg-white/[.025] p-3"><p className="text-xs font-bold">Mert Kaya</p><p className="mt-1 text-[10px] text-[#647981]">Ücretsiz plan</p></div>
       </aside>
