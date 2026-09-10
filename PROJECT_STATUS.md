@@ -1106,3 +1106,9 @@ Son güncelleme: 2026-09-09
 - Kırmızı karınlı pacu profili 88 cm bilimsel erişkin boy, 300 × 90 cm taban ve doğrulanmış ikincil kaynaktaki yaklaşık 3.000 litre tropikal havuz ölçeğiyle düzeltildi. Standart ev/topluluk akvaryumuna uygun olmama, aşırı biyolojik yük ve doğaya bırakmama uyarıları eklendi.
 - Alligator Gar güvenlik kaydı FishBase'deki 260 cm toplam boy ile uzman kaynaktaki 305 cm standart boyun farklı ölçüm türleri olduğunu açıklayacak şekilde güncellendi. Güvenilir kaynak sayısal yetişkin tesis hacmi veya tabanı yayımlamadığı için sahte profil oluşturulmadı ve belirsiz mağaza adı güvenlik listesinde kaldı.
 - Regresyon testi ve tam `pnpm verify` başarılıdır: TypeScript, yedi ekipman kategorili ve 615 bakım ürünlü katalog akışı, 52 sağlık senaryosu, beş kum türünü kapsayan hesaplayıcı regresyonu, katalog denetimi ve 14 sayfalık üretim derlemesi geçti. Bu ek paket GitHub/Vercel'e henüz gönderilmedi.
+
+## 2026-09-10 Katalog önizleme kontrol noktası
+
+- Bu tarihteki Baensch's Peacock, Gastromyzon stellatus, Green Spotted Puffer, iki Xenentodon türü, Brachirus panoides, Parambassis ranga, Chitala ornata ve eski Monster profil güvenlik düzeltmeleri `79a07bb` commit'iyle `codex/catalog-capacity-batch` dalına gönderildi.
+- Vercel önizleme dağıtımı başarıyla tamamlandı. Bu yalnız görev dalı önizlemesidir; `main` dalı ve genel üretim adresi değiştirilmedi.
+- Önizleme bağlantısı: `https://aqua-mind-git-codex-catalog-capacity-batch-ckaracoras-projects.vercel.app/`
