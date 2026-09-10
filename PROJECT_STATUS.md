@@ -1042,3 +1042,67 @@ Son güncelleme: 2026-09-09
 - Erkek bölgeciliği, başka Aulonocara türleriyle melezleşme, ince kum, güçlü filtrasyon ve haftalık %30–50 su değişimi gereksinimleri kullanıcı uyarılarına taşındı.
 - Genel `RED RUBY CİKLET` doğal ve tekil bir tür adı olmadığı için A. stuartgranti profiline otomatik bağlanmadı. Seçilim hattı veya melez kimliği doğrulanmadıkça açıklamalı güvenlik kaydı olarak kalıyor.
 - Hedefli katalog testi ve tam `pnpm verify` başarılıdır: TypeScript, 615 bakım ürünlü katalog akışı, 52 sağlık senaryosu, beş kum türünü kapsayan hesaplayıcı regresyonu, katalog denetimi ve 14 sayfalık üretim derlemesi geçti. Cichlid grubu 71 kaynaklı ve bakım verisi tam profile ulaştı. GitHub/Vercel'e gönderim yapılmadı.
+
+## 2026-09-10 Baensch's Peacock ve Sarı İmparator ayrımı
+
+- `Aulonocara baenschi`, Baensch's/Sunshine Peacock adıyla ayrı seçilebilir profile eklendi. Uzman tür kaynağındaki erkek 12 cm boy, 120 × 45 cm/243 litre taban, bir erkek ve en az dört dişilik grup, 25–29 °C ve pH 7,5–9,0 eşikleri işlendi.
+- İnce kum, olgun ve kararlı Malawi kurulumu, güçlü filtrasyon, haftalık %30–50 su değişimi, erkek bölgeciliği ve başka Aulonocara türleriyle melezleşme riskleri kullanıcı uyarılarına eklendi.
+- Genel `İTHAL SARI İMPARATOR CİKLET` başlığı A. baenschi, sarı A. stuartgranti yerel formları ve seçilim/melez Peacock hatları için kullanılabildiğinden otomatik bağlanmadı; bilimsel kimlik veya göl kökeni olmadan güvenlik kaydı olarak kalıyor.
+- Hedefli katalog testi ve tam `pnpm verify` başarılıdır: TypeScript, 615 bakım ürünlü katalog akışı, 52 sağlık senaryosu, beş kum türünü kapsayan hesaplayıcı regresyonu, katalog denetimi ve 14 sayfalık üretim derlemesi geçti. Cichlid grubu 72 kaynaklı ve bakım verisi tam profile ulaştı. Bu ek paket GitHub/Vercel'e henüz gönderilmedi.
+
+## 2026-09-10 Gastromyzon stellatus ve genel Borneo Kelebek Vatoz ayrımı
+
+- Ticarette bulunan `Gastromyzon stellatus`, Yıldızlı Borneo vantuzu adıyla ayrı seçilebilir profile eklendi. Uzman kaynakta yayımlanan 5,5 cm boy, 75 × 30 cm/68 litre taban, en az dörtlü grup, 20–24 °C, pH 6,0–7,5 ve güçlü akıntı gereksinimleri işlendi.
+- Olgun biyofilmli akarsu kurulumu, yüksek oksijen, yönlü akıntı, düz taş otlakları, boşluksuz kapak ve sıradan sıcak su topluluğuna uygun olmama uyarıları kullanıcıya aktarılıyor.
+- Genel `Borneo Kelebek Vatoz` satış adı otomatik bağlanmadı. Uzman kaynak gerçek G. punctulatus'un ticarette bulunmadığını ve G. stellatus dahil farklı Gastromyzon türlerinin Borneo Sucker/Butterfly Loach adıyla karıştığını belirttiği için bilimsel etiket olmadan profil seçilmiyor.
+- Hedefli katalog testi ve tam `pnpm verify` başarılıdır: TypeScript, 615 bakım ürünlü katalog akışı, 52 sağlık senaryosu, beş kum türünü kapsayan hesaplayıcı regresyonu, katalog denetimi ve 14 sayfalık üretim derlemesi geçti. Dip balığı grubu 72 kaynaklı ve bakım verisi tam profile ulaştı. Bu ek paket GitHub/Vercel'e henüz gönderilmedi.
+
+## 2026-09-10 Green Spotted Puffer ve genel Puffer ayrımı
+
+- Bilimsel kimliği açık `Dichotomyctere nigroviridis`, Yeşil Benekli Balon Balığı adıyla ayrı seçilebilir profile eklendi. FishBase'deki 17 cm erişkin boy, 24–28 °C, sert-alkali su ve tuz gereksinimi; tür odaklı bakım kaynaklarındaki 120 litre/80 cm alt sınırıyla birlikte işlendi.
+- Yavruların düşük tuzluluğa dayanabilmesinin uzun süreli tatlı su bakımı anlamına gelmediği açıklandı. Erişkin profil yalnız acı su/deniz suyu kataloğunda gösteriliyor; SG 1.010–1.018, güçlü filtrasyon, sıfır amonyak-nitrit, sert kabuklu yem ve tek bireylik tür akvaryumu uyarıları kullanıcıya aktarılıyor.
+- Genel `PUFFER BALIKLARI` mağaza başlığı tatlı, acı ve deniz suyunda yaşayan çok farklı türleri kapsadığı için bu profile veya başka bir balon balığına otomatik bağlanmadı. Regresyon testi kesin bilimsel/ortak adın acı su profilini bulduğunu, genel adın güvenlik kaydı olarak kaldığını ve türün tatlı su kataloğunda önerilmediğini doğruluyor.
+- Hedefli katalog testi ve tam `pnpm verify` başarılıdır: TypeScript, yedi ekipman kategorili ve 615 bakım ürünlü katalog akışı, 52 sağlık senaryosu, beş kum türünü kapsayan hesaplayıcı regresyonu, katalog denetimi ve 14 sayfalık üretim derlemesi geçti. Balon balığı grubu 7 kaynaklı ve bakım verisi tam profile ulaştı. Bu ek paket GitHub/Vercel'e henüz gönderilmedi.
+
+## 2026-09-10 Tatlı su iğne balığı ve genel Pipe Fish Needle ayrımı
+
+- `Xenentodon cancila`, Tatlı Su İğne Balığı adıyla ayrı seçilebilir profile eklendi. Uzman tür kaynağındaki 40 cm toplam erişkin boy, dört veya daha fazla birey, 180 × 60 cm taban/yaklaşık 648 litre, 18–30 °C ve pH 6,0–8,0 eşikleri işlendi.
+- Yüzeyde avlanma, küçük balıkları yutma, ani sıçrama, güçlü fakat türbülans oluşturmayan filtrasyon, olgun akvaryum ve haftalık %30–50 su değişimi gereksinimleri kullanıcı uyarılarına eklendi. Kaynak normal bakımda deniz tuzunun gerekli olmadığını belirttiği için profil yalnız tatlı su kataloğunda gösteriliyor.
+- Genel `PIPE FISH NEEDLE` satış başlığı farklı familyalardaki pipefish ve needlefish türlerini birlikte çağrıştırdığı için bu profile bağlanmadı. Bilimsel kimlikli `X. cancila` seçilebilirken mağaza kaydı açıklamalı güvenlik listesinde kalıyor.
+- Hedefli katalog testi ve tam `pnpm verify` başarılıdır: TypeScript, yedi ekipman kategorili ve 615 bakım ürünlü katalog akışı, 52 sağlık senaryosu, beş kum türünü kapsayan hesaplayıcı regresyonu, katalog denetimi ve 14 sayfalık üretim derlemesi geçti. Diğer balıklar grubu 25 kaynaklı ve bakım verisi tam profile ulaştı. Bu ek paket GitHub/Vercel'e henüz gönderilmedi.
+
+## 2026-09-10 Hindiçin iğne balığı tür ayrımı
+
+- `Xenentodon canciloides`, Hindiçin/Inkstripe Needlefish adıyla `X. cancila`dan ayrı seçilebilir profile eklendi. FishBase ve Eschmeyer tür kimliğini doğruluyor; uzman bakım kaynağındaki 30 cm boy, 180 × 60 cm/yaklaşık 648 litre taban, en az dörtlü grup, 18–26 °C ve pH 6,0–8,0 eşikleri işlendi.
+- Yalnız tatlı su, yüzeyde avlanma, küçük balık riski, zayıf yem rekabeti, boşluksuz kapak, olgun akvaryum, düşük türbülans ve haftalık %30–50 su değişimi gereksinimleri kullanıcı uyarılarına eklendi.
+- Genel `PIPE FISH NEEDLE` kaydı artık iki ayrı Xenentodon profilinin hazır olduğunu açıklıyor; bilimsel kimlik verilmediği için `X. cancila`, `X. canciloides` veya gerçek bir pipefish türünden hiçbirine otomatik bağlanmıyor.
+- Hedefli katalog testi ve tam `pnpm verify` başarılıdır: TypeScript, yedi ekipman kategorili ve 615 bakım ürünlü katalog akışı, 52 sağlık senaryosu, beş kum türünü kapsayan hesaplayıcı regresyonu, katalog denetimi ve 14 sayfalık üretim derlemesi geçti. Diğer balıklar grubu 26 kaynaklı ve bakım verisi tam profile ulaştı. Bu ek paket GitHub/Vercel'e henüz gönderilmedi.
+
+## 2026-09-10 Brachirus panoides ve genel Tatlı Su Dil Balığı ayrımı
+
+- `Brachirus panoides`, Malaya Nehir Dil Balığı adıyla ayrı seçilebilir profile eklendi. FishBase'deki 20 cm erişkin boy ve tatlı/acı su yaşamı; bakım kaynaklarındaki 208 litre, 100 cm, 23–28 °C, pH 7,0–8,0 ve SG 1.000–1.015 eşikleriyle işlendi.
+- İnce kuma gömülme, loş ve düşük akıntılı taban alanı, canlı/dondurulmuş dip yemiyle hedefli besleme, küçük canlıları avlama ve tuzluluk değişimlerini yavaş yapma uyarıları kullanıcıya aktarılıyor.
+- Genel `TATLI SU DİL BALIKLARI` adı B. panoides dışında B. harmandi, B. selheimi ve başka yassı balıkları da kapsadığından otomatik bağlanmadı. Bilimsel kimlikli profil seçilebilirken mağaza kaydı açıklamalı güvenlik listesinde kalıyor.
+- Hedefli katalog testi ve tam `pnpm verify` başarılıdır: TypeScript, yedi ekipman kategorili ve 615 bakım ürünlü katalog akışı, 52 sağlık senaryosu, beş kum türünü kapsayan hesaplayıcı regresyonu, katalog denetimi ve 14 sayfalık üretim derlemesi geçti. Diğer balıklar grubu 27 kaynaklı ve bakım verisi tam profile ulaştı. Bu ek paket GitHub/Vercel'e henüz gönderilmedi.
+
+## 2026-09-10 Parambassis ranga ve genel Buz Balığı ayrımı
+
+- `Parambassis ranga`, Hint Cam Balığı adıyla ayrı seçilebilir profile eklendi. FishBase'deki 9,5 cm azami boy; uzman bakım kaynağındaki en az altılı sürü, 80 × 30 cm/yaklaşık 72 litre, 20–30 °C ve pH 6,5–8,0 eşikleriyle işlendi.
+- Tatlı ve hafif acı su kapsamı, düşük akıntı, koyu ve bitkili kurulum, sakin tank arkadaşları ve bilimsel kimlik doğrulaması kullanıcı uyarılarına eklendi. Tatlı suda tuzun zorunlu olmadığı ve `Painted/Disco` adıyla satılan boya enjekte edilmiş bireylerin ağır refah riski taşıdığı açıklandı.
+- Genel `BUZ BALIĞI` satış adı tatlı, acı ve deniz suyunda yaşayan ilgisiz taksonları kapsadığından bu profile otomatik bağlanmadı; kesin bilimsel/ortak ad profili bulurken mağaza kaydı açıklamalı güvenlik listesinde kalıyor.
+- Hedefli katalog testi ve tam `pnpm verify` başarılıdır: TypeScript, yedi ekipman kategorili ve 615 bakım ürünlü katalog akışı, 52 sağlık senaryosu, beş kum türünü kapsayan hesaplayıcı regresyonu, katalog denetimi ve 14 sayfalık üretim derlemesi geçti. Diğer balıklar grubu 28 kaynaklı ve bakım verisi tam profile ulaştı. Bu ek paket GitHub/Vercel'e henüz gönderilmedi.
+
+## 2026-09-10 Chitala ornata güvenlik ve kaynak düzeltmesi
+
+- Mevcut `Chitala ornata` profilindeki kaynaksız 1.500 litre/300 cm değerleri kaldırıldı. FishBase'deki 100 cm erişkin boy, Seriously Fish'teki 20–28 °C ve pH 6,0–8,0 koşulları ile Aqueon'un erişkin için yayımladığı 750 ABD galonu/yaklaşık 2.839 litre eşik işlendi.
+- Kaynaklar santimetre cinsinden minimum akvaryum cephesi vermediği için uzunluk tahmin edilmedi ve kullanıcıya açık veri notu eklendi. Standart ev akvaryumuna uygun olmama, tek bireylik uzman kurulum, avlanma riski, yüksek oksijen, güçlü olgun filtrasyon, güvenli kapak ve haftalık %50–70 su değişimi uyarıları tamamlandı.
+- Genel `BIÇAK BALIKLARI` ile renk adı olan `ALBİNO BIÇAK BALIĞI`, bilimsel kimlik kanıtlanmadan bu profile bağlanmıyor. Kesin `Clown Knifefish` veya `Chitala ornata` araması kaynaklı profili buluyor.
+- Hedefli katalog testi ve tam `pnpm verify` başarılıdır: TypeScript, yedi ekipman kategorili ve 615 bakım ürünlü katalog akışı, 52 sağlık senaryosu, beş kum türünü kapsayan hesaplayıcı regresyonu, katalog denetimi ve 14 sayfalık üretim derlemesi geçti. Monster grubu 36 kaynaklı ve bakım verisi tam profilde kaldı. Bu ek paket GitHub/Vercel'e henüz gönderilmedi.
+
+## 2026-09-10 Eski Monster profilleri kaynak düzeltmesi
+
+- Senegal bichir profili FishBase'deki 70 cm bilimsel azami boy ve Seriously Fish'teki 150 × 60 cm/yaklaşık 540 litre bakım tabanı ile güncellendi. Boy kaynaklarının farklı amaçlarla verdiği 70 cm ve 50 cm değerleri kullanıcıya açıklandı; düşük akıntı, yüzey havasına erişim, yumuşak taban ve kaçış kapağı uyarıları eklendi.
+- Dev guraminin kaynaksız 1.200 litre/250 cm eşikleri kaldırıldı; tür kaynağının yayımladığı 70 cm, 183 × 61 cm/yaklaşık 681 litre mutlak alt sınır, 20–30 °C ve pH 6,5–8,0 koşulları işlendi. Uzun ömür, hızlı büyüme, güçlü filtrasyon ve daha büyük sistem tercih edilmesi açıklandı.
+- Kırmızı karınlı pacu profili 88 cm bilimsel erişkin boy, 300 × 90 cm taban ve doğrulanmış ikincil kaynaktaki yaklaşık 3.000 litre tropikal havuz ölçeğiyle düzeltildi. Standart ev/topluluk akvaryumuna uygun olmama, aşırı biyolojik yük ve doğaya bırakmama uyarıları eklendi.
+- Alligator Gar güvenlik kaydı FishBase'deki 260 cm toplam boy ile uzman kaynaktaki 305 cm standart boyun farklı ölçüm türleri olduğunu açıklayacak şekilde güncellendi. Güvenilir kaynak sayısal yetişkin tesis hacmi veya tabanı yayımlamadığı için sahte profil oluşturulmadı ve belirsiz mağaza adı güvenlik listesinde kaldı.
+- Regresyon testi ve tam `pnpm verify` başarılıdır: TypeScript, yedi ekipman kategorili ve 615 bakım ürünlü katalog akışı, 52 sağlık senaryosu, beş kum türünü kapsayan hesaplayıcı regresyonu, katalog denetimi ve 14 sayfalık üretim derlemesi geçti. Bu ek paket GitHub/Vercel'e henüz gönderilmedi.

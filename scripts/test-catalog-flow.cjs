@@ -1881,6 +1881,16 @@ for (const [id, minVolumeL, minGroup] of [
 assert.equal(speciesCatalog.find((item) => item.id === "butterfly-goodeid")?.flow, "high", "Kelebek Goodeid oksijenli ve akıntılı habitat gereksinimini taşımalı");
 assert.equal(speciesCatalog.find((item) => item.id === "red-tailed-goodeid")?.speciesOnly, true, "Kırmızı kuyruklu Goodeid güvenli topluluk balığı gibi önerilmemeli");
 assert.deepEqual(speciesCatalog.find((item) => item.id === "dark-edged-splitfin")?.temperature, [10, 22], "Koyu kenarlı Splitfin sürekli tropikal sıcaklığa önerilmemeli");
+const starryBorneoSucker = speciesCatalog.find((item) => item.id === "starry-borneo-sucker");
+assert.deepEqual(
+  [starryBorneoSucker?.scientificName,starryBorneoSucker?.adultSizeCm,starryBorneoSucker?.minVolumeL,starryBorneoSucker?.minTankLengthCm,starryBorneoSucker?.minGroup,starryBorneoSucker?.temperature,starryBorneoSucker?.ph,starryBorneoSucker?.flow],
+  ["Gastromyzon stellatus",5.5,68,75,4,[20,24],[6,7.5],"high"],
+  "Gastromyzon stellatus kaynaklı boy, grup, akvaryum tabanı ve akarsu eşiklerini taşımalı",
+);
+assert.equal(starryBorneoSucker?.speciesOnly, true, "Gastromyzon stellatus sıradan sıcak su topluluk balığı gibi sunulmamalı");
+assert.equal(starryBorneoSucker?.verifiedAt, "2026-09-10", "Gastromyzon stellatus güncel doğrulama tarihini taşımalı");
+assert.match(starryBorneoSucker?.sourceUrl || "", /^https:\/\/www\.seriouslyfish\.com\/species\/gastromyzon-stellatus$/, "Gastromyzon stellatus doğrudan türe özel uzman kaynağa bağlanmalı");
+assert.equal(speciesForLivestock({commonName:"Borneo Kelebek Vatoz",category:"fish",quantity:1}), undefined, "Genel Borneo Kelebek Vatoz adı Gastromyzon stellatus veya başka tepe loach profiline tahminle bağlanmamalı");
 assert.deepEqual([speciesCatalog.find((item) => item.id === "tropheus-moorii")?.minGroup, speciesCatalog.find((item) => item.id === "tropheus-moorii")?.minTankLengthCm], [15, 150], "Moorii Tropheus küçük grup veya kısa tank için önerilmemeli");
 assert.equal(speciesCatalog.find((item) => item.id === "red-zebra-mbuna")?.ph[0], 7.5, "Kırmızı zebra asidik topluluk su koşullarına önerilmemeli");
 const grantsPeacock = speciesCatalog.find((item) => item.id === "grants-peacock");
@@ -1893,6 +1903,16 @@ assert.equal(grantsPeacock?.speciesOnly, true, "Aulonocara stuartgranti melezle�
 assert.equal(grantsPeacock?.verifiedAt, "2026-09-10", "Aulonocara stuartgranti güncel doğrulama tarihini taşımalı");
 assert.match(grantsPeacock?.sourceUrl || "", /^https:\/\/www\.seriouslyfish\.com\/species\/aulonocara-stuartgranti$/, "Aulonocara stuartgranti doğrudan türe özel uzman kaynağa bağlanmalı");
 assert.equal(speciesForLivestock({commonName:"RED RUBY CİKLET",category:"fish",quantity:1}), undefined, "Red Ruby ticari adı Aulonocara stuartgranti veya başka Peacock profiline tahminle bağlanmamalı");
+const baenschiPeacock = speciesCatalog.find((item) => item.id === "baenschi-peacock");
+assert.deepEqual(
+  [baenschiPeacock?.scientificName,baenschiPeacock?.adultSizeCm,baenschiPeacock?.minVolumeL,baenschiPeacock?.minTankLengthCm,baenschiPeacock?.minGroup,baenschiPeacock?.temperature,baenschiPeacock?.ph,baenschiPeacock?.flow],
+  ["Aulonocara baenschi",12,243,120,5,[25,29],[7.5,9],"medium"],
+  "Aulonocara baenschi kaynaklı boy, harem grubu, taban alanı ve su eşiklerini taşımalı",
+);
+assert.equal(baenschiPeacock?.speciesOnly, true, "Aulonocara baenschi melezleşme ve erkek saldırganlığı nedeniyle sıradan topluluk balığı gibi sunulmamalı");
+assert.equal(baenschiPeacock?.verifiedAt, "2026-09-10", "Aulonocara baenschi güncel doğrulama tarihini taşımalı");
+assert.match(baenschiPeacock?.sourceUrl || "", /^https:\/\/www\.seriouslyfish\.com\/species\/aulonocara-baenschi$/, "Aulonocara baenschi doğrudan türe özel uzman kaynağa bağlanmalı");
+assert.equal(speciesForLivestock({commonName:"İTHAL SARI İMPARATOR CİKLET",category:"fish",quantity:1}), undefined, "Sarı İmparator ticari adı Aulonocara baenschi veya başka Peacock profiline tahminle bağlanmamalı");
 for (const [id, minVolumeL, minTankLengthCm, minGroup] of [
   ["jaguar-cichlid", 680, 182, 1],
   ["salvini-cichlid", 240, 120, 2],
@@ -2593,6 +2613,20 @@ for (const [id, scientificName, minVolumeL, minTankLengthCm] of [
   assert((profile.additionalSourceUrls?.length || 0) >= 2, `${id} kurumsal veya uzman ek kaynaklarla doğrulanmalı`);
   assert(/ev akvaryum/i.test(profile.husbandryCaution || ""), `${id} ev akvaryumu uygunluk riskini açıkça anlatmalı`);
 }
+const clownKnifefish = speciesCatalog.find((item) => item.id === "clown-knifefish");
+assert.deepEqual(
+  [clownKnifefish?.scientificName, clownKnifefish?.adultSizeCm, clownKnifefish?.minVolumeL, clownKnifefish?.minTankLengthCm, clownKnifefish?.temperature, clownKnifefish?.ph, clownKnifefish?.flow],
+  ["Chitala ornata", 100, 2839, undefined, [20, 28], [6, 8], "medium"],
+  "Chitala ornata yalnız kaynaklı boy, hacim ve su eşiklerini taşımalı; yayımlanmayan uzunluk tahmin edilmemeli",
+);
+assert.equal(clownKnifefish?.speciesOnly, true, "Chitala ornata standart topluluk balığı gibi sunulmamalı");
+assert.equal(clownKnifefish?.predatory, true, "Chitala ornata küçük canlılar için avlanma riskini taşımalı");
+assert(clownKnifefish?.tankLengthDataNote?.includes("tahmin edilmedi"), "Chitala ornata yayımlanmayan akvaryum uzunluğunu açıkça belirtmeli");
+assert(clownKnifefish?.husbandryCaution?.includes("%50–70"), "Chitala ornata kaynaklı yoğun haftalık bakım gereksinimini taşımalı");
+assert.equal(clownKnifefish?.verifiedAt, "2026-09-10", "Chitala ornata güncel doğrulama tarihini taşımalı");
+assert.equal(speciesForCatalogExactSearch("Clown Knifefish", "fish", "freshwater")?.id, "clown-knifefish", "Kesin Clown Knifefish adı doğru profile bağlanmalı");
+assert.equal(speciesForLivestock({commonName:"ALBİNO BIÇAK BALIĞI",category:"fish",quantity:1}), undefined, "Albino Bıçak Balığı renk adı Chitala ornata profiline tahminle bağlanmamalı");
+assert.equal(speciesForLivestock({commonName:"BIÇAK BALIKLARI",category:"fish",quantity:1}), undefined, "Genel Bıçak Balıkları adı Chitala ornata profiline tahminle bağlanmamalı");
 
 const cikletistTetraMainInventory = [
   `Neon Tetra
@@ -3475,8 +3509,8 @@ assert.equal(ocellarisPeacockBass?.predatory, true, "Ocellaris Peacock Bass kü�
 assert.equal(ocellarisPeacockBass?.speciesOnly, true, "Ocellaris Peacock Bass sıradan topluluk canlısı gibi sunulmamalı");
 assert.equal(ocellarisPeacockBass?.additionalSourceUrls?.length, 2, "Ocellaris Peacock Bass kimlik ve Türkiye satış adı kaynaklarını saklamalı");
 assert.equal(ocellarisPeacockBass?.verifiedAt, "2026-08-31", "Ocellaris Peacock Bass güncel doğrulama tarihini taşımalı");
-assert.equal(speciesCatalog.filter((item) => speciesGroup(item) === "cichlid").length, 71, "Cichlid kataloğu ayrı Aulonocara stuartgranti, Herichthys carpintis ve H. cyanoguttatus profilleri dahil doğrulanmış 71 profil içermeli");
-assert.equal(speciesCatalog.filter((item) => speciesGroup(item) === "bottom").length, 71, "Dip balığı kataloğu gerçek Julii, doğrulanmış Garra türleri, Ninja woodcat ve kesin L146/Ucayalensis profilleri dahil 71 profil içermeli");
+assert.equal(speciesCatalog.filter((item) => speciesGroup(item) === "cichlid").length, 72, "Cichlid kataloğu ayrı Aulonocara baenschi, A. stuartgranti, Herichthys carpintis ve H. cyanoguttatus profilleri dahil doğrulanmış 72 profil içermeli");
+assert.equal(speciesCatalog.filter((item) => speciesGroup(item) === "bottom").length, 72, "Dip balığı kataloğu ayrı Gastromyzon stellatus, gerçek Julii, doğrulanmış Garra türleri, Ninja woodcat ve kesin L146/Ucayalensis profilleri dahil 72 profil içermeli");
 assert.equal(speciesCatalog.filter((item) => speciesGroup(item) === "goby").length, 13, "Goby kataloğu üç ayrı Lipstick Sicyopus türü ve ayrıştırılmış Blue Neon profilleri dahil 13 profil içermeli");
 assert.equal(speciesCatalog.filter((item) => speciesGroup(item) === "crayfish").length, 4, "Kerevit kataloğu Cambarellus diminutus dahil dört tür içermeli");
 for (const [id,group,volume,length,count,temperature,ph,flow] of [
@@ -3906,6 +3940,7 @@ for (const [id, minVolumeL, minTankLengthCm] of [
   ["congo-puffer", 112, 80],
   ["red-eyed-puffer", 80, 80],
   ["spotted-congo-puffer", 110, 80],
+  ["green-spotted-puffer", 120, 80],
 ]) {
   const profile = speciesCatalog.find((item) => item.id === id);
   assert(profile, `${id} tatlı su balon balığı kataloğunda bulunmalı`);
@@ -3914,6 +3949,55 @@ for (const [id, minVolumeL, minTankLengthCm] of [
 }
 assert.equal(speciesCatalog.find((item) => item.id === "congo-puffer")?.speciesOnly, true, "Congo balon balığı tür akvaryumu gerektirmeli");
 assert(speciesCatalog.find((item) => item.id === "spotted-congo-puffer")?.communityCaution, "Spotted Congo topluluk riski açıklaması taşımalı");
+const greenSpottedPuffer = speciesCatalog.find((item) => item.id === "green-spotted-puffer");
+assert.deepEqual([greenSpottedPuffer?.scientificName, greenSpottedPuffer?.adultSizeCm, greenSpottedPuffer?.temperature, greenSpottedPuffer?.ph], ["Dichotomyctere nigroviridis", 17, [24, 28], [7.5, 8.5]], "Green Spotted Puffer kaynaklı kimlik, boy ve su eşiklerini taşımalı");
+assert.deepEqual(greenSpottedPuffer?.waterTypes, ["brackish", "saltwater"], "Green Spotted Puffer uzun süreli tatlı su profili gibi sunulmamalı");
+assert.deepEqual(greenSpottedPuffer?.specificGravity, [1.01, 1.018], "Green Spotted Puffer erişkin acı su özgül ağırlığını taşımalı");
+assert.equal(greenSpottedPuffer?.speciesOnly, true, "Green Spotted Puffer topluluk canlısı gibi sunulmamalı");
+assert.equal(greenSpottedPuffer?.predatory, true, "Green Spotted Puffer avlanma riskini taşımalı");
+assert(greenSpottedPuffer?.sourceUrl?.includes("fishbase.se/summary/Dichotomyctere-nigroviridis"), "Green Spotted Puffer FishBase tür kaynağına bağlanmalı");
+assert.equal(speciesForCatalogExactSearch("Green Spotted Puffer", "fish", "brackish")?.id, "green-spotted-puffer", "Kesin Green Spotted Puffer adı acı su kataloğunda bulunmalı");
+assert.equal(speciesForCatalogExactSearch("Green Spotted Puffer", "fish", "freshwater"), undefined, "Green Spotted Puffer tatlı su kataloğunda önerilmemeli");
+assert.equal(unresolvedSpeciesForSearch("PUFFER BALIKLARI", "fish", "brackish")?.name, "PUFFER BALIKLARI", "Genel Puffer Balıkları adı tek türe tahminle bağlanmamalı");
+const freshwaterNeedlefish = speciesCatalog.find((item) => item.id === "freshwater-needlefish");
+assert.deepEqual([freshwaterNeedlefish?.scientificName, freshwaterNeedlefish?.adultSizeCm, freshwaterNeedlefish?.minVolumeL, freshwaterNeedlefish?.minTankLengthCm, freshwaterNeedlefish?.minGroup], ["Xenentodon cancila", 40, 648, 180, 4], "Xenentodon cancila kaynaklı kimlik, boy, akvaryum ve grup eşiklerini taşımalı");
+assert.deepEqual([freshwaterNeedlefish?.temperature, freshwaterNeedlefish?.ph, freshwaterNeedlefish?.flow], [[18, 30], [6, 8], "low"], "Xenentodon cancila kaynaklı su ve düşük türbülans gereksinimini taşımalı");
+assert.deepEqual(freshwaterNeedlefish?.waterTypes, ["freshwater"], "Xenentodon cancila normal bakımda tuz gerektiren tür gibi sunulmamalı");
+assert.equal(freshwaterNeedlefish?.predatory, true, "Xenentodon cancila küçük canlılar için avlanma riskini taşımalı");
+assert.equal(freshwaterNeedlefish?.speciesOnly, true, "Xenentodon cancila sıradan topluluk balığı gibi sunulmamalı");
+assert(freshwaterNeedlefish?.husbandryCaution?.includes("%30–50"), "Xenentodon cancila haftalık bakım gereksinimini açıklamalı");
+assert.equal(speciesForCatalogExactSearch("Freshwater Needlefish", "fish", "freshwater")?.id, "freshwater-needlefish", "Kesin Freshwater Needlefish adı doğru profili bulmalı");
+const indochineseNeedlefish = speciesCatalog.find((item) => item.id === "indochinese-needlefish");
+assert.deepEqual([indochineseNeedlefish?.scientificName, indochineseNeedlefish?.adultSizeCm, indochineseNeedlefish?.minVolumeL, indochineseNeedlefish?.minTankLengthCm, indochineseNeedlefish?.minGroup], ["Xenentodon canciloides", 30, 648, 180, 4], "Xenentodon canciloides kaynaklı kimlik, boy, akvaryum ve grup eşiklerini taşımalı");
+assert.deepEqual([indochineseNeedlefish?.temperature, indochineseNeedlefish?.ph, indochineseNeedlefish?.flow], [[18, 26], [6, 8], "low"], "Xenentodon canciloides kaynaklı su ve düşük türbülans gereksinimini taşımalı");
+assert.deepEqual(indochineseNeedlefish?.waterTypes, ["freshwater"], "Xenentodon canciloides yalnız tatlı su profilinde görünmeli");
+assert.equal(indochineseNeedlefish?.predatory, true, "Xenentodon canciloides küçük canlılar için avlanma riskini taşımalı");
+assert.equal(indochineseNeedlefish?.speciesOnly, true, "Xenentodon canciloides sıradan topluluk balığı gibi sunulmamalı");
+assert.equal(speciesForCatalogExactSearch("Indochinese Needlefish", "fish", "freshwater")?.id, "indochinese-needlefish", "Ayırt edici Indochinese Needlefish adı doğru profili bulmalı");
+assert.notEqual(freshwaterNeedlefish?.scientificName, indochineseNeedlefish?.scientificName, "İki Xenentodon türü tek profil gibi gösterilmemeli");
+assert.equal(speciesForLivestock({commonName:"PIPE FISH NEEDLE",category:"fish",quantity:1}), undefined, "Genel Pipe Fish Needle adı pipefish veya needlefish profiline tahminle bağlanmamalı");
+const malayanRiverSole = speciesCatalog.find((item) => item.id === "malayan-river-sole");
+assert.deepEqual([malayanRiverSole?.scientificName, malayanRiverSole?.adultSizeCm, malayanRiverSole?.minVolumeL, malayanRiverSole?.minTankLengthCm, malayanRiverSole?.minGroup], ["Brachirus panoides", 20, 208, 100, 1], "Brachirus panoides kaynaklı kimlik, boy ve akvaryum eşiklerini taşımalı");
+assert.deepEqual([malayanRiverSole?.temperature, malayanRiverSole?.ph, malayanRiverSole?.flow], [[23, 28], [7, 8], "low"], "Brachirus panoides kaynaklı su ve düşük akıntı gereksinimini taşımalı");
+assert.deepEqual(malayanRiverSole?.waterTypes, ["freshwater", "brackish"], "Brachirus panoides doğrulanan tatlı ve acı su kapsamını taşımalı");
+assert.deepEqual(malayanRiverSole?.specificGravity, [1, 1.015], "Brachirus panoides kaynaklı tuzluluk toleransını taşımalı");
+assert.equal(malayanRiverSole?.predatory, true, "Brachirus panoides küçük canlılar için avlanma riskini taşımalı");
+assert.equal(malayanRiverSole?.speciesOnly, true, "Brachirus panoides uzman kurulumu gerektirmeli");
+assert(malayanRiverSole?.husbandryCaution?.includes("ince kum"), "Brachirus panoides gömülme zemini ve hedefli besleme uyarısını taşımalı");
+assert.equal(speciesForCatalogExactSearch("Brachirus panoides", "fish", "freshwater")?.id, "malayan-river-sole", "Kesin Brachirus panoides adı doğru profili bulmalı");
+assert.equal(speciesForLivestock({commonName:"TATLI SU DİL BALIKLARI",category:"fish",quantity:1}), undefined, "Genel Tatlı Su Dil Balıkları adı Brachirus panoides profiline tahminle bağlanmamalı");
+const indianGlassFish = speciesCatalog.find((item) => item.id === "indian-glass-fish");
+assert.deepEqual(
+  [indianGlassFish?.scientificName, indianGlassFish?.adultSizeCm, indianGlassFish?.minVolumeL, indianGlassFish?.minTankLengthCm, indianGlassFish?.minGroup],
+  ["Parambassis ranga", 9.5, 72, 80, 6],
+  "Parambassis ranga kaynaklı kimlik, boy, akvaryum ve sürü eşiklerini taşımalı",
+);
+assert.deepEqual([indianGlassFish?.temperature, indianGlassFish?.ph, indianGlassFish?.flow], [[20, 30], [6.5, 8], "low"], "Parambassis ranga kaynaklı su ve düşük akıntı gereksinimini taşımalı");
+assert.deepEqual(indianGlassFish?.waterTypes, ["freshwater", "brackish"], "Parambassis ranga doğrulanan tatlı ve hafif acı su kapsamını taşımalı");
+assert(indianGlassFish?.husbandryCaution?.includes("Painted"), "Parambassis ranga yapay boya enjeksiyonu refah uyarısını taşımalı");
+assert.equal(speciesForCatalogExactSearch("Indian Glass Fish", "fish", "freshwater")?.id, "indian-glass-fish", "Kesin Indian Glass Fish adı doğru profili bulmalı");
+assert.equal(speciesForLivestock({commonName:"BUZ BALIĞI",category:"fish",quantity:1}), undefined, "Genel Buz Balığı adı Parambassis ranga profiline tahminle bağlanmamalı");
+assert.equal(unresolvedSpeciesForSearch("BUZ BALIĞI", "fish", "freshwater")?.name, "BUZ BALIĞI", "Genel Buz Balığı açıklamalı güvenlik kaydı olarak kalmalı");
 for (const [id, minVolumeL, minTankLengthCm] of [
   ["african-butterfly-fish", 81, 90],
   ["elephantnose-fish", 680, 150],
@@ -4010,11 +4094,24 @@ assert.notEqual(southernPurpleSpottedGudgeon?.scientificName, northernPurpleSpot
 assert.equal(speciesForLivestock({ commonName: "Purple Spotted Gudgeon", category: "fish", quantity: 1 }), undefined, "Genel Purple Spotted Gudgeon adı kuzey veya güney profiline otomatik bağlanmamalı");
 const unresolvedAlligatorGar = unresolvedSpeciesForSearch("ALLIGATOR GAR TİMSAH BALIKLARI", "fish", "freshwater");
 assert.equal(unresolvedAlligatorGar?.group, "monster", "Alligator Gar satışı Monster grubunda güvenlik kaydı olarak kalmalı");
-assert.equal(unresolvedAlligatorGar?.verifiedAt, "2026-09-08", "Alligator Gar güvenlik kaydı güncel kaynak denetim tarihini taşımalı");
-assert(unresolvedAlligatorGar?.reason.includes("305 cm") && unresolvedAlligatorGar?.reason.includes("kamusal tesis"), "Alligator Gar kaydı ev akvaryumuna uygunsuzluğu ve erişkin ölçeğini kullanıcıya açıklamalı");
+assert.equal(unresolvedAlligatorGar?.verifiedAt, "2026-09-10", "Alligator Gar güvenlik kaydı güncel kaynak denetim tarihini taşımalı");
+assert(unresolvedAlligatorGar?.reason.includes("260 cm") && unresolvedAlligatorGar?.reason.includes("305 cm") && unresolvedAlligatorGar?.reason.includes("kamusal tesis"), "Alligator Gar kaydı farklı boy ölçümlerini ve ev akvaryumuna uygunsuzluğu açıklamalı");
 assert(unresolvedAlligatorGar?.additionalSourceUrls.some((url) => url.includes("seriouslyfish.com/species/atractosteus-spatula")), "Alligator Gar uzman bakım kaynağına bağlanmalı");
 assert(unresolvedAlligatorGar?.additionalSourceUrls.some((url) => url.includes("floridamuseum.ufl.edu")), "Alligator Gar kurumsal tür ve erişkin boy kaynağına bağlanmalı");
+assert(unresolvedAlligatorGar?.additionalSourceUrls.some((url) => url.includes("fws.gov")), "Alligator Gar kamu kurumu risk kaynağına bağlanmalı");
 assert.equal(speciesForLivestock({ commonName: "ALLIGATOR GAR TİMSAH BALIKLARI", category: "fish", quantity: 1 }), undefined, "Kimliği ve yetişkin tesisi doğrulanmayan Alligator Gar için sahte hacim profili üretilmemeli");
+const senegalBichir = speciesForLivestock({ commonName: "Senegal bichir", scientificName: "Polypterus senegalus", category: "fish", quantity: 1 });
+assert.deepEqual([senegalBichir?.adultSizeCm, senegalBichir?.minVolumeL, senegalBichir?.minTankLengthCm, senegalBichir?.temperature, senegalBichir?.ph], [70, 540, 150, [24, 28], [6.2, 7.8]], "Senegal bichir bilimsel azami boyu ve kaynaklı bakım eşiklerini taşımalı");
+assert.equal(senegalBichir?.verifiedAt, "2026-09-10", "Senegal bichir güncel kaynak denetim tarihini taşımalı");
+assert(senegalBichir?.husbandryCaution?.includes("150 × 60 cm") && senegalBichir?.husbandryCaution?.includes("70 cm"), "Senegal bichir boy ve taban kaynağı farkını açıklamalı");
+const giantGourami = speciesForLivestock({ commonName: "Dev gurami", scientificName: "Osphronemus goramy", category: "fish", quantity: 1 });
+assert.deepEqual([giantGourami?.adultSizeCm, giantGourami?.minVolumeL, giantGourami?.minTankLengthCm, giantGourami?.temperature, giantGourami?.ph], [70, 681, 183, [20, 30], [6.5, 8]], "Dev gurami kaynaklı erişkin, akvaryum ve su eşiklerini taşımalı");
+assert.equal(giantGourami?.verifiedAt, "2026-09-10", "Dev gurami güncel kaynak denetim tarihini taşımalı");
+assert(giantGourami?.husbandryCaution?.includes("mutlak alt sınır"), "Dev gurami yayımlanan minimumun çıplak alt sınır olduğunu açıklamalı");
+const redBelliedPacu = speciesForLivestock({ commonName: "Kırmızı karınlı pacu", scientificName: "Piaractus brachypomus", category: "fish", quantity: 1 });
+assert.deepEqual([redBelliedPacu?.adultSizeCm, redBelliedPacu?.minVolumeL, redBelliedPacu?.minTankLengthCm, redBelliedPacu?.minGroup, redBelliedPacu?.temperature, redBelliedPacu?.ph], [88, 3000, 300, 1, [23, 28], [4.8, 7.5]], "Kırmızı karınlı pacu kaynaklı erişkin, havuz ölçeği ve su eşiklerini taşımalı");
+assert.equal(redBelliedPacu?.verifiedAt, "2026-09-10", "Kırmızı karınlı pacu güncel kaynak denetim tarihini taşımalı");
+assert.equal(redBelliedPacu?.speciesOnly, true, "Kırmızı karınlı pacu standart topluluk önerilerine girmemeli");
 const unresolvedBlueAzulPeacockBass = unresolvedSpeciesForSearch("BLUE AZUL PEACOCK BASS", "fish", "freshwater");
 assert.equal(unresolvedBlueAzulPeacockBass?.group, "monster", "Blue Azul Peacock Bass Monster grubunda güvenlik kaydı olarak kalmalı");
 assert.equal(unresolvedBlueAzulPeacockBass?.verifiedAt, "2026-09-09", "Blue Azul Peacock Bass güvenlik kaydı güncel kaynak denetim tarihini taşımalı");
