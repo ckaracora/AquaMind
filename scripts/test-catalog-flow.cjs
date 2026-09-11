@@ -32,7 +32,7 @@ require.extensions[".ts"] = (module, filename) => {
 
 const { equipmentBrandsForCategory, equipmentCatalog, equipmentForBrandInCategory, equipmentForCategory, hasStandaloneCapacityData, speciesCatalog, speciesForCatalogExactSearch, speciesForCatalogSearch, speciesForCategoryAndWaterType, speciesForLivestock, speciesGroup, speciesGroupsForCategoryAndWaterType, speciesWaterTypes } = require(path.join(projectRoot, "src/data/catalog.ts"));
 const { unresolvedSpeciesForSearch, unresolvedSpeciesListings } = require(path.join(projectRoot, "src/data/catalog-species-unresolved.ts"));
-const { careProductCatalog } = require(path.join(projectRoot, "src/data/care-product-catalog.ts"));
+const { careCategoryLabels, careProductCatalog } = require(path.join(projectRoot, "src/data/care-product-catalog.ts"));
 const { catalogBrandCoverage } = require(path.join(projectRoot, "src/data/catalog-coverage.ts"));
 const { allNavigationItems, primaryNavigationItems, settingsNavigationItem } = require(path.join(projectRoot, "src/data/navigation.ts"));
 const cikletistMainCategoryInventory = require(path.join(projectRoot, "scripts/fixtures/cikletist-main-category.cjs"));
@@ -323,6 +323,90 @@ const aquaelHypermaxEngineCover = equipmentCatalog.find((entry) => entry.id === 
 assert(aquaelHypermaxEngineCover, "Aquael Hypermax motor kapağı katalogda bulunmalı");
 assert.deepEqual([aquaelHypermaxEngineCover.category, aquaelHypermaxEngineCover.passiveComponent], ["other", true], "Aquael Hypermax motor kapağı pasif aksesuar olmalı");
 assert.equal(aquaelHypermaxEngineCover.sourceUrl, "https://www.aquael.com/products/aquaristics/aquaristics/139094-2/", "Aquael Hypermax motor kapağı doğrudan resmî ürün sayfasına bağlanmalı");
+
+const aquaelCare = careProductCatalog.filter((entry) => entry.brand === "Aquael");
+assert.equal(aquaelCare.length, 230, "Aquael güncel ürün portföyü 230 ayrı ürün/varyant içermeli");
+assert.equal(aquaelCare.filter((entry) => entry.category === "filter_media").length, 69, "Aquael resmî filtre medyası portföyü 69 kayıt içermeli");
+assert.equal(aquaelCare.filter((entry) => entry.category === "substrate").length, 33, "Aquael resmî taban malzemesi portföyü 33 kayıt içermeli");
+assert.equal(aquaelCare.filter((entry) => entry.category === "food").length, 40, "Aquael resmî Acti Food portföyü 40 paket varyantı içermeli");
+assert.equal(aquaelCare.filter((entry) => entry.category === "water_conditioner").length, 2, "Aquael Acti Clean iki gerçek hacim seçeneği içermeli");
+assert.equal(aquaelCare.filter((entry) => entry.category === "bacteria").length, 2, "Aquael Acti Bactol iki gerçek hacim seçeneği içermeli");
+assert.equal(aquaelCare.filter((entry) => entry.category === "decoration").length, 26, "Aquael resmî dekorasyon portföyü 26 ürün/varyant içermeli");
+assert.equal(aquaelCare.filter((entry) => entry.category === "aquarium_set").length, 16, "Aquael doğrulanmış akvaryum seti paketi 16 varyant içermeli");
+assert.equal(aquaelCare.filter((entry) => entry.category === "tank").length, 14, "Aquael standart boş cam akvaryum ailesi 14 varyant içermeli");
+assert.equal(aquaelCare.filter((entry) => entry.category === "cover").length, 11, "Aquael resmî Leddy ve Classic kapak aileleri 11 varyant içermeli");
+assert.equal(aquaelCare.filter((entry) => entry.category === "cabinet").length, 17, "Aquael doğrulanmış dolap paketi 17 varyant içermeli");
+assert(aquaelCare.every((entry) => entry.sourceUrl.startsWith("https://www.aquael.com/")), "Aquael bakım ürünlerinin tamamı resmî üretici kaynağına bağlanmalı");
+assert(aquaelCare.every((entry) => ["2026-09-11","2026-09-12"].includes(entry.verifiedAt)), "Aquael ürünlerinin tamamı güncel doğrulama tarihi taşımalı");
+const aquaelCareCategory = (model) => aquaelCare.find((entry) => entry.model === model)?.category;
+for (const model of [
+  "NanoMax Bio 1 L",
+  "NatureMax Bio 1 L",
+  "PearlMax Bio 1 L",
+  "Magic Balls 1 L",
+  "BioCeraMAX UltraPro 1600 1 L",
+  "CarboMAX Plus 1 L",
+  "ZeoMAX Plus 1 L",
+  "WoolMax Pro",
+  "FZN Pro Media Pack PhosMAX 3'lü",
+  "Filter Media Bag 28 × 32 cm",
+]) {
+  assert.equal(aquaelCareCategory(model), "filter_media", `Aquael ${model} filtre medyası kategorisinde bulunmalı`);
+}
+for (const model of [
+  "Aqua Decoris Black 2–3 mm 1 kg",
+  "Natural Multicolored Gravel 5–10 mm 10 kg",
+  "Quartz Sand 0,1–0,3 mm 10 kg",
+  "Basalt Gravel 2–4 mm 10 kg",
+  "Dolomite Gravel 2–4 mm 10 kg",
+  "H.E.L.P. Advanced Soil Plants 8 L",
+  "Aqua Decoris Flora 1,5 kg",
+]) {
+  assert.equal(aquaelCareCategory(model), "substrate", `Aquael ${model} taban malzemesi kategorisinde bulunmalı`);
+}
+for (const model of [
+  "ActiGran 1000 ml",
+  "SpiruTabs 250 ml",
+  "Vegetal 11 L",
+  "Betta 100 ml",
+  "GoldVit 11 L",
+  "CichlidGran 1000 ml",
+  "CrusTabs 10 g",
+  "DiscusVit 1000 ml",
+]) {
+  assert.equal(aquaelCareCategory(model), "food", `Aquael ${model} yem kategorisinde bulunmalı`);
+}
+assert.equal(aquaelCareCategory("Acti Clean 250 ml"), "water_conditioner", "Aquael Acti Clean su düzenleyici kategorisinde bulunmalı");
+assert.equal(aquaelCareCategory("Acti Bactol 250 ml"), "bacteria", "Aquael Acti Bactol bakteri kültürü kategorisinde bulunmalı");
+for (const model of [
+  "Shrimp Wood Mix 25 kg",
+  "Lava Red Mix 10 kg",
+  "Plastic Plant PR-203 7 cm",
+  "Plastic Plant PR-203 20 cm",
+  "Driftwood Mix Pack 8–10 kg",
+  "Black Quartz Rock Stone Mix 20 kg",
+]) {
+  assert.equal(aquaelCareCategory(model), "decoration", `Aquael ${model} dekorasyon kategorisinde bulunmalı`);
+}
+assert.equal(careCategoryLabels.decoration, "Dekorasyon", "Ürün kataloğu dekorasyon için ayrı ve anlaşılır filtre göstermeli");
+assert.equal(careCategoryLabels.aquarium_set, "Akvaryum seti", "Tam akvaryum setleri ürün kataloğunda ayrı filtrelenmeli");
+assert.equal(careCategoryLabels.tank, "Boş akvaryum", "Boş cam akvaryumlar setlerden ayrı filtrelenmeli");
+assert.equal(careCategoryLabels.cover, "Akvaryum kapağı", "Akvaryum kapakları ayrı filtrelenmeli");
+assert.equal(careCategoryLabels.cabinet, "Akvaryum dolabı", "Akvaryum dolapları ayrı filtrelenmeli");
+const aquaelNeoSet240 = aquaelCare.find((entry) => entry.model === "Neo Set 240");
+assert.deepEqual([aquaelNeoSet240?.category, aquaelNeoSet240?.volumeL, aquaelNeoSet240?.dimensionsCm], ["aquarium_set",240,[121,41,56]], "Neo Set 240 resmî hacim ve ölçülerini taşımalı");
+assert(aquaelNeoSet240?.includedEquipmentModels?.includes("Neo Bio 1000"), "Neo Set 240 içindeki doğrulanmış filtre modeli saklanmalı");
+const aquaelRectangular150 = aquaelCare.find((entry) => entry.model === "Glass Aquarium Rectangular 150");
+assert.deepEqual([aquaelRectangular150?.category, aquaelRectangular150?.volumeL, aquaelRectangular150?.dimensionsCm], ["tank",375,[150,50,50]], "150 cm dik cam akvaryum resmî hacim ve ölçülerini taşımalı");
+for (const entry of aquaelCare.filter((item) => item.category === "aquarium_set" || item.category === "tank")) {
+  assert.equal(entry.verifiedAt, "2026-09-12", `Aquael ${entry.model} güncel yapısal ürün doğrulama tarihini taşımalı`);
+  assert(entry.volumeL > 0 && entry.dimensionsCm?.every((value) => value > 0), `Aquael ${entry.model} kaynaklı hacim ve üç boyut taşımalı`);
+}
+const aquaelLeddyCover = aquaelCare.find((entry) => entry.model === "Leddy Cover Rectangular 40 Black");
+assert.deepEqual([aquaelLeddyCover?.category,aquaelLeddyCover?.footprintCm], ["cover",[41,25]], "Leddy 40 siyah kapak resmî taban ölçüsünü taşımalı");
+const aquaelOptiCabinet = aquaelCare.find((entry) => entry.model === "Opti Set Cabinet 125 Grey");
+assert.deepEqual([aquaelOptiCabinet?.category,aquaelOptiCabinet?.dimensionsCm], ["cabinet",[81.5,36,80]], "Opti Set 125 gri dolap resmî üç boyutunu taşımalı");
+assert.equal(aquaelCare.filter((entry) => entry.model === "Betta 100 ml").length, 1, "Aynı hacimde yalnız dil etiketi değişen Aquael Betta SKU'ları kullanıcıya yinelenmemeli");
 
 const chihiros = equipmentCatalog.filter((item) => item.brand === "Chihiros");
 for (const model of ["WRGB II Pro 60", "WRGB II Pro 120", "Dosing Pump System (4 Head)", "Dosing Pump Mate (2 Head)", "Heater Pro 12/16 mm (EU)", "Heater Pro 16/22 mm (EU)", "Doctor Mate", "Digital TDS / Temperature Tester Pen", "CO₂ Spiral Bubble Counter", "Nano CO₂ Diffuser", "CO₂ Drop Checker"]) {

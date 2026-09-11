@@ -1,6 +1,6 @@
 # AquaMind proje durumu
 
-Son güncelleme: 2026-09-11
+Son güncelleme: 2026-09-12
 
 ## Doğrulanmış temel
 
@@ -10,7 +10,7 @@ Son güncelleme: 2026-09-11
 - Canlı önizleme: `https://aqua-mind-three.vercel.app/`
 - Görev panosu: `https://github.com/users/ckaracora/projects/1`
 - Teknoloji: Next.js 15, React 19, TypeScript, Tailwind CSS, pnpm
-- `pnpm verify`: 2026-09-11 tarihinde yerelde başarılı
+- `pnpm verify`: 2026-09-12 tarihinde yerelde başarılı
 - Arkadaş kurulumu: `buraksenfx` hesabı collaborator; Windows kopyasında kurulum ve tüm doğrulamalar başarılı
 
 ## Mevcut veri durumu
@@ -1167,3 +1167,16 @@ Son güncelleme: 2026-09-11
 - Resmî aksesuar listesinden 25 ayrı varyant eklendi: üç dip süpürgesi, düz/eğri makas ve cımbızlar, beş klasik termometre, dört 2-in-1 mıknatıslı temizleyici, 3-in-1 kazıyıcı, dört hava taşı, iki yağmurlama aparatı, 12/16 mm cam boru seti ve 1 W Nano Cool. Pasif parçalar motor kapasitesine karışmıyor; hava taşları bağımsız hava motoru gereksinimini taşıyor.
 - Yedi balık kepçesi, altı koruyucu akvaryum matı, 1,6 m hortum temizleme fırçası, üç klasik mıknatıslı temizleyici, 3/6 m hava hortumları ve Hypermax motor kapağı eklendi. Böylece resmî Aquael aksesuar sayfasında açık model veya varyant tablosu yayımlanan güncel aksesuar aileleri katalogda karşılandı.
 - GitHub/Vercel: 73 ekipmanlık Regent ve Aquael kontrol paketi `de34b43` commit'iyle görev dalına gönderildi ve önizleme tetiklendi; 177 ekipmana ulaşan geniş Aquael ek paketi henüz gönderilmedi. Sonraki tek iş Aquael'in resmî filtre medyası ile taban malzemesi ailelerini katalogla karşılaştırmak; miktar/ölçü seçeneğini yalnız kaynak açıkça ayrı varyant olarak yayımladığında eklemektir.
+- Aquael'in güncel resmî filtre medyası portföyü ürün ve uyumluluk varyantları düzeyinde kataloglandı: biyolojik/kimyasal/mekanik dökme medyalar, cihaz süngerleri, UltraMax/MaxiKani ve FZN Pro kartuşları ile üç filtre torbası toplam 69 kayıt oluşturuyor.
+- Resmî taban portföyüne 10 Aqua Decoris renkli kuvars, altı doğal çok renkli çakıl, altı kuvars kum, ikişer bazalt ve dolomit, beş H.E.L.P. Advanced Soil ile iki Grunt/Flora seçeneği olmak üzere 33 kayıt eklendi. Paket miktarı ve tane ölçüsü yalnız üreticinin ayrı varyant olarak yayımladığı yerlerde modele işlendi.
+- Hedefli katalog testi başarılıdır: Aquael artık 177 ekipman ve 102 bakım ürünü içeriyor; bakım kataloğu toplam 717 kayda ulaştı. Yeni 102 kaydın kategori, resmî kaynak ve 2026-09-11 doğrulama tarihi regresyon kapsamındadır.
+- GitHub/Vercel: 177 ekipmanlık paket `e41216b` commit'iyle görev dalına gönderildi ve güncel önizleme bağlantısına alındı. Ardından eklenen 102 Aquael filtre medyası/taban kaydı henüz GitHub veya Vercel'e gönderilmedi. Sonraki tek iş Aquael'in resmî yem, su düzenleyici ve bakteri ürün ailelerini katalogla karşılaştırmaktır.
+- Aquael'in resmî Acti Food bölümündeki 15 güncel aile, dil etiketi dışında aynı olan SKU'lar yinelenmeden gerçek paket seçenekleriyle eklendi: 40 yem varyantı. Resmî Treatments bölümündeki Acti Clean ve Acti Bactol 100/250 ml seçenekleri de iki su düzenleyici ve iki bakteri kültürü olarak ayrı kategorilere işlendi.
+- Aquael bakım ürünü toplamı 146'ya, genel bakım kataloğu 761 kayda ulaştı. Hedefli katalog testi; 40 yem, 69 filtre medyası, 33 taban malzemesi, iki su düzenleyici ve iki bakteri kültürünü; resmî kaynakları, güncel tarihi ve aynı hacimli dil SKU'larının yinelenmemesini doğruladı.
+- Bu 146 kayıtlık Aquael bakım ürünü paketi henüz GitHub/Vercel'e gönderilmedi. Sonraki tek iş Aquael'in mevcut uygulama taksonomisinin dışında kalan akvaryum seti, tank, kapak, dolap ve dekorasyon ailelerini ayrı ürün başlığı gereksinimi açısından değerlendirmek; uygun olmayanları ekipman kategorilerine zorla yerleştirmemektir.
+- Aquael'in resmî dekorasyon portföyü için ayrı `Dekorasyon` ürün kategorisi oluşturuldu. Beş doğal kök/taş karışımı, 11 yapay bitki varyantı, sekiz doğal kök ve iki doğal taş karışımı olmak üzere 26 kayıt doğrudan üretici sayfalarıyla eklendi; ekipman kapasitesi veya taban malzemesi hesaplarına karıştırılmadı.
+- Aquael bakım ürünü toplamı 172'ye, genel bakım/ürün kataloğu 787 kayda ulaştı. Airlights LED daha önce pasif ekipman aksesuarı olarak bulunduğu için dekorasyon kataloğunda yinelenmedi.
+- Set ve tanklar filtre/ısıtıcı gibi davranmaması için sağlık hesabına giren ekipman kataloğuna eklenmedi; ürün kataloğunda ayrı `Akvaryum seti` ve `Boş akvaryum` kategorileri, kaynaklı hacim/ölçü alanları ve set içeriği alanı oluşturuldu. Neo Set'in dört, Aqua 4'ün altı, Classic Box'ın altı ve standart cam akvaryumların 14 varyantı olmak üzere 30 yapısal ürün eklendi.
+- Aquael'in Leddy ve Classic kapak ailelerindeki 11 varyant `Akvaryum kapağı` kategorisine; Opti Set siyah/beyaz, Opti Set gri, Shrimp Set ve Simple ailelerindeki 17 varyant `Akvaryum dolabı` kategorisine resmî ölçüleriyle eklendi. Kapakların iki boyutlu uyum ölçüsü ile dolapların üç boyutlu gövde ölçüsü ayrı alanlarda saklanıyor.
+- Aquael toplamı 230 ürüne, genel ürün kataloğu 845 kayda ulaştı. Sıradaki iş, resmî dolap dizinindeki kalan Ultraskape, Glossy, Hexa ve Fish & Shrimp Set Duo ailelerini; ardından kalan akvaryum setlerini seçenek düzeyinde doğrulamaktır.
+- Bu 230 Aquael ürünlü kontrol paketi tam `pnpm verify` sonrasında kullanıcının güncel bağlantı talebiyle `codex/catalog-capacity-batch` görev dalı önizlemesine gönderilmek üzere hazırlandı; `main` ve genel üretim yayını değiştirilmedi.
