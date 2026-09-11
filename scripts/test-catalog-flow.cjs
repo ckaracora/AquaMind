@@ -372,10 +372,11 @@ assert.match(aquawingAq680?.specifications || "", /8681475610967/, "Aquawing AQ6
 const aquawingAq708 = equipmentCatalog.find((entry) => entry.brand === "Aquawing" && entry.model === "AQ708");
 assert.equal(aquawingAq708?.category, "air_pump", "Aquawing AQ708 hava motoru kategorisinde bulunmalı");
 assert.equal(aquawingAq708?.powerW, 3, "Aquawing AQ708 doğrulanmış 3 W güç değerini taşımalı");
-assert.equal(aquawingAq708?.ratedFlowLph, undefined, "Aquawing AQ708 yayımlanmayan hava debisini tahmin etmemeli");
-assert.match(aquawingAq708?.capacityDataNote || "", /yayımlanmadığı/, "Aquawing AQ708 kapasite boşluğunu açıklamalı");
+assert.equal(aquawingAq708?.ratedFlowLph, 210, "Aquawing AQ708 doğrulanmış 3,5 L/dk hava debisini saatlik değere dönüştürmeli");
+assert.equal(aquawingAq708?.recommendedMaxL, 60, "Aquawing AQ708 yayımlanan üst akvaryum hacmini taşımalı");
+assert.equal(aquawingAq708?.capacityDataNote, undefined, "Aquawing AQ708 kaynaklı debi varken kapasite boşluğu göstermemeli");
 assert.match(aquawingAq708?.specifications || "", /8681475613111/, "Aquawing AQ708 doğrulanmış barkodu taşımalı");
-assert.equal(aquawingAq708?.verifiedAt, "2026-09-09", "Aquawing AQ708 güncel doğrulama tarihini taşımalı");
+assert.equal(aquawingAq708?.verifiedAt, "2026-09-10", "Aquawing AQ708 güncel doğrulama tarihini taşımalı");
 for (const [model, power, barcode] of [["AQ-A1000", 8, "8690000438709"], ["AQ-A2000", 12, "8690000438716"]]) {
   const item = equipmentCatalog.find((entry) => entry.brand === "Aquawing" && entry.model === model);
   assert.equal(item?.category, "air_pump", `Aquawing ${model} hava motoru kategorisinde bulunmalı`);
@@ -425,12 +426,15 @@ assert.match(aquawingAq288?.specifications || "", /8681475613593/, "Aquawing AQ2
 const aquawingAq666led = equipmentCatalog.find((entry) => entry.id === "aquawing-aq666led");
 assert.deepEqual([aquawingAq666led?.category, aquawingAq666led?.ratedFlowLph, aquawingAq666led?.powerW], ["other", 1000, 6], "Aquawing AQ666LED su dolaşım verisini hava debisi hesabına karıştırmamalı");
 const aquawingAq999a = equipmentCatalog.find((entry) => entry.id === "aquawing-aq999a");
-assert.deepEqual([aquawingAq999a?.category, aquawingAq999a?.powerW, aquawingAq999a?.ratedFlowLph], ["air_pump", 8, undefined], "Aquawing AQ999A yayımlanmayan hava debisini tahmin etmemeli");
-assert.match(aquawingAq999a?.capacityDataNote || "", /yayımlanmadığı/, "Aquawing AQ999A kapasite boşluğunu açıklamalı");
+assert.deepEqual([aquawingAq999a?.category, aquawingAq999a?.powerW, aquawingAq999a?.ratedFlowLph], ["air_pump", 8, 720], "Aquawing AQ999A doğrulanmış dört çıkışlı toplam hava debisini taşımalı");
+assert.equal(aquawingAq999a?.capacityDataNote, undefined, "Aquawing AQ999A kaynaklı debi varken kapasite boşluğu göstermemeli");
+assert.equal(aquawingAq999a?.sourceUrl, "https://bettamarketim.com.tr/aquawing-dort-cikisli-hava-motoru-8w", "Aquawing AQ999A onaylı yerel kaynağa bağlanmalı");
+assert.equal(aquawingAq999a?.verifiedAt, "2026-09-10", "Aquawing AQ999A güncel doğrulama tarihini taşımalı");
 const aquawingAq311 = equipmentCatalog.find((entry) => entry.id === "aquawing-aq311");
-assert.deepEqual([aquawingAq311?.category, aquawingAq311?.powerW, aquawingAq311?.ratedFlowLph], ["air_pump", 2.5, undefined], "Aquawing AQ311 yayımlanmayan hava debisini tahmin etmemeli");
+assert.deepEqual([aquawingAq311?.category, aquawingAq311?.powerW, aquawingAq311?.ratedFlowLph], ["air_pump", 2.5, 108], "Aquawing AQ311 doğrulanmış 1,8 L/dk hava debisini saatlik değere dönüştürmeli");
 assert.match(aquawingAq311?.specifications || "", /8681475611063/, "Aquawing AQ311 doğrulanmış barkodu taşımalı");
-assert.match(aquawingAq311?.capacityDataNote || "", /yayımlanmadığı/, "Aquawing AQ311 kapasite boşluğunu açıklamalı");
+assert.equal(aquawingAq311?.capacityDataNote, undefined, "Aquawing AQ311 kaynaklı debi varken kapasite boşluğu göstermemeli");
+assert.equal(aquawingAq311?.verifiedAt, "2026-09-10", "Aquawing AQ311 güncel doğrulama tarihini taşımalı");
 for (const [model, barcode] of [["AQMBS1", "8681475628900"], ["AQMBM2", "8681475628917"], ["07708 Check Valve 20'li Paket", "8690000437665"]]) {
   const item = equipmentCatalog.find((entry) => entry.brand === "Aquawing" && entry.model === model);
   assert.equal(item?.category, "other", `Aquawing ${model} kapasite hesabına karışmamalı`);
@@ -3422,13 +3426,13 @@ const greenNeon = speciesCatalog.find((item) => item.id === "green-neon-tetra");
 assert.equal(greenNeon?.minGroup, 10, "Green Neon tetra küçük bir grup yerine güvenli sürü sayısıyla önerilmeli");
 assert.equal(greenNeon?.flow, "low", "Green Neon tetra düşük akış gereksinimini taşımalı");
 const blackGhost = speciesCatalog.find((item) => item.id === "black-ghost-knifefish");
-assert.equal(blackGhost?.minVolumeL, 450, "Yetişkin Black Ghost bıçak balığı küçük akvaryuma önerilmemeli");
+assert.equal(blackGhost?.minVolumeL, 454, "Yetişkin Black Ghost bıçak balığı küçük akvaryuma önerilmemeli");
 assert.equal(blackGhost?.predatory, true, "Black Ghost küçük canlılar için avcı riski taşımalı");
 assert((blackGhost?.adultSizeCm || 0) >= 45, "Black Ghost yetişkin boyu yavru satış boyuyla karıştırılmamalı");
 for (const [id, minVolumeL, minTankLengthCm, minGroup] of [
   ["tinfoil-barb", 1500, 200, 6],
-  ["spotted-silver-dollar", 350, 150, 6],
-  ["bala-shark", 680, 180, 6],
+  ["spotted-silver-dollar", 304, 152, 6],
+  ["bala-shark", 864, 240, 5],
 ]) {
   const profile = speciesCatalog.find((item) => item.id === id);
   assert(profile, `${id} büyük tür kataloğunda bulunmalı`);
@@ -3534,6 +3538,19 @@ for (const [id,group,volume,length,count,temperature,ph,flow] of [
   assert.equal(profile.verifiedAt,"2026-08-27",id+" güncel doğrulama tarihini taşımalı");
   assert(profile.husbandryCaution,id+" özel bakım uyarısını taşımalı");
 }
+for (const id of ["tinfoil-barb", "spotted-silver-dollar", "bala-shark"]) {
+  const profile = speciesCatalog.find((item) => item.id === id);
+  assert.equal(profile?.verifiedAt, "2026-09-10", `${id} güncel kaynak denetim tarihini taşımalı`);
+  assert((profile?.additionalSourceUrls?.length || 0) >= 1, `${id} bakım veya bilimsel ek kaynağa bağlanmalı`);
+}
+assert(speciesCatalog.find((item) => item.id === "spotted-silver-dollar")?.husbandryCaution?.includes("metrik karşılığı"), "Benekli Silver Dollar dönüştürülen metrik akvaryum ölçüsünü açıklamalı");
+assert.equal(speciesCatalog.find((item) => item.id === "bala-shark")?.adultSizeCm, 35, "Bala Shark bilimsel erişkin boyunu taşımalı");
+const ropeFish = speciesForLivestock({ commonName: "Ropefish", scientificName: "Erpetoichthys calabaricus", category: "fish", quantity: 1 });
+assert.deepEqual([ropeFish?.adultSizeCm, ropeFish?.minVolumeL, ropeFish?.minTankLengthCm, ropeFish?.temperature, ropeFish?.ph, ropeFish?.flow], [90, 540, 150, [23, 30], [6, 7.5], "low"], "Ropefish koruyucu uzman boyu, kaynaklı akvaryum ve su eşiklerini taşımalı");
+assert.deepEqual(ropeFish?.waterTypes, ["freshwater", "brackish"], "Ropefish FishBase'deki tatlı ve acı su kapsamını taşımalı");
+assert.equal(ropeFish?.verifiedAt, "2026-09-10", "Ropefish güncel kaynak denetim tarihini taşımalı");
+assert(ropeFish?.husbandryCaution?.includes("37 cm") && ropeFish?.husbandryCaution?.includes("90 cm"), "Ropefish çelişen erişkin boy kaynaklarını kullanıcıya açıklamalı");
+assert(ropeFish?.husbandryCaution?.includes("ağırlıklı kapak") && ropeFish?.husbandryCaution?.includes("yüzey havasına"), "Ropefish kaçış ve hava soluma güvenlik uyarılarını taşımalı");
 assert.equal(speciesCatalog.find((item)=>item.id==="panda-loach")?.speciesOnly,true,"Panda Loach akarsu tipi özel kurulum uyarısı taşımalı");
 for (const [id, scientificName, minVolumeL, minTankLengthCm, minGroup] of [
   ["winemillers-eartheater", "Geophagus winemilleri", 350, 180, 6],
@@ -4001,7 +4018,7 @@ assert.equal(unresolvedSpeciesForSearch("BUZ BALIĞI", "fish", "freshwater")?.na
 for (const [id, minVolumeL, minTankLengthCm] of [
   ["african-butterfly-fish", 81, 90],
   ["elephantnose-fish", 680, 150],
-  ["rope-fish", 680, 150],
+  ["rope-fish", 540, 150],
 ]) {
   const profile = speciesCatalog.find((item) => item.id === id);
   assert(profile?.husbandryCaution, `${id} özel bakım uyarısı taşımalı`);
@@ -4112,6 +4129,11 @@ const redBelliedPacu = speciesForLivestock({ commonName: "Kırmızı karınlı p
 assert.deepEqual([redBelliedPacu?.adultSizeCm, redBelliedPacu?.minVolumeL, redBelliedPacu?.minTankLengthCm, redBelliedPacu?.minGroup, redBelliedPacu?.temperature, redBelliedPacu?.ph], [88, 3000, 300, 1, [23, 28], [4.8, 7.5]], "Kırmızı karınlı pacu kaynaklı erişkin, havuz ölçeği ve su eşiklerini taşımalı");
 assert.equal(redBelliedPacu?.verifiedAt, "2026-09-10", "Kırmızı karınlı pacu güncel kaynak denetim tarihini taşımalı");
 assert.equal(redBelliedPacu?.speciesOnly, true, "Kırmızı karınlı pacu standart topluluk önerilerine girmemeli");
+const blackGhostKnifefish = speciesForLivestock({ commonName: "Black Ghost bıçak balığı", scientificName: "Apteronotus albifrons", category: "fish", quantity: 1 });
+assert.deepEqual([blackGhostKnifefish?.adultSizeCm, blackGhostKnifefish?.minVolumeL, blackGhostKnifefish?.minTankLengthCm, blackGhostKnifefish?.temperature, blackGhostKnifefish?.ph, blackGhostKnifefish?.flow], [50, 454, undefined, [23, 28], [6, 8], undefined], "Black Ghost bıçak balığı yalnız yayımlanmış erişkin, hacim ve su eşiklerini taşımalı");
+assert.equal(blackGhostKnifefish?.verifiedAt, "2026-09-10", "Black Ghost bıçak balığı güncel kaynak denetim tarihini taşımalı");
+assert(blackGhostKnifefish?.tankLengthDataNote?.includes("tahmin edilmedi"), "Black Ghost bıçak balığı için yayımlanmayan akvaryum cephesi uydurulmamalı");
+assert(blackGhostKnifefish?.additionalSourceUrls?.some((url) => url.includes("fishbase.se/summary/Apteronotus-albifrons")), "Black Ghost bıçak balığı bilimsel boy ve su kaynağına bağlanmalı");
 const unresolvedBlueAzulPeacockBass = unresolvedSpeciesForSearch("BLUE AZUL PEACOCK BASS", "fish", "freshwater");
 assert.equal(unresolvedBlueAzulPeacockBass?.group, "monster", "Blue Azul Peacock Bass Monster grubunda güvenlik kaydı olarak kalmalı");
 assert.equal(unresolvedBlueAzulPeacockBass?.verifiedAt, "2026-09-09", "Blue Azul Peacock Bass güvenlik kaydı güncel kaynak denetim tarihini taşımalı");

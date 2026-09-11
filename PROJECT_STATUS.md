@@ -1112,3 +1112,31 @@ Son güncelleme: 2026-09-09
 - Bu tarihteki Baensch's Peacock, Gastromyzon stellatus, Green Spotted Puffer, iki Xenentodon türü, Brachirus panoides, Parambassis ranga, Chitala ornata ve eski Monster profil güvenlik düzeltmeleri `79a07bb` commit'iyle `codex/catalog-capacity-batch` dalına gönderildi.
 - Vercel önizleme dağıtımı başarıyla tamamlandı. Bu yalnız görev dalı önizlemesidir; `main` dalı ve genel üretim adresi değiştirilmedi.
 - Önizleme bağlantısı: `https://aqua-mind-git-codex-catalog-capacity-batch-ckaracoras-projects.vercel.app/`
+
+## 2026-09-10 Black Ghost bıçak balığı kaynak düzeltmesi
+
+- `Apteronotus albifrons` profilindeki kaynaksız 45 cm, 450 litre, 150 cm cephe ve düşük akıntı değerleri yeniden denetlendi. FishBase'deki 50 cm azami boy, 23–28 °C ve pH 6,0–8,0 aralığı ile Aquarium Co-Op'un erişkin için yayımladığı 120–180 ABD galonu bilgisi işlendi; sağlık analizi minimumda yaklaşık 454 litre kullanıyor.
+- Kaynaklar santimetre cinsinden minimum cephe veya tek bir akıntı tercihi yayımlamadığı için bu iki alan tahmin edilmedi. Gececi avlanma, küçük canlı riski, tek elektrikli bıçak balığı, loş ve pürüzsüz saklanma alanları ile düzenli su bakımı uyarıları eklendi.
+- Bu ek paket henüz GitHub/Vercel'e gönderilmedi.
+
+## 2026-09-10 İri sürü balıkları kaynak düzeltmesi
+
+- Tinfoil barb profilindeki 35 cm, altılı sürü, 1.500 litre ve 200 cm eşikleri ayrı bakım kaynaklarıyla doğrulandı; akıntı düzeyi abartılı `high` yerine kaynak ifadesine uygun `medium` yapıldı. Golden/Albino bireylerin `Barbonymus altus` ile karışma ihtimali kullanıcıya açıklandı.
+- Benekli Silver Dollar profilindeki kaynaksız 350 litre/150 cm değerleri, uzman kaynağın yayımladığı 5 × 1,5 × 1,5 fit ölçünün metrik karşılığı olan yaklaşık 304 litre/152 cm ile değiştirildi. Dönüşüm veri notunda açıkça belirtiliyor.
+- Bala Shark profili Seriously Fish'teki 35 cm erişkin boy, en az beşli sürü, 240 × 60 cm taban/yaklaşık 864 litre, 20–28 °C ve pH 6,0–8,0 değerleriyle düzeltildi. Eski 40 cm, 680 litre ve 180 cm eşikleri kaldırıldı.
+- Hedefli katalog testi ve tam `pnpm verify` başarılıdır: TypeScript, yedi ekipman kategorili ve 615 bakım ürünlü katalog akışı, 52 sağlık senaryosu, beş kum türünü kapsayan hesaplayıcı regresyonu, katalog denetimi ve 14 sayfalık üretim derlemesi geçti.
+- Black Ghost ve iri sürü balığı ek paketi henüz GitHub/Vercel'e gönderilmedi.
+
+## 2026-09-10 Ropefish kaynak ve güvenlik düzeltmesi
+
+- Monster grubunda tarihli kaynak denetimi olmayan son profil `Erpetoichthys calabaricus` idi. FishBase 37 cm bilimsel örneklem azamisi yayımlarken Seriously Fish 90 cm erişkin boy ile 150 × 60 × 60 cm/yaklaşık 540 litre bakım tabanı yayımlıyor; sağlık analizi hayvan refahı için koruyucu 90 cm değerini kullanıyor ve bu fark kullanıcıya açıklanıyor.
+- Tatlı/acı su kapsamı, gececi avlanma, küçük canlı riski, yem rekabeti, yumuşak taban, yüzey havasına erişim ve ağırlıklı boşluksuz kapak gereksinimleri tamamlandı. Eski kaynaksız 50 cm, 680 litre ve dar sıcaklık/pH eşikleri kaldırıldı.
+- Hedefli katalog testi ve tam `pnpm verify` başarılıdır: TypeScript, yedi ekipman kategorili ve 615 bakım ürünlü katalog akışı, 52 sağlık senaryosu, beş kum türünü kapsayan hesaplayıcı regresyonu, katalog denetimi ve 14 sayfalık üretim derlemesi geçti.
+- Bu ek paket henüz GitHub/Vercel'e gönderilmedi.
+
+## 2026-09-10 Aquawing hava motoru kapasite tamamlaması
+
+- Onaylı yerel kaynaklarda yeni yayımlanan teknik bilgilerle `AQ311` için 1,8 L/dk = 108 L/saat ve 2,5 W; `AQ708` için 3,5 L/dk = 210 L/saat, 3 W ve 50–60 litre; `AQ999A` için dört çıkışta 4 × 3 L/dk = toplam 720 L/saat ve 8 W doğrulandı.
+- Üç model otomatik hava kapasitesi hesabına alındı; eski “debi yayımlanmamış” notları kaldırıldı. Dakikalık debiler yalnız birim dönüşümüyle saatlik değere çevrildi, akvaryum hacmi yalnız kaynak açıkça yayımladığında eklendi.
+- Aquawing açıklamalı kapasite boşluğu altı modelden üç modele düştü; AQ-A1000, AQ-A2000 ve AQ-A3000 için debi henüz güvenilir kaynakta yayımlanmadığından boşluklar korundu. Bu ek paket henüz GitHub/Vercel'e gönderilmedi.
+- Hedefli katalog testi ve tam `pnpm verify` başarılıdır: TypeScript, yedi ekipman kategorili ve 615 bakım ürünlü katalog akışı, 52 sağlık senaryosu, beş kum türünü kapsayan hesaplayıcı regresyonu, katalog denetimi ve 14 sayfalık üretim derlemesi geçti. Aquawing'in kapasite gerektiren 88 kaydının 85'i otomatik hesaplamaya hazırdır (%97).
