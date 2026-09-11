@@ -52,7 +52,7 @@ const rows = catalogBrandCoverage.map((coverage) => {
   const equipment = equipmentCatalog.filter((item) => normalized(item.brand) === normalized(coverage.brand));
   const capacityEquipment = equipment.filter((item) => ["filter", "heater", "air_pump"].includes(item.category) && !item.passiveComponent);
   const technicalCount = capacityEquipment.filter((item) => {
-    if (item.category === "heater") return item.powerW != null || item.recommendedMaxL != null;
+    if (item.category === "heater") return item.powerW != null || item.recommendedMinL != null || item.recommendedMaxL != null;
     if (item.category === "filter" && item.requiresAirPump) return true;
     return item.ratedFlowLph != null || item.recommendedMaxL != null;
   }).length;
@@ -74,7 +74,7 @@ console.table(rows);
 const missingCapacityRows = equipmentCatalog
   .filter((item) => ["filter", "heater", "air_pump"].includes(item.category) && !item.passiveComponent)
   .filter((item) => {
-    if (item.category === "heater") return item.powerW == null && item.recommendedMaxL == null;
+    if (item.category === "heater") return item.powerW == null && item.recommendedMinL == null && item.recommendedMaxL == null;
     if (item.category === "filter" && item.requiresAirPump) return false;
     return item.ratedFlowLph == null && item.recommendedMaxL == null;
   })

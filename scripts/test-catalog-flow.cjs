@@ -86,6 +86,36 @@ for (const [power, minL, maxL] of expectedAquaelPlatiniumHeaters) {
   assert.equal(item.verifiedAt, "2026-09-11", `Aquael Platinium Heater ${power} W güncel doğrulama tarihi taşımalı`);
 }
 
+const expectedAquaelDayNightHeaters = [
+  [25, 10, 25],
+  [50, 15, 50],
+  [75, 35, 75],
+  [100, 60, 100],
+  [150, 90, 150],
+  [200, 130, 200],
+];
+for (const [power, minL, maxL] of expectedAquaelDayNightHeaters) {
+  const item = equipmentCatalog.find((entry) => entry.id === `aquael-ultra-heater-day-night-${power}`);
+  assert(item, `Aquael Ultra Heater Day&Night ${power} W katalogda bulunmalı`);
+  assert.equal(item.category, "heater", `Aquael Ultra Heater Day&Night ${power} W yalnız ısıtıcı kategorisinde olmalı`);
+  assert.equal(item.powerW, power, `Aquael Ultra Heater Day&Night ${power} W resmî gücü taşımalı`);
+  assert.equal(item.recommendedMinL, minL, `Aquael Ultra Heater Day&Night ${power} W resmî alt hacim sınırını taşımalı`);
+  assert.equal(item.recommendedMaxL, maxL, `Aquael Ultra Heater Day&Night ${power} W resmî üst hacim sınırını taşımalı`);
+  assert.equal(item.sourceUrl, "https://www.aquael.com/products/aquaristics/heaters/ultra-heater-daynight/", `Aquael Ultra Heater Day&Night ${power} W resmî ürün sayfasına bağlanmalı`);
+  assert.equal(item.verifiedAt, "2026-09-11", `Aquael Ultra Heater Day&Night ${power} W güncel doğrulama tarihi taşımalı`);
+}
+
+const aquaelFlowHeaterBt = equipmentCatalog.find((entry) => entry.id === "aquael-flow-heater-bt");
+assert(aquaelFlowHeaterBt, "Aquael Flow Heater BT katalogda bulunmalı");
+assert.equal(aquaelFlowHeaterBt.category, "heater", "Aquael Flow Heater BT yalnız ısıtıcı kategorisinde olmalı");
+assert.equal(aquaelFlowHeaterBt.recommendedMinL, 60, "Aquael Flow Heater BT resmî alt hacim sınırını taşımalı");
+assert.equal(aquaelFlowHeaterBt.recommendedMaxL, undefined, "Aquael Flow Heater BT çelişkili üst hacim sınırını otomatik hesaba almamalı");
+assert.equal(aquaelFlowHeaterBt.powerW, undefined, "Aquael Flow Heater BT değişken 50–500 W aralığını sabit güç gibi kullanmamalı");
+assert.match(aquaelFlowHeaterBt.specifications, /50–500 W/, "Aquael Flow Heater BT ayarlanabilir güç aralığını kullanıcıya açıklamalı");
+assert.match(aquaelFlowHeaterBt.specifications, /kesin üst sınır kullanılmaz/, "Aquael Flow Heater BT resmî kaynak çelişkisini kullanıcıdan saklamamalı");
+assert.equal(aquaelFlowHeaterBt.sourceUrl, "https://www.aquael.com/products/aquaristics/smart-aquarium/flow-heater-bt/", "Aquael Flow Heater BT resmî ürün sayfasına bağlanmalı");
+assert.equal(aquaelFlowHeaterBt.verifiedAt, "2026-09-11", "Aquael Flow Heater BT güncel doğrulama tarihi taşımalı");
+
 const expectedAquaelCurrentInternalFilters = [
   ["aquael-pat-mini", 450, 4.5, 10, 120],
   ["aquael-turbo-mini", 320, 4.4, undefined, 80],
@@ -144,6 +174,155 @@ for (const [id, flow, power, minL, maxL, heaterPower] of expectedAquaelSmartCani
   assert.equal(item.adjustableFlow, true, `${id} uygulama veya panelden ayarlanabilir akışı taşımalı`);
   assert.equal(item.verifiedAt, "2026-09-11", `${id} güncel doğrulama tarihi taşımalı`);
 }
+
+const expectedAquaelCurrentLighting = [
+  ["aquael-leddy-slim-sunny-day-night-4-8", 4.8, [20, 30], "520 lm"],
+  ["aquael-leddy-slim-sunny-day-night-10", 10, [50, 70], "900 lm"],
+  ["aquael-leddy-slim-sunny-day-night-32", 32, [80, 107], "2900 lm"],
+  ["aquael-leddy-slim-sunny-day-night-36", 36, [100, 127], "3250 lm"],
+  ["aquael-leddy-tube-sunny-day-night-7", 7, undefined, "620 lm"],
+  ["aquael-leddy-tube-sunny-day-night-10", 10, undefined, "900 lm"],
+  ["aquael-leddy-tube-sunny-day-night-14", 14, undefined, "70 cm"],
+  ["aquael-leddy-tube-sunny-day-night-14-j", 14, undefined, "62 cm"],
+  ["aquael-leddy-tube-sunny-day-night-17", 17, undefined, "101.5 cm"],
+  ["aquael-leddy-tube-sunny-day-night-17-j", 17, undefined, "92.5 cm"],
+  ["aquael-leddy-tube-sunny-4-8", 4.8, undefined, "520 lm"],
+  ["aquael-leddy-tube-plant-4-8", 4.8, undefined, "9000 K"],
+  ["aquael-leddy-tube-plant-10", 10, undefined, "41,5 cm"],
+  ["aquael-leddy-tube-plant-14", 14, undefined, "70 cm"],
+  ["aquael-leddy-tube-plant-17", 17, undefined, "101,5 cm"],
+  ["aquael-leddy-tube-marine-day-night-10", 10, undefined, "900 lm"],
+  ["aquael-leddy-tube-marine-day-night-14", 14, undefined, "1270 lm"],
+  ["aquael-leddy-tube-marine-day-night-17", 17, undefined, "1520 lm"],
+  ["aquael-leddy-slim-duo-sunny-plant-night-10", 10, [20, 30], "650 lm"],
+  ["aquael-leddy-slim-duo-sunny-plant-night-16", 16, [40, 67], "1100 lm"],
+  ["aquael-leddy-slim-duo-marine-actinic-10", 10, [20, 30], "900 lm"],
+  ["aquael-ultra-slim-bt-30", 30, [31.9, 57.4], "3100 lm"],
+  ["aquael-ultra-slim-bt-60", 60, [59.9, 105.4], "6200 lm"],
+  ["aquael-ultra-slim-bt-90", 90, [87.9, 133.4], "9300 lm"],
+  ["aquael-leddy-slim-bt-460", 14, undefined, "WRGB + UV-A"],
+  ["aquael-leddy-slim-bt-560", 18, undefined, "WRGB + UV-A"],
+  ["aquael-leddy-slim-bt-760", 26, undefined, "WRGB + UV-A"],
+  ["aquael-leddy-slim-bt-960", 34, undefined, "WRGB + UV-A"],
+  ["aquael-leddy-smart-day-night-sunny", 4.8, undefined, "520 lm"],
+  ["aquael-leddy-smart-day-night-plant", 4.8, undefined, "350 lm"],
+  ["aquael-leddy-smart-bt", 4.8, undefined, "10–50 L"],
+  ["aquael-leddy-slim-marine-day-night-32", 32, [80, 107], "2900 lm"],
+  ["aquael-leddy-slim-marine-day-night-36", 36, [100, 127], "3250 lm"],
+  ["aquael-moonlight-led", 1, undefined, "IPX8"],
+  ["aquael-leddy-slim-link-36", 36, [100, 120], "2750 lm"],
+];
+for (const [id, power, tankLength, detail] of expectedAquaelCurrentLighting) {
+  const item = equipmentCatalog.find((entry) => entry.id === id);
+  assert(item, `Güncel Aquael aydınlatma modeli katalogda bulunmalı: ${id}`);
+  assert.equal(item.category, "lighting", `${id} yalnız aydınlatma kategorisinde olmalı`);
+  assert.equal(item.powerW, power, `${id} resmî güç değerini taşımalı`);
+  assert.deepEqual(item.recommendedTankLengthCm, tankLength, `${id} yalnız kaynakta akvaryum genişliği yayımlandığında uzunluk aralığı taşımalı`);
+  assert.match(item.specifications, new RegExp(String(detail).replace(/[+]/g, "\\+")), `${id} resmî ışık veya boyut ayrıntısını taşımalı`);
+  assert(item.sourceUrl?.startsWith("https://www.aquael.com/"), `${id} resmî Aquael kaynağına bağlanmalı`);
+  assert.equal(item.verifiedAt, "2026-09-11", `${id} güncel doğrulama tarihi taşımalı`);
+}
+
+const aquaelAirlights = equipmentCatalog.find((entry) => entry.id === "aquael-airlights-led");
+assert(aquaelAirlights, "Aquael Airlights LED katalogda bulunmalı");
+assert.equal(aquaelAirlights.category, "other", "Aquael Airlights ana aydınlatma veya filtre gibi sınıflandırılmamalı");
+assert.equal(aquaelAirlights.requiresAirPump, true, "Aquael Airlights bağımsız hava motoru gereksinimini taşımalı");
+assert.equal(aquaelAirlights.passiveComponent, true, "Aquael Airlights motorlu ekipman kapasitesine katılmamalı");
+assert.equal(aquaelAirlights.sourceUrl, "https://www.aquael.com/products/aquaristics/decorations/koncowka-napowietrzajaca-led/", "Aquael Airlights resmî ürün sayfasına bağlanmalı");
+assert.equal(aquaelAirlights.verifiedAt, "2026-09-11", "Aquael Airlights güncel doğrulama tarihi taşımalı");
+
+for (const [id, sourcePart] of [
+  ["aquael-leddy-slim-hanger", "/leddy-slim-hanger/"],
+  ["aquael-leddy-slim-frame-bracket", "/drzak-na-ram-pro-lampy-leddy-slim/"],
+]) {
+  const item = equipmentCatalog.find((entry) => entry.id === id);
+  assert(item, `Aquael pasif aydınlatma montaj aksesuarı katalogda bulunmalı: ${id}`);
+  assert.equal(item.category, "other", `${id} ana aydınlatma cihazı gibi sınıflandırılmamalı`);
+  assert.equal(item.passiveComponent, true, `${id} motorlu veya elektrikli kapasite hesabına katılmamalı`);
+  assert(item.sourceUrl?.includes(sourcePart), `${id} doğrudan resmî ürün sayfasına bağlanmalı`);
+  assert.equal(item.verifiedAt, "2026-09-11", `${id} güncel doğrulama tarihi taşımalı`);
+}
+
+for (const [id, flow, power, detail] of [
+  ["aquael-unipump-700", 700, 9.5, "145 cm"],
+  ["aquael-unipump-1000", 1000, 15, "145 cm"],
+  ["aquael-unipump-1500", 1400, 19, "155 cm"],
+]) {
+  const item = equipmentCatalog.find((entry) => entry.id === id);
+  assert(item, `Aquael güncel Uni Pump modeli katalogda bulunmalı: ${id}`);
+  assert.deepEqual([item.category, item.ratedFlowLph, item.powerW], ["other", flow, power], `${id} resmî debi ve güç değerlerini taşımalı`);
+  assert.match(item.specifications, new RegExp(detail), `${id} resmî basma yüksekliğini taşımalı`);
+  assert(item.sourceUrl?.includes("/unipump/"), `${id} doğrudan resmî Uni Pump sayfasına bağlanmalı`);
+}
+
+for (const [id, power, minL, maxL] of [
+  ["aquael-sterilizer-uv-as-2-5w", 5, 1, 200],
+  ["aquael-sterilizer-uv-as-2-7w", 7, 200, 400],
+  ["aquael-sterilizer-uv-as-2-9w", 9, 400, 600],
+  ["aquael-sterilizer-uv-as-2-11w", 11, 600, 800],
+]) {
+  const item = equipmentCatalog.find((entry) => entry.id === id);
+  assert(item, `Aquael UV AS 2.0 varyantı katalogda bulunmalı: ${id}`);
+  assert.deepEqual([item.category, item.powerW, item.integratedUvcW, item.recommendedMinL, item.recommendedMaxL], ["uv", power, power, minL, maxL], `${id} resmî UV gücü ve hacim aralığını taşımalı`);
+  assert(item.sourceUrl?.includes("/sterilizer-uv-as-2-0-en/"), `${id} doğrudan resmî sterilizatör sayfasına bağlanmalı`);
+}
+
+const aquaelUv3w = equipmentCatalog.find((entry) => entry.id === "aquael-sterilizer-uv-3w-led");
+assert.deepEqual([aquaelUv3w?.category, aquaelUv3w?.powerW, aquaelUv3w?.integratedUvcW, aquaelUv3w?.recommendedMaxL], ["uv", 3.5, 3, 120], "Aquael 3 W LED sterilizatör UV gücü, toplam tüketimi ve 120 L sınırını ayırmalı");
+const aquaelMiniUv = equipmentCatalog.find((entry) => entry.id === "aquael-mini-uv-c");
+assert.deepEqual([aquaelMiniUv?.category, aquaelMiniUv?.powerW, aquaelMiniUv?.recommendedMaxL], ["uv", 0.5, 150], "Aquael Mini UV C resmî 0,5 W ve 150 L sınırını taşımalı");
+
+for (const [id, sourcePart] of [
+  ["aquael-thermometer-bt", "/thermometer-bt-2/"],
+  ["aquael-socket-bt-duo", "/socket-bt-duo/"],
+  ["aquael-wifi-gateway-bt", "/wi-fi-gateway-bt/"],
+  ["aquael-thermometer-link", "/thermometer-link/"],
+  ["aquael-socket-link-duo", "/socket-link-duo/"],
+]) {
+  const item = equipmentCatalog.find((entry) => entry.id === id);
+  assert(item, `Aquael akıllı aksesuarı katalogda bulunmalı: ${id}`);
+  assert.equal(item.category, "other", `${id} filtre, ısıtıcı veya UV kapasitesine karışmamalı`);
+  assert(item.sourceUrl?.includes(sourcePart), `${id} doğrudan resmî ürün sayfasına bağlanmalı`);
+  assert.equal(item.verifiedAt, "2026-09-11", `${id} güncel doğrulama tarihi taşımalı`);
+}
+
+const aquaelCurrentAccessoryIds = [
+  "aquael-gravel-cleaner-s", "aquael-gravel-cleaner-l", "aquael-gravel-cleaner-xl",
+  "aquael-straight-scissors-25", "aquael-curved-scissors-25",
+  "aquael-straight-tweezers-27", "aquael-curved-tweezers-27",
+  "aquael-thermometer-t9", "aquael-thermometer-glass-15", "aquael-thermometer-glass-6",
+  "aquael-thermometer-hanging-6", "aquael-thermometer-hanging-10",
+  "aquael-magnet-cleaner-2in1-s", "aquael-magnet-cleaner-2in1-m",
+  "aquael-magnet-cleaner-2in1-l", "aquael-magnet-cleaner-2in1-xl",
+  "aquael-aquarium-scraper-3in1",
+  "aquael-air-stone-roller-small", "aquael-air-stone-sphere-small",
+  "aquael-air-stone-roller-medium", "aquael-air-stone-sphere-medium",
+  "aquael-sprinkler-fan-350-650", "aquael-sprinkler-unimax-1100",
+  "aquael-glass-pipes-12-16", "aquael-nano-cool",
+  "aquael-fish-net-7-5x6", "aquael-fish-net-10x7-5", "aquael-fish-net-12-5x10",
+  "aquael-fish-net-15x12-5", "aquael-fish-net-20x15", "aquael-fish-net-25x20", "aquael-fish-net-30x25",
+  "aquael-aquarium-mat-41x25", "aquael-aquarium-mat-60x30", "aquael-aquarium-mat-80x35",
+  "aquael-aquarium-mat-100x40", "aquael-aquarium-mat-120x40", "aquael-aquarium-mat-150x50",
+  "aquael-filter-hose-cleaner",
+  "aquael-magnet-cleaner-s", "aquael-magnet-cleaner-m", "aquael-magnet-cleaner-l",
+  "aquael-airline-3m", "aquael-airline-6m",
+];
+for (const id of aquaelCurrentAccessoryIds) {
+  const item = equipmentCatalog.find((entry) => entry.id === id);
+  assert(item, `Aquael güncel bakım aksesuarı katalogda bulunmalı: ${id}`);
+  assert.equal(item.category, "other", `${id} diğer ekipman kategorisinde bulunmalı`);
+  assert(item.sourceUrl?.startsWith("https://www.aquael.com/products/aquaristics/accessories/"), `${id} doğrudan resmî aksesuar sayfasına bağlanmalı`);
+  assert.equal(item.verifiedAt, "2026-09-11", `${id} güncel doğrulama tarihi taşımalı`);
+}
+for (const id of ["aquael-air-stone-roller-small", "aquael-air-stone-sphere-medium"]) {
+  const item = equipmentCatalog.find((entry) => entry.id === id);
+  assert.deepEqual([item?.requiresAirPump, item?.passiveComponent, item?.ratedFlowLph], [true, true, undefined], `${id} bağımsız hava motoru gerektiren debisiz pasif aksesuar olmalı`);
+}
+assert.equal(equipmentCatalog.find((entry) => entry.id === "aquael-nano-cool")?.powerW, 1, "Aquael Nano Cool resmî 1 W tüketimini taşımalı");
+const aquaelHypermaxEngineCover = equipmentCatalog.find((entry) => entry.id === "aquael-hypermax-engine-cover");
+assert(aquaelHypermaxEngineCover, "Aquael Hypermax motor kapağı katalogda bulunmalı");
+assert.deepEqual([aquaelHypermaxEngineCover.category, aquaelHypermaxEngineCover.passiveComponent], ["other", true], "Aquael Hypermax motor kapağı pasif aksesuar olmalı");
+assert.equal(aquaelHypermaxEngineCover.sourceUrl, "https://www.aquael.com/products/aquaristics/aquaristics/139094-2/", "Aquael Hypermax motor kapağı doğrudan resmî ürün sayfasına bağlanmalı");
 
 const chihiros = equipmentCatalog.filter((item) => item.brand === "Chihiros");
 for (const model of ["WRGB II Pro 60", "WRGB II Pro 120", "Dosing Pump System (4 Head)", "Dosing Pump Mate (2 Head)", "Heater Pro 12/16 mm (EU)", "Heater Pro 16/22 mm (EU)", "Doctor Mate", "Digital TDS / Temperature Tester Pen", "CO₂ Spiral Bubble Counter", "Nano CO₂ Diffuser", "CO₂ Drop Checker"]) {
