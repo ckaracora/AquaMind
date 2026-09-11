@@ -1207,13 +1207,14 @@ const waterbearEquipment:EquipmentProfile[]=[
   {id:"waterbear-sd02",category:"filter",brand:"WaterBear",model:"SD-02",specifications:"Motorlu pipo filtre · 200 L/saat · 2 W",ratedFlowLph:200,powerW:2,sourceUrl:"https://atakanpetshop.com/akvaryum-sunger-filtreler-pipo-filtre-dophin-sfp",verifiedAt},
 ];
 
+const regentAirPumpTableSource="https://hydroponic.co.za/hydroponics/air-pumps/";
 const regentEquipment:EquipmentProfile[]=[
-  ["5500",2,"Tek çıkış",80,false,"https://hydroponic.co.za/size/regent-5500/"],
-  ["6500",2.4,"Tek çıkış",100,false,"https://atakanpetshop.com/regent-6500-tek-cikisli-hava-motoru-2-4w"],
-  ["7500",3,"Çift çıkış",150,false,"https://atakanpetshop.com/regent-7500-cift-cikisli-hava-motoru-3w"],
-  ["8500",4,"Çift çıkış",210,false,"https://atakanpetshop.com/regent-8500-cift-cikisli-hava-motoru-4w"],
-  ["9500",4,"Çift çıkış, ayarlanabilir",240,true,"https://atakanpetshop.com/regent-9500-cift-cikisli-hava-motoru-4w"],
-].map(([model,powerW,outlet,ratedFlowLph,adjustableFlow,sourceUrl])=>({id:`regent-${model}`,category:"air_pump",brand:"Regent",model:String(model),specifications:`${outlet} hava motoru · ${ratedFlowLph} L/saat · ${powerW} W`,ratedFlowLph:Number(ratedFlowLph),powerW:Number(powerW),adjustableFlow:Boolean(adjustableFlow),sourceUrl:String(sourceUrl),verifiedAt:model==="5500"?"2026-08-26":"2026-08-24"}));
+  {id:"regent-5500",category:"air_pump",brand:"Regent",model:"5500",specifications:"Tek çıkışlı hava motoru · 80 L/saat · 2 W",ratedFlowLph:80,powerW:2,adjustableFlow:false,sourceUrl:"https://hydroponic.co.za/size/regent-5500/",additionalSourceUrls:[regentAirPumpTableSource],verifiedAt:"2026-09-11"},
+  {id:"regent-6500",category:"air_pump",brand:"Regent",model:"6500",specifications:"Tek çıkışlı hava motoru · 100 L/saat · Türkiye ürün etiketi 2,4 W (uluslararası tabloda 2,5 W ve düşük/yüksek kademe; yerel varyant için akış ayarı varsayılmaz)",ratedFlowLph:100,powerW:2.4,adjustableFlow:false,sourceUrl:regentAirPumpTableSource,additionalSourceUrls:["https://atakanpetshop.com/regent-6500-tek-cikisli-hava-motoru-2-4w"],verifiedAt:"2026-09-11"},
+  {id:"regent-7500",category:"air_pump",brand:"Regent",model:"7500",specifications:"Çift çıkışlı hava motoru · 150 L/saat · 3 W (uluslararası tabloda düşük/yüksek kademe; yerel varyant için akış ayarı varsayılmaz)",ratedFlowLph:150,powerW:3,adjustableFlow:false,sourceUrl:regentAirPumpTableSource,additionalSourceUrls:["https://atakanpetshop.com/regent-7500-cift-cikisli-hava-motoru-3w"],verifiedAt:"2026-09-11"},
+  {id:"regent-8500",category:"air_pump",brand:"Regent",model:"8500",specifications:"Çift çıkışlı hava motoru · 210 L/saat · Türkiye ürün etiketi 4 W (uluslararası tabloda 3,5 W ve düşük/yüksek kademe; yerel varyant için akış ayarı varsayılmaz)",ratedFlowLph:210,powerW:4,adjustableFlow:false,sourceUrl:regentAirPumpTableSource,additionalSourceUrls:["https://atakanpetshop.com/regent-8500-cift-cikisli-hava-motoru-4w"],verifiedAt:"2026-09-11"},
+  {id:"regent-9500",category:"air_pump",brand:"Regent",model:"9500",specifications:"Ayarlanabilir çift çıkışlı hava motoru · 240 L/saat · 4 W",ratedFlowLph:240,powerW:4,adjustableFlow:true,sourceUrl:regentAirPumpTableSource,additionalSourceUrls:["https://atakanpetshop.com/regent-9500-cift-cikisli-hava-motoru-4w","https://www.wazeersaquariums.co.za/online-store/air-pumps-compressors-accessories/regent-9500-air-pump-copy"],verifiedAt:"2026-09-11"},
+];
 regentEquipment.push({id:"regent-calm-rc-006",category:"air_pump",brand:"Regent",model:"Calm RC-006",specifications:"Çift çıkışlı hava motoru · 180 L/saat · 3 W · 200 litreye kadar",ratedFlowLph:180,powerW:3,recommendedMaxL:200,adjustableFlow:true,sourceUrl:"https://rozetka.com.ua/kwzone_6938104010394/p16905500/",verifiedAt:"2026-08-18"});
 
 const sharkEquipment:EquipmentProfile[]=[

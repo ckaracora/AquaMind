@@ -47,6 +47,104 @@ for (const brand of ["Aquael", "Sera", "Eheim", "Tetra", "ISTA", "Seachem", "Flu
   assert(catalogBrandCoverage.some((item) => item.brand === brand && item.equipmentCount + item.careProductCount >= 8), `${brand} tek tük örnek ürünle temsil edilmemeli`);
 }
 
+const expectedAquaelOxyboost = [
+  ["aquael-oxyboost-100", 100, 2.2, undefined, 100, false],
+  ["aquael-oxyboost-150", 150, 2.2, 100, 150, true],
+  ["aquael-oxyboost-200", 200, 2.5, 150, 200, false],
+  ["aquael-oxyboost-300", 300, 2.5, 200, 300, true],
+];
+for (const [id, flow, power, minL, maxL, adjustable] of expectedAquaelOxyboost) {
+  const item = equipmentCatalog.find((entry) => entry.id === id);
+  assert(item, `Aquael OXYBOOST modeli eksik: ${id}`);
+  assert.equal(item.ratedFlowLph, flow, `${id} resmî debiyi taşımalı`);
+  assert.equal(item.powerW, power, `${id} resmî güç değerini taşımalı`);
+  assert.equal(item.recommendedMinL, minL, `${id} resmî alt hacim sınırını taşımalı`);
+  assert.equal(item.recommendedMaxL, maxL, `${id} resmî üst hacim sınırını taşımalı`);
+  assert.equal(item.adjustableFlow, adjustable, `${id} yalnız APR varyantında ayarlanabilir olmalı`);
+  assert.equal(item.sourceUrl, "https://www.aquael.com/products/aquaristics/air_pumps/oxyboost-plus-en/", `${id} resmî güncel aile tablosuna bağlanmalı`);
+  assert.equal(item.verifiedAt, "2026-09-11", `${id} güncel doğrulama tarihi taşımalı`);
+}
+
+const expectedAquaelPlatiniumHeaters = [
+  [25, 10, 25],
+  [50, 15, 50],
+  [75, 35, 75],
+  [100, 60, 100],
+  [150, 90, 150],
+  [200, 130, 200],
+  [250, 180, 250],
+  [300, 230, 300],
+];
+for (const [power, minL, maxL] of expectedAquaelPlatiniumHeaters) {
+  const item = equipmentCatalog.find((entry) => entry.id === `aquael-platinium-${power}`);
+  assert(item, `Aquael Platinium Heater ${power} W katalogda bulunmalı`);
+  assert.equal(item.category, "heater", `Aquael Platinium Heater ${power} W yalnız ısıtıcı kategorisinde olmalı`);
+  assert.equal(item.powerW, power, `Aquael Platinium Heater ${power} W resmî gücü taşımalı`);
+  assert.equal(item.recommendedMinL, minL, `Aquael Platinium Heater ${power} W resmî alt hacim sınırını taşımalı`);
+  assert.equal(item.recommendedMaxL, maxL, `Aquael Platinium Heater ${power} W resmî üst hacim sınırını taşımalı`);
+  assert.equal(item.sourceUrl, "https://www.aquael.com/us/products/aquaristics-us/heaters-us/platinium-heater/", `Aquael Platinium Heater ${power} W resmî aile tablosuna bağlanmalı`);
+  assert.equal(item.verifiedAt, "2026-09-11", `Aquael Platinium Heater ${power} W güncel doğrulama tarihi taşımalı`);
+}
+
+const expectedAquaelCurrentInternalFilters = [
+  ["aquael-pat-mini", 450, 4.5, 10, 120],
+  ["aquael-turbo-mini", 320, 4.4, undefined, 80],
+  ["aquael-sas-500", 500, 4.4, 20, 500],
+  ["aquael-unifilter-uvc-500", 500, 5, 100, 200],
+  ["aquael-unifilter-uvc-750", 750, 8, 200, 300],
+  ["aquael-unifilter-uvc-1000", 1000, 10.9, 250, 350],
+];
+for (const [id, flow, power, minL, maxL] of expectedAquaelCurrentInternalFilters) {
+  const item = equipmentCatalog.find((entry) => entry.id === id);
+  assert(item, `Güncel Aquael iç filtre katalogda bulunmalı: ${id}`);
+  assert.equal(item.category, "filter", `${id} yalnız filtre kategorisinde olmalı`);
+  assert.equal(item.ratedFlowLph, flow, `${id} resmî debiyi taşımalı`);
+  assert.equal(item.powerW, power, `${id} resmî gücü taşımalı`);
+  assert.equal(item.recommendedMinL, minL, `${id} resmî alt hacim sınırını taşımalı`);
+  assert.equal(item.recommendedMaxL, maxL, `${id} resmî üst hacim sınırını taşımalı`);
+  assert.equal(item.adjustableFlow, true, `${id} resmî akış ayarı bilgisini taşımalı`);
+  assert.equal(item.verifiedAt, "2026-09-11", `${id} güncel doğrulama tarihi taşımalı`);
+}
+
+const expectedAquaelNewFilters = [
+  ["aquael-neo-300", 320, 4.5, undefined, 100, true],
+  ["aquael-neo-bio-1000", 1000, 15, undefined, 250, true],
+  ["aquael-multikani-1000", 1000, 9.1, 25, 400, undefined],
+  ["aquael-fzn-pro-400", 320, 4.5, 10, 75, true],
+  ["aquael-fzn-pro-700", 700, 6.2, 75, 130, true],
+  ["aquael-fzn-pro-1000", 900, 7.1, 130, 200, true],
+  ["aquael-fzn-pro-1500", 1370, 13, 200, 300, true],
+];
+for (const [id, flow, power, minL, maxL, adjustable] of expectedAquaelNewFilters) {
+  const item = equipmentCatalog.find((entry) => entry.id === id);
+  assert(item, `Güncel Aquael filtre katalogda bulunmalı: ${id}`);
+  assert.equal(item.category, "filter", `${id} yalnız filtre kategorisinde olmalı`);
+  assert.equal(item.ratedFlowLph, flow, `${id} resmî debiyi taşımalı`);
+  assert.equal(item.powerW, power, `${id} resmî gücü taşımalı`);
+  assert.equal(item.recommendedMinL, minL, `${id} resmî alt hacim sınırını taşımalı`);
+  assert.equal(item.recommendedMaxL, maxL, `${id} resmî üst hacim sınırını taşımalı`);
+  assert.equal(item.adjustableFlow, adjustable, `${id} yalnız kaynakta yayımlanan akış ayarını taşımalı`);
+  assert.equal(item.verifiedAt, "2026-09-11", `${id} güncel doğrulama tarihi taşımalı`);
+}
+
+const expectedAquaelSmartCanisters = [
+  ["aquael-ultramax-bt", 2200, 13.5, 100, 750, undefined],
+  ["aquael-hypermax-link", 4500, 36, 200, 1500, 300],
+  ["aquael-hypermax-bt-thermo", 4500, 36, 200, 1500, 300],
+];
+for (const [id, flow, power, minL, maxL, heaterPower] of expectedAquaelSmartCanisters) {
+  const item = equipmentCatalog.find((entry) => entry.id === id);
+  assert(item, `Güncel Aquael akıllı dış filtre katalogda bulunmalı: ${id}`);
+  assert.equal(item.category, "filter", `${id} yalnız filtre kategorisinde olmalı`);
+  assert.equal(item.ratedFlowLph, flow, `${id} resmî azami debiyi taşımalı`);
+  assert.equal(item.powerW, power, `${id} resmî azami motor gücünü taşımalı`);
+  assert.equal(item.recommendedMinL, minL, `${id} resmî alt hacim sınırını taşımalı`);
+  assert.equal(item.recommendedMaxL, maxL, `${id} resmî üst hacim sınırını taşımalı`);
+  assert.equal(item.integratedHeaterW, heaterPower, `${id} yalnız gerçek entegre ısıtıcı gücünü taşımalı`);
+  assert.equal(item.adjustableFlow, true, `${id} uygulama veya panelden ayarlanabilir akışı taşımalı`);
+  assert.equal(item.verifiedAt, "2026-09-11", `${id} güncel doğrulama tarihi taşımalı`);
+}
+
 const chihiros = equipmentCatalog.filter((item) => item.brand === "Chihiros");
 for (const model of ["WRGB II Pro 60", "WRGB II Pro 120", "Dosing Pump System (4 Head)", "Dosing Pump Mate (2 Head)", "Heater Pro 12/16 mm (EU)", "Heater Pro 16/22 mm (EU)", "Doctor Mate", "Digital TDS / Temperature Tester Pen", "CO₂ Spiral Bubble Counter", "Nano CO₂ Diffuser", "CO₂ Drop Checker"]) {
   assert(chihiros.some((item) => item.model === model), `Chihiros ${model} güncel ürün ailesinde bulunduğu için katalogda yer almalı`);
@@ -546,9 +644,13 @@ for (const [model, expectedFlow] of expectedRegentFlows) {
 }
 for (const model of ["6500", "7500", "8500", "9500"]) {
   const item = equipmentCatalog.find((entry) => entry.brand === "Regent" && entry.model === model);
-  assert(item?.sourceUrl.includes(`regent-${model}-`), `Regent ${model} genel seri sayfası yerine doğrudan ürün kaynağına bağlanmalı`);
+  assert.equal(item?.sourceUrl, "https://hydroponic.co.za/hydroponics/air-pumps/", `Regent ${model} debisi model tablosuna bağlanmalı`);
+  assert(item?.additionalSourceUrls?.some((url) => url.includes(`regent-${model}-`)), `Regent ${model} Türkiye ürün varyantı ayrıca kaynaklanmalı`);
+  assert.equal(item?.verifiedAt, "2026-09-11", `Regent ${model} güncel doğrulama tarihi taşımalı`);
 }
 assert.equal(equipmentCatalog.find((entry) => entry.brand === "Regent" && entry.model === "5500")?.sourceUrl, "https://hydroponic.co.za/size/regent-5500/", "Regent 5500 yanlışlıkla 9500 ürün kaynağına bağlanmamalı");
+assert.match(equipmentCatalog.find((entry) => entry.brand === "Regent" && entry.model === "6500")?.specifications ?? "", /2,4 W.*2,5 W/, "Regent 6500 bölgesel güç farkını açıklamalı");
+assert.match(equipmentCatalog.find((entry) => entry.brand === "Regent" && entry.model === "8500")?.specifications ?? "", /4 W.*3,5 W/, "Regent 8500 bölgesel güç farkını açıklamalı");
 assert.equal(equipmentCatalog.find((entry) => entry.brand === "Regent" && entry.model === "6500")?.adjustableFlow, false, "Güncel Regent 6500 ayar düğmesi varmış gibi gösterilmemeli");
 assert.equal(equipmentCatalog.find((entry) => entry.brand === "Regent" && entry.model === "7500")?.adjustableFlow, false, "Güncel Regent 7500 ayar düğmesi varmış gibi gösterilmemeli");
 assert.equal(equipmentCatalog.find((entry) => entry.brand === "Regent" && entry.model === "8500")?.adjustableFlow, false, "Güncel Regent 8500 ayar düğmesi varmış gibi gösterilmemeli");
