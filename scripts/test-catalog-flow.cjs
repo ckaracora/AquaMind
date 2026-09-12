@@ -325,7 +325,7 @@ assert.deepEqual([aquaelHypermaxEngineCover.category, aquaelHypermaxEngineCover.
 assert.equal(aquaelHypermaxEngineCover.sourceUrl, "https://www.aquael.com/products/aquaristics/aquaristics/139094-2/", "Aquael Hypermax motor kapağı doğrudan resmî ürün sayfasına bağlanmalı");
 
 const aquaelCare = careProductCatalog.filter((entry) => entry.brand === "Aquael");
-assert.equal(aquaelCare.length, 230, "Aquael güncel ürün portföyü 230 ayrı ürün/varyant içermeli");
+assert.equal(aquaelCare.length, 243, "Aquael güncel ürün portföyü 243 ayrı ürün/varyant içermeli");
 assert.equal(aquaelCare.filter((entry) => entry.category === "filter_media").length, 69, "Aquael resmî filtre medyası portföyü 69 kayıt içermeli");
 assert.equal(aquaelCare.filter((entry) => entry.category === "substrate").length, 33, "Aquael resmî taban malzemesi portföyü 33 kayıt içermeli");
 assert.equal(aquaelCare.filter((entry) => entry.category === "food").length, 40, "Aquael resmî Acti Food portföyü 40 paket varyantı içermeli");
@@ -335,7 +335,7 @@ assert.equal(aquaelCare.filter((entry) => entry.category === "decoration").lengt
 assert.equal(aquaelCare.filter((entry) => entry.category === "aquarium_set").length, 16, "Aquael doğrulanmış akvaryum seti paketi 16 varyant içermeli");
 assert.equal(aquaelCare.filter((entry) => entry.category === "tank").length, 14, "Aquael standart boş cam akvaryum ailesi 14 varyant içermeli");
 assert.equal(aquaelCare.filter((entry) => entry.category === "cover").length, 11, "Aquael resmî Leddy ve Classic kapak aileleri 11 varyant içermeli");
-assert.equal(aquaelCare.filter((entry) => entry.category === "cabinet").length, 17, "Aquael doğrulanmış dolap paketi 17 varyant içermeli");
+assert.equal(aquaelCare.filter((entry) => entry.category === "cabinet").length, 30, "Aquael resmî dolap portföyü 30 varyant içermeli");
 assert(aquaelCare.every((entry) => entry.sourceUrl.startsWith("https://www.aquael.com/")), "Aquael bakım ürünlerinin tamamı resmî üretici kaynağına bağlanmalı");
 assert(aquaelCare.every((entry) => ["2026-09-11","2026-09-12"].includes(entry.verifiedAt)), "Aquael ürünlerinin tamamı güncel doğrulama tarihi taşımalı");
 const aquaelCareCategory = (model) => aquaelCare.find((entry) => entry.model === model)?.category;
@@ -406,6 +406,15 @@ const aquaelLeddyCover = aquaelCare.find((entry) => entry.model === "Leddy Cover
 assert.deepEqual([aquaelLeddyCover?.category,aquaelLeddyCover?.footprintCm], ["cover",[41,25]], "Leddy 40 siyah kapak resmî taban ölçüsünü taşımalı");
 const aquaelOptiCabinet = aquaelCare.find((entry) => entry.model === "Opti Set Cabinet 125 Grey");
 assert.deepEqual([aquaelOptiCabinet?.category,aquaelOptiCabinet?.dimensionsCm], ["cabinet",[81.5,36,80]], "Opti Set 125 gri dolap resmî üç boyutunu taşımalı");
+for (const [model,dimensions] of [
+  ["UltraScape Cabinet 90 Forest",[90,45,80]],
+  ["Glossy ST Cube Grey Cabinet",[50,50,90]],
+  ["Hexa 60 Cabinet",[45,45,73]],
+  ["Fish & Shrimp Set Duo Cabinet White",[35,35,90]],
+]) {
+  const item = aquaelCare.find((entry) => entry.model === model);
+  assert.deepEqual([item?.category,item?.dimensionsCm], ["cabinet",dimensions], `Aquael ${model} resmî dolap ölçülerini taşımalı`);
+}
 assert.equal(aquaelCare.filter((entry) => entry.model === "Betta 100 ml").length, 1, "Aynı hacimde yalnız dil etiketi değişen Aquael Betta SKU'ları kullanıcıya yinelenmemeli");
 
 const chihiros = equipmentCatalog.filter((item) => item.brand === "Chihiros");

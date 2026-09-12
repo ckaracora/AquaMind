@@ -1109,6 +1109,27 @@ export const careProductCatalog: CareProductProfile[] = [
     ["Simple Cabinet Rectangular 80 Black",[81,35.5,72.5],"80 cm dik akvaryum için kapaksız siyah dolap · 81 × 35,5 × 72,5 cm"],
     ["Simple Cabinet Rectangular 80 White",[81,35.5,72.5],"80 cm dik akvaryum için kapaksız beyaz dolap · 81 × 35,5 × 72,5 cm"],
   ]),
+  ...dimensionProducts("cabinet","https://www.aquael.com/products/aquaristics/cabinets/ultrascape-cabinet/",[
+    ["UltraScape Cabinet 60 Snow",[60,30,80],"UltraScape Set 60 için Snow renkli akvaryum dolabı · 60 × 30 × 80 cm"],
+    ["UltraScape Cabinet 60 Forest",[60,30,80],"UltraScape Set 60 için Forest renkli akvaryum dolabı · 60 × 30 × 80 cm"],
+    ["UltraScape Cabinet 90 Snow",[90,45,80],"UltraScape Set 90 için Snow renkli akvaryum dolabı · 90 × 45 × 80 cm"],
+    ["UltraScape Cabinet 90 Forest",[90,45,80],"UltraScape Set 90 için Forest renkli akvaryum dolabı · 90 × 45 × 80 cm"],
+  ]),
+  ...dimensionProducts("cabinet","https://www.aquael.com/products/aquaristics/new-en/glossy-st-grey-cabinet/",[
+    ["Glossy ST 80 Grey Cabinet",[80,35,72],"Glossy ST 80 için gri parlak akvaryum dolabı · 80 × 35 × 72 cm"],
+    ["Glossy ST 100 Grey Cabinet",[100,40,72],"Glossy ST 100 için gri parlak akvaryum dolabı · 100 × 40 × 72 cm"],
+    ["Glossy ST 120 Grey Cabinet",[120,40,72],"Glossy ST 120 için gri parlak akvaryum dolabı · 120 × 40 × 72 cm"],
+    ["Glossy ST 150 Grey Cabinet",[150,50,72],"Glossy ST 150 için gri parlak akvaryum dolabı · 150 × 50 × 72 cm"],
+    ["Glossy ST Cube Grey Cabinet",[50,50,90],"Glossy ST Cube için gri parlak akvaryum dolabı · 50 × 50 × 90 cm"],
+  ]),
+  ...dimensionProducts("cabinet","https://www.aquael.com/products/aquaristics/cabinets/hexa/",[
+    ["Hexa 60 Simple Cabinet",[45,45,73],"Hexa Set 60 için Simple akvaryum dolabı · 45 × 45 × 73 cm"],
+    ["Hexa 60 Cabinet",[45,45,73],"Hexa Set 60 için kapalı akvaryum dolabı · 45 × 45 × 73 cm"],
+  ]),
+  ...dimensionProducts("cabinet","https://www.aquael.com/products/aquaristics/cabinets/fishshrimp-set-duo/",[
+    ["Fish & Shrimp Set Duo Cabinet Black",[35,35,90],"Fish & Shrimp Set Duo için siyah akvaryum dolabı · 35 × 35 × 90 cm"],
+    ["Fish & Shrimp Set Duo Cabinet White",[35,35,90],"Fish & Shrimp Set Duo için beyaz akvaryum dolabı · 35 × 35 × 90 cm"],
+  ]),
   ...products("Resun","filter_media","https://www.resun-china.com/h-pd-268.html",[
     ["FTP01 Ammonia Filter Pad","Yeni canlı ekleme, fazla yemleme ve aşırı yük kaynaklı amonyak kontrolüne yardımcı kesilebilir filtre pedi"],
     ["FTP02 Carbon Filter Pad","Koku, renk ve toksinlerin tutulmasına yardımcı kesilebilir karbon filtre pedi"],
