@@ -157,6 +157,24 @@ for (const [id, flow, power, minL, maxL, adjustable] of expectedAquaelNewFilters
   assert.equal(item.verifiedAt, "2026-09-11", `${id} güncel doğrulama tarihi taşımalı`);
 }
 
+const aquaelNeoBioAdditionalModule = equipmentCatalog.find((entry) => entry.id === "aquael-neo-bio-1000-additional-module");
+assert(aquaelNeoBioAdditionalModule, "Aquael Neo Bio 1000 ek filtre modülü katalogda bulunmalı");
+assert.deepEqual(
+  [aquaelNeoBioAdditionalModule.category, aquaelNeoBioAdditionalModule.passiveComponent, aquaelNeoBioAdditionalModule.ratedFlowLph],
+  ["other", true, undefined],
+  "Neo Bio 1000 ek modülü bağımsız motor debisi olmayan pasif aksesuar olmalı",
+);
+assert.equal(aquaelNeoBioAdditionalModule.sourceUrl, "https://www.aquael.com/products/aquaristics/aquaristics/neo-bio-100-additional-module/", "Neo Bio 1000 ek modülü doğrudan resmî kaynağa bağlanmalı");
+
+const aquaelOxypro150 = equipmentCatalog.find((entry) => entry.id === "aquael-oxypro-150");
+assert(aquaelOxypro150, "Aquael OXYPRO 150 katalogda bulunmalı");
+assert.deepEqual(
+  [aquaelOxypro150.category, aquaelOxypro150.ratedFlowLph, aquaelOxypro150.powerW, aquaelOxypro150.recommendedMaxL, aquaelOxypro150.adjustableFlow],
+  ["air_pump", 150, 2, 200, true],
+  "OXYPRO 150 resmî debi, güç, hacim ve ayarlanabilirlik verilerini taşımalı",
+);
+assert.equal(aquaelOxypro150.sourceUrl, "https://www.aquael.com/products/aquaristics/air_pumps/oxypro/", "OXYPRO 150 doğrudan resmî ürün sayfasına bağlanmalı");
+
 const expectedAquaelSmartCanisters = [
   ["aquael-ultramax-bt", 2200, 13.5, 100, 750, undefined],
   ["aquael-hypermax-link", 4500, 36, 200, 1500, 300],
@@ -220,8 +238,31 @@ for (const [id, power, tankLength, detail] of expectedAquaelCurrentLighting) {
   assert.deepEqual(item.recommendedTankLengthCm, tankLength, `${id} yalnız kaynakta akvaryum genişliği yayımlandığında uzunluk aralığı taşımalı`);
   assert.match(item.specifications, new RegExp(String(detail).replace(/[+]/g, "\\+")), `${id} resmî ışık veya boyut ayrıntısını taşımalı`);
   assert(item.sourceUrl?.startsWith("https://www.aquael.com/"), `${id} resmî Aquael kaynağına bağlanmalı`);
-  assert.equal(item.verifiedAt, "2026-09-11", `${id} güncel doğrulama tarihi taşımalı`);
+  assert(["2026-09-11", "2026-09-12"].includes(item.verifiedAt), `${id} güncel doğrulama tarihi taşımalı`);
 }
+
+for (const [id, model, power] of [
+  ["aquael-leddy-slim-bt-460-white", "Leddy Slim BT 460 White", 14],
+  ["aquael-leddy-slim-bt-560-white", "Leddy Slim BT 560 White", 18],
+  ["aquael-leddy-slim-bt-760-white", "Leddy Slim BT 760 White", 26],
+  ["aquael-leddy-slim-bt-960-white", "Leddy Slim BT 960 White", 34],
+  ["aquael-leddy-slim-sunny-day-night-32-white", "Leddy Slim Sunny Day&Night 32 W White", 32],
+  ["aquael-leddy-slim-sunny-day-night-36-white", "Leddy Slim Sunny Day&Night 36 W White", 36],
+  ["aquael-leddy-plant-32-white", "Leddy Slim Plant 32 W White", 32],
+  ["aquael-leddy-plant-36-white", "Leddy Slim Plant 36 W White", 36],
+  ["aquael-leddy-slim-duo-sunny-plant-night-10-white", "Leddy Slim Duo Sunny Plant&Night 10 W White", 10],
+  ["aquael-leddy-slim-duo-sunny-plant-night-16-white", "Leddy Slim Duo Sunny Plant&Night 16 W White", 16],
+  ["aquael-leddy-smart-day-night-sunny-white", "Leddy Smart Day&Night Sunny White", 4.8],
+  ["aquael-leddy-smart-day-night-plant-white", "Leddy Smart Day&Night Plant White", 4.8],
+  ["aquael-leddy-slim-marine-day-night-32-white", "Leddy Slim Marine Day&Night 32 W White", 32],
+  ["aquael-leddy-slim-marine-day-night-36-white", "Leddy Slim Marine Day&Night 36 W White", 36],
+  ["aquael-leddy-smart-bt-white", "Leddy Smart BT White", 4.8],
+]) {
+  const item = equipmentCatalog.find((entry) => entry.id === id);
+  assert.deepEqual([item?.model, item?.category, item?.powerW], [model, "lighting", power], `${model} ayrı resmî renk varyantı olarak bulunmalı`);
+  assert.equal(item?.verifiedAt, "2026-09-12", `${model} güncel doğrulama tarihini taşımalı`);
+}
+assert.equal(equipmentCatalog.find((entry) => entry.id === "aquael-leddy-slim-bt-460")?.model, "Leddy Slim BT 460 Black", "Eski Leddy Slim BT katalog kimliği siyah varyantı korumalı");
 
 const aquaelAirlights = equipmentCatalog.find((entry) => entry.id === "aquael-airlights-led");
 assert(aquaelAirlights, "Aquael Airlights LED katalogda bulunmalı");
@@ -325,20 +366,54 @@ assert.deepEqual([aquaelHypermaxEngineCover.category, aquaelHypermaxEngineCover.
 assert.equal(aquaelHypermaxEngineCover.sourceUrl, "https://www.aquael.com/products/aquaristics/aquaristics/139094-2/", "Aquael Hypermax motor kapağı doğrudan resmî ürün sayfasına bağlanmalı");
 
 const aquaelCare = careProductCatalog.filter((entry) => entry.brand === "Aquael");
-assert.equal(aquaelCare.length, 243, "Aquael güncel ürün portföyü 243 ayrı ürün/varyant içermeli");
+const aquaelEquipment = equipmentCatalog.filter((entry) => entry.brand === "Aquael");
+assert.equal(aquaelEquipment.length, 194, "Aquael güncel ekipman portföyü 194 ayrı model/varyant içermeli");
+assert.equal(aquaelCare.length, 322, "Aquael güncel ürün portföyü 322 ayrı ürün/varyant içermeli");
 assert.equal(aquaelCare.filter((entry) => entry.category === "filter_media").length, 69, "Aquael resmî filtre medyası portföyü 69 kayıt içermeli");
 assert.equal(aquaelCare.filter((entry) => entry.category === "substrate").length, 33, "Aquael resmî taban malzemesi portföyü 33 kayıt içermeli");
 assert.equal(aquaelCare.filter((entry) => entry.category === "food").length, 40, "Aquael resmî Acti Food portföyü 40 paket varyantı içermeli");
 assert.equal(aquaelCare.filter((entry) => entry.category === "water_conditioner").length, 2, "Aquael Acti Clean iki gerçek hacim seçeneği içermeli");
 assert.equal(aquaelCare.filter((entry) => entry.category === "bacteria").length, 2, "Aquael Acti Bactol iki gerçek hacim seçeneği içermeli");
 assert.equal(aquaelCare.filter((entry) => entry.category === "decoration").length, 26, "Aquael resmî dekorasyon portföyü 26 ürün/varyant içermeli");
-assert.equal(aquaelCare.filter((entry) => entry.category === "aquarium_set").length, 16, "Aquael doğrulanmış akvaryum seti paketi 16 varyant içermeli");
-assert.equal(aquaelCare.filter((entry) => entry.category === "tank").length, 14, "Aquael standart boş cam akvaryum ailesi 14 varyant içermeli");
+assert.equal(aquaelCare.filter((entry) => entry.category === "aquarium_set").length, 74, "Aquael doğrulanmış akvaryum seti paketi 74 varyant içermeli");
+assert.equal(aquaelCare.filter((entry) => entry.category === "tank").length, 27, "Aquael güncel boş akvaryum ve fanus aileleri 27 varyant içermeli");
 assert.equal(aquaelCare.filter((entry) => entry.category === "cover").length, 11, "Aquael resmî Leddy ve Classic kapak aileleri 11 varyant içermeli");
-assert.equal(aquaelCare.filter((entry) => entry.category === "cabinet").length, 30, "Aquael resmî dolap portföyü 30 varyant içermeli");
+assert.equal(aquaelCare.filter((entry) => entry.category === "cabinet").length, 34, "Aquael resmî dolap portföyü 34 varyant içermeli");
+assert.equal(aquaelCare.filter((entry) => entry.category === "aquaterrarium").length, 3, "Aquael resmî Aquaterrarium ailesi üç gerçek boy içermeli");
+assert.equal(aquaelCare.filter((entry) => entry.category === "terrarium").length, 1, "Aquael Selva Mini ayrı terrarium kategorisinde bulunmalı");
+const aquaelOptiSetCabinet130White = aquaelCare.find((entry) => entry.model === "Opti Set Cabinet 130 White");
+assert.equal(aquaelOptiSetCabinet130White?.category, "cabinet", "Opti Set Cabinet 130 renkleri dolap kategorisinde olmalı");
+assert.equal(aquaelOptiSetCabinet130White?.dimensionsCm, undefined, "Opti Set Cabinet 130 için kaynakta yayımlanmayan derinlik değeri tahmin edilmemeli");
+assert.equal(aquaelOptiSetCabinet130White?.sourceUrl, "https://www.aquael.com/products/aquaristics/cabinets/opti-set-cabinet-130/", "Opti Set Cabinet 130 doğrudan resmî ürün sayfasına bağlanmalı");
 assert(aquaelCare.every((entry) => entry.sourceUrl.startsWith("https://www.aquael.com/")), "Aquael bakım ürünlerinin tamamı resmî üretici kaynağına bağlanmalı");
 assert(aquaelCare.every((entry) => ["2026-09-11","2026-09-12"].includes(entry.verifiedAt)), "Aquael ürünlerinin tamamı güncel doğrulama tarihi taşımalı");
 const aquaelCareCategory = (model) => aquaelCare.find((entry) => entry.model === model)?.category;
+for (const [family,model,category] of [
+  ["Neo Set","Neo Set 125","aquarium_set"],
+  ["Selva Mini Terrarium","Selva Mini Terrarium","terrarium"],
+  ["Glossy Marine","Glossy Marine Standard","aquarium_set"],
+  ["Leddy XL Day&Night","Leddy XL Day&Night 40","aquarium_set"],
+  ["Aquaterrarium","AquaTerrarium 60","aquaterrarium"],
+  ["Opti Set 130","Opti Set 130 White","aquarium_set"],
+  ["Fish & Shrimp Set Duo","Fish & Shrimp Set Duo 35 White","aquarium_set"],
+  ["NanoReef Duo","NanoReef Duo 35 White","aquarium_set"],
+  ["Shrimp Set Day&Night","Shrimp Set Day&Night 10 Black","aquarium_set"],
+  ["Opti Set","Opti Set 125 Black","aquarium_set"],
+  ["Glossy ST","Glossy ST 80 Grey","aquarium_set"],
+  ["Leddy Day&Night","Leddy Day&Night 40 Black","aquarium_set"],
+  ["Aqua 4","Aqua 4 Kids Rectangular","aquarium_set"],
+  ["Classic Box","Classic Box Set 40 Rectangular","aquarium_set"],
+  ["UltraScape Set","UltraScape Set 60 Forest","aquarium_set"],
+  ["OptiBent Set","OptiBent Set 20 Black","aquarium_set"],
+  ["Leddy Plus","Leddy Plus Day&Night 40 Black","aquarium_set"],
+  ["Hexa Set","Hexa Set II 60L Black LT","aquarium_set"],
+  ["Betta Kit","Betta Kit","aquarium_set"],
+  ["Leddy Mini Creative Set","Leddy Mini Creative Set 30 Black","aquarium_set"],
+]) {
+  const item = aquaelCare.find((entry) => entry.model === model);
+  assert.equal(item?.category, category, `Aquael resmî ${family} ailesi doğru kategoride temsil edilmeli`);
+  assert(item?.sourceUrl.startsWith("https://www.aquael.com/"), `Aquael ${family} ailesi doğrudan resmî kaynağa bağlanmalı`);
+}
 for (const model of [
   "NanoMax Bio 1 L",
   "NatureMax Bio 1 L",
@@ -390,22 +465,66 @@ for (const model of [
 }
 assert.equal(careCategoryLabels.decoration, "Dekorasyon", "Ürün kataloğu dekorasyon için ayrı ve anlaşılır filtre göstermeli");
 assert.equal(careCategoryLabels.aquarium_set, "Akvaryum seti", "Tam akvaryum setleri ürün kataloğunda ayrı filtrelenmeli");
+assert.equal(careCategoryLabels.aquaterrarium, "Aquaterrarium", "Su-kara habitatları akvaryum setlerinden ayrı filtrelenmeli");
+assert.equal(careCategoryLabels.terrarium, "Terrarium", "Kara bitki habitatları akvaryum setlerinden ayrı filtrelenmeli");
 assert.equal(careCategoryLabels.tank, "Boş akvaryum", "Boş cam akvaryumlar setlerden ayrı filtrelenmeli");
 assert.equal(careCategoryLabels.cover, "Akvaryum kapağı", "Akvaryum kapakları ayrı filtrelenmeli");
 assert.equal(careCategoryLabels.cabinet, "Akvaryum dolabı", "Akvaryum dolapları ayrı filtrelenmeli");
 const aquaelNeoSet240 = aquaelCare.find((entry) => entry.model === "Neo Set 240");
 assert.deepEqual([aquaelNeoSet240?.category, aquaelNeoSet240?.volumeL, aquaelNeoSet240?.dimensionsCm], ["aquarium_set",240,[121,41,56]], "Neo Set 240 resmî hacim ve ölçülerini taşımalı");
 assert(aquaelNeoSet240?.includedEquipmentModels?.includes("Neo Bio 1000"), "Neo Set 240 içindeki doğrulanmış filtre modeli saklanmalı");
+for (const [model,volume,dimensions,equipment] of [
+  ["Shrimp Set Day&Night 20 White",19,[25,25,30],"Turbo Mini"],
+  ["Fish & Shrimp Set Duo 35 Day&Night Black",49,[35,35,40],"FZN Versa Pro 700"],
+  ["Opti Set 130 Grey",130,[60.9,40.9,60.5],"Leddy Tube Sunny Day&Night 2.0 × 2"],
+  ["Leddy XL Day&Night 60",72,[60,30,40],"ASAP 300"],
+  ["UltraScape Set 90 Forest",243,[90,60,45],"Leddy Tube Plant 14 W × 2"],
+  ["OptiBent Set 70 White",68,[39,39,45],"Ultra Heater 75 W"],
+  ["Opti Set 240 Grey",240,[121,41,56],"Leddy Tube Sunny Day&Night 17 W × 2"],
+  ["Hexa Set II 60L Black LT",60,[41,41,60],"Built-in Filter 350 L/h"],
+  ["NanoReef Duo 35 White",49,[35,35,40],"FZN 3"],
+  ["Leddy Day&Night 75 White",105,[75,35,40],"ASAP 500"],
+  ["Leddy Plus Day&Night 60 Black",54,[60,30,30],"Platinium Heater 50 W"],
+  ["Leddy Mini Creative Set 30 White",12.6,[28,15,30],"Turbo Mini"],
+  ["Glossy ST Cube Grey",135,[50,50,63],"Leddy Tube Sunny Day&Night 10 W × 2"],
+  ["Glossy Marine Standard",170,[60,58,50],"Protein Skimmer"],
+  ["Glossy Marine Optimum",170,[60,58,50],"Leddy Slim BT 18 W × 2"],
+]) {
+  const item = aquaelCare.find((entry) => entry.model === model);
+  assert.deepEqual([item?.category,item?.volumeL,item?.dimensionsCm], ["aquarium_set",volume,dimensions], `Aquael ${model} resmî hacim ve ölçülerini taşımalı`);
+  assert(item?.includedEquipmentModels?.includes(equipment), `Aquael ${model} içindeki doğrulanmış ekipmanı saklamalı`);
+}
 const aquaelRectangular150 = aquaelCare.find((entry) => entry.model === "Glass Aquarium Rectangular 150");
 assert.deepEqual([aquaelRectangular150?.category, aquaelRectangular150?.volumeL, aquaelRectangular150?.dimensionsCm], ["tank",375,[150,50,50]], "150 cm dik cam akvaryum resmî hacim ve ölçülerini taşımalı");
+for (const [model,volume,dimensions] of [
+  ["Opti Tank 100",200,[100,40,50]],
+  ["Opti Tank Rounded 20 White",19,[25,25,30]],
+  ["Opti Tank Rounded 70 Black",68,[39,39,45]],
+]) {
+  const item = aquaelCare.find((entry) => entry.model === model);
+  assert.deepEqual([item?.category,item?.volumeL,item?.dimensionsCm], ["tank",volume,dimensions], `Aquael ${model} resmî hacim ve ölçülerini taşımalı`);
+}
+const aquaelGlassBowl45 = aquaelCare.find((entry) => entry.model === "Glass Bowl 45");
+assert.deepEqual([aquaelGlassBowl45?.category,aquaelGlassBowl45?.volumeL,aquaelGlassBowl45?.dimensionsCm], ["tank",45,undefined], "Glass Bowl 45 yalnız kaynakta yayımlanan hacmi taşımalı, ölçü uydurmamalı");
 for (const entry of aquaelCare.filter((item) => item.category === "aquarium_set" || item.category === "tank")) {
   assert.equal(entry.verifiedAt, "2026-09-12", `Aquael ${entry.model} güncel yapısal ürün doğrulama tarihini taşımalı`);
-  assert(entry.volumeL > 0 && entry.dimensionsCm?.every((value) => value > 0), `Aquael ${entry.model} kaynaklı hacim ve üç boyut taşımalı`);
+  assert(entry.volumeL > 0, `Aquael ${entry.model} kaynaklı pozitif hacim taşımalı`);
+  if (!entry.model.startsWith("Glass Bowl")) assert(entry.dimensionsCm?.every((value) => value > 0), `Aquael ${entry.model} kaynaklı üç boyut taşımalı`);
 }
 const aquaelLeddyCover = aquaelCare.find((entry) => entry.model === "Leddy Cover Rectangular 40 Black");
 assert.deepEqual([aquaelLeddyCover?.category,aquaelLeddyCover?.footprintCm], ["cover",[41,25]], "Leddy 40 siyah kapak resmî taban ölçüsünü taşımalı");
 const aquaelOptiCabinet = aquaelCare.find((entry) => entry.model === "Opti Set Cabinet 125 Grey");
 assert.deepEqual([aquaelOptiCabinet?.category,aquaelOptiCabinet?.dimensionsCm], ["cabinet",[81.5,36,80]], "Opti Set 125 gri dolap resmî üç boyutunu taşımalı");
+const aquaelBettaKit = aquaelCare.find((entry) => entry.model === "Betta Kit");
+assert.deepEqual([aquaelBettaKit?.category,aquaelBettaKit?.volumeL,aquaelBettaKit?.dimensionsCm], ["aquarium_set",3,[23.7,15.4,17.3]], "Betta Kit resmî hacim ve ölçülerini taşımalı");
+const aquaelGlossyMarineCabinet = aquaelCare.find((entry) => entry.model === "Glossy Marine Cabinet");
+assert.deepEqual([aquaelGlossyMarineCabinet?.category,aquaelGlossyMarineCabinet?.dimensionsCm], ["cabinet",[60,60,87]], "Glossy Marine dolabı resmî üç boyutunu taşımalı");
+const aquaelAquaterrarium60 = aquaelCare.find((entry) => entry.model === "AquaTerrarium 60");
+assert.deepEqual([aquaelAquaterrarium60?.category,aquaelAquaterrarium60?.dimensionsCm,aquaelAquaterrarium60?.includedEquipmentModels], ["aquaterrarium",[60,30,20.5],undefined], "AquaTerrarium 60 resmî ölçüyü taşımalı ve kaynakta bulunmayan filtreyi içermemeli");
+const aquaelAquaterrarium100 = aquaelCare.find((entry) => entry.model === "AquaTerrarium 100");
+assert.deepEqual([aquaelAquaterrarium100?.category,aquaelAquaterrarium100?.dimensionsCm,aquaelAquaterrarium100?.includedEquipmentModels], ["aquaterrarium",[100,40,35.5],["Filter 500 L/h"]], "AquaTerrarium 100 resmî ölçüyü ve 500 L/saat filtreyi taşımalı");
+const aquaelSelvaMini = aquaelCare.find((entry) => entry.model === "Selva Mini Terrarium");
+assert.deepEqual([aquaelSelvaMini?.category,aquaelSelvaMini?.dimensionsCm], ["terrarium",[20,20,30]], "Selva Mini yanlış akvaryum kategorisine girmeden resmî ölçülerini taşımalı");
 for (const [model,dimensions] of [
   ["UltraScape Cabinet 90 Forest",[90,45,80]],
   ["Glossy ST Cube Grey Cabinet",[50,50,90]],
@@ -418,8 +537,234 @@ for (const [model,dimensions] of [
 assert.equal(aquaelCare.filter((entry) => entry.model === "Betta 100 ml").length, 1, "Aynı hacimde yalnız dil etiketi değişen Aquael Betta SKU'ları kullanıcıya yinelenmemeli");
 
 const chihiros = equipmentCatalog.filter((item) => item.brand === "Chihiros");
+assert.equal(chihiros.length, 289, "Chihiros katalog paketi 289 doğrulanmış ekipman kaydını korumalı");
+for (const model of [
+  "CO₂ Regulator Pro Limited Edition",
+  "CO₂ Regulator Mate",
+  "CO₂ Regulator Pro — W21.8",
+  "CO₂ Regulator Pro — CGA320",
+  "CO₂ Regulator — G5/8 / With Solenoid",
+  "Mini CO₂ Regulator Whole Set without CO₂ Cartridge",
+  "CO₂ Generator Kit 2.5 L",
+  "External CO₂ Diffuser XL — 19/25 mm",
+  "CO₂ Diffuser Mate",
+  "Magnetic Light",
+  "Fish Feeder",
+  "Fish Feeder L",
+  "Clean Hose 3 m — 9/12 mm",
+  "Clean Hose 3 m — 12/16 mm",
+  "Clean Hose 3 m — 16/22 mm",
+  "LED Lights Small Hanging Stand Kit",
+  "Nova 1 PCB Module",
+  "WRGB I Connection Cable",
+  "Doctor Power Supply",
+  "Dosing Pump System Connect Tube",
+  "Magnetic Light 2",
+  "ECO Ping Light",
+  "Magnetic Light Base",
+  "Magnetic Light Base S",
+  "Magnetic Light Base L",
+  "CO₂ U Clip M — 8 mm",
+  "CO₂ U Clip L — 12 mm",
+  "VIVID 2 Mini Cooling Fan",
+  "Magnet Cleaner Mini",
+  "Magnet Cleaner Nano",
+  "RGB VIVID Mini Hanging Rope Kit",
+  "A II Hanging Rope Kit",
+  "RGB VIVID II Lamp Panel",
+  "WRGB II Slim Series Lamp Panel",
+  "WRGB II Series Lamp Panel",
+  "RGB VIVID II / Mini Bluetooth Module",
+  "RGB VIVID II / Mini PCB Module",
+  "Hanging Stand for VIVID / WRGB",
+  "WRGB II Acrylic Stand",
+  "C II RGB Shade with Mirror",
+  "LED Hanging Kit",
+  "A Series LED Leg Bracket Kit",
+  "NOVA Stand",
+  "RGB VIVID II Mini Mount Shade",
+  "A II Series Lamp Panel",
+  "A II Series Diamond Stand Holder",
+  "WRGB II Pro Holder",
+  "RGB VIVID II Mini Lamp Panel",
+  "RGB VIVID II 10th Edition Lamp Panel",
+  "RGB VIVID II 10th Edition PCB Module",
+  "RGB VIVID II 10th Edition Bluetooth Module",
+  "Z Light Tiny Standard",
+  "Z Light Tiny Diving",
+  "Z Light Tiny Extend Arm",
+  "Z Light Tiny L Clip",
+  "RGB VIVID II Mini Pendant Shade",
+  "Dosing Tube Holder X",
+  "Cooling Fan — Manual Edition",
+  "Cooling Fan — Bluetooth Edition",
+  "WiFi Hub Pro",
+  "WiFi Hub Pro Dedicated Stand",
+  "WiFi Hub Pro Desktop Stand",
+  "WiFi Hub Pro with Dedicated Stand",
+  "WiFi Hub Pro with Desktop Stand",
+  "Filter Hose Pro 3 m — 9/12 mm",
+  "Filter Hose Pro 3 m — 16/21 mm",
+  "Filter Hose Pro 3 m — 19/25 mm",
+  "Double Tap Quick Connector — 12/16 mm",
+  "Pro-Brush Soft 15 cm",
+  "Pro-Brush Soft 23 cm",
+  "Pro-Brush Hard 15 cm",
+  "Magnetic Stirrers",
+  "Smart Power Strip — EU Plug",
+  "Doctor 5",
+  "Dosing Flow Adapter — 12/16 mm",
+  "Dosing Flow Adapter — 16/22 mm",
+  "Sand Flattener",
+  "Extendable 3D Net S",
+  "Extendable 3D Net L",
+  "Double-Sided Tank Cleaning Cloth",
+  "Adjustable Holder for A II Series Lights",
+  "Scissors Pro Straight 17 cm",
+  "Scissors Pro Wavy 28 cm",
+  "Scissors Spring Pro",
+  "Straight Tweezers Max 30 cm",
+  "Straight Tweezers Pro 27 cm",
+]) {
+  assert.ok(chihiros.some((item) => item.model === model), `Chihiros CO₂ kataloğunda ${model} bulunmalı`);
+}
+for (const model of [
+  "Clean Hose 3 m — 9/12 mm",
+  "Clean Hose 3 m — 12/16 mm",
+  "Clean Hose 3 m — 16/22 mm",
+  "LED Lights Small Hanging Stand Kit",
+  "Nova 1 PCB Module",
+  "WRGB I Connection Cable",
+  "Doctor Power Supply",
+  "Dosing Pump System Connect Tube",
+]) {
+  assert.equal(chihiros.find((item) => item.model === model)?.passiveComponent, true, `${model} ana cihaz kapasitesine karışmamalı`);
+}
+for (const model of [
+  "Glass Air Aquarium Tank",
+  "Magnetic Light Terrarium Set — Glass Air",
+  "Magnetic Light Terrarium Set — Glass Pot",
+  "Tiny Terrarium Egg",
+  "Aqua Soil",
+  "ECO Ping",
+  "Glass Pot for Plant",
+  "Glass Pot Dew S",
+  "Glass Pot Dew L",
+  "Glass Pot Dew Shaped",
+  "Aquarium Acrylic UV Print POD",
+]) {
+  assert.ok(careProductCatalog.some((item) => item.brand === "Chihiros" && item.model === model), `Chihiros ürün kataloğunda ${model} bulunmalı`);
+}
+for (const item of chihiros.filter((entry) => entry.model.includes("Manifold Block") || entry.model.includes("Diffuser"))) {
+  assert.equal(item.passiveComponent, true, `${item.model} bağımsız CO₂ kaynağı veya kapasite cihazı gibi davranmamalı`);
+}
+for (const item of chihiros.filter((entry) => entry.model.includes("Lamp Panel") || entry.model.includes("Bluetooth Module") || entry.model.includes("PCB Module") || entry.model.includes("Hanging Rope") || entry.model.includes("Holder"))) {
+  assert.equal(item.passiveComponent, true, `${item.model} ana aydınlatma veya kapasite cihazı gibi davranmamalı`);
+  assert.equal(item.powerW, undefined, `${item.model} için yayımlanmayan güç değeri tahmin edilmemeli`);
+}
+for (const model of ["Z Light Tiny Standard","Z Light Tiny Diving"]) {
+  const item = chihiros.find((entry) => entry.model === model);
+  assert.deepEqual([item?.category,item?.powerW], ["lighting",6], `${model} resmî 6 W değerini taşımalı`);
+  assert.match(item?.specifications ?? "", /400 lm · 2800–8000 K · 15–60°/, `${model} resmî ışık ve açı verilerini taşımalı`);
+}
+const chihirosVividMini = chihiros.find((entry) => entry.model === "RGB VIVID II Mini");
+assert.deepEqual([chihirosVividMini?.category,chihirosVividMini?.powerW], ["lighting",75], "RGB VIVID II Mini resmî 75 W değerini taşımalı");
+assert.match(chihirosVividMini?.specifications ?? "", /5000 lm · Mount ve Pendant/, "RGB VIVID II Mini resmî lümen ve iki montaj seçeneğini açıklamalı");
+for (const model of ["Cooling Fan — Manual Edition","Cooling Fan — Bluetooth Edition"]) {
+  const item = chihiros.find((entry) => entry.model === model);
+  assert.deepEqual([item?.category,item?.powerW,item?.passiveComponent], ["other",2.8,undefined], `${model} resmî nominal gücüyle aktif cihaz olmalı`);
+  assert.match(item?.specifications ?? "", /3800 RPM.*IP55.*5–20 mm.*2–4 °C/, `${model} resmî motor, koruma, cam ve soğutma verilerini taşımalı`);
+}
+for (const model of ["WiFi Hub Pro Dedicated Stand","WiFi Hub Pro Desktop Stand","Filter Hose Pro 3 m — 9/12 mm","Filter Hose Pro 3 m — 16/21 mm","Filter Hose Pro 3 m — 19/25 mm","Double Tap Quick Connector — 12/16 mm","Pro-Brush Soft 15 cm","Pro-Brush Soft 23 cm","Pro-Brush Hard 15 cm"]) {
+  const item = chihiros.find((entry) => entry.model === model);
+  assert.equal(item?.passiveComponent, true, `${model} bağımsız kapasite cihazı gibi davranmamalı`);
+  assert.equal(item?.powerW, undefined, `${model} için güç değeri uydurulmamalı`);
+}
+const chihirosWifiHubPro = chihiros.find((entry) => entry.model === "WiFi Hub Pro");
+assert.match(chihirosWifiHubPro?.specifications ?? "", /20 Bluetooth.*2,4\/5 GHz/, "WiFi Hub Pro resmî bağlantı sınırlarını taşımalı");
+const chihirosFilterHosePro1612 = chihiros.find((entry) => entry.model === "Filter Hose Pro 3 m — 16/21 mm");
+assert.match(chihirosFilterHosePro1612?.specifications ?? "", /16 mm iç \/ 21 mm dış.*17 mm jet/, "Filter Hose Pro 16/21 resmî teknik tablo değerlerini taşımalı");
+for (const model of ["Filter Hose Pro 3 m — 9/12 mm","Filter Hose Pro 3 m — 19/25 mm"]) {
+  assert.match(chihiros.find((entry) => entry.model === model)?.specifications ?? "", /tahmin edilmedi/, `${model} çelişkili teknik tablo nedeniyle türetilmiş çap ayrıntısı taşımamalı`);
+}
+const chihirosSmartPowerStrip = chihiros.find((entry) => entry.model === "Smart Power Strip — EU Plug");
+assert.equal(chihirosSmartPowerStrip?.powerW, undefined, "Smart Power Strip azami anahtarlama yükü cihaz tüketimi gibi işlenmemeli");
+assert.match(chihirosSmartPowerStrip?.specifications ?? "", /dört bağımsız priz.*toplam 30 W.*3000 W/, "Smart Power Strip resmî çıkış ve yük verilerini taşımalı");
+for (const model of ["Dosing Flow Adapter — 12/16 mm","Dosing Flow Adapter — 16/22 mm","Sand Flattener","Extendable 3D Net S","Extendable 3D Net L","Double-Sided Tank Cleaning Cloth","Adjustable Holder for A II Series Lights","Scissors Pro Straight 17 cm","Scissors Pro Wavy 28 cm","Scissors Spring Pro","Straight Tweezers Max 30 cm","Straight Tweezers Pro 27 cm"]) {
+  const item = chihiros.find((entry) => entry.model === model);
+  assert.equal(item?.passiveComponent, true, `${model} aktif cihaz veya kapasite ekipmanı gibi davranmamalı`);
+  assert.equal(item?.powerW, undefined, `${model} için güç değeri uydurulmamalı`);
+}
+const chihirosDoctor5 = chihiros.find((entry) => entry.model === "Doctor 5");
+assert.equal(chihirosDoctor5?.category, "other", "Doctor 5 filtre veya UV kapasitesine karışmamalı");
+assert.match(chihirosDoctor5?.specifications ?? "", /Plants, Fishes ve Shrimps.*sıcaklık/, "Doctor 5 yalnız resmî olarak doğrulanan mod ve gösterge bilgisini taşımalı");
+assert.equal(chihirosDoctor5?.recommendedMaxL, undefined, "Doctor 5 için yayımlanmayan akvaryum kapasitesi tahmin edilmemeli");
 for (const model of ["WRGB II Pro 60", "WRGB II Pro 120", "Dosing Pump System (4 Head)", "Dosing Pump Mate (2 Head)", "Heater Pro 12/16 mm (EU)", "Heater Pro 16/22 mm (EU)", "Doctor Mate", "Digital TDS / Temperature Tester Pen", "CO₂ Spiral Bubble Counter", "Nano CO₂ Diffuser", "CO₂ Drop Checker"]) {
   assert(chihiros.some((item) => item.model === model), `Chihiros ${model} güncel ürün ailesinde bulunduğu için katalogda yer almalı`);
+}
+for (const model of ["A II Max 301", "A II Max 451", "A II Max 601", "A II Max 801", "A II Max 901", "A II Max 1201"]) {
+  const item = chihiros.find((entry) => entry.model === model);
+  assert.equal(item?.sourceUrl, "https://www.chihirosaquaticstudio.com/products/chihiros-a-ii-max-led-light", `Chihiros ${model} resmî model seçeneğine bağlanmalı`);
+  assert.equal(item?.powerW, undefined, `Chihiros ${model} için resmî sayfada yayımlanmayan güç değeri tahmin edilmemeli`);
+}
+for (const [model,powerW] of [["30x30",4.7],["35x30",5.6],["45x30",7.5],["50x35",9.9],["60x36",12.8],["60x45",12.8],["90x45",19.6]]) {
+  const item = chihiros.find((entry) => entry.model === `White LED Background ${model} cm`);
+  assert.deepEqual([item?.category,item?.powerW], ["lighting",powerW], `Chihiros White LED Background ${model} resmî güç değerini taşımalı`);
+  assert(item?.sourceUrl.includes("chihiros-white-led-background-lightscreen"), `Chihiros White LED Background ${model} doğrudan ürün kaynağına bağlanmalı`);
+}
+for (const model of ["Metal Inflow Outflow Pro M Pro", "Metal Inflow Outflow Pro L Pro", "Metal Inflow Outflow Set S", "Metal Inflow Outflow Set M", "Metal Inflow Outflow Set L", "Metal Inflow Outflow Set ML", "Lily Type Glass Outflow M — 12/16 mm", "Lily Type Glass Outflow L — 16/22 mm", "Poppy Type Glass Outflow M — 12/16 mm", "Poppy Type Glass Outflow L — 16/22 mm", "U Type Glass Inflow M — 12/16 mm", "U Type Glass Inflow L — 16/22 mm", "Spiral Type Skimmer Glass Inflow M — 12/16 mm", "Spiral Type Skimmer Glass Inflow L — 16/22 mm"]) {
+  const item = chihiros.find((entry) => entry.model === model);
+  assert.deepEqual([item?.category,item?.passiveComponent,item?.ratedFlowLph], ["other",true,undefined], `Chihiros ${model} pasif hat aksesuarı olarak kalmalı`);
+  assert(item?.sourceUrl.includes("bbs.chihirosaquaticstudio.com/threads/chihiros-inflow-outflow"), `Chihiros ${model} resmî ürün duyurusuna bağlanmalı`);
+}
+for (const model of ["Doctor Mesh Reactor Replacement — Doctor Mate", "B Series Shades with Mirror — B 20", "B Series Shades with Mirror — B 30", "B Series Shades with Mirror — B 60", "B Series Shades with Mirror — B 80", "B Series Shades with Mirror — B 90", "B Series Shades with Mirror — B 120", "Wabi Kusa Hanger (3 pcs)", "C II Base Stand", "C II RGB Base Stand", "WRGB II / 10th Edition Hanging Rope Kit", "WRGB II Slim Hanging Rope Kit", "WRGB II Pro Non-adjustable Metal Stand", "A II Max Acrylic Stand", "A II Max Hanging Rope Kit", "WRGB II Pro Shades with Mirror — 30 cm", "WRGB II Pro Shades with Mirror — 40 cm", "RGB VIVID II / VIVID 2 Mate Shades with Mirror — Black", "RGB VIVID II / VIVID 2 Mate Shades with Mirror — Silver", "WRGB II / WRGB II Slim Shades with Mirror — 30 cm"]) {
+  const item = chihiros.find((entry) => entry.model === model);
+  assert.deepEqual([item?.category,item?.passiveComponent,item?.powerW], ["other",true,undefined], `Chihiros ${model} pasif aksesuar olarak kalmalı`);
+  assert(item?.sourceUrl.startsWith("https://www.chihirosaquaticstudio.com/products/"), `Chihiros ${model} doğrudan resmî ürün sayfasına bağlanmalı`);
+}
+const chihirosLedPanelReplacements = chihiros.filter((entry) => entry.model.startsWith("LED Panel Replacement — "));
+assert.equal(chihirosLedPanelReplacements.length, 34, "Chihiros resmî LED panel yedek parçası 34 uyumlu model seçeneğini korumalı");
+assert(chihirosLedPanelReplacements.every((entry) => entry.category === "other" && entry.passiveComponent === true && entry.powerW === undefined), "Chihiros LED panel yedekleri ana aydınlatma gücüne karışmamalı");
+assert(chihirosLedPanelReplacements.every((entry) => entry.sourceUrl.endsWith("/chihiros-led-beads-panel-aluminum-substrate-replacement")), "Chihiros LED panel yedeklerinin tamamı doğrudan resmî ürün sayfasına bağlanmalı");
+for (const compatibleModel of ["WRGB II 30 (Discontinued)", "WRGB II 120 10th Edition", "WRGB II Slim 90", "WRGB II Pro 80", "RGB VIVID II Mini", "A II 351 (Discontinued)", "A II 1201"]) {
+  assert(chihirosLedPanelReplacements.some((entry) => entry.model === `LED Panel Replacement — ${compatibleModel}`), `Chihiros ${compatibleModel} LED panel seçeneği katalogda bulunmalı`);
+}
+for (const model of ["A II 351 (Discontinued)", "A II 361 (Discontinued)", "A II 451 (Discontinued)", "A II 501", "A II 1201", "B 60"]) {
+  const item = chihiros.find((entry) => entry.model === model);
+  assert.equal(item?.category, "lighting", `Chihiros ${model} resmî model uyumluluk kaydıyla aydınlatma kataloğunda bulunmalı`);
+  assert(item?.additionalSourceUrls?.some((url) => url.startsWith("https://www.chihirosaquaticstudio.com/products/")), `Chihiros ${model} ikinci resmî doğrulama bağlantısını taşımalı`);
+  assert.equal(item?.powerW, undefined, `Chihiros ${model} için model bazında yayımlanmayan güç değeri tahmin edilmemeli`);
+}
+const chihirosPowerSupplies = chihiros.filter((entry) => entry.model.startsWith("Power Supply "));
+assert.equal(chihirosPowerSupplies.length, 24, "Chihiros güç kaynakları 12 elektriksel konfigürasyonun Standard ve Waterproof seçeneklerini taşımalı");
+assert(chihirosPowerSupplies.every((entry) => entry.category === "other" && entry.passiveComponent === true && entry.powerW === undefined), "Chihiros yedek güç kaynakları ana cihaz tüketimi gibi değerlendirilmemeli");
+for (const model of ["Power Supply 12V 1A — Standard", "Power Supply 12V 5A — Waterproof", "Power Supply 36V 0.8A — Standard", "Power Supply 36V 5.5A — Waterproof"]) {
+  const item = chihirosPowerSupplies.find((entry) => entry.model === model);
+  assert(item?.sourceUrl.endsWith("/chihiros-power-supply-replacement"), `Chihiros ${model} doğrudan resmî ürün sayfasına bağlanmalı`);
+  assert.match(item?.specifications ?? "", /EU, UK, US ve AU/, `Chihiros ${model} ülkeye göre priz seçeneklerini tek üründe açıklamalı`);
+}
+for (const [model,powerW,lumen] of [["C201",7,750],["C251",10,1150],["C301",14,1500],["C361",18,1850]]) {
+  const item = chihiros.find((entry) => entry.model === model);
+  assert.deepEqual([item?.category,item?.powerW], ["lighting",powerW], `Chihiros ${model} resmî güç değerini taşımalı`);
+  assert.match(item?.specifications ?? "", new RegExp(`${lumen} lm`), `Chihiros ${model} resmî lümen değerini taşımalı`);
+  assert(item?.sourceUrl.startsWith("https://www.chihirosaquaticstudio.com/products/chihiros-c"), `Chihiros ${model} doğrudan resmî arşiv ürününe bağlanmalı`);
+}
+const chihirosNova1 = chihiros.find((entry) => entry.model === "Nova 1");
+assert.deepEqual([chihirosNova1?.category,chihirosNova1?.powerW,chihirosNova1?.recommendedTankLengthCm], ["lighting",126,[45,60]], "Chihiros Nova 1 resmî 126 W ve 45–60 cm verilerini taşımalı");
+assert.match(chihirosNova1?.specifications ?? "", /3800 lm · 61 LED/, "Chihiros Nova 1 resmî ışık akısı ve LED sayısını taşımalı");
+assert(chihirosNova1?.sourceUrl.includes("chihirosaquaticstudio.com/blogs/"), "Chihiros Nova 1 resmî üretici yazısına bağlanmalı");
+const chihirosArchivedTools = chihiros.filter((entry) => ["Wavy Scissor 21 cm", "Curved Tweezer 33 cm", "Curved Tweezer 25 cm", "Straight Tweezer 33 cm", "Straight Tweezer 25 cm", "Algae Scraper 65 cm", "Curved Scissor 21 cm", "Straight Scissor 21 cm", "Pipe Brush One Head 60 cm", "Pipe Brush Two Heads 155 cm", "Stainless Steel Tool Holder 24 cm", "Magnet Cleaner Mini", "Magnet Cleaner Nano", "Garden Mat"].includes(entry.model));
+assert.equal(chihirosArchivedTools.length, 14, "Chihiros resmî arşivindeki bakım araçları ve iki gerçek mıknatıslı temizleyici seçeneği katalogda bulunmalı");
+assert(chihirosArchivedTools.every((entry) => entry.category === "other" && entry.passiveComponent === true), "Chihiros bakım araçları cihaz kapasitesine karışmamalı");
+for (const model of ["Commander 1 Bluetooth Controller", "Manual Dimmer", "Wi-Fi Hub", "CO₂ Regulator Solenoid Controller"]) {
+  const item = chihiros.find((entry) => entry.model === model);
+  assert(item?.sourceUrl.startsWith("https://www.chihirosaquaticstudio.com/products/"), `Chihiros ${model} resmî ürün arşivine bağlanmalı`);
+  assert.equal(item?.passiveComponent, true, `Chihiros ${model} bağımsız cihaz kapasitesi üretmemeli`);
+}
+for (const model of ["Doctor 4th Gen Nano (Bluetooth)", "Doctor 4th Gen 125L+ (Bluetooth)", "Doctor 4th Gen 125L+ (Touch Control)"]) {
+  const item = chihiros.find((entry) => entry.model === model);
+  assert.equal(item?.category, "other", `Chihiros ${model} filtre veya UV kapasitesi gibi değerlendirilmemeli`);
+  assert(item?.sourceUrl.includes("chihiros-doctor-4th-gen"), `Chihiros ${model} doğrudan resmî arşiv ürününe bağlanmalı`);
 }
 
 const ista = equipmentCatalog.filter((item) => item.brand === "ISTA");
@@ -1239,6 +1584,8 @@ for (const item of [...netleaEquipment.filter((entry) => entry.verifiedAt === "2
   assert.match(item.verifiedAt, /^\d{4}-\d{2}-\d{2}$/, `Netlea ${item.model} ISO doğrulama tarihi taşımalı`);
 }
 
+const creaquaEquipment = equipmentCatalog.filter((entry) => entry.brand === "Creaqua");
+assert.equal(creaquaEquipment.length, 45, "Creaqua aydınlatma, CO₂, filtrasyon, bakım ve su hazırlama portföyü 45 seçenek içermeli");
 for (const [model, power, length] of [["Sigma PW 5,5 W", 5.5, [35, 55]], ["Sigma PW 16,5 W", 16.5, [90, 115]], ["Nano Elite Black 17 W", 17, undefined], ["Nano S Black 6,5 W", 6.5, [10, 50]]]) {
   const item = equipmentCatalog.find((entry) => entry.brand === "Creaqua" && entry.model === model);
   assert.equal(item?.powerW, power, `Creaqua ${model} güncel üretici gücünü taşımalı`);
@@ -1254,12 +1601,146 @@ for (const [model, power, length] of [["Delta Marine 35", 15, [35, 55]], ["Delta
   assert.deepEqual([item?.category, item?.powerW, item?.recommendedTankLengthCm], ["lighting", power, length], `Creaqua ${model} ayrı ve doğrulanmış resif aydınlatması olmalı`);
 }
 const creaquaCare = careProductCatalog.filter((item) => item.brand === "Creaqua");
-assert.equal(creaquaCare.length, 22, "Creaqua gübre, su düzenleyici, bakteri, filtre medyası ve kum aileleri 22 ayrı ürün içermeli");
+assert.equal(creaquaCare.length, 101, "Creaqua akvaryum, mobilya, teraryum, tasarım, bakım ve taban portföyü 101 ayrı seçenek içermeli");
 for (const [model, category] of [["Plant Nutrition Macro 250 ml", "fertilizer"], ["GH Plus 250 ml", "water_conditioner"], ["Cycle Booster", "bacteria"], ["Hivex", "filter_media"], ["Cosmetics River Sand 3 L", "substrate"]]) {
   const item = creaquaCare.find((entry) => entry.model === model);
   assert.equal(item?.category, category, `Creaqua ${model} doğru bakım kategorisinde bulunmalı`);
   assert.match(item?.sourceUrl || "", /^https:\/\//, `Creaqua ${model} doğrulama kaynağı taşımalı`);
 }
+for (const model of ["Askı Profili 120 × 20 cm", "Askı Profili 150 × 25 cm", "Chrome Pipe 12/16 mm", "Chrome Pipe 16/22 mm", "Chrome Pipe 16/22 mm emiş – 12/16 mm basış", "Pipe Holder"]) {
+  const item = creaquaEquipment.find((entry) => entry.model === model);
+  assert.deepEqual([item?.category, item?.passiveComponent, item?.ratedFlowLph], ["other", true, undefined], `Creaqua ${model} pasif aksesuar olmalı ve filtre debisi taşımamalı`);
+  assert.equal(item?.verifiedAt, "2026-09-14", `Creaqua ${model} güncel doğrulama tarihini taşımalı`);
+}
+const creaquaCompact = creaquaEquipment.find((entry) => entry.model === "Compact RO Sistemi");
+assert.deepEqual([creaquaCompact?.category, creaquaCompact?.passiveComponent, creaquaCompact?.ratedFlowLph, creaquaCompact?.recommendedMaxL], ["other", true, undefined, undefined], "Creaqua Compact günlük ozmos üretimini akvaryum filtre debisi veya hacim kapasitesi gibi kullanmamalı");
+const creaquaExpress = creaquaEquipment.find((entry) => entry.model === "Express Su Değişim Ön Filtresi");
+assert.deepEqual([creaquaExpress?.category, creaquaExpress?.passiveComponent, creaquaExpress?.ratedFlowLph, creaquaExpress?.recommendedMaxL], ["other", true, undefined, undefined], "Creaqua Express ön filtresi akvaryum filtre debisi veya hacim kapasitesi gibi kullanılmamalı");
+const creaquaEraser = creaquaEquipment.find((entry) => entry.model === "Eraser Brick");
+assert.deepEqual([creaquaEraser?.category, creaquaEraser?.passiveComponent, creaquaEraser?.powerW], ["other", true, undefined], "Creaqua Eraser Brick pasif bakım aracı olmalı ve cihaz gücü taşımamalı");
+for (const [model, category, dimensions] of [
+  ["Crystal 45 30×30×30 cm", "tank", [30,30,30]],
+  ["Crystal Classic 150×50×50 cm", "tank", [150,50,50]],
+  ["Stand 45 120×55×80 cm", "cabinet", [120,55,80]],
+  ["Bitkili Teraryum 60×60×90 cm", "terrarium", [60,60,90]],
+  ["Reptile Teraryum 100×50×60 cm", "terrarium", [100,50,60]],
+  ["Desktop Nano Stand 50×30×10 cm", "cabinet", [50,30,10]],
+]) {
+  const item = creaquaCare.find((entry) => entry.model === model);
+  assert.equal(item?.category, category, `Creaqua ${model} doğru yapısal kategoride bulunmalı`);
+  assert.deepEqual(item?.dimensionsCm, dimensions, `Creaqua ${model} resmî ölçülerini taşımalı`);
+  assert.equal(item?.verifiedAt, "2026-09-14", `Creaqua ${model} güncel doğrulama tarihini taşımalı`);
+}
+assert.deepEqual(creaquaCare.find((entry) => entry.model === "AquaMat 90×50 cm")?.footprintCm, [90,50], "Creaqua AquaMat resmî taban ölçüsünü taşımalı");
+for (const model of ["REVEX 100 ml", "REVEX 250 ml", "REVEX 500 ml", "Clarifier Filter Pad 50×25 cm", "Media Bag 15×15 cm"]) {
+  const item = creaquaCare.find((entry) => entry.model === model);
+  assert.equal(item?.category, "filter_media", `Creaqua ${model} filtre medyası veya filtre aksesuarı ürünlerinde bulunmalı`);
+  assert.equal(item?.verifiedAt, "2026-09-14", `Creaqua ${model} güncel doğrulama tarihini taşımalı`);
+}
+for (const model of ["Ribbed Wood", "Spotted Wood", "Black Flame", "Red Velt", "Arbour Wood", "Bucelog", "Twigy Dark", "Twigy Light", "Twigy Mix", "Twigy Large Dark", "Twigy Large Light", "MossRock", "Frodo Stone", "Gray Moon Stone", "Orange Moon Stone", "Galapagos Rock", "Keitir Stone", "Plantie Kahverengi 500 cm", "Plantie Yeşil 500 cm"]) {
+  const item = creaquaCare.find((entry) => entry.model === model);
+  assert.equal(item?.category, "decoration", `Creaqua ${model} tasarım/bakım ürünlerinde bulunmalı`);
+  assert.match(item?.sourceUrl || "", /^https:\/\/www\.creaqua\.com\.tr\//, `Creaqua ${model} doğrudan resmî kaynağa bağlı olmalı`);
+  assert.equal(item?.verifiedAt, "2026-09-14", `Creaqua ${model} güncel doğrulama tarihini taşımalı`);
+}
+for (const model of ["Alder Cones", "Kurrajong Pods", "Banana Leaves", "Just Clear 250 ml"]) {
+  const item = creaquaCare.find((entry) => entry.model === model);
+  assert.equal(item?.category, "water_conditioner", `Creaqua ${model} su düzenleyici ürünlerinde bulunmalı`);
+  assert.equal(item?.verifiedAt, "2026-09-14", `Creaqua ${model} güncel doğrulama tarihini taşımalı`);
+}
+const creaquaHoseColors = ["Şeffaf", "Siyah", "Metalik Gri", "Cam Mavisi"];
+for (const color of creaquaHoseColors) {
+  const item = creaquaEquipment.find((entry) => entry.model === `CO₂ Hortumu 2 m ${color}`);
+  assert.deepEqual([item?.category, item?.passiveComponent, item?.sourceUrl, item?.verifiedAt], ["co2", true, "https://www.creaqua.com.tr/tr/co2-sistemi/15-co2-hortumu.html", "2026-09-14"], `Creaqua ${color} CO₂ hortumu resmî ve pasif seçenek olmalı`);
+}
+const creaquaBrownSand = creaquaCare.find((entry) => entry.model === "Cosmetics Brown Sand");
+assert.equal(creaquaBrownSand?.category, "substrate", "Creaqua Brown kozmetik kum taban ürünlerinde bulunmalı");
+assert.match(creaquaBrownSand?.description || "", /paket hacmi yayımlamadığı/, "Creaqua Brown için yayımlanmayan paket miktarı tahmin edilmemeli");
+
+const creaquaAll = [...creaquaEquipment, ...creaquaCare];
+const creaquaOfficialFamilies = [
+  "Crystal 45", "Stand 45", "AquaMat", "Askı Profili", "Bubblegun", "CO₂ İndikatör Sıvısı", "CO₂ Hortumu 2 m", "Macro", "Micro", "Potassium", "GH Plus", "EXALG",
+  "Chrome Pipe", "Pipe Holder", "Ribbed Wood", "MossRock", "Frodo Stone", "Cosmetics Natural Sand", "Delta PW", "Nano Elite", "Nano S", "Spotted Wood", "Black Flame", "Compact RO",
+  "Express Su", "Cosmetics Beige Sand", "Cosmetics Black Sand", "Cosmetics White Sand", "Cosmetics River Sand", "Low Tech", "Cocoon", "Damla Sayacı", "Hivex", "Gray Moon Stone", "Orange Moon Stone", "Galapagos Rock",
+  "Cosmetics Brown Sand", "Plantie", "REVEX", "Active Carbon", "Red Velt", "Keitir Stone", "CO₂ İndikatör Seti", "Nitrogen", "Phosphate", "Iron", "Eraser Brick", "Clarifier Filter Pad",
+  "Six Up", "Desktop Nano Stand", "Media Bag", "Purifier Filter Pad", "Crystal Classic", "Avant Guard", "Regülatörü", "Just Clear", "Cycle Booster", "Bitkili Teraryum", "Arbour Wood", "Twigy Dark",
+  "Bucelog", "Twigy Large", "Alpha RGB+W", "Sigma PW", "Delta Marine", "Alpha PW", "Reptile Teraryum", "Alder Cones", "Kurrajong Pods", "Banana Leaves",
+];
+assert.equal(creaquaOfficialFamilies.length, 70, "Creaqua güncel ürün dizini 70 aileden oluşmalı");
+for (const family of creaquaOfficialFamilies) {
+  assert(creaquaAll.some((entry) => entry.model.includes(family)), `Creaqua resmî 70 aile kapsamı ${family} kaydını içermeli`);
+}
+
+const orionLed = equipmentCatalog.filter((entry) => entry.brand === "OrionLED");
+assert.equal(orionLed.length, 164, "OrionLED güncel resmî akvaryum aydınlatma aileleriyle 164 ayrı seçenek içermeli");
+for (const [prefix, expectedCount] of [
+  ["Grolux A ", 8],
+  ["Grolux T8-", 5],
+  ["C ", 14],
+  ["D-REEF ", 3],
+  ["D-RGBW ", 14],
+]) {
+  assert.equal(orionLed.filter((entry) => entry.model.startsWith(prefix)).length, expectedCount, `OrionLED ${prefix.trim()} seçenek sayısı resmî tabloyla aynı olmalı`);
+}
+for (const model of ["Nano Arc", "Nano M1-B", "Nano C Reef", "Nano Grolux"]) {
+  const item = orionLed.find((entry) => entry.model === model);
+  assert.equal(item?.verifiedAt, "2026-09-14", `OrionLED ${model} güncel doğrulama tarihini taşımalı`);
+  assert.match(item?.sourceUrl || "", /^https:\/\/orionled\.com\.tr\/urun\//, `OrionLED ${model} doğrudan resmî ürün kaynağına bağlanmalı`);
+}
+assert.deepEqual(
+  [orionLed.find((entry) => entry.model === "Grolux T8-60")?.powerW, orionLed.find((entry) => entry.model === "Grolux T8-60")?.recommendedTankLengthCm],
+  [11, [65, 80]],
+  "OrionLED Grolux T8-60 resmî güç ve akvaryum uzunluğu değerlerini taşımalı",
+);
+assert.deepEqual(
+  [orionLed.find((entry) => entry.model === "D-REEF 90")?.powerW, orionLed.find((entry) => entry.model === "D-REEF 90")?.recommendedTankLengthCm],
+  [100, [90, 100]],
+  "OrionLED D-REEF 90 resmî güç ve akvaryum uzunluğu değerlerini taşımalı",
+);
+
+for (const model of ["Nano M-1 Karışık Renkli", "Nano M-2", "Nano M-3", "Fanus & Nano Gooseneck 5V", "Fanus Mini LED Siyah"]) {
+  const item = orionLed.find((entry) => entry.model === model);
+  assert.equal(item?.verifiedAt, "2026-09-14", "OrionLED "+model+" güncel doğrulama tarihini taşımalı");
+  assert.match(item?.sourceUrl || "", /^https:\/\/orionled\.com\.tr\/urun\//, "OrionLED "+model+" doğrudan resmî ürün kaynağına bağlanmalı");
+}
+assert.equal(orionLed.filter((entry) => entry.model.startsWith("Plant A ")).length, 14, "OrionLED Plant A resmî tabloda yayımlanan 14 boy seçeneğini içermeli");
+assert(orionLed.filter((entry) => entry.model.startsWith("Plant A ")).every((entry) => entry.powerW === undefined && entry.specifications.includes("güç yayımlanmıyor")), "OrionLED Plant A için yayımlanmayan güç değeri tahmin edilmemeli");
+assert.equal(orionLed.filter((entry) => entry.model.startsWith("SPOT 24V 12W ")).length, 3, "OrionLED SPOT resmî 3000K, 4000K ve 6500K seçeneklerini ayrı ayrı içermeli");
+assert.equal(orionLed.filter((entry) => entry.model.startsWith("NANO SPOT 5V 3W ")).length, 3, "OrionLED NANO SPOT resmî 3000K, 4000K ve 6500K seçeneklerini ayrı ayrı içermeli");
+assert.equal(orionLed.filter((entry) => /^B-\d+$/.test(entry.model)).length, 8, "OrionLED B serisi resmî sekiz ölçü seçeneğini içermeli");
+assert.equal(orionLed.filter((entry) => entry.model.startsWith("C RGB-W ")).length, 7, "OrionLED C RGB-W serisi resmî yedi ölçü seçeneğini içermeli");
+assert.equal(orionLed.filter((entry) => entry.model.startsWith("Bluetooth RGB ")).length, 14, "OrionLED Bluetooth RGB serisi resmî 14 ölçü seçeneğini içermeli");
+assert(orionLed.filter((entry) => entry.model.startsWith("Bluetooth RGB ")).every((entry) => entry.powerW === undefined && entry.specifications.includes("güç yayımlanmıyor")), "OrionLED Bluetooth RGB için yayımlanmayan güç değeri tahmin edilmemeli");
+assert.deepEqual(
+  [orionLed.find((entry) => entry.model === "B-80")?.powerW, orionLed.find((entry) => entry.model === "B-80")?.recommendedTankLengthCm],
+  [36, [85, 90]],
+  "OrionLED B-80 resmî güç ve akvaryum uzunluğu değerlerini taşımalı",
+);
+assert.equal(orionLed.filter((entry) => entry.model.includes("Extreme B 80")).length, 0, "Eski tekil Extreme B 80 kaydı tam B serisiyle yinelenmemeli");
+assert.equal(orionLed.filter((entry) => entry.model.startsWith("Aquaslim Grolux Fire ")).length, 8, "OrionLED Aquaslim Grolux Fire resmî sekiz boy seçeneğini içermeli");
+assert.equal(orionLed.filter((entry) => entry.model.startsWith("Aquaslim Grolux Ice ")).length, 8, "OrionLED Aquaslim Grolux Ice resmî sekiz boy seçeneğini içermeli");
+assert.equal(orionLed.filter((entry) => entry.model.startsWith("Aquaslim Royal Mavi ")).length, 11, "OrionLED Aquaslim Royal Mavi mağazada seçilebilen 11 boyu içermeli");
+assert.equal(orionLed.filter((entry) => entry.model.startsWith("Shade Mirror D-")).length, 14, "OrionLED Shade Mirror mağazada seçilebilen yedi boy ve iki rengi içermeli");
+for (const model of ["Aquaslim Royal Mavi 35", "Aquaslim Royal Mavi 65"]) {
+  const item = orionLed.find((entry) => entry.model === model);
+  assert.equal(item?.powerW, undefined, "OrionLED "+model+" için resmî tabloda yayımlanmayan güç tahmin edilmemeli");
+  assert(item?.specifications.includes("güç yayımlanmıyor"), "OrionLED "+model+" eksik teknik değeri kullanıcıya açıklamalı");
+}
+for (const color of ["Gri", "Siyah"]) {
+  const item = orionLed.find((entry) => entry.model === "Shade Mirror D-115 "+color);
+  assert.equal(item?.recommendedTankLengthCm, undefined, "Shade Mirror D-115 "+color+" için D-120 tablosundan uyumluluk tahmin edilmemeli");
+  assert(item?.specifications.includes("D-120") && item?.specifications.includes("çeliştiği"), "Shade Mirror D-115 "+color+" mağaza ve açıklama çelişkisini göstermeli");
+}
+for (const family of [
+  "Aquaslim Grolux Fire", "Aquaslim Grolux Ice", "Aquaslim Royal Mavi", "Bluetooth RGB",
+  "Shade Mirror", "Nano M1-B", "B-20", "C 30 Black / Grey", "C RGB-W 30", "D-REEF 45",
+  "D-RGBW 35 Black", "D-RGBW 35 Grey", "Plant E 20", "Fanus & Nano Gooseneck", "Fanus Mini",
+  "Grolux A", "Grolux T8", "Nano Arc", "Nano C Reef", "Nano Grolux", "Nano M-1",
+  "Nano M-2", "Nano M-3", "NANO SPOT 5V", "Plant A", "SPOT 24V",
+]) {
+  assert(orionLed.some((entry) => entry.model.includes(family)), "OrionLED güncel ürün ailesi katalogda bulunmalı: "+family);
+}
+assert(orionLed.some((entry) => entry.model === "Aquaslim 20"), "OrionLED Aquaslim 4 Renk ailesi katalogda bulunmalı");
 
 const waterbear = equipmentCatalog.filter((entry) => entry.brand === "WaterBear");
 assert.equal(waterbear.length, 34, "WaterBear'ın doğrulanan filtre, hava motoru, pompa ve bakım ekipmanı portföyü 34 model içermeli");

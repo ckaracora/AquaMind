@@ -22,7 +22,7 @@ export function MobileNav() {
         <nav className="space-y-1 overflow-y-auto">
           {allNavigationItems.map(({key,label,href})=>{const Icon=navIcons[key];const active=href==="/"?pathname==="/":pathname.startsWith(href);return <a key={href} href={href} className={`flex items-center gap-3 rounded-xl px-3 py-3 text-[13px] font-semibold ${active?"bg-aqua/10 text-aqua":"text-[#91a3aa]"}`}><Icon size={18}/>{label}{active&&<span className="ml-auto size-1.5 rounded-full bg-aqua"/>}</a>})}
         </nav>
-        <div className="mt-auto rounded-xl bg-white/[.025] p-3"><p className="text-xs font-bold">Mert Kaya</p><p className="mt-1 text-[10px] text-[#647981]">Ücretsiz plan</p></div>
+        <div className="mt-auto rounded-xl bg-white/[.025] p-3"><p className="text-xs font-bold">Canberk</p><p className="mt-1 text-[10px] text-[#647981]">Ücretsiz plan</p></div>
       </aside>
     </div>}
     <nav aria-label="Mobil ana menü" className="fixed inset-x-0 bottom-0 z-40 flex h-[74px] items-center justify-around border-t border-white/10 bg-[#0a171e]/95 px-3 pb-[env(safe-area-inset-bottom)] backdrop-blur-xl lg:hidden">

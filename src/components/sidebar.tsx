@@ -18,7 +18,7 @@ export function Sidebar() {
     </nav>
     <div className="mt-auto border-t border-white/[.06] pt-4">
       <a href={settingsNavigationItem.href} className={`flex items-center gap-3 rounded-xl px-3 py-3 text-[13px] font-semibold ${pathname.startsWith(settingsNavigationItem.href)?"bg-aqua/10 text-aqua":"text-[#82969e]"}`}><Settings size={18}/>{settingsNavigationItem.label}</a>
-      <div className="mt-3 flex items-center gap-3 rounded-xl bg-white/[.025] p-3"><div className="grid size-9 place-items-center rounded-full bg-gradient-to-br from-aqua to-cyan-700 text-xs font-extrabold text-ink">MK</div><div><p className="text-xs font-bold">Mert Kaya</p><p className="text-[10px] text-[#647981]">Ücretsiz plan</p></div></div>
+      <div className="mt-3 flex items-center gap-3 rounded-xl bg-white/[.025] p-3"><div className="grid size-9 place-items-center rounded-full bg-gradient-to-br from-aqua to-cyan-700 text-xs font-extrabold text-ink">C</div><div><p className="text-xs font-bold">Canberk</p><p className="text-[10px] text-[#647981]">Ücretsiz plan</p></div></div>
     </div>
   </aside>;
 }
