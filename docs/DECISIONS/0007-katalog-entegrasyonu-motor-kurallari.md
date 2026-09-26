@@ -1,7 +1,7 @@
 # 0007 — Katalog entegrasyonu: yaşam ortamı, tuzluluk, ek hacim ve yardımcı filtre kuralları
 
 - Tarih: 2026-09-24
-- Durum: Önerildi — ürün sahibi (`buraksenfx`) beş kuralı 2026-09-24'te açıkça onayladı; `codex/catalog-integration` dalında Codex denetimi, pull request ve `main` birleştirmesi bekliyor. `main` dalına birleştirilene kadar kabul edilmiş sayılmaz
+- Durum: Önerildi — ürün sahibi (`buraksenfx`) beş kuralı 2026-09-24'te açıkça onayladı; Codex denetimi temiz geçti ve PR #11 açıldı; `main` birleştirmesi bekliyor. `main` dalına birleştirilene kadar kabul edilmiş sayılmaz
 
 ## Bağlam
 
@@ -24,7 +24,7 @@ Motor kataloğu içe aktarmamaya devam eder. Su türü varsayılanı motor için
 ## Doğrulama
 
 - Pakete taşınan motor, aynı birleşik katalog üzerinde dalın özgün motoruyla 1020 altın vakanın tamamında birebir aynı çıktıyı verdi.
-- Altın fikstür, ürün sahibi onayından sonra yeniden üretildi (604 vakadan 1020 vakaya); birleştirme commit'inden ayrı bir commit'te kaydedilmesi planlandı. Her tür kendi su türündeki akvaryumda denenir.
+- Altın fikstür, ürün sahibi onayından sonra yeniden üretildi (604 vakadan 1020 vakaya); birleştirme commit'inden ayrı bir commit'te (`0698435`) kaydedildi. Her tür kendi su türündeki akvaryumda denenir.
 - `scripts/test-health.cjs`, dalın 52 senaryosuyla değişmeden çalışır.
 
 ## Sonuçlar
