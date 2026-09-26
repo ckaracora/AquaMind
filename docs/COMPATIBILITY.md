@@ -1,6 +1,6 @@
 # AquaMind uyumluluk motoru
 
-Son güncelleme: 2026-09-02 (Phase 0B).
+Son güncelleme: 2026-09-24 (kural seti 1.1.0, katalog entegrasyonu).
 
 ## Temel kural
 
@@ -15,7 +15,7 @@ Uyumluluk puanı, alt puanlar ve bulgular yalnızca `packages/compatibility-engi
 | Uyarlayıcı | `src/lib/health-analysis.ts` | Kataloğun dört fonksiyonunu çözümleyici olarak bağlar; `analyzeAquarium`'u aynı imzayla dışa aktarır |
 | Bilgi | `src/data/catalog.ts` | Canlı ve ekipman profilleri, doğrulanmışlık kuralı |
 | Testler | `packages/compatibility-engine/test/` | Altın karşılaştırma, bağımsızlık, mevcut senaryo betiği |
-| Mevcut senaryolar | `scripts/test-health.cjs` | 35 senaryo; `pnpm verify` doğrudan, `pnpm test` alt süreç olarak çalıştırır |
+| Mevcut senaryolar | `scripts/test-health.cjs` | 52 senaryo; `pnpm verify` doğrudan, `pnpm test` alt süreç olarak çalıştırır |
 
 ## Sınır: `KnowledgeResolver`
 
@@ -47,23 +47,27 @@ Sonuç nesnesine sürüm veya bulgu kodu alanı **eklenmedi**; bu, çıktı biç
 
 ## Kural seti (mevcut sabitler)
 
-Motorun içine gömülü eşikler `RULESET_VERSION` ile sürümlenir. Mevcut sürüm 1.0.0:
+Motorun içine gömülü eşikler `RULESET_VERSION` ile sürümlenir. Mevcut sürüm 1.1.0:
 
 - Etkin hacim: net hacmin 0,85'i. Biyolojik yük = Σ(adet × yetişkin boy × atık katsayısı) / etkin hacim.
 - Filtre: nominal debinin 0,65'i etkin sayılır; hedef çevrim 5–10/saat, düşük akıntı seven türler çoğunluktaysa 3–7/saat, yük arttıkça hedef yükselir.
 - Isıtıcı: üretici hacim aralığı varsa o, yoksa 0,5–1,5 W/L bandı.
-- Uyum cezaları: sıcaklık kesişimi yok 55, pH kesişimi yok 55, akıntı çatışması 20, avlanma 60, tür akvaryumu gerektiren canlı 60, topluluk uyarısı 30.
+- Yaşam ortamı: canlının su türü (`waterTypes`; belirtilmemişse yalnızca tatlı su) akvaryum türünü içermiyorsa tehlike uyarısı verilir.
+- Alan: gereken hacim = en az hacim + (adet − 1) × birey başına ek hacim (tanımlıysa). Kaynak tank uzunluğu yayımlamıyorsa yalnızca hacim denetlenir ve bunu belirten bir uyarı gösterilir.
+- Filtre türleri: pasif parçalar filtre hesabına girmez; yardımcı filtreler (ör. yüzey skimmeri) ana filtrenin yerine geçmez, akvaryumda yalnız yardımcı filtre varsa tehlike uyarısı verilir.
+- Tuzluluk: deniz ve acı su profillerinde özgül ağırlık aralığı tanımlıdır; ölçüm yoksa uyarı, son ölçüm aralık dışındaysa tehlike uyarısı verilir.
+- Uyum cezaları: yaşam ortamı uyumsuzluğu 80, sıcaklık kesişimi yok 55, pH kesişimi yok 55, akıntı çatışması 20, avlanma 60, tür akvaryumu gerektiren canlı 60, topluluk uyarısı 30.
 - Avlanma: av, avcının yetişkin boyunun %40'ı veya altındaysa.
-- Su değeri uyumu: yalnızca son ölçümün sıcaklık ve pH'ı.
+- Su değeri uyumu: son ölçümün sıcaklığı, pH'ı ve (tanımlı profillerde) özgül ağırlığı. Amonyak, nitrit ve nitrat bu sürümde değerlendirilmez.
 - Veri güveni: doğrulanmış (kaynaklı) kayıtların güvenlik hesabına giren kayıtlara oranı.
 
-Bu sabitler Phase 0B'de değiştirilmedi ve yeni kural eklenmedi.
+Bu sabitler Phase 0B'de değiştirilmedi. 1.1.0'da katalog entegrasyonuyla yaşam ortamı, tuzluluk, birey başına ek hacim ve yardımcı filtre kuralları eklendi (bkz. `docs/DECISIONS/0007-katalog-entegrasyonu-motor-kurallari.md`).
 
 ## Değişmezlik güvencesi
 
-- `test/fixtures/golden-v1.json`: motor taşınmadan önce, `8d6a164` içeriğindeki orijinal `src/lib/health-analysis.ts` ile alınmış 604 vakalık çıktı (228 türün her biri için "sığar" ve "dar" senaryosu, 60 filtre, 30 ısıtıcı, 10 hava motoru, 45 tür çifti, tohum veri, boş akvaryum). Vakalar `test/fixtures/golden-cases.ts` ile deterministik üretilir.
+- `test/fixtures/golden-v1.json`: ilk sürümü motor taşınmadan önce, `8d6a164` içeriğindeki orijinal `src/lib/health-analysis.ts` ile alınmış 604 vakalık çıktıydı. Motor 1.1.0 ile yeniden üretildi: 1020 vaka (417 türün her biri için kendi su türünde "sığar" ve "dar" senaryosu, 60 filtre, 30 ısıtıcı, 10 hava motoru, 84 tür çifti, tohum veri, boş akvaryum). Yeniden üretimden önce, pakete taşınan kuralların `codex/catalog-capacity-batch` dalındaki (`950a70f`) özgün motorla 1020 vakanın tamamında birebir aynı çıktıyı verdiği doğrulandı. Vakalar `test/fixtures/golden-cases.ts` ile deterministik üretilir.
 - `test/golden.test.ts`: uyarlayıcının bugünkü çıktısını fikstürle `toStrictEqual` ile karşılaştırır. Fikstür yoksa test başarısız olur; sessizce yazılmaz.
-- `test/legacy-scripts.test.ts`: `scripts/test-health.cjs` betiğini alt süreç olarak çalıştırır; 35 senaryo tek kaynakta kalır, kopyalanmaz.
+- `test/legacy-scripts.test.ts`: `scripts/test-health.cjs` betiğini alt süreç olarak çalıştırır; 52 senaryo tek kaynakta kalır, kopyalanmaz.
 - `test/isolation.test.ts`: motorun katalog modüllerini içe aktarmadığını ve stub çözümleyiciyle çalıştığını gösterir.
 
 ## Motoru değiştirme kuralı

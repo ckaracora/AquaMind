@@ -27,7 +27,7 @@ export default function Dashboard() {
       </header>
       <div className="mx-auto max-w-[1440px] px-5 py-7 sm:px-8 lg:px-10 lg:py-10">
         <section className="mb-8 flex flex-col justify-between gap-4 sm:flex-row sm:items-end">
-          <div><p className="eyebrow mb-2 text-aqua">{new Intl.DateTimeFormat("tr-TR",{day:"numeric",month:"long",weekday:"long"}).format(new Date())}</p><h1 className="text-2xl font-extrabold tracking-tight sm:text-3xl">Günaydın, Mert.</h1><p className="mt-2 text-sm text-[#71858d]">Akvaryumunda bugün her şey yolunda görünüyor.</p></div>
+          <div><p className="eyebrow mb-2 text-aqua">{new Intl.DateTimeFormat("tr-TR",{day:"numeric",month:"long",weekday:"long"}).format(new Date())}</p><h1 className="text-2xl font-extrabold tracking-tight sm:text-3xl">Günaydın, Canberk.</h1><p className="mt-2 text-sm text-[#71858d]">Akvaryumunda bugün her şey yolunda görünüyor.</p></div>
           <label className="surface flex w-full items-center justify-between gap-4 px-4 py-3 text-left sm:w-auto"><div><p className="text-[10px] font-bold uppercase tracking-wider text-[#647981]">Aktif akvaryum</p><select value={aquarium.id} onChange={e=>setSelectedId(e.target.value)} className="mt-1 min-w-40 bg-transparent text-sm font-bold outline-none">{aquariums.map(item=><option key={item.id} value={item.id}>{item.name}</option>)}</select></div><ChevronRight size={16} className="text-aqua"/></label>
         </section>
 

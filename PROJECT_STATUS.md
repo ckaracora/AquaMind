@@ -1,21 +1,21 @@
 # AquaMind proje durumu
 
-Son güncelleme: 2026-09-03
+Son güncelleme: 2026-09-24
 
 ## Doğrulanmış temel
 
 - GitHub: `https://github.com/ckaracora/AquaMind`
-- Ana dal: `main` (uzak ucu `76cabd2f7fe5aab3a03b1bce4a7dd1d8f4dee8fa`, PR #9 squash merge). Yerel `main`, 2026-09-03'te `git pull --ff-only` ile `origin/main` ile senkronize edildi
+- Ana dal: `main` (uzak ucu `7b60ffb1eb01fa3e125e4a27b9dd9295b0e1d3aa`, PR #10 squash merge, 2026-09-03). Yerel `main` 2026-09-24'te `origin/main` ile aynı
 - Başlangıç commit'i: `7d8fb01 fix: approve sharp build dependency`
-- Canlı uygulama: `https://aqua-mind-three.vercel.app/` (Phase 0B ve Issue #8 değişikliklerini içeriyor; `76cabd2` için Vercel üretim dağıtımı 2026-09-03'te `success` durumuyla tamamlandı, site HTTP 200 döndürdü ve yeni derlemeyi sunuyor. Tarayıcıda arayüz kontrolü ayrıca yapılmadı)
+- Canlı uygulama: `https://aqua-mind-three.vercel.app/` (Phase 0B ve Issue #8 değişikliklerini içeriyor; en son `7b60ffb` (PR #10, yalnızca belge) için Vercel üretim dağıtımı 2026-09-03'te `success` durumuyla tamamlandı ve site 2026-09-24'te HTTP 200 döndürdü. Katalog entegrasyonu henüz canlıda değil. Tarayıcıda arayüz kontrolü ayrıca yapılmadı)
 - Görev panosu: `https://github.com/users/ckaracora/projects/1`
 - Teknoloji: Next.js 15, React 19, TypeScript, Tailwind CSS, pnpm 11.11.0 çalışma alanı, Vitest
-- `pnpm verify`: 2026-09-03 tarihinde `codex/issue-8-closeout` dalında (taban `76cabd2`) yerelde başarılı (tip denetimi, katalog akışı, 35 sağlık senaryosu, katalog denetimi, 114 Vitest testi, üretim derlemesi); Corepack üzerinden tam olarak pnpm 11.11.0 ile doğrulandı (`corepack pnpm verify`). GitHub Actions `Doğrulama` workflow'u PR #9 üzerinde ve `76cabd2` `main` push'unda başarılı (çalıştırma `33708095377`)
+- `pnpm verify`: 2026-09-24 tarihinde `codex/catalog-integration` dalında (taban `7b60ffb`, katalog birleştirmesi commit edilmeden önce) yerelde başarılı: tip denetimi, katalog akışı (1027 bakım ürünü), 52 sağlık senaryosu, hesaplayıcılar, katalog denetimi, 114 Vitest testi, üretim derlemesi; Corepack üzerinden pnpm 11.11.0 ile (`corepack pnpm verify`). GitHub Actions `Doğrulama` en son PR #10 üzerinde ve `7b60ffb` `main` push'unda başarılı (çalıştırma `33711373282`)
 - Arkadaş kurulumu: `buraksenfx` hesabı collaborator; Windows kopyasında kurulum ve tüm doğrulamalar başarılı
 
 ## Mevcut veri durumu
 
-- Kataloglar `src/data/` altında sürüm kontrollü TypeScript verisidir; Phase 0B'de tek bayt değişmedi.
+- Kataloglar `src/data/` altında sürüm kontrollü TypeScript verisidir; Phase 0B'de değişmedi. Katalog entegrasyonuyla (aşağıda; henüz `main` dalında değil) 417 canlı, 3009 ekipman ve 1027 bakım ürününe genişliyor; katalog çalışma günlüğü `docs/CATALOG_LOG.md` içinde.
 - Akvaryumlar, ölçümler, bakım, canlılar, bitkiler ve ekipmanlar şimdilik tarayıcı `localStorage` alanında saklanır. Issue #8 ile depolama katmanı doğrulama, karantina, kaydetme askısı ve günlüklü silme kazandı; `aquamind:*:v1` anahtar adları ve JSON biçimi değişmedi.
 - Alan tipleri `packages/domain` içinde tanımlıdır; uygulama `src/types/aquarium.ts` köprüsüyle aynı adları kullanır. Zod şemaları, tercihler ve `LocalExportV1` artık uygulamada da kullanılır (yükleme doğrulaması ve dışa aktarma).
 - Kullanıcı hesabı, bulut senkronizasyonu ve gerçek veritabanı henüz yoktur.
@@ -31,9 +31,11 @@ Son güncelleme: 2026-09-03
 - [x] GitHub Actions otomatik doğrulaması (Issue #2): PR #3 ile 2026-08-26'da `main` dalına birleştirildi; PR #5 ve `main` push'u üzerinde başarıyla çalıştığı 2026-09-02'de doğrulandı
 - [x] Phase 0B mimari temel (Issue #4): tamamlandı; PR #5 squash merge ile `main` dalına birleştirildi (`7e8d63b`), Issue #4 kapandı (aşağıda)
 - [x] localStorage veri bütünlüğü (Issue #8): tamamlandı; PR #9 squash merge ile `main` dalına birleştirildi (`76cabd2`), Issue #8 kapandı (aşağıda)
-- [ ] Ortak katalog araştırma tablosu hazırlanacak
+- [ ] Katalog genişletmesi (Canberk'in `codex/catalog-capacity-batch` dalı, `950a70f`): `codex/catalog-integration` dalında `main` ile birleştirildi ve yerelde doğrulandı; commit, Codex denetimi, pull request ve kullanıcı onayı bekliyor (aşağıda)
+- [ ] Uyumluluk denetimi (2026-09-24) bulgularının düzeltilmesi (aşağıda)
+- [ ] Ortak katalog araştırma tablosu şimdilik ertelendi; katalog verisi sürüm kontrollü dosyalar ve kaynak bağlantılarıyla ilerliyor (Canberk'in katalog dalındaki durum)
 - [ ] Supabase tasarımı ve geçişi: tasarım belgesi hazır (`docs/DATABASE.md`, `docs/SECURITY.md`), uygulama Phase 1
-- [ ] İki bilgisayarlı devir provası yapılacak
+- [x] İki bilgisayarlı devir provası tamamlandı (Canberk'in katalog dalındaki durum belgesinde işaretlendi)
 
 ## Phase 0B — Mimari temel (Issue #4, tamamlandı)
 
@@ -101,19 +103,46 @@ Son güncelleme: 2026-09-03
 - Bilinen riskler: zod nedeniyle paket büyümesi (yukarıda ölçüldü); silinen akvaryumlar için geri yükleme arayüzü yok (veri korunuyor, arayüz ayrı iş); tam çoklu-sekme eşzamanlılığı kapsam dışı, yalnızca aktif günlük görüldüğünde yazma engelleniyor
 - Merge sonrası belge düzeltmesi (aynı dalda yapıldı): `docs/DECISIONS/0006-yerel-depolama-butunlugu.md` durumu "Önerildi" yerine **"Kabul edildi (Issue #8) — PR #9 ile `main` dalına squash merge edildi (`76cabd2`)"** oldu; `docs/ARCHITECTURE.md` tarayıcı deposu bölümündeki "`main` dalında henüz yoktur" notu merge ve yayın gerçeğiyle değiştirildi; `docs/DATABASE.md` madde 1b "Codex yeniden denetimi bekliyor" yerine "tamamlandı — PR #9 ile birleştirildi" oldu
 
+## Katalog entegrasyonu (Canberk'in dalı `950a70f`)
+
+- Kaynak: `codex/catalog-capacity-batch`, son commit `950a70f` (2026-09-14; 13 commit, 27 Ağustos–14 Eylül). Canberk veri çekmeye devam ediyor; o dala dokunulmadı. Sonraki commit'leri ayrı bir birleştirmeyle alınacak
+- Dal: `codex/catalog-integration`, taban `main` (`7b60ffb`); `git merge --no-ff --no-commit` ile birleştirildi. Henüz commit ve push edilmedi
+- Kapsam: 417 canlı (403'ü tatlı su, 10'u acı su, 14'ü deniz profiline uygun; bazı türler birden fazla su türüne), 3009 ekipman, 1027 bakım ürünü; dalın arayüz değişiklikleri (canlı formu, menü, hesaplayıcılar) ve 52 sağlık senaryosu. `src/data/` ve `scripts/` dalla bayt bayt aynı
+- Çakışmalar (4 dosya) ve çözümleri:
+  - `src/lib/health-analysis.ts`: `main`'deki uyarlayıcı korundu. Dalın motor kuralları (yaşam ortamı, tuzluluk, birey başına ek hacim, isteğe bağlı tank uzunluğu, pasif ve yardımcı filtre) `packages/compatibility-engine/src/index.ts` içine taşındı. Taşınan motor, dalın özgün motoruyla aynı katalogda 1020 vakanın tamamında birebir aynı çıktıyı verdi. Karar kaydı: `docs/DECISIONS/0007-katalog-entegrasyonu-motor-kurallari.md`
+  - `src/types/aquarium.ts`: `main`'deki tip köprüsü korundu; dalın eklediği `specificGravity` alanı `packages/domain` tipine ve Zod şemasına eklendi
+  - `package.json`: iki tarafın betikleri birleşti; `verify` artık `scripts/test-calculators.cjs` betiğini de çalıştırıyor
+  - `PROJECT_STATUS.md`: `main`'in yapısı korundu. Dalın 119 bölümlük katalog günlüğü değiştirilmeden `docs/CATALOG_LOG.md` dosyasına taşındı (yalnızca "Sıradaki tek iş" başlığı yeniden adlandırıldı); dalın kontrol listesindeki iki durum yukarıya işlendi
+- Otomatik birleşen `src/app/settings/page.tsx` elle denetlendi: Issue #8 mantığı yerinde; tek fark profil adındaki örnek değerin "Mert Kaya"dan "Canberk"e çevrilmesi
+- Motor sürümü: `ENGINE_VERSION` ve `RULESET_VERSION` 1.1.0. Altın fikstür, ürün sahibinin 2026-09-24 onayından sonra 604 vakadan 1020 vakaya yeniden üretildi; `docs/COMPATIBILITY.md` motor değiştirme kuralı gereği birleştirme commit'inden ayrı bir commit'te kaydedilmesi planlandı. Vaka üreticisi artık her türü kendi su türünde dener, yayımlanmamış tank uzunluğunu destekler ve hava motoru vakalarını gerçek bir sünger filtreyle kurar (katalog büyüyünce ilk 60 filtre içinde sünger filtre kalmamış, vakalar sessizce dış filtreyle çalışmaya başlamıştı). Eski fikstürle ortak 523 vakanın 269'u aynı; 125'i girdisindeki katalog kaydı değiştiği için, 129'u yalnızca alan uyarısı metni ("Kayıtlı adet için minimum …") değiştiği için farklı; açıklanamayan fark yok
+- Güncellenen belgeler ve testler: `docs/COMPATIBILITY.md` (kural seti 1.1.0, 52 senaryo, fikstür), `docs/DATABASE.md` ve `docs/ARCHITECTURE.md` (katalog sayıları, betikler, doğrulama sırası); `legacy-scripts.test.ts` artık 52 senaryoyu bekliyor
+- Doğrulama: `corepack pnpm verify` başarılı (yukarıda), `git diff --check` temiz
+- Paket boyutu (bilinen maliyet): katalog istemciye gönderildiği için ilk yükleme JS'i arttı: `/livestock` 215 → 319 kB, `/equipment` 215 → 307 kB, `/aquariums/[id]/health` 216 → 310 kB, `/products` 151 → 168 kB. Kalıcı çözüm kataloğun sunucuya veya veritabanına taşınmasıdır (Phase 1–2)
+- Bilinen riskler: Aşağıdaki uyumluluk denetimi bulguları bu birleştirmeyle çözülmez; yalnızca su türü kontrolü gelir. Ana sayfa selamlaması, menü ve ayarlar her ziyaretçiye sabit "Canberk" adını gösterir (önceden sabit "Mert"). Canberk'in sonraki notları dalında `PROJECT_STATUS.md`'ye eklenirse bir sonraki birleştirmede yine çakışır; yeni katalog notları `docs/CATALOG_LOG.md`'ye yazılmalıdır
+
+## Uyumluluk denetimi (2026-09-24)
+
+- Yöntem: motor kodu satır satır okundu; akvaryumculukta cevabı bilinen 11 senaryo hem `main` hem katalog dalında çalıştırıldı; katalog otomatik tutarlılık kontrollerinden geçirildi; 189 balık türünün sıcaklık, pH ve boy değerleri FishBase kayıtlarıyla karşılaştırıldı. Denetim sırasında dosya değiştirilmedi
+- Senaryo sonuçları (doğru / kısmen / yanlış alarm / kaçırdı): `main` 0/2/2/7, katalog dalı 0/5/2/4
+- Acil (kullanıcıya yanlış güven veren): (1) ana sayfadaki su değeri kartlarının "İdeal", "Dengeli", "Normal", "Güvenli" etiketleri ve "her şey yolunda" cümlesi koda sabit yazılı; (2) amonyak, nitrit ve nitrat hiçbir yerde değerlendirilmiyor (2 ppm amonyakta su uyumu 100); (3) genel puan sekiz ölçütün ortalaması olduğu için tehlike uyarısı varken "iyi" görünebiliyor (diskus + neon: 78); (4) su türü kontrolü yok, katalog entegrasyonuyla geliyor
+- Kaçırılanlar: yüzgeç ısırma (Sumatra barb), küçük balık avlama (melek, Japon balığı) ve karides avlama (gurami) işaretsiz; tank arkadaşı uyarıları yalnızca başka tür varken çıktığı için iki erkek beta uyarısı hiç görünmüyor; alan uyarısının şiddeti hacim açığıyla artmıyor
+- Yanlış alarmlar: filtre kuralı (etkin debi %65, en az 5 çevrim/saat) üreticiyle çelişiyor; debisi ve önerilen hacmi olan 273 filtrenin 263'ü üreticinin azami hacminde "tehlike" alıyor (katalog dalında 345'te 332). Biyolojik yük eşiği 100 L'de 12 neon, 6 corydoras ve 1 vatozu "tehlike" sayıyor
+- Veri: ekipman açıklamalarındaki sayılar hesap alanlarıyla tutarlı; FishBase karşılaştırmasında bariz tür hatası bulunmadı. Ancak `main`'de 89 türün (katalog dalında 77) kaynağı bilimsel addan otomatik üretilmiş FishBase veya SeriouslyFish bağlantısı; bunların 14'ünde sıcaklık veya pH, gösterilen kaynaktan belirgin biçimde farklı. İncelenecek kayıtlar: inci pullu cichlid 24–25 °C (dal), Senegal bichir 35 cm (`main`) ve 70 cm (dal), Channa asiatica 35 cm ve 160 L (dal), Japon balığı 25 cm ve 100 L, Boyu EFU filtreleri (debi önerilen hacme eşit), "arı goby" adının iki türde olması
+- Düzeltme kuralı: katalog değerleri hafızadan değil, kaydedilen kaynaklarla düzeltilir; eşik ve davranış kararları Canberk'in akvaryumculuk görüşüyle netleştirilir
+
 ## Sıradaki tek iş
 
-Bu merge sonrası durum kapanışının Codex tarafından denetlenmesi ve kullanıcı onayı. Dal: `codex/issue-8-closeout` (GitHub'a push edildi); değişen dosyalar `PROJECT_STATUS.md`, `docs/ARCHITECTURE.md`, `docs/DATABASE.md`, `docs/DECISIONS/0006-yerel-depolama-butunlugu.md`. Pull request, `main` birleştirmesi, Vercel yayını ve dal silme yapılmadı.
+Katalog entegrasyonunun (`codex/catalog-integration`) kullanıcı onayıyla commit edilmesi (birleştirme commit'i ve ayrı bir altın fikstür commit'i), GitHub'a gönderilmesi, Codex denetimi ve pull request. `main` birleştirmesi ve üretim yayını ayrıca onay ister. Motor kurallarına `docs/COMPATIBILITY.md` gereği ürün sahibi onayı 2026-09-24'te verildi (`docs/DECISIONS/0007-katalog-entegrasyonu-motor-kurallari.md`). Ardından uyumluluk denetimindeki acil düzeltmeler ayrı görevler olarak yapılır.
 
-Ardından Phase 1A (Issue #7) — **engelli**: Docker Desktop kurulu değil ve BIOS/UEFI'de SVM Mode kapalı. Kullanıcı BIOS ayarını açıp Docker Desktop'ı kurana kadar bekliyor; bu iş için başka bir hazırlık yapılmayacak.
+Phase 1A (Issue #7) — **engelli** (2026-09-24'te yeniden doğrulandı): Docker Desktop kurulu değil ve BIOS/UEFI'de SVM Mode kapalı. Kullanıcı BIOS ayarını açıp Docker Desktop'ı kurana kadar bekliyor. Uyumluluk düzeltmeleri Docker gerektirmediği için bu sürede yapılabilir. Issue #7'ye 2026-09-16'da yazılan yorum ilgisiz bir hesabın ücretli hizmet reklamıdır; dikkate alınmamalıdır.
 
 ## Oturum sonu devir şablonu
 
-- Yapılan görev: Issue #8 merge sonrası durum temizliği ve belge düzeltmesi. PR #9 squash merge ile `main` dalına birleştirildi (`76cabd2`), `main` push'unda GitHub Actions `Doğrulama` ve Vercel üretim dağıtımı başarılı, Issue #8 kapandı. Yerel `main`, `git pull --ff-only` ile senkronize edildi, `codex/issue-8-closeout` dalı açıldı ve üç belgedeki "denetim bekliyor / `main` içinde değil / Önerildi" ifadeleri merge sonrası gerçek durumla değiştirildi
-- Değişen dosyalar: `PROJECT_STATUS.md`, `docs/ARCHITECTURE.md`, `docs/DATABASE.md`, `docs/DECISIONS/0006-yerel-depolama-butunlugu.md` (yalnızca belge; kod, katalog, betik, workflow ve diğer belgeler değişmedi)
-- Çalıştırılan kontroller: çalışma ağacı temizliği, `git fetch origin`, `origin/main` = `76cabd2` doğrulaması, `git pull --ff-only`, `corepack pnpm verify` (114 Vitest testi dahil)
+- Yapılan görev: uyumluluk ve katalog denetimi (dosya değiştirmeden) ve Canberk'in katalog dalının (`950a70f`) `main` ile birleştirilmesi: motor kurallarının pakete taşınması, çakışmaların çözümü, altın fikstürün yeniden üretimi ve belgeler
+- Değişen dosyalar: birleştirmeyle gelen katalog (`src/data/**`), betikler (`scripts/**`), arayüz (`src/app/**`, `src/components/{catalog-livestock-form,mobile-nav,sidebar}.tsx`, `src/lib/calculators.ts`) ve `docs/DATA_SOURCES.md`; çözüm için `packages/compatibility-engine/src/{index,version}.ts`, `packages/compatibility-engine/test/{legacy-scripts.test.ts,fixtures/golden-cases.ts,fixtures/golden-v1.json}`, `packages/domain/src/{aquarium,schemas}.ts`, `package.json`, `PROJECT_STATUS.md`, `docs/{COMPATIBILITY,DATABASE,ARCHITECTURE}.md`; yeni: `docs/CATALOG_LOG.md`, `docs/DECISIONS/0007-katalog-entegrasyonu-motor-kurallari.md`
+- Çalıştırılan kontroller: `tsc --noEmit`; özgün ve taşınan motorun 1020 vakada karşılaştırılması (1020/1020 aynı); eski ve yeni fikstür farklarının sınıflandırılması; `src/data` ve `scripts` klasörlerinin dalla aynı olduğunun doğrulanması; `corepack pnpm verify`; `git diff --check`
 - Sonuç: tümü başarılı
-- Bilinen hata veya risk: yukarıdaki "Bilinen riskler"
-- GitHub'a gönderildi mi: Evet. Issue #8 çalışması PR #9 ile `main` dalına birleştirildi; bu durum kapanışı ise `codex/issue-8-closeout` görev dalı olarak push edildi (pull request açılmadı, `main` birleştirilmedi)
-- Vercel'e yayımlandı mı: Evet. `76cabd2` için üretim dağıtımı `success` ve canlı uygulama (`https://aqua-mind-three.vercel.app/`) Issue #8 değişikliklerini içeriyor
-- Sonraki tek iş: bu kapanış dalının Codex denetimi ve kullanıcı onayı (yukarıda)
+- Bilinen hata veya risk: yukarıdaki "Katalog entegrasyonu" bölümündeki riskler ve "Uyumluluk denetimi"
+- GitHub'a gönderildi mi: Hayır. Birleştirme yerelde duruyor, commit edilmedi
+- Vercel'e yayımlandı mı: Hayır. Canlı uygulama (`https://aqua-mind-three.vercel.app/`) `7b60ffb` sürümünde ve katalog entegrasyonunu içermiyor
+- Sonraki tek iş: kullanıcı onayıyla commit, push, Codex denetimi ve pull request (yukarıda)

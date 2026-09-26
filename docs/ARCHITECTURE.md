@@ -9,12 +9,12 @@ Depo, kökünde çalışan Next.js 15 web uygulamasını barındıran bir pnpm �
 | Yer | İçerik | Notlar |
 |---|---|---|
 | `src/` | Next.js App Router uygulaması, bileşenler, sağlayıcı, `localStorage` katmanı | Ürün davranışı Phase 0B'de değişmedi |
-| `src/data/` | Canlı, ekipman ve bakım ürünü katalogları; içe aktarma anı bütünlük denetimleri | Yerinde kaldı, tek bayt değişmedi |
+| `src/data/` | Canlı, ekipman ve bakım ürünü katalogları; içe aktarma anı bütünlük denetimleri | Yerinde kaldı; Phase 0B'de değişmedi, 2026-09 katalog entegrasyonuyla genişledi |
 | `src/types/aquarium.ts` | Tip köprüsü: aynı adları `@aquamind/domain` üzerinden yeniden dışa aktarır | 13 tüketici değişmeden çalışır |
 | `src/lib/health-analysis.ts` | Uyarlayıcı: kataloğu motora bağlar ve `analyzeAquarium`'u aynı imzayla dışa aktarır | Sağlık sayfası ve `scripts/test-health.cjs` bu yolu kullanır |
 | `packages/domain` | `@aquamind/domain`: alan tipleri, Zod şemaları, tercihler, depo anahtarları ve günlük/arşiv şemaları, `LocalExportV1` | Şemalar uygulamada kullanılıyor: `src/lib/aquarium-storage.ts` yüklemeyi ve dışa aktarmayı bunlarla doğruluyor. Bu nedenle zod istemci paketine dahildir |
 | `packages/compatibility-engine` | `@aquamind/compatibility-engine`: deterministik uyumluluk/sağlık motoru, `createAnalyzer(resolver)` | Kataloğu içe aktarmaz; bilgiye `KnowledgeResolver` ile ulaşır |
-| `scripts/` | CommonJS doğrulama betikleri (katalog akışı, sağlık senaryoları, katalog denetimi) | Değişmedi; `pnpm verify` içinde kalır |
+| `scripts/` | CommonJS doğrulama betikleri (katalog akışı, sağlık senaryoları, hesaplayıcılar, katalog denetimi) | `pnpm verify` içinde kalır; hesaplayıcı betiği katalog entegrasyonuyla eklendi |
 | `vitest.config.mts` | Vitest yapılandırması; `packages/**/*.test.ts` | `@` takma adı `src/` hedefler |
 | `.github/workflows/verify.yml` | `pnpm verify`; yalnızca `main` dalına push'ta ve tüm pull request olaylarında tetiklenir (diğer dallara push tetiklemez) | Değişmedi |
 
@@ -65,7 +65,7 @@ Ayarlar sayfasındaki JSON yedeği yapılandırılmıştır: ana koleksiyonlar y
 pnpm verify
 ```
 
-Sırasıyla: `tsc --noEmit`, `scripts/test-catalog-flow.cjs`, `scripts/test-health.cjs`, `scripts/audit-catalog.cjs`, `vitest run`, `next build`. Vitest paketi testleri `pnpm test` ile ayrıca çalıştırılabilir. Motorun değişmezliği `packages/compatibility-engine/test/golden.test.ts` ile 604 vakalık altın fikstüre karşı denetlenir (bkz. `docs/COMPATIBILITY.md`).
+Sırasıyla: `tsc --noEmit`, `scripts/test-catalog-flow.cjs`, `scripts/test-health.cjs`, `scripts/test-calculators.cjs`, `scripts/audit-catalog.cjs`, `vitest run`, `next build`. Vitest paketi testleri `pnpm test` ile ayrıca çalıştırılabilir. Motorun değişmezliği `packages/compatibility-engine/test/golden.test.ts` ile 1020 vakalık altın fikstüre karşı denetlenir (bkz. `docs/COMPATIBILITY.md`).
 
 ## Hedef mimari (planlanan)
 

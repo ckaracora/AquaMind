@@ -12,7 +12,7 @@ Son güncelleme: 2026-09-02. **Durum: tasarım.** Bu belgede anlatılan hiçbir 
 
 ## Yol 1: bilgi (kataloglar)
 
-Mevcut: `src/data/` altında TypeScript dizileri (228 canlı, 1557 ekipman, 507 bakım ürünü); içe aktarma anında doğrulanır, `scripts/` testleriyle sabitlenir, her kayıtta `sourceUrl` ve `verifiedAt`.
+Mevcut: `src/data/` altında TypeScript dizileri (2026-09 katalog entegrasyonu itibarıyla 417 canlı, 3009 ekipman, 1027 bakım ürünü; Phase 0B'de 228, 1557 ve 507); içe aktarma anında doğrulanır, `scripts/` testleriyle sabitlenir, her kayıtta `sourceUrl` ve `verifiedAt`.
 
 Hedef: yayımlanmış bilgi deposu olarak Postgres tabloları. Yönetici inceleme akışı gelene kadar TypeScript dosyaları yazım kaynağı olarak kalır; veritabanı onlardan üretilir.
 
