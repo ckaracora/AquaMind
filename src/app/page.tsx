@@ -1,10 +1,11 @@
 "use client";
 
 import { Activity, Bell, CalendarDays, ChevronRight, CircleGauge, Droplets, FlaskConical, Plus, Search, Thermometer, Waves } from "lucide-react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { MobileNav } from "@/components/mobile-nav";
 import { ParameterCard } from "@/components/parameter-card";
 import { Sidebar } from "@/components/sidebar";
+import { greetingForHour } from "@/lib/greeting";
 import { useAquariums } from "@/providers/aquarium-provider";
 
 const formatDay = (date: string) => new Intl.DateTimeFormat("tr-TR", { day: "numeric", month: "short" }).format(new Date(date));
@@ -12,6 +13,9 @@ const formatDay = (date: string) => new Intl.DateTimeFormat("tr-TR", { day: "num
 export default function Dashboard() {
   const { aquariums, waterReadings, maintenanceTasks } = useAquariums();
   const [selectedId, setSelectedId] = useState("");
+  // Sayfa önceden derlendiği için saat, derleme sunucusunda değil tarayıcıda okunur.
+  const [greeting, setGreeting] = useState<string>();
+  useEffect(() => setGreeting(greetingForHour(new Date().getHours())), []);
   const aquarium = aquariums.find((item) => item.id === selectedId) ?? aquariums[0];
   if (!aquarium) return <div className="min-h-screen"><Sidebar/><main className="pb-28 lg:ml-[248px]"><div className="grid min-h-screen place-items-center px-5 text-center"><div><Waves size={45} className="mx-auto mb-5 text-aqua"/><h1 className="text-2xl font-extrabold">AquaMind’e hoş geldin</h1><p className="mt-2 text-sm text-[#71858d]">Dashboard’u kullanmaya başlamak için ilk akvaryumunu oluştur.</p><a href="/aquariums/new" className="mt-6 inline-flex items-center gap-2 rounded-xl bg-aqua px-5 py-3 text-xs font-extrabold text-ink"><Plus size={16}/>Akvaryum oluştur</a></div></div></main><MobileNav/></div>;
   const aquariumReadings = waterReadings.filter((item) => item.aquariumId === aquarium.id);
@@ -27,7 +31,7 @@ export default function Dashboard() {
       </header>
       <div className="mx-auto max-w-[1440px] px-5 py-7 sm:px-8 lg:px-10 lg:py-10">
         <section className="mb-8 flex flex-col justify-between gap-4 sm:flex-row sm:items-end">
-          <div><p className="eyebrow mb-2 text-aqua">{new Intl.DateTimeFormat("tr-TR",{day:"numeric",month:"long",weekday:"long"}).format(new Date())}</p><h1 className="text-2xl font-extrabold tracking-tight sm:text-3xl">Günaydın, Canberk.</h1><p className="mt-2 text-sm text-[#71858d]">Akvaryumunda bugün her şey yolunda görünüyor.</p></div>
+          <div><p className="eyebrow mb-2 text-aqua">{new Intl.DateTimeFormat("tr-TR",{day:"numeric",month:"long",weekday:"long"}).format(new Date())}</p><h1 className="text-2xl font-extrabold tracking-tight sm:text-3xl">{greeting ?? "Merhaba."}</h1><p className="mt-2 text-sm text-[#71858d]">Akvaryumunda bugün her şey yolunda görünüyor.</p></div>
           <label className="surface flex w-full items-center justify-between gap-4 px-4 py-3 text-left sm:w-auto"><div><p className="text-[10px] font-bold uppercase tracking-wider text-[#647981]">Aktif akvaryum</p><select value={aquarium.id} onChange={e=>setSelectedId(e.target.value)} className="mt-1 min-w-40 bg-transparent text-sm font-bold outline-none">{aquariums.map(item=><option key={item.id} value={item.id}>{item.name}</option>)}</select></div><ChevronRight size={16} className="text-aqua"/></label>
         </section>
 

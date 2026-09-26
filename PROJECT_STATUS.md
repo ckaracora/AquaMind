@@ -10,7 +10,7 @@ Son güncelleme: 2026-09-24
 - Canlı uygulama: `https://aqua-mind-three.vercel.app/` (Phase 0B ve Issue #8 değişikliklerini içeriyor; en son `7b60ffb` (PR #10, yalnızca belge) için Vercel üretim dağıtımı 2026-09-03'te `success` durumuyla tamamlandı ve site 2026-09-24'te HTTP 200 döndürdü. Katalog entegrasyonu henüz canlıda değil. Tarayıcıda arayüz kontrolü ayrıca yapılmadı)
 - Görev panosu: `https://github.com/users/ckaracora/projects/1`
 - Teknoloji: Next.js 15, React 19, TypeScript, Tailwind CSS, pnpm 11.11.0 çalışma alanı, Vitest
-- `pnpm verify`: 2026-09-24 tarihinde `codex/catalog-integration` dalında (taban `7b60ffb`, katalog birleştirmesi commit edilmeden önce) yerelde başarılı: tip denetimi, katalog akışı (1027 bakım ürünü), 52 sağlık senaryosu, hesaplayıcılar, katalog denetimi, 114 Vitest testi, üretim derlemesi; Corepack üzerinden pnpm 11.11.0 ile (`corepack pnpm verify`). GitHub Actions `Doğrulama` en son PR #10 üzerinde ve `7b60ffb` `main` push'unda başarılı (çalıştırma `33711373282`)
+- `pnpm verify`: 2026-09-24 tarihinde `codex/catalog-integration` dalında (taban `7b60ffb`, katalog birleştirmesi commit edilmeden önce) yerelde başarılı: tip denetimi, katalog akışı (1027 bakım ürünü), 52 sağlık senaryosu, hesaplayıcılar, katalog denetimi, 118 Vitest testi (selamlama değişikliği dahil), üretim derlemesi; Corepack üzerinden pnpm 11.11.0 ile (`corepack pnpm verify`). GitHub Actions `Doğrulama` en son PR #10 üzerinde ve `7b60ffb` `main` push'unda başarılı (çalıştırma `33711373282`)
 - Arkadaş kurulumu: `buraksenfx` hesabı collaborator; Windows kopyasında kurulum ve tüm doğrulamalar başarılı
 
 ## Mevcut veri durumu
@@ -117,8 +117,16 @@ Son güncelleme: 2026-09-24
 - Motor sürümü: `ENGINE_VERSION` ve `RULESET_VERSION` 1.1.0. Altın fikstür, ürün sahibinin 2026-09-24 onayından sonra 604 vakadan 1020 vakaya yeniden üretildi; `docs/COMPATIBILITY.md` motor değiştirme kuralı gereği birleştirme commit'inden ayrı bir commit'te kaydedilmesi planlandı. Vaka üreticisi artık her türü kendi su türünde dener, yayımlanmamış tank uzunluğunu destekler ve hava motoru vakalarını gerçek bir sünger filtreyle kurar (katalog büyüyünce ilk 60 filtre içinde sünger filtre kalmamış, vakalar sessizce dış filtreyle çalışmaya başlamıştı). Eski fikstürle ortak 523 vakanın 269'u aynı; 125'i girdisindeki katalog kaydı değiştiği için, 129'u yalnızca alan uyarısı metni ("Kayıtlı adet için minimum …") değiştiği için farklı; açıklanamayan fark yok
 - Güncellenen belgeler ve testler: `docs/COMPATIBILITY.md` (kural seti 1.1.0, 52 senaryo, fikstür), `docs/DATABASE.md` ve `docs/ARCHITECTURE.md` (katalog sayıları, betikler, doğrulama sırası); `legacy-scripts.test.ts` artık 52 senaryoyu bekliyor
 - Doğrulama: `corepack pnpm verify` başarılı (yukarıda), `git diff --check` temiz
-- Paket boyutu (bilinen maliyet): katalog istemciye gönderildiği için ilk yükleme JS'i arttı: `/livestock` 215 → 319 kB, `/equipment` 215 → 307 kB, `/aquariums/[id]/health` 216 → 310 kB, `/products` 151 → 168 kB. Kalıcı çözüm kataloğun sunucuya veya veritabanına taşınmasıdır (Phase 1–2)
-- Bilinen riskler: Aşağıdaki uyumluluk denetimi bulguları bu birleştirmeyle çözülmez; yalnızca su türü kontrolü gelir. Ana sayfa selamlaması, menü ve ayarlar her ziyaretçiye sabit "Canberk" adını gösterir (önceden sabit "Mert"). Canberk'in sonraki notları dalında `PROJECT_STATUS.md`'ye eklenirse bir sonraki birleştirmede yine çakışır; yeni katalog notları `docs/CATALOG_LOG.md`'ye yazılmalıdır
+- Paket boyutu (bilinen maliyet): katalog istemciye gönderildiği için ilk yükleme JS'i arttı: `/livestock` 215 → 319 kB, `/equipment` 215 → 307 kB (selamlama değişikliğindeki kişi simgesiyle 308 kB), `/aquariums/[id]/health` 216 → 310 kB, `/products` 151 → 168 kB. Kalıcı çözüm kataloğun sunucuya veya veritabanına taşınmasıdır (Phase 1–2)
+- Bilinen riskler: Aşağıdaki uyumluluk denetimi bulguları bu birleştirmeyle çözülmez; yalnızca su türü kontrolü gelir. Birleştirmeyle gelen sabit "Canberk" adı (önceden sabit "Mert") ayrı bir değişiklikle kaldırıldı (aşağıda). Canberk'in sonraki notları dalında `PROJECT_STATUS.md`'ye eklenirse bir sonraki birleştirmede yine çakışır; yeni katalog notları `docs/CATALOG_LOG.md`'ye yazılmalıdır
+
+## Selamlama ve profil adı (katalog entegrasyonunun üstünde, ayrı değişiklik)
+
+- Kullanıcı isteği: her ziyaretçiye gösterilen sabit kişi adı yerine esnek, isimsiz bir selamlama
+- Ana sayfa: "Günaydın, Canberk." yerine ziyaretçinin cihaz saatine göre "Günaydın." (05.00–11.59), "İyi günler." (12.00–17.59) veya "İyi akşamlar." (18.00–04.59). Sayfa önceden derlendiği için saat tarayıcıda okunur; ilk çizimde "Merhaba." görünür. Mantık `src/lib/greeting.ts`, testler `src/lib/__tests__/greeting.test.ts` (4 test)
+- Menü ve mobil menü: sabit ad yerine "Misafir" (baş harf yerine kişi simgesi). Ayarlar → Profil'deki ad alanı boş ve "Adınız" ipucunu gösteriyor; alan önceden de kaydedilmiyordu. Hesaplar geldiğinde (Phase 1) gerçek ad buraya bağlanır
+- Kapsam dışı: selamlamanın altındaki sabit "Akvaryumunda bugün her şey yolunda görünüyor." cümlesi ve su değeri kartlarının sabit etiketleri, uyumluluk denetiminin birinci acil maddesidir; ayrı görevde düzeltilecek
+- Doğrulama: `corepack pnpm verify` başarılı (118 Vitest testi). Tarayıcıda görsel kontrol yapılmadı
 
 ## Uyumluluk denetimi (2026-09-24)
 
@@ -132,17 +140,17 @@ Son güncelleme: 2026-09-24
 
 ## Sıradaki tek iş
 
-Katalog entegrasyonunun (`codex/catalog-integration`) kullanıcı onayıyla commit edilmesi (birleştirme commit'i ve ayrı bir altın fikstür commit'i), GitHub'a gönderilmesi, Codex denetimi ve pull request. `main` birleştirmesi ve üretim yayını ayrıca onay ister. Motor kurallarına `docs/COMPATIBILITY.md` gereği ürün sahibi onayı 2026-09-24'te verildi (`docs/DECISIONS/0007-katalog-entegrasyonu-motor-kurallari.md`). Ardından uyumluluk denetimindeki acil düzeltmeler ayrı görevler olarak yapılır.
+Codex'in `codex/catalog-integration` dalındaki yerel değişiklikleri salt okuma ile denetlemesi. Ardından kullanıcı onayıyla üç commit (birleştirme, ayrı altın fikstür, selamlama), GitHub'a gönderme ve pull request. `main` birleştirmesi ve üretim yayını ayrıca onay ister. Motor kurallarına `docs/COMPATIBILITY.md` gereği ürün sahibi onayı 2026-09-24'te verildi (`docs/DECISIONS/0007-katalog-entegrasyonu-motor-kurallari.md`). Ardından uyumluluk denetimindeki acil düzeltmeler ayrı görevler olarak yapılır.
 
 Phase 1A (Issue #7) — **engelli** (2026-09-24'te yeniden doğrulandı): Docker Desktop kurulu değil ve BIOS/UEFI'de SVM Mode kapalı. Kullanıcı BIOS ayarını açıp Docker Desktop'ı kurana kadar bekliyor. Uyumluluk düzeltmeleri Docker gerektirmediği için bu sürede yapılabilir. Issue #7'ye 2026-09-16'da yazılan yorum ilgisiz bir hesabın ücretli hizmet reklamıdır; dikkate alınmamalıdır.
 
 ## Oturum sonu devir şablonu
 
-- Yapılan görev: uyumluluk ve katalog denetimi (dosya değiştirmeden) ve Canberk'in katalog dalının (`950a70f`) `main` ile birleştirilmesi: motor kurallarının pakete taşınması, çakışmaların çözümü, altın fikstürün yeniden üretimi ve belgeler
-- Değişen dosyalar: birleştirmeyle gelen katalog (`src/data/**`), betikler (`scripts/**`), arayüz (`src/app/**`, `src/components/{catalog-livestock-form,mobile-nav,sidebar}.tsx`, `src/lib/calculators.ts`) ve `docs/DATA_SOURCES.md`; çözüm için `packages/compatibility-engine/src/{index,version}.ts`, `packages/compatibility-engine/test/{legacy-scripts.test.ts,fixtures/golden-cases.ts,fixtures/golden-v1.json}`, `packages/domain/src/{aquarium,schemas}.ts`, `package.json`, `PROJECT_STATUS.md`, `docs/{COMPATIBILITY,DATABASE,ARCHITECTURE}.md`; yeni: `docs/CATALOG_LOG.md`, `docs/DECISIONS/0007-katalog-entegrasyonu-motor-kurallari.md`
+- Yapılan görev: uyumluluk ve katalog denetimi (dosya değiştirmeden); Canberk'in katalog dalının (`950a70f`) `main` ile birleştirilmesi (motor kurallarının pakete taşınması, çakışmaların çözümü, altın fikstürün yeniden üretimi, belgeler); sabit kişi adının isimsiz, saate göre değişen selamlamayla değiştirilmesi
+- Değişen dosyalar: birleştirmeyle gelen katalog (`src/data/**`), betikler (`scripts/**`), arayüz (`src/app/**`, `src/components/{catalog-livestock-form,mobile-nav,sidebar}.tsx`, `src/lib/calculators.ts`) ve `docs/DATA_SOURCES.md`; çözüm için `packages/compatibility-engine/src/{index,version}.ts`, `packages/compatibility-engine/test/{legacy-scripts.test.ts,fixtures/golden-cases.ts,fixtures/golden-v1.json}`, `packages/domain/src/{aquarium,schemas}.ts`, `package.json`, `PROJECT_STATUS.md`, `docs/{COMPATIBILITY,DATABASE,ARCHITECTURE}.md`; yeni: `docs/CATALOG_LOG.md`, `docs/DECISIONS/0007-katalog-entegrasyonu-motor-kurallari.md`. Selamlama için `src/app/page.tsx`, `src/components/{sidebar,mobile-nav}.tsx`, `src/app/settings/page.tsx`; yeni: `src/lib/greeting.ts`, `src/lib/__tests__/greeting.test.ts`
 - Çalıştırılan kontroller: `tsc --noEmit`; özgün ve taşınan motorun 1020 vakada karşılaştırılması (1020/1020 aynı); eski ve yeni fikstür farklarının sınıflandırılması; `src/data` ve `scripts` klasörlerinin dalla aynı olduğunun doğrulanması; `corepack pnpm verify`; `git diff --check`
 - Sonuç: tümü başarılı
 - Bilinen hata veya risk: yukarıdaki "Katalog entegrasyonu" bölümündeki riskler ve "Uyumluluk denetimi"
 - GitHub'a gönderildi mi: Hayır. Birleştirme yerelde duruyor, commit edilmedi
 - Vercel'e yayımlandı mı: Hayır. Canlı uygulama (`https://aqua-mind-three.vercel.app/`) `7b60ffb` sürümünde ve katalog entegrasyonunu içermiyor
-- Sonraki tek iş: kullanıcı onayıyla commit, push, Codex denetimi ve pull request (yukarıda)
+- Sonraki tek iş: Codex denetimi, ardından kullanıcı onayıyla commit, push ve pull request (yukarıda)
