@@ -58,16 +58,20 @@ export function buildGoldenCases(): GoldenCase[] {
   const species = byId(speciesCatalog);
 
   for (const profile of species) {
+    // Her tür kendi su türündeki akvaryumda denenir; tank uzunluğu yayımlanmamışsa varsayılan 60 cm kullanılır.
+    const type = profile.waterTypes?.[0] ?? "freshwater";
+    const minLength = profile.minTankLengthCm ?? 60;
     cases.push({
       name: `species-fit:${profile.id}`,
-      args: [aquarium({ netVolumeLiters: profile.minVolumeL, lengthCm: profile.minTankLengthCm }), [animal(profile, profile.minGroup)], []],
+      args: [aquarium({ type, netVolumeLiters: profile.minVolumeL, lengthCm: minLength }), [animal(profile, profile.minGroup)], []],
     });
     cases.push({
       name: `species-tight:${profile.id}`,
       args: [
         aquarium({
+          type,
           netVolumeLiters: Math.max(10, Math.round(profile.minVolumeL * 0.6)),
-          lengthCm: Math.max(20, Math.round(profile.minTankLengthCm * 0.7)),
+          lengthCm: Math.max(20, Math.round(minLength * 0.7)),
         }),
         [animal(profile, Math.max(1, profile.minGroup - 1))],
         [],
@@ -82,7 +86,8 @@ export function buildGoldenCases(): GoldenCase[] {
   const filters = byId(equipmentCatalog.filter((item) => item.category === "filter")).slice(0, 60);
   const heaters = byId(equipmentCatalog.filter((item) => item.category === "heater")).slice(0, 30);
   const airPumps = byId(equipmentCatalog.filter((item) => item.category === "air_pump")).slice(0, 10);
-  const spongeFilter = filters.find((item) => item.requiresAirPump) ?? filters[0];
+  // Hava motoru vakaları gerçek bir hava motorlu filtreyle denenir; böyle bir filtre ilk 60 filtre içinde olmayabilir.
+  const spongeFilter = byId(equipmentCatalog.filter((item) => item.category === "filter" && item.requiresAirPump))[0] ?? filters[0];
 
   for (const filter of filters) cases.push({ name: `filter:${filter.id}`, args: [aquarium({ netVolumeLiters: 100, lengthCm: 80 }), [animal(neon, 8)], [device(filter)]] });
   for (const heater of heaters) cases.push({ name: `heater:${heater.id}`, args: [aquarium({ netVolumeLiters: 100, lengthCm: 80 }), [animal(neon, 8)], [device(heater)]] });

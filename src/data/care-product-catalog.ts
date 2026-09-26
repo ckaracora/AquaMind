@@ -1,4 +1,4 @@
-export type CareProductCategory = "food" | "fertilizer" | "water_conditioner" | "bacteria" | "test" | "filter_media" | "substrate" | "treatment";
+export type CareProductCategory = "food" | "fertilizer" | "water_conditioner" | "bacteria" | "test" | "filter_media" | "substrate" | "plant_seed" | "treatment" | "decoration" | "aquarium_set" | "aquaterrarium" | "terrarium" | "tank" | "cover" | "cabinet";
 
 export interface CareProductProfile {
   id: string;
@@ -6,6 +6,10 @@ export interface CareProductProfile {
   model: string;
   category: CareProductCategory;
   description: string;
+  volumeL?: number;
+  dimensionsCm?: [number, number, number];
+  footprintCm?: [number, number];
+  includedEquipmentModels?: string[];
   sourceUrl: string;
   verifiedAt: string;
 }
@@ -29,7 +33,6 @@ const seachemPlantSource = "https://www.seachem.com/planted.php";
 const seachemSubstrateSource = "https://www.seachem.com/substrates.php";
 const seachemProbioticFoodSource = "https://www.seachem.com/nutridiet.php";
 const seachemFoodSource = "https://www.seachem.com/nutridiet-international.php";
-const tropicaSource = "https://tropica.com/en/plant-care/";
 const aptSource = "https://www.2hraquarist.com/collections/all";
 const shrimpsForeverSource = "https://shrimpsforever.com/";
 const masterLineSource = "https://www.acvaristic.ro/";
@@ -42,6 +45,7 @@ const adaSoilSource = "https://www.adana.co.jp/en/contents/products/na_substrate
 const adaPowerSandSource = "https://www.adana.co.jp/en/contents/products/na_substrate/detail01.html/1000";
 const adaSubstrateAdditiveSource = "https://www.adana.co.jp/en/contents/products/na_substrate/detail05.html/1000";
 const adaTestSource = "https://www.adana.co.jp/en/contents/products/na_condition/detail03.html";
+const adaFilterMediaSource = "https://www.adana.co.jp/en/contents/products/na_filter/detail03.html";
 const aquaminsSource = "https://atakanpetshop.com/aquamins";
 
 const catalogSlug = (value:string) => value
@@ -56,8 +60,51 @@ const catalogSlug = (value:string) => value
   .replace(/[^a-z0-9]+/g,"-")
   .replace(/(^-|-$)/g,"");
 
-const products = (brand:string, category:CareProductCategory, sourceUrl:string, names:Array<[string,string]>): CareProductProfile[] =>
-  names.map(([model,description]) => ({ id:catalogSlug(`${brand}-${model}`), brand, model, category, description, sourceUrl, verifiedAt }));
+const products = (brand:string, category:CareProductCategory, sourceUrl:string, names:Array<[string,string]>, verifiedDate = verifiedAt): CareProductProfile[] =>
+  names.map(([model,description]) => ({ id:catalogSlug(`${brand}-${model}`), brand, model, category, description, sourceUrl, verifiedAt:verifiedDate }));
+
+const aquariumProducts = (
+  category:"aquarium_set"|"tank",
+  sourceUrl:string,
+  entries:Array<[string,number,[number,number,number],string,string[]?]>,
+): CareProductProfile[] => entries.map(([model,volumeL,dimensionsCm,description,includedEquipmentModels]) => ({
+  id:catalogSlug(`Aquael-${model}`), brand:"Aquael", model, category, description, volumeL, dimensionsCm,
+  includedEquipmentModels, sourceUrl, verifiedAt:"2026-09-12",
+}));
+
+const dimensionProducts = (
+  category:"cover"|"cabinet",
+  sourceUrl:string,
+  entries:Array<[string,[number,number]|[number,number,number],string]>,
+): CareProductProfile[] => entries.map(([model,dimensions,description]) => ({
+  id:catalogSlug(`Aquael-${model}`), brand:"Aquael", model, category, description,
+  ...(dimensions.length === 3 ? {dimensionsCm:dimensions} : {footprintCm:dimensions}),
+  sourceUrl, verifiedAt:"2026-09-12",
+}));
+
+const habitatProducts = (
+  category:"aquaterrarium"|"terrarium",
+  sourceUrl:string,
+  entries:Array<[string,[number,number,number],string,string[]?]>,
+): CareProductProfile[] => entries.map(([model,dimensionsCm,description,includedEquipmentModels]) => ({
+  id:catalogSlug(`Aquael-${model}`), brand:"Aquael", model, category, description, dimensionsCm,
+  includedEquipmentModels, sourceUrl, verifiedAt:"2026-09-12",
+}));
+
+const volumeProducts = (
+  category:"tank",
+  sourceUrl:string,
+  entries:Array<[string,number,string]>,
+): CareProductProfile[] => entries.map(([model,volumeL,description]) => ({
+  id:catalogSlug(`Aquael-${model}`), brand:"Aquael", model, category, description, volumeL,
+  sourceUrl, verifiedAt:"2026-09-12",
+}));
+
+const dennerleProducts = (category:CareProductCategory, entries:Array<[string,string,string]>): CareProductProfile[] =>
+  entries.map(([handle,model,description]) => ({
+    id:catalogSlug(`Dennerle-${model}`), brand:"Dennerle", model, category, description,
+    sourceUrl:`https://dennerle.com/en/products/${handle}`, verifiedAt:"2026-08-27",
+  }));
 
 export const careProductCatalog: CareProductProfile[] = [
   ...products("Tropical","food",tropicalSource,[
@@ -367,14 +414,14 @@ export const careProductCatalog: CareProductProfile[] = [
   ...products("Seachem","test",seachemPlantSource,[
     ["CO2 Indicator Solution","Drop checker ile çözünmüş CO₂ düzeyini renk üzerinden izleyen gösterge sıvısı"],
   ]),
-  ...products("Tropica","fertilizer",tropicaSource,[
-    ["Premium Nutrition","Makro içermeyen mikro elementli sıvı gübre"], ["Specialised Nutrition","NPK, demir ve mikro elementli sıvı gübre"],
-    ["Carbon Nutrition","Günlük sıvı karbon desteği"], ["Nutrition Capsules","Kökten beslenen bitkiler için yavaş salınımlı kapsül"],
-  ]),
-  ...products("Tropica","water_conditioner",tropicaSource,[["Water Conditioner","Klor ve ağır metal bağlayan su düzenleyici"]]),
-  ...products("Tropica","substrate",tropicaSource,[
-    ["Aquarium Soil","Aktif volkanik bitki toprağı"], ["Aquarium Soil Powder","İnce taneli aktif bitki toprağı"], ["Substrate","Taban altı besleyici katman"],
-  ]),
+  ...products("Tropica","fertilizer","https://tropica.com/en/plant-care/liquid-fertilisers/premium-nutrition/",[["Premium Nutrition","Az veya yavaş büyüyen bitkili akvaryumlar için azot ve fosfor içermeyen mikro elementli sıvı gübre"]],"2026-08-26"),
+  ...products("Tropica","fertilizer","https://tropica.com/en/plant-care/liquid-fertilisers/specialised-nutrition/",[["Specialised Nutrition","Yoğun bitkili akvaryumlar için azot, fosfor, demir, magnezyum ve mikro elementli sıvı gübre"]],"2026-08-26"),
+  ...products("Tropica","fertilizer","https://tropica.com/en/plant-care/liquid-fertilisers/carbon-nutrition/",[["Carbon Nutrition","Bitkiler için günlük sıvı karbon desteği"]],"2026-08-26"),
+  ...products("Tropica","fertilizer","https://tropica.com/en/plant-care/nutrition-capsules/",[["Nutrition Capsules","Kökten beslenen bitkiler için yavaş salınımlı besin kapsülü"]],"2026-08-26"),
+  ...products("Tropica","water_conditioner","https://tropica.com/en/plant-care/liquid-fertilisers/water-conditioner/",[["Water Conditioner","Musluk suyundaki kloru etkisizleştiren ve ağır metalleri bağlayan su düzenleyici"]],"2026-08-26"),
+  ...products("Tropica","substrate","https://tropica.com/en/plant-care/aquarium-soil/",[["Aquarium Soil","Doğal volkanik minerallerden oluşan, su kimyasını etkileyen tam aktif bitki toprağı"]],"2026-08-26"),
+  ...products("Tropica","substrate","https://tropica.com/en/plant-care/aquarium-soil/aquarium-soil-powder/",[["Aquarium Soil Powder","Ön plan bitkileri için 1–2 mm taneli tam aktif bitki toprağı"]],"2026-08-26"),
+  ...products("Tropica","substrate","https://tropica.com/en/plant-care/substrate/",[["Substrate","Çakılın altına serilen, KH veya pH değerini etkilemeyen konsantre besleyici taban katmanı"]],"2026-08-26"),
   ...products("The 2Hr Aquarist","fertilizer",aptSource,[
     ["APT 1 / Zero","Nitrat ve fosfat içermeyen günlük kapsamlı sıvı gübre"], ["APT 3 / Complete","Makro ve mikro element içeren günlük tam sıvı gübre"],
     ["APT e","EI yöntemi için yoğun sıvı gübre"], ["APT Jazz","Soil için katı kök besini"],
@@ -445,35 +492,132 @@ export const careProductCatalog: CareProductProfile[] = [
     ["Purity","Çözünmüş organik maddeleri adsorbe eden yenilenebilir filtre medyası"],
     ["FilterMax","Amonyak ve nitrit azaltımını destekleyen, bakteri kolonizasyonuna uygun doğal filtre medyası"],
   ]),
-  ...products("Dennerle","food",dennerleSource,[
-    ["Shrimp King Complete","Karidesler için günlük tam yem"], ["Shrimp King Protein","Üreme ve büyüme için protein yemi"],
-    ["Shrimp King Mineral","Kabuk gelişimi için mineral yemi"], ["Shrimp King Snow Pops","Soya kepeği bazlı karides yemi"],
-    ["Shrimp King Color","Renk destekleyici karides yemi"], ["Shrimp King 5in1","Beş Shrimp King yeminden oluşan karma paket"],
-    ["CrustaGran","Karides ve cüce kerevit için temel granül yem"],
-    ["Shrimp King Baby","Karides larvaları ve genç karidesler için yaklaşık 1 mm mikro granül büyütme yemi"],
-    ["Shrimp King Atyopsis","Yelpaze karidesleri için uygun parçacık boyutlu toz temel yem"],
-    ["Cookies Special Menu","Dip balıkları için probiyotik ve prebiyotik içerikli batan yem cipsi"],
-    ["Shrimp King Dadap Leaves","Karides ve kerevitler için protein ve kalsiyumca zengin doğal yaprak yemi"],
-    ["Shrimp King SnailStixx","Tatlı su salyangozları için kalsiyum destekli temel çubuk yem"],
+  ...dennerleProducts("food",[
+    ["betta-booster","Betta Booster","Betta ve diğer labirent balıkları için böcek ve kabuklu içerikli temel yem"],
+    ["cichlid-carny","Cichlid Carny","Etçil Malawi ve Tanganika cikletleri için hayvansal içerikli temel yem"],
+    ["cichlid-veggy","Cichlid Veggy","Aufwuchs ile beslenen otçul cikletler için alg ve sebze içerikli yem"],
+    ["color-booster","Color Booster","Astaksantin içeren 0,5 mm renk destekleyici granül yem"],
+    ["complete-gourmet-flakes","Complete Gourmet Flakes","Karma türlerin bulunduğu topluluk akvaryumları için dengeli pul yem"],
+    ["complete-gourmet-menu","Complete Gourmet Menu","Doğal beslenme örüntüsünü temel alan çok bileşenli granül yem"],
+    ["cookies-special-menu","Cookies Special Menu","Dip balıkları için probiyotik ve prebiyotik içerikli batan yem cipsi"],
+    ["crusta-brennnessel-stixx","Crusta Brennnessel Stixx","Karidesler için ısırgan otu bazlı mineral ve vitamin desteği"],
+    ["crusta-spinat-stixx","Crusta Spinat Stixx","Karidesler için yüzde yüz ıspanaktan üretilen tamamlayıcı yem"],
+    ["crustagran","CrustaGran","Karides ve cüce kerevit için alg içerikli batan temel granül yem"],
+    ["crustagran-baby","CrustaGran Baby","Yavru karidesler için 0,1–0,8 mm, suyu bulandırmayan mikro granül yem"],
+    ["diskus-soft","Diskus Soft","Diskus balıkları için yumuşak ve dengeli granül yem"],
+    ["goldy-booster","Goldy Booster","Japon balığı ve varyeteleri için hayvansal ve bitkisel içerikli yem"],
+    ["guppy-booster","Guppy Booster","Guppy, plati ve moliler için biyolojik olarak dengeli temel yem"],
+    ["nano-algenfutterblaetter","Nano Algae Food Leaves","Karidesler için yüzde yüz doğal alg yaprakları"],
+    ["nano-gran","Nano Gran","Üç santimetreye kadar nano balıklar için suya dayanıklı granül yem"],
+    ["neon-booster","Neon Booster","Neon tetra ve diğer küçük süs balıkları için ince granül temel yem"],
+    ["pleco-menu","Pleco Menu","Alg ve bitki yiyen vatozlar için yaprak ve bitkisel içerikli temel yem"],
+    ["shrimp-king-5in1","Shrimp King 5in1","Beş Shrimp King yeminden oluşan karides karma paketi"],
+    ["shrimp-king-atyopsis","Shrimp King Atyopsis","Yelpaze karidesleri için uygun parçacık boyutlu toz temel yem"],
+    ["shrimp-king-baby","Shrimp King Baby","Karides larvaları ve genç karidesler için mikro granül büyütme yemi"],
+    ["shrimp-king-cambarellus","Shrimp King Cambarellus","Cüce kerevitlerin hepçil beslenmesine uygun temel yem"],
+    ["shrimp-king-color","Shrimp King Color","Karideslerde doğal renk oluşumunu destekleyen karotenoidli yem"],
+    ["shrimp-king-complete","Shrimp King Complete","Karidesler için günlük, suya dayanıklı tam yem çubuğu"],
+    ["shrimp-king-dadap-leaves","Shrimp King Dadap Leaves","Karides ve kerevitler için doğal yaprak yemi"],
+    ["shrimp-king-mineral","Shrimp King Mineral","Yüzde 7 kalsiyum ve yüzde 10 montmorillonit içeren mineral yem"],
+    ["shrimp-king-protein","Shrimp King Protein","Artan protein gereksinimi dönemleri için yüzde 42,2 proteinli yem"],
+    ["shrimp-king-snailstixx","Shrimp King SnailStixx","Tatlı su salyangozları için kalsiyum destekli temel çubuk yem"],
+    ["shrimp-king-snow-pops","Shrimp King Snow Pops","Organik soya kepeğinden üretilen dağılan karides yem çubuğu"],
+    ["shrimp-king-yummy-gum","Shrimp King Yummy Gum","Taş, kök veya cama yapışabilen karides yem hamuru"],
   ]),
-  ...products("Dennerle","fertilizer",dennerleSource,[
-    ["Plant Care Pro","Yoğun bitkili akvaryum için kapsamlı mikro gübre"], ["Plant Care NPK","Azot, fosfor ve potasyum gübresi"],
-    ["Plant Care P","Tek bileşenli fosfat gübresi"], ["Plant System V30","Kapsamlı bitki gübresi"],
-    ["Plant System E15","Demir gübresi"], ["Plant System S7","Vitamin ve iz element desteği"],
-    ["Plant Elixir Basic","Genel bitki bakım gübresi"], ["All in One Elixir","Bitki, su ve filtre için birleşik bakım ürünü"],
-    ["Plant System Set Nano","Küçük bitkili akvaryumlar için üç bileşenli gübre sistemi"],
-    ["Plant Care Pro Daily","Yoğun bitkili akvaryumlar için günlük mikro besin ve demir gübresi"],
-    ["Plant System Set","V30, E15 ve S7 bileşenlerinden oluşan üç parçalı gübre sistemi"],
-    ["Plant Care N","Hedefli nitrat ve azot desteği"],
-    ["Plant Care K","Hedefli potasyum desteği"],
+  ...dennerleProducts("fertilizer",[
+    ["all-in-one-elixir","All in One Elixir","Balık, karides ve bitkili akvaryumlar için birleşik temel bakım ürünü"],
+    ["carbo-care-bio","Carbo Care Bio","Kolay ve orta düzey bitkili akvaryumlar için biyolojik karbon bakım ürünü"],
+    ["carbo-care-pro","Carbo Care Pro","Yoğun bitkili akvaryumlar için yüksek performanslı karbon bakım ürünü"],
+    ["carbo-elixier-bio","Carbo Elixir Bio","Akvaryum bitkilerine biyolojik kullanılabilir karbon sağlayan sıvı bakım ürünü"],
+    ["dosator","Dosator","V30 ve S7 gübrelerini osmozla düzenli veren elektriksiz dozlayıcı"],
+    ["plant-active-enzymes","Plant Active Enzymes","Bitki besinlerinin kullanımını destekleyen enzim bakım ürünü"],
+    ["plant-care-basic-root","Plant Care Basic Root","Kökten beslenen bitkiler için kil tabanlı besin deposu"],
+    ["plant-care-k","Plant Care K","Hedefli potasyum desteği sağlayan makro gübre"],
+    ["plant-care-n","Plant Care N","Hedefli azot ve nitrat desteği sağlayan makro gübre"],
+    ["plant-care-npk","Plant Care NPK","Azot, fosfat, potasyum ve magnezyum içeren makro gübre"],
+    ["plant-care-p","Plant Care P","Hedefli fosfat desteği sağlayan tek besinli gübre"],
+    ["plant-care-pro","Plant Care Pro","Yoğun bitkili ve CO₂ destekli akvaryumlar için mikro besin gübresi"],
+    ["plant-care-pro-daily","Plant Care Pro Daily","Yoğun bitkili akvaryumlar için günlük mikro besin ve demir gübresi"],
+    ["plant-care-pro-root","Plant Care Pro Root","Güçlü köklenen bitkiler için kök bölgesi besin tableti"],
+    ["plant-elixir-basic","Plant Elixir Basic","Tüm bitkili akvaryumlar için genel amaçlı sıvı gübre"],
+    ["plant-system-e15","Plant System E15","Uzun dönemli demir desteği sağlayan sistem bileşeni"],
+    ["plant-system-s7","Plant System S7","Haftalık vitamin ve iz element desteği sağlayan sistem bileşeni"],
+    ["plant-system-set-de","Plant System Set","V30, E15 ve S7 bileşenlerinden oluşan büyük akvaryum gübre sistemi"],
+    ["plant-system-set-nano","Plant System Set Nano","Nano akvaryumlar için üç bileşenli gübre sistemi"],
+    ["plant-system-v30","Plant System V30","Aylık kapsamlı bitki besini sağlayan sistem bileşeni"],
   ]),
-  ...products("Dennerle","water_conditioner",dennerleSource,[
-    ["Shrimp King Shrimp Salt GH/KH+","Neocaridina ve tiger karidesler için mineral tuzu"], ["Shrimp King Bee Salt GH+","Bee karidesler için GH mineral tuzu"],
+  ...dennerleProducts("test",[
+    ["aqua-dest","Aqua Dest","CO₂ ve pH testlerinin hazırlanmasında kullanılan saflaştırılmış test suyu"],
+    ["aqua-test","Aqua Test","Dennerle sürekli CO₂ testleri için test çözeltisi"],
+    ["carbo-test-indicator","Carbo Test Indicator","CO₂ seviyesini renk değişimiyle gösteren indikatör çözeltisi"],
+    ["carbo-test-precision","Carbo Test Precision","Small, Medium ve Large boy sürekli CO₂ ölçüm cihazı"],
+    ["co2-langzeittest-correct","CO₂ Long-Term Test Correct","Akvaryumdaki CO₂ seviyesini sürekli izleyen test"],
+    ["co2-langzeittest-crystal","Carbo Test Crystal","Nano ve standart boy cam sürekli CO₂ testi"],
+    ["co2-quick-test","CO₂ QuickTest","Akvaryum suyundaki CO₂ yeterliliğini hızlı kontrol eden test"],
+    ["kcl-losung","KCL Solution","pH elektrodu saklama ve bakım çözeltisi"],
+    ["ph-eichloesung-4","pH Calibration Solution 4","pH elektrotları için pH 4 kalibrasyon çözeltisi"],
+    ["ph-eichloesung-7","pH Calibration Solution 7","pH elektrotları için pH 7 kalibrasyon çözeltisi"],
+    ["water-test-6in1","Water Test 6in1","Altı temel tatlı su parametresini birlikte ölçen şerit test"],
   ]),
-  ...products("Dennerle","substrate",dennerleSource,[
-    ["Scaper's Soil","Bitkili ve yumuşak su karides akvaryumları için aktif soil"],
-    ["Shrimp King Active Soil","Bee karidesleri için pH'ı yaklaşık 6,0–6,5 aralığına çeken aktif volkanik soil"],
-    ["NutriBasis","Kum veya çakıl altında kullanılan uzun etkili besleyici taban katmanı"],
+  ...dennerleProducts("filter_media",[
+    ["corner-filter-element-40-60","Corner Filter Element 40/60","Corner Filter 40 ve 60 için tekli ve üçlü yedek filtre elemanı"],
+    ["corner-filter-element-100","Corner Filter Element 100","Corner Filter 100 için yedek filtre elemanı"],
+    ["nano-active-carbon","Nano Active Carbon","İlaç kalıntısı ve organik maddeleri adsorbe eden aktif karbon medya"],
+    ["nano-algenstop","Nano Algae Stop","Nano filtreler için alg besinlerini bağlayan özel filtre medyası"],
+    ["nano-biofiltergranulat","Nano Bio Filter Granules","Bakteri kolonizasyonu için yüksek yüzeyli biyolojik filtre granülü"],
+    ["nano-filtertubes","Nano Filtertubes","Nano filtreler için biyolojik seramik tüp medya"],
+    ["osmose-feinfilter","Osmose Fine Filter","Osmose Professional sistemi için ince ön filtre kartuşu"],
+    ["osmose-kohlefilter","Osmose Carbon Filter","Osmose Professional sistemi için aktif karbon ön filtre kartuşu"],
+    ["scapers-flow-filter-schwamm","Scaper's Flow Filter Sponge","Scaper's Flow için yedek mekanik filtre süngeri"],
+    ["scapers-flow-pad","Scaper's Flow Pad","Scaper's Flow için yedek ince filtre pedi"],
+  ]),
+  ...dennerleProducts("water_conditioner",[
+    ["aqua-elixir","Aqua Elixir","Klor ve ağır metalleri nötralize eden genel su düzenleyici"],
+    ["betta-water","Betta Water","Betta akvaryumları için klor ve ağır metalleri nötralize eden su düzenleyici"],
+    ["clear-water-elixir","Clear Water Elixir","Bulanıklık, renk ve kokuyu bağlamaya yardımcı mineral esaslı berraklaştırıcı"],
+    ["humin-elixir","Humin Elixir","Balık ve omurgasız bakımı için humik ve fulvik asit karışımı"],
+    ["osmose-remineral","Osmose Remineral+","Ozmoz suyuna gerekli mineralleri geri kazandıran mineral karışımı"],
+    ["shrimp-king-bee-salt-gh","Shrimp King Bee Salt GH+","Bee karidesler için iletkenlik ve genel sertlik sağlayan mineral tuzu"],
+    ["shrimp-king-shrimp-salt-gh-kh","Shrimp King Shrimp Salt GH/KH+","Neocaridina ve tiger karidesler için GH/KH mineral tuzu"],
+    ["shrimp-king-sulawesi-salt","Shrimp King Sulawesi Salt","Sulawesi karidesleri için mineral tuzu"],
+  ]),
+  ...dennerleProducts("bacteria",[
+    ["aquarium-starter-rapid","Aquarium Starter Rapid","Yeni akvaryumların hızlı başlangıcı için canlı filtre bakterisi sistemi"],
+    ["bacto-elixir-bio","Bacto Elixir Bio","Filtre temizliği ve canlı ekleme sonrasında kullanılan yoğun bakteri kültürü"],
+    ["bacto-elixir-fb7","Bacto Elixir FB7","Atık parçalanmasını başlatan canlı temizleme bakterileri karışımı"],
+  ]),
+  ...dennerleProducts("treatment",[
+    ["all-for-betta","All for Betta","Betta için yem, su düzenleme ve bakım ürünlerinden oluşan üçlü set"],
+    ["betta-care","Betta Care","Humik ve fulvik asitli Betta su bakım ürünü"],
+    ["black-cones","Black Cones","Humik ve tanen desteği sağlayan doğal kızılağaç kozalakları"],
+    ["care-protect-set","Care & Protect Set","Genel akvaryum bakımı ve koruması için üçlü ürün seti"],
+    ["catappa-leaves","Catappa Leaves","Balık ve omurgasız bakımı için doğal badem yaprakları"],
+    ["nano-catappa-barks","Nano Catappa Barks","Uzun süreli humik ve tanen desteği sağlayan badem ağacı kabuğu"],
+    ["nano-crusta-fit","Nano Crusta Fit","Karides ve kerevitler için vitamin ve iz element bakım ürünü"],
+    ["nano-crusta-mineral","Nano Crusta Mineral","Karides ve kerevitler için mineral bakım ürünü"],
+    ["vital-elixir","Vital Elixir","Tatlı su balıklarına fizyolojik iz element ve mineral desteği"],
+  ]),
+  ...dennerleProducts("substrate",[
+    ["deponit-mix-pro","Deponit Mix Pro","Kum veya çakıl altında kullanılan uzun etkili besleyici taban katmanı · 1–9,6 kg"],
+    ["deponit-mix-pro-black","Deponit Mix Pro Black","Koyu renkli akvaryumlar için besleyici taban katmanı · 1–9,6 kg"],
+    ["kristall-quarzkies-diamantschwarz","Kristall Quartz Gravel Diamond Black","Elmas siyahı kristal kuvars çakıl · 5 ve 10 kg"],
+    ["kristall-quarzkies-dunkelbraun","Kristall Quartz Gravel Dark Brown","Koyu kahverengi kristal kuvars çakıl · 10 kg"],
+    ["kristall-quarzkies-naturweiss","Kristall Quartz Gravel Natural White","Doğal beyaz kristal kuvars çakıl · 10 kg"],
+    ["kristall-quarzkies-rehbraun","Kristall Quartz Gravel Deer Brown","Açık kahverengi kristal kuvars çakıl · 10 kg"],
+    ["kristall-quarzkies-schiefergrau","Kristall Quartz Gravel Slate Grey","Arduvaz gri kristal kuvars çakıl · 10 kg"],
+    ["nano-garnelenkies","Nano Shrimp Gravel","Sulawesi siyah, Arkansas gri, Borneo kahverengi ve Sunda beyaz nano çakıl"],
+    ["naturkies-bairaman","Natural Gravel Bairaman 0,1–0,6 mm","0,1–0,6 mm doğal akvaryum kumu · 0,5–5 kg"],
+    ["naturkies-kongo-10-30mm","Natural Gravel Congo 10–30 mm","10–30 mm iri doğal akvaryum çakılı · 0,5–5 kg"],
+    ["naturkies-kongo-3-8mm","Natural Gravel Congo 3–8 mm","3–8 mm doğal akvaryum çakılı · 0,5–5 kg"],
+    ["naturkies-mekong","Natural Gravel Mekong 0,1–1,4 mm","0,1–1,4 mm doğal akvaryum kumu · 0,5 ve 2,5 kg"],
+    ["naturkies-okavango-4-8mm","Natural Gravel Okavango 4–8 mm","4–8 mm doğal akvaryum çakılı · 0,5–5 kg"],
+    ["naturkies-okavango-8-12mm","Natural Gravel Okavango 8–12 mm","8–12 mm doğal akvaryum çakılı · 0,5–5 kg"],
+    ["naturkies-rio-branco","Natural Gravel Rio Branco 0,1–2 mm","0,1–2 mm doğal akvaryum kumu · 0,5 ve 2,5 kg"],
+    ["naturkies-rio-xingu","Natural Gravel Rio Xingu 2–22 mm","2–22 mm karma taneli doğal akvaryum çakılı · 0,5–5 kg"],
+    ["nutribasis","NutriBasis","Kum veya çakıl altında kullanılan besleyici taban katmanı · 2,4–9,6 kg"],
+    ["scapers-soil","Scaper's Soil","Bitkili ve yumuşak su karides akvaryumları için aktif soil · 4 ve 8 L"],
+    ["scapers-soil-natural-mix","Scaper's Soil Natural Mix","Doğal karışım görünümlü aktif aquascaping soil · 4 ve 8 L"],
+    ["shrimp-king-active-soil","Shrimp King Active Soil","Bee karidesleri için pH düşürücü aktif volkanik soil · 4 ve 8 L"],
   ]),
   ...products("ADA","food",adaFoodSource,[
     ["AP-1 Premium","Yüzeyden beslenen küçük balıklar için yüzen premium yem"], ["AP-2 Premium","Küçük ve orta boy balıklar için yavaş batan premium yem"],
@@ -525,6 +669,34 @@ export const careProductCatalog: CareProductProfile[] = [
     ["Pack Checker COD","Organik kirlilik göstergesi COD düzeyini ölçen tüp test"],
     ["Pack Checker PO4","Fosfat düzeyini ölçen tek kullanımlık tüp test"],
   ]),
+  ...products("ADA","filter_media",adaFilterMediaSource,[
+    ["Bio Rio G","pH ve sertliği belirgin biçimde etkilemeden biyolojik filtrasyon sağlayan gözenekli sinterlenmiş cam medya · 1 L"],
+    ["Bio Cube","Uzun süreli biyolojik filtrasyon için geniş yüzeyli siyah poliüretan medya · 2 L"],
+    ["NA Carbon","Su sararmasını azaltan, asitle işlenmiş yüksek emiş kapasiteli aktif karbon · 750 ml"],
+    ["Bamboo Charcoal","Emiş etkisi sonrasında da biyolojik medya olarak kullanılabilen rafine bambu kömürü · 1 L"],
+  ],"2026-08-27"),
+  ...products("Netlea","substrate","https://www.netlea.com/xqy-scn.html",[
+    ["Aquatic Plant Soil","Zayıf asidik siyah-kahverengi topraktan üretilen, organik madde, demir ve iz elementler içeren bitkili akvaryum taban malzemesi"],
+  ],"2026-08-27"),
+  ...products("Netlea","fertilizer","https://www.netlea.com/xqy-scyf.html",[
+    ["Aquatic Plant Liquid Fertilizer","Su bitkilerine besin ve enerji desteği sağlayan sıvı bitki gübresi"],
+  ],"2026-08-27"),
+  ...products("Netlea","filter_media","https://www.netlea.com/xqy-xwh.html",[
+    ["Microbial Fiber Ring","Diyatomlu toprağın yüksek sıcaklıkta pişirilmesiyle üretilen, nötr ve çok gözenekli biyolojik filtre medyası"],
+  ],"2026-08-27"),
+  ...products("Netlea","bacteria","https://www.sxi.com.tw/product/%E5%B0%BC%E7%89%B9%E5%88%A9Netlea%E7%A1%9D%E5%8C%96%E8%8F%8C",[
+    ["Supreme Nitrifying Bacteria Bottle","Akvaryum döngüsünü kurmayı destekleyen yoğun canlı bakteri kültürü"],
+    ["Supreme Nitrifying Bacteria Capsule","İlk kurulumda 150 litreye bir kapsül önerisi yayımlanan yoğun canlı bakteri kültürü"],
+  ],"2026-08-27"),
+  ...products("Netlea","filter_media","https://www.sxi.com.tw/product/%E5%B0%BC%E7%89%B9%E5%88%A9NetleaNOV",[
+    ["Technology Hollow Colored Ball S 1 L","Biyolojik filtrasyon için teknoloji tipi boşluklu renkli küresel medya"],
+    ["Microporous Fiber Ring M 1 L","Biyolojik filtrasyon için mikro gözenekli orta boy lif halka"],
+    ["Small Hollow Quartz Ball S 1 L","Biyolojik filtrasyon için küçük boşluklu kuvars küre"],
+    ["Fiber Ring S 1 L","Biyolojik filtrasyon için küçük boy lif halka"],
+    ["Fiber Ring M 1 L","Biyolojik filtrasyon için orta boy lif halka"],
+    ["Fiber Ball 1 L","Biyolojik filtrasyon için lif küre"],
+    ["Fiber Triangle 1 L","Biyolojik filtrasyon için üçgen lif medya"],
+  ],"2026-08-27"),
   ...products("Aquamins","fertilizer",aquaminsSource,[["Potasflow 100 ml","Potasyum ağırlıklı bitki gübresi"],["Plants All Included 100 ml","Kapsamlı bitki gübresi"],["Plants All Included 250 ml","Kapsamlı bitki gübresi"]]),
   ...products("Aquamins","water_conditioner",aquaminsSource,[
     ["H2O 100 ml","Klor ve ağır metalleri nötralize eden musluk suyu düzenleyici"],
@@ -560,6 +732,59 @@ export const careProductCatalog: CareProductProfile[] = [
     ["Lav Taşı Kırığı 0,5 cm 12 kg","Akvaryum tabanı için yaklaşık 0,5 cm gözenekli lav taşı kırığı"],
     ["Lav Taşı Kırığı 0,5–1,5 cm 12 kg","Akvaryum tabanı için 0,5–1,5 cm gözenekli lav taşı kırığı"],
   ]),
+  ...[
+    ["30×30×30",27,[30,30,30]], ["35×35×35",42.875,[35,35,35]], ["40×40×30",48,[40,40,30]],
+    ["50×30×30",45,[50,30,30]], ["60×40×40",96,[60,40,40]], ["90×45×45",182.25,[90,45,45]],
+    ["100×50×45",225,[100,50,45]], ["120×50×45",270,[120,50,45]], ["30×20×15",9,[30,20,15]],
+    ["40×30×20",24,[40,30,20]], ["150×50×40",300,[150,50,40]], ["150×50×50",375,[150,50,50]],
+  ].flatMap(([size,volumeL,dimensionsCm])=>[
+    {id:`creaqua-crystal-45-${String(size).replaceAll("×","-")}`,brand:"Creaqua",model:`Crystal 45 ${size} cm`,category:"tank" as const,description:"Yüzde 90'ın üzerinde ışık geçirgenliğine sahip cam, 45° rodajlı köşeler, beyaz taban matı ve buzlu arka fonla sunulan boş akvaryum",volumeL:Number(volumeL),dimensionsCm:dimensionsCm as [number,number,number],sourceUrl:"https://www.creaqua.com.tr/tr/akvaryum/7-2590-creaqua-crystal-akvaryum.html",verifiedAt:"2026-09-14"},
+    {id:`creaqua-crystal-classic-${String(size).replaceAll("×","-")}`,brand:"Creaqua",model:`Crystal Classic ${size} cm`,category:"tank" as const,description:"Yüzde 90'ın üzerinde ışık geçirgenliğine sahip cam, düz rodajlı köşeler, beyaz taban matı ve buzlu arka fonla sunulan boş akvaryum",volumeL:Number(volumeL),dimensionsCm:dimensionsCm as [number,number,number],sourceUrl:"https://www.creaqua.com.tr/tr/akvaryum/72-crystal-classic.html",verifiedAt:"2026-09-14"},
+  ]),
+  ...[
+    ["30×30×80",[30,30,80]], ["40×40×80",[40,40,80]], ["50×30×80",[50,30,80]],
+    ["60×40×80",[60,40,80]], ["90×45×80",[90,45,80]], ["100×50×80",[100,50,80]],
+    ["120×50×80",[120,50,80]], ["150×55×80",[150,55,80]], ["120×55×80",[120,55,80]],
+    ["150×50×80",[150,50,80]],
+  ].map(([size,dimensionsCm])=>({id:`creaqua-stand-45-${String(size).replaceAll("×","-")}`,brand:"Creaqua",model:`Stand 45 ${size} cm`,category:"cabinet" as const,description:"Akvaryum için beyaz veya antrasit renk seçeneği bulunan dayanıklı mobilya",dimensionsCm:dimensionsCm as [number,number,number],sourceUrl:"https://www.creaqua.com.tr/tr/mobilya/8-2489-creaqua-akvaryum-mobilyasi.html",verifiedAt:"2026-09-14"})),
+  ...[
+    ["35×50",[35,50]], ["90×50",[90,50]], ["150×50",[150,50]],
+  ].map(([size,footprintCm])=>({id:`creaqua-aquamat-${String(size).replaceAll("×","-")}`,brand:"Creaqua",model:`AquaMat ${size} cm`,category:"decoration" as const,description:"Akvaryum taban camını korumak, yüzey pürüzlerini absorbe etmek, stabilite ve ısı yalıtımı sağlamak için siyah veya beyaz taban matı",footprintCm:footprintCm as [number,number],sourceUrl:"https://www.creaqua.com.tr/tr/akvaryum-ve-mobilya-ekipmanlari/9-2613-creaqua-aquamat.html",verifiedAt:"2026-09-14"})),
+  ...[
+    ["35×35×50",[35,35,50]], ["45×45×60",[45,45,60]], ["50×50×70",[50,50,70]], ["60×60×90",[60,60,90]],
+  ].map(([size,dimensionsCm])=>({id:`creaqua-planted-terrarium-${String(size).replaceAll("×","-")}`,brand:"Creaqua",model:`Bitkili Teraryum ${size} cm`,category:"terrarium" as const,description:"Yoğun bitkili teraryumlar için dip çekim bölmesi, ön ve üst paslanmaz havalandırma ızgaraları, güvenli menteşe/kilit, taban matı ve kablo-nozul geçişleri bulunan cam habitat",dimensionsCm:dimensionsCm as [number,number,number],sourceUrl:"https://www.creaqua.com.tr/tr/paludaryum-teraryum/81-2609-bitkili-teraryum.html",verifiedAt:"2026-09-14"})),
+  ...[
+    ["40×30×40",[40,30,40]], ["50×40×40",[50,40,40]], ["60×40×50",[60,40,50]], ["80×50×50",[80,50,50]], ["100×50×60",[100,50,60]],
+  ].map(([size,dimensionsCm])=>({id:`creaqua-reptile-terrarium-${String(size).replaceAll("×","-")}`,brand:"Creaqua",model:`Reptile Teraryum ${size} cm`,category:"terrarium" as const,description:"Bitkili ve sürüngen teraryumları için dip çekim bölmesi, ön ve üst paslanmaz havalandırma ızgaraları, güvenli menteşe/kilit, taban matı ve kablo-nozul geçişleri bulunan cam habitat",dimensionsCm:dimensionsCm as [number,number,number],sourceUrl:"https://www.creaqua.com.tr/tr/paludaryum-teraryum/94-reptile-teraryum.html",verifiedAt:"2026-09-14"})),
+  ...[
+    ["30×30×10",[30,30,10]], ["35×35×10",[35,35,10]], ["40×40×10",[40,40,10]], ["50×30×10",[50,30,10]],
+  ].map(([size,dimensionsCm])=>({id:`creaqua-desktop-nano-stand-${String(size).replaceAll("×","-")}`,brand:"Creaqua",model:`Desktop Nano Stand ${size} cm`,category:"cabinet" as const,description:"Nano akvaryum ekipmanlarını düzenlemek için çekmeceli masaüstü mobilyası · beyaz veya antrasit renk seçeneği",dimensionsCm:dimensionsCm as [number,number,number],sourceUrl:"https://www.creaqua.com.tr/tr/mobilya/69-desktop-nano-stand.html",verifiedAt:"2026-09-14"})),
+  ...products("Creaqua","filter_media","https://www.creaqua.com.tr/tr/filtre-medyalari/57-revex.html",[
+    ["REVEX 100 ml","Organik maddeler, organik atıklar ve tanen giderimi için rejenere edilebilir sentetik adsorban"],
+    ["REVEX 250 ml","Organik maddeler, organik atıklar ve tanen giderimi için rejenere edilebilir sentetik adsorban"],
+    ["REVEX 500 ml","Organik maddeler, organik atıklar ve tanen giderimi için rejenere edilebilir sentetik adsorban"],
+  ],"2026-09-14"),
+  {id:"creaqua-clarifier-filter-pad",brand:"Creaqua",model:"Clarifier Filter Pad 50×25 cm",category:"filter_media",description:"Koku, bulanıklık, organik atık ve kirleticileri gidermeye yardımcı, filtreye göre kesilebilen tek kullanımlık ped",footprintCm:[50,25],sourceUrl:"https://www.creaqua.com.tr/tr/filtre-medyalari/66-clarifier-filter-pad.html",verifiedAt:"2026-09-14"},
+  {id:"creaqua-media-bag-15-15",brand:"Creaqua",model:"Media Bag 15×15 cm",category:"filter_media",description:"Küçük taneli karbon, reçine ve zeolit gibi medyalar için fermuarlı, sık gözenekli ve yüksek su geçirgenliğine sahip filtre çantası",footprintCm:[15,15],sourceUrl:"https://www.creaqua.com.tr/tr/filtrasyon-aksesuarlari/70-media-bag.html",verifiedAt:"2026-09-14"},
+  ...products("Creaqua","decoration","https://www.creaqua.com.tr/tr/agaclar/25-ribbed-wood.html",[["Ribbed Wood","Doğal nervürlü ve burgulu görünümlü, suya kolay batan ve suyu az renklendiren akvaryum tasarım ağacı"]],"2026-09-14"),
+  ...products("Creaqua","decoration","https://www.creaqua.com.tr/tr/ana-sayfa/36-flame-wood.html",[["Spotted Wood","Koyu benekli ince dalları bulunan, suya kolay batan ve suyu az renklendiren akvaryum tasarım ağacı"]],"2026-09-14"),
+  ...products("Creaqua","decoration","https://www.creaqua.com.tr/tr/ana-sayfa/37-black-flame.html",[["Black Flame","Koyu kahverengi, alev biçimli kıvrımları bulunan yoğun ve suya hemen batan akvaryum tasarım ağacı"]],"2026-09-14"),
+  ...products("Creaqua","decoration","https://www.creaqua.com.tr/tr/agaclar/59-red-velt.html",[["Red Velt","Çok dallı açık kahverengi, suda zamanla kırmızı çizgiler oluşturabilen ve az tanen salan doğal tasarım ağacı"]],"2026-09-14"),
+  ...products("Creaqua","decoration","https://www.creaqua.com.tr/tr/agaclar/82-arbour-wood.html",[["Arbour Wood","Kırmızı karamel renkli, sık ve kıvırcık dokulu; 15–80 cm arasında doğal parçalar halinde sunulan, az tanen salan tasarım ağacı"]],"2026-09-14"),
+  ...products("Creaqua","decoration","https://www.creaqua.com.tr/tr/ana-sayfa/85-bucelog.html",[["Bucelog","Anubias, fern, Bucephalandra ve Bolbitis gibi epifit bitkileri lastikle sabitlemek için hemen batan küçük doğal ağaç parçaları"]],"2026-09-14"),
+  ...products("Creaqua","decoration","https://www.creaqua.com.tr/tr/agaclar/83-twiggy.html",[["Twigy Dark","Küçük koyu dal porsiyonu ve doğal tanen kaynağı"],["Twigy Light","Küçük açık renkli dal porsiyonu ve doğal tanen kaynağı"],["Twigy Mix","Küçük karışık dal porsiyonu ve doğal tanen kaynağı"]],"2026-09-14"),
+  ...products("Creaqua","decoration","https://www.creaqua.com.tr/tr/agaclar/87-2622-twigy-large.html",[["Twigy Large Dark","Ortalama 30–40 cm koyu dal porsiyonu ve doğal tanen kaynağı"],["Twigy Large Light","Ortalama 30–40 cm açık renkli dal porsiyonu ve doğal tanen kaynağı"]],"2026-09-14"),
+  ...products("Creaqua","decoration","https://www.creaqua.com.tr/tr/tasarim-malzemeleri/27-mossrock.html",[["MossRock","Misina yardımıyla moss porsiyonları hazırlamak için ince, düz ve su kimyasını etkilemeyen doğal dekor"]],"2026-09-14"),
+  ...products("Creaqua","decoration","https://www.creaqua.com.tr/tr/kayalar/28-ancyra-rock-type-1.html",[["Frodo Stone","İnce çizgili ve derin oluklu yapısıyla doğal kayalık tasarımlar için akvaryum kayası"]],"2026-09-14"),
+  ...products("Creaqua","decoration","https://www.creaqua.com.tr/tr/ana-sayfa/51-gray-moon-stone.html",[["Gray Moon Stone","Oval delikli, ıslandığında açık griye dönen doğal tasarım kayası · üretici ilk kullanımda suyu biraz sertleştirebileceğini belirtir"]],"2026-09-14"),
+  ...products("Creaqua","decoration","https://www.creaqua.com.tr/tr/ana-sayfa/52-orange-moon-stone.html",[["Orange Moon Stone","Farklı büyüklüklerde oval delikleri bulunan ve gerektiğinde küçültülebilen doğal tasarım kayası"]],"2026-09-14"),
+  ...products("Creaqua","decoration","https://www.creaqua.com.tr/tr/ana-sayfa/53-galapagos-rock.html",[["Galapagos Rock","Yoğun delikli ve oluklu yüzeyi bitki yerleşimine uygun, koyu renkli doğal tasarım kayası"]],"2026-09-14"),
+  ...products("Creaqua","decoration","https://www.creaqua.com.tr/tr/kayalar/60-keitir-stone.html",[["Keitir Stone","Sarp dağ kayalıklarını andıran güçlü yüzey şekillerine sahip siyah volkanik tasarım kayası"]],"2026-09-14"),
+  ...products("Creaqua","water_conditioner","https://www.creaqua.com.tr/en/natural-water-conditioners/96-alder-cones.html",[["Alder Cones","Kızılağaç kozalağı · tatlı su ve nemli teraryumlarda tanen, hümik ve fulvik bileşikler sağlayan doğal biyotop malzemesi"]],"2026-09-14"),
+  ...products("Creaqua","water_conditioner","https://www.creaqua.com.tr/en/natural-water-conditioners/97-kurrajong-pods.html",[["Kurrajong Pods","Orta düzey tanen salan; tatlı su, paludaryum ve nemli teraryumlarda kullanılan doğal biyotop malzemesi"]],"2026-09-14"),
+  ...products("Creaqua","water_conditioner","https://www.creaqua.com.tr/en/natural-water-conditioners/99-banana-leaves.html",[["Banana Leaves","Tatlı su, paludaryum ve nemli teraryumlarda tanen sağlayan ve biyofilm oluşumunu destekleyen doğal muz yaprağı"]],"2026-09-14"),
+  ...products("Creaqua","decoration","https://www.creaqua.com.tr/tr/ana-sayfa/55-plantie.html",[["Plantie Kahverengi 500 cm","Epifit bitkileri köklenene kadar sabitlemek için kahverengi plastik kaplı tel"],["Plantie Yeşil 500 cm","Epifit bitkileri köklenene kadar sabitlemek için yeşil plastik kaplı tel"]],"2026-09-14"),
+  ...products("Creaqua","water_conditioner","https://www.creaqua.com.tr/tr/su-duezenleyiciler/77-just-clear.html",[["Just Clear 250 ml","Tatlı ve tuzlu su akvaryumları ile süs havuzlarında serbest partikülleri bağlayan konsantre berraklaştırıcı · 2,5 ml/50 L doz · 250 ml şişe 5000 L su için"]],"2026-09-14"),
   ...products("Creaqua","fertilizer","https://www.creaqua.com.tr/en/10-fertilizers-and-water-conditioners",[
     ["Plant Nutrition Macro 250 ml","Bitkili akvaryumlar için haftalık makro besin desteği"],
     ["Plant Nutrition Micro 250 ml","Bitkili akvaryumlar için konsantre mikro besin desteği"],
@@ -592,6 +817,7 @@ export const careProductCatalog: CareProductProfile[] = [
     ["Cosmetics River Sand 3 L","Nehir tabanı görünümü için kozmetik akvaryum kumu"],
     ["Cosmetics Black Sand 3 L","Su değerlerini etkilemeyen siyah kozmetik akvaryum kumu"],
   ]),
+  ...products("Creaqua","substrate","https://www.creaqua.com.tr/tr/kozmetik-kumlar/54-brown.html",[["Cosmetics Brown Sand","Genel akvaryum ve bitkili tasarımlarda kozmetik kullanım için su değerlerini etkilemeyen kahverengi nötr kum · resmî sayfa paket hacmi yayımlamadığı için miktar belirtilmedi"]],"2026-09-14"),
   { id:"eurostar-zeo-carbon-fix-500ml", brand:"Eurostar", model:"Zeo Karbon Fix 500 ml", category:"filter_media", description:"Aktif karbon ve zeolit içeren kimyasal filtre medyası", sourceUrl:"https://atakanpetshop.com/eurostar-zeo-karbon-fix-500ml-filtre-malzemesi", verifiedAt },
   { id:"eurostar-lava-fix-500ml", brand:"Eurostar", model:"Lava Fix 500 ml", category:"filter_media", description:"Biyolojik filtrasyon için doğal volkanik lav taşı", sourceUrl:"https://atakanpetshop.com/eurostar-lava-fix-500ml-filtre-malzemesi-452-1018", verifiedAt },
   { id:"eurostar-bio-porous-ring-500ml", brand:"Eurostar", model:"Bio Porous Ring 500 ml", category:"filter_media", description:"Gözenekli seramik biyolojik filtre halkası", sourceUrl:"https://atakanpetshop.com/eurostar-bio-porous-ring-500ml-filtre-malzemesi-452-1017", verifiedAt },
@@ -601,6 +827,11 @@ export const careProductCatalog: CareProductProfile[] = [
   { id:"eurostar-hollow-bio-balls-1l", brand:"Eurostar", model:"Hollow Bio Balls 1 L", category:"filter_media", description:"pH üzerinde etkisiz biyokimyasal seramik biyolojik filtre medyası", sourceUrl:"https://atakanpetshop.com/eurostar-hollow-bio-balls-biolojik-filtre-malzemesi-1lt", verifiedAt:"2026-08-24" },
   { id:"eurostar-super-premium-carbon-300ml", brand:"Eurostar", model:"Super Premium Carbon 300 ml", category:"filter_media", description:"Klor, ağır metal, koku ve organik kirleticileri adsorbe eden aktif karbon", sourceUrl:"https://atakanpetshop.com/eurostar-super-premium-carbon-300ml-filtre-malzemesi-452-1016", verifiedAt:"2026-08-24" },
   { id:"eurostar-aquaclay-500ml", brand:"Eurostar", model:"Aquaclay 500 ml", category:"filter_media", description:"Biyolojik filtrasyon için 8–16 mm gözenekli, katkısız ve fırınlanmış kil esaslı filtre medyası", sourceUrl:"https://www.akvaryumexpress.com/eurostar-aquaclay-biyolojik-filtre-malzemesi", verifiedAt:"2026-08-25" },
+  { id:"eurostar-aquaclay-substrate-5l", brand:"Eurostar", model:"Aquaclay Bitki Kumu 5 L", category:"substrate", description:"Bitkili akvaryumlar için kil esaslı taban malzemesi · 5 L · ürün kodu 452-2001 · barkod 8681144120018", sourceUrl:"https://atakanpetshop.com/eurostar-aquaclay-bitki-kumu-5lt", verifiedAt:"2026-09-09" },
+  { id:"eurostar-aquaclay-substrate-10l", brand:"Eurostar", model:"Aquaclay Bitki Kumu 10 L", category:"substrate", description:"Bitkili akvaryumlar için kil esaslı taban malzemesi · 10 L · ürün kodu 452-2009 · barkod 8681144120094", sourceUrl:"https://atakanpetshop.com/eurostar-aquaclay-bitki-kumu-10lt", verifiedAt:"2026-09-09" },
+  { id:"eurostar-seed-eleocharis", brand:"Eurostar", model:"Bitki Tohumu Eleocharis Parvula", category:"plant_seed", description:"Satıcının Eleocharis parvula adıyla sunduğu bitki tohumu seçeneği · ürün kodu 452-1503 · barkod 8681144115038; paket içeriğinin bilimsel kimliği bağımsız olarak doğrulanmamıştır", sourceUrl:"https://atakanpetshop.com/eurostar-bitki-tohumu-eleocharis-parvula", verifiedAt:"2026-09-09" },
+  { id:"eurostar-seed-glossostigma", brand:"Eurostar", model:"Bitki Tohumu Glossostigma Elatinoides", category:"plant_seed", description:"Satıcının Glossostigma elatinoides adıyla sunduğu bitki tohumu seçeneği · ürün kodu 452-1501 · barkod 8681144115014; paket içeriğinin bilimsel kimliği bağımsız olarak doğrulanmamıştır", sourceUrl:"https://atakanpetshop.com/eurostar-bitki-tohumu-glossostigma-elatinoides", verifiedAt:"2026-09-09" },
+  { id:"eurostar-seed-hemianthus", brand:"Eurostar", model:"Bitki Tohumu Hemianthus Callitrichoides", category:"plant_seed", description:"Satıcının Hemianthus callitrichoides adıyla sunduğu bitki tohumu seçeneği · ürün kodu 452-1502 · barkod 8681144115021; paket içeriğinin bilimsel kimliği bağımsız olarak doğrulanmamıştır", sourceUrl:"https://atakanpetshop.com/eurostar-bitki-tohumu-hemianthus-callitrichoides", verifiedAt:"2026-09-09" },
   { id:"eurostar-water-clarifier-500ml", brand:"Eurostar", model:"Su Berraklaştırıcı 500 ml", category:"water_conditioner", description:"Askıdaki ince partiküllerin filtre tarafından tutulmasını destekleyen su berraklaştırıcı", sourceUrl:"https://atakanpetshop.com/eurostar", verifiedAt:"2026-08-24" },
   { id:"eurostar-ammonia-zeolite-500ml", brand:"Eurostar", model:"Amonyak Giderici Zeolit 500 ml", category:"filter_media", description:"Amonyak, nitrit ve ağır metal kontrolüne yardımcı doğal zeolit filtre medyası", sourceUrl:"https://www.akvaryumexpress.com/eurostar-amonyak-giderici-zeolite-filtre-malzemesi-500-ml", verifiedAt:"2026-08-25" },
   { id:"eurostar-micro-bio-pellets-1000ml", brand:"Eurostar", model:"Micro Bio Pellets 1000 ml", category:"filter_media", description:"Nitrat ve fosfat kontrolünü destekleyen biyolojik filtre peleti", sourceUrl:"https://atakanpetshop.com/eurostar", verifiedAt:"2026-08-24" },
@@ -620,6 +851,539 @@ export const careProductCatalog: CareProductProfile[] = [
     description:`Mekanik ve biyolojik filtrasyon için kesilerek kullanılabilen, yıkanabilir altı katmanlı filtre süngeri · ${size} · satıcı başlığı ile seçenek alanındaki kalınlık değerleri çeliştiğinden kalınlık belirtilmedi`,
     sourceUrl:"https://atakanpetshop.com/mufan-6-katli-biyolojik-filtre-sungeri-30x30x18-cm", verifiedAt:"2026-08-24",
   })),
+  ...products("Aquael","filter_media","https://www.aquael.com/wp-content/uploads/2024/09/new_media_info_en_131452_131453_131454_131455_677.pdf",[
+    ["NanoMax Bio 1 L","Yaklaşık 2.000 m²/L yüzey alanlı sinterlenmiş seramik biyolojik filtre medyası · 1 L"],
+    ["NatureMax Bio 1 L","Su pH, KH ve GH değerlerini değiştirmeyen doğal mikrogözenekli biyolojik filtre medyası · 1 L"],
+    ["PearlMax Bio 1 L","Nitrifikasyon, denitrifikasyon ve mineralizasyonu destekleyen sinterlenmiş cam biyolojik filtre medyası · 1 L"],
+    ["Magic Balls 1 L","Üç mikrona kadar parçacıkları yakalamak üzere tasarlanmış yeniden kullanılabilir mekanik filtre medyası · 1 L"],
+  ],"2026-09-11"),
+  ...products("Aquael","filter_media","https://www.aquael.com/products/aquaristics/pond-filter-media/biologiczne/",[
+    ["BioCeraMAX Pro 600 1 L","Tatlı ve deniz suyu için 600 m²/L yüzey alanlı gözenekli seramik biyolojik filtre medyası · 1 L"],
+    ["BioCeraMAX UltraPro 1200 1 L","Tatlı ve deniz suyu için 1.200 m²/L yüzey alanlı sinterlenmiş cam biyolojik filtre medyası · 1 L"],
+    ["BioCeraMAX UltraPro 1600 1 L","Tatlı ve deniz suyu için 1.600 m²/L yüzey alanlı sinterlenmiş cam biyolojik filtre medyası · 1 L"],
+    ["Multi Cartridge BioCeraMAX","Aquael MultiKani filtre için BioCeraMAX biyolojik medya kartuşu"],
+  ],"2026-09-11"),
+  ...products("Aquael","filter_media","https://www.aquael.com/products/aquaristics/pond-filter-media/chemiczne/",[
+    ["CarboMAX Plus 1 L","Kloru, ağır metal iyonlarını, ilaç kalıntılarını ve renklenmeyi adsorbe eden aktif karbon · 1 L"],
+    ["FZN Mini CarboMAX Media Pack 3'lü","FZN Mini için aktif karbonlu kimyasal filtre kartuşu · 3 adet"],
+    ["FZN Mini PhosMAX Media Pack 3'lü","FZN Mini için fosfat tutucu filtre kartuşu · 3 adet"],
+    ["Magic Algae Stop","Fosfatı bağlayarak alg gelişimini sınırlamaya yardımcı kimyasal filtre kartuşu"],
+    ["Multi Cartridge CarboMAX","Aquael MultiKani filtre için aktif karbon kartuşu"],
+    ["Multi Cartridge PhosMAX Basic","Aquael MultiKani filtre için fosfat tutucu kartuş"],
+    ["Multi Cartridge ZeoMAX","Aquael MultiKani filtre için zeolit kartuşu"],
+    ["NitroMAX","Nitrat kontrolüne yardımcı kimyasal filtre medyası"],
+    ["PhosMAX","Fosfat kontrolüne yardımcı kimyasal filtre medyası"],
+    ["Sponge ASAP 300 CarboMAX 2'li","ASAP 300 için aktif karbon emdirilmiş filtre süngeri · 2 adet"],
+    ["Sponge ASAP 300 PhosMAX 2'li","ASAP 300 için fosfat tutucu filtre süngeri · 2 adet"],
+    ["Sponge ASAP 500 PhosMAX 2'li","ASAP 500 için fosfat tutucu filtre süngeri · 2 adet"],
+    ["Sponge ASAP 700 CarboMAX 2'li","ASAP 700 için aktif karbon emdirilmiş filtre süngeri · 2 adet"],
+    ["Sponge ASAP 700 PhosMAX 2'li","ASAP 700 için fosfat tutucu filtre süngeri · 2 adet"],
+    ["Sponge FAN 1 Plus Carbo 2'li","FAN 1 Plus için aktif karbon emdirilmiş filtre süngeri · 2 adet"],
+    ["Sponge FAN 2 Plus Carbo 2'li","FAN 2 Plus için aktif karbon emdirilmiş filtre süngeri · 2 adet"],
+    ["Sponge FAN 3 Plus Carbo 2'li","FAN 3 Plus için aktif karbon emdirilmiş filtre süngeri · 2 adet"],
+    ["Sponge FAN Mikro Plus Carbo 2'li","FAN Mikro Plus için aktif karbon emdirilmiş filtre süngeri · 2 adet"],
+    ["Sponge FAN Mini Plus Carbo 2'li","FAN Mini Plus için aktif karbon emdirilmiş filtre süngeri · 2 adet"],
+    ["Sponge PAT Mini CarboMAX 2'li","PAT Mini için aktif karbon emdirilmiş filtre süngeri · 2 adet"],
+    ["Sponge PAT Mini PhosMAX 2'li","PAT Mini için fosfat tutucu filtre süngeri · 2 adet"],
+    ["ZeoMAX Plus 1 L","Tatlı su sistemlerinde amonyak kontrolüne yardımcı doğal zeolit medya · 1 L"],
+  ],"2026-09-11"),
+  ...products("Aquael","filter_media","https://www.aquael.com/products/aquaristics/pond-filter-media/mechaniczne-2/",[
+    ["Cartridge ASAP 300 Standard","ASAP 300 için standart mekanik filtre kartuşu"],
+    ["Cartridge ASAP 500 Standard","ASAP 500 için standart mekanik filtre kartuşu"],
+    ["Cartridge ASAP 700 Standard","ASAP 700 için standart mekanik filtre kartuşu"],
+    ["FZN Mini Standard Media Pack 3'lü","FZN Mini için standart mekanik filtre kartuşu · 3 adet"],
+    ["Sponge ASAP 300 Standard 2'li","ASAP 300 için standart mekanik filtre süngeri · 2 adet"],
+    ["Sponge ASAP 500 Standard 2'li","ASAP 500 için standart mekanik filtre süngeri · 2 adet"],
+    ["Sponge ASAP 700 Standard 2'li","ASAP 700 için standart mekanik filtre süngeri · 2 adet"],
+    ["Sponge FAN 1 Plus 2'li","FAN 1 Plus için standart filtre süngeri · 2 adet"],
+    ["Sponge FAN 2 Plus 2'li","FAN 2 Plus için standart filtre süngeri · 2 adet"],
+    ["Sponge FAN 3 Plus 2'li","FAN 3 Plus için standart filtre süngeri · 2 adet"],
+    ["Sponge FAN Mikro Plus 2'li","FAN Mikro Plus için standart filtre süngeri · 2 adet"],
+    ["Sponge FAN Mini Plus 2'li","FAN Mini Plus için standart filtre süngeri · 2 adet"],
+    ["Sponge FZN-1 2'li","FZN-1 için standart filtre süngeri · 2 adet"],
+    ["Sponge FZN-2 2'li","FZN-2 için standart filtre süngeri · 2 adet"],
+    ["Sponge FZN-3 2'li","FZN-3 için standart filtre süngeri · 2 adet"],
+    ["Sponge High Density MultiKani 800","MultiKani 800 için yüksek yoğunluklu mekanik filtre süngeri"],
+    ["Sponge Low Density MultiKani 800","MultiKani 800 için düşük yoğunluklu mekanik filtre süngeri"],
+    ["Sponge MiniKani 80/120","MiniKani 80 ve 120 için filtre süngeri"],
+    ["Sponge PAT Mini 2'li","PAT Mini için standart filtre süngeri · 2 adet"],
+    ["Sponge PAT Mini Dense","PAT Mini için yoğun gözenekli filtre süngeri"],
+    ["Sponge Turbo 500 2'li","Turbo 500 için standart filtre süngeri · 2 adet"],
+    ["Sponge Turbo 1000/1500/2000 2'li","Turbo 1000, 1500 ve 2000 için standart filtre süngeri · 2 adet"],
+    ["Sponge Unifilter 500 3'lü","Unifilter 500 için standart filtre süngeri · 3 adet"],
+    ["Sponge Unifilter 750/1000 3'lü","Unifilter 750 ve 1000 için standart filtre süngeri · 3 adet"],
+    ["WoolMax Pro","İnce parçacıkları tutan mekanik filtre elyafı"],
+  ],"2026-09-11"),
+  ...products("Aquael","filter_media","https://www.aquael.com/products/aquaristics/aquaristics/ultramax-maxi-kani-media/",[
+    ["UltraMax/MaxiKani Standard 20 PPI","UltraMax ve MaxiKani filtrelerde yüksek akış öncelikli 20 PPI sünger"],
+    ["UltraMax/MaxiKani Finish 30 PPI","UltraMax ve MaxiKani filtrelerde akış ve berraklık dengeli 30 PPI sünger"],
+    ["UltraMax/MaxiKani Super Finish 45 PPI","UltraMax ve MaxiKani filtrelerde ince mekanik filtrasyon sağlayan 45 PPI sünger"],
+    ["UltraMax/MaxiKani WoolMax Pro","UltraMax ve MaxiKani filtreler için ince mekanik filtre elyafı"],
+  ],"2026-09-11"),
+  ...products("Aquael","filter_media","https://www.aquael.com/products/aquaristics/pond-filter-media/fzn-pro-sponge-cartridge/",[
+    ["FZN Pro 700 Sponge Cartridge","FZN Pro 700 ana sepetine uyumlu mekanik filtre süngeri"],
+    ["FZN Pro 1000 Sponge Cartridge","FZN Pro 1000 ana sepetine uyumlu mekanik filtre süngeri"],
+    ["FZN Pro 1500 Sponge Cartridge","FZN Pro 1500 ana sepetine uyumlu mekanik filtre süngeri"],
+    ["FZN Pro Prefilter Sponge Cartridge","FZN Pro ailesi için silindirik kaba gözenekli ön filtre süngeri"],
+  ],"2026-09-11"),
+  ...products("Aquael","filter_media","https://www.aquael.com/products/aquaristics/pond-filter-media/media-pack-fzn-pro/",[
+    ["FZN Pro Media Pack Standard 3'lü","FZN Pro filtreler için mekanik filtre elyafı kartuşu · 3 adet"],
+    ["FZN Pro Media Pack CarboMAX 3'lü","FZN Pro filtreler için aktif karbonlu mekanik ve kimyasal kartuş · 3 adet"],
+    ["FZN Pro Media Pack PhosMAX 3'lü","FZN Pro filtreler için fosfat tutucu kartuş · 3 adet"],
+  ],"2026-09-11"),
+  ...products("Aquael","filter_media","https://www.aquael.com/products/aquaristics/pond-filter-media/aquarium-filter-media-bags/",[
+    ["Filter Media Bag 15 × 20 cm","Yaklaşık 1 L gevşek filtre medyası için fermuarlı torba · 15 × 20 cm"],
+    ["Filter Media Bag 15 × 30 cm","Yaklaşık 2 L gevşek filtre medyası için fermuarlı torba · 15 × 30 cm"],
+    ["Filter Media Bag 28 × 32 cm","Yaklaşık 3,5 L gevşek filtre medyası için fermuarlı torba · 28 × 32 cm"],
+  ],"2026-09-11"),
+  ...products("Aquael","substrate","https://www.aquael.com/products/aquaristics/substrates-gravels/kwarcowe-wielobarwne-2/",[
+    ["Aqua Decoris White 2–3 mm 1 kg","Tatlı su akvaryumları için beyaz kaplamalı kuvars çakıl · 2–3 mm · 1 kg"],
+    ["Aqua Decoris Black 2–3 mm 1 kg","Tatlı su akvaryumları için siyah kaplamalı kuvars çakıl · 2–3 mm · 1 kg"],
+    ["Aqua Decoris Green 2–3 mm 1 kg","Tatlı su akvaryumları için yeşil kaplamalı kuvars çakıl · 2–3 mm · 1 kg"],
+    ["Aqua Decoris Yellow 2–3 mm 1 kg","Tatlı su akvaryumları için sarı kaplamalı kuvars çakıl · 2–3 mm · 1 kg"],
+    ["Aqua Decoris Turquoise 2–3 mm 1 kg","Tatlı su akvaryumları için turkuaz kaplamalı kuvars çakıl · 2–3 mm · 1 kg"],
+    ["Aqua Decoris Fuchsia 2–3 mm 1 kg","Tatlı su akvaryumları için fuşya kaplamalı kuvars çakıl · 2–3 mm · 1 kg"],
+    ["Aqua Decoris Red 2–3 mm 1 kg","Tatlı su akvaryumları için kırmızı kaplamalı kuvars çakıl · 2–3 mm · 1 kg"],
+    ["Aqua Decoris Violet 2–3 mm 1 kg","Tatlı su akvaryumları için mor kaplamalı kuvars çakıl · 2–3 mm · 1 kg"],
+    ["Aqua Decoris Blue 2–3 mm 1 kg","Tatlı su akvaryumları için mavi kaplamalı kuvars çakıl · 2–3 mm · 1 kg"],
+    ["Aqua Decoris Lila Rose 2–3 mm 1 kg","Tatlı su akvaryumları için lila-pembe kaplamalı kuvars çakıl · 2–3 mm · 1 kg"],
+  ],"2026-09-11"),
+  ...products("Aquael","substrate","https://www.aquael.com/products/aquaristics/substrates-gravels/kwarcowe-wielobarwne/",[
+    ["Natural Multicolored Gravel 1,4–2 mm 2 kg","Tatlı su akvaryumları için doğal çok renkli çakıl · 1,4–2 mm · 2 kg"],
+    ["Natural Multicolored Gravel 1,4–2 mm 10 kg","Tatlı su akvaryumları için doğal çok renkli çakıl · 1,4–2 mm · 10 kg"],
+    ["Natural Multicolored Gravel 3–5 mm 2 kg","Tatlı su akvaryumları için doğal çok renkli çakıl · 3–5 mm · 2 kg"],
+    ["Natural Multicolored Gravel 3–5 mm 10 kg","Tatlı su akvaryumları için doğal çok renkli çakıl · 3–5 mm · 10 kg"],
+    ["Natural Multicolored Gravel 5–10 mm 2 kg","Tatlı su akvaryumları için doğal çok renkli çakıl · 5–10 mm · 2 kg"],
+    ["Natural Multicolored Gravel 5–10 mm 10 kg","Tatlı su akvaryumları için doğal çok renkli çakıl · 5–10 mm · 10 kg"],
+  ],"2026-09-11"),
+  ...products("Aquael","substrate","https://www.aquael.com/wp-content/uploads/2024/05/aquael-product-catalogue-2024_670.pdf",[
+    ["Quartz Sand 0,1–0,3 mm 2 kg","Dip balıkları için uygun ince doğal kuvars kumu · 0,1–0,3 mm · 2 kg"],
+    ["Quartz Sand 0,1–0,3 mm 10 kg","Dip balıkları için uygun ince doğal kuvars kumu · 0,1–0,3 mm · 10 kg"],
+    ["Quartz Sand 0,4–1,2 mm 2 kg","Tatlı su akvaryumları için doğal kuvars kumu · 0,4–1,2 mm · 2 kg"],
+    ["Quartz Sand 0,4–1,2 mm 10 kg","Tatlı su akvaryumları için doğal kuvars kumu · 0,4–1,2 mm · 10 kg"],
+    ["Quartz Sand 1,6–4 mm 2 kg","Tatlı su akvaryumları için iri doğal kuvars kumu · 1,6–4 mm · 2 kg"],
+    ["Quartz Sand 1,6–4 mm 10 kg","Tatlı su akvaryumları için iri doğal kuvars kumu · 1,6–4 mm · 10 kg"],
+  ],"2026-09-11"),
+  ...products("Aquael","substrate","https://www.aquael.com/products/aquaristics/substrates-gravels/bazaltowe/",[
+    ["Basalt Gravel 2–4 mm 2 kg","Koyu taban tercih eden canlılar için doğal bazalt çakıl · 2–4 mm · 2 kg"],
+    ["Basalt Gravel 2–4 mm 10 kg","Koyu taban tercih eden canlılar için doğal bazalt çakıl · 2–4 mm · 10 kg"],
+  ],"2026-09-11"),
+  ...products("Aquael","substrate","https://www.aquael.com/products/aquaristics/substrates-gravels/dolomitowe/",[
+    ["Dolomite Gravel 2–4 mm 2 kg","Sert ve alkali suyu tercih eden türler için doğal dolomit çakıl · 2–4 mm · 2 kg"],
+    ["Dolomite Gravel 2–4 mm 10 kg","Sert ve alkali suyu tercih eden türler için doğal dolomit çakıl · 2–4 mm · 10 kg"],
+  ],"2026-09-11"),
+  ...products("Aquael","substrate","https://www.aquael.com/wp-content/uploads/2024/05/aquael-product-catalogue-2024_670.pdf",[
+    ["H.E.L.P. Advanced Soil Plants 3 L","Bitkili akvaryumlar için 1–4 mm siyah granüllü aktif taban · 3 L"],
+    ["H.E.L.P. Advanced Soil Plants 8 L","Bitkili akvaryumlar için 1–4 mm siyah granüllü aktif taban · 8 L"],
+    ["H.E.L.P. Advanced Soil Shrimp 3 L","Karides akvaryumlarında su değerlerini dengelemeye yardımcı aktif taban · 3 L"],
+    ["H.E.L.P. Advanced Soil Original 3 L","Tatlı su akvaryumları için aktif Japon taban malzemesi · 3 L"],
+    ["H.E.L.P. Advanced Soil Original 8 L","Tatlı su akvaryumları için aktif Japon taban malzemesi · 8 L"],
+  ],"2026-09-11"),
+  ...products("Aquael","substrate","https://www.aquael.com/products/aquaristics/substrates-gravels/aqua-grunt-floran/",[
+    ["Aqua Decoris Grunt 1,25 kg","Demir ve mikroelement içeren mikrogözenekli bitki tabanı · 1,25 kg"],
+    ["Aqua Decoris Flora 1,5 kg","Bitkili tatlı su akvaryumları için besleyici taban malzemesi · 1,5 kg"],
+  ],"2026-09-11"),
+  ...products("Aquael","food","https://www.aquael.com/products/aquaristics/acti-food/actigran/",[
+    ["ActiGran 100 ml","Tropikal akvaryum balıkları için günlük çok bileşenli granül yem · 100 ml"],
+    ["ActiGran 250 ml","Tropikal akvaryum balıkları için günlük çok bileşenli granül yem · 250 ml"],
+    ["ActiGran 1000 ml","Tropikal akvaryum balıkları için günlük çok bileşenli granül yem · 1000 ml"],
+  ],"2026-09-11"),
+  ...products("Aquael","food","https://www.aquael.com/products/aquaristics/acti-food/spirutabs/",[
+    ["SpiruTabs 100 ml","Yüzde 20 spirulina içeren, cama yapıştırılabilen veya dibe bırakılabilen bitkisel tablet yem · 100 ml"],
+    ["SpiruTabs 250 ml","Yüzde 20 spirulina içeren, cama yapıştırılabilen veya dibe bırakılabilen bitkisel tablet yem · 250 ml"],
+  ],"2026-09-11"),
+  ...products("Aquael","food","https://www.aquael.com/products/aquaristics/acti-food/tortue/",[
+    ["Tortue 100 ml","Su kaplumbağaları için Gammarus ve spirulinalı bitkisel çubuk içeren karma yem · 100 ml"],
+    ["Tortue 250 ml","Su kaplumbağaları için Gammarus ve spirulinalı bitkisel çubuk içeren karma yem · 250 ml"],
+    ["Tortue 1000 ml","Su kaplumbağaları için Gammarus ve spirulinalı bitkisel çubuk içeren karma yem · 1000 ml"],
+  ],"2026-09-11"),
+  ...products("Aquael","food","https://www.aquael.com/products/aquaristics/acti-food/vegetal/",[
+    ["Vegetal 10 g","Canlı doğuranlar ve otçul cikletler için bitkisel proteinli pul yem · 10 g"],
+    ["Vegetal 100 ml","Canlı doğuranlar ve otçul cikletler için bitkisel proteinli pul yem · 100 ml"],
+    ["Vegetal 250 ml","Canlı doğuranlar ve otçul cikletler için bitkisel proteinli pul yem · 250 ml"],
+    ["Vegetal 11 L","Canlı doğuranlar ve otçul cikletler için bitkisel proteinli pul yem · 11 L"],
+  ],"2026-09-11"),
+  ...products("Aquael","food","https://www.aquael.com/products/aquaristics/acti-food/goldgran/",[
+    ["GoldGran 100 ml","Japon balıkları ve diğer soğuk su balıkları için kolay sindirilen granül yem · 100 ml"],
+    ["GoldGran 250 ml","Japon balıkları ve diğer soğuk su balıkları için kolay sindirilen granül yem · 250 ml"],
+    ["GoldGran 1000 ml","Japon balıkları ve diğer soğuk su balıkları için kolay sindirilen granül yem · 1000 ml"],
+  ],"2026-09-11"),
+  ...products("Aquael","food","https://www.aquael.com/products/aquaristics/acti-food/actimin/",[
+    ["ActiMin 10 g","Akvaryum balıkları için günlük çok bileşenli pul yem · 10 g"],
+    ["ActiMin 100 ml","Akvaryum balıkları için günlük çok bileşenli pul yem · 100 ml"],
+    ["ActiMin 250 ml","Akvaryum balıkları için günlük çok bileşenli pul yem · 250 ml"],
+    ["ActiMin 1000 ml","Akvaryum balıkları için günlük çok bileşenli pul yem · 1000 ml"],
+  ],"2026-09-11"),
+  ...products("Aquael","food","https://www.aquael.com/products/aquaristics/acti-food/betta/",[
+    ["Betta 100 ml","Betta balıkları için plankton, kan kurdu ve krill içeren dengeli yem · 100 ml"],
+  ],"2026-09-11"),
+  ...products("Aquael","food","https://www.aquael.com/products/aquaristics/acti-food/goldvit/",[
+    ["GoldVit 100 ml","Japon balıkları ve diğer soğuk su balıkları için kolay sindirilen pul yem · 100 ml"],
+    ["GoldVit 250 ml","Japon balıkları ve diğer soğuk su balıkları için kolay sindirilen pul yem · 250 ml"],
+    ["GoldVit 1000 ml","Japon balıkları ve diğer soğuk su balıkları için kolay sindirilen pul yem · 1000 ml"],
+    ["GoldVit 11 L","Japon balıkları ve diğer soğuk su balıkları için kolay sindirilen pul yem · 11 L"],
+  ],"2026-09-11"),
+  ...products("Aquael","food","https://www.aquael.com/products/aquaristics/acti-food/cichlid/",[
+    ["Cichlid 100 ml","Doğu Afrika göl cikletleri için bitkisel ağırlıklı dengeli pul yem · 100 ml"],
+    ["Cichlid 250 ml","Doğu Afrika göl cikletleri için bitkisel ağırlıklı dengeli pul yem · 250 ml"],
+  ],"2026-09-11"),
+  ...products("Aquael","food","https://www.aquael.com/products/aquaristics/acti-food/cichlidgran/",[
+    ["CichlidGran 250 ml","Doğu Afrika göl cikletleri için bitkisel ağırlıklı dengeli granül yem · 250 ml"],
+    ["CichlidGran 1000 ml","Doğu Afrika göl cikletleri için bitkisel ağırlıklı dengeli granül yem · 1000 ml"],
+  ],"2026-09-11"),
+  ...products("Aquael","food","https://www.aquael.com/products/aquaristics/acti-food/acticolor/",[
+    ["Acti Color 10 g","Beta-karoten ve doğal astaksantin içeren renk destekli pul yem · 10 g"],
+    ["Acti Color 100 ml","Beta-karoten ve doğal astaksantin içeren renk destekli pul yem · 100 ml"],
+    ["Acti Color 250 ml","Beta-karoten ve doğal astaksantin içeren renk destekli pul yem · 250 ml"],
+  ],"2026-09-11"),
+  ...products("Aquael","food","https://www.aquael.com/products/aquaristics/acti-food/guppy/",[
+    ["Guppy 100 ml","Guppyler için sucul böcek larvası temelli ince pul yem · 100 ml"],
+  ],"2026-09-11"),
+  ...products("Aquael","food","https://www.aquael.com/products/aquaristics/acti-food/crustabs/",[
+    ["CrusTabs 10 g","Tatlı su karidesleri ve diğer kabuklular için mineral destekli tablet yem · 10 g"],
+    ["CrusTabs 100 ml","Tatlı su karidesleri ve diğer kabuklular için mineral destekli tablet yem · 100 ml"],
+  ],"2026-09-11"),
+  ...products("Aquael","food","https://www.aquael.com/products/aquaristics/acti-food/artemin/",[
+    ["ArteMin 10 g","Artemia salina içeren yüksek proteinli pul yem · 10 g"],
+    ["ArteMin 100 ml","Artemia salina içeren yüksek proteinli pul yem · 100 ml"],
+    ["ArteMin 250 ml","Artemia salina içeren yüksek proteinli pul yem · 250 ml"],
+  ],"2026-09-11"),
+  ...products("Aquael","food","https://www.aquael.com/products/aquaristics/acti-food/discus-vit/",[
+    ["DiscusVit 100 ml","Discus ve Güney/Orta Amerika cikletleri için yavaş batan küçük granül yem · 100 ml"],
+    ["DiscusVit 250 ml","Discus ve Güney/Orta Amerika cikletleri için yavaş batan küçük granül yem · 250 ml"],
+    ["DiscusVit 1000 ml","Discus ve Güney/Orta Amerika cikletleri için yavaş batan küçük granül yem · 1000 ml"],
+  ],"2026-09-11"),
+  ...products("Aquael","water_conditioner","https://www.aquael.com/products/aquaristics/treatments-en/acti-clean/",[
+    ["Acti Clean 100 ml","Kloru ve zararlı bileşikleri bağlayan, ağır metalleri güvenli forma getirmeye yardımcı musluk suyu düzenleyicisi · 100 ml"],
+    ["Acti Clean 250 ml","Kloru ve zararlı bileşikleri bağlayan, ağır metalleri güvenli forma getirmeye yardımcı musluk suyu düzenleyicisi · 250 ml"],
+  ],"2026-09-11"),
+  ...products("Aquael","bacteria","https://www.aquael.com/products/aquaristics/treatments-en/acti-bactol/",[
+    ["Acti Bactol 100 ml","Filtre medyası ve tabanda biyolojik filtrasyonun başlamasını destekleyen canlı bakteri kültürü · 100 ml"],
+    ["Acti Bactol 250 ml","Filtre medyası ve tabanda biyolojik filtrasyonun başlamasını destekleyen canlı bakteri kültürü · 250 ml"],
+  ],"2026-09-11"),
+  ...products("Aquael","decoration","https://www.aquael.com/products/aquaristics/aquaristics/shrimp-wood-mix/",[
+    ["Shrimp Wood Mix 25 kg","Karides ve nano akvaryumlar için doğal küçük köklerden oluşan dekorasyon karışımı · 25 kg"],
+  ],"2026-09-11"),
+  ...products("Aquael","decoration","https://www.aquael.com/products/aquaristics/aquaristics/red-driftwood-mix/",[
+    ["Red Driftwood Mix 25 kg","Farklı biçim ve boylarda kızıl-kahverengi doğal köklerden oluşan dekorasyon karışımı · 25 kg"],
+  ],"2026-09-11"),
+  ...products("Aquael","decoration","https://www.aquael.com/products/aquaristics/aquaristics/lava-red-mix/",[
+    ["Lava Red Mix 10 kg","Farklı boylarda doğal volkanik kırmızı lav taşlarından oluşan dekorasyon karışımı · 10 kg"],
+  ],"2026-09-11"),
+  ...products("Aquael","decoration","https://www.aquael.com/products/aquaristics/aquaristics/leopard-stone-mix/",[
+    ["Leopard Stone Mix 10 kg","Farklı boylarda çizgili doğal Leopard taşlarından oluşan dekorasyon karışımı · 10 kg"],
+  ],"2026-09-11"),
+  ...products("Aquael","decoration","https://www.aquael.com/products/aquaristics/aquaristics/iron-driftwood-mix/",[
+    ["Iron Driftwood Mix 25 kg","Farklı biçim ve boylarda sert, koyu renkli doğal köklerden oluşan dekorasyon karışımı · 25 kg"],
+  ],"2026-09-11"),
+  ...products("Aquael","decoration","https://www.aquael.com/products/aquaristics/decorations/plastic-plants/",[
+    ["Plastic Plant B2207 24 × 12 × 16 cm","Akvaryum düzenlemesi için B2207 model yapay bitki · 24 × 12 × 16 cm"],
+    ["Plastic Plant Mix 5'li 10 cm","Akvaryum düzenlemesi için 10 cm yapay bitki karışımı · 5 adet"],
+    ["Plastic Plant PR-203 7 cm","Akvaryum düzenlemesi için PR-203 model yapay bitki · 7 cm"],
+    ["Plastic Plant PR-410 10 cm","Akvaryum düzenlemesi için PR-410 model yapay bitki · 10 cm"],
+    ["Plastic Plant CP-035 20 cm","Akvaryum düzenlemesi için CP-035 model yapay bitki · 20 cm"],
+    ["Plastic Plant PR-402 10 cm","Akvaryum düzenlemesi için PR-402 model yapay bitki · 10 cm"],
+    ["Plastic Plant AP-005 20 cm","Akvaryum düzenlemesi için AP-005 model yapay bitki · 20 cm"],
+    ["Plastic Plant CP-057 7 cm","Akvaryum düzenlemesi için CP-057 model yapay bitki · 7 cm"],
+    ["Plastic Plant AP-012 20 cm","Akvaryum düzenlemesi için AP-012 model yapay bitki · 20 cm"],
+    ["Plastic Plant PR-203 20 cm","Akvaryum düzenlemesi için PR-203 model yapay bitki · 20 cm"],
+    ["Plastic Plant B2001 23 × 16 × 14 cm","Akvaryum düzenlemesi için B2001 model yapay bitki · 23 × 16 × 14 cm"],
+  ],"2026-09-11"),
+  ...products("Aquael","decoration","https://www.aquael.com/products/aquaristics/decorations/korzenie-naturalne/",[
+    ["Mangro Root S","Akvaryum düzenlemesi için doğal mangrov kökü · S boy"],
+    ["Mangro Root M","Akvaryum düzenlemesi için doğal mangrov kökü · M boy"],
+    ["Mangro Root L","Akvaryum düzenlemesi için doğal mangrov kökü · L boy"],
+    ["Root Driftwood S","Akvaryum düzenlemesi için doğal driftwood kökü · S boy"],
+    ["Root Driftwood M","Akvaryum düzenlemesi için doğal driftwood kökü · M boy"],
+    ["Root Driftwood L","Akvaryum düzenlemesi için doğal driftwood kökü · L boy"],
+    ["Root Driftwood XL","Akvaryum düzenlemesi için doğal driftwood kökü · XL boy"],
+    ["Driftwood Mix Pack 8–10 kg","Farklı biçim ve boylarda doğal driftwood köklerinden oluşan karışım · 8–10 kg"],
+  ],"2026-09-11"),
+  ...products("Aquael","decoration","https://www.aquael.com/products/aquaristics/decorations/kamienie-naturalne/",[
+    ["Dinosaur Bone Stone Mix 20 kg","Farklı biçim ve boylarda doğal Dinosaur Bone taşlarından oluşan dekorasyon karışımı · 20 kg"],
+    ["Black Quartz Rock Stone Mix 20 kg","Farklı biçim ve boylarda doğal siyah kuvars taşlarından oluşan dekorasyon karışımı · 20 kg"],
+  ],"2026-09-11"),
+  ...aquariumProducts("aquarium_set","https://www.aquael.com/products/aquaristics/aquaristics/neo-set/",[
+    ["Neo Set 125",125,[81,36,51],"125 L tam akvaryum seti · 81 × 36 × 51 cm · Neo Bio 1000 filtre, Platinium 150 W ısıtıcı ve iki 10 W LED modülü",["Neo Bio 1000","Platinium Heater 150 W","Leddy Slim BT 10 W × 2"]],
+    ["Neo Set 130",130,[61,41,60.5],"130 L tam akvaryum seti · 61 × 41 × 60,5 cm · Neo Bio 1000 filtre, Platinium 150 W ısıtıcı ve iki 10 W LED modülü",["Neo Bio 1000","Platinium Heater 150 W","Leddy Tube Sunny 2.0 10 W × 2"]],
+    ["Neo Set 200",200,[101,41,56],"200 L tam akvaryum seti · 101 × 41 × 56 cm · Neo Bio 1000 filtre, Platinium 200 W ısıtıcı ve iki 14 W LED modülü",["Neo Bio 1000","Platinium Heater 200 W","Leddy Tube Sunny 2.0 14 W × 2"]],
+    ["Neo Set 240",240,[121,41,56],"240 L tam akvaryum seti · 121 × 41 × 56 cm · Neo Bio 1000 filtre, Platinium 250 W ısıtıcı ve iki 17 W LED modülü",["Neo Bio 1000","Platinium Heater 250 W","Leddy Tube Sunny 2.0 17 W × 2"]],
+  ]),
+  ...aquariumProducts("aquarium_set","https://www.aquael.com/products/aquaristics/aquarium-sets/aqua-4/",[
+    ["Aqua 4 Kids Rectangular",25,[41,25,25],"25 L dik ön camlı tam set · 41 × 25 × 25 cm · FAN Mini filtre, FIX 25 W ısıtıcı ve 6 W LED aydınlatma",["FAN Mini","FIX 25 W","LEDDY TUBE 6 W"]],
+    ["Aqua 4 Kids Oval",20,[41,25,25],"20 L bombeli ön camlı tam set · 41 × 25 × 25 cm · FAN Mini filtre, FIX 50 W ısıtıcı ve 7 W Day&Night LED",["FAN Mini","FIX 50 W","LEDDY TUBE SUNNY DAY&NIGHT 7 W"]],
+    ["Aqua 4 Start Rectangular",54,[60,30,30],"54 L dik ön camlı tam set · 60 × 30 × 30 cm · FAN 1 filtre, FIX 50 W ısıtıcı ve 10 W LED aydınlatma",["FAN 1","FIX 50 W","RETROFIT 10 W"]],
+    ["Aqua 4 Start Oval",45,[60,30,30],"45 L bombeli ön camlı tam set · 60 × 30 × 30 cm · FAN 1 filtre, FIX 50 W ısıtıcı ve 10 W Day&Night LED",["FAN 1","FIX 50 W","LEDDY TUBE SUNNY DAY&NIGHT 10 W"]],
+    ["Aqua 4 Family Rectangular",112,[80,35,40],"112 L dik ön camlı tam set · 80 × 35 × 40 cm · FAN 2 filtre, FIX 100 W ısıtıcı ve 14 W Day&Night LED",["FAN 2","FIX 100 W","LEDDY TUBE SUNNY DAY&NIGHT 14 W"]],
+    ["Aqua 4 Family Oval",102,[80,35,40],"102 L bombeli ön camlı tam set · 80 × 35 × 40 cm · FAN 2 filtre, FIX 100 W ısıtıcı ve 14 W Day&Night LED",["FAN 2","FIX 100 W","LEDDY TUBE SUNNY DAY&NIGHT 14 W"]],
+  ]),
+  ...aquariumProducts("aquarium_set","https://www.aquael.com/products/aquaristics/aquarium-sets/classic-box/",[
+    ["Classic Box Set 40 Oval",20,[41,25,25],"20 L bombeli ön camlı akvaryum ve kapak seti · 41 × 25 × 25 cm · 7 W Leddy Tube Sunny Day&Night",["Leddy Tube Sunny Day&Night 7 W"]],
+    ["Classic Box Set 60 Oval",45,[60,30,30],"45 L bombeli ön camlı akvaryum ve kapak seti · 60 × 30 × 30 cm · 10 W Leddy Tube Sunny Day&Night",["Leddy Tube Sunny Day&Night 10 W"]],
+    ["Classic Box Set 80 Oval",102,[80,35,40],"102 L bombeli ön camlı akvaryum ve kapak seti · 80 × 35 × 40 cm · 14 W Leddy Tube Sunny Day&Night",["Leddy Tube Sunny Day&Night 14 W"]],
+    ["Classic Box Set 40 Rectangular",25,[41,25,25],"25 L dik ön camlı akvaryum ve kapak seti · 41 × 25 × 25 cm · 7 W Leddy Tube Sunny Day&Night",["Leddy Tube Sunny Day&Night 7 W"]],
+    ["Classic Box Set 60 Rectangular",54,[60,30,30],"54 L dik ön camlı akvaryum ve kapak seti · 60 × 30 × 30 cm · 10 W Leddy Tube Sunny Day&Night",["Leddy Tube Sunny Day&Night 10 W"]],
+    ["Classic Box Set 80 Rectangular",112,[80,35,40],"112 L dik ön camlı akvaryum ve kapak seti · 80 × 35 × 40 cm · 14 W Leddy Tube Sunny Day&Night",["Leddy Tube Sunny Day&Night 14 W"]],
+  ]),
+  ...aquariumProducts("aquarium_set","https://www.aquael.com/products/aquaristics/aquarium-sets/shrimp-set-daynight/",[
+    ["Shrimp Set Day&Night 10 Black",10,[20,20,25],"10 L siyah nano akvaryum seti · 20 × 20 × 25 cm · Turbo Mini filtre, Fix 2 50 W ısıtıcı ve 4,8 W Day&Night LED",["Turbo Mini","Fix 2 50 W","Leddy Smart Day&Night 4.8 W"]],
+    ["Shrimp Set Day&Night 10 White",10,[20,20,25],"10 L beyaz nano akvaryum seti · 20 × 20 × 25 cm · Turbo Mini filtre, Fix 2 50 W ısıtıcı ve 4,8 W Day&Night LED",["Turbo Mini","Fix 2 50 W","Leddy Smart Day&Night 4.8 W"]],
+    ["Shrimp Set Day&Night 20 Black",19,[25,25,30],"19 L siyah nano akvaryum seti · 25 × 25 × 30 cm · Turbo Mini filtre, Fix 2 50 W ısıtıcı ve 4,8 W Day&Night LED",["Turbo Mini","Fix 2 50 W","Leddy Smart Day&Night 4.8 W"]],
+    ["Shrimp Set Day&Night 20 White",19,[25,25,30],"19 L beyaz nano akvaryum seti · 25 × 25 × 30 cm · Turbo Mini filtre, Fix 2 50 W ısıtıcı ve 4,8 W Day&Night LED",["Turbo Mini","Fix 2 50 W","Leddy Smart Day&Night 4.8 W"]],
+    ["Shrimp Set Day&Night 30 Black",30,[29,29,35],"30 L siyah nano akvaryum seti · 29 × 29 × 35 cm · Turbo Mini filtre, Fix 2 50 W ısıtıcı ve 4,8 W Day&Night LED",["Turbo Mini","Fix 2 50 W","Leddy Smart Day&Night 4.8 W"]],
+    ["Shrimp Set Day&Night 30 White",30,[29,29,35],"30 L beyaz nano akvaryum seti · 29 × 29 × 35 cm · Turbo Mini filtre, Fix 2 50 W ısıtıcı ve 4,8 W Day&Night LED",["Turbo Mini","Fix 2 50 W","Leddy Smart Day&Night 4.8 W"]],
+  ]),
+  ...aquariumProducts("aquarium_set","https://www.aquael.com/products/aquaristics/aquaristics/shrimp-set-duo/",[
+    ["Fish & Shrimp Set Duo 35 White",49,[35,35,40],"49 L beyaz küp akvaryum seti · 35 × 35 × 40 cm · FZN Versa Pro 700 filtre, Fix 50 ısıtıcı ve Leddy Slim Duo aydınlatma",["FZN Versa Pro 700","Fix 50","Leddy Slim Duo"]],
+    ["Fish & Shrimp Set Duo 35 Day&Night Black",49,[35,35,40],"49 L siyah küp akvaryum seti · 35 × 35 × 40 cm · FZN Versa Pro 700 filtre, Fix 50 ısıtıcı ve Leddy Slim Duo Sunny Plant&Night aydınlatma",["FZN Versa Pro 700","Fix 50","Leddy Slim Duo Sunny Plant&Night"]],
+  ]),
+  ...aquariumProducts("aquarium_set","https://www.aquael.com/products/aquaristics/aquarium-sets/opti-set-130/",[
+    ["Opti Set 130 White",130,[60.9,40.9,60.5],"130 L beyaz Opti-Glass akvaryum seti · 60,9 × 40,9 × 60,5 cm · iki Leddy Tube Sunny Day&Night 2.0 aydınlatma modülü",["Leddy Tube Sunny Day&Night 2.0 × 2"]],
+    ["Opti Set 130 Black",130,[60.9,40.9,60.5],"130 L siyah Opti-Glass akvaryum seti · 60,9 × 40,9 × 60,5 cm · iki Leddy Tube Sunny Day&Night 2.0 aydınlatma modülü",["Leddy Tube Sunny Day&Night 2.0 × 2"]],
+    ["Opti Set 130 Grey",130,[60.9,40.9,60.5],"130 L gri Opti-Glass akvaryum seti · 60,9 × 40,9 × 60,5 cm · iki Leddy Tube Sunny Day&Night 2.0 aydınlatma modülü",["Leddy Tube Sunny Day&Night 2.0 × 2"]],
+  ]),
+  ...aquariumProducts("aquarium_set","https://www.aquael.com/products/aquaristics/aquarium-sets/leddy-xl-daynight/",[
+    ["Leddy XL Day&Night 40",35,[41,25,35],"35 L yüksek akvaryum seti · 41 × 25 × 35 cm · ASAP 300 filtre, Fix 50 W ısıtıcı ve 7 W Leddy Tube Sunny Day&Night",["ASAP 300","Fix 50 W","Leddy Tube Sunny Day&Night 7 W"]],
+    ["Leddy XL Day&Night 60",72,[60,30,40],"72 L yüksek akvaryum seti · 60 × 30 × 40 cm · ASAP 300 filtre, Fix 100 W ısıtıcı ve 10 W Leddy Tube Sunny Day&Night",["ASAP 300","Fix 100 W","Leddy Tube Sunny Day&Night 10 W"]],
+  ]),
+  ...aquariumProducts("aquarium_set","https://www.aquael.com/products/aquaristics/aquarium-sets/ultrascape-set/",[
+    ["UltraScape Set 60 Forest",64.8,[60,30,36],"64,8 L Forest renkli Opti-Glass aquascape seti · 60 × 30 × 36 cm · iki 10 W Plant ve bir 10 W Sunny Day&Night LED modülü",["Leddy Tube Plant 10 W × 2","Leddy Tube Sunny Day&Night 10 W"]],
+    ["UltraScape Set 60 Snow",64.8,[60,30,36],"64,8 L Snow renkli Opti-Glass aquascape seti · 60 × 30 × 36 cm · iki 10 W Plant ve bir 10 W Sunny Day&Night LED modülü",["Leddy Tube Plant 10 W × 2","Leddy Tube Sunny Day&Night 10 W"]],
+    ["UltraScape Set 90 Forest",243,[90,60,45],"243 L Forest renkli Opti-Glass aquascape seti · 90 × 60 × 45 cm · iki 14 W Plant ve iki 14 W Sunny Day&Night LED modülü",["Leddy Tube Plant 14 W × 2","Leddy Tube Sunny Day&Night 14 W × 2"]],
+    ["UltraScape Set 90 Snow",243,[90,60,45],"243 L Snow renkli Opti-Glass aquascape seti · 90 × 60 × 45 cm · iki 14 W Plant ve iki 14 W Sunny Day&Night LED modülü",["Leddy Tube Plant 14 W × 2","Leddy Tube Sunny Day&Night 14 W × 2"]],
+  ]),
+  ...aquariumProducts("aquarium_set","https://www.aquael.com/us/products/aquaristics-us/aquarium-sets-us/optibent-set/",[
+    ["OptiBent Set 20 Black",19,[25,25,30],"19 L siyah, yuvarlatılmış köşeli Opti-Glass set · 25 × 25 × 30 cm · Fan Mini Plus filtre, Ultra Heater 25 W ve Leddy Slim Duo Sunny Plant&Night",["Fan Mini Plus","Ultra Heater 25 W","Leddy Slim Duo Sunny Plant&Night"]],
+    ["OptiBent Set 20 White",19,[25,25,30],"19 L beyaz, yuvarlatılmış köşeli Opti-Glass set · 25 × 25 × 30 cm · Fan Mini Plus filtre, Ultra Heater 25 W ve Leddy Slim Duo Sunny Plant&Night",["Fan Mini Plus","Ultra Heater 25 W","Leddy Slim Duo Sunny Plant&Night"]],
+    ["OptiBent Set 30 Black",29,[29,29,35],"29 L siyah, yuvarlatılmış köşeli Opti-Glass set · 29 × 29 × 35 cm · Fan Mini Plus filtre, Ultra Heater 25 W ve Leddy Slim Duo Sunny Plant&Night",["Fan Mini Plus","Ultra Heater 25 W","Leddy Slim Duo Sunny Plant&Night"]],
+    ["OptiBent Set 30 White",29,[29,29,35],"29 L beyaz, yuvarlatılmış köşeli Opti-Glass set · 29 × 29 × 35 cm · Fan Mini Plus filtre, Ultra Heater 25 W ve Leddy Slim Duo Sunny Plant&Night",["Fan Mini Plus","Ultra Heater 25 W","Leddy Slim Duo Sunny Plant&Night"]],
+    ["OptiBent Set 70 Black",68,[39,39,45],"68 L siyah, yuvarlatılmış köşeli Opti-Glass set · 39 × 39 × 45 cm · Fan 1 Plus filtre, Ultra Heater 75 W ve Leddy Slim Duo Sunny Plant&Night",["Fan 1 Plus","Ultra Heater 75 W","Leddy Slim Duo Sunny Plant&Night"]],
+    ["OptiBent Set 70 White",68,[39,39,45],"68 L beyaz, yuvarlatılmış köşeli Opti-Glass set · 39 × 39 × 45 cm · Fan 1 Plus filtre, Ultra Heater 75 W ve Leddy Slim Duo Sunny Plant&Night",["Fan 1 Plus","Ultra Heater 75 W","Leddy Slim Duo Sunny Plant&Night"]],
+  ]),
+  ...aquariumProducts("aquarium_set","https://www.aquael.com/products/aquaristics/aquarium-sets/opti-set/",[
+    ["Opti Set 125 Grey",125,[81,36,51],"125 L gri Opti-Glass akvaryum seti · 81 × 36 × 51 cm · iki 14 W LED aydınlatma modülü",["Leddy Tube Sunny Day&Night 14 W × 2"]],
+    ["Opti Set 125 Black",125,[81,36,51],"125 L siyah Opti-Glass akvaryum seti · 81 × 36 × 51 cm · iki 14 W LED aydınlatma modülü",["Leddy Tube Sunny Day&Night 14 W × 2"]],
+    ["Opti Set 125 White",125,[81,36,51],"125 L beyaz Opti-Glass akvaryum seti · 81 × 36 × 51 cm · iki 14 W LED aydınlatma modülü",["Leddy Tube Sunny Day&Night 14 W × 2"]],
+    ["Opti Set 200 Grey",200,[101,41,56],"200 L gri Opti-Glass akvaryum seti · 101 × 41 × 56 cm · iki 14 W LED aydınlatma modülü",["Leddy Tube Sunny Day&Night 14 W × 2"]],
+    ["Opti Set 200 Black",200,[101,41,56],"200 L siyah Opti-Glass akvaryum seti · 101 × 41 × 56 cm · iki 14 W LED aydınlatma modülü",["Leddy Tube Sunny Day&Night 14 W × 2"]],
+    ["Opti Set 200 White",200,[101,41,56],"200 L beyaz Opti-Glass akvaryum seti · 101 × 41 × 56 cm · iki 14 W LED aydınlatma modülü",["Leddy Tube Sunny Day&Night 14 W × 2"]],
+    ["Opti Set 240 Grey",240,[121,41,56],"240 L gri Opti-Glass akvaryum seti · 121 × 41 × 56 cm · iki 17 W LED aydınlatma modülü",["Leddy Tube Sunny Day&Night 17 W × 2"]],
+    ["Opti Set 240 Black",240,[121,41,56],"240 L siyah Opti-Glass akvaryum seti · 121 × 41 × 56 cm · iki 17 W LED aydınlatma modülü",["Leddy Tube Sunny Day&Night 17 W × 2"]],
+    ["Opti Set 240 White",240,[121,41,56],"240 L beyaz Opti-Glass akvaryum seti · 121 × 41 × 56 cm · iki 17 W LED aydınlatma modülü",["Leddy Tube Sunny Day&Night 17 W × 2"]],
+  ]),
+  ...aquariumProducts("aquarium_set","https://www.aquael.com/products/aquaristics/aquarium-sets/hexa-set/",[
+    ["Hexa Set II 60L Black LT",60,[41,41,60],"60 L siyah altıgen akvaryum seti · 41 × 41 × 60 cm · kapağa gömülü 350 L/saat filtre, Platinium 50 W ısıtıcı ve Leddy Tube 7 W Day&Night",["Built-in Filter 350 L/h","Platinium Heater 50 W","Leddy Tube Day&Night 7 W"]],
+  ]),
+  ...aquariumProducts("aquarium_set","https://www.aquael.com/products/aquaristics/aquarium-sets/nano-reef/",[
+    ["NanoReef Duo 35 White",49,[35,35,40],"49 L beyaz deniz nano akvaryum seti · 35 × 35 × 40 cm · ayarlanabilir 1200 L/saat FZN 3 filtre ve Leddy Slim Duo Marine & Actinic aydınlatma",["FZN 3","Leddy Slim Duo Marine & Actinic"]],
+  ]),
+  ...aquariumProducts("aquarium_set","https://www.aquael.com/products/aquaristics/aquarium-sets/leddy-daynight/",[
+    ["Leddy Day&Night 40 Black",25,[41,25,25],"25 L siyah tam akvaryum seti · 41 × 25 × 25 cm · ASAP 300 filtre, Fix 50 ısıtıcı ve 7 W Leddy Tube Sunny Day&Night",["ASAP 300","Fix 50","Leddy Tube Sunny Day&Night 7 W"]],
+    ["Leddy Day&Night 40 White",25,[41,25,25],"25 L beyaz tam akvaryum seti · 41 × 25 × 25 cm · ASAP 300 filtre, Fix 50 ısıtıcı ve 7 W Leddy Tube Sunny Day&Night",["ASAP 300","Fix 50","Leddy Tube Sunny Day&Night 7 W"]],
+    ["Leddy Day&Night 60 Black",54,[60,30,30],"54 L siyah tam akvaryum seti · 60 × 30 × 30 cm · ASAP 300 filtre, Fix 50 ısıtıcı ve 7 W Leddy Tube Sunny Day&Night",["ASAP 300","Fix 50","Leddy Tube Sunny Day&Night 7 W"]],
+    ["Leddy Day&Night 60 White",54,[60,30,30],"54 L beyaz tam akvaryum seti · 60 × 30 × 30 cm · ASAP 300 filtre, Fix 50 ısıtıcı ve 7 W Leddy Tube Sunny Day&Night",["ASAP 300","Fix 50","Leddy Tube Sunny Day&Night 7 W"]],
+    ["Leddy Day&Night 75 Black",105,[75,35,40],"105 L siyah tam akvaryum seti · 75 × 35 × 40 cm · ASAP 500 filtre, Fix 100 ısıtıcı ve 14 W Leddy Tube Sunny Day&Night",["ASAP 500","Fix 100","Leddy Tube Sunny Day&Night 14 W"]],
+    ["Leddy Day&Night 75 White",105,[75,35,40],"105 L beyaz tam akvaryum seti · 75 × 35 × 40 cm · ASAP 500 filtre, Fix 100 ısıtıcı ve 14 W Leddy Tube Sunny Day&Night",["ASAP 500","Fix 100","Leddy Tube Sunny Day&Night 14 W"]],
+  ]),
+  ...aquariumProducts("aquarium_set","https://www.aquael.com/products/aquaristics/aquarium-sets/leddy-plus-en/",[
+    ["Leddy Plus Day&Night 40 Black",25,[41,25,25],"25 L siyah Plus akvaryum seti · 41 × 25 × 25 cm · Fan Mini Plus filtre, Platinium 25 W ısıtıcı ve 7 W Day&Night LED",["Fan Mini Plus","Platinium Heater 25 W","Leddy Tube Day&Night 7 W"]],
+    ["Leddy Plus Day&Night 40 White",25,[41,25,25],"25 L beyaz Plus akvaryum seti · 41 × 25 × 25 cm · Fan Mini Plus filtre, Platinium 25 W ısıtıcı ve 7 W Day&Night LED",["Fan Mini Plus","Platinium Heater 25 W","Leddy Tube Day&Night 7 W"]],
+    ["Leddy Plus Day&Night 60 Black",54,[60,30,30],"54 L siyah Plus akvaryum seti · 60 × 30 × 30 cm · Fan 1 Plus filtre, Platinium 50 W ısıtıcı ve 7 W Day&Night LED",["Fan 1 Plus","Platinium Heater 50 W","Leddy Tube Day&Night 7 W"]],
+    ["Leddy Plus Day&Night 60 White",54,[60,30,30],"54 L beyaz Plus akvaryum seti · 60 × 30 × 30 cm · Fan 1 Plus filtre, Platinium 50 W ısıtıcı ve 7 W Day&Night LED",["Fan 1 Plus","Platinium Heater 50 W","Leddy Tube Day&Night 7 W"]],
+    ["Leddy Plus Day&Night 75 Black",105,[75,35,40],"105 L siyah Plus akvaryum seti · 75 × 35 × 40 cm · Fan 2 Plus filtre, Platinium 100 W ısıtıcı ve 7 W Day&Night LED",["Fan 2 Plus","Platinium Heater 100 W","Leddy Tube Day&Night 7 W"]],
+    ["Leddy Plus Day&Night 75 White",105,[75,35,40],"105 L beyaz Plus akvaryum seti · 75 × 35 × 40 cm · Fan 2 Plus filtre, Platinium 100 W ısıtıcı ve 7 W Day&Night LED",["Fan 2 Plus","Platinium Heater 100 W","Leddy Tube Day&Night 7 W"]],
+  ]),
+  ...aquariumProducts("aquarium_set","https://www.aquael.com/products/aquaristics/aquarium-sets/leddy-mini-creative-set/",[
+    ["Leddy Mini Creative Set 30 Black",12.6,[28,15,30],"12,6 L siyah başlangıç akvaryumu · 28 × 15 × 30 cm · ayarlanabilir ve havalandırmalı Turbo Mini filtre",["Turbo Mini"]],
+    ["Leddy Mini Creative Set 30 White",12.6,[28,15,30],"12,6 L beyaz başlangıç akvaryumu · 28 × 15 × 30 cm · ayarlanabilir ve havalandırmalı Turbo Mini filtre",["Turbo Mini"]],
+    ["Leddy Mini Creative Set 35 Black",19,[35,18,30],"19 L siyah başlangıç akvaryumu · 35 × 18 × 30 cm · ayarlanabilir ve havalandırmalı Turbo Mini filtre",["Turbo Mini"]],
+    ["Leddy Mini Creative Set 35 White",19,[35,18,30],"19 L beyaz başlangıç akvaryumu · 35 × 18 × 30 cm · ayarlanabilir ve havalandırmalı Turbo Mini filtre",["Turbo Mini"]],
+  ]),
+  ...aquariumProducts("aquarium_set","https://www.aquael.com/products/aquaristics/aquarium-sets/glossy-st-grey-en/",[
+    ["Glossy ST 80 Grey",125,[80,35,54],"125 L gri parlak akvaryum seti · 80 × 35 × 54 cm · iki 14 W LED aydınlatma modülü",["Leddy Tube Sunny Day&Night 14 W × 2"]],
+    ["Glossy ST 100 Grey",215,[100,40,63],"215 L gri parlak akvaryum seti · 100 × 40 × 63 cm · iki 14 W LED aydınlatma modülü",["Leddy Tube Sunny Day&Night 14 W × 2"]],
+    ["Glossy ST 120 Grey",260,[120,40,63],"260 L gri parlak akvaryum seti · 120 × 40 × 63 cm · üç 17 W LED aydınlatma modülü",["Leddy Tube Sunny Day&Night 17 W × 3"]],
+    ["Glossy ST 150 Grey",405,[150,50,63],"405 L gri parlak akvaryum seti · 150 × 50 × 63 cm · üç 17 W LED aydınlatma modülü",["Leddy Tube Sunny Day&Night 17 W × 3"]],
+    ["Glossy ST Cube Grey",135,[50,50,63],"135 L gri parlak küp akvaryum seti · 50 × 50 × 63 cm · iki 10 W LED aydınlatma modülü",["Leddy Tube Sunny Day&Night 10 W × 2"]],
+  ]),
+  ...aquariumProducts("aquarium_set","https://www.aquael.com/products/aquaristics/aquarium-sets/betta-kit/",[
+    ["Betta Kit",3,[23.7,15.4,17.3],"3 L çizilmeye ve kırılmaya dayanıklı plastik taşıma akvaryumu · 23,7 × 15,4 × 17,3 cm · havalandırma delikli çıkarılabilir kapak ve taşıma sapı"],
+  ]),
+  ...aquariumProducts("aquarium_set","https://www.aquael.com/products/aquaristics/new-en/glossy-marine-2/",[
+    ["Glossy Marine Standard",170,[60,58,50],"170 L Opti cam deniz akvaryumu seti · 60 × 58 × 50 cm · filtre paneli, protein skimmer, ayarlanabilir sirkülasyon pompası ve biyolojik filtre medyası",["Filter Panel","Protein Skimmer","Adjustable Circulation Pump"]],
+    ["Glossy Marine Optimum",170,[60,58,50],"Yaklaşık 170 L Opti cam deniz akvaryumu seti · 60 × 58 × 50 cm · Standard ekipmanlarına ek iki 18 W Leddy Slim BT aydınlatma",["Filter Panel","Protein Skimmer","Adjustable Circulation Pump","Leddy Slim BT 18 W × 2"]],
+  ]),
+  ...habitatProducts("aquaterrarium","https://www.aquael.com/wp-content/uploads/2025/02/aquaterrarium-123968-123969-123970-info-en_173.pdf",[
+    ["AquaTerrarium 60",[60,30,20.5],"Kaplumbağa ve yengeç gibi su-kara canlıları için 60 cm aquaterrarium · 60 × 30 × 20,5 cm · doğal çakıl kaplı kaymaz çıkış platformu; filtre dahil değil"],
+    ["AquaTerrarium 80",[80,35,30.5],"Kaplumbağa ve yengeç gibi su-kara canlıları için 80 cm aquaterrarium · 80 × 35 × 30,5 cm · kaymaz çıkış platformu ve 500 L/saat filtre",["Filter 500 L/h"]],
+    ["AquaTerrarium 100",[100,40,35.5],"Kaplumbağa ve yengeç gibi su-kara canlıları için 100 cm aquaterrarium · 100 × 40 × 35,5 cm · kaymaz çıkış platformu ve 500 L/saat filtre",["Filter 500 L/h"]],
+  ]),
+  ...habitatProducts("terrarium","https://www.aquael.com/products/aquaristics/smart-aquarium/selva-mini-terrarium/",[
+    ["Selva Mini Terrarium",[20,20,30],"Egzotik bitkiler için Opti cam mini terrarium · 20 × 20 × 30 cm · Aquael BT uygulamasıyla kontrol edilen WRGB LED ve entegre havalandırma sistemi",["WRGB LED (Bluetooth, Aquael BT)"]],
+  ]),
+  ...aquariumProducts("tank","https://www.aquael.com/products/aquaristics/aquarien/standard/",[
+    ["Glass Aquarium Oval 41",20,[41,25,25],"20 L bombeli ön camlı boş cam akvaryum · 41 × 25 × 25 cm · 4 mm cam"],
+    ["Glass Aquarium Oval 50",40,[50,30,30],"40 L bombeli ön camlı boş cam akvaryum · 50 × 30 × 30 cm · 4 mm cam"],
+    ["Glass Aquarium Oval 60",45,[60,30,30],"45 L bombeli ön camlı boş cam akvaryum · 60 × 30 × 30 cm · 4 mm cam"],
+    ["Glass Aquarium Oval 80",102,[80,35,40],"102 L bombeli ön camlı boş cam akvaryum · 80 × 35 × 40 cm · 6 mm cam"],
+    ["Glass Aquarium Oval 100",170,[100,40,50],"170 L bombeli ön camlı boş cam akvaryum · 100 × 40 × 50 cm · 8 mm cam"],
+    ["Glass Aquarium Oval 120",205,[120,40,50],"205 L bombeli ön camlı boş cam akvaryum · 120 × 40 × 50 cm · 8 mm cam"],
+    ["Glass Aquarium Oval 150",320,[150,40,50],"320 L bombeli ön camlı boş cam akvaryum · 150 × 40 × 50 cm · 10 mm cam"],
+    ["Glass Aquarium Rectangular 41",25,[41,25,25],"25 L dik ön camlı boş cam akvaryum · 41 × 25 × 25 cm · 4 mm cam"],
+    ["Glass Aquarium Rectangular 50",45,[50,30,30],"45 L dik ön camlı boş cam akvaryum · 50 × 30 × 30 cm · 4 mm cam"],
+    ["Glass Aquarium Rectangular 60",54,[60,30,30],"54 L dik ön camlı boş cam akvaryum · 60 × 30 × 30 cm · 4 mm cam"],
+    ["Glass Aquarium Rectangular 80",112,[80,35,40],"112 L dik ön camlı boş cam akvaryum · 80 × 35 × 40 cm · 6 mm cam"],
+    ["Glass Aquarium Rectangular 100",200,[100,40,50],"200 L dik ön camlı boş cam akvaryum · 100 × 40 × 50 cm · 8 mm cam"],
+    ["Glass Aquarium Rectangular 120",240,[120,40,50],"240 L dik ön camlı boş cam akvaryum · 120 × 40 × 50 cm · 8 mm cam"],
+    ["Glass Aquarium Rectangular 150",375,[150,50,50],"375 L dik ön camlı boş cam akvaryum · 150 × 50 × 50 cm · 10 mm cam"],
+  ]),
+  ...aquariumProducts("tank","https://www.aquael.com/us/products/aquaristics-us/aquariums-us/opti-tank/",[
+    ["Opti Tank 60",54,[60,30,30],"54 L şeffaf Opti cam akvaryum · 60 × 30 × 30 cm · 5 mm cam"],
+    ["Opti Tank 80",112,[80,35,40],"112 L şeffaf Opti cam akvaryum · 80 × 35 × 40 cm · 6 mm cam"],
+    ["Opti Tank 100",200,[100,40,50],"200 L şeffaf Opti cam akvaryum · 100 × 40 × 50 cm · 8 mm cam"],
+  ]),
+  ...aquariumProducts("tank","https://www.aquael.com/products/aquaristics/aquarien/opti-tank-rounded/",[
+    ["Opti Tank Rounded 20 Black",19,[25,25,30],"19 L siyah detaylı, yuvarlatılmış ön köşeli Opti cam akvaryum · 25 × 25 × 30 cm · cam kapak ve taban matı"],
+    ["Opti Tank Rounded 20 White",19,[25,25,30],"19 L beyaz detaylı, yuvarlatılmış ön köşeli Opti cam akvaryum · 25 × 25 × 30 cm · cam kapak ve taban matı"],
+    ["Opti Tank Rounded 30 Black",29,[29,29,35],"29 L siyah detaylı, yuvarlatılmış ön köşeli Opti cam akvaryum · 29 × 29 × 35 cm · cam kapak ve taban matı"],
+    ["Opti Tank Rounded 30 White",29,[29,29,35],"29 L beyaz detaylı, yuvarlatılmış ön köşeli Opti cam akvaryum · 29 × 29 × 35 cm · cam kapak ve taban matı"],
+    ["Opti Tank Rounded 70 Black",68,[39,39,45],"68 L siyah detaylı, yuvarlatılmış ön köşeli Opti cam akvaryum · 39 × 39 × 45 cm · cam kapak ve taban matı"],
+    ["Opti Tank Rounded 70 White",68,[39,39,45],"68 L beyaz detaylı, yuvarlatılmış ön köşeli Opti cam akvaryum · 39 × 39 × 45 cm · cam kapak ve taban matı"],
+  ]),
+  ...volumeProducts("tank","https://www.aquael.com/products/aquaristics/aquaristics/kula/",[
+    ["Glass Bowl 23",4.5,"Wabi-kusa, su bitkileri, salyangoz ve karides düzenlemeleri için 4,5 L dayanıklı cam fanus"],
+    ["Glass Bowl 25",8.5,"Wabi-kusa, su bitkileri, salyangoz ve karides düzenlemeleri için 8,5 L dayanıklı cam fanus"],
+    ["Glass Bowl 30",13,"Wabi-kusa, su bitkileri, salyangoz ve karides düzenlemeleri için 13 L dayanıklı cam fanus"],
+    ["Glass Bowl 45",45,"Wabi-kusa, su bitkileri, salyangoz ve karides düzenlemeleri için 45 L dayanıklı cam fanus"],
+  ]),
+  ...dimensionProducts("cover","https://www.aquael.com/products/aquaristics/aquarium-cover/leddy-2/",[
+    ["Leddy Cover Rectangular 40 Black",[41,25],"40 cm akvaryum için siyah kapak · 41 × 25 cm · 6 W, 680 lm, 6500 K LED"],
+    ["Leddy Cover Rectangular 40 White",[41,25],"40 cm akvaryum için beyaz kapak · 41 × 25 cm · 6 W, 680 lm, 6500 K LED"],
+    ["Leddy Cover Rectangular 60 Black",[60,30],"60 cm akvaryum için siyah kapak · 60 × 30 cm · 8 W, 900 lm, 6500 K LED"],
+    ["Leddy Cover Rectangular 60 White",[60,30],"60 cm akvaryum için beyaz kapak · 60 × 30 cm · 8 W, 900 lm, 6500 K LED"],
+    ["Leddy Cover Rectangular 75 Black",[75,35],"75 cm akvaryum için siyah kapak · 75 × 35 cm · 16 W, 1650 lm, 6500 K LED"],
+  ]),
+  ...dimensionProducts("cover","https://www.aquael.com/products/aquaristics/aquarium-cover/classic-2/",[
+    ["Classic Cover Oval 100 LT",[100,40],"100 cm bombeli akvaryum kapağı · 100 × 40 cm · 2 × 16 W, toplam 3300 lm, 6500 K LED"],
+    ["Classic Cover Oval 120 × 40 LT",[120,40],"120 cm bombeli akvaryum kapağı · 120 × 40 cm · 2 × 18 W, toplam 3640 lm, 6500 K LED"],
+    ["Classic Cover Oval 150 × 50 LT",[150,50],"150 cm bombeli akvaryum kapağı · 150 × 50 cm · 2 × 18 W, toplam 3640 lm, 6500 K LED"],
+    ["Classic Cover Rectangular 100 LT",[100,40],"100 cm dik akvaryum kapağı · 100 × 40 cm · 2 × 16 W, toplam 3300 lm, 6500 K LED"],
+    ["Classic Cover Rectangular 120 × 40 LT",[120,40],"120 cm dik akvaryum kapağı · 120 × 40 cm · 2 × 18 W, toplam 3640 lm, 6500 K LED"],
+    ["Classic Cover Rectangular 150 × 50 LT",[150,50],"150 cm dik akvaryum kapağı · 150 × 50 cm · 2 × 18 W, toplam 3640 lm, 6500 K LED"],
+  ]),
+  ...dimensionProducts("cabinet","https://www.aquael.com/products/aquaristics/cabinets/opti-set-cabinet/",[
+    ["Opti Set Cabinet 125 Black",[81,36,80],"Opti Set 125 için siyah akvaryum dolabı · 81 × 36 × 80 cm"],
+    ["Opti Set Cabinet 125 White",[81,36,80],"Opti Set 125 için beyaz akvaryum dolabı · 81 × 36 × 80 cm"],
+    ["Opti Set Cabinet 200 Black",[101,41,80],"Opti Set 200 için siyah akvaryum dolabı · 101 × 41 × 80 cm"],
+    ["Opti Set Cabinet 200 White",[101,41,80],"Opti Set 200 için beyaz akvaryum dolabı · 101 × 41 × 80 cm"],
+    ["Opti Set Cabinet 240 Black",[121,41,80],"Opti Set 240 için siyah akvaryum dolabı · 121 × 41 × 80 cm"],
+    ["Opti Set Cabinet 240 White",[121,41,80],"Opti Set 240 için beyaz akvaryum dolabı · 121 × 41 × 80 cm"],
+  ]),
+  ...products("Aquael","cabinet","https://www.aquael.com/products/aquaristics/cabinets/opti-set-cabinet-130/",[
+    ["Opti Set Cabinet 130 White","Opti Set 130 için beyaz, 60 cm genişliğinde ve 80 cm yüksekliğinde akvaryum dolabı · 200 kg taşıma kapasitesi"],
+    ["Opti Set Cabinet 130 Black","Opti Set 130 için siyah, 60 cm genişliğinde ve 80 cm yüksekliğinde akvaryum dolabı · 200 kg taşıma kapasitesi"],
+    ["Opti Set Cabinet 130 Grey","Opti Set 130 için gri, 60 cm genişliğinde ve 80 cm yüksekliğinde akvaryum dolabı · 200 kg taşıma kapasitesi"],
+  ],"2026-09-12"),
+  ...dimensionProducts("cabinet","https://www.aquael.com/products/aquaristics/aquaristics/cabinet-opti-set-grey/",[
+    ["Opti Set Cabinet 125 Grey",[81.5,36,80],"Opti Set 125 için gri akvaryum dolabı · 81,5 × 36 × 80 cm"],
+    ["Opti Set Cabinet 200 Grey",[101,41,80],"Opti Set 200 için gri akvaryum dolabı · 101 × 41 × 80 cm"],
+    ["Opti Set Cabinet 240 Grey",[121,41,80],"Opti Set 240 için gri akvaryum dolabı · 121 × 41 × 80 cm"],
+  ]),
+  ...dimensionProducts("cabinet","https://www.aquael.com/products/aquaristics/cabinets/shrimp-set/",[
+    ["Shrimp Set 30 Stand Black",[29,29,90],"Shrimp Set ve NanoReef için siyah akvaryum dolabı · 29 × 29 × 90 cm"],
+    ["Shrimp Set 30 Stand White",[29,29,90],"Shrimp Set ve NanoReef için beyaz akvaryum dolabı · 29 × 29 × 90 cm"],
+  ]),
+  ...dimensionProducts("cabinet","https://www.aquael.com/products/aquaristics/cabinets/simple/",[
+    ["Simple Cabinet Rectangular 60 Black",[61,31,72.5],"60 cm dik akvaryum için kapaksız siyah dolap · 61 × 31 × 72,5 cm"],
+    ["Simple Cabinet Rectangular 60 White",[61,31,72.5],"60 cm dik akvaryum için kapaksız beyaz dolap · 61 × 31 × 72,5 cm"],
+    ["Simple Cabinet Rectangular 75 Black",[75.6,36,72.5],"75 cm dik akvaryum için kapaksız siyah dolap · 75,6 × 36 × 72,5 cm"],
+    ["Simple Cabinet Rectangular 75 White",[75.6,36,72.5],"75 cm dik akvaryum için kapaksız beyaz dolap · 75,6 × 36 × 72,5 cm"],
+    ["Simple Cabinet Rectangular 80 Black",[81,35.5,72.5],"80 cm dik akvaryum için kapaksız siyah dolap · 81 × 35,5 × 72,5 cm"],
+    ["Simple Cabinet Rectangular 80 White",[81,35.5,72.5],"80 cm dik akvaryum için kapaksız beyaz dolap · 81 × 35,5 × 72,5 cm"],
+  ]),
+  ...dimensionProducts("cabinet","https://www.aquael.com/products/aquaristics/cabinets/ultrascape-cabinet/",[
+    ["UltraScape Cabinet 60 Snow",[60,30,80],"UltraScape Set 60 için Snow renkli akvaryum dolabı · 60 × 30 × 80 cm"],
+    ["UltraScape Cabinet 60 Forest",[60,30,80],"UltraScape Set 60 için Forest renkli akvaryum dolabı · 60 × 30 × 80 cm"],
+    ["UltraScape Cabinet 90 Snow",[90,45,80],"UltraScape Set 90 için Snow renkli akvaryum dolabı · 90 × 45 × 80 cm"],
+    ["UltraScape Cabinet 90 Forest",[90,45,80],"UltraScape Set 90 için Forest renkli akvaryum dolabı · 90 × 45 × 80 cm"],
+  ]),
+  ...dimensionProducts("cabinet","https://www.aquael.com/products/aquaristics/new-en/glossy-st-grey-cabinet/",[
+    ["Glossy ST 80 Grey Cabinet",[80,35,72],"Glossy ST 80 için gri parlak akvaryum dolabı · 80 × 35 × 72 cm"],
+    ["Glossy ST 100 Grey Cabinet",[100,40,72],"Glossy ST 100 için gri parlak akvaryum dolabı · 100 × 40 × 72 cm"],
+    ["Glossy ST 120 Grey Cabinet",[120,40,72],"Glossy ST 120 için gri parlak akvaryum dolabı · 120 × 40 × 72 cm"],
+    ["Glossy ST 150 Grey Cabinet",[150,50,72],"Glossy ST 150 için gri parlak akvaryum dolabı · 150 × 50 × 72 cm"],
+    ["Glossy ST Cube Grey Cabinet",[50,50,90],"Glossy ST Cube için gri parlak akvaryum dolabı · 50 × 50 × 90 cm"],
+  ]),
+  ...dimensionProducts("cabinet","https://www.aquael.com/products/aquaristics/cabinets/hexa/",[
+    ["Hexa 60 Simple Cabinet",[45,45,73],"Hexa Set 60 için Simple akvaryum dolabı · 45 × 45 × 73 cm"],
+    ["Hexa 60 Cabinet",[45,45,73],"Hexa Set 60 için kapalı akvaryum dolabı · 45 × 45 × 73 cm"],
+  ]),
+  ...dimensionProducts("cabinet","https://www.aquael.com/products/aquaristics/cabinets/fishshrimp-set-duo/",[
+    ["Fish & Shrimp Set Duo Cabinet Black",[35,35,90],"Fish & Shrimp Set Duo için siyah akvaryum dolabı · 35 × 35 × 90 cm"],
+    ["Fish & Shrimp Set Duo Cabinet White",[35,35,90],"Fish & Shrimp Set Duo için beyaz akvaryum dolabı · 35 × 35 × 90 cm"],
+  ]),
+  ...dimensionProducts("cabinet","https://www.aquael.com/products/aquaristics/new-en/glossy-marine-2/",[
+    ["Glossy Marine Cabinet",[60,60,87],"Glossy Marine akvaryum seti için dolap · 60 × 60 × 87 cm"],
+  ]),
+  {
+    id:"chihiros-glass-air-aquarium-tank",brand:"Chihiros",model:"Glass Air Aquarium Tank",category:"tank",
+    description:"45 derece kesimli cam akvaryum · 30 × 18 × 12 cm · üretimden kaldırıldı",
+    dimensionsCm:[30,18,12],sourceUrl:"https://www.chihirosaquaticstudio.com/products/chihiros-glass-air-aquarium-tank",verifiedAt:"2026-09-12",
+  },
+  {
+    id:"chihiros-magnetic-light-terrarium-set-glass-air",brand:"Chihiros",model:"Magnetic Light Terrarium Set — Glass Air",category:"terrarium",
+    description:"15 × 15 × 30 cm Glass Air gövde, Magnetic Light ve Magnetic Base içeren uygulama kontrollü terrarium seti · üretimden kaldırıldı",
+    dimensionsCm:[15,15,30],includedEquipmentModels:["Magnetic Light"],sourceUrl:"https://www.chihirosaquaticstudio.com/products/chihiros-magnetic-light-terrarium-set",verifiedAt:"2026-09-12",
+  },
+  {
+    id:"chihiros-magnetic-light-terrarium-set-glass-pot",brand:"Chihiros",model:"Magnetic Light Terrarium Set — Glass Pot",category:"terrarium",
+    description:"21,6 cm genişlik ve 27 cm yüksekliğe sahip Glass Pot, Magnetic Light ve Magnetic Base içeren uygulama kontrollü terrarium seti · üretimden kaldırıldı",
+    includedEquipmentModels:["Magnetic Light"],sourceUrl:"https://www.chihirosaquaticstudio.com/products/chihiros-magnetic-light-terrarium-set",verifiedAt:"2026-09-12",
+  },
+  {
+    id:"chihiros-tiny-terrarium-egg",brand:"Chihiros",model:"Tiny Terrarium Egg",category:"terrarium",
+    description:"Bitki ve nemli mini peyzaj düzenlemeleri için yumurta biçimli cam terrarium · üretimden kaldırıldı; resmî arşiv ölçü yayımlamıyor",
+    sourceUrl:"https://www.chihirosaquaticstudio.com/products/chihiros-tiny-terrarium-egg",verifiedAt:"2026-09-12",
+  },
+  {
+    id:"chihiros-aqua-soil",brand:"Chihiros",model:"Aqua Soil",category:"substrate",
+    description:"Bitkili akvaryumlar için granül taban malzemesi · yalnız yerel bayiler üzerinden sunulan arşiv ürünü; paket hacmi resmî arşivde yayımlanmadığı için eklenmedi",
+    sourceUrl:"https://www.chihirosaquaticstudio.com/products/chihiros-aqua-soil-need-to-contact-your-local-dealer-to-purchase",verifiedAt:"2026-09-12",
+  },
+  {
+    id:"chihiros-eco-ping",brand:"Chihiros",model:"ECO Ping",category:"aquarium_set",
+    description:"6,1 L silindirik masaüstü akvaryum seti · 295 mm yükseklik ve 216 mm çap · uygulama kontrollü beyaz/RGB aydınlatma ve USB kablosu · üretici 5 V / 3 A adaptör öneriyor · üretimden kaldırıldı",
+    volumeL:6.1,includedEquipmentModels:["ECO Ping Light"],sourceUrl:"https://www.chihirosaquaticstudio.com/products/chihiros-eco-ping",verifiedAt:"2026-09-12",
+  },
+  {
+    id:"chihiros-glass-pot-for-plant",brand:"Chihiros",model:"Glass Pot for Plant",category:"terrarium",
+    description:"Bitki ve mini peyzaj düzenlemeleri için cam kap · üretimden kaldırıldı; resmî arşiv güvenilir üç boyut veya hacim yayımlamadığı için ölçü eklenmedi",
+    sourceUrl:"https://www.chihirosaquaticstudio.com/products/chihiros-glass-pot-for-plant",verifiedAt:"2026-09-12",
+  },
+  ...[
+    ["Dew S","Küçük boy"],["Dew L","Büyük boy"],["Dew Shaped","Şekilli gövde"],
+  ].map(([model,size])=>({
+    id:catalogSlug(`Chihiros-Glass Pot ${model}`),brand:"Chihiros",model:`Glass Pot ${model}`,category:"terrarium" as const,
+    description:`${size} cam bitki/terrarium kabı · havalandırma delikli akrilik kapak · ters çevrilebilir şişe ve merkezde damlatma deliği`,
+    sourceUrl:"https://bbs.chihirosaquaticstudio.com/threads/chihiros-glass-pot-dew.169/",verifiedAt:"2026-09-12",
+  })),
+  {
+    id:"chihiros-aquarium-acrylic-uv-print-pod",brand:"Chihiros",model:"Aquarium Acrylic UV Print POD",category:"decoration",
+    description:"Kullanıcının akvaryum fotoğrafının UV baskıyla uygulandığı akrilik dekor paneli · 240 × 90 × 20 mm",
+    dimensionsCm:[24,9,2],sourceUrl:"https://bbs.chihirosaquaticstudio.com/threads/chihiros-aquarium-acrylic-uv-print-pod.19/",verifiedAt:"2026-09-12",
+  },
+  ...products("Resun","filter_media","https://www.resun-china.com/h-pd-268.html",[
+    ["FTP01 Ammonia Filter Pad","Yeni canlı ekleme, fazla yemleme ve aşırı yük kaynaklı amonyak kontrolüne yardımcı kesilebilir filtre pedi"],
+    ["FTP02 Carbon Filter Pad","Koku, renk ve toksinlerin tutulmasına yardımcı kesilebilir karbon filtre pedi"],
+    ["FTP03 Phosphate Filter Pad","Fosfat seviyesini ve alg gelişimini azaltmaya yardımcı kesilebilir filtre pedi"],
+    ["FTP04 Polyfiber Filter Pad","Suda yüzen atık ve parçacıkları mekanik olarak tutan kesilebilir polyfiber filtre pedi"],
+    ["FTP05 Nitrate Filter Pad","Fazla yemleme, aşırı yük ve yetersiz su değişimi kaynaklı nitrat kontrolüne yardımcı kesilebilir filtre pedi"],
+  ],"2026-08-27"),
+  {
+    id:"ferplast-co2-energy-ingredients",brand:"Ferplast",model:"CO₂ ENERGY INGREDIENTS",category:"fertilizer",
+    description:"CO₂ Energy Classic sistemi için uzun süreli karbondioksit üretimine yönelik doğal bileşen kiti",
+    sourceUrl:"https://www.ferplast.com/products/co2-energy-ingredients",verifiedAt:"2026-08-27",
+  },
 ];
 
 const careCatalogIds = new Set<string>();
@@ -636,5 +1400,7 @@ for (const product of careProductCatalog) {
 
 export const careCategoryLabels: Record<CareProductCategory,string> = {
   food:"Yem", fertilizer:"Gübre", water_conditioner:"Su düzenleyici", bacteria:"Bakteri kültürü",
-  test:"Test", filter_media:"Filtre medyası", substrate:"Taban malzemesi", treatment:"Tedavi",
+  test:"Test", filter_media:"Filtre medyası", substrate:"Taban malzemesi", plant_seed:"Bitki tohumu", treatment:"Tedavi", decoration:"Dekorasyon",
+  aquarium_set:"Akvaryum seti", aquaterrarium:"Aquaterrarium", terrarium:"Terrarium", tank:"Boş akvaryum",
+  cover:"Akvaryum kapağı", cabinet:"Akvaryum dolabı",
 };

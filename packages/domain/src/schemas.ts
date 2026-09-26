@@ -57,6 +57,7 @@ export const waterParametersSchema = z.object({
   nitrate: z.number().optional(),
   phosphate: z.number().optional(),
   iron: z.number().optional(),
+  specificGravity: z.number().optional(),
 });
 
 export const maintenanceTaskSchema = z.object({
