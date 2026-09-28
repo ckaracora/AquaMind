@@ -11,6 +11,8 @@
 import type { Aquarium, AquariumType, Equipment, Livestock, WaterParameters } from "@aquamind/domain";
 
 export { ENGINE_VERSION, RULESET_VERSION } from "./version";
+export * from "./water-quality";
+import { assessWaterQuality } from "./water-quality";
 
 /** Motorun bir canlı profilinden okuduğu alanlar. Katalogdaki SpeciesProfile bunu yapısal olarak karşılar. */
 export interface SpeciesProfileInput {
@@ -121,7 +123,10 @@ export function createAnalyzer(resolver:KnowledgeResolver):AnalyzeAquarium{
  const heaterScore=heaters.length?(heaterDataReady?(heaterFit?95:45):60):profiles.some(x=>x.profile!.temperature[0]>=23)?35:75;
  const salinityProfiles=profiles.filter(({profile})=>profile!.specificGravity);
  const salinityIssues=salinityProfiles.filter(({profile})=>latest?.specificGravity!==undefined&&(latest.specificGravity<profile!.specificGravity![0]||latest.specificGravity>profile!.specificGravity![1]));
- const waterChecks=profiles.flatMap(({profile})=>latest?[latest.temperature!==undefined&&latest.temperature>=profile!.temperature[0]&&latest.temperature<=profile!.temperature[1],latest.ph!==undefined&&latest.ph>=profile!.ph[0]&&latest.ph<=profile!.ph[1],profile!.specificGravity&&latest.specificGravity!==undefined?latest.specificGravity>=profile!.specificGravity[0]&&latest.specificGravity<=profile!.specificGravity[1]:undefined].filter(x=>typeof x==="boolean") as boolean[]:[]); const waterScore=waterChecks.length?clamp(waterChecks.filter(Boolean).length/waterChecks.length*100):65;
+ const waterChecks=profiles.flatMap(({profile})=>latest?[latest.temperature!==undefined&&latest.temperature>=profile!.temperature[0]&&latest.temperature<=profile!.temperature[1],latest.ph!==undefined&&latest.ph>=profile!.ph[0]&&latest.ph<=profile!.ph[1],profile!.specificGravity&&latest.specificGravity!==undefined?latest.specificGravity>=profile!.specificGravity[0]&&latest.specificGravity<=profile!.specificGravity[1]:undefined].filter(x=>typeof x==="boolean") as boolean[]:[]);
+ const waterQuality=assessWaterQuality(latest,aquarium.type);
+ const waterQualityChecks=[waterQuality.ammonia,waterQuality.nitrite,waterQuality.nitrate].flatMap(item=>item?[item.level==="ok"]:[]);
+ const allWaterChecks=[...waterChecks,...waterQualityChecks]; const waterScore=allWaterChecks.length?clamp(allWaterChecks.filter(Boolean).length/allWaterChecks.length*100):65;
  const safetyEquipment=matchedEquipment.filter(p=>!p.passiveComponent&&(p.category==="filter"||p.category==="heater"||Boolean(p.integratedHeaterW)||(airDrivenFilters.length>0&&p.category==="air_pump")));
  const calculationReadyEquipment=safetyEquipment.filter(p=>{
   if(!resolver.isVerifiedEquipmentProfile(p))return false;
@@ -161,6 +166,12 @@ export function createAnalyzer(resolver:KnowledgeResolver):AnalyzeAquarium{
  for(const {profile} of habitatIssues)warnings.push({level:"danger",title:profile!.commonName+": akvaryum türü uyumsuz",message:profile!.commonName+", "+(aquarium.type==="freshwater"?"tatlı su":aquarium.type==="saltwater"?"tuzlu su":"acı su")+" akvaryumunda güvenli kabul edilmez. Canlı profilinin desteklediği su türüne uygun ayrı bir akvaryum seçin."});
  if(salinityProfiles.length&&latest?.specificGravity===undefined)warnings.push({level:"warning",title:"Özgül ağırlık ölçümü gerekli",message:"Deniz canlılarının tuzluluk uyumu değerlendirilemedi. Refraktometre veya hidrometre ile özgül ağırlık ölçümü ekleyin."});
  if(salinityIssues.length)warnings.push({level:"danger",title:"Özgül ağırlık canlı aralığı dışında",message:salinityIssues.length+" canlı için son özgül ağırlık ölçümü güvenli katalog aralığının dışında."});
+ const fmt=(value:number,digits=3)=>String(Number(value.toFixed(digits))).replace(".",",");
+ const {ammonia,nitrite,nitrate,invalid}=waterQuality;
+ if(invalid.length){const names=invalid.map(key=>({ammonia:"amonyak",nitrite:"nitrit",nitrate:"nitrat"})[key]);const list=names.length>1?`${names.slice(0,-1).join(", ")} ve ${names[names.length-1]}`:names[0];warnings.push({level:"warning",title:"Geçersiz su ölçümü",message:names.length>1?`Son ölçümdeki ${list} değerleri geçersiz (negatif ya da geçerli bir sayı değil); bu değerler değerlendirmeye alınmadı. Yeniden ölçüp kaydedin.`:`Son ölçümdeki ${list} değeri geçersiz (negatif ya da geçerli bir sayı değil); bu değer değerlendirmeye alınmadı. Yeniden ölçüp kaydedin.`});}
+ if(ammonia&&ammonia.level!=="ok")warnings.push(ammonia.level==="danger"?(ammonia.worstCase?{level:"danger",title:"Amonyak zehirli olabilir",message:`Toplam amonyak ${fmt(ammonia.total)} ppm. pH veya sıcaklık ölçümü eksik ya da geçersiz olduğu için zehirli (serbest) kısmı hesaplanamadı; en kötü durumda güvenli üst sınır olan ${fmt(ammonia.limit)} ppm aşılıyor. pH ve sıcaklığı da ölçün, bu arada kısmi su değişimi yapın.`}:{level:"danger",title:"Zehirli amonyak sınırın üzerinde",message:`Ölçülen pH ve sıcaklıkta serbest (zehirli) amonyak yaklaşık ${fmt(ammonia.free,4)} ppm; güvenli üst sınır ${fmt(ammonia.limit)} ppm. Hemen kısmi su değişimi yapın, beslemeyi azaltın ve filtreyi kontrol edin.`}):{level:"warning",title:"Amonyak ölçüldü",message:`Toplam amonyak ${fmt(ammonia.total)} ppm. Olgun bir akvaryumda amonyak 0 olmalıdır; sıfırın üstündeki değerler yalnızca kısa süre tolere edilebilir. pH yükselirse zehirli kısmı hızla artar.`});
+ if(nitrite&&nitrite.level!=="ok")warnings.push(nitrite.level==="danger"?{level:"danger",title:"Nitrit sınırın üzerinde",message:`Nitrit ${fmt(nitrite.value)} ppm; güvenli üst sınır ${fmt(nitrite.limit)} ppm. Hemen kısmi su değişimi yapın ve filtreyi kontrol edin.`}:{level:"warning",title:"Nitrit ölçüldü",message:`Nitrit ${fmt(nitrite.value)} ppm. Nitrit 0 olmalıdır; sıfırın üstündeki değerler yalnızca kısa süre tolere edilebilir.`});
+ if(nitrate&&nitrate.level!=="ok")warnings.push(nitrate.level==="danger"?{level:"danger",title:"Nitrat çok yüksek",message:aquarium.type==="saltwater"?`Nitrat ${fmt(nitrate.value)} ppm; deniz akvaryumu için üst sınır 100 ppm. Su değişimini artırın.`:`Nitrat ${fmt(nitrate.value)} ppm. Musluk suyu yasal olarak en fazla 50 ppm nitrat içerebildiği için önerilen sınır (musluk suyunun en fazla 50 ppm üstü) aşılmış. Su değişimini artırın.`}:{level:"warning",title:"Nitrat yüksek olabilir",message:`Nitrat ${fmt(nitrate.value)} ppm. Önerilen sınır musluk suyunun en fazla 50 ppm üstüdür; musluk suyunun nitratını da ölçün ve su değişimini artırın.`});
  if(temperatureConflict)warnings.push({level:"danger",title:"Türlerin sıcaklık ihtiyaçları uyuşmuyor",message:"Seçilen canlılar için ortak ve güvenli bir sıcaklık aralığı bulunamadı."});
  if(phConflict)warnings.push({level:"danger",title:"Türlerin pH ihtiyaçları uyuşmuyor",message:"Seçilen canlılar için ortak ve güvenli bir pH aralığı bulunamadı."});
  if(flowConflict)warnings.push({level:"warning",title:"Akıntı ihtiyaçları farklı",message:"Düşük ve yüksek akıntı isteyen türler birlikte seçildi. Akvaryumda sakin ve güçlü akış bölgeleri oluşturulmalı."});
@@ -171,6 +182,10 @@ export function createAnalyzer(resolver:KnowledgeResolver):AnalyzeAquarium{
  for(const {profile} of profiles.filter(({profile})=>profile!.tankLengthDataNote))warnings.push({level:"warning",title:`${profile!.commonName}: tank uzunluğu verisi sınırlı`,message:profile!.tankLengthDataNote!});
  for(const {item,profile} of groupIssues)warnings.push({level:"warning",title:`${profile!.commonName}: grup sayısı düşük`,message:`Kayıtlı adet ${item.quantity}; katalog önerisi en az ${profile!.minGroup}.`});
  for(const entry of spaceIssues){const {profile}=entry;const volume=requiredVolume(entry);warnings.push({level:"warning",title:`${profile!.commonName}: alan sınırda`,message:profile!.minTankLengthCm===undefined?`Kayıtlı adet için minimum ${volume} L referansı kullanıldı; kaynak tank uzunluğu yayımlamıyor.`:`Kayıtlı adet için minimum ${volume} L ve ${profile!.minTankLengthCm} cm uzunluk referansı kullanıldı.`});}
- const score=clamp(metrics.reduce((s,m)=>s+m.score,0)/metrics.length); return {score,status:status(score),metrics,warnings};
+ // Kesin tehlikeler (yanlış su türü, kesişmeyen sıcaklık veya pH, avlanma, tür akvaryumu, tuzluluk, zehirli
+ // amonyak veya nitrit) genel durumu "tehlike"ye çeker; sekiz ölçütün ortalaması bunları gizleyemez.
+ // Tahmine dayalı biyolojik yük, filtre ve ısıtıcı uyarıları genel durumu kilitlemez.
+ const criticalDanger=habitatIssues.length>0||temperatureConflict||phConflict||predationIssues.length>0||speciesOnlyIssues.length>0||salinityIssues.length>0||ammonia?.level==="danger"||nitrite?.level==="danger";
+ const averageScore=clamp(metrics.reduce((s,m)=>s+m.score,0)/metrics.length); const score=criticalDanger?Math.min(averageScore,49):averageScore; return {score,status:status(score),metrics,warnings};
  };
 }

@@ -1,7 +1,7 @@
 # 0007 — Katalog entegrasyonu: yaşam ortamı, tuzluluk, ek hacim ve yardımcı filtre kuralları
 
 - Tarih: 2026-09-24
-- Durum: Önerildi — ürün sahibi (`buraksenfx`) beş kuralı 2026-09-24'te açıkça onayladı; Codex denetimi temiz geçti ve PR #11 açıldı; `main` birleştirmesi bekliyor. `main` dalına birleştirilene kadar kabul edilmiş sayılmaz
+- Durum: Kabul edildi — ürün sahibi (`buraksenfx`) beş kuralı 2026-09-24'te açıkça onayladı; Codex denetimi temiz geçti; PR #11, 2026-09-26'da merge commit ile `main` dalına birleştirildi (`6a74165`). `main` push'unda GitHub Actions `Doğrulama` ve Vercel üretim dağıtımı başarılı
 
 ## Bağlam
 

@@ -6,20 +6,36 @@ import { MobileNav } from "@/components/mobile-nav";
 import { ParameterCard } from "@/components/parameter-card";
 import { Sidebar } from "@/components/sidebar";
 import { greetingForHour } from "@/lib/greeting";
+import type { dashboardStatus } from "@/lib/dashboard-status";
+import type { ParameterStatus } from "@/lib/water-status";
 import { useAquariums } from "@/providers/aquarium-provider";
+
+const summaryTones = { good: "text-[#71858d]", neutral: "text-[#71858d]", warning: "text-amber-300", danger: "text-red-300" } as const;
+const pendingStatus: ParameterStatus = { label: "…", tone: "neutral" };
 
 const formatDay = (date: string) => new Intl.DateTimeFormat("tr-TR", { day: "numeric", month: "short" }).format(new Date(date));
 
 export default function Dashboard() {
-  const { aquariums, waterReadings, maintenanceTasks } = useAquariums();
+  const { aquariums, waterReadings, maintenanceTasks, livestock, equipment } = useAquariums();
   const [selectedId, setSelectedId] = useState("");
   // Sayfa önceden derlendiği için saat, derleme sunucusunda değil tarayıcıda okunur.
   const [greeting, setGreeting] = useState<string>();
   useEffect(() => setGreeting(greetingForHour(new Date().getHours())), []);
+  // Durum hesapları kataloğun tamamını gerektirir; ilk yükü küçük tutmak için sayfa açıldıktan sonra yüklenir.
+  const [computeStatus, setComputeStatus] = useState<typeof dashboardStatus>();
+  useEffect(() => { import("@/lib/dashboard-status").then((module) => setComputeStatus(() => module.dashboardStatus)); }, []);
   const aquarium = aquariums.find((item) => item.id === selectedId) ?? aquariums[0];
   if (!aquarium) return <div className="min-h-screen"><Sidebar/><main className="pb-28 lg:ml-[248px]"><div className="grid min-h-screen place-items-center px-5 text-center"><div><Waves size={45} className="mx-auto mb-5 text-aqua"/><h1 className="text-2xl font-extrabold">AquaMind’e hoş geldin</h1><p className="mt-2 text-sm text-[#71858d]">Dashboard’u kullanmaya başlamak için ilk akvaryumunu oluştur.</p><a href="/aquariums/new" className="mt-6 inline-flex items-center gap-2 rounded-xl bg-aqua px-5 py-3 text-xs font-extrabold text-ink"><Plus size={16}/>Akvaryum oluştur</a></div></div></main><MobileNav/></div>;
   const aquariumReadings = waterReadings.filter((item) => item.aquariumId === aquarium.id);
-  const latest = aquariumReadings[0];
+  // Sağlık sayfasıyla aynı kural: en son ölçüm tarihe göre seçilir.
+  const latest = [...aquariumReadings].sort((a, b) => +new Date(b.measuredAt) - +new Date(a.measuredAt))[0];
+  const animals = livestock.filter((item) => item.aquariumId === aquarium.id);
+  const status = computeStatus?.(aquarium, animals, equipment.filter((item) => item.aquariumId === aquarium.id), latest);
+  const summary = status?.summary ?? { text: "Durum hesaplanıyor…", tone: "neutral" as const };
+  const temperatureStatus = status?.temperature ?? pendingStatus;
+  const phStatus = status?.ph ?? pendingStatus;
+  const nitrate = status?.nitrate ?? pendingStatus;
+  const tds = status?.tds ?? pendingStatus;
   const upcomingTasks = maintenanceTasks.filter((item) => item.aquariumId === aquarium.id && !item.completedAt).slice(0, 3);
   return <div className="min-h-screen">
     <Sidebar />
@@ -31,15 +47,15 @@ export default function Dashboard() {
       </header>
       <div className="mx-auto max-w-[1440px] px-5 py-7 sm:px-8 lg:px-10 lg:py-10">
         <section className="mb-8 flex flex-col justify-between gap-4 sm:flex-row sm:items-end">
-          <div><p className="eyebrow mb-2 text-aqua">{new Intl.DateTimeFormat("tr-TR",{day:"numeric",month:"long",weekday:"long"}).format(new Date())}</p><h1 className="text-2xl font-extrabold tracking-tight sm:text-3xl">{greeting ?? "Merhaba."}</h1><p className="mt-2 text-sm text-[#71858d]">Akvaryumunda bugün her şey yolunda görünüyor.</p></div>
+          <div><p className="eyebrow mb-2 text-aqua">{new Intl.DateTimeFormat("tr-TR",{day:"numeric",month:"long",weekday:"long"}).format(new Date())}</p><h1 className="text-2xl font-extrabold tracking-tight sm:text-3xl">{greeting ?? "Merhaba."}</h1><p className={`mt-2 text-sm ${summaryTones[summary.tone]}`}>{summary.text} <a href={`/aquariums/${aquarium.id}/health`} className="font-bold text-aqua hover:underline">Sağlık analizini aç</a></p></div>
           <label className="surface flex w-full items-center justify-between gap-4 px-4 py-3 text-left sm:w-auto"><div><p className="text-[10px] font-bold uppercase tracking-wider text-[#647981]">Aktif akvaryum</p><select value={aquarium.id} onChange={e=>setSelectedId(e.target.value)} className="mt-1 min-w-40 bg-transparent text-sm font-bold outline-none">{aquariums.map(item=><option key={item.id} value={item.id}>{item.name}</option>)}</select></div><ChevronRight size={16} className="text-aqua"/></label>
         </section>
 
         <section className="mb-5 grid grid-cols-2 gap-3 xl:grid-cols-4">
-          <ParameterCard icon={Thermometer} label="Sıcaklık" value={latest?.temperature !== undefined ? `${latest.temperature}°C` : "—"} status="İdeal" />
-          <ParameterCard icon={FlaskConical} label="pH değeri" value={latest?.ph !== undefined ? `${latest.ph}` : "—"} status="Dengeli" tone="green" />
-          <ParameterCard icon={CircleGauge} label="TDS" value={latest?.tds !== undefined ? `${latest.tds} ppm` : "—"} status="Normal" />
-          <ParameterCard icon={Activity} label="Nitrat (NO₃)" value={latest?.nitrate !== undefined ? `${latest.nitrate} ppm` : "—"} status="Güvenli" tone="green" />
+          <ParameterCard icon={Thermometer} label="Sıcaklık" value={latest?.temperature !== undefined ? `${latest.temperature}°C` : "—"} status={temperatureStatus.label} statusTone={temperatureStatus.tone} />
+          <ParameterCard icon={FlaskConical} label="pH değeri" value={latest?.ph !== undefined ? `${latest.ph}` : "—"} status={phStatus.label} statusTone={phStatus.tone} tone="green" />
+          <ParameterCard icon={CircleGauge} label="TDS" value={latest?.tds !== undefined ? `${latest.tds} ppm` : "—"} status={tds.label} statusTone={tds.tone} />
+          <ParameterCard icon={Activity} label="Nitrat (NO₃)" value={latest?.nitrate !== undefined ? `${latest.nitrate} ppm` : "—"} status={nitrate.label} statusTone={nitrate.tone} tone="green" />
         </section>
 
         <div className="grid gap-5 xl:grid-cols-[1.45fr_.9fr]">
