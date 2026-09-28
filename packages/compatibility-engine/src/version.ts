@@ -10,5 +10,8 @@
 //
 // 1.1.0: katalog entegrasyonuyla yaşam ortamı, tuzluluk, birey başına ek hacim ve
 // yardımcı filtre kuralları eklendi (bkz. docs/DECISIONS/0007-katalog-entegrasyonu-motor-kurallari.md).
-export const ENGINE_VERSION = "1.1.0";
-export const RULESET_VERSION = "1.1.0";
+//
+// 1.2.0: amonyak, nitrit ve nitrat değerlendirmesi (OATA eşikleri) ve kesin tehlikenin genel
+// durumu "tehlike"ye çekmesi eklendi (bkz. docs/DECISIONS/0008-su-kalitesi-ve-kesin-tehlike.md).
+export const ENGINE_VERSION = "1.2.0";
+export const RULESET_VERSION = "1.2.0";
