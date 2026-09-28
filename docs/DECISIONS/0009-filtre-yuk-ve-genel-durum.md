@@ -1,7 +1,7 @@
 # 0009 — Filtre yeterliliği, tahmini biyolojik yük ve tehlike uyarısının genel duruma etkisi
 
 - Tarih: 2026-09-28
-- Durum: Önerildi — ürün sahibi (`buraksenfx`) üç kuralı 2026-09-28'de karar sayfası üzerinden açıkça onayladı. Akvaryum uzmanı Canberk eşik kararlarını aynı gün güvenilir kaynaklara bıraktı; karar sayfasındaki dört soru kaynaklara göre cevaplandı (aşağıda "Sonuçlar"). `codex/filter-load-recalibration` dalında; Codex denetimi iki turda tamamlandı (son tur 2026-09-29 temiz); `main` birleştirmesi bekliyor. `main` dalına birleştirilene kadar kabul edilmiş sayılmaz
+- Durum: Önerildi — ürün sahibi (`buraksenfx`) üç kuralı 2026-09-28'de karar sayfası üzerinden açıkça onayladı. Akvaryum uzmanı Canberk eşik kararlarını aynı gün güvenilir kaynaklara bıraktı; karar sayfasındaki dört soru kaynaklara göre cevaplandı (aşağıda "Sonuçlar"). `codex/filter-load-recalibration` dalında; Codex denetimi iki turda tamamlandı (son tur 2026-09-29 temiz); PR #13 (`https://github.com/ckaracora/AquaMind/pull/13`) açıldı ve kontrolleri başarılı; `main` birleştirmesi için kullanıcı onayı bekliyor. `main` dalına birleştirilene kadar kabul edilmiş sayılmaz
 - Karar sayfası: https://claude.ai/artifact/NSCBZ1orfPNYa4wRucL8VZ (özel; paylaşım ürün sahibinde)
 
 ## Bağlam
@@ -60,7 +60,7 @@ Türe özel bir atık katsayısı yayımlayan güvenilir kaynak bulunamadı.
 
 - `packages/compatibility-engine/test/filter-load.test.ts`: filtre hacmi ve debi eşiklerinin sınırları, birden fazla filtre, hacim önerili debisiz filtre, karışık filtre seti, sünger filtre ve hava motoru, yük eşiği, genel durum sınırı (stub kayıtlarla).
 - `packages/compatibility-engine/test/audit-scenarios.test.ts`: denetimde bekleyen iki madde gerçek teste dönüştü (100 L'lik topluluk, 200 L'deki Eheim Classic 250); 200 L'deki JBL i60 ve beş kat kalabalık örnekleri eklendi.
-- Altın fikstür onaydan sonra yeniden üretildi (1020 vaka; 1014'ü değişti) ve her fark sınıflandırıldı; açıklanamayan fark yok. Codex 1. tur düzeltmesinden sonra yeniden üretildiğinde yalnızca hacim önerili debisiz filtre kullanan 3 vaka (Aquael Ultra 900, 1200, 1400) değişti: veri güveni %50'den %100'e çıktı, "Ekipman kapasite bilgisi eksik" uyarısı kalktı. Kod değişikliğinden ayrı bir commit'te kaydedilmesi planlandı.
+- Altın fikstür onaydan sonra yeniden üretildi (1020 vaka; 1014'ü değişti) ve her fark sınıflandırıldı; açıklanamayan fark yok. Codex 1. tur düzeltmesinden sonra yeniden üretildiğinde yalnızca hacim önerili debisiz filtre kullanan 3 vaka (Aquael Ultra 900, 1200, 1400) değişti: veri güveni %50'den %100'e çıktı, "Ekipman kapasite bilgisi eksik" uyarısı kalktı. Kod değişikliğinden ayrı bir commit'te kaydedildi (`cc3b1a2`).
 
 ## Sonuçlar
 
