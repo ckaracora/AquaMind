@@ -1,7 +1,7 @@
 # 0008 — Su kalitesi değerlendirmesi ve kesin tehlikenin genel durumu belirlemesi
 
 - Tarih: 2026-09-26
-- Durum: Önerildi — ürün sahibi (`buraksenfx`) kuralları 2026-09-26'da açıkça onayladı; geçersiz ölçüm ek kuralını 2026-09-27'de onayladı. `codex/urgent-safety-fixes` dalında Codex denetimi üç turda tamamlandı (son tur 2026-09-28 temiz); `main` birleştirmesi için kullanıcı onayı bekliyor. `main` dalına birleştirilene kadar kabul edilmiş sayılmaz
+- Durum: Önerildi — ürün sahibi (`buraksenfx`) kuralları 2026-09-26'da açıkça onayladı; geçersiz ölçüm ek kuralını 2026-09-27'de onayladı. `codex/urgent-safety-fixes` dalında Codex denetimi üç turda tamamlandı (son tur 2026-09-28 temiz); PR #12 (`https://github.com/ckaracora/AquaMind/pull/12`) açıldı ve kontrolleri başarılı; `main` birleştirmesi için kullanıcı onayı bekliyor. `main` dalına birleştirilene kadar kabul edilmiş sayılmaz
 
 ## Bağlam
 
@@ -61,7 +61,7 @@ Sonuç nesnesinin biçimi değişmez; yalnızca `score` ve `status` değerleri e
 - `packages/compatibility-engine/test/water-quality.test.ts`: formül Florida DEP tablosuyla, eşikler OATA değerleriyle sınanır.
 - `packages/compatibility-engine/test/audit-scenarios.test.ts`: denetim senaryolarından düzeltilenler kalıcı teste dönüştü. Düzeltilmeyenler `it.todo` olarak görünür kalır.
 - `src/lib/__tests__/water-status.test.ts` ve `src/lib/__tests__/dashboard-status.test.ts`: ana sayfa etiketleri ve özet cümlesi.
-- Altın fikstür, ürün sahibi onayından sonra yeniden üretildi (vaka sayısı 1020, değişmedi); kod değişikliğinden ayrı bir commit'te kaydedilmesi planlandı.
+- Altın fikstür, ürün sahibi onayından sonra yeniden üretildi (vaka sayısı 1020, değişmedi); kod değişikliğinden ayrı bir commit'te kaydedildi (`c2fc391`).
 
 ## Sonuçlar
 
