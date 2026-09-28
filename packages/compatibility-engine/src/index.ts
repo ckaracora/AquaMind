@@ -70,6 +70,17 @@ export type AnalyzeAquarium = (aquarium: Aquarium, animals: Livestock[], equipme
 export interface HealthMetric { key:string; label:string; score:number; status:"good"|"warning"|"danger"; detail:string; }
 export interface HealthAnalysis { score:number; status:"good"|"warning"|"danger"; metrics:HealthMetric[]; warnings:Array<{level:"warning"|"danger";title:string;message:string}>; }
 const clamp=(n:number)=>Math.max(0,Math.min(100,Math.round(n)));
+// Kural seti 1.3.0 eşikleri (docs/DECISIONS/0009-filtre-yuk-ve-genel-durum.md).
+/** Akvaryum, filtrelerin üreticilerince önerilen toplam hacmi bu oranın üstünde aşarsa tehlike; altında aşarsa uyarı. */
+const FILTER_OVER_CAPACITY_DANGER=1.5;
+/** Üretici hacim önermiyorsa etiket debisiyle saatte en az bu kadar çevrim uygun sayılır. */
+const FILTER_MIN_RATED_TURNOVER=4;
+/** Etiket debisiyle saatte bu kadar çevrimin altı tehlikedir; arası uyarıdır. */
+const FILTER_DANGER_RATED_TURNOVER=2;
+/** Tahmini yük oranı bunun üstündeyse uyarı. Katalogdaki hiçbir tür, kendi kaynağının önerdiği en küçük akvaryum ve grupta bu değere ulaşmaz. */
+const LOAD_WARNING_RATIO=2.5;
+/** Kesin tehlike olmayan bir tehlike uyarısı varken genel puanın üst sınırı (en fazla "dikkat"). */
+const DANGER_WARNING_SCORE_CAP=74;
 const status=(score:number):HealthMetric["status"]=>score>=75?"good":score>=50?"warning":"danger";
 
 export function createAnalyzer(resolver:KnowledgeResolver):AnalyzeAquarium{
@@ -88,7 +99,8 @@ export function createAnalyzer(resolver:KnowledgeResolver):AnalyzeAquarium{
  // Su türü belirtilmemiş canlı profilleri tatlı su kabul edilir.
  const habitatIssues=profiles.filter(({profile})=>!(profile!.waterTypes??["freshwater"]).includes(aquarium.type));
  const loadUnits=profiles.reduce((sum,{item,profile})=>sum+item.quantity*profile!.adultSizeCm*profile!.wasteFactor,0);
- const loadRatio=loadUnits/Math.max(1,aquarium.netVolumeLiters*.85); const loadScore=clamp(100-loadRatio*55);
+ // Atık katsayısının kaynağı olmadığı için tahmini yük tehlike vermez; yalnızca belirgin aşırı kalabalıkta uyarır.
+ const loadRatio=loadUnits/Math.max(1,aquarium.netVolumeLiters*.85); const loadScore=loadRatio>LOAD_WARNING_RATIO?60:clamp(100-loadRatio*10);
  const requiredVolume=({item,profile}:(typeof profiles)[number])=>profile!.minVolumeL+Math.max(0,item.quantity-1)*(profile!.additionalVolumePerAnimalL??0);
  const spaceIssues=profiles.filter(entry=>aquarium.netVolumeLiters<requiredVolume(entry)||(entry.profile!.minTankLengthCm!==undefined&&aquarium.lengthCm<entry.profile!.minTankLengthCm));
  const spaceScore=profiles.length?clamp(100-spaceIssues.length/profiles.length*80):100;
@@ -105,8 +117,19 @@ export function createAnalyzer(resolver:KnowledgeResolver):AnalyzeAquarium{
  const compatibilityPenalty=(habitatIssues.length?80:0)+(temperatureConflict?55:0)+(phConflict?55:0)+(flowConflict?20:0)+(predationIssues.length?60:0)+(speciesOnlyIssues.length?60:0)+(communityCautionIssues.length?30:0); const compatibilityScore=clamp(100-compatibilityPenalty);
  const matchedEquipment=equipment.map(item=>resolver.profileForEquipment(item)).filter(profile=>profile!==undefined); const verifiedEquipment=matchedEquipment.filter(profile=>resolver.isVerifiedEquipmentProfile(profile));
  const filterEquipment=verifiedEquipment.filter(p=>p.category==="filter"); const auxiliaryFilters=filterEquipment.filter(p=>p.auxiliaryFiltration); const filters=filterEquipment.filter(p=>!p.passiveComponent); const primaryFilters=filters.filter(p=>!p.auxiliaryFiltration); const filtersWithFlow=primaryFilters.filter(p=>p.ratedFlowLph); const airDrivenFilters=primaryFilters.filter(p=>p.requiresAirPump); const airPumpsWithFlow=verifiedEquipment.filter(p=>p.category==="air_pump"&&p.ratedFlowLph); const airDrivenReady=!airDrivenFilters.length||airPumpsWithFlow.length>0; const ratedFlow=filtersWithFlow.reduce((s,p)=>s+(p.ratedFlowLph??0),0); const turnover=ratedFlow*.65/Math.max(1,aquarium.netVolumeLiters);
- const lowFlowShare=flowProfiles.length?flowProfiles.filter(x=>x.profile!.flow==="low").length/flowProfiles.length:0; const loadBoost=Math.min(3,Math.max(0,(loadRatio-1)*2)); const targetMin=(lowFlowShare>.5?3:5)+loadBoost; const targetMax=(lowFlowShare>.5?7:10)+loadBoost;
- const filterScore=!primaryFilters.length?35:!filtersWithFlow.length?(airDrivenFilters.length?(airDrivenReady?80:45):60):turnover<targetMin?clamp(70-(targetMin-turnover)*15):turnover>targetMax?clamp(75-(turnover-targetMax)*8):95;
+ const lowFlowShare=flowProfiles.length?flowProfiles.filter(x=>x.profile!.flow==="low").length/flowProfiles.length:0; const targetMax=lowFlowShare>.5?7:10;
+ // Yeterlilik: her çalışan ana filtrenin karşılayabildiği hacim toplanır. Üretici hacim önerisi varsa o (tehlike sınırı 1,5 katı),
+ // yoksa etiket debisinin saatte 4 çevrime (tehlike sınırı 2 çevrime) karşılık geldiği hacim kullanılır.
+ // Hava motoru olmayan sünger filtre su çevirmediği için hesaba girmez.
+ const runningFilters=primaryFilters.filter(p=>!p.requiresAirPump||airDrivenReady);
+ const sizedFilters=runningFilters.filter(p=>p.recommendedMaxL||p.ratedFlowLph);
+ const filterOkL=sizedFilters.reduce((s,p)=>s+(p.recommendedMaxL??(p.ratedFlowLph??0)/FILTER_MIN_RATED_TURNOVER),0);
+ const filterLimitL=sizedFilters.reduce((s,p)=>s+(p.recommendedMaxL?p.recommendedMaxL*FILTER_OVER_CAPACITY_DANGER:(p.ratedFlowLph??0)/FILTER_DANGER_RATED_TURNOVER),0);
+ const sizedByManufacturer=sizedFilters.length>0&&sizedFilters.every(p=>p.recommendedMaxL); const sizedByFlow=sizedFilters.length>0&&sizedFilters.every(p=>!p.recommendedMaxL);
+ const ratedTurnover=sizedFilters.reduce((s,p)=>s+(p.ratedFlowLph??0),0)/Math.max(1,aquarium.netVolumeLiters);
+ const filterFit:"ok"|"warning"|"danger"|undefined=sizedFilters.length?(aquarium.netVolumeLiters<=filterOkL?"ok":aquarium.netVolumeLiters<=filterLimitL?"warning":"danger"):undefined;
+ const fitScore=!primaryFilters.length?35:filterFit?(filterFit==="ok"?95:filterFit==="warning"?60:35):airDrivenFilters.length?(airDrivenReady?80:45):60;
+ const filterScore=turnover>targetMax?Math.min(fitScore,clamp(75-(turnover-targetMax)*8)):fitScore;
  const heaters=verifiedEquipment.filter(p=>p.category==="heater"||p.integratedHeaterW);
  const heaterPowerW=heaters.reduce((sum,h)=>sum+(h.integratedHeaterW??(h.category==="heater"?(h.powerW??0):0)),0);
  const manufacturerHeaterRanges=heaters.filter(h=>h.recommendedMinL||h.recommendedMaxL);
@@ -130,7 +153,7 @@ export function createAnalyzer(resolver:KnowledgeResolver):AnalyzeAquarium{
  const safetyEquipment=matchedEquipment.filter(p=>!p.passiveComponent&&(p.category==="filter"||p.category==="heater"||Boolean(p.integratedHeaterW)||(airDrivenFilters.length>0&&p.category==="air_pump")));
  const calculationReadyEquipment=safetyEquipment.filter(p=>{
   if(!resolver.isVerifiedEquipmentProfile(p))return false;
-  const filterReady=p.category!=="filter"||Boolean(p.ratedFlowLph)||(Boolean(p.requiresAirPump)&&airPumpsWithFlow.length>0);
+  const filterReady=p.category!=="filter"||Boolean(p.ratedFlowLph)||(!p.requiresAirPump&&Boolean(p.recommendedMaxL))||(Boolean(p.requiresAirPump)&&airPumpsWithFlow.length>0);
   const airPumpReady=p.category!=="air_pump"||Boolean(p.ratedFlowLph);
   const heaterReady=!(p.category==="heater"||p.integratedHeaterW)||Boolean(p.recommendedMinL||p.recommendedMaxL||p.integratedHeaterW||(p.category==="heater"&&p.powerW));
   return filterReady&&heaterReady&&airPumpReady;
@@ -143,7 +166,7 @@ export function createAnalyzer(resolver:KnowledgeResolver):AnalyzeAquarium{
   {key:"space",label:"Yüzme alanı",score:spaceScore,status:status(spaceScore),detail:spaceIssues.length?`${spaceIssues.length} tür için alan sınırda`:"Kayıtlı türler için uygun"},
   {key:"social",label:"Sosyal ihtiyaç",score:socialScore,status:status(socialScore),detail:groupIssues.length?`${groupIssues.length} türün grup sayısı düşük`:"Grup ihtiyaçları uygun"},
   {key:"compatibility",label:"Tür uyumu",score:compatibilityScore,status:status(compatibilityScore),detail:habitatIssues.length?"Akvaryum türüyle yaşam ortamı uyuşmuyor":speciesOnlyIssues.length?"Tür akvaryumu önerilen canlı var":predationIssues.length?"Küçük canlılar için avlanma riski var":temperatureConflict||phConflict?"Su değeri aralıkları kesişmiyor":flowConflict?"Akıntı ihtiyaçları farklı":communityCautionIssues.length?"Tank arkadaşı seçimi dikkat gerektiriyor":"Ortak yaşam aralıkları mevcut"},
-  {key:"filter",label:"Filtrasyon uygunluğu",score:filterScore,status:status(filterScore),detail:filtersWithFlow.length?`Tahmini ${turnover.toFixed(1)} çevrim/saat`:airDrivenFilters.length?(airDrivenReady?"Hava motorlu sünger filtre bağlantısı hazır":"Sünger filtre için hava motoru gerekli"):primaryFilters.length?"Debi bilgisi doğrulanmayı bekliyor":auxiliaryFilters.length?"Yalnız yardımcı yüzey skimmeri kayıtlı; ana filtre gerekli":"Katalogdan filtre bulunamadı"},
+  {key:"filter",label:"Filtrasyon uygunluğu",score:filterScore,status:status(filterScore),detail:sizedByManufacturer?`Üretici önerisi en fazla ${filterOkL} L`:sizedByFlow?`Etiket debisiyle ${ratedTurnover.toFixed(1).replace(".",",")} çevrim/saat`:sizedFilters.length?`Üretici önerisi ve etiket debisine göre en fazla ${Math.round(filterOkL)} L`:airDrivenFilters.length?(airDrivenReady?"Hava motorlu sünger filtre bağlantısı hazır":"Sünger filtre için hava motoru gerekli"):primaryFilters.length?"Debi bilgisi doğrulanmayı bekliyor":auxiliaryFilters.length?"Yalnız yardımcı yüzey skimmeri kayıtlı; ana filtre gerekli":"Katalogdan filtre bulunamadı"},
   {key:"heater",label:"Isıtıcı uygunluğu",score:heaterScore,status:status(heaterScore),detail:heaterDataReady?(heaterFit?(useEstimatedHeaterRange?`Toplam ${heaterPowerW} W için tahmini hacim uygun`:"Üretici hacim aralığı uygun"):(heaterTooSmall?"Isıtma gücü bu hacim için düşük":heaterTooLarge?"Isıtma gücü bu hacim için yüksek":"Hacim aralığı dışında")):heaters.length?"Watt veya hacim verisi doğrulanmayı bekliyor":"Katalogdan ısıtıcı bulunamadı"},
   {key:"water",label:"Su değeri uyumu",score:waterScore,status:status(waterScore),detail:latest?"Son ölçüme göre":"Ölçüm eklenmesi gerekli"},
   {key:"confidence",label:"Veri güveni",score:confidenceScore,status:status(confidenceScore),detail:totalDataCount?`${verifiedDataCount}/${totalDataCount} güvenlik kaydı hesaplamaya hazır`:"Güvenlik hesabı için kayıt bulunamadı"},
@@ -159,9 +182,9 @@ export function createAnalyzer(resolver:KnowledgeResolver):AnalyzeAquarium{
  if(missingCapacityCount){const names=missingCapacityEquipment.slice(0,3).map(item=>`${item.brand} ${item.model}`).join(", ");const remaining=missingCapacityCount>3?` ve ${missingCapacityCount-3} ekipman daha`:"";const reason=missingCapacityCount===1&&missingCapacityEquipment[0].capacityDataNote?` ${missingCapacityEquipment[0].capacityDataNote}`:" Gerekli debi, hacim veya hava motoru bağlantısı doğrulanmalı.";warnings.push({level:"warning",title:"Ekipman kapasite bilgisi eksik",message:`${names}${remaining} güvenli kapasite hesabına alınamadı.${reason}`});}
  if(auxiliaryFilters.length&&!primaryFilters.length)warnings.push({level:"danger",title:"Ana filtre gerekli",message:"Yüzey skimmeri su yüzeyindeki filmi toplar ancak tek başına ana mekanik ve biyolojik filtrenin yerine geçmez. Katalogdan akvaryuma uygun bir ana filtre ekleyin."});
  if(airDrivenFilters.length&&!airDrivenReady)warnings.push({level:"danger",title:"Sünger filtre için hava motoru gerekli",message:"Seçilen pipo/sünger filtre kendi başına su çevirmez. Katalogdan uygun bir hava motoru ekleyin."});
- if(loadScore<75)warnings.push({level:loadScore<50?"danger":"warning",title:"Biyolojik yük yüksek olabilir",message:"Canlı eklemeden önce filtrasyon ve bakım sıklığını gözden geçir."});
+ if(loadRatio>LOAD_WARNING_RATIO)warnings.push({level:"warning",title:"Biyolojik yük yüksek olabilir",message:"Tahmini canlı yükü, türlerin kaynaklarında önerilen koşulların belirgin biçimde üstünde. Canlı eklemeden önce filtrasyonu ve bakım sıklığını gözden geçir; amonyak, nitrit ve nitratı düzenli ölç."});
  if(turnover>targetMax)warnings.push({level:"warning",title:"Filtre akışı güçlü olabilir",message:`Tahmini ${turnover.toFixed(1)} çevrim/saat. Düşük akıntı seven türler için çıkışı dağıtmayı düşün.`});
- if(filtersWithFlow.length&&turnover<targetMin)warnings.push({level:"danger",title:"Filtrasyon sınırda",message:"Tahmini filtre çevrimi mevcut canlı yükü için düşük görünüyor."});
+ if(filterFit==="warning"||filterFit==="danger"){const volume=aquarium.netVolumeLiters;const cycles=ratedTurnover.toFixed(1).replace(".",",");if(sizedByManufacturer){const capacityText=sizedFilters.length>1?`filtrelerin üreticilerince önerilen toplam hacmin (${filterOkL} L)`:`filtrenin üreticisinin önerdiği en büyük hacmin (${filterOkL} L)`;warnings.push(filterFit==="danger"?{level:"danger",title:"Filtre bu akvaryum için küçük",message:`Akvaryumun net hacmi (${volume} L), ${capacityText} %50'den fazla üstünde. Akvaryuma uygun bir filtre ekleyin.`}:{level:"warning",title:"Filtre üretici önerisinin üstünde",message:`Akvaryumun net hacmi (${volume} L), ${capacityText} üstünde. Filtre bakımını sık yapın; canlı eklemeden önce daha büyük bir filtre düşünün.`});}else if(sizedByFlow){warnings.push(filterFit==="danger"?{level:"danger",title:"Filtre debisi yetersiz",message:`Üretici hacim önerisi olmadığı için etiket debisine bakıldı: akvaryumun suyu saatte yaklaşık ${cycles} kez dolaşıyor. Hortum ve filtre malzemesiyle gerçek debi bunun yaklaşık yarısına iner; akvaryuma uygun bir filtre ekleyin.`}:{level:"warning",title:"Filtre debisi düşük olabilir",message:`Üretici hacim önerisi olmadığı için etiket debisine bakıldı: akvaryumun suyu saatte yaklaşık ${cycles} kez dolaşıyor, önerilen en az ${FILTER_MIN_RATED_TURNOVER}. Filtre kirlendikçe gerçek debi daha da düşer.`});}else{warnings.push(filterFit==="danger"?{level:"danger",title:"Filtre bu akvaryum için küçük",message:`Akvaryumun net hacmi (${volume} L), filtrelerin üretici önerisi ve etiket debisine göre karşılayabildiği en büyük hacmin (${Math.round(filterLimitL)} L) üstünde. Akvaryuma uygun bir filtre ekleyin.`}:{level:"warning",title:"Filtre kapasitesi düşük olabilir",message:`Akvaryumun net hacmi (${volume} L), filtrelerin üretici önerisi ve etiket debisine göre uygun olduğu hacmin (${Math.round(filterOkL)} L) üstünde. Filtre bakımını sık yapın; canlı eklemeden önce daha güçlü bir filtre düşünün.`});}}
  if(heaterDataReady&&!heaterFit)warnings.push({level:heaterTooSmall?"danger":"warning",title:heaterTooSmall?"Isıtıcı gücü yetersiz olabilir":heaterTooLarge?"Isıtıcı akvaryuma göre güçlü olabilir":"Isıtıcı hacimle eşleşmiyor",message:heaterTooSmall?"Seçilen ısıtıcının üretici hacim aralığı veya watt kapasitesi bu akvaryum için düşük kalıyor.":heaterTooLarge?"Yüksek güçlü ısıtıcı küçük hacimde sıcaklığı hızlı değiştirebilir. Güvenilir termostat ve doğru konumlandırma önemlidir.":"Seçilen ısıtıcının katalog hacim aralığı bu akvaryumu kapsamıyor."});
  for(const {profile} of habitatIssues)warnings.push({level:"danger",title:profile!.commonName+": akvaryum türü uyumsuz",message:profile!.commonName+", "+(aquarium.type==="freshwater"?"tatlı su":aquarium.type==="saltwater"?"tuzlu su":"acı su")+" akvaryumunda güvenli kabul edilmez. Canlı profilinin desteklediği su türüne uygun ayrı bir akvaryum seçin."});
  if(salinityProfiles.length&&latest?.specificGravity===undefined)warnings.push({level:"warning",title:"Özgül ağırlık ölçümü gerekli",message:"Deniz canlılarının tuzluluk uyumu değerlendirilemedi. Refraktometre veya hidrometre ile özgül ağırlık ölçümü ekleyin."});
@@ -184,8 +207,10 @@ export function createAnalyzer(resolver:KnowledgeResolver):AnalyzeAquarium{
  for(const entry of spaceIssues){const {profile}=entry;const volume=requiredVolume(entry);warnings.push({level:"warning",title:`${profile!.commonName}: alan sınırda`,message:profile!.minTankLengthCm===undefined?`Kayıtlı adet için minimum ${volume} L referansı kullanıldı; kaynak tank uzunluğu yayımlamıyor.`:`Kayıtlı adet için minimum ${volume} L ve ${profile!.minTankLengthCm} cm uzunluk referansı kullanıldı.`});}
  // Kesin tehlikeler (yanlış su türü, kesişmeyen sıcaklık veya pH, avlanma, tür akvaryumu, tuzluluk, zehirli
  // amonyak veya nitrit) genel durumu "tehlike"ye çeker; sekiz ölçütün ortalaması bunları gizleyemez.
- // Tahmine dayalı biyolojik yük, filtre ve ısıtıcı uyarıları genel durumu kilitlemez.
+ // Diğer tehlike uyarıları (ör. üretici önerisini çok aşan filtre, yetersiz ısıtıcı) genel durumu "tehlike"ye
+ // çekmez ama "iyi" görünmesini de engeller: genel puan en fazla "dikkat" olur.
  const criticalDanger=habitatIssues.length>0||temperatureConflict||phConflict||predationIssues.length>0||speciesOnlyIssues.length>0||salinityIssues.length>0||ammonia?.level==="danger"||nitrite?.level==="danger";
- const averageScore=clamp(metrics.reduce((s,m)=>s+m.score,0)/metrics.length); const score=criticalDanger?Math.min(averageScore,49):averageScore; return {score,status:status(score),metrics,warnings};
+ const dangerWarning=warnings.some(warning=>warning.level==="danger");
+ const averageScore=clamp(metrics.reduce((s,m)=>s+m.score,0)/metrics.length); const score=criticalDanger?Math.min(averageScore,49):dangerWarning?Math.min(averageScore,DANGER_WARNING_SCORE_CAP):averageScore; return {score,status:status(score),metrics,warnings};
  };
 }

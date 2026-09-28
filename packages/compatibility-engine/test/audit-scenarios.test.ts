@@ -98,9 +98,36 @@ describe("denetim senaryoları: su kalitesi", () => {
   });
 });
 
+describe("denetim senaryoları: filtre ve biyolojik yük", () => {
+  const filterOrLoad = (result: ReturnType<typeof analyzeAquarium>) =>
+    result.warnings.filter((warning) => /^Filtre (bu|üretici|debisi|kapasitesi)|Biyolojik yük/.test(warning.title));
+
+  it("100 L'de 12 neon, 6 corydoras ve 1 vatoz yük veya filtre uyarısı almaz", () => {
+    const result = analyzeAquarium(tank(80, 100), community(), communityDevices(), water());
+    expect(filterOrLoad(result)).toEqual([]);
+    expect(result.metrics.find((metric) => metric.key === "load")!.status).toBe("good");
+    expect(result.status).toBe("good");
+  });
+
+  it("Eheim Classic 250, üreticinin 250 L sınırı içinde (200 L) filtre uyarısı almaz", () => {
+    const result = analyzeAquarium(tank(100, 200), [fish("neon-tetra", 20), fish("corydoras-panda", 8), fish("ancistrus", 1)], [device("eheim-classic-250"), device("eheim-thermo-150")], water());
+    expect(filterOrLoad(result)).toEqual([]);
+    expect(result.metrics.find((metric) => metric.key === "filter")!.status).toBe("good");
+  });
+
+  it("200 L'de en fazla 80 L'lik JBL i60 tehlikedir ve genel durum 'iyi' görünmez", () => {
+    const result = analyzeAquarium(tank(100, 200), [fish("neon-tetra", 20), fish("corydoras-panda", 8), fish("ancistrus", 1)], [device("jbl-cristalprofi-i60"), device("eheim-thermo-150")], water());
+    expect(filterOrLoad(result).map((warning) => [warning.level, warning.title])).toEqual([["danger", "Filtre bu akvaryum için küçük"]]);
+    expect(result.status).toBe("warning");
+  });
+
+  it("100 L'de 60 neon, 30 corydoras ve 5 vatoz yalnızca sarı yük uyarısı alır", () => {
+    const result = analyzeAquarium(tank(80, 100), [fish("neon-tetra", 60), fish("corydoras-panda", 30), fish("ancistrus", 5)], communityDevices(), water());
+    expect(filterOrLoad(result).map((warning) => [warning.level, warning.title])).toEqual([["warning", "Biyolojik yük yüksek olabilir"]]);
+  });
+});
+
 describe("denetim senaryoları: henüz düzeltilmeyenler", () => {
-  it.todo("100 L'de 12 neon, 6 corydoras ve 1 vatoz biyolojik yük için kırmızı uyarı almamalı (yük eşiği yeniden ayarlanacak)");
-  it.todo("Eheim Classic 250, üreticinin 250 L sınırı içinde 'Filtrasyon sınırda' tehlikesi almamalı (filtre kuralı yeniden ayarlanacak)");
   it.todo("Japon balığı ile neon tetra için küçük balık avlama uyarısı çıkmalı (davranış işareti)");
   it.todo("Melek balığı ile neon tetra için küçük balık avlama uyarısı çıkmalı (davranış işareti)");
   it.todo("Sumatra barb için yüzgeç ısırma uyarısı çıkmalı (davranış işareti)");

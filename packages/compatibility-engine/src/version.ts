@@ -13,5 +13,9 @@
 //
 // 1.2.0: amonyak, nitrit ve nitrat değerlendirmesi (OATA eşikleri) ve kesin tehlikenin genel
 // durumu "tehlike"ye çekmesi eklendi (bkz. docs/DECISIONS/0008-su-kalitesi-ve-kesin-tehlike.md).
-export const ENGINE_VERSION = "1.2.0";
-export const RULESET_VERSION = "1.2.0";
+//
+// 1.3.0: filtre yeterliliği üretici hacim önerisine (yoksa etiket debisiyle saatteki çevrime) göre;
+// tahmini biyolojik yük yalnızca belirgin aşırı kalabalıkta uyarı verir; kesin olmayan bir tehlike uyarısı
+// varken genel durum en fazla "dikkat" olur (bkz. docs/DECISIONS/0009-filtre-yuk-ve-genel-durum.md).
+export const ENGINE_VERSION = "1.3.0";
+export const RULESET_VERSION = "1.3.0";

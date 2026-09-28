@@ -1,7 +1,7 @@
 # 0008 — Su kalitesi değerlendirmesi ve kesin tehlikenin genel durumu belirlemesi
 
 - Tarih: 2026-09-26
-- Durum: Önerildi — ürün sahibi (`buraksenfx`) kuralları 2026-09-26'da açıkça onayladı; geçersiz ölçüm ek kuralını 2026-09-27'de onayladı. `codex/urgent-safety-fixes` dalında Codex denetimi üç turda tamamlandı (son tur 2026-09-28 temiz); PR #12 (`https://github.com/ckaracora/AquaMind/pull/12`) açıldı ve kontrolleri başarılı; `main` birleştirmesi için kullanıcı onayı bekliyor. `main` dalına birleştirilene kadar kabul edilmiş sayılmaz
+- Durum: Kabul edildi — ürün sahibi (`buraksenfx`) kuralları 2026-09-26'da, geçersiz ölçüm ek kuralını 2026-09-27'de açıkça onayladı. Codex denetimi üç turda tamamlandı (son tur 2026-09-28 temiz). PR #12 (`https://github.com/ckaracora/AquaMind/pull/12`) ile 2026-09-28'de merge commit yöntemiyle `main` dalına birleştirildi (`f921919`) ve canlıda
 
 ## Bağlam
 
