@@ -1,7 +1,7 @@
 # 0010 — Davranış uyarıları: yüzgeç ısırma, cüce karides, fırsatçı avcı ve aynı tür saldırganlığı
 
 - Tarih: 2026-09-29
-- Durum: Önerildi — ürün sahibi (`buraksenfx`) dört kuralı 2026-09-29'da karar sayfası ve soru formuyla açıkça onayladı; dördünde de önerilen seçenek. `codex/behavior-warnings` dalında. Codex denetimi üç turda tamamlandı (son tur 2026-09-29 temiz); PR ve `main` birleştirmesi bekliyor. `main` dalına birleştirilene kadar kabul edilmiş sayılmaz
+- Durum: Önerildi — ürün sahibi (`buraksenfx`) dört kuralı 2026-09-29'da karar sayfası ve soru formuyla açıkça onayladı; dördünde de önerilen seçenek. `codex/behavior-warnings` dalında. Codex denetimi üç turda tamamlandı (son tur 2026-09-29 temiz). Kod ve belgeler (`5226649`) ile altın fikstür (`df8683b`) ayrı commit'ler olarak kaydedildi ve PR #14 (`https://github.com/ckaracora/AquaMind/pull/14`) açıldı; PR üzerinde GitHub Actions `Doğrulama` ve Vercel önizlemesi başarılı. `main` birleştirmesi ürün sahibinin onayını bekliyor. `main` dalına birleştirilene kadar kabul edilmiş sayılmaz
 - Karar sayfası: https://claude.ai/artifact/VnfqPSmsKrkSQUStML6dXK (özel; paylaşım ürün sahibinde)
 
 ## Bağlam
@@ -65,7 +65,7 @@ Kayıt başına kaynak bağlantıları `src/data/species-behavior.ts` içindedir
 - `packages/compatibility-engine/test/behavior.test.ts`: dört kural, çelişkili kayıtlar, asıl ve fırsatçı avcı ayrımı, %40 boy sınırı ve kaynağın av boyu sınırı, cüce karides sınırı, adetlerin toplanması, tür uyumu tabanı, davranış tabanı ve kesin tehlike önceliği (stub kayıtlarla).
 - `src/lib/__tests__/species-behavior.test.ts`: her türün katalogda olması, HTTPS kaynak ve kaynak adı eşleşmesi, doğrulama tarihi, koşul metinlerinde kısaltma olmaması, av boyu sınırı (yalnızca kaynağın ölçü verdiği threadfin acara'da), `withBehavior` bağlaması, avcı işaretinin kaldırılması ve gerçek katalogda threadfin acara ile 2 cm'lik chili rasbora (sarı uyarı, "2 cm ve altı" notuyla) ve neon tetra (uyarı yok).
 - `packages/compatibility-engine/test/audit-scenarios.test.ts`: denetimde bekleyen beş davranış maddesi gerçek teste dönüştü (cüce gurami ve kiraz karides kaynaklara göre "uyarı yok"). Yalnızca alan uyarısının şiddeti `it.todo` olarak kaldı.
-- Altın fikstür onaydan sonra yeniden üretildi (1020 vaka; 83'ü değişti); her fark sınıflandırıldı, açıklanamayan fark yok. Kod değişikliğinden ayrı bir commit'te kaydedilmesi planlandı.
+- Altın fikstür onaydan sonra yeniden üretildi (1020 vaka; 83'ü değişti); her fark sınıflandırıldı, açıklanamayan fark yok. Kod değişikliğinden ayrı bir commit'te kaydedildi (`df8683b`).
 
 ## Sonuçlar
 
