@@ -1,6 +1,6 @@
 # AquaMind uyumluluk motoru
 
-Son güncelleme: 2026-09-28 (kural seti 1.3.0, filtre, biyolojik yük ve genel durum).
+Son güncelleme: 2026-09-29 (kural seti 1.4.0, davranış uyarıları).
 
 ## Temel kural
 
@@ -14,6 +14,7 @@ Uyumluluk puanı, alt puanlar ve bulgular yalnızca `packages/compatibility-engi
 | Sürümler | `packages/compatibility-engine/src/version.ts` | `ENGINE_VERSION`, `RULESET_VERSION` (ayrı sabitler) |
 | Uyarlayıcı | `src/lib/health-analysis.ts` | Kataloğun dört fonksiyonunu çözümleyici olarak bağlar; `analyzeAquarium`'u aynı imzayla dışa aktarır |
 | Bilgi | `src/data/catalog.ts` | Canlı ve ekipman profilleri, doğrulanmışlık kuralı |
+| Davranış verisi | `src/data/species-behavior.ts` | Kaynaklı davranış kayıtları (1.4.0); uyarlayıcıdaki `withBehavior` bunları motorun isteğe bağlı `behavior` girişine bağlar |
 | Testler | `packages/compatibility-engine/test/` | Altın karşılaştırma, bağımsızlık, mevcut senaryo betiği |
 | Mevcut senaryolar | `scripts/test-health.cjs` | 52 senaryo; `pnpm verify` doğrudan, `pnpm test` alt süreç olarak çalıştırır |
 
@@ -47,7 +48,7 @@ Sonuç nesnesine sürüm veya bulgu kodu alanı **eklenmedi**; bu, çıktı biç
 
 ## Kural seti (mevcut sabitler)
 
-Motorun içine gömülü eşikler `RULESET_VERSION` ile sürümlenir. Mevcut sürüm 1.3.0:
+Motorun içine gömülü eşikler `RULESET_VERSION` ile sürümlenir. Mevcut sürüm 1.4.0:
 
 - Etkin hacim: net hacmin 0,85'i. Tahmini biyolojik yük oranı = Σ(adet × yetişkin boy × atık katsayısı) / etkin hacim. Atık katsayısının kaynağı olmadığı için yük hiçbir zaman tehlike vermez: oran 2,5'in üstündeyse uyarı (ölçüt puanı 60), değilse ölçüt puanı 100 − oran × 10. 2,5, katalogdaki hiçbir türün kendi kaynağının önerdiği en küçük akvaryum ve grupta ulaşmadığı değerdir.
 - Filtre yeterliliği: her çalışan ana filtrenin karşılayabildiği hacim toplanır. Üretici hacim önerisi olan filtrede öneri uygunluk, 1,5 katı tehlike sınırıdır; önerisi olmayanda etiket debisinin saatte 4 çevrime karşılık geldiği hacim uygunluk, saatte 2 çevrime karşılık geldiği hacim tehlike sınırıdır. Net hacim uygunluk sınırları toplamının içindeyse uygun, tehlike sınırları toplamının içindeyse uyarı, üstündeyse tehlike. Yalnız hacim önerili filtrelerde bu "önerinin %50'ye kadar aşımı uyarı", yalnız debili filtrelerde "saatte 4 çevrim uygun, 2–4 uyarı, 2'nin altı tehlike" demektir. Hacim önerili debisiz filtre hesaba hazır sayılır. Hava motoru olmayan sünger filtre hesaba girmez. Yük filtre hedefini etkilemez.
@@ -57,25 +58,28 @@ Motorun içine gömülü eşikler `RULESET_VERSION` ile sürümlenir. Mevcut sü
 - Alan: gereken hacim = en az hacim + (adet − 1) × birey başına ek hacim (tanımlıysa). Kaynak tank uzunluğu yayımlamıyorsa yalnızca hacim denetlenir ve bunu belirten bir uyarı gösterilir.
 - Filtre türleri: pasif parçalar filtre hesabına girmez; yardımcı filtreler (ör. yüzey skimmeri) ana filtrenin yerine geçmez, akvaryumda yalnız yardımcı filtre varsa tehlike uyarısı verilir.
 - Tuzluluk: deniz ve acı su profillerinde özgül ağırlık aralığı tanımlıdır; ölçüm yoksa uyarı, son ölçüm aralık dışındaysa tehlike uyarısı verilir.
-- Uyum cezaları: yaşam ortamı uyumsuzluğu 80, sıcaklık kesişimi yok 55, pH kesişimi yok 55, akıntı çatışması 20, avlanma 60, tür akvaryumu gerektiren canlı 60, topluluk uyarısı 30.
+- Uyum cezaları: yaşam ortamı uyumsuzluğu 80, sıcaklık kesişimi yok 55, pH kesişimi yok 55, akıntı çatışması 20, avlanma 60, tür akvaryumu gerektiren canlı 60, topluluk uyarısı 30; davranış: fırsatçı avcı 40, yüzgeç ısırma 30, aynı tür saldırganlığı 30, karides yiyen balık 30, karides uyumu doğrulanmayan balık 15. Kesin tehlike (yaşam ortamı, sıcaklık veya pH, avlanma, tür akvaryumu) yoksa tür uyumu 50'nin altına inmez.
 - Avlanma: av, avcının yetişkin boyunun %40'ı veya altındaysa.
+- Davranış (1.4.0, yalnızca `src/data/species-behavior.ts` içindeki açık kaynaklı kayıtlar; hepsi uyarı): yüzgeç ısıran balık + uzun ya da yavaş yüzgeçli farklı balık → "<hedef>: yüzgeç ısırma riski"; fırsatçı avcı (asıl avcı değil) + yetişkin boyu %40 veya altındaki balık → "<av>: avlanabilir" (kaynak daha küçük bir av boyu verdiyse o sınır, sınır dahil; kaynağa göre asıl avcı olmayan türün katalogdaki avcı işareti kaldırılır, kaynak sayısal bir av boyu verdiyse tür o sınırla fırsatçı avcı sayılır); aynı tür saldırganlığında toplam adet 2 veya fazlaysa → "<tür>: erkekler kavga eder" ya da "<tür>: tek tutulmalı"; cüce karides (yetişkin 4 cm veya altı) + kaynağı "karides yer" diyen balık → "Karidesler yenebilir", kaynağında "karidesle güvenli" bilgisi olmayan balık → "Karides uyumu doğrulanmadı". Çelişkili kayıtlar uyarı üretmez (karideste "doğrulanmadı" sayılır). Uyarı mesajı kaynağın adını ve varsa notunu söyler.
 - Su değeri uyumu: son ölçümün sıcaklığı, pH'ı, (tanımlı profillerde) özgül ağırlığı ve amonyak, nitrit, nitrat seviyeleri.
 - Su kalitesi (OATA, Ekim 2022): amonyak ve nitrit sıfırın üstündeyse uyarı. Serbest amonyak tatlı suda 0,02, deniz ve acı suda 0,01 mg/L'yi; nitrit tatlı suda 0,2, deniz ve acı suda 0,125 mg/L'yi aşarsa tehlike. Serbest amonyak = toplam amonyak × Florida DEP kesri (pKa = 0,0901821 + 2729,92 / (°C + 273,2)); pH veya sıcaklık yoksa ya da geçersizse toplamın tamamı zehirli sayılır. Nitrat tatlı ve acı suda 50 mg/L üstü uyarı, 100 mg/L üstü tehlike; denizde 100 mg/L üstü tehlike. Negatif, sayı olmayan veya sonsuz amonyak, nitrit ve nitrat değerlendirilmez ("uygun" sayılmaz, puana girmez) ve "Geçersiz su ölçümü" uyarısı verilir.
 - Kesin tehlike: yaşam ortamı uyumsuzluğu, sıcaklık veya pH kesişiminin olmaması, avlanma, tür akvaryumu gerektiren canlı, aralık dışı tuzluluk, zehirli amonyak veya sınırı aşan nitrit varsa genel puan en fazla 49 olur (durum "tehlike").
 - Diğer tehlike uyarıları: kesin tehlike dışında herhangi bir tehlike uyarısı (ör. üretici önerisini çok aşan filtre, yetersiz ısıtıcı) varsa genel puan en fazla 74 olur (durum en fazla "dikkat").
+- Davranış tabanı: davranış cezası olmadan tehlikede olmayan akvaryumun genel puanı davranış uyarıları yüzünden 50'nin altına inmez.
 - Veri güveni: doğrulanmış (kaynaklı) kayıtların güvenlik hesabına giren kayıtlara oranı.
 
-Bu sabitler Phase 0B'de değiştirilmedi. 1.1.0'da katalog entegrasyonuyla yaşam ortamı, tuzluluk, birey başına ek hacim ve yardımcı filtre kuralları eklendi (bkz. `docs/DECISIONS/0007-katalog-entegrasyonu-motor-kurallari.md`). 1.2.0'da su kalitesi eşikleri ve kesin tehlike kuralı eklendi (bkz. `docs/DECISIONS/0008-su-kalitesi-ve-kesin-tehlike.md`). 1.3.0'da filtre yeterliliği, tahmini yük ve tehlike uyarısının genel duruma etkisi değişti (bkz. `docs/DECISIONS/0009-filtre-yuk-ve-genel-durum.md`); eşikler `src/index.ts` başındaki adlandırılmış sabitlerdedir.
+Bu sabitler Phase 0B'de değiştirilmedi. 1.1.0'da katalog entegrasyonuyla yaşam ortamı, tuzluluk, birey başına ek hacim ve yardımcı filtre kuralları eklendi (bkz. `docs/DECISIONS/0007-katalog-entegrasyonu-motor-kurallari.md`). 1.2.0'da su kalitesi eşikleri ve kesin tehlike kuralı eklendi (bkz. `docs/DECISIONS/0008-su-kalitesi-ve-kesin-tehlike.md`). 1.3.0'da filtre yeterliliği, tahmini yük ve tehlike uyarısının genel duruma etkisi değişti (bkz. `docs/DECISIONS/0009-filtre-yuk-ve-genel-durum.md`); eşikler `src/index.ts` başındaki adlandırılmış sabitlerdedir. 1.4.0'da kaynaklı davranış uyarıları eklendi (bkz. `docs/DECISIONS/0010-davranis-uyarilari.md`).
 
 ## Değişmezlik güvencesi
 
-- `test/fixtures/golden-v1.json`: ilk sürümü motor taşınmadan önce, `8d6a164` içeriğindeki orijinal `src/lib/health-analysis.ts` ile alınmış 604 vakalık çıktıydı. Motor 1.1.0 ile yeniden üretildi: 1020 vaka (417 türün her biri için kendi su türünde "sığar" ve "dar" senaryosu, 60 filtre, 30 ısıtıcı, 10 hava motoru, 84 tür çifti, tohum veri, boş akvaryum). Yeniden üretimden önce, pakete taşınan kuralların `codex/catalog-capacity-batch` dalındaki (`950a70f`) özgün motorla 1020 vakanın tamamında birebir aynı çıktıyı verdiği doğrulandı. Motor 1.2.0 (su kalitesi ve kesin tehlike) için ürün sahibi onayından sonra yeniden üretildi; vaka sayısı değişmedi. Motor 1.3.0 (filtre, yük, genel durum) için 2026-09-28 onayından sonra yeniden üretildi; 1014 vaka değişti ve farkların tamamı sınıflandırıldı (yük ölçütü, filtre ölçütü, filtre ve yük uyarıları, tehlike uyarısında 74 sınırı, hacim önerili debisiz filtrelerin veri güveni). Vakalar `test/fixtures/golden-cases.ts` ile deterministik üretilir.
+- `test/fixtures/golden-v1.json`: ilk sürümü motor taşınmadan önce, `8d6a164` içeriğindeki orijinal `src/lib/health-analysis.ts` ile alınmış 604 vakalık çıktıydı. Motor 1.1.0 ile yeniden üretildi: 1020 vaka (417 türün her biri için kendi su türünde "sığar" ve "dar" senaryosu, 60 filtre, 30 ısıtıcı, 10 hava motoru, 84 tür çifti, tohum veri, boş akvaryum). Yeniden üretimden önce, pakete taşınan kuralların `codex/catalog-capacity-batch` dalındaki (`950a70f`) özgün motorla 1020 vakanın tamamında birebir aynı çıktıyı verdiği doğrulandı. Motor 1.2.0 (su kalitesi ve kesin tehlike) için ürün sahibi onayından sonra yeniden üretildi; vaka sayısı değişmedi. Motor 1.3.0 (filtre, yük, genel durum) için 2026-09-28 onayından sonra yeniden üretildi; 1014 vaka değişti ve farkların tamamı sınıflandırıldı (yük ölçütü, filtre ölçütü, filtre ve yük uyarıları, tehlike uyarısında 74 sınırı, hacim önerili debisiz filtrelerin veri güveni). Motor 1.4.0 (davranış uyarıları) için 2026-09-29 onayından sonra yeniden üretildi; 83 vaka değişti ve farkların tamamı sınıflandırıldı (tür uyumu ölçütü, davranış uyarıları, davranış tabanı). Vakalar `test/fixtures/golden-cases.ts` ile deterministik üretilir.
 - `test/golden.test.ts`: uyarlayıcının bugünkü çıktısını fikstürle `toStrictEqual` ile karşılaştırır. Fikstür yoksa test başarısız olur; sessizce yazılmaz.
 - `test/legacy-scripts.test.ts`: `scripts/test-health.cjs` betiğini alt süreç olarak çalıştırır; 52 senaryo tek kaynakta kalır, kopyalanmaz.
 - `test/isolation.test.ts`: motorun katalog modüllerini içe aktarmadığını ve stub çözümleyiciyle çalıştığını gösterir.
 - `test/water-quality.test.ts`: serbest amonyak formülünü Florida DEP'in yayımlanmış tablosuyla, su kalitesi eşiklerini OATA değerleriyle, geçersiz (negatif, sayı olmayan, sonsuz) değerlerin sınırını ayrıca sınar.
+- `test/behavior.test.ts`: 1.4.0 davranış kurallarını, çelişkili kayıtları, tür uyumu tabanını ve davranış tabanını stub kayıtlarla sınar.
 - `test/filter-load.test.ts`: 1.3.0 filtre (hacim önerili, debili, karışık set, sünger filtre), yük ve genel durum eşiklerini stub kayıtlarla sınırlarından sınar.
-- `test/audit-scenarios.test.ts`: 2026-09-24 denetim senaryoları ve bulguları. Düzeltilenler kalıcı testtir; henüz düzeltilmeyenler (beş davranış senaryosu ve alan uyarısının şiddeti) `it.todo` olarak görünür kalır. Geçersiz ölçümün ve eksik pH/sıcaklık mesajının motor çıktısındaki etkisi de burada sınanır.
+- `test/audit-scenarios.test.ts`: 2026-09-24 denetim senaryoları ve bulguları. Düzeltilenler kalıcı testtir; henüz düzeltilmeyen alan uyarısının şiddeti `it.todo` olarak görünür kalır. Geçersiz ölçümün ve eksik pH/sıcaklık mesajının motor çıktısındaki etkisi de burada sınanır.
 
 ## Kural kaynakları
 
@@ -83,6 +87,7 @@ Bu sabitler Phase 0B'de değiştirilmedi. 1.1.0'da katalog entegrasyonuyla yaşa
 - Florida Department of Environmental Protection, "Calculation of un-ionized ammonia in fresh water", Rev. 2, 2001: https://floridadep.gov/sites/default/files/5-Unionized-Ammonia-SOP_1.pdf
 - İnsani Tüketim Amaçlı Sular Hakkında Yönetmelik, Resmî Gazete 17.02.2005, Ek-1 (içme suyunda nitrat en fazla 50 mg/L): https://www.resmigazete.gov.tr/eskiler/2005/02/20050217-3.htm
 - Filtre ve stok kuralı kaynakları (JBL ve Fluval kılavuzları, Eheim, Seriously Fish, Practical Fishkeeping, AqAdvisor, OATA, VDA, aquariumscience.org): `docs/DECISIONS/0009-filtre-yuk-ve-genel-durum.md` → "Kaynaklar"
+- Davranış kuralı kaynakları (OATA, Seriously Fish, Fishkeeper, Practical Fishkeeping): `docs/DECISIONS/0010-davranis-uyarilari.md` → "Kaynaklar"; kayıt başına bağlantılar `src/data/species-behavior.ts` içinde
 
 ## Motoru değiştirme kuralı
 

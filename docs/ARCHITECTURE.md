@@ -1,6 +1,6 @@
 # AquaMind mimarisi
 
-Son güncelleme: 2026-09-03 (Issue #8 — yerel depolama bütünlüğü). Bu belge iki bölümden oluşur: **mevcut yapı** (depoda bugün olan) ve **hedef mimari** (planlanan, henüz uygulanmamış). Planlanan kısımlar tamamlanmış gibi gösterilmez.
+Son güncelleme: 2026-09-29 (motor 1.4.0 — kaynaklı tür davranış verisi `src/data/species-behavior.ts`; önceki büyük güncelleme 2026-09-03, Issue #8 — yerel depolama bütünlüğü). Bu belge iki bölümden oluşur: **mevcut yapı** (depoda bugün olan) ve **hedef mimari** (planlanan, henüz uygulanmamış). Planlanan kısımlar tamamlanmış gibi gösterilmez.
 
 ## Mevcut yapı (Phase 0B sonrası)
 
@@ -9,7 +9,7 @@ Depo, kökünde çalışan Next.js 15 web uygulamasını barındıran bir pnpm �
 | Yer | İçerik | Notlar |
 |---|---|---|
 | `src/` | Next.js App Router uygulaması, bileşenler, sağlayıcı, `localStorage` katmanı | Ürün davranışı Phase 0B'de değişmedi |
-| `src/data/` | Canlı, ekipman ve bakım ürünü katalogları; içe aktarma anı bütünlük denetimleri | Yerinde kaldı; Phase 0B'de değişmedi, 2026-09 katalog entegrasyonuyla genişledi |
+| `src/data/` | Canlı, ekipman ve bakım ürünü katalogları; kaynaklı tür davranış verisi (`species-behavior.ts`, motor 1.4.0); içe aktarma anı bütünlük denetimleri | Yerinde kaldı; Phase 0B'de değişmedi, 2026-09 katalog entegrasyonuyla genişledi |
 | `src/types/aquarium.ts` | Tip köprüsü: aynı adları `@aquamind/domain` üzerinden yeniden dışa aktarır | 13 tüketici değişmeden çalışır |
 | `src/lib/health-analysis.ts` | Uyarlayıcı: kataloğu motora bağlar ve `analyzeAquarium`'u aynı imzayla dışa aktarır | Sağlık sayfası ve `scripts/test-health.cjs` bu yolu kullanır |
 | `packages/domain` | `@aquamind/domain`: alan tipleri, Zod şemaları, tercihler, depo anahtarları ve günlük/arşiv şemaları, `LocalExportV1` | Şemalar uygulamada kullanılıyor: `src/lib/aquarium-storage.ts` yüklemeyi ve dışa aktarmayı bunlarla doğruluyor. Bu nedenle zod istemci paketine dahildir |

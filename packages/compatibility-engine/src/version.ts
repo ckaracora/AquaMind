@@ -17,5 +17,8 @@
 // 1.3.0: filtre yeterliliği üretici hacim önerisine (yoksa etiket debisiyle saatteki çevrime) göre;
 // tahmini biyolojik yük yalnızca belirgin aşırı kalabalıkta uyarı verir; kesin olmayan bir tehlike uyarısı
 // varken genel durum en fazla "dikkat" olur (bkz. docs/DECISIONS/0009-filtre-yuk-ve-genel-durum.md).
-export const ENGINE_VERSION = "1.3.0";
-export const RULESET_VERSION = "1.3.0";
+//
+// 1.4.0: kaynaklı davranış uyarıları: yüzgeç ısırma, cüce karides, fırsatçı avcı ve aynı tür
+// saldırganlığı; hepsi uyarı seviyesinde (bkz. docs/DECISIONS/0010-davranis-uyarilari.md).
+export const ENGINE_VERSION = "1.4.0";
+export const RULESET_VERSION = "1.4.0";
