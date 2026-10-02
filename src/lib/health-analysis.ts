@@ -39,7 +39,9 @@ export function analyzeAquarium(aquarium:Aquarium,animals:Livestock[],equipment:
  const filterEquipment=verifiedEquipment.filter(p=>p.category==="filter"); const auxiliaryFilters=filterEquipment.filter(p=>p.auxiliaryFiltration); const filters=filterEquipment.filter(p=>!p.passiveComponent); const primaryFilters=filters.filter(p=>!p.auxiliaryFiltration); const filtersWithFlow=primaryFilters.filter(p=>p.ratedFlowLph); const airDrivenFilters=primaryFilters.filter(p=>p.requiresAirPump); const airPumpsWithFlow=verifiedEquipment.filter(p=>p.category==="air_pump"&&p.ratedFlowLph); const airDrivenReady=!airDrivenFilters.length||airPumpsWithFlow.length>0; const ratedFlow=filtersWithFlow.reduce((s,p)=>s+(p.ratedFlowLph??0),0); const turnover=ratedFlow*.65/Math.max(1,aquarium.netVolumeLiters);
  const lowFlowShare=flowProfiles.length?flowProfiles.filter(x=>x.profile!.flow==="low").length/flowProfiles.length:0; const loadBoost=Math.min(3,Math.max(0,(loadRatio-1)*2)); const targetMin=(lowFlowShare>.5?3:5)+loadBoost; const targetMax=(lowFlowShare>.5?7:10)+loadBoost;
  const filterScore=!primaryFilters.length?35:!filtersWithFlow.length?(airDrivenFilters.length?(airDrivenReady?80:45):60):turnover<targetMin?clamp(70-(targetMin-turnover)*15):turnover>targetMax?clamp(75-(turnover-targetMax)*8):95;
- const heaters=verifiedEquipment.filter(p=>p.category==="heater"||p.integratedHeaterW);
+ // Taban isitma kablosu gibi yardimci/pasif kayitlar Isitici secicisinde bulunabilir,
+ // ancak ana su isitma kapasitesi saglamaz. Bunlari uygunluk hesabina katma.
+ const heaters=verifiedEquipment.filter(p=>!p.passiveComponent&&(p.category==="heater"||p.integratedHeaterW));
  const heaterPowerW=heaters.reduce((sum,h)=>sum+(h.integratedHeaterW??(h.category==="heater"?(h.powerW??0):0)),0);
  const manufacturerHeaterRanges=heaters.filter(h=>h.recommendedMinL||h.recommendedMaxL);
  // Oda sıcaklığı bilinmediğinde güvenli tarafta kalan geniş bir 0,5–1,5 W/L bandı kullanılır.

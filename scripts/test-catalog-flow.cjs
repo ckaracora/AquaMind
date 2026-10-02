@@ -47,6 +47,1230 @@ for (const brand of ["Aquael", "Sera", "Eheim", "Tetra", "ISTA", "Seachem", "Flu
   assert(catalogBrandCoverage.some((item) => item.brand === brand && item.equipmentCount + item.careProductCount >= 8), `${brand} tek tük örnek ürünle temsil edilmemeli`);
 }
 
+const eheimCompactOnIds = ["300","600","1000","2100","3000","5000","9000","12000","16000"].map((model) => `eheim-compacton-${model}`);
+const eheimCompactOn = eheimCompactOnIds.map((id) => equipmentCatalog.find((item) => item.id === id));
+assert(eheimCompactOn.every(Boolean), "Eheim compactON ailesinin dokuz güncel modeli bulunmalı");
+assert.deepEqual(eheimCompactOn.map((item) => item?.ratedFlowLph), [300,600,1000,2100,3000,5000,9000,12000,16000], "Eheim compactON modelleri resmî azami debileri taşımalı");
+assert.deepEqual(eheimCompactOn.map((item) => item?.powerW), [7,7,15,38,55,70,80,110,160], "Eheim compactON modelleri resmî 50 Hz güçlerini taşımalı");
+assert(eheimCompactOn.every((item) => item?.category === "other" && item.sourceUrl?.startsWith("https://eheim.com/") && item.verifiedAt === "2026-09-27"), "Eheim compactON pompaları ana filtre değil sirkülasyon pompası olarak resmî kaynakla tutulmalı");
+assert.deepEqual(eheimCompactOn.map((item) => item?.adjustableFlow), [true,true,true,true,true,false,false,false,false], "Eheim compactON debi ayarı yalnız üreticinin yayımladığı modellerde işaretlenmeli");
+
+const eheimStreamOnIds = ["3500","6500","9500"].map((model) => `eheim-streamon-plus-${model}`);
+const eheimStreamOn = eheimStreamOnIds.map((id) => equipmentCatalog.find((item) => item.id === id));
+assert(eheimStreamOn.every(Boolean), "Eheim streamON+ ailesinin üç güncel modeli bulunmalı");
+assert.deepEqual(eheimStreamOn.map((item) => [item?.ratedFlowLph,item?.powerW]), [[3500,2.5],[6500,6],[9500,12]], "Eheim streamON+ pompaları resmî azami debi ve güçleri taşımalı");
+assert(eheimStreamOn.every((item) => item?.category === "other" && item.adjustableFlow === true), "Eheim streamON+ modelleri ayarlanabilir sirkülasyon pompası olarak tutulmalı");
+
+const eheimSkim350 = equipmentCatalog.find((item) => item.id === "eheim-skim350");
+assert(eheimSkim350?.category === "filter" && eheimSkim350.auxiliaryFiltration === true && eheimSkim350.recommendedMaxL === 350 && eheimSkim350.powerW === 5, "Eheim skim350 yardımcı yüzey filtresi olarak 350 L ve 5 W resmî değerlerini taşımalı");
+assert(eheimSkim350.ratedFlowLph === undefined && eheimSkim350.specifications.includes("üretici debi yayımlamıyor"), "Eheim skim350 için yayımlanmayan debi uydurulmamalı");
+const eheimFeedingIds = ["eheim-autofeeder","eheim-autofeeder-plus","eheim-twinfeeder","eheim-feedingstation"];
+const eheimFeeding = eheimFeedingIds.map((id) => equipmentCatalog.find((item) => item.id === id));
+assert(eheimFeeding.every((item) => item?.category === "other" && item.sourceUrl?.startsWith("https://eheim.com/") && item.verifiedAt === "2026-09-27"), "Eheim besleme ailesinin dört güncel ürünü resmî kaynakla Diğer kategorisinde bulunmalı");
+assert(eheimFeeding.at(-1)?.passiveComponent === true, "Eheim feedingSTATION motorsuz pasif aksesuar olarak kalmalı");
+
+const eheimSmartHeaterIds = [150,200,250,300].map((powerW) => `eheim-thermocontrol-plus-e-${powerW}`);
+const eheimSmartHeaters = eheimSmartHeaterIds.map((id) => equipmentCatalog.find((item) => item.id === id));
+assert(eheimSmartHeaters.every(Boolean), "Eheim thermocontrol+ e ailesinin dört güncel modeli bulunmalı");
+assert.deepEqual(eheimSmartHeaters.map((item) => [item?.powerW,item?.recommendedMinL,item?.recommendedMaxL]), [[150,200,300],[200,300,400],[250,400,600],[300,600,1000]], "Eheim thermocontrol+ e modelleri resmî güç ve hacim aralıklarını taşımalı");
+assert(eheimSmartHeaters.every((item) => item?.category === "heater" && item.specifications.includes("18–32 °C") && item.specifications.includes("IPX8") && item.sourceUrl?.startsWith("https://eheim.com/") && item.verifiedAt === "2026-09-27"), "Eheim akıllı ısıtıcıları güvenlik ve kaynak bilgileriyle Isıtıcı kategorisinde bulunmalı");
+
+const eheimSmartUvIds = [500,800,1500,2000].map((model) => `eheim-reeflexuv-plus-e-${model}`);
+const eheimSmartUv = eheimSmartUvIds.map((id) => equipmentCatalog.find((item) => item.id === id));
+assert(eheimSmartUv.every(Boolean), "Eheim reeflexUV+e ailesinin dört güncel modeli bulunmalı");
+assert.deepEqual(eheimSmartUv.map((item) => [item?.powerW,item?.recommendedMinL,item?.recommendedMaxL]), [[11,300,500],[11,400,800],[19,700,1500],[24,1200,2000]], "Eheim reeflexUV+e modelleri resmî güç ve hacim aralıklarını taşımalı");
+assert(eheimSmartUv.every((item) => item?.category === "uv" && item.specifications.includes("otomatik kapanma") && item.sourceUrl?.startsWith("https://eheim.com/") && item.verifiedAt === "2026-09-27"), "Eheim akıllı UV ailesi güvenlik özelliği ve resmî kaynakla UV kategorisinde bulunmalı");
+
+const eheimLibertyIds = ["75","130","200"].map((model) => `eheim-liberty-${model}`);
+const eheimLiberty = eheimLibertyIds.map((id) => equipmentCatalog.find((item) => item.id === id));
+assert(eheimLiberty.every(Boolean), "Eheim LiBERTY ailesinin üç askı filtresi bulunmalı");
+assert.deepEqual(eheimLiberty.map((item) => [item?.ratedFlowLph,item?.powerW,item?.recommendedMaxL]), [[380,2.5,75],[570,3,130],[760,4,200]], "Eheim LiBERTY modelleri resmî azami debi, güç ve hacimleri taşımalı");
+assert(eheimLiberty.every((item) => item?.category === "filter" && item.adjustableFlow === true && item.sourceUrl?.startsWith("https://eheim.com/") && item.verifiedAt === "2026-09-27"), "Eheim LiBERTY ailesi ayarlanabilir askı filtre olarak resmî kaynakla tutulmalı");
+
+const eheimMiniUp = equipmentCatalog.find((item) => item.id === "eheim-miniup");
+assert.deepEqual([eheimMiniUp?.ratedFlowLph,eheimMiniUp?.powerW,eheimMiniUp?.recommendedMinL,eheimMiniUp?.recommendedMaxL], [300,5,25,30], "Eheim miniUP resmî debi, güç ve nano akvaryum hacmini taşımalı");
+
+const eheimAquaIds = ["60","160","200"].map((model) => `eheim-aqua-${model}`);
+const eheimAqua = eheimAquaIds.map((id) => equipmentCatalog.find((item) => item.id === id));
+assert.deepEqual(eheimAqua.map((item) => [item?.ratedFlowLph,item?.recommendedMinL,item?.recommendedMaxL]), [[300,30,60],[440,60,160],[440,100,200]], "Eheim aqua ailesi resmî debi ve hacim aralıklarını taşımalı");
+assert(eheimAqua.every((item) => item?.powerW === undefined && item.adjustableFlow === true && item.specifications.includes("güç alanı kesinleştirilmedi")), "Eheim aqua ailesindeki çelişkili resmî güç değerleri kesin watt alanına yazılmamalı");
+
+const eheimAquaCorner = equipmentCatalog.find((item) => item.id === "eheim-aquacorner-60");
+assert.deepEqual([eheimAquaCorner?.ratedFlowLph,eheimAquaCorner?.powerW,eheimAquaCorner?.recommendedMinL,eheimAquaCorner?.recommendedMaxL], [200,5,10,60], "Eheim aquaCorner 60 resmî teknik değerlerini taşımalı");
+
+const eheimPowerLineIds = ["eheim-powerline-200","eheim-powerline-xl"];
+const eheimPowerLine = eheimPowerLineIds.map((id) => equipmentCatalog.find((item) => item.id === id));
+assert.deepEqual(eheimPowerLine.map((item) => [item?.ratedFlowLph,item?.powerW,item?.recommendedMinL,item?.recommendedMaxL]), [[600,10,100,200],[1200,28,200,undefined]], "Eheim PowerLine modelleri resmî debi, güç ve yayımlanan hacim sınırlarını taşımalı");
+assert(eheimPowerLine[1]?.specifications.includes("üst hacim sınırı yayımlamıyor"), "PowerLine XL için yayımlanmayan üst hacim sınırı uydurulmamalı");
+
+const eheimAquaCompactIds = ["40","60"].map((model) => `eheim-aquacompact-${model}`);
+const eheimAquaCompact = eheimAquaCompactIds.map((id) => equipmentCatalog.find((item) => item.id === id));
+assert.deepEqual(eheimAquaCompact.map((item) => [item?.recommendedMinL,item?.recommendedMaxL]), [[20,40],[30,60]], "Eheim aquacompact modelleri resmî hacim aralıklarını taşımalı");
+assert(eheimAquaCompact.every((item) => item?.ratedFlowLph === undefined && item.powerW === undefined && item.adjustableFlow === true && item.specifications.includes("debi ve güç yayımlanmıyor")), "Eheim aquacompact için güncel sayfada yayımlanmayan debi ve güç uydurulmamalı");
+
+const eheimAirfilter = equipmentCatalog.find((item) => item.id === "eheim-airfilter");
+assert(eheimAirfilter?.category === "filter" && eheimAirfilter.requiresAirPump === true && eheimAirfilter.ratedFlowLph === undefined && eheimAirfilter.powerW === undefined, "Eheim Airfilter harici hava motoru gerektiren filtredir; motor kapasitesi uydurulmamalı");
+
+const eheimCurrentPro5e = ["eheim-pro5e-350","eheim-pro5e-450","eheim-pro5e-700","eheim-professionel-5e-600t"].map((id) => equipmentCatalog.find((item) => item.id === id));
+assert(eheimCurrentPro5e.every(Boolean), "Eheim professionel 5e güncel dört modelinin tamamı bulunmalı");
+assert.deepEqual(eheimCurrentPro5e.map((item) => [item?.ratedFlowLph,item?.powerW,item?.recommendedMinL,item?.recommendedMaxL]), [[1500,35,180,350],[1700,35,240,550],[1850,35,300,700],[1850,35,300,600]], "Eheim professionel 5e ailesi resmî pompa, güç ve hacim verilerini taşımalı");
+assert(eheimCurrentPro5e[1]?.model.includes("önceki ad 450") && eheimCurrentPro5e[2]?.model.includes("önceki ad 700"), "Eheim 2076/2078 gövdelerinin eski 450/700 adları aramada korunmalı");
+assert(eheimCurrentPro5e[3]?.integratedHeaterW === 210 && eheimCurrentPro5e[3].specifications.includes("tatlı su"), "Professionel 5e 600T 210 W termofiltre ve yalnız tatlı su olarak tutulmalı");
+
+const eheimClassicVario = equipmentCatalog.find((item) => item.id === "eheim-classicvario-plus-e-250");
+assert.deepEqual([eheimClassicVario?.ratedFlowLph,eheimClassicVario?.powerW,eheimClassicVario?.recommendedMinL,eheimClassicVario?.recommendedMaxL], [510,9.8,50,250], "Eheim classicVARIO+e 250 resmî teknik değerlerini taşımalı");
+assert(eheimClassicVario?.adjustableFlow === true && eheimClassicVario.specifications.includes("Wi-Fi"), "Eheim classicVARIO+e 250 ayarlanabilir akıllı dış filtre olmalı");
+
+const eheimPro4eArchived = equipmentCatalog.find((item) => item.id === "eheim-professionel-4e-plus-350");
+assert.deepEqual([eheimPro4eArchived?.ratedFlowLph,eheimPro4eArchived?.powerW,eheimPro4eArchived?.recommendedMinL,eheimPro4eArchived?.recommendedMaxL], [1500,35,180,350], "Eheim Professionel 4e+ 350 resmî arşiv teknik değerlerini taşımalı");
+assert(eheimPro4eArchived?.adjustableFlow === true && eheimPro4eArchived.model.includes("arşiv") && eheimPro4eArchived.specifications.includes("stoklarla sınırlı"), "Eheim Professionel 4e+ 350 güncel ürün gibi sunulmamalı");
+assert(eheimPro4eArchived?.sourceUrl?.startsWith("https://eheim.com/") && eheimPro4eArchived.additionalSourceUrls?.length === 2, "Eheim Professionel 4e+ 350 resmî teknik ve yedek parça kaynaklarına bağlı olmalı");
+
+const eheimPro4Thermo = ["250t","350t"].map((model) => equipmentCatalog.find((item) => item.id === `eheim-professionel-4plus-${model}`));
+assert.deepEqual(eheimPro4Thermo.map((item) => [item?.ratedFlowLph,item?.powerW,item?.integratedHeaterW,item?.recommendedMinL,item?.recommendedMaxL]), [[950,12,210,120,250],[1050,16,210,180,350]], "Eheim Professionel 4+ termofiltreleri resmî pompa, ısıtıcı ve hacim değerlerini taşımalı");
+assert(eheimPro4Thermo.every((item) => item?.category === "filter" && item.adjustableFlow === true && item.sourceUrl?.startsWith("https://eheim.com/")), "Eheim Professionel 4+ termofiltreleri ayarlanabilir filtre kategorisinde resmî kaynakla bulunmalı");
+
+const fluvalPSeries = [10,25,50].map((powerW) => equipmentCatalog.find((item) => item.id === `fluval-p${powerW}`));
+assert.deepEqual(fluvalPSeries.map((item) => [item?.category,item?.powerW,item?.recommendedMaxL]), [["heater",10,10],["heater",25,25],["heater",50,50]], "Fluval P-Series üç güncel nano ısıtıcıyı resmî güç ve hacim değerleriyle taşımalı");
+assert(fluvalPSeries.every((item) => item?.sourceUrl?.startsWith("https://fluvalaquatics.com/") && item.verifiedAt === "2026-09-28"), "Fluval P-Series resmî ve güncel kaynaklı olmalı");
+
+const fluvalCurrentLights = [
+  ["fluval-aquasky-3-12w",12,38,63],
+  ["fluval-aquasky-3-18w",18,61,93],
+  ["fluval-aquasky-3-27w",27,91,123],
+  ["fluval-aquasky-3-35w",35,123,154],
+  ["fluval-plant-4-22w",22,38,63],
+  ["fluval-plant-4-32w",32,59,89],
+  ["fluval-plant-4-46w",46,88,126],
+  ["fluval-plant-4-59w",59,117,155],
+  ["fluval-reef-4-22w",22,38,63],
+  ["fluval-reef-4-32w",32,59,89],
+  ["fluval-reef-4-46w",46,88,126],
+  ["fluval-reef-4-59w",59,117,155],
+  ["fluval-plant-pro-60",38,38,60],
+  ["fluval-plant-pro-90",60,59,88],
+  ["fluval-plant-pro-120",90,88,124],
+  ["fluval-plant-pro-150",120,117,154],
+  ["fluval-plant-4-nano-20w",20,11.5,20],
+  ["fluval-reef-4-nano-25w",25,11.5,20],
+];
+for (const [id,powerW,minLength,maxLength] of fluvalCurrentLights) {
+  const item = equipmentCatalog.find((entry) => entry.id === id);
+  assert.deepEqual([item?.category,item?.powerW,item?.recommendedTankLengthCm], ["lighting",powerW,[minLength,maxLength]], `Fluval ${id} resmî güç ve uzunluk aralığını taşımalı`);
+  assert(item?.sourceUrl?.startsWith("https://fluvalaquatics.com/") && item.verifiedAt === "2026-09-28", `Fluval ${id} resmî ve güncel kaynaklı olmalı`);
+}
+
+const fluvalPreviousGenerationLights = [
+  ["fluval-aquasky-2-12w",12,[38,61]],["fluval-aquasky-2-18w",18,[61,91]],["fluval-aquasky-2-27w",27,[91,122]],["fluval-aquasky-2-35w",35,[122,153]],
+  ["fluval-plant-3-22w",22,[38,61]],["fluval-plant-3-32w",32,[61,85]],["fluval-plant-3-46w",46,[91,115]],["fluval-plant-3-59w",59,[122,153]],
+  ["fluval-marine-3-22w",22,[38,61]],["fluval-marine-3-32w",32,[61,85]],["fluval-marine-3-46w",46,[91,122]],["fluval-marine-3-59w",59,[122,153]],
+];
+for (const [id,powerW,lengthRange] of fluvalPreviousGenerationLights) {
+  const item = equipmentCatalog.find((entry) => entry.id === id);
+  assert.deepEqual([item?.category,item?.powerW,item?.recommendedTankLengthCm], ["lighting",powerW,lengthRange], `Fluval ${id} önceki nesil resmî güç ve uzunluk aralığını taşımalı`);
+  assert(item?.specifications.includes("önceki nesil") && item.sourceUrl?.startsWith("https://fluvalaquatics.com/") && item.verifiedAt === "2026-09-28", `Fluval ${id} yeni nesille karışmadan resmî kaynağa bağlı olmalı`);
+}
+const fluvalSpecialLightExpectations = [
+  ["fluval-plant-3-nano-15w",15,"1000 lm"],["fluval-marine-3-nano-20w",20,"850 lm"],["fluval-cob-nano-6-5w",6.5,"290 lm"],["fluval-prism-2-6-5w",6.5,"60 lm"],
+];
+const fluvalSpecialLights = fluvalSpecialLightExpectations.map(([id]) => equipmentCatalog.find((item) => item.id === id));
+assert.deepEqual(fluvalSpecialLights.map((item) => [item?.category,item?.powerW]), [["lighting",15],["lighting",20],["lighting",6.5],["lighting",6.5]], "Fluval nano ve su altı aydınlatmaları resmî güçleriyle ayrı modeller olmalı");
+for (const [index,[,powerW,lumens]] of fluvalSpecialLightExpectations.entries()) assert(fluvalSpecialLights[index]?.powerW === powerW && fluvalSpecialLights[index]?.specifications.includes(lumens), "Fluval özel aydınlatmasının resmî lümen değeri korunmalı");
+
+const fluvalAcSeries = [
+  ["fluval-ac20",379,5,18,76],
+  ["fluval-ac30",568,5,38,114],
+  ["fluval-ac50",757,5,76,190],
+  ["fluval-ac70",1136,5,152,265],
+  ["fluval-ac110",1892,14,227,416],
+].map(([id]) => equipmentCatalog.find((item) => item.id === id));
+assert.deepEqual(fluvalAcSeries.map((item) => [item?.ratedFlowLph,item?.powerW,item?.recommendedMinL,item?.recommendedMaxL]), [[379,5,18,76],[568,5,38,114],[757,5,76,190],[1136,5,152,265],[1892,14,227,416]], "Fluval AC Series resmî Avrupa güç, debi ve hacim değerlerini taşımalı");
+assert(fluvalAcSeries.every((item) => item?.adjustableFlow === true && item.sourceUrl === "https://fluvalaquatics.com/us/shop/product/aquaclear" && item.verifiedAt === "2026-09-28"), "Fluval AC Series ortak güncel resmî kaynağa bağlı olmalı");
+
+const fluvalCpSeries = [
+  ["fluval-cp1",1000,3.5,60],
+  ["fluval-cp2",1600,4,100],
+  ["fluval-cp3",2800,5,200],
+  ["fluval-cp4",5200,7,350],
+];
+for (const [id,ratedFlowLph,powerW,recommendedMaxL] of fluvalCpSeries) {
+  const item = equipmentCatalog.find((entry) => entry.id === id);
+  assert.deepEqual([item?.category,item?.ratedFlowLph,item?.powerW,item?.recommendedMaxL], ["other",ratedFlowLph,powerW,recommendedMaxL], `Fluval ${id} resmî sirkülasyon pompası değerlerini taşımalı`);
+  assert(item?.specifications.includes("filtrasyon sağlamaz"), `Fluval ${id} biyolojik filtre hesabına karışmamalı`);
+}
+
+const fluvalSk400 = equipmentCatalog.find((item) => item.id === "fluval-sk400");
+assert.deepEqual([fluvalSk400?.category,fluvalSk400?.powerW,fluvalSk400?.recommendedMaxL,fluvalSk400?.auxiliaryFiltration], ["filter",3.3,400,true], "Fluval SK400 yardımcı yüzey filtrasyonu olarak resmî güç ve hacim değerlerini taşımalı");
+const fluvalPassiveSkimmers = ["fluval-surface-skimmer-05-07","fluval-ac-surface-skimmer-20-50","fluval-ac-surface-skimmer-70-110"].map((id) => equipmentCatalog.find((item) => item.id === id));
+assert(fluvalPassiveSkimmers.every((item) => item?.category === "other" && item.passiveComponent === true && item.ratedFlowLph === undefined && item.powerW === undefined), "Fluval motorsuz yüzey süpürücüleri bağımsız kapasite cihazı olmamalı");
+
+const fluvalSpPumps = ["fluval-sp4","fluval-sp6"].map((id) => equipmentCatalog.find((item) => item.id === id));
+assert.deepEqual(fluvalSpPumps.map((item) => [item?.category,item?.ratedFlowLph,item?.powerW]), [["other",7500,90],["other",13000,100]], "Fluval SP sump pompaları resmî debi ve güç değerlerini taşımalı");
+assert(fluvalSpPumps.every((item) => item?.specifications.includes("filtrasyon sağlamaz")), "Fluval SP pompaları biyolojik filtre hesabına karışmamalı");
+const fluvalProteinSkimmers = ["fluval-ps1","fluval-ps2"].map((id) => equipmentCatalog.find((item) => item.id === id));
+assert.deepEqual(fluvalProteinSkimmers.map((item) => [item?.category,item?.powerW,item?.recommendedMinL,item?.recommendedMaxL]), [["other",undefined,undefined,170],["other",8,20,80]], "Fluval PS1/PS2 yayımlanmış güç ve hacim sınırlarını taşımalı");
+assert(fluvalProteinSkimmers.every((item) => item?.specifications.includes("ana biyolojik filtre yerine geçmez")), "Fluval protein skimmer'ları ana biyolojik filtre gibi değerlendirilmemeli");
+const fluvalUvcClarifiers = ["fluval-uvc-inline-a198","fluval-fx-uvc-inline-a199"].map((id) => equipmentCatalog.find((item) => item.id === id));
+assert.deepEqual(fluvalUvcClarifiers.map((item) => [item?.category,item?.ratedFlowLph,item?.powerW,item?.integratedUvcW,item?.recommendedMaxL]), [["uv",930,3,3,400],["uv",2130,6,6,1500]], "Fluval hat üstü UV-C berraklaştırıcıları resmî akış, güç ve hacim sınırlarını taşımalı");
+assert(fluvalUvcClarifiers.every((item) => item?.specifications.includes("ana biyolojik filtre yerine geçmez") && item.sourceUrl?.startsWith("https://fluvalaquatics.com/") && item.additionalSourceUrls?.length === 2 && item.verifiedAt === "2026-09-28"), "Fluval UV-C cihazları filtre kapasitesine karışmadan resmî ürün ve kılavuz kaynaklarına bağlı olmalı");
+
+const expectedJblCurrentHardware = [
+  ["jbl-protemp-cooler-x200-gen2","other",3,60,200],
+  ["jbl-protemp-cooler-x300-gen2","other",4,90,300],
+  ["jbl-procristal-uvc-compact-plus-5","uv",5,undefined,300],
+  ["jbl-procristal-uvc-compact-plus-11","uv",11,undefined,800],
+  ["jbl-procristal-uvc-compact-plus-18","uv",18,undefined,1500],
+  ["jbl-procristal-uvc-compact-plus-36","uv",36,undefined,3000],
+];
+for (const [id,category,powerW,minL,maxL] of expectedJblCurrentHardware) {
+  const item = equipmentCatalog.find((entry) => entry.id === id);
+  assert(item, `Güncel JBL cihazı eksik: ${id}`);
+  assert.equal(item.category, category, `${id} doğru kategoriye ayrılmalı`);
+  assert.equal(item.powerW, powerW, `${id} resmî güç değerini taşımalı`);
+  assert.equal(item.recommendedMinL, minL, `${id} yalnız yayımlanan alt hacmi taşımalı`);
+  assert.equal(item.recommendedMaxL, maxL, `${id} resmî üst hacmi taşımalı`);
+  assert.equal(item.verifiedAt, "2026-09-14", `${id} güncel doğrulama tarihi taşımalı`);
+}
+
+const jblProFlowIds = ["jbl-proflow-t300","jbl-proflow-t500","jbl-proflow-u800","jbl-proflow-u1100","jbl-proflow-u2000"];
+assert.deepEqual(jblProFlowIds.map((id) => equipmentCatalog.find((item) => item.id === id)?.ratedFlowLph), [300,500,900,1200,2000], "JBL ProFlow pompaları resmî azami debileriyle bulunmalı");
+assert(jblProFlowIds.every((id) => equipmentCatalog.find((item) => item.id === id)?.category === "other"), "JBL ProFlow sirkülasyon pompaları ana biyolojik filtre sayılmamalı");
+
+const jblCurrentExternalFilterIds = ["e402","e702","e902","e1502","e1902"].map((model) => "jbl-cristalprofi-" + model);
+const jblCurrentExternalFilters = jblCurrentExternalFilterIds.map((id) => equipmentCatalog.find((item) => item.id === id));
+assert(jblCurrentExternalFilters.every(Boolean), "JBL CRISTALPROFI 02 neslinin beş güncel dış filtresi bulunmalı");
+assert.deepEqual(jblCurrentExternalFilters.map((item) => item?.ratedFlowLph), [450,700,900,1400,1900], "JBL güncel dış filtreleri resmî azami pompa debilerini korumalı");
+assert.deepEqual(jblCurrentExternalFilters.map((item) => item?.powerW), [4,9,11,20,36], "JBL güncel dış filtreleri resmî güç değerlerini korumalı");
+assert.deepEqual(jblCurrentExternalFilters.map((item) => [item?.recommendedMinL,item?.recommendedMaxL]), [[40,120],[60,200],[90,300],[160,600],[200,800]], "JBL güncel dış filtreleri resmî hacim aralıklarını korumalı");
+const jblArchiveExternalFilterIds = [
+  "jbl-cristalprofi-e401-archive","jbl-cristalprofi-e701-archive","jbl-cristalprofi-e901-archive",
+  "jbl-cristalprofi-e1501-archive","jbl-cristalprofi-e1901-archive","jbl-cristalprofi-e401-white-archive",
+  "jbl-cristalprofi-e701-white-archive","jbl-cristalprofi-e901-white-archive",
+];
+const jblArchiveExternalFilters = jblArchiveExternalFilterIds.map((id) => equipmentCatalog.find((item) => item.id === id));
+assert(jblArchiveExternalFilters.every(Boolean), "JBL dış filtre arşivindeki beş 01 nesli ve üç WHITE model bulunmalı");
+assert([...jblCurrentExternalFilters,...jblArchiveExternalFilters].every((item) => item?.category === "filter" && item.adjustableFlow === true && item.sourceUrl?.startsWith("https://www.jbl.de/") && item.verifiedAt === "2026-09-16"), "JBL dış filtreleri ayarlanabilir filtre olarak resmî kaynak ve güncel doğrulama tarihi taşımalı");
+const jblE1501 = equipmentCatalog.find((item) => item.id === "jbl-cristalprofi-e1501-archive");
+assert(jblE1501?.ratedFlowLph === undefined && jblE1501?.specifications.includes("1400 L/saat") && jblE1501?.specifications.includes("1500 L/saat") && jblE1501?.specifications.includes("debi otomatik biyolojik yük hesabına alınmaz"), "JBL e1501 için çelişen resmî debi değeri otomatik hesaba alınmamalı");
+assert(jblArchiveExternalFilters.filter((item) => item?.id.includes("-white-")).every((item) => item?.model.includes("WHITE") && item.specifications.includes("beyaz 01 nesli")), "JBL WHITE dış filtreler renk varyantı ve arşiv nesli olarak ayrılmalı");
+
+const jblCurrentInternalFilterIds = ["jbl-procristal-i30","jbl-cristalprofi-i60","jbl-cristalprofi-i80","jbl-cristalprofi-i100","jbl-cristalprofi-i200","jbl-cristalprofi-m-greenline"];
+const jblCurrentInternalFilters = jblCurrentInternalFilterIds.map((id) => equipmentCatalog.find((item) => item.id === id));
+assert(jblCurrentInternalFilters.every(Boolean), "JBL iç filtre grubunun altı güncel modeli bulunmalı");
+assert.deepEqual(jblCurrentInternalFilters.map((item) => item?.ratedFlowLph), [200,420,420,720,720,200], "JBL güncel iç filtreleri resmî azami pompa debilerini korumalı");
+assert.deepEqual(jblCurrentInternalFilters.map((item) => [item?.recommendedMinL,item?.recommendedMaxL]), [[10,60],[40,80],[60,110],[90,160],[130,200],[20,80]], "JBL güncel iç filtreleri resmî hacim aralıklarını korumalı");
+const jblArchiveInternalFilterIds = ["jbl-prosilent-tekair-archive","jbl-cristalprofi-i40-archive","jbl-cristalprofi-i60-archive","jbl-cristalprofi-i80-archive","jbl-cristalprofi-i100-archive","jbl-cristalprofi-i200-archive"];
+const jblArchiveInternalFilters = jblArchiveInternalFilterIds.map((id) => equipmentCatalog.find((item) => item.id === id));
+assert(jblArchiveInternalFilters.every(Boolean), "JBL iç filtre arşivindeki TekAir ve beş CristalProfi modeli bulunmalı");
+assert(jblArchiveInternalFilters.every((item) => item?.category === "filter" && item.sourceUrl?.startsWith("https://www.jbl.de/") && item.verifiedAt === "2026-09-16"), "JBL arşiv iç filtreleri filtre kategorisinde, resmî kaynaklı ve güncel doğrulama tarihli olmalı");
+const jblTekAir = equipmentCatalog.find((item) => item.id === "jbl-prosilent-tekair-archive");
+assert(jblTekAir?.passiveComponent === true && jblTekAir.ratedFlowLph === undefined && jblTekAir.recommendedMaxL === 80, "JBL TekAir hava motoru olmadan pasif kalmalı ve hava debisi su debisine dönüşmemeli");
+const jblI40Archive = equipmentCatalog.find((item) => item.id === "jbl-cristalprofi-i40-archive");
+assert(jblI40Archive?.ratedFlowLph === undefined && jblI40Archive.powerW === 3 && jblI40Archive.recommendedMinL === 10 && jblI40Archive.recommendedMaxL === 40, "JBL i40 hava debisini su debisi olarak kullanmadan resmî güç ve hacim aralığını taşımalı");
+const jblMotorDrivenArchiveInternal = jblArchiveInternalFilters.slice(2);
+assert.deepEqual(jblMotorDrivenArchiveInternal.map((item) => [item?.ratedFlowLph,item?.powerW]), [[800,11],[800,11],[800,11],[800,11]], "JBL eski i60-i200 nesli resmî 300-800 L/saat ve 11 W teknik verilerini korumalı");
+assert(jblMotorDrivenArchiveInternal.every((item) => item?.recommendedMinL === undefined && item?.recommendedMaxL === undefined && item?.adjustableFlow === true), "JBL eski i60-i200 için yayımlanmayan hacim aralığı uydurulmamalı");
+
+const jblCurrentRodHeaterIds = ["26","51","101","151","201","301"].map((model) => "jbl-protemp-s-" + model);
+const jblCurrentRodHeaters = jblCurrentRodHeaterIds.map((id) => equipmentCatalog.find((item) => item.id === id));
+assert(jblCurrentRodHeaters.every(Boolean), "JBL PROTEMP S güncel çubuk ısıtıcı ailesinin altı modeli bulunmalı");
+assert.deepEqual(jblCurrentRodHeaters.map((item) => item?.powerW), [25,50,100,150,200,300], "JBL PROTEMP S modelleri resmî güç değerlerini korumalı");
+assert.deepEqual(jblCurrentRodHeaters.map((item) => [item?.recommendedMinL,item?.recommendedMaxL]), [[10,50],[30,80],[50,160],[90,200],[100,300],[160,400]], "JBL PROTEMP S modelleri resmî hacim aralıklarını korumalı");
+assert(jblCurrentRodHeaters.every((item) => item?.category === "heater" && item.sourceUrl?.startsWith("https://www.jbl.de/") && item.verifiedAt === "2026-09-16" && item.specifications.includes("önceki S")), "JBL PROTEMP S güncel adları eski resmî adlarla aranabilir ve kaynaklı olmalı");
+const jblInlineHeaters = ["jbl-protemp-e300","jbl-protemp-e500"].map((id) => equipmentCatalog.find((item) => item.id === id));
+assert.deepEqual(jblInlineHeaters.map((item) => item?.model), ["PROTEMP e301","PROTEMP e501"], "JBL dış ısıtıcıları güncel üretici model başlıklarını göstermeli");
+assert.deepEqual(jblInlineHeaters.map((item) => [item?.powerW,item?.recommendedMinL,item?.recommendedMaxL]), [[300,90,300],[500,160,600]], "JBL dış ısıtıcıları resmî güç ve hacim aralıklarını korumalı");
+assert(jblInlineHeaters.every((item) => item?.specifications.includes("Önceki e") && item.verifiedAt === "2026-09-16"), "JBL e301/e501 eski e300/e500 adlarıyla da aranabilir olmalı");
+const jblCurrentSubstrateHeaters = ["10","20","40","60"].map((model) => equipmentCatalog.find((item) => item.id === `jbl-protemp-b-${model}-iii`));
+assert(jblCurrentSubstrateHeaters.every(Boolean), "JBL PROTEMP b III güncel taban ısıtıcı ailesinin dört modeli bulunmalı");
+assert.deepEqual(jblCurrentSubstrateHeaters.map((item) => [item?.powerW,item?.recommendedMinL,item?.recommendedMaxL]), [[10,40,120],[20,60,200],[40,90,300],[60,160,600]], "JBL PROTEMP b III resmî güç ve hacim aralıklarını korumalı");
+assert(jblCurrentSubstrateHeaters.every((item) => item?.category === "heater" && item.passiveComponent === true && item.specifications.includes("ana ısıtıcının yerine geçmez") && item.specifications.includes("kumda önerilmez") && item.sourceUrl === "https://www.jbl.de/en/products/detail/9317/jbl-protemp-b-iii?country=gb" && item.verifiedAt === "2026-09-16"), "JBL taban ısıtıcıları Isıtıcı seçicisinde bulunmalı fakat ana su ısıtma kapasitesine katılmamalı");
+const jblArchiveSubstrateHeaters = ["10","20","40","60"].map((model) => equipmentCatalog.find((item) => item.id === `jbl-protemp-b-${model}-archive`));
+assert.deepEqual(jblArchiveSubstrateHeaters.map((item) => [item?.powerW,item?.recommendedMinL,item?.recommendedMaxL]), [[10,50,120],[20,100,250],[40,200,400],[60,300,600]], "JBL ilk nesil taban ısıtıcıları resmî arşiv güç ve hacim aralıklarını korumalı");
+const jblArchiveSubstrateHeatersV2 = ["40","60"].map((model) => equipmentCatalog.find((item) => item.id === `jbl-protemp-b-${model}-ii-archive`));
+assert.deepEqual(jblArchiveSubstrateHeatersV2.map((item) => [item?.powerW,item?.recommendedMinL,item?.recommendedMaxL]), [[40,200,400],[60,300,600]], "JBL ikinci nesil taban ısıtıcıları resmî arşiv güç ve hacim aralıklarını korumalı");
+assert([...jblArchiveSubstrateHeaters,...jblArchiveSubstrateHeatersV2].every((item) => item?.category === "heater" && item.passiveComponent === true && item.model.includes("Arşiv") && item.specifications.includes("ana su ısıtıcısının yerine geçmez") && item.sourceUrl?.startsWith("https://www.jbl.de/") && item.verifiedAt === "2026-09-16"), "JBL arşiv taban ısıtıcıları ana su ısıtma kapasitesine karışmamalı");
+const jblProtempExternal = equipmentCatalog.find((item) => item.id === "jbl-protemp-external");
+assert.deepEqual([jblProtempExternal?.model,jblProtempExternal?.category,jblProtempExternal?.powerW,jblProtempExternal?.recommendedMinL,jblProtempExternal?.recommendedMaxL], ["PROTEMP EXTERNAL","heater",500,10,600], "JBL 2026 PROTEMP EXTERNAL resmî güç ve hacim aralığıyla bulunmalı");
+assert(jblProtempExternal?.sourceUrl?.startsWith("https://www.jbl.de/") && jblProtempExternal.verifiedAt === "2026-09-16", "JBL PROTEMP EXTERNAL güncel resmî kaynağa bağlı olmalı");
+const jblCurrentAirPumps = ["60","100","200","400","600"].map((model) => equipmentCatalog.find((item) => item.id === `jbl-proair-a${model}`));
+assert(jblCurrentAirPumps.every(Boolean), "JBL PROAIR güncel hava pompası ailesinin beş modeli bulunmalı");
+assert.deepEqual(jblCurrentAirPumps.map((item) => [item?.ratedFlowLph,item?.powerW]), [[60,2.5],[100,2.5],[200,3.2],[400,5],[600,10]], "JBL PROAIR modelleri resmî hava debisi ve güç değerlerini korumalı");
+assert.deepEqual(jblCurrentAirPumps.map((item) => [item?.recommendedMinL,item?.recommendedMaxL]), [[40,120],[60,200],[90,300],[160,600],[200,800]], "JBL PROAIR modelleri resmî akvaryum hacim aralıklarını korumalı");
+assert(jblCurrentAirPumps.every((item) => item?.category === "air_pump" && item.sourceUrl?.startsWith("https://www.jbl.de/") && item.verifiedAt === "2026-09-16"), "JBL PROAIR ailesi yalnız hava motoru kategorisinde ve güncel resmî kaynaklarla bulunmalı");
+assert(jblCurrentAirPumps[0]?.adjustableFlow !== true && jblCurrentAirPumps.slice(1).every((item) => item?.adjustableFlow === true), "JBL PROAIR a60 ayarsız, a100-a600 elektronik ayarlı olarak ayrılmalı");
+const jblArchiveAirPumpIds = ["jbl-proair-a50-archive","jbl-prosilent-a50-archive","jbl-prosilent-a100-archive","jbl-prosilent-a200-archive","jbl-prosilent-a300-archive","jbl-prosilent-a400-archive"];
+const jblArchiveAirPumps = jblArchiveAirPumpIds.map((id) => equipmentCatalog.find((item) => item.id === id));
+assert(jblArchiveAirPumps.every(Boolean), "JBL hava pompası arşivindeki iki a50 ve dört PROSILENT modeli bulunmalı");
+assert.deepEqual(jblArchiveAirPumps.map((item) => item?.ratedFlowLph), [50,50,100,200,300,400], "JBL arşiv hava motorları resmî hava debilerini korumalı");
+assert.deepEqual(jblArchiveAirPumps.map((item) => [item?.recommendedMinL,item?.recommendedMaxL]), [[10,50],[10,50],[40,150],[50,300],[100,400],[200,600]], "JBL arşiv hava motorları doğrulanmış hacim aralıklarını korumalı");
+assert.deepEqual(jblArchiveAirPumps.map((item) => item?.powerW), [undefined,2.3,undefined,undefined,3.9,5.5], "JBL arşiv hava motorlarında yalnız çelişmeyen resmî güç değerleri kullanılmalı");
+assert(jblArchiveAirPumps.every((item) => item?.category === "air_pump" && item.model.includes("Arşiv") && item.sourceUrl?.startsWith("https://www.jbl.de/") && item.verifiedAt === "2026-09-16"), "JBL arşiv hava motorları güncel ürün gibi gösterilmeden resmî kaynaklara bağlı olmalı");
+assert(jblArchiveAirPumps[0]?.specifications.includes("2,3 W") && jblArchiveAirPumps[0]?.specifications.includes("3 W") && jblArchiveAirPumps[2]?.specifications.includes("2,9 W") && jblArchiveAirPumps[2]?.specifications.includes("3 W") && jblArchiveAirPumps[3]?.specifications.includes("3,5 W") && jblArchiveAirPumps[3]?.specifications.includes("3,4 W"), "JBL arşivindeki resmî teknik çelişkiler kullanıcıdan saklanmamalı");
+const jblLegacySAirPumps = ["100","200","500"].map((model) => equipmentCatalog.find((item) => item.id === `jbl-prosilent-s${model}-archive`));
+assert(jblLegacySAirPumps.every(Boolean), "JBL'nin eski ProSilent S100/S200/S500 hava motorları bulunmalı");
+assert.deepEqual(jblLegacySAirPumps.map((item) => [item?.ratedFlowLph,item?.powerW]), [[60,1.5],[100,2],[150,2.5]], "JBL ProSilent S serisi doğrulanmış hava debisi ve güç değerlerini korumalı");
+assert(jblLegacySAirPumps[0]?.adjustableFlow !== true && jblLegacySAirPumps.slice(1).every((item) => item?.adjustableFlow === true), "JBL ProSilent S100 ayarsız, S200 ve S500 mekanik ayarlı kalmalı");
+assert(jblLegacySAirPumps.every((item) => item?.category === "air_pump" && item.model.includes("Arşiv") && item.recommendedMinL === undefined && item.recommendedMaxL === undefined && item.sourceUrl === "https://www.jbl.de/de/download/458/Gebrauchsanleitungen/JBL_ProSilent.pdf" && item.verifiedAt === "2026-09-17"), "Eski JBL S serisine yayımlanmayan akvaryum hacmi uydurulmamalı ve resmî kılavuz korunmalı");
+const jblEcoAir40 = equipmentCatalog.find((item) => item.id === "jbl-ecoair-40-archive");
+assert(jblEcoAir40?.category === "air_pump" && jblEcoAir40.model.includes("Arşiv") && jblEcoAir40.sourceUrl?.startsWith("https://www.jbl.de/") && jblEcoAir40.verifiedAt === "2026-09-25", "JBL EcoAir 40 resmî katalog ve sistem kılavuzuyla arşiv hava motoru olarak bulunmalı");
+assert.deepEqual([jblEcoAir40?.ratedFlowLph,jblEcoAir40?.powerW],[80,3], "JBL EcoAir 40 resmî yaklaşık hava debisi ve güç değerlerini taşımalı");
+assert(jblEcoAir40?.recommendedMinL === undefined && jblEcoAir40?.recommendedMaxL === undefined && jblEcoAir40?.capacityDataNote === undefined && jblEcoAir40?.specifications.includes("akvaryum hacmi yayımlanmamış"), "JBL EcoAir 40'a yayımlanmayan akvaryum hacmi uydurulmamalı");
+const jblAerationAccessoryIds = [
+  "jbl-prosilent-safe","jbl-prosilent-control","jbl-prosilent-tube",
+  "jbl-prosilent-aeras-micro-s2","jbl-prosilent-aeras-micro-s3",
+  "jbl-prosilent-aeras-micro-s","jbl-prosilent-aeras-micro-m",
+  "jbl-prosilent-aeras-micro-plus-m","jbl-prosilent-aeras-micro-plus-l",
+  "jbl-prosilent-aeras-micro-ball-l",
+  "jbl-aeras-marin-s-archive","jbl-aeras-marin-m-archive",
+  "jbl-prosilent-ceramic-s-archive","jbl-prosilent-ceramic-m-archive","jbl-prosilent-ceramic-l-archive",
+];
+const jblAerationAccessories = jblAerationAccessoryIds.map((id) => equipmentCatalog.find((item) => item.id === id));
+assert(jblAerationAccessories.every(Boolean), "JBL havalandırma aksesuar ailesinin 15 doğrulanmış seçeneği bulunmalı");
+assert(jblAerationAccessories.every((item) => item?.category === "other" && item.passiveComponent === true && item.sourceUrl?.startsWith("https://www.jbl.de/") && item.verifiedAt === "2026-09-17"), "JBL havalandırma aksesuarları pasif kalmalı ve resmî JBL kaynağı taşımalı");
+assert(jblAerationAccessories.every((item) => item?.ratedFlowLph === undefined && item.powerW === undefined && item.recommendedMinL === undefined && item.recommendedMaxL === undefined), "JBL pasif havalandırma parçaları pompa debisi, gücü veya hacim kapasitesi kazanmamalı");
+assert.deepEqual(
+  ["jbl-prosilent-aeras-micro-s2","jbl-prosilent-aeras-micro-s3","jbl-prosilent-aeras-micro-s","jbl-prosilent-aeras-micro-m","jbl-prosilent-aeras-micro-plus-m","jbl-prosilent-aeras-micro-plus-l","jbl-prosilent-aeras-micro-ball-l"].map((id) => equipmentCatalog.find((item) => item.id === id)?.specifications.match(/(?:Ø )?\d+(?: × \d+)? mm/g)),
+  [["Ø 21 mm"],["26 × 14 mm","Ø 14 mm"],["100 mm"],["140 mm"],["140 mm"],["270 mm"],["Ø 40 mm"]],
+  "JBL güncel hava taşları resmî ölçülerini korumalı",
+);
+assert.deepEqual(
+  ["jbl-aeras-marin-s-archive","jbl-aeras-marin-m-archive","jbl-prosilent-ceramic-s-archive","jbl-prosilent-ceramic-m-archive","jbl-prosilent-ceramic-l-archive"].map((id) => equipmentCatalog.find((item) => item.id === id)?.specifications.match(/\d+ mm/)?.[0]),
+  ["45 mm","65 mm","55 mm","105 mm","155 mm"],
+  "JBL arşiv hava taşı boyları eski resmî katalogla aynı kalmalı",
+);
+assert(["jbl-aeras-marin-s-archive","jbl-aeras-marin-m-archive","jbl-prosilent-ceramic-s-archive","jbl-prosilent-ceramic-m-archive","jbl-prosilent-ceramic-l-archive"].every((id) => equipmentCatalog.find((item) => item.id === id)?.model.includes("Arşiv")), "Üretimden kalkan JBL hava taşları güncel ürün gibi sunulmamalı");
+const jblTubingAccessoryIds = [
+  "jbl-backflow-protection-archive",
+  "jbl-aquatube-green-4-6","jbl-aquatube-green-9-12","jbl-aquatube-green-12-16","jbl-aquatube-green-16-22",
+  "jbl-aquatube-grey-4-6","jbl-aquatube-grey-9-12","jbl-aquatube-grey-12-16","jbl-aquatube-grey-16-22","jbl-aquatube-grey-19-27",
+  "jbl-silicone-hose-4-6",
+  "jbl-aquarium-tubing-green-cardboard-4-6","jbl-aquarium-tubing-green-cardboard-9-12","jbl-aquarium-tubing-green-cardboard-12-16","jbl-aquarium-tubing-green-cardboard-16-22",
+  "jbl-aquarium-tubing-grey-cardboard-4-6","jbl-aquarium-tubing-grey-cardboard-9-12","jbl-aquarium-tubing-grey-cardboard-12-16","jbl-aquarium-tubing-grey-cardboard-16-22",
+  "jbl-aquarium-tubing-silicone-cardboard-4-6",
+  "jbl-aquarium-tubing-green-reel-4-6-archive","jbl-aquarium-tubing-green-reel-9-12-archive","jbl-aquarium-tubing-green-reel-12-16-archive","jbl-aquarium-tubing-green-reel-16-22-archive",
+  "jbl-aquarium-tubing-grey-reel-4-6-archive","jbl-aquarium-tubing-grey-reel-9-12-archive","jbl-aquarium-tubing-grey-reel-12-16-archive","jbl-aquarium-tubing-grey-reel-16-22-archive",
+  "jbl-silicone-hose-4-6-reel-archive",
+];
+const jblTubingAccessories = jblTubingAccessoryIds.map((id) => equipmentCatalog.find((item) => item.id === id));
+assert(jblTubingAccessories.every(Boolean), "JBL çek valf ve hortum paketinin 29 doğrulanmış seçeneği bulunmalı");
+assert(jblTubingAccessories.every((item) => item?.category === "other" && item.passiveComponent === true && item.sourceUrl?.startsWith("https://www.jbl.de/") && item.verifiedAt === "2026-09-17"), "JBL çek valf ve hortumları pasif kalmalı ve doğrudan resmî kaynak taşımalı");
+assert(jblTubingAccessories.every((item) => item?.ratedFlowLph === undefined && item.powerW === undefined && item.recommendedMinL === undefined && item.recommendedMaxL === undefined), "JBL hortum ve çek valfleri cihaz kapasitesi kazanmamalı");
+assert.deepEqual(
+  ["jbl-aquarium-tubing-green-reel-4-6-archive","jbl-aquarium-tubing-green-reel-9-12-archive","jbl-aquarium-tubing-green-reel-12-16-archive","jbl-aquarium-tubing-green-reel-16-22-archive"].map((id) => equipmentCatalog.find((item) => item.id === id)?.specifications.match(/· (\d+) m/)?.[1]),
+  ["200","70","50","25"],
+  "JBL eski yeşil hortum makaraları resmî uzunluklarını korumalı",
+);
+assert.deepEqual(
+  ["jbl-aquarium-tubing-green-cardboard-4-6","jbl-aquarium-tubing-green-cardboard-9-12","jbl-aquarium-tubing-green-cardboard-12-16","jbl-aquarium-tubing-green-cardboard-16-22"].map((id) => equipmentCatalog.find((item) => item.id === id)?.specifications.match(/· (\d+) m/)?.[1]),
+  ["180","60","40","18"],
+  "JBL güncel karton makaralı yeşil hortumları resmî uzunluklarını korumalı",
+);
+assert.deepEqual(
+  ["jbl-aquarium-tubing-grey-cardboard-4-6","jbl-aquarium-tubing-grey-cardboard-9-12","jbl-aquarium-tubing-grey-cardboard-12-16","jbl-aquarium-tubing-grey-cardboard-16-22"].map((id) => equipmentCatalog.find((item) => item.id === id)?.specifications.match(/· (\d+) m/)?.[1]),
+  ["180","60","40","18"],
+  "JBL güncel karton makaralı gri hortumları doğrulanmış uzunluklarını korumalı",
+);
+assert.deepEqual(
+  ["jbl-aquarium-tubing-grey-reel-4-6-archive","jbl-aquarium-tubing-grey-reel-9-12-archive","jbl-aquarium-tubing-grey-reel-12-16-archive","jbl-aquarium-tubing-grey-reel-16-22-archive"].map((id) => equipmentCatalog.find((item) => item.id === id)?.specifications.match(/· (\d+) m/)?.[1]),
+  ["200","70","50","25"],
+  "JBL eski gri hortum makaraları arşiv katalog uzunluklarını korumalı",
+);
+const jblCurrentSiliconeReel = equipmentCatalog.find((item) => item.id === "jbl-aquarium-tubing-silicone-cardboard-4-6");
+assert(jblCurrentSiliconeReel?.specifications.includes("180 m") && !jblCurrentSiliconeReel.model.includes("Arşiv"), "JBL güncel silikon karton makarası 4/6 mm ve 180 m olarak bulunmalı");
+assert(["jbl-aquarium-tubing-grey-reel-4-6-archive","jbl-aquarium-tubing-grey-reel-9-12-archive","jbl-aquarium-tubing-grey-reel-12-16-archive","jbl-aquarium-tubing-grey-reel-16-22-archive"].every((id) => equipmentCatalog.find((item) => item.id === id)?.model.includes("Arşiv")), "JBL eski plastik makaralı gri hortumlar güncel ürün gibi gösterilmemeli");
+const jblGrey1927 = equipmentCatalog.find((item) => item.id === "jbl-aquatube-grey-19-27");
+assert(jblGrey1927?.model.includes("19/27") && jblGrey1927.specifications.includes("19/25") && jblGrey1927.specifications.includes("çelişkisi"), "JBL gri hortum sayfasındaki 19/25 ve 19/27 üretici çelişkisi kullanıcıdan saklanmamalı");
+const jblHoseFittingIds = [
+  "jbl-double-stopcock-quick-coupling-12-16","jbl-double-stopcock-quick-coupling-16-22","jbl-double-stopcock-quick-coupling-19-25",
+  "jbl-antikink-12-16","jbl-antikink-16-22","jbl-clipsafe-vario","jbl-clipsafe-archive","jbl-cleany",
+];
+const jblHoseFittings = jblHoseFittingIds.map((id) => equipmentCatalog.find((item) => item.id === id));
+assert(jblHoseFittings.every(Boolean), "JBL hortum bağlantısı, kelepçe ve temizleme ailesinin sekiz seçeneği bulunmalı");
+assert(jblHoseFittings.every((item) => item?.category === "other" && item.passiveComponent === true && item.sourceUrl?.startsWith("https://www.jbl.de/") && item.verifiedAt === "2026-09-17"), "JBL hortum bağlantı aksesuarları pasif ve doğrudan resmî kaynaklı kalmalı");
+assert(jblHoseFittings.every((item) => item?.ratedFlowLph === undefined && item.powerW === undefined && item.recommendedMinL === undefined && item.recommendedMaxL === undefined), "JBL hortum bağlantıları cihaz debisi, gücü veya hacim kapasitesi kazanmamalı");
+assert.deepEqual(
+  ["jbl-double-stopcock-quick-coupling-12-16","jbl-double-stopcock-quick-coupling-16-22","jbl-double-stopcock-quick-coupling-19-25"].map((id) => equipmentCatalog.find((item) => item.id === id)?.model.match(/\d+\/\d+/)?.[0]),
+  ["12/16","16/22","19/25"],
+  "JBL çift musluklu hızlı bağlantının üç güncel hortum çapı bulunmalı",
+);
+assert(equipmentCatalog.find((item) => item.id === "jbl-clipsafe-vario")?.specifications.includes("9–27 mm") && equipmentCatalog.find((item) => item.id === "jbl-clipsafe-archive")?.model.includes("Arşiv"), "JBL ClipSafe nesilleri ayarlı güncel ürün ve 12/16 mm arşiv ürün olarak ayrılmalı");
+assert(equipmentCatalog.find((item) => item.id === "jbl-cleany")?.specifications.includes("160 cm") && equipmentCatalog.find((item) => item.id === "jbl-cleany")?.specifications.includes("9–30 mm"), "JBL Cleany resmî uzunluk ve hortum çapı aralığını korumalı");
+const jblSuctionCupIds = [
+  "jbl-suction-cup-clip-6","jbl-suction-cup-clip-12","jbl-suction-cup-clip-16","jbl-suction-cup-clip-23","jbl-suction-cup-clip-37",
+  "jbl-suction-cup-hole-5-archive","jbl-suction-cup-hole-5-6","jbl-suction-cup-hole-12","jbl-slotted-suction-cup-2",
+];
+const jblSuctionCups = jblSuctionCupIds.map((id) => equipmentCatalog.find((item) => item.id === id));
+assert(jblSuctionCups.every(Boolean), "JBL vantuz ailesinin sekiz güncel ve bir arşiv seçeneği bulunmalı");
+assert(jblSuctionCups.every((item) => item?.category === "other" && item.passiveComponent === true && item.sourceUrl?.startsWith("https://www.jbl.de/") && item.verifiedAt === "2026-09-17"), "JBL vantuzları pasif ve doğrudan resmî kaynaklı kalmalı");
+assert(jblSuctionCups.every((item) => item?.ratedFlowLph === undefined && item.powerW === undefined && item.recommendedMinL === undefined && item.recommendedMaxL === undefined), "JBL vantuzları cihaz debisi, gücü veya hacim kapasitesi kazanmamalı");
+assert.deepEqual(
+  ["jbl-suction-cup-clip-6","jbl-suction-cup-clip-12","jbl-suction-cup-clip-16","jbl-suction-cup-clip-23","jbl-suction-cup-clip-37"].map((id) => equipmentCatalog.find((item) => item.id === id)?.model.match(/\d+/)?.[0]),
+  ["6","12","16","23","37"],
+  "JBL klipsli vantuzların beş resmî çap seçeneği bulunmalı",
+);
+assert(equipmentCatalog.find((item) => item.id === "jbl-suction-cup-hole-5-archive")?.model.includes("Arşiv") && equipmentCatalog.find((item) => item.id === "jbl-slotted-suction-cup-2")?.specifications.includes("2–4 mm"), "JBL 5 mm delikli vantuz arşivde, yarıklı vantuz ise 2–4 mm kablolar için kalmalı");
+const jblBreedingIds = ["jbl-babyhome-oxygen","jbl-babyhome-pro-air","jbl-nbox","jbl-discon","jbl-ceramic-spawning-cave"];
+const jblBreedingEquipment = jblBreedingIds.map((id) => equipmentCatalog.find((item) => item.id === id));
+assert(jblBreedingEquipment.every(Boolean), "JBL yavruluk ve yumurtlama yardımcılarının beş güncel ürünü bulunmalı");
+assert(jblBreedingEquipment.every((item) => item?.category === "other" && item.sourceUrl?.startsWith("https://www.jbl.de/") && item.verifiedAt === "2026-09-17"), "JBL yavruluk ve yumurtlama yardımcıları doğrudan resmî kaynaklı kalmalı");
+assert(equipmentCatalog.find((item) => item.id === "jbl-babyhome-oxygen")?.powerW === 3 && equipmentCatalog.find((item) => item.id === "jbl-babyhome-oxygen")?.passiveComponent !== true, "JBL BabyHome Oxygen dâhilî 3 W hava motoruyla aktif set olarak kalmalı");
+assert(jblBreedingEquipment.filter((item) => item?.id !== "jbl-babyhome-oxygen").every((item) => item?.passiveComponent === true && item.powerW === undefined), "Motor içermeyen JBL yavruluk ve yumurtlama yardımcıları pasif kalmalı");
+assert(equipmentCatalog.find((item) => item.id === "jbl-nbox")?.specifications.includes("2 L") && equipmentCatalog.find((item) => item.id === "jbl-discon")?.specifications.includes("25,5 cm") && equipmentCatalog.find((item) => item.id === "jbl-ceramic-spawning-cave")?.specifications.includes("Ø 11,5 cm"), "JBL yavruluk ve yumurtlama ürünleri resmî hacim ve ölçülerini korumalı");
+const jblThermometerIds = [
+  "jbl-aquarium-thermometer-float","jbl-aquarium-thermometer-slim","jbl-aquarium-thermometer-digital-strip","jbl-aquarium-thermometer-mini",
+  "jbl-aquarium-thermometer-digiscan","jbl-aquarium-thermometer-digiscan-alarm-archive","jbl-aquarium-thermometer-digiscan-tube","jbl-hydrometer",
+];
+const jblThermometers = jblThermometerIds.map((id) => equipmentCatalog.find((item) => item.id === id));
+assert(jblThermometers.every(Boolean), "JBL termometre ve hidrometre ailesinin sekiz seçeneği bulunmalı");
+assert(jblThermometers.every((item) => item?.category === "other" && item.sourceUrl?.startsWith("https://www.jbl.de/") && item.verifiedAt === "2026-09-17"), "JBL termometre ve hidrometreleri doğrudan resmî kaynaklı kalmalı");
+assert(["jbl-aquarium-thermometer-float","jbl-aquarium-thermometer-slim","jbl-aquarium-thermometer-digital-strip","jbl-aquarium-thermometer-mini","jbl-hydrometer"].every((id) => equipmentCatalog.find((item) => item.id === id)?.passiveComponent === true), "JBL pilsiz termometre ve hidrometreler pasif kalmalı");
+assert(["jbl-aquarium-thermometer-digiscan","jbl-aquarium-thermometer-digiscan-alarm-archive","jbl-aquarium-thermometer-digiscan-tube"].every((id) => equipmentCatalog.find((item) => item.id === id)?.passiveComponent !== true), "JBL pilli DigiScan modelleri pasif parça gibi işaretlenmemeli");
+assert(equipmentCatalog.find((item) => item.id === "jbl-aquarium-thermometer-digiscan-alarm-archive")?.model.includes("Arşiv") && equipmentCatalog.find((item) => item.id === "jbl-aquarium-thermometer-digiscan-tube")?.specifications.includes("12–26 mm"), "JBL DigiScan Alarm arşiv durumu ve Tube hortum aralığı korunmalı");
+assert(equipmentCatalog.find((item) => item.id === "jbl-hydrometer")?.specifications.includes("1,016–1,028") && equipmentCatalog.find((item) => item.id === "jbl-hydrometer")?.specifications.includes("0,0005"), "JBL hidrometre resmî yoğunluk aralığı ve çözünürlüğünü korumalı");
+const jblAquaPadIds = ["jbl-aquapad-80-41","jbl-aquapad-60-31","jbl-aquapad-100-40","jbl-aquapad-100-50","jbl-aquapad-120-40","jbl-aquapad-120-50","jbl-aquapad-150-51"];
+const jblAquaPads = jblAquaPadIds.map((id) => equipmentCatalog.find((item) => item.id === id));
+assert(jblAquaPads.every(Boolean), "JBL AquaPad ailesinin yedi güncel ölçü seçeneği bulunmalı");
+assert.deepEqual(jblAquaPads.map((item) => item?.model.replace("AquaPad ","")), ["80x41","60x31","100x40","100x50","120x40","120x50","150x51"], "JBL AquaPad ölçüleri güncel resmî seçimlerle aynı kalmalı");
+const jblProscapeToolIds = [
+  "jbl-proscape-tools-s20-straight","jbl-proscape-tools-s20-curved","jbl-proscape-tools-s30-straight","jbl-proscape-tools-s30-curved",
+  "jbl-proscape-tools-s20-wave","jbl-proscape-tools-s16-spring","jbl-proscape-tools-p30-straight","jbl-proscape-tools-p30-slim-line",
+  "jbl-proscape-tools-p30-curved","jbl-proscape-tools-sp30-straight","jbl-proscape-plantis-pins","jbl-combifix",
+];
+const jblProscapeTools = jblProscapeToolIds.map((id) => equipmentCatalog.find((item) => item.id === id));
+assert(jblProscapeTools.every(Boolean), "JBL PROSCAPE araçlarının 12 seçilebilir ürün ve varyantı bulunmalı");
+const jblAquaPadAndTools = [...jblAquaPads,...jblProscapeTools];
+assert(jblAquaPadAndTools.every((item) => item?.brand === "JBL" && item.category === "other" && item.passiveComponent === true && item.sourceUrl?.startsWith("https://www.jbl.de/") && item.verifiedAt === "2026-09-17"), "JBL AquaPad ve PROSCAPE araçları pasif ve doğrudan resmî kaynaklı kalmalı");
+assert(jblAquaPadAndTools.every((item) => item?.ratedFlowLph === undefined && item.powerW === undefined && item.recommendedMinL === undefined && item.recommendedMaxL === undefined), "JBL AquaPad ve PROSCAPE araçları cihaz debisi, gücü veya hacim kapasitesi kazanmamalı");
+assert(equipmentCatalog.find((item) => item.id === "jbl-proscape-tools-s16-spring")?.specifications.includes("16 cm") && equipmentCatalog.find((item) => item.id === "jbl-proscape-tools-sp30-straight")?.specifications.includes("62 mm ve 25 mm"), "JBL PROSCAPE makas ve spatula ölçüleri korunmalı");
+assert(equipmentCatalog.find((item) => item.id === "jbl-proscape-plantis-pins")?.specifications.includes("12 adet") && equipmentCatalog.find((item) => item.id === "jbl-combifix")?.specifications.includes("46 cm"), "JBL Plantis Pins paket adedi ve CombiFix uzunluğu korunmalı");
+const jblArchiveCoolers = ["jbl-protemp-cooler-x200-archive","jbl-protemp-cooler-x300-archive","jbl-cooler-100-archive","jbl-cooler-200-archive","jbl-cooler-300-archive"].map((id) => equipmentCatalog.find((item) => item.id === id));
+assert(jblArchiveCoolers.every(Boolean), "JBL soğutma arşivindeki beş fan modeli bulunmalı");
+assert.deepEqual(jblArchiveCoolers.map((item) => item?.powerW), [3,4,5.5,11.2,15.3], "JBL arşiv soğutucuları resmî güç değerlerini korumalı");
+assert.deepEqual(jblArchiveCoolers.map((item) => [item?.recommendedMinL,item?.recommendedMaxL]), [[undefined,200],[90,300],[60,100],[100,200],[200,300]], "JBL arşiv soğutucuları doğrulanmış hacim sınırlarını korumalı ve x200 çelişkisini kesin alt sınıra çevirmemeli");
+assert(jblArchiveCoolers.every((item) => item?.category === "other" && item.model.includes("Arşiv") && item.sourceUrl?.startsWith("https://www.jbl.de/") && item.verifiedAt === "2026-09-16"), "JBL arşiv soğutucuları güncel ürün veya ısıtıcı gibi gösterilmemeli");
+const jblArchiveCoolControl = equipmentCatalog.find((item) => item.id === "jbl-coolcontrol-archive");
+assert(jblArchiveCoolControl?.passiveComponent === true && jblArchiveCoolControl.specifications.includes("1–50 W") && jblArchiveCoolControl.specifications.includes("18–36 °C"), "JBL eski CoolControl bağımsız soğutucu kapasitesi kazanmadan resmî kontrol aralığını taşımalı");
+
+const jblNaturGen2 = equipmentCatalog.filter((item) => item.id.startsWith("jbl-led-solar-natur-gen2-"));
+const jblEffectGen2 = equipmentCatalog.filter((item) => item.id.startsWith("jbl-led-solar-effect-gen2-"));
+assert.deepEqual(jblNaturGen2.map((item) => item.powerW), [16,20,28,31,47,48,53], "JBL LED SOLAR NATUR Gen 2'nin yedi resmî güç seçeneği bulunmalı");
+assert.deepEqual(jblEffectGen2.map((item) => item.powerW), [8,9,14,17,20,21,22], "JBL LED SOLAR EFFECT Gen 2'nin yedi resmî güç seçeneği bulunmalı");
+assert([...jblNaturGen2,...jblEffectGen2].every((item) => item.category === "lighting" && item.recommendedTankLengthCm && item.sourceUrl?.startsWith("https://www.jbl.de/")), "JBL LED seçenekleri yalnız aydınlatmada ve resmî kaynakla bulunmalı");
+
+const jblProfloraSets = equipmentCatalog.filter((item) => /^jbl-proflora-co2-(basic|advanced|professional)-set-/.test(item.id));
+assert.equal(jblProfloraSets.length, 9, "JBL PROFLORA BASIC, ADVANCED ve PROFESSIONAL ailelerinin U/M/V setleri bulunmalı");
+for (const family of ["basic","advanced","professional"]) {
+  const familySets = jblProfloraSets.filter((item) => item.id.includes(`-${family}-`));
+  assert.deepEqual(familySets.map((item) => item.id.at(-1)), ["u","m","v"], `JBL PROFLORA ${family} ailesi U/M/V seçeneklerini korumalı`);
+  assert(familySets.every((item) => item.recommendedMinL === 40 && item.recommendedMaxL === (family === "basic" ? 300 : 600)), `JBL PROFLORA ${family} setleri resmî hacim aralığını taşımalı`);
+}
+const jblProfloraControl = equipmentCatalog.filter((item) => item.id.startsWith("jbl-proflora-co2-") && ["jbl-proflora-co2-control","jbl-proflora-co2-ph-sensor-set","jbl-proflora-co2-calibration-set"].includes(item.id));
+assert.equal(jblProfloraControl.length, 3, "JBL PROFLORA kontrol, pH sensörü ve kalibrasyon seti bulunmalı");
+const jblProfloraRegulators = equipmentCatalog.filter((item) => item.sourceUrl?.includes("/group/9427/proflora-co2-regulator-adapt"));
+const jblProfloraTaifun = equipmentCatalog.filter((item) => item.id.startsWith("jbl-proflora-co2-taifun-"));
+assert.equal(jblProfloraRegulators.length, 7, "JBL PROFLORA regülatör ve adaptör ailesinin yedi güncel modeli bulunmalı");
+assert.equal(jblProfloraTaifun.length, 14, "JBL PROFLORA TAIFUN ailesinin 14 güncel model ve varyantı bulunmalı");
+assert([...jblProfloraSets,...jblProfloraControl,...jblProfloraRegulators].every((item) => item.brand === "JBL" && item.category === "co2" && item.verifiedAt === "2026-09-14"), "JBL PROFLORA set, kontrol ve regülatör paketi CO₂ kategorisinde ve doğrulama tarihiyle bulunmalı");
+assert(jblProfloraTaifun.every((item) => item.brand === "JBL" && item.category === "co2" && item.sourceUrl?.includes("/products/detail/") && item.verifiedAt === "2026-09-16"), "JBL güncel TAIFUN ailesi doğrudan resmî ürün sayfası ve güncel doğrulama tarihi taşımalı");
+assert.deepEqual(
+  ["jbl-proflora-co2-taifun-spiral-5","jbl-proflora-co2-taifun-spiral-10"].map((id) => {
+    const item = equipmentCatalog.find((entry) => entry.id === id);
+    return [item?.recommendedMinL,item?.recommendedMaxL];
+  }),
+  [[40,200],[40,400]],
+  "JBL TAIFUN SPIRAL 5/10 resmî hacim aralıklarını korumalı",
+);
+const jblCurrentInline = ["jbl-proflora-co2-taifun-inline","jbl-proflora-co2-taifun-inline-16-22","jbl-proflora-co2-taifun-inline-19-25"].map((id) => equipmentCatalog.find((item) => item.id === id));
+assert.deepEqual(jblCurrentInline.map((item) => [item?.recommendedMinL,item?.recommendedMaxL]), [[40,300],[160,600],[200,800]], "JBL TAIFUN INLINE hortum seçenekleri resmî hacim aralıklarını korumalı");
+const jblCurrentGlass = ["jbl-proflora-co2-taifun-glass-mini","jbl-proflora-co2-taifun-glass","jbl-proflora-co2-taifun-glass-maxi"].map((id) => equipmentCatalog.find((item) => item.id === id));
+assert.deepEqual(jblCurrentGlass.map((item) => [item?.recommendedMinL,item?.recommendedMaxL]), [[40,120],[40,300],[160,800]], "JBL TAIFUN GLASS Mini/Midi/Maxi resmî hacim aralıklarını korumalı");
+const jblCurrentTaifunPassiveIds = [
+  "jbl-proflora-co2-taifun-count-safe","jbl-proflora-co2-taifun-safestop","jbl-proflora-co2-taifun-tube",
+  "jbl-proflora-co2-taifun-tube-clear","jbl-proflora-co2-taifun-spiral-extend","jbl-proflora-co2-taifun-inline-membrane",
+];
+assert(jblCurrentTaifunPassiveIds.every((id) => {
+  const item = equipmentCatalog.find((entry) => entry.id === id);
+  return item?.passiveComponent === true && item.recommendedMinL === undefined && item.recommendedMaxL === undefined;
+}), "JBL güncel sayaç, valf, hortum, uzatma ve membran kayıtları bağımsız kapasite kazanmamalı");
+assert([...jblCurrentInline,...jblCurrentGlass].every((item) => item?.passiveComponent !== true), "JBL güncel INLINE ve GLASS difüzörleri pasif aksesuar sayılmamalı");
+const jblLegacyBioCo2Ids = ["jbl-proflora-bio80-eco","jbl-proflora-bio80","jbl-proflora-bio160","jbl-proflora-biorefill"];
+const jblLegacyBioCo2 = jblLegacyBioCo2Ids.map((id) => equipmentCatalog.find((item) => item.id === id));
+assert(jblLegacyBioCo2.every(Boolean), "JBL eski Bio-CO₂ kayıtları eksiksiz bulunmalı");
+assert.deepEqual(jblLegacyBioCo2.map((item) => item.model), ["PROFLORA Bio80 eco","PROFLORA Bio80","PROFLORA Bio160","PROFLORA BioRefill"], "JBL eski Bio-CO₂ grubunun dört benzersiz modeli bulunmalı");
+assert.deepEqual(jblLegacyBioCo2.slice(0,3).map((item) => [item.recommendedMinL,item.recommendedMaxL]), [[30,80],[30,80],[50,160]], "JBL eski Bio-CO₂ setleri resmî hacim aralıklarını taşımalı");
+assert(jblLegacyBioCo2.slice(0,3).every((item) => item.category === "co2" && item.specifications.includes("Arşiv Bio-CO₂") && item.verifiedAt === "2026-09-15"), "JBL eski Bio-CO₂ setleri güncel seri gibi gösterilmemeli");
+const jblLegacyBioRefill = equipmentCatalog.find((item) => item.id === "jbl-proflora-biorefill");
+assert(jblLegacyBioRefill?.passiveComponent === true && jblLegacyBioRefill.recommendedMinL === undefined && jblLegacyBioRefill.specifications.includes("tek başına CO₂ sistemi değildir"), "JBL BioRefill bağımsız kapasite sağlayan CO₂ sistemi sayılmamalı");
+const expectedJblLegacyPressureSets = [
+  ["jbl-proflora-u501",400],["jbl-proflora-u502",600],["jbl-proflora-u504",undefined],
+  ["jbl-proflora-m501",400],["jbl-proflora-m502",600],["jbl-proflora-m503",600],["jbl-proflora-m2003",1000],
+];
+for (const [id,maxL] of expectedJblLegacyPressureSets) {
+  const item = equipmentCatalog.find((entry) => entry.id === id);
+  assert(item, `JBL eski basınçlı PROFLORA seti eksik: ${id}`);
+  assert.equal(item.category, "co2", `${id} CO₂ kategorisinde bulunmalı`);
+  assert.equal(item.recommendedMinL, undefined, `${id} için üreticinin yayımlamadığı alt hacim uydurulmamalı`);
+  assert.equal(item.recommendedMaxL, maxL, `${id} yalnız üreticinin yayımladığı üst hacmi taşımalı`);
+  assert(item.specifications.includes("Arşiv") && item.specifications.includes("yalnız dik konumda"), `${id} arşiv ve basınçlı tüp güvenlik bilgisini taşımalı`);
+  assert(item.sourceUrl?.startsWith("https://www.jbl.de/"), `${id} doğrudan resmî JBL kaynağı taşımalı`);
+  assert.equal(item.verifiedAt, "2026-09-15", `${id} güncel doğrulama tarihi taşımalı`);
+}
+assert(equipmentCatalog.find((item) => item.id === "jbl-proflora-u504")?.specifications.includes("otomatik kapasite değerlendirmesi yapılmaz"), "JBL u504 için yayımlanmayan hacim tahmin edilmemeli");
+assert(equipmentCatalog.find((item) => item.id === "jbl-proflora-m2003")?.specifications.includes("pH sensörü ayrıca alınır"), "JBL m2003 pH sensörü paket sınırını açıkça göstermeli");
+const expectedJblOlderPressureSets = [
+  ["jbl-proflora-u401",undefined,400],["jbl-proflora-u402",undefined,400],["jbl-proflora-u403",undefined,400],
+  ["jbl-proflora-m601",100,600],["jbl-proflora-m602",100,600],["jbl-proflora-m603",100,600],["jbl-proflora-m1003",600,1000],
+];
+for (const [id,minL,maxL] of expectedJblOlderPressureSets) {
+  const item = equipmentCatalog.find((entry) => entry.id === id);
+  assert(item, `JBL daha eski basınçlı PROFLORA seti eksik: ${id}`);
+  assert.equal(item.category, "co2", `${id} CO₂ kategorisinde bulunmalı`);
+  assert.equal(item.recommendedMinL, minL, `${id} yalnız üreticinin yayımladığı alt hacmi taşımalı`);
+  assert.equal(item.recommendedMaxL, maxL, `${id} resmî üst hacmi taşımalı`);
+  assert(item.specifications.includes("Daha eski arşiv") && item.specifications.includes("yalnız dik konumda"), `${id} nesil ve basınçlı tüp güvenlik bilgisini taşımalı`);
+  assert(item.sourceUrl?.startsWith("https://www.jbl.de/"), `${id} doğrudan resmî JBL kaynağı taşımalı`);
+}
+assert.deepEqual(["jbl-proflora-u402","jbl-proflora-m602"].map((id) => equipmentCatalog.find((item) => item.id === id)?.powerW), [0.8,0.8], "JBL u402 ve m602 gece valfleri resmî 0,8 W değerini taşımalı");
+assert(["jbl-proflora-u403","jbl-proflora-m603","jbl-proflora-m1003"].every((id) => equipmentCatalog.find((item) => item.id === id)?.specifications.includes("pH sensörü ayrıca alınır")), "Eski JBL pH kontrollü setlerde sensörün ayrıca alınması gerektiği açık olmalı");
+const jblLegacyMiniSet = equipmentCatalog.find((item) => item.id === "jbl-proflora-u201");
+assert(jblLegacyMiniSet?.category === "co2" && jblLegacyMiniSet.recommendedMinL === 10 && jblLegacyMiniSet.recommendedMaxL === 200, "JBL u201 mini seti resmî 10–200 L aralığıyla bulunmalı");
+const jblLegacyCylinders = equipmentCatalog.filter((item) => [
+  "jbl-proflora-u95","jbl-proflora-u95-3x","jbl-proflora-u500","jbl-proflora-u500-3x",
+  "jbl-proflora-m500","jbl-proflora-m500-silver","jbl-proflora-m2000-silver",
+].includes(item.id));
+assert.equal(jblLegacyCylinders.length, 7, "JBL'nin yedi eski tekli/çoklu CO₂ tüp seçeneği bulunmalı");
+assert(jblLegacyCylinders.every((item) => item.category === "co2" && item.passiveComponent === true && item.recommendedMinL === undefined && item.recommendedMaxL === undefined), "Eski JBL tüpleri bağımsız akvaryum kapasitesi sağlayan sistem sayılmamalı");
+assert(jblLegacyCylinders.every((item) => item.specifications.includes("tek başına CO₂ dozaj sistemi değildir") && item.specifications.includes("yalnız dik konumda")), "Eski JBL tüpleri set sınırı ve basınçlı tüp güvenliğini göstermeli");
+assert(equipmentCatalog.find((item) => item.id === "jbl-proflora-u95")?.specifications.includes("normal M10×1 U tipi regülatöre doğrudan bağlanmaz"), "JBL u95 bağlantı uyumsuzluğu kullanıcıdan saklanmamalı");
+const expectedJblCurrentCylinderIds = [
+  "jbl-proflora-co2-cylinder-500-m","jbl-proflora-co2-cylinder-2000-m","jbl-proflora-co2-cylinder-500-u",
+  "jbl-proflora-co2-cylinder-500-u-3x","jbl-proflora-co2-cylinder-1200-u",
+  "jbl-proflora-co2-cylinder-wallmount","jbl-proflora-co2-cylinder-stand",
+];
+const jblCurrentCylinders = expectedJblCurrentCylinderIds.map((id) => equipmentCatalog.find((item) => item.id === id));
+assert(jblCurrentCylinders.every(Boolean), "JBL güncel CO₂ CYLINDER ailesinin beş tüp/paket ve iki montaj yardımcısı bulunmalı");
+assert(jblCurrentCylinders.every((item) => item.category === "co2" && item.passiveComponent === true && item.recommendedMinL === undefined && item.recommendedMaxL === undefined), "JBL güncel tüp ve montaj yardımcıları bağımsız akvaryum kapasitesi sağlamamalı");
+assert(jblCurrentCylinders.every((item) => item.sourceUrl?.startsWith("https://www.jbl.de/") && item.verifiedAt === "2026-09-15"), "JBL güncel CYLINDER ailesi resmî kaynak ve güncel doğrulama tarihi taşımalı");
+assert(equipmentCatalog.find((item) => item.id === "jbl-proflora-co2-cylinder-500-m")?.specifications.includes("kendi başına dik durmaz"), "JBL 500 M için stand veya duvar askısı gereksinimi açık olmalı");
+assert(equipmentCatalog.find((item) => item.id === "jbl-proflora-co2-cylinder-1200-u")?.specifications.includes("eski JBL PROFLORA U regülatörleriyle uyumlu"), "JBL 1200 U geriye dönük uyumluluğu korunmalı");
+const expectedJblPhArchiveIds = [
+  "jbl-proflora-ph-control-touch-archive","jbl-proflora-ph-control-archive","jbl-proflora-ph-sensor-cal-archive",
+  "jbl-proflora-cal-legacy","jbl-proflora-cal-archive","jbl-buffer-solution-ph-4","jbl-buffer-solution-ph-7-archive",
+  "jbl-dest-archive","jbl-storage-solution-archive","jbl-proflora-cal-tray-archive",
+];
+const jblPhArchiveProducts = expectedJblPhArchiveIds.map((id) => equipmentCatalog.find((item) => item.id === id));
+assert(jblPhArchiveProducts.every(Boolean), "JBL pH kontrol grubunun iki cihazı, sensörü, iki Cal nesli ve beş tekil aksesuarı bulunmalı");
+assert(jblPhArchiveProducts.every((item) => item.category === "co2" && item.sourceUrl?.startsWith("https://www.jbl.de/") && item.verifiedAt === "2026-09-16"), "JBL pH kontrol ürünleri CO₂ kategorisinde, resmî kaynaklı ve güncel doğrulama tarihli olmalı");
+assert(jblPhArchiveProducts.every((item) => item.recommendedMinL === undefined && item.recommendedMaxL === undefined), "JBL pH kontrol parçalarına üreticinin yayımlamadığı akvaryum kapasitesi uydurulmamalı");
+assert(jblPhArchiveProducts.slice(0,2).every((item) => item.passiveComponent !== true), "JBL pH kontrol bilgisayarları pasif aksesuar sayılmamalı");
+assert(jblPhArchiveProducts.slice(2).every((item) => item.passiveComponent === true), "JBL pH sensörü, kalibrasyon setleri, sıvıları ve tablası pasif aksesuar olmalı");
+assert(equipmentCatalog.find((item) => item.id === "jbl-proflora-ph-control-touch-archive")?.specifications.includes("pH elektrodu ve harici solenoid valf dahil değildir"), "JBL pH-Control Touch paket sınırı açık olmalı");
+assert(equipmentCatalog.find((item) => item.id === "jbl-proflora-ph-control-archive")?.specifications.includes("entegre hassas solenoid valf") && equipmentCatalog.find((item) => item.id === "jbl-proflora-ph-control-archive")?.specifications.includes("pH elektrodu ayrıca alınır"), "Eski JBL pH Control entegre valf ve ayrı elektrot farkını korumalı");
+assert(equipmentCatalog.find((item) => item.id === "jbl-proflora-ph-sensor-cal-archive")?.specifications.includes("BNC") && equipmentCatalog.find((item) => item.id === "jbl-proflora-ph-sensor-cal-archive")?.specifications.includes("dört adet 50 ml"), "JBL pH-Sensor+Cal bağlantı ve paket içeriğini taşımalı");
+assert.deepEqual(["jbl-proflora-cal-legacy","jbl-proflora-cal-archive"].map((id) => equipmentCatalog.find((item) => item.id === id)?.model), ["ProFlora Cal (eski nesil)","PROFLORA Cal (2016 nesli)"], "JBL'nin iki arşiv Cal nesli kullanıcıya açık nesil etiketleri ve ayrı ürün kimlikleriyle korunmalı");
+const expectedJblLegacyRegulatorIds = [
+  "jbl-proflora-u001-archive","jbl-proflora-m001-legacy","jbl-proflora-m001-archive","jbl-proflora-v002-archive",
+  "jbl-proflora-adapt-u-m-legacy","jbl-proflora-adapt-u-m-archive","jbl-proflora-adapt-u201-u500-archive","jbl-proflora-adapt-u-dennerle-archive",
+];
+const jblLegacyRegulators = expectedJblLegacyRegulatorIds.map((id) => equipmentCatalog.find((item) => item.id === id));
+assert(jblLegacyRegulators.every(Boolean), "JBL arşiv regülatör, solenoid valf ve adaptör grubunun sekiz ürünü bulunmalı");
+assert(jblLegacyRegulators.every((item) => item.category === "co2" && item.sourceUrl?.startsWith("https://www.jbl.de/") && item.verifiedAt === "2026-09-16"), "JBL arşiv regülatör parçaları CO₂ kategorisinde, resmî kaynaklı ve güncel doğrulama tarihli olmalı");
+assert(jblLegacyRegulators.every((item) => item.recommendedMinL === undefined && item.recommendedMaxL === undefined), "JBL regülatör ve adaptör parçalarına bağımsız akvaryum kapasitesi uydurulmamalı");
+assert(jblLegacyRegulators.slice(0,4).every((item) => item.passiveComponent !== true), "JBL basınç düşürücüleri ve solenoid valf pasif aksesuar sayılmamalı");
+assert(jblLegacyRegulators.slice(4).every((item) => item.passiveComponent === true), "JBL adaptörleri pasif bileşen olmalı");
+assert.deepEqual(["jbl-proflora-m001-legacy","jbl-proflora-m001-archive"].map((id) => equipmentCatalog.find((item) => item.id === id)?.model), ["ProFlora m001 (eski nesil)","PROFLORA m001 (2016 nesli)"], "JBL m001 nesilleri kullanıcıya görünür etiketlerle ayrılmalı");
+assert(equipmentCatalog.find((item) => item.id === "jbl-proflora-u001-archive")?.specifications.includes("M10×1") && equipmentCatalog.find((item) => item.id === "jbl-proflora-u001-archive")?.specifications.includes("1,5 bar"), "JBL u001 bağlantı ve çalışma basıncı bilgisini taşımalı");
+assert(equipmentCatalog.find((item) => item.id === "jbl-proflora-m001-archive")?.specifications.includes("W21,8×1/14") && equipmentCatalog.find((item) => item.id === "jbl-proflora-m001-archive")?.specifications.includes("60 bardan 1,5 bara"), "JBL m001 resmî bağlantı ve basınç değerlerini taşımalı");
+const jblV002 = equipmentCatalog.find((item) => item.id === "jbl-proflora-v002-archive");
+assert(jblV002?.powerW === undefined && jblV002?.specifications.includes("birbiriyle çelişen güç değerleri"), "JBL v002 için çelişkili resmî güç değeri otomatik hesaba alınmamalı");
+assert(equipmentCatalog.find((item) => item.id === "jbl-proflora-adapt-u201-u500-archive")?.specifications.includes("5/8 inç UNF") && equipmentCatalog.find((item) => item.id === "jbl-proflora-adapt-u201-u500-archive")?.specifications.includes("M10×1"), "JBL u201-u500 adaptörünün iki bağlantı standardı korunmalı");
+assert(equipmentCatalog.find((item) => item.id === "jbl-proflora-adapt-u-dennerle-archive")?.specifications.includes("ters yönde") && equipmentCatalog.find((item) => item.id === "jbl-proflora-adapt-u-dennerle-archive")?.specifications.includes("M10×1,25"), "JBL Dennerle adaptörünün yön ve bağlantı sınırı açık olmalı");
+
+const expectedJblLegacyAccessoryIds = [
+  "jbl-proflora-m001-duo-legacy","jbl-proflora-m001-duo-archive","jbl-proflora-cylinder-stand-archive",
+  "jbl-proflora-t3-black-legacy","jbl-proflora-t3-archive","jbl-proflora-co2-count-safe-archive",
+  "jbl-proflora-safestop-legacy","jbl-proflora-safestop-archive",
+];
+const jblLegacyAccessories = expectedJblLegacyAccessoryIds.map((id) => equipmentCatalog.find((item) => item.id === id));
+assert(jblLegacyAccessories.every(Boolean), "JBL arşiv duo regülatör ve CO₂ yardımcıları sekiz ürünle bulunmalı");
+assert(jblLegacyAccessories.every((item) => item.category === "co2" && item.sourceUrl?.startsWith("https://www.jbl.de/") && item.verifiedAt === "2026-09-16"), "JBL arşiv CO₂ yardımcıları resmî kaynak ve güncel doğrulama tarihi taşımalı");
+assert(jblLegacyAccessories.every((item) => item.recommendedMinL === undefined && item.recommendedMaxL === undefined), "JBL duo regülatör ve pasif CO₂ yardımcılarına bağımsız akvaryum kapasitesi uydurulmamalı");
+assert(jblLegacyAccessories.slice(0,2).every((item) => item.passiveComponent !== true), "JBL m001 duo regülatörleri pasif aksesuar sayılmamalı");
+assert(jblLegacyAccessories.slice(2).every((item) => item.passiveComponent === true), "JBL stand, hortum, sayaç ve geri akış valfleri pasif bileşen olmalı");
+assert(jblLegacyAccessories.slice(0,2).every((item) => item.specifications.includes("iki") && item.specifications.includes("M10×1") && item.specifications.includes("W21,8×1/14")), "JBL m001 duo nesilleri iki ayrı çıkış ve iki tüp standardını göstermeli");
+assert(equipmentCatalog.find((item) => item.id === "jbl-proflora-cylinder-stand-archive")?.specifications.includes("60 mm") && equipmentCatalog.find((item) => item.id === "jbl-proflora-cylinder-stand-archive")?.specifications.includes("dik"), "JBL eski tüp standı çap ve dik kullanım güvenliğini taşımalı");
+assert(["jbl-proflora-t3-black-legacy","jbl-proflora-t3-archive"].every((id) => equipmentCatalog.find((item) => item.id === id)?.specifications.includes("3 m") && equipmentCatalog.find((item) => item.id === id)?.specifications.includes("4/6 mm")), "JBL T3 hortum nesilleri resmî uzunluk ve çap değerini taşımalı");
+assert(equipmentCatalog.find((item) => item.id === "jbl-proflora-co2-count-safe-archive")?.specifications.includes("entegre geri akış koruması"), "JBL eski Count Safe entegre çek valfini açıklamalı");
+assert(["jbl-proflora-safestop-legacy","jbl-proflora-safestop-archive"].every((id) => equipmentCatalog.find((item) => item.id === id)?.specifications.includes("4/6 mm")), "JBL SafeStop nesilleri doğru hortum çapını taşımalı");
+assert(equipmentCatalog.find((item) => item.id === "jbl-proflora-safestop-archive")?.specifications.includes("yalnız bir çek valf"), "JBL SafeStop çoklu çek valf riskini kullanıcıya göstermeli");
+
+const expectedJblLegacyDiffuserIds = [
+  "jbl-proflora-taifun-p-legacy","jbl-proflora-taifun-p-archive","jbl-proflora-taifun-s5-legacy","jbl-proflora-taifun-s-archive",
+  "jbl-proflora-taifun-m10-legacy","jbl-proflora-taifun-m-archive","jbl-proflora-taifun-extend-legacy","jbl-proflora-taifun-extend-archive",
+  "jbl-proflora-direct-12-16-archive","jbl-proflora-direct-16-22-archive","jbl-proflora-direct-19-25-archive","jbl-proflora-direct-membrane-archive",
+];
+const jblLegacyDiffusers = expectedJblLegacyDiffuserIds.map((id) => equipmentCatalog.find((item) => item.id === id));
+assert(jblLegacyDiffusers.every(Boolean), "JBL arşiv Taifun ve Direct difüzör ailesinin 12 seçeneği bulunmalı");
+assert(jblLegacyDiffusers.every((item) => item.category === "co2" && item.sourceUrl?.startsWith("https://www.jbl.de/") && item.verifiedAt === "2026-09-16"), "JBL arşiv difüzörleri CO₂ kategorisinde, resmî kaynaklı ve güncel doğrulama tarihli olmalı");
+assert.deepEqual(
+  ["jbl-proflora-taifun-p-legacy","jbl-proflora-taifun-s5-legacy","jbl-proflora-taifun-m10-legacy"].map((id) => equipmentCatalog.find((item) => item.id === id)?.recommendedMaxL),
+  [undefined,200,400],
+  "JBL eski Taifun nesillerine yalnız üreticinin yayımladığı üst hacimler yazılmalı",
+);
+assert.deepEqual(
+  ["jbl-proflora-taifun-p-archive","jbl-proflora-taifun-s-archive","jbl-proflora-taifun-m-archive"].map((id) => {
+    const item = equipmentCatalog.find((entry) => entry.id === id);
+    return [item?.recommendedMinL,item?.recommendedMaxL];
+  }),
+  [[20,400],[50,200],[undefined,400]],
+  "JBL 2016 Taifun nesilleri resmî hacim aralıklarını korumalı",
+);
+assert(["jbl-proflora-taifun-extend-legacy","jbl-proflora-taifun-extend-archive","jbl-proflora-direct-membrane-archive"].every((id) => {
+  const item = equipmentCatalog.find((entry) => entry.id === id);
+  return item?.passiveComponent === true && item.recommendedMinL === undefined && item.recommendedMaxL === undefined;
+}), "JBL Taifun uzatmaları ve Direct membranı pasif kalmalı, bağımsız kapasite kazanmamalı");
+const jblDirectDiffusers = ["jbl-proflora-direct-12-16-archive","jbl-proflora-direct-16-22-archive","jbl-proflora-direct-19-25-archive"].map((id) => equipmentCatalog.find((item) => item.id === id));
+assert.deepEqual(jblDirectDiffusers.map((item) => [item?.recommendedMinL,item?.recommendedMaxL]), [[40,300],[160,600],[200,800]], "JBL Direct hortum seçeneklerinin resmî hacim aralıkları korunmalı");
+assert(jblDirectDiffusers.every((item) => item?.passiveComponent !== true && item.specifications.includes("entegre kabarcık sayacı") && item.specifications.includes("1,0–1,5 bar")), "JBL Direct seçenekleri aktif difüzör ve resmî çalışma basıncıyla tanımlanmalı");
+assert(equipmentCatalog.find((item) => item.id === "jbl-proflora-direct-membrane-archive")?.specifications.includes("24 saat") && equipmentCatalog.find((item) => item.id === "jbl-proflora-direct-membrane-archive")?.specifications.includes("yıllık değişim"), "JBL Direct membran hazırlık ve bakım sınırını taşımalı");
+
+const jblAutomaticFeeders = equipmentCatalog.filter((item) => [
+  "jbl-pronovo-autofood-multi",
+  "jbl-pronovo-autofood-black",
+  "jbl-pronovo-autofood-white",
+  "jbl-autofood-black-archive",
+  "jbl-autofood-white-archive",
+].includes(item.id));
+assert.equal(jblAutomaticFeeders.length, 5, "JBL'nin güncel ve arşiv otomatik yemleyicileri eksiksiz ayrılmalı");
+assert(jblAutomaticFeeders.every((item) => item.category === "other" && item.sourceUrl?.startsWith("https://www.jbl.de/")), "JBL yemleyicileri resmî kaynaklı Diğer ekipman olmalı");
+assert(equipmentCatalog.find((item) => item.id === "jbl-pronovo-autofood-multi")?.specifications.includes("günde 6 öğüne kadar"), "Yeni JBL AUTOFOOD MULTI altı öğün bilgisini taşımalı");
+assert(equipmentCatalog.find((item) => item.id === "jbl-autofood-black-archive")?.specifications.includes("üretimden kaldırıldı"), "Önceki nesil JBL AutoFood güncel ürün gibi gösterilmemeli");
+
+const jblCleaningEquipment = equipmentCatalog.filter((item) =>
+  item.brand === "JBL" &&
+  item.verifiedAt === "2026-09-14" &&
+  (
+    item.id.startsWith("jbl-proclean-") ||
+    item.id.startsWith("jbl-floaty-") ||
+    item.id.startsWith("jbl-algae-magnet-") ||
+    item.id.startsWith("jbl-aqua-t-") ||
+    ["jbl-blade-for-floaty-l-xl","jbl-blanki","jbl-blanki-set","jbl-wishwash","jbl-spongi","jbl-proscape-cleaning-glove"].includes(item.id)
+  )
+);
+assert.equal(jblCleaningEquipment.length, 29, "JBL'nin 29 güncel dip, cam ve aksesuar temizlik seçeneği bulunmalı");
+assert(jblCleaningEquipment.every((item) => item.category === "other" && item.passiveComponent === true && item.sourceUrl?.startsWith("https://www.jbl.de/")), "JBL temizlik ürünleri pasif olmalı ve kapasite hesabına karışmamalı");
+assert.deepEqual(
+  ["s","m","l"].map((size) => equipmentCatalog.find((item) => item.id === `jbl-algae-magnet-${size}`)?.specifications.match(/(6|10|15) mm/)?.[1]),
+  ["6","10","15"],
+  "JBL Algae Magnet S/M/L cam kalınlıkları resmî seçenekleri korumalı",
+);
+const jblFeedingAccessories = equipmentCatalog.filter((item) => ["jbl-novostation","jbl-food-clip"].includes(item.id));
+assert.equal(jblFeedingAccessories.length, 2, "JBL'nin iki güncel pasif yemleme aksesuarı bulunmalı");
+assert(jblFeedingAccessories.every((item) => item.category === "other" && item.passiveComponent === true && item.sourceUrl?.includes("/group/7989/accessories-feeding")), "JBL yemleme aksesuarları pasif olmalı ve kapasite hesabına karışmamalı");
+const jblArtemioAccessories = equipmentCatalog.filter((item) => item.brand === "JBL" && item.sourceUrl?.includes("/group/3391/accessories-for-artemio"));
+assert.equal(jblArtemioAccessories.length, 5, "JBL Artemio grubunda tam set ve dört aksesuar bulunmalı");
+assert.deepEqual(jblArtemioAccessories.map((item) => item.model), ["ArtemioSet","Artemio 1","Artemio 2","Artemio 3","Artemio 4"], "JBL Artemio aksesuarlarının model ayrımı korunmalı");
+assert(jblArtemioAccessories.slice(1).every((item) => item.passiveComponent === true), "JBL Artemio yedek kap ve elekleri pasif aksesuar olmalı");
+const jblPestTraps = equipmentCatalog.filter((item) => ["jbl-limcollect","jbl-placollect"].includes(item.id));
+assert.equal(jblPestTraps.length, 2, "JBL LimCollect ve PlaCollect tuzakları bulunmalı");
+assert(jblPestTraps.every((item) => item.category === "other" && item.passiveComponent === true && item.sourceUrl?.includes("/products/detail/") && item.verifiedAt === "2026-09-15"), "JBL zararlı tuzakları pasif ekipman ve doğrudan resmî kaynakla tutulmalı");
+assert(equipmentCatalog.find((item) => item.id === "jbl-placollect")?.specifications.includes("kıl kurtları için uygun değildir"), "JBL PlaCollect ürün sınırı kullanıcıdan saklanmamalı");
+const jblLegacyGravelCleaning = equipmentCatalog.filter((item) => [
+  "jbl-aquaex-set-10-35","jbl-aquaex-set-20-45","jbl-aquaex-set-45-70","jbl-aqua-in-out-complete-set","jbl-aqua-in-out-extension",
+].includes(item.id));
+assert.deepEqual(jblLegacyGravelCleaning.map((item) => item.model), ["AquaEx Set 10-35","AquaEX Set 20-45","AquaEx Set 45-70","Aqua In Out Complete Set","Aqua In Out Extension"], "JBL eski dip temizleme ailesinin beş arşiv ürünü bulunmalı");
+assert(jblLegacyGravelCleaning.every((item) => item.category === "other" && item.passiveComponent === true && item.specifications.includes("Arşiv ürün") && item.verifiedAt === "2026-09-15"), "JBL eski dip temizleme ürünleri güncel PROCLEAN modeli veya kapasite sağlayan ekipman gibi gösterilmemeli");
+const jblNanoFloaty = equipmentCatalog.find((item) => item.id === "jbl-nano-floaty");
+assert(jblNanoFloaty?.category === "other" && jblNanoFloaty.passiveComponent === true && jblNanoFloaty.specifications.includes("Arşiv ürün") && jblNanoFloaty.specifications.includes("akrilik"), "JBL Nano-Floaty arşiv ve yüzey uyumluluğu bilgisiyle pasif ekipman olarak bulunmalı");
+const jblLegacyCleaningSolutions = equipmentCatalog.filter((item) => ["jbl-clean-a","jbl-desinfekt","jbl-power-clean"].includes(item.id));
+assert.deepEqual(jblLegacyCleaningSolutions.map((item) => item.model), ["Clean A","Desinfekt","Power Clean"], "JBL eski temizlik çözümlerinin üç modeli bulunmalı");
+assert(jblLegacyCleaningSolutions.every((item) => item.category === "other" && item.passiveComponent === true && item.specifications.includes("Arşiv ürün") && item.verifiedAt === "2026-09-15"), "JBL eski temizlik çözümleri güncel veya kapasite sağlayan ekipman gibi gösterilmemeli");
+assert(equipmentCatalog.find((item) => item.id === "jbl-clean-a")?.specifications.includes("yalnız dış yüzeyi"), "JBL Clean A kullanım yüzeyi sınırı açık olmalı");
+assert(equipmentCatalog.find((item) => item.id === "jbl-desinfekt")?.specifications.includes("canlı ve bitki bulunan akvaryumun içinde kullanılmaz"), "JBL Desinfekt canlı akvaryum güvenlik uyarısını taşımalı");
+assert(equipmentCatalog.find((item) => item.id === "jbl-power-clean")?.specifications.includes("bitki veya diğer canlılarda kullanılmaz"), "JBL Power Clean canlılar üzerindeki kullanım yasağını taşımalı");
+assert.equal(equipmentCatalog.filter((item) => item.brand === "JBL").length, 351, "JBL ekipman kataloğu 351 doğrulanmış seçeneğe ulaşmalı");
+
+const jblCareProducts = careProductCatalog.filter((item) => item.brand === "JBL");
+assert.equal(jblCareProducts.length, 515, "JBL bakım kataloğunda 515 doğrulanmış ürün seçeneği bulunmalı");
+const jblSansibarAndVolcano = jblCareProducts.filter((item) => item.category === "substrate");
+assert.equal(jblSansibarAndVolcano.length, 39, "JBL taban kataloğunda Sansibar, Volcano, Mount Aso, Manado ve eski PROSCAPE Soil ailelerinin 39 seçeneği bulunmalı");
+assert(jblSansibarAndVolcano.every((item) => item.sourceUrl.startsWith("https://www.jbl.de/") && ["2026-09-17","2026-09-18"].includes(item.verifiedAt)), "JBL taban kayıtları doğrudan resmî ürün sayfasına bağlanmalı");
+assert.deepEqual(
+  jblSansibarAndVolcano.filter((item) => item.model.startsWith("Sansibar ")).map((item) => item.model),
+  ["Sansibar WHITE 5 kg","Sansibar WHITE 10 kg","Sansibar RIVER 5 kg","Sansibar RIVER 10 kg","Sansibar SNOW 5 kg","Sansibar SNOW 10 kg","Sansibar GREY 5 kg","Sansibar GREY 10 kg","Sansibar ORANGE 5 kg","Sansibar ORANGE 10 kg","Sansibar RED 5 kg","Sansibar RED 10 kg","Sansibar DARK 5 kg","Sansibar DARK 10 kg"],
+  "JBL Sansibar ailesinin yedi renk ve ikişer paket boyu bulunmalı",
+);
+assert(jblSansibarAndVolcano.filter((item) => item.model.startsWith("Sansibar RIVER")).every((item) => item.description.includes("taban ısıtma kabloları için uygun")), "Yalnız Sansibar RIVER taban ısıtma kablosuna uygun gösterilmeli");
+assert(jblSansibarAndVolcano.filter((item) => item.model.startsWith("PROSCAPE VOLCANO")).every((item) => item.description.includes("kazıcı balıklar") && item.description.includes("Sansibar ile birlikte kullanılmamalı")), "JBL Volcano Mineral kazıcı balık ve Sansibar uyumsuzluk uyarılarını taşımalı");
+const jblMountAsoSoils = jblSansibarAndVolcano.filter((item) => item.model.startsWith("PROSCAPE MOUNT ASO SOIL"));
+assert.deepEqual(jblMountAsoSoils.map((item) => item.model), ["PROSCAPE MOUNT ASO SOIL BROWN 3 L","PROSCAPE MOUNT ASO SOIL BROWN 9 L","PROSCAPE MOUNT ASO SOIL BLACK 3 L","PROSCAPE MOUNT ASO SOIL BLACK 9 L"], "JBL Mount Aso Soil iki renk ve iki hacimle bulunmalı");
+assert(jblMountAsoSoils.every((item) => item.description.includes("önceden gübreyle yüklenmemiş") && item.description.includes("kazıcı balıklara ve karideslere uygundur") && item.description.includes("taban ısıtıcısıyla kullanılabilir")), "JBL Mount Aso Soil gübre yükü, canlı ve taban ısıtma uyumluluğunu korumalı");
+const jblManado = jblSansibarAndVolcano.filter((item) => item.model.startsWith("Manado "));
+assert.equal(jblManado.length, 11, "JBL Manado ailesinde beş kahverengi arşiv, üç güncel DARK ve üç eski DARK seçenek bulunmalı");
+assert.deepEqual(jblManado.filter((item) => item.model.match(/^Manado \d/)).map((item) => item.model), ["Manado 1,5 L (Arşiv)","Manado 3 L (Arşiv)","Manado 5 L (Arşiv)","Manado 10 L (Arşiv)","Manado 25 L (Arşiv)"], "JBL Manado kahverengi serisinin beş hacmi korunmalı");
+assert(jblManado.filter((item) => item.model.includes("DARK") && item.model.includes("Güncel")).every((item) => item.description.includes("6710")), "Güncel Manado DARK nesli 67100–67102 ürün kodlarıyla ayrılmalı");
+assert(jblManado.filter((item) => item.model.includes("Eski nesil arşiv")).every((item) => item.description.includes("6703") && item.description.includes("resmî sayfada arşivlenmiştir")), "Eski Manado DARK nesli 67035–67037 ürün kodları ve arşiv durumu ile ayrılmalı");
+const jblLegacyProscapeSoils = jblSansibarAndVolcano.filter((item) => item.model.startsWith("PROSCAPE PLANT SOIL") || item.model.startsWith("PROSCAPE SHRIMPS SOIL"));
+assert.equal(jblLegacyProscapeSoils.length, 8, "Eski PROSCAPE Plant/Shrimps Soil ailelerinde iki renk ve iki hacim bulunmalı");
+assert.equal(jblLegacyProscapeSoils.filter((item) => item.model.startsWith("PROSCAPE PLANT SOIL")).length, 4, "Eski PROSCAPE Plant Soil dört renk-hacim seçeneğiyle bulunmalı");
+assert(jblLegacyProscapeSoils.filter((item) => item.model.startsWith("PROSCAPE PLANT SOIL")).every((item) => item.description.includes("ilave gübre") && item.description.includes("içerir") && item.description.includes("taban filtresinde kullanılmamalıdır")), "Plant Soil gübre yükü ve taban filtresi kısıtı korunmalı");
+assert(jblLegacyProscapeSoils.filter((item) => item.model.startsWith("PROSCAPE SHRIMPS SOIL")).every((item) => item.description.includes("ilave gübre içermez") && item.description.includes("karides")), "Shrimps Soil gübresiz karides kullanım amacıyla ayrılmalı");
+assert.equal(jblCareProducts.filter((item) => item.category === "filter_media").length, 53, "JBL filtre medyaları doğru ürün kategorisinde tutulmalı");
+const jblGeneralFilterMedia = jblCareProducts.filter((item) => [
+  "Carbomec activ 400 g","Carbomec ultra 400 g","Tormec activ 1000 ml (Arşiv)",
+  "SilicatEx Rapid 400 g","NitratEx 250 ml","BioNitratEx 100 biyolojik top",
+  "PhosEx ultra 340 g","ClearMec plus 600 ml / 450 g","Cermec 700 g",
+  "Sintomec 450 g","Micromec 650 g",
+].includes(item.model));
+assert.equal(jblGeneralFilterMedia.length, 11, "JBL genel filtre medyasının 11 gerçek paket seçeneği bulunmalı");
+assert(jblGeneralFilterMedia.every((item) => item.sourceUrl.startsWith("https://www.jbl.de/") && item.verifiedAt === "2026-09-18"), "JBL genel filtre medyaları doğrudan resmî kaynak ve güncel doğrulama tarihi taşımalı");
+assert(jblCareProducts.find((item) => item.model === "Carbomec activ 400 g")?.description.includes("pH 6,5–7,5") && jblCareProducts.find((item) => item.model === "Carbomec activ 400 g")?.description.includes("kısa süreli"), "JBL Carbomec activ tatlı su pH aralığı ve süre sınırıyla bulunmalı");
+assert(jblCareProducts.find((item) => item.model === "Carbomec ultra 400 g")?.description.includes("pH 7,5–8,5") && jblCareProducts.find((item) => item.model === "Carbomec ultra 400 g")?.description.includes("2–3 gün"), "JBL Carbomec ultra yüksek pH hedefi ve tatlı su süre sınırıyla bulunmalı");
+const jblTormec = jblCareProducts.find((item) => item.model === "Tormec activ 1000 ml (Arşiv)");
+assert(jblTormec?.description.includes("800 L") && jblTormec.description.includes("24 saat") && jblTormec.additionalSourceUrls?.some((url) => url.includes("JBL_Hauptkatalog")), "JBL Tormec paket hacmi, kullanım hazırlığı ve arşiv durumu iki resmî kaynakla korunmalı");
+assert(jblCareProducts.find((item) => item.model === "SilicatEx Rapid 400 g")?.description.includes("12000 mg") && jblCareProducts.find((item) => item.model === "SilicatEx Rapid 400 g")?.description.includes("KH ve pH"), "JBL SilicatEx kapasitesi ve yumuşak su güvenlik takibiyle bulunmalı");
+const jblNitratEx = jblCareProducts.find((item) => item.model === "NitratEx 250 ml");
+assert(jblNitratEx?.description.includes("Yalnız tatlı su") && jblNitratEx.description.includes("9000 mg") && jblNitratEx.description.includes("sofra tuzuyla"), "JBL NitratEx su türü, bağlama kapasitesi ve yenilenme yöntemiyle bulunmalı");
+const jblBioNitratEx = jblCareProducts.find((item) => item.model === "BioNitratEx 100 biyolojik top");
+assert(jblBioNitratEx?.description.includes("200–300 L") && jblBioNitratEx.description.includes("düzenli su değişiminin yerine geçmez"), "JBL BioNitratEx paket kapasitesi ve bakım sınırıyla bulunmalı");
+assert(jblCareProducts.find((item) => item.model === "PhosEx ultra 340 g")?.description.includes("18000 mg"), "JBL PhosEx ultra doğrulanmış fosfat bağlama kapasitesini taşımalı");
+assert(jblCareProducts.find((item) => item.model === "ClearMec plus 600 ml / 450 g")?.description.includes("150–300 L"), "JBL ClearMec plus gerçek hacim, ağırlık ve kullanım aralığıyla bulunmalı");
+assert(jblCareProducts.find((item) => item.model === "Cermec 700 g")?.description.includes("17,4 × 17,4 mm"), "JBL Cermec gerçek paket ağırlığı ve halka ölçüsüyle bulunmalı");
+assert(jblCareProducts.find((item) => item.model === "Sintomec 450 g")?.description.includes("1200 m²/L"), "JBL Sintomec paket ağırlığı ve biyolojik yüzeyiyle bulunmalı");
+assert(jblCareProducts.find((item) => item.model === "Micromec 650 g")?.description.includes("1500 m²/L"), "JBL Micromec paket ağırlığı ve biyolojik yüzeyiyle bulunmalı");
+const jblExternalFilterMedia = jblCareProducts.filter((item) => [
+  "FilterPad VL CristalProfi 120/250 (Arşiv)","FilterPad VL CristalProfi 500 (Arşiv)",
+  "FilterPad F15 CristalProfi 120/250 (Son şans)","FilterPad F15 CristalProfi 500 (Son şans)",
+  "FilterPad F35 CristalProfi 120/250 (Son şans)","FilterPad F35 CristalProfi 500 (Arşiv)",
+  "CombiBloc CristalProfi e4/7/900/1/2 6 parça","CombiBloc CristalProfi e15/1900/1/2 6 parça",
+  "CRISTALPROFI UNIBLOC e4/7/90X 2'li","CRISTALPROFI UNIBLOC e15/190X 2'li",
+  "CRISTALPROFI CLEARMEC e4/7/900/1/2 500 ml","CRISTALPROFI CLEARMEC e15/1900/1/2 800 ml",
+  "CRISTALPROFI COMBIBLOC II e4/7/902 3 parça","CRISTALPROFI COMBIBLOC II e15/1902 3 parça",
+  "CRISTALPROFI SYMECPAD e4/7/901/2 6'lı","CRISTALPROFI SYMECPAD e15/1901/2 6'lı",
+].includes(item.model));
+assert.equal(jblExternalFilterMedia.length, 16, "JBL dış filtreye özel medya ailesinin 16 gerçek cihaz/paket seçeneği bulunmalı");
+assert(jblExternalFilterMedia.every((item) => item.sourceUrl.startsWith("https://www.jbl.de/") && item.verifiedAt === "2026-09-18"), "JBL dış filtre medyaları doğrudan resmî kaynak ve güncel doğrulama tarihi taşımalı");
+assert.deepEqual(jblExternalFilterMedia.filter((item) => item.model.startsWith("FilterPad VL")).map((item) => item.model), ["FilterPad VL CristalProfi 120/250 (Arşiv)","FilterPad VL CristalProfi 500 (Arşiv)"], "JBL FilterPad VL iki eski filtre gövdesi için ayrı seçilebilmeli");
+assert(jblExternalFilterMedia.filter((item) => item.model.startsWith("FilterPad VL")).every((item) => item.description.includes("iki adet") && item.description.includes("yeniden kullanılmaz") && item.additionalSourceUrls?.some((url) => url.includes("JBL_Hauptkatalog"))), "JBL FilterPad VL paket adedi, tek kullanımlık güvenliği ve resmî katalog kaynağıyla bulunmalı");
+assert.deepEqual(jblExternalFilterMedia.filter((item) => item.model.startsWith("FilterPad F15")).map((item) => item.model), ["FilterPad F15 CristalProfi 120/250 (Son şans)","FilterPad F15 CristalProfi 500 (Son şans)"], "JBL FilterPad F15 iki eski filtre gövdesi için ayrı seçilebilmeli");
+assert(jblExternalFilterMedia.filter((item) => item.model.startsWith("FilterPad F15")).every((item) => item.description.includes("15 ppi") && item.description.includes("iki adet")), "JBL FilterPad F15 gözenek ve paket adedini taşımalı");
+assert.deepEqual(jblExternalFilterMedia.filter((item) => item.model.startsWith("FilterPad F35")).map((item) => item.model), ["FilterPad F35 CristalProfi 120/250 (Son şans)","FilterPad F35 CristalProfi 500 (Arşiv)"], "JBL FilterPad F35 güncel son şans ve arşiv seçeneğini ayırmalı");
+assert(jblExternalFilterMedia.filter((item) => item.model.startsWith("FilterPad F35")).every((item) => item.description.includes("35 ppi") && item.description.includes("iki adet") && item.additionalSourceUrls?.some((url) => url.includes("JBL_Hauptkatalog"))), "JBL FilterPad F35 gözenek, paket adedi ve resmî katalog kaynağıyla bulunmalı");
+assert(jblExternalFilterMedia.filter((item) => item.model.startsWith("CombiBloc CristalProfi")).every((item) => item.description.includes("dört 10 ppi") && item.description.includes("20 ppi") && item.description.includes("30 ppi")), "JBL eski CombiBloc setleri altı parçalık doğru sünger bileşimini taşımalı");
+assert(jblExternalFilterMedia.filter((item) => item.model.startsWith("CRISTALPROFI UNIBLOC")).every((item) => item.description.includes("iki adet 25 ppi") && item.description.includes("merkez kesiti")), "JBL UniBloc seçenekleri paket adedi, gözenek ve çıkarılabilir merkez bilgisini taşımalı");
+assert.deepEqual(jblExternalFilterMedia.filter((item) => item.model.startsWith("CRISTALPROFI CLEARMEC")).map((item) => item.model), ["CRISTALPROFI CLEARMEC e4/7/900/1/2 500 ml","CRISTALPROFI CLEARMEC e15/1900/1/2 800 ml"], "JBL ClearMec e iki gerçek medya hacmiyle ayrılmalı");
+assert(jblExternalFilterMedia.filter((item) => item.model.startsWith("CRISTALPROFI CLEARMEC")).every((item) => item.description.includes("nitrit, nitrat ve fosfat") && item.description.includes("üstten bir önceki")), "JBL ClearMec e hedef kirleticileri ve doğru sepet konumunu taşımalı");
+assert(jblExternalFilterMedia.filter((item) => item.model.startsWith("CRISTALPROFI COMBIBLOC II")).every((item) => item.description.includes("iki kaba 15 ppi") && item.description.includes("bir ince 35 ppi")), "JBL CombiBloc II setleri üç parçalık doğru sünger bileşimini taşımalı");
+assert(jblExternalFilterMedia.filter((item) => item.model.startsWith("CRISTALPROFI SYMECPAD")).every((item) => item.description.includes("altı") && item.description.includes("yalnız bir kez")), "JBL SymecPad e paket adedi ve güvenli yenileme sınırını taşımalı");
+const jblInternalFilterMedia = jblCareProducts.filter((item) => [
+  "PROCRISTAL i30 FilterSponge 1'li","PROCRISTAL i30 SuperClear 2'li","PROCRISTAL i30 SuperClear 6'lı (Son şans)",
+  "PROCRISTAL i30 GreenStop 2'li (Arşiv)","PROCRISTAL i30 GreenStop 6'lı","UniBloc CristalProfi i60/80/100/200 1'li",
+  "PhosEx ultra CristalProfi i60/80/100/200 190 ml","CarboMec ultra CristalProfi i60/80/100/200 190 ml",
+  "ClearMec CristalProfi i60/80/100/200 190 ml","TorMec CristalProfi i60/80/100/200 190 ml (Son şans)",
+  "MicroMec CristalProfi i60/80/100/200 190 ml","CristalProfi m greenline FilterPad 35 ppi",
+  "CristalProfi m greenline Modul FilterPad 2'li",
+].includes(item.model));
+assert.equal(jblInternalFilterMedia.length, 13, "JBL iç filtre medyalarının 13 gerçek ürün ve paket seçeneği bulunmalı");
+assert(jblInternalFilterMedia.every((item) => item.sourceUrl.startsWith("https://www.jbl.de/") && item.verifiedAt === "2026-09-18"), "JBL iç filtre medyaları doğrudan resmî ürün sayfası ve güncel doğrulama tarihi taşımalı");
+const jblI30Sponge = jblInternalFilterMedia.find((item) => item.model === "PROCRISTAL i30 FilterSponge 1'li");
+assert(jblI30Sponge?.description.includes("30 ppi") && jblI30Sponge.description.includes("10–40 L") && jblI30Sponge.description.includes("üç ayda"), "JBL i30 standart sünger gözenek, hacim ve yenileme bilgisiyle bulunmalı");
+const jblI30SuperClear = jblInternalFilterMedia.filter((item) => item.model.startsWith("PROCRISTAL i30 SuperClear"));
+assert.deepEqual(jblI30SuperClear.map((item) => item.model), ["PROCRISTAL i30 SuperClear 2'li","PROCRISTAL i30 SuperClear 6'lı (Son şans)"], "JBL i30 SuperClear güncel 2'li ve son şans 6'lı paketleri ayırmalı");
+assert(jblI30SuperClear.every((item) => item.description.includes("25 ml") && item.description.includes("ayda bir") && item.description.includes("aktif karbon")), "JBL i30 SuperClear kartuş hacmi, medya ve yenileme sıklığını taşımalı");
+const jblI30GreenStop = jblInternalFilterMedia.filter((item) => item.model.startsWith("PROCRISTAL i30 GreenStop"));
+assert.deepEqual(jblI30GreenStop.map((item) => item.model), ["PROCRISTAL i30 GreenStop 2'li (Arşiv)","PROCRISTAL i30 GreenStop 6'lı"], "JBL i30 GreenStop arşiv 2'li ve etkin 6'lı paketleri ayırmalı");
+assert(jblI30GreenStop.every((item) => item.description.includes("25 ml") && item.description.includes("fosfat, nitrat ve nitriti") && item.description.includes("ayda bir")), "JBL i30 GreenStop kartuş hacmi, hedef maddeler ve yenileme sıklığını taşımalı");
+assert(jblInternalFilterMedia.find((item) => item.model.startsWith("UniBloc CristalProfi"))?.description.includes("20 ppi"), "JBL CristalProfi i UniBloc 20 ppi gözenekle bulunmalı");
+const jblCpiProblemMedia = jblInternalFilterMedia.filter((item) => item.model.includes("CristalProfi i60/80/100/200 190 ml"));
+assert.equal(jblCpiProblemMedia.length, 5, "JBL CristalProfi i serisinin beş özel 190 ml medya kartuşu bulunmalı");
+assert(jblCpiProblemMedia.every((item) => item.description.includes("190 ml")), "JBL CristalProfi i özel kartuşları gerçek medya hacmini taşımalı");
+assert(jblInternalFilterMedia.find((item) => item.model.startsWith("CarboMec ultra CristalProfi"))?.description.includes("2–3 hafta"), "JBL CristalProfi i aktif karbon kartuşu kısa kullanım sınırıyla bulunmalı");
+assert(jblInternalFilterMedia.find((item) => item.model.startsWith("PhosEx ultra CristalProfi"))?.description.includes("2–3 ay"), "JBL CristalProfi i fosfat kartuşu ölçüme bağlı yenileme süresiyle bulunmalı");
+assert(jblInternalFilterMedia.find((item) => item.model.startsWith("MicroMec CristalProfi"))?.description.includes("yeniden kullanılabilir"), "JBL CristalProfi i MicroMec bilyeleri tek kullanımlık gibi gösterilmemeli");
+assert(jblInternalFilterMedia.find((item) => item.model === "CristalProfi m greenline FilterPad 35 ppi")?.description.includes("küçük balık ve karideslerin"), "JBL CP m ana ped karides ve yavru güvenliğini taşımalı");
+assert(jblInternalFilterMedia.find((item) => item.model === "CristalProfi m greenline Modul FilterPad 2'li")?.description.includes("13 × 9 cm"), "JBL CP m modül pedi paket adedi ve gerçek ölçüsüyle bulunmalı");
+const jblGeneralFlossAndFoam = jblCareProducts.filter((item) =>
+  item.model.startsWith("Symec ") || item.model.startsWith("Mavi ince filtre süngeri") || item.model.startsWith("Mavi kaba filtre süngeri")
+);
+assert.equal(jblGeneralFlossAndFoam.length, 13, "JBL genel elyaf ve kesilebilir sünger grubunda 13 gerçek paket seçeneği bulunmalı");
+assert(jblGeneralFlossAndFoam.every((item) => item.sourceUrl.startsWith("https://www.jbl.de/") && item.verifiedAt === "2026-09-18"), "JBL genel elyaf ve süngerleri doğrudan resmî ürün sayfası ve güncel doğrulama tarihi taşımalı");
+const jblSymecMicro = jblGeneralFlossAndFoam.find((item) => item.model === "Symec micro 25 × 74 cm");
+assert(jblSymecMicro?.description.includes("1/1000 mm") && jblSymecMicro.description.includes("12 saat") && jblSymecMicro.description.includes("24 saatte") && jblSymecMicro.description.includes("yalnız bir kez"), "JBL Symec micro gerçek ölçü, parçacık eşiği ve tek kullanımlık 12–24 saat sınırıyla bulunmalı");
+const jblSymecFloss = jblGeneralFlossAndFoam.filter((item) => item.model.startsWith("Symec filtre elyafı"));
+assert.deepEqual(jblSymecFloss.map((item) => item.model), ["Symec filtre elyafı 100 g","Symec filtre elyafı 250 g","Symec filtre elyafı 500 g","Symec filtre elyafı 1000 g"], "JBL Symec elyaf ailesi dört gerçek paket ağırlığıyla ayrılmalı");
+assert(jblSymecFloss.every((item) => item.description.includes("su debisi düştüğünde") && item.description.includes("yenilenmesi önerilir")), "JBL Symec elyafları güvenli yenileme işaretini taşımalı");
+assert(jblGeneralFlossAndFoam.find((item) => item.model === "Symec XL 250 g yeşil")?.description.includes("Sıkışmayan"), "JBL Symec XL gerçek 250 g paketi ve sıkışmayan yapısıyla bulunmalı");
+assert(jblGeneralFlossAndFoam.find((item) => item.model === "Symec VL 80 × 25 × 3 cm")?.description.includes("3 cm kalınlıktaki"), "JBL Symec VL gerçek mat ölçüsü ve kalınlığıyla bulunmalı");
+const jblFineFoam = jblGeneralFlossAndFoam.filter((item) => item.model.startsWith("Mavi ince filtre süngeri"));
+assert.deepEqual(jblFineFoam.map((item) => item.model), ["Mavi ince filtre süngeri 50 × 50 × 2,5 cm","Mavi ince filtre süngeri 50 × 50 × 5 cm","Mavi ince filtre süngeri 50 × 50 × 10 cm"], "JBL ince kesilebilir sünger üç gerçek kalınlıkla ayrılmalı");
+assert(jblFineFoam.every((item) => item.description.includes("30 ppi") && item.description.includes("1–2 mm büyük")), "JBL ince süngerler doğru gözenek ve kesim talimatını taşımalı");
+const jblCoarseFoam = jblGeneralFlossAndFoam.filter((item) => item.model.startsWith("Mavi kaba filtre süngeri"));
+assert.deepEqual(jblCoarseFoam.map((item) => item.model), ["Mavi kaba filtre süngeri 50 × 50 × 2,5 cm","Mavi kaba filtre süngeri 50 × 50 × 5 cm","Mavi kaba filtre süngeri 50 × 50 × 10 cm"], "JBL kaba kesilebilir sünger üç gerçek kalınlıkla ayrılmalı");
+assert(jblCoarseFoam.every((item) => item.description.includes("10 ppi") && item.description.includes("1–2 mm büyük")), "JBL kaba süngerler doğru gözenek ve kesim talimatını taşımalı");
+const jblBacteriaStarters = jblCareProducts.filter((item) => item.category === "bacteria");
+assert.equal(jblBacteriaStarters.length, 7, "JBL bakteri başlangıç ürünleri yedi gerçek paket seçeneğiyle doğru kategoride tutulmalı");
+assert(jblBacteriaStarters.every((item) => item.sourceUrl.startsWith("https://www.jbl.de/") && item.verifiedAt === "2026-09-18"), "JBL bakteri başlangıç ürünleri doğrudan resmî ürün sayfası ve güncel doğrulama tarihi taşımalı");
+const jblDenitrol = jblBacteriaStarters.filter((item) => item.model.startsWith("Denitrol"));
+assert.deepEqual(jblDenitrol.map((item) => item.model), ["Denitrol 100 ml (Arşiv)","Denitrol 250 ml"], "JBL Denitrol arşiv 100 ml ve güncel 250 ml paketleriyle ayrılmalı");
+assert(jblDenitrol.every((item) => item.description.includes("20 L suya 10 ml") && item.description.includes("300 L suya 10 ml")), "JBL Denitrol ilk kurulum ve su değişimi dozlarını ayrı ayrı taşımalı");
+const jblFilterStart = jblBacteriaStarters.find((item) => item.model === "FilterStart 10 ml");
+assert(jblFilterStart?.description.includes("3 L filtre malzemesine") && jblFilterStart.description.includes("35 °C"), "JBL FilterStart gerçek hacim ve saklama sınırıyla bulunmalı");
+const jblFilterStartRed = jblBacteriaStarters.find((item) => item.model === "FilterStart Red 10 ml");
+assert(jblFilterStartRed?.description.includes("Japon balığı") && jblFilterStartRed.description.includes("serin su") && !jblFilterStartRed.description.includes("karides"), "JBL FilterStart Red karides ürünü değil serin su Japon balığı ürünü olarak sınıflandırılmalı");
+const jblFilterBoost = jblBacteriaStarters.find((item) => item.model === "FilterBoost 25 g");
+assert(jblFilterBoost?.description.includes("5–6 L filtre hacmine") && jblFilterBoost.description.includes("tek sünger kartuşlu iç filtrelere uygun değildir"), "JBL FilterBoost kapasite ve filtre tipi kısıtını taşımalı");
+const jblStartKit = jblBacteriaStarters.find((item) => item.model === "StartKit 2 × 15 ml");
+assert(jblStartKit?.description.includes("10–60 L") && jblStartKit.description.includes("15 dakika sonra"), "JBL StartKit gerçek iki şişe, hacim ve uygulama sırasıyla bulunmalı");
+const jblProCleanBac = jblBacteriaStarters.find((item) => item.model === "PROCLEAN BAC 50 ml");
+assert(jblProCleanBac?.description.includes("60–200 L") && jblProCleanBac.description.includes("tek kullanımlık 50 ml") && jblProCleanBac.description.includes("tatlı su"), "JBL PROCLEAN BAC gerçek kartuş hacmi ve tatlı su kullanım aralığıyla bulunmalı");
+assert.equal(jblCareProducts.filter((item) => item.category === "water_conditioner").length, 44, "JBL su düzenleyici, sorun çözücü ve eski deniz bakım ambalajları doğru kategoride tutulmalı");
+const jblTroubleshooterLiquids = jblCareProducts.filter((item) => /^(Detoxol|PhosEx rapid|Clynol|Clearol) /.test(item.model));
+assert.equal(jblTroubleshooterLiquids.length, 10, "JBL ilk dört sorun giderici ailesi on gerçek şişe seçeneğiyle bulunmalı");
+assert(jblTroubleshooterLiquids.every((item) => item.sourceUrl.startsWith("https://www.jbl.de/") && item.verifiedAt === "2026-09-18"), "JBL sıvı sorun gidericileri doğrudan resmî ürün sayfası ve güncel doğrulama tarihi taşımalı");
+const jblDetoxol = jblTroubleshooterLiquids.filter((item) => item.model.startsWith("Detoxol"));
+assert.deepEqual(jblDetoxol.map((item) => item.model), ["Detoxol 100 ml","Detoxol 250 ml"], "JBL Detoxol iki gerçek şişe seçeneğiyle ayrılmalı");
+assert(jblDetoxol.every((item) => item.description.includes("30 mg amonyum/amonyak") && item.description.includes("mevcut nitritin bağlanmadığını") && item.description.includes("su değişimi ve ölçümün yerine geçmez")), "JBL Detoxol kapasite ve üretici nitrit çelişkisini güvenli biçimde taşımalı");
+const jblPhosExRapid = jblTroubleshooterLiquids.filter((item) => item.model.startsWith("PhosEx rapid"));
+assert.deepEqual(jblPhosExRapid.map((item) => item.model), ["PhosEx rapid 100 ml","PhosEx rapid 250 ml"], "JBL PhosEx rapid iki gerçek şişe seçeneğiyle ayrılmalı");
+assert(jblPhosExRapid.every((item) => item.description.includes("PO₄ >2,4 mg/L") && item.description.includes("aşındırıcıdır") && item.description.includes("ciddi cilt ve göz hasarı")), "JBL PhosEx rapid ölçüme bağlı doz ve resmî tehlike uyarısını taşımalı");
+const jblClynol = jblTroubleshooterLiquids.filter((item) => item.model.startsWith("Clynol"));
+assert.deepEqual(jblClynol.map((item) => item.model), ["Clynol 100 ml","Clynol 250 ml","Clynol 500 ml"], "JBL Clynol üç gerçek şişe seçeneğiyle ayrılmalı");
+assert(jblClynol.every((item) => item.description.includes("haftalık doz 40 L suya 10 ml") && item.description.includes("2–24 saatte")), "JBL Clynol doğru doz ve berraklaşma süresini taşımalı");
+const jblClearol = jblTroubleshooterLiquids.filter((item) => item.model.startsWith("Clearol"));
+assert.deepEqual(jblClearol.map((item) => item.model), ["Clearol 100 ml","Clearol 250 ml","Clearol 500 ml"], "JBL Clearol üç gerçek şişe seçeneğiyle ayrılmalı");
+assert(jblClearol.every((item) => item.description.includes("pH >6") && item.description.includes("KH >5 °dKH") && item.description.includes("haftalık düzenli kullanım önerilmez")), "JBL Clearol pH/KH güvenlik eşikleri ve tekrar kullanım uyarısını taşımalı");
+const jblPhMinus = jblCareProducts.filter((item) => item.model.startsWith("pH-Minus"));
+assert.deepEqual(jblPhMinus.map((item) => item.model), ["pH-Minus 100 ml (Son şans)","pH-Minus 250 ml (Son şans)"], "JBL pH-Minus iki gerçek son şans şişesiyle ayrılmalı");
+assert(jblPhMinus.every((item) => item.description.includes("KH en az 4 °dKH") && item.description.includes("pH <7 iken kullanılmaz") && item.description.includes("ciddi cilt yanığı ve göz hasarı")), "JBL pH-Minus ölçüm ve kimyasal güvenlik sınırlarını taşımalı");
+const jblPhPlus = jblCareProducts.filter((item) => item.model.startsWith("pH-Plus"));
+assert.deepEqual(jblPhPlus.map((item) => item.model), ["pH-Plus 100 ml","pH-Plus 250 ml"], "JBL pH-Plus iki gerçek şişe seçeneğiyle ayrılmalı");
+assert(jblPhPlus.every((item) => item.description.includes("yaklaşık 1 °dKH") && item.description.includes("birkaç güne yayılan küçük adımlarla")), "JBL pH-Plus KH etkisi ve yavaş ayarlama uyarısını taşımalı");
+const jblNanoCrusta = jblCareProducts.find((item) => item.model === "Nano-Crusta 15 ml");
+assert(jblNanoCrusta?.description.includes("2 L suya bir damla") && jblNanoCrusta.description.includes("700 L"), "JBL Nano-Crusta gerçek şişe ve haftalık dozuyla bulunmalı");
+const jblAquadur = jblCareProducts.find((item) => item.model === "Aquadur 250 g");
+assert(jblAquadur?.description.includes("18,75 g") && jblAquadur.description.includes("2,5 °dKH") && jblAquadur.description.includes("5–10 L değişim suyunda"), "JBL Aquadur gerçek paket, sertlik etkisi ve güvenli çözündürme talimatıyla bulunmalı");
+const jblAquadurMt = jblCareProducts.find((item) => item.model === "Aquadur Malawi/Tanganjika 250 g");
+assert(jblAquadurMt?.description.includes("30 g") && jblAquadurMt.description.includes("78,7 g") && jblAquadurMt.description.includes("KH ölçülmeden sabit doz uygulanmaz"), "JBL Aquadur Malawi/Tanganjika göle ve başlangıç KH'sına bağlı ayrı dozları taşımalı");
+const jblPlantStart = jblCareProducts.find((item) => item.model === "PROSCAPE PLANT START 2 × 8 g");
+assert(jblPlantStart?.sourceUrl.includes("/detail/8338/") && jblPlantStart.verifiedAt === "2026-09-18", "JBL PROSCAPE PLANT START doğrudan resmî ürün sayfası ve güncel doğrulama tarihi taşımalı");
+assert(jblPlantStart?.description.includes("20–100 L") && jblPlantStart.description.includes("iki adet 8 g") && jblPlantStart.description.includes("sonradan eklenmez"), "JBL PROSCAPE PLANT START gerçek paket, hacim ve yalnız ilk kurulum sınırıyla bulunmalı");
+const jblBiotopol = jblCareProducts.filter((item) => /^Biotopol (100|250|500|Refill|5 L)/.test(item.model));
+assert.deepEqual(jblBiotopol.map((item) => item.model), ["Biotopol 100 ml","Biotopol 250 ml","Biotopol 500 ml","Biotopol Refill 500+125 ml","Biotopol 5 L"], "JBL Biotopol ailesinin beş gerçek paket seçeneği bulunmalı");
+assert(jblBiotopol.every((item) => item.description.includes("40 L suya 10 ml") && item.description.includes("ayrı kova")), "JBL Biotopol paketleri ortak doz ve omurgasızlar için güvenli su hazırlama uyarısını taşımalı");
+const jblBiotopolR = jblCareProducts.find((item) => item.model === "Biotopol R 100 ml");
+assert(jblBiotopolR?.description.includes("Japon balığı") && !jblBiotopolR.description.includes("Karides"), "JBL Biotopol R karides ürünü değil Japon balığı su düzenleyicisi olarak sınıflandırılmalı");
+const jblBiotopolC = jblCareProducts.find((item) => item.model === "Biotopol C 100 ml");
+assert(jblBiotopolC?.description.includes("Karides") && jblBiotopolC.description.includes("ayrı kovada") && jblBiotopolC.description.includes("40 L suya 10 ml"), "JBL Biotopol C kabuklu hedefi, üretici dozu ve bakır güvenliğiyle bulunmalı");
+const jblNanoBiotopolBetta = jblCareProducts.find((item) => item.model === "Nano-Biotopol Betta 15 ml");
+assert(jblNanoBiotopolBetta?.description.includes("180 L") && jblNanoBiotopolBetta.description.includes("1 L suya 2 damla"), "JBL Nano-Biotopol Betta gerçek şişe hacmi ve dozuyla bulunmalı");
+const jblAcclimol = jblCareProducts.filter((item) => item.model.startsWith("Acclimol "));
+assert.deepEqual(jblAcclimol.map((item) => item.model), ["Acclimol 50 ml","Acclimol 100 ml","Acclimol 250 ml","Acclimol 500 ml","Acclimol 5 L"], "JBL Acclimol ailesinin beş gerçek paket seçeneği bulunmalı");
+assert(jblAcclimol.every((item) => item.description.includes("40 L suya 10 ml")), "JBL Acclimol paketleri ortak üretici dozunu taşımalı");
+const jblTropol = jblCareProducts.filter((item) => item.model.startsWith("Tropol "));
+assert.deepEqual(jblTropol.map((item) => item.model), ["Tropol 100 ml","Tropol 250 ml","Tropol 5 L"], "JBL Tropol ailesinin üç gerçek paket seçeneği bulunmalı");
+assert(jblTropol.every((item) => item.description.includes("40 L suya 10 ml") && item.description.includes("Biotopol yerine")), "JBL Tropol dozu ve tam musluk suyu düzenleyicisi olmadığı uyarısını taşımalı");
+assert(jblCareProducts.find((item) => item.model === "Catappa XL 10 yaprak")?.description.includes("50–100 L suya bir yaprak"), "JBL Catappa XL yaprak adedi, boyu ve dozuyla bulunmalı");
+assert(jblCareProducts.find((item) => item.model === "Nano-Catappa 10 yaprak")?.description.includes("15–30 L suya bir yaprak"), "JBL Nano-Catappa yaprak adedi ve nano akvaryum dozuyla bulunmalı");
+assert.equal(jblCareProducts.filter((item) => item.category === "fertilizer").length, 24, "JBL PROFLORA ve PROSCAPE gübre aileleri doğru kategoride tutulmalı");
+const jblAquabasis = jblCareProducts.filter((item) => item.model.startsWith("PROFLORA AquaBasis plus"));
+assert.deepEqual(jblAquabasis.map((item) => item.model), ["PROFLORA AquaBasis plus 2,5 L","PROFLORA AquaBasis plus 5 L"], "JBL AquaBasis plus iki güncel paket hacmiyle seçilebilmeli");
+assert(jblAquabasis.every((item) => item.description.includes("beş yıllık etkiyi") && item.description.includes("2–3 yıllık") && item.additionalSourceUrls?.some((url) => url.includes("/press/detail/973/"))), "AquaBasis süre açıklamalarındaki resmî kaynak farkı gizlenmemeli");
+assert(jblCareProducts.find((item) => item.model === "PROFLORA Ferropol Tabs 30 tablet")?.description.includes("tabana gömülmez"), "Ferropol Tabs su kolonu tableti kök tableti gibi sunulmamalı");
+assert(jblCareProducts.find((item) => item.model === "PROFLORA Ferropol Root 30 tablet")?.description.includes("omurgasızlara uygundur"), "Ferropol Root paket adedi ve omurgasız uyumluluğunu taşımalı");
+assert(jblCareProducts.find((item) => item.model === "PROFLORA Florapol 700 g (Arşiv)")?.description.includes("resmî sayfada arşivlenmiştir"), "Florapol 700 g güncel ürün gibi gösterilmemeli");
+const jblVolcanoPowder = jblCareProducts.find((item) => item.model === "PROSCAPE VOLCANO POWDER 250 g");
+assert(jblVolcanoPowder?.description.includes("200 L") && jblVolcanoPowder.description.includes("12 ay") && jblVolcanoPowder.description.includes("taban ısıtma kablosuyla kullanılabilir"), "Volcano Powder miktarı, etki süresi ve taban ısıtma uyumluluğunu taşımalı");
+const jblFerropolLiquids = jblCareProducts.filter((item) => /^PROFLORA Ferropol (100|250|500|Refill|5 L)/.test(item.model));
+assert.deepEqual(jblFerropolLiquids.map((item) => item.model), ["PROFLORA Ferropol 100 ml (Eski seri)","PROFLORA Ferropol 250 ml (Arşiv)","PROFLORA Ferropol 500 ml (Arşiv)","PROFLORA Ferropol Refill 500+125 ml (Arşiv)","PROFLORA Ferropol 5 L (Eski seri)"], "JBL Ferropol eski sıvı seri beş gerçek paketle bulunmalı");
+assert(jblFerropolLiquids.every((item) => item.description.includes("40 L başına 10 ml") || item.description.includes("40 L'ye 10 ml")), "Ferropol paketleri ortak üretici dozunu taşımalı");
+const jblFerropol24 = jblCareProducts.filter((item) => item.model.startsWith("PROFLORA Ferropol 24"));
+assert.deepEqual(jblFerropol24.map((item) => item.model), ["PROFLORA Ferropol 24 10 ml (Arşiv)","PROFLORA Ferropol 24 50 ml (Arşiv)"], "Ferropol 24 iki eski hacimle bulunmalı");
+assert(jblFerropol24.every((item) => item.description.includes("50 L suya her gün bir damla") && item.description.includes("arşivlenmiştir")), "Ferropol 24 günlük doz ve arşiv durumunu taşımalı");
+const jblProscapeLiquids = jblCareProducts.filter((item) => /^PROSCAPE (Fe|NPK|N |P |K |Mg )/.test(item.model));
+assert.deepEqual(jblProscapeLiquids.map((item) => item.model), ["PROSCAPE Fe +MICROELEMENTS 250 ml","PROSCAPE Fe +MICROELEMENTS 500 ml","PROSCAPE NPK +MACROELEMENTS 250 ml","PROSCAPE NPK +MACROELEMENTS 500 ml","PROSCAPE N +MACROELEMENTS 250 ml","PROSCAPE P +MACROELEMENTS 250 ml","PROSCAPE K +MACROELEMENTS 250 ml","PROSCAPE Mg +MACROELEMENTS 250 ml"], "JBL PROSCAPE sıvı gübreleri sekiz gerçek hacim seçeneğiyle bulunmalı");
+assert(jblProscapeLiquids.every((item) => item.description.includes("100 L'ye") && item.description.includes("Ürün kodu")), "PROSCAPE sıvıları ürün kodu ve ışık/CO2'ye bağlı doz bilgisi taşımalı");
+assert.equal(jblCareProducts.filter((item) => item.category === "treatment").length, 17, "JBL Algol ve 14 arşiv ilaç ailesinin 16 gerçek paketi tedavi kategorisinde tutulmalı");
+const jblProAquaTests = jblCareProducts.filter((item) =>
+  item.category === "test" &&
+  item.model.startsWith("PROAQUATEST") &&
+  (item.model.endsWith(" Set") || item.model.endsWith(" Refill"))
+);
+assert.equal(jblProAquaTests.length, 38, "JBL PROAQUATEST ailesinin 19 set ve 19 refill seçeneği bulunmalı");
+assert.equal(jblProAquaTests.filter((item) => item.model.endsWith(" Set")).length, 19, "JBL PROAQUATEST tam setleri refill ürünlerinden ayrılmalı");
+assert.equal(jblProAquaTests.filter((item) => item.model.endsWith(" Refill")).length, 19, "JBL PROAQUATEST refill ürünleri tam setlerden ayrılmalı");
+const jblProAquaCoreTests = jblProAquaTests.filter((item) => /pH 3\.0-10\.0|pH 6\.0-7\.6|pH 7\.4-9\.0|GH General hardness|KH Carbonate hardness/.test(item.model));
+assert.equal(jblProAquaCoreTests.length, 10, "JBL temel pH/GH/KH testlerinin beş set ve beş refill seçeneği bulunmalı");
+assert(jblProAquaCoreTests.every((item) => item.sourceUrl.includes("/products/detail/") && item.verifiedAt === "2026-09-18"), "JBL temel pH/GH/KH testleri doğrudan resmî ürün sayfalarına bağlı olmalı");
+assert(careProductCatalog.find((item) => item.model === "PROAQUATEST pH 3.0-10.0 Set")?.description.includes("2410117") && careProductCatalog.find((item) => item.model === "PROAQUATEST pH 3.0-10.0 Refill")?.description.includes("2410219"), "JBL geniş aralıklı pH set/refill ürün kodları ayrılmalı");
+assert(careProductCatalog.find((item) => item.model === "PROAQUATEST pH 6.0-7.6 Refill")?.description.includes("tam set yerine geçmez") && careProductCatalog.find((item) => item.model === "PROAQUATEST pH 7.4-9.0 Set")?.description.includes("2410517"), "JBL hassas pH set/refill içerikleri karıştırılmamalı");
+assert(careProductCatalog.find((item) => item.model === "PROAQUATEST GH General hardness Set")?.description.includes("deniz suyunda GH yerine") && careProductCatalog.find((item) => item.model === "PROAQUATEST KH Carbonate hardness Refill")?.description.includes("aşındırıcıdır"), "JBL GH/KH kullanım ve kimyasal güvenlik sınırları korunmalı");
+const jblProAquaChemicalTests = jblProAquaTests.filter((item) => /O2 Oxygen|Cu Copper|Fe Iron|SiO2 Silicate|NH4 Ammonium/.test(item.model));
+assert.equal(jblProAquaChemicalTests.length, 10, "JBL O2/Cu/Fe/SiO2/NH4 testlerinin beş set ve beş refill seçeneği bulunmalı");
+assert(jblProAquaChemicalTests.every((item) => item.sourceUrl.includes("/products/detail/") && item.verifiedAt === "2026-09-18"), "JBL O2/Cu/Fe/SiO2/NH4 testleri doğrudan resmî ürün sayfalarına bağlı olmalı");
+assert(careProductCatalog.find((item) => item.model === "PROAQUATEST O2 Oxygen Set")?.description.includes("üç reaktif") && careProductCatalog.find((item) => item.model === "PROAQUATEST O2 Oxygen Refill")?.description.includes("organ hasarı"), "JBL O2 set içeriği ve kimyasal güvenliği korunmalı");
+assert(careProductCatalog.find((item) => item.model === "PROAQUATEST Cu Copper Set")?.description.includes("şelatlanmış bakırı göstermez") && careProductCatalog.find((item) => item.model === "PROAQUATEST Fe Iron Refill")?.description.includes("2411719"), "JBL Cu ölçüm sınırı ve Fe refill kimliği korunmalı");
+assert(careProductCatalog.find((item) => item.model === "PROAQUATEST SiO2 Silicate Set")?.description.includes("2411800") && careProductCatalog.find((item) => item.model === "PROAQUATEST SiO2 Silicate Refill")?.description.includes("birlikte yenilenir"), "JBL SiO2 set/refill kapsamı korunmalı");
+assert(careProductCatalog.find((item) => item.model === "PROAQUATEST NH4 Ammonium Set")?.description.includes("pH tablosuyla NH3") && careProductCatalog.find((item) => item.model === "PROAQUATEST NH4 Ammonium Refill")?.description.includes("zehirli gaz"), "JBL NH4 ölçüm ve kimyasal güvenlik sınırları korunmalı");
+const jblProAquaNutrientTests = jblProAquaTests.filter((item) => /NO2 Nitrite|NO3 Nitrate|PO4 Phosphate Sensitive|K Potassium/.test(item.model));
+assert.equal(jblProAquaNutrientTests.length, 8, "JBL NO2/NO3/PO4/K testlerinin dört set ve dört refill seçeneği bulunmalı");
+assert(jblProAquaNutrientTests.every((item) => item.sourceUrl.includes("/products/detail/") && item.verifiedAt === "2026-09-18"), "JBL NO2/NO3/PO4/K testleri doğrudan resmî ürün sayfalarına bağlı olmalı");
+assert(careProductCatalog.find((item) => item.model === "PROAQUATEST NO2 Nitrite Set")?.description.includes("üç hafta günlük") && careProductCatalog.find((item) => item.model === "PROAQUATEST NO3 Nitrate Set")?.description.includes("bir dakika kuvvetle"), "JBL NO2/NO3 kullanım süreleri korunmalı");
+assert(careProductCatalog.find((item) => item.model === "PROAQUATEST PO4 Phosphate Sensitive Set")?.description.includes("polifosfatı doğrudan ölçmez") && careProductCatalog.find((item) => item.model === "PROAQUATEST PO4 Phosphate Sensitive Refill")?.description.includes("takım halinde"), "JBL PO4 ölçüm sınırı ve refill yenileme kuralı korunmalı");
+assert(careProductCatalog.find((item) => item.model === "PROAQUATEST K Potassium Set")?.description.includes("uzman uygulamasıdır") && careProductCatalog.find((item) => item.model === "PROAQUATEST K Potassium Refill")?.description.includes("2413100"), "JBL K tatlı/deniz suyu sınırı ve refill kimliği korunmalı");
+const jblProAquaMineralCo2Tests = jblProAquaTests.filter((item) => /Ca Calcium|Mg-Ca Magnesium-Calcium|CO2-pH Permanent|CO2 Direct|Mg Magnesium Fresh water/.test(item.model));
+assert.equal(jblProAquaMineralCo2Tests.length, 10, "JBL Ca/Mg/CO2 testlerinin beş set ve beş refill seçeneği bulunmalı");
+assert(jblProAquaMineralCo2Tests.every((item) => item.sourceUrl.includes("/products/detail/") && item.verifiedAt === "2026-09-18"), "JBL Ca/Mg/CO2 testleri doğrudan resmî ürün sayfalarına bağlı olmalı");
+assert(careProductCatalog.find((item) => item.model === "PROAQUATEST Ca Calcium Set")?.description.includes("damla sayısı × 20") && careProductCatalog.find((item) => item.model === "PROAQUATEST Ca Calcium Refill")?.description.includes("2413319"), "JBL Ca titrasyon hesabı ve refill kimliği korunmalı");
+assert(careProductCatalog.find((item) => item.model === "PROAQUATEST Mg-Ca Magnesium-Calcium Set")?.description.includes("doğal deniz suyunda × 100") && careProductCatalog.find((item) => item.model === "PROAQUATEST Mg-Ca Magnesium-Calcium Refill")?.description.includes("2413719"), "JBL Mg-Ca yapay/doğal deniz suyu faktörleri korunmalı");
+assert(careProductCatalog.find((item) => item.model === "PROAQUATEST CO2-pH Permanent Set")?.description.includes("sıvı karbon ürünleri") && careProductCatalog.find((item) => item.model === "PROAQUATEST CO2-pH Permanent Refill")?.description.includes("2413900"), "JBL kalıcı CO2-pH testinin ölçüm sınırı ve refill kimliği korunmalı");
+assert(careProductCatalog.find((item) => item.model === "PROAQUATEST CO2 Direct Set")?.description.includes("damla sayısı × 2") && careProductCatalog.find((item) => item.model === "PROAQUATEST CO2 Direct Refill")?.description.includes("2414100"), "JBL doğrudan CO2 titrasyon hesabı ve refill kimliği korunmalı");
+assert(careProductCatalog.find((item) => item.model === "PROAQUATEST Mg Magnesium Fresh water Set")?.description.includes("karşılaştırma") && careProductCatalog.find((item) => item.model === "PROAQUATEST Mg Magnesium Fresh water Refill")?.description.includes("2414300"), "JBL tatlı su Mg karşılaştırma seti ve refill kimliği korunmalı");
+assert(jblProAquaTests.filter((item) => item.model.endsWith(" Refill")).every((item) => item.description.includes("yalnız yedek") && item.description.includes("yerine geçmez")), "JBL refill seçenekleri tam test seti gibi gösterilmemeli");
+const jblTestCases = jblCareProducts.filter((item) => [
+  "jbl-proaquatest-combiset-plus-fe","jbl-proaquatest-combiset-plus-nh4","jbl-proaquatest-lab",
+  "jbl-proaquatest-lab-proscape","jbl-proaquatest-lab-marin","jbl-proaquatest-combiset-marin",
+].includes(item.id));
+assert.equal(jblTestCases.length, 6, "JBL'nin altı güncel test çantası bulunmalı");
+assert(jblTestCases.every((item) => item.category === "test" && item.sourceUrl.includes("/products/detail/")), "JBL test çantaları doğrudan resmî ürün sayfasına bağlanmalı");
+assert(careProductCatalog.find((item) => item.id === "jbl-proaquatest-lab")?.description.includes("13 testli"), "JBL PROAQUATEST LAB 13 testli içerikle tanımlanmalı");
+assert(jblTestCases.every((item) => item.description.includes("Ürün kodu") && item.verifiedAt === "2026-09-18"), "JBL güncel test çantalarının ürün kimlikleri ve doğrulama tarihi korunmalı");
+assert(careProductCatalog.find((item) => item.id === "jbl-proaquatest-lab-marin")?.description.includes("asitle temasında zehirli gaz") && careProductCatalog.find((item) => item.id === "jbl-proaquatest-lab-proscape")?.description.includes("deniz suyu laboratuvar çantası değildir"), "JBL LAB Marin kimyasal güvenliği ile PROSCAPE su türü sınırı korunmalı");
+const jblEasy7in1 = careProductCatalog.find((item) => item.id === "jbl-proaquatest-easy-7in1");
+assert(jblEasy7in1?.description.includes("50 adet") && jblEasy7in1.description.includes("fosfat ve amonyum ölçmez"), "JBL EASY 7in1 şerit adedi ve ölçüm sınırı kullanıcıya açık olmalı");
+const jblProscan = careProductCatalog.find((item) => item.id === "jbl-proscan");
+const jblProscanRecharge = careProductCatalog.find((item) => item.id === "jbl-proscan-recharge");
+assert(jblProscan?.description.includes("24 analiz şeridi") && jblProscan.description.includes("renk kartı"), "JBL PROSCAN başlangıç setinin şerit ve renk kartı içeriği bulunmalı");
+assert(jblProscanRecharge?.description.includes("24 adet yedek") && jblProscanRecharge.description.includes("renk kartı içermez"), "JBL PROSCAN RECHARGE tam başlangıç seti gibi gösterilmemeli");
+assert(jblProscan?.description.includes("2542000") && jblProscanRecharge?.description.includes("2542100"), "JBL PROSCAN başlangıç ve recharge ürün kodları korunmalı");
+assert([jblProscan,jblProscanRecharge].every((item) => item?.description.includes("deniz suyuna uygun değildir") && item.description.includes("EASY 7in1") && item.verifiedAt === "2026-09-18"), "JBL PROSCAN su türü ve şerit uyumluluk sınırları korunmalı");
+const jblProNovoBelCorePackages = jblCareProducts.filter((item) => /^(PRONOVO BEL FLAKES S|PRONOVO BEL FLAKES M|PRONOVO BEL GRANO XXS|PRONOVO BEL GRANO XS|PRONOVO BEL GRANO S|PRONOVO BEL GRANO M|PRONOVO TAB M) /.test(item.model));
+assert.equal(jblProNovoBelCorePackages.length, 18, "JBL PRONOVO toplum ana yemlerinin 18 gerçek ambalaj seçeneği bulunmalı");
+assert(jblProNovoBelCorePackages.every((item) => item.sourceUrl.includes("/detail/") && item.verifiedAt === "2026-09-18"), "JBL PRONOVO toplum ana yem ambalajları doğrudan resmî ürün sayfasına bağlı olmalı");
+assert.equal(jblProNovoBelCorePackages.filter((item) => item.model.startsWith("PRONOVO BEL FLAKES M ")).length, 5, "JBL PRONOVO BEL FLAKES M beş ambalajla korunmalı");
+assert(careProductCatalog.find((item) => item.model === "PRONOVO BEL GRANO XS 20 ml Freshlock")?.description.includes("çelişki") && careProductCatalog.find((item) => item.model === "PRONOVO TAB M 5,5 L")?.description.includes("2900 g"), "JBL PRONOVO XS kaynak çelişkisi ve TAB büyük ambalaj ağırlığı korunmalı");
+const jblProNovoJuvenileHolidayFoods = jblCareProducts.filter((item) => /^(PRONOVO BEL FLAKES BABY|PRONOVO BEL GRANO BABY|PRONOVO BEL FLUID|PRONOVO BEL WEEKEND|PRONOVO BEL HOLIDAY) /.test(item.model));
+assert.equal(jblProNovoJuvenileHolidayFoods.length, 5, "JBL PRONOVO yavru, sıvı ve tatil yemlerinin beş gerçek ambalajı bulunmalı");
+assert(jblProNovoJuvenileHolidayFoods.every((item) => item.sourceUrl.includes("/detail/") && item.verifiedAt === "2026-09-18"), "JBL PRONOVO yavru ve tatil yemleri doğrudan resmî ürün sayfasına bağlı olmalı");
+assert(careProductCatalog.find((item) => item.model === "PRONOVO BEL FLAKES BABY 3 × 10 ml")?.description.includes("3112418") && careProductCatalog.find((item) => item.model === "PRONOVO BEL FLAKES BABY 3 × 10 ml")?.description.includes("üç farklı"), "JBL FLAKES BABY ürün kodu ve üç büyüme boyu korunmalı");
+assert(careProductCatalog.find((item) => item.model === "PRONOVO BEL GRANO BABY 3 × 10 ml")?.description.includes("5–20 mm") && careProductCatalog.find((item) => item.model === "PRONOVO BEL GRANO BABY 3 × 10 ml")?.description.includes("%10 Artemia"), "JBL GRANO BABY hedef yavru boyu ve Artemia oranı korunmalı");
+assert(careProductCatalog.find((item) => item.model === "PRONOVO BEL FLUID 50 ml")?.description.includes("3112618") && careProductCatalog.find((item) => item.model === "PRONOVO BEL FLUID 50 ml")?.description.includes("damlalıklı"), "JBL BEL FLUID ürün kodu ve damlalıklı ambalajı korunmalı");
+assert(careProductCatalog.find((item) => item.model === "PRONOVO BEL WEEKEND 4 blok")?.description.includes("üç gün") && careProductCatalog.find((item) => item.model === "PRONOVO BEL WEEKEND 4 blok")?.description.includes("genel sertliği"), "JBL WEEKEND blok sayısı, kullanım süresi ve sertlik etkisi korunmalı");
+assert(careProductCatalog.find((item) => item.model === "PRONOVO BEL HOLIDAY 1 blok")?.description.includes("20–25") && careProductCatalog.find((item) => item.model === "PRONOVO BEL HOLIDAY 1 blok")?.description.includes("14 güne kadar") && careProductCatalog.find((item) => item.model === "PRONOVO BEL HOLIDAY 1 blok")?.description.includes("genel sertliği"), "JBL HOLIDAY balık sayısı, kullanım süresi ve sertlik etkisi korunmalı");
+const jblProNovoSpirulinaPackages = jblCareProducts.filter((item) => item.model.startsWith("PRONOVO SPIRULINA "));
+assert.equal(jblProNovoSpirulinaPackages.length, 6, "JBL PRONOVO Spirulina ailesinde altı gerçek ambalaj seçeneği bulunmalı");
+assert.equal(jblProNovoSpirulinaPackages.filter((item) => item.model.startsWith("PRONOVO SPIRULINA FLAKES M ")).length, 4, "JBL PRONOVO Spirulina pul yem dört hacimle korunmalı");
+assert(jblProNovoSpirulinaPackages.every((item) => item.sourceUrl.includes("/detail/") && item.verifiedAt === "2026-09-18" && item.description.includes("%20 Spirulina")), "JBL PRONOVO Spirulina ambalajları doğrudan resmî ürün sayfasına ve yayımlanan Spirulina oranına bağlı olmalı");
+assert(careProductCatalog.find((item) => item.model === "PRONOVO SPIRULINA GRANO S 100 ml")?.description.includes("3113618") && careProductCatalog.find((item) => item.model === "PRONOVO SPIRULINA GRANO M 250 ml")?.description.includes("3113718"), "JBL Spirulina S ve M granül ürün kodları korunmalı");
+const jblProNovoColorPackages = jblCareProducts.filter((item) => item.model.startsWith("PRONOVO COLOR "));
+assert.equal(jblProNovoColorPackages.length, 4, "JBL PRONOVO Color ailesinde dört gerçek ambalaj seçeneği bulunmalı");
+assert.equal(jblProNovoColorPackages.filter((item) => item.model.startsWith("PRONOVO COLOR FLAKES M ")).length, 2, "JBL PRONOVO Color pul yem iki hacimle korunmalı");
+assert(jblProNovoColorPackages.every((item) => item.sourceUrl.includes("/detail/") && item.verifiedAt === "2026-09-18" && item.description.includes("ham protein %40")), "JBL PRONOVO Color ambalajları doğrudan resmî ürün sayfasına ve yayımlanan besin değerlerine bağlı olmalı");
+assert(careProductCatalog.find((item) => item.model === "PRONOVO COLOR FLAKES M 250 ml")?.description.includes("3113918") && careProductCatalog.find((item) => item.model === "PRONOVO COLOR GRANO M 250 ml")?.description.includes("125 g"), "JBL Color 250 ml pul ürün kodu ve M granül net ağırlığı korunmalı");
+const jblLegacyWaterTests = jblCareProducts.filter((item) => item.sourceUrl.includes("/group/4034/test-sets-and-refills"));
+assert.equal(jblLegacyWaterTests.length, 18, "JBL eski su testi grubunda 18 tekil test bulunmalı");
+assert(jblLegacyWaterTests.every((item) => item.category === "test" && item.description.includes("arşiv olarak listelenir") && item.description.includes("PROAQUATEST") && item.verifiedAt === "2026-09-15"), "JBL eski su testleri güncel PROAQUATEST ürünleri gibi gösterilmemeli");
+assert.equal(jblLegacyWaterTests.filter((item) => item.model.includes("Oxygen")).length, 2, "JBL eski ve New Formula oksijen testleri ayrı model olarak korunmalı");
+const jblLegacyTestCases = jblCareProducts.filter((item) => item.sourceUrl.includes("/group/6051/test-case"));
+assert.deepEqual(jblLegacyTestCases.map((item) => item.model), ["Test Combi Set plus Fe","Test Combi Set Plus NH4","Testlab","Testlab ProScape","Testlab Marin","Test Combi Set Marin"], "JBL eski test çantalarının altı modeli resmî sırayla bulunmalı");
+assert(jblLegacyTestCases.every((item) => item.category === "test" && item.description.includes("arşiv olarak listelenir") && item.description.includes("PROAQUATEST") && item.verifiedAt === "2026-09-15"), "JBL eski test çantaları güncel PROAQUATEST çantaları gibi gösterilmemeli");
+assert.equal(jblCareProducts.filter((item) => item.category === "test").length, 71, "JBL test kategorisinde 71 doğrulanmış güncel ve arşiv seçenek bulunmalı");
+const jblCommunityFood = jblCareProducts.filter((item) =>
+  item.category === "food" &&
+  (jblProNovoBelCorePackages.some((core) => core.id === item.id) || jblProNovoJuvenileHolidayFoods.some((food) => food.id === item.id) || jblProNovoSpirulinaPackages.some((food) => food.id === item.id) || jblProNovoColorPackages.some((food) => food.id === item.id))
+);
+assert.equal(jblCommunityFood.length, 33, "JBL toplum akvaryumu PRONOVO grubunda 33 güncel ürün/ambalaj seçeneği bulunmalı");
+assert.equal(jblCommunityFood.filter((item) => item.model.startsWith("PRONOVO BEL") || item.model.startsWith("PRONOVO TAB M")).length, 23, "JBL PRONOVO genel yem ailesinde 23 ürün/ambalaj seçeneği bulunmalı");
+assert.equal(jblCommunityFood.filter((item) => item.model.startsWith("PRONOVO SPIRULINA")).length, 6, "JBL PRONOVO Spirulina ailesinde altı ambalaj bulunmalı");
+assert.equal(jblCommunityFood.filter((item) => item.model.startsWith("PRONOVO COLOR")).length, 4, "JBL PRONOVO renk yemi ailesinde dört ambalaj bulunmalı");
+assert(jblCommunityFood.every((item) => item.sourceUrl.startsWith("https://www.jbl.de/") && ["2026-09-14","2026-09-18"].includes(item.verifiedAt)), "JBL toplum akvaryumu yemleri güncel resmî ürün veya grup sayfalarına bağlanmalı");
+const jblSpeciesDirectFoods = jblCareProducts.filter((item) => /^(PRONOVO NEON GRANO XXS|PRONOVO DANIO GRANO XS|PRONOVO GUPPY FLAKES S|PRONOVO GUPPY GRANO S) /.test(item.model));
+assert.equal(jblSpeciesDirectFoods.length, 8, "JBL Neon, Danio ve Guppy yemlerinde sekiz gerçek ambalaj seçeneği bulunmalı");
+assert(jblSpeciesDirectFoods.every((item) => item.sourceUrl.includes("/detail/") && item.verifiedAt === "2026-09-18"), "JBL Neon, Danio ve Guppy ambalajları doğrudan resmî ürün sayfalarına bağlı olmalı");
+assert.equal(jblSpeciesDirectFoods.filter((item) => item.model.startsWith("PRONOVO NEON GRANO XXS ")).length, 2, "JBL PRONOVO NEON 20 ve 100 ml seçenekleriyle korunmalı");
+assert.equal(jblSpeciesDirectFoods.filter((item) => item.model.startsWith("PRONOVO DANIO GRANO XS ")).length, 2, "JBL PRONOVO DANIO 20 ve 100 ml seçenekleriyle korunmalı");
+assert.equal(jblSpeciesDirectFoods.filter((item) => item.model.startsWith("PRONOVO GUPPY ")).length, 4, "JBL PRONOVO GUPPY pul ve granül yemleri ikişer hacimle korunmalı");
+assert(careProductCatalog.find((item) => item.model === "PRONOVO NEON GRANO XXS 20 ml Freshlock")?.description.includes("16 g") && careProductCatalog.find((item) => item.model === "PRONOVO NEON GRANO XXS 100 ml")?.description.includes("48 g"), "JBL NEON küçük ve kutu ambalaj ağırlıkları korunmalı");
+assert(careProductCatalog.find((item) => item.model === "PRONOVO DANIO GRANO XS 100 ml")?.description.includes("3115118") && careProductCatalog.find((item) => item.model === "PRONOVO GUPPY GRANO S 250 ml")?.description.includes("136 g"), "JBL DANIO ürün kodu ve GUPPY büyük granül ağırlığı korunmalı");
+const jblCichlidFoodPackages = jblCareProducts.filter((item) => /^(PRONOVO TANGANYIKA FLAKES M|PRONOVO TANGANYIKA GRANO M|PRONOVO MALAWI FLAKES M|PRONOVO MALAWI GRANO M|PRONOVO BITS GRANO S|PRONOVO BITS GRANO M|PRONOVO CICHLID GRANO S|PRONOVO CICHLID GRANO M|PRONOVO CICHLID GRANO XL) /.test(item.model));
+assert.equal(jblCichlidFoodPackages.length, 20, "JBL Tanganyika, Malawi, BITS ve CICHLID ailelerinde 20 gerçek ambalaj seçeneği bulunmalı");
+assert(jblCichlidFoodPackages.every((item) => item.sourceUrl.includes("/detail/") && item.verifiedAt === "2026-09-18"), "JBL güncel ciklet yemi ambalajları doğrudan resmî ürün sayfalarına bağlı olmalı");
+assert.equal(jblCichlidFoodPackages.filter((item) => item.model.startsWith("PRONOVO TANGANYIKA ")).length, 5, "JBL Tanganyika pul ve granül yemlerinde beş ambalaj bulunmalı");
+assert.equal(jblCichlidFoodPackages.filter((item) => item.model.startsWith("PRONOVO MALAWI ")).length, 5, "JBL Malawi pul ve granül yemlerinde beş ambalaj bulunmalı");
+assert.equal(jblCichlidFoodPackages.filter((item) => item.model.startsWith("PRONOVO BITS ")).length, 5, "JBL BITS S ve M granül yemlerinde beş ambalaj bulunmalı");
+assert.equal(jblCichlidFoodPackages.filter((item) => item.model.startsWith("PRONOVO CICHLID GRANO ")).length, 5, "JBL CICHLID S, M ve XL granül yemlerinde beş ambalaj bulunmalı");
+assert(careProductCatalog.find((item) => item.model === "PRONOVO TANGANYIKA GRANO M 1000 ml")?.description.includes("570 g") && careProductCatalog.find((item) => item.model === "PRONOVO MALAWI FLAKES M 1000 ml")?.description.includes("190 g"), "JBL Tanganyika granül ve Malawi pul büyük kutu ağırlıkları korunmalı");
+assert(careProductCatalog.find((item) => item.model === "PRONOVO BITS GRANO M 5,5 L")?.description.includes("2640 g") && careProductCatalog.find((item) => item.model === "PRONOVO MALAWI GRANO M 5,5 L")?.description.includes("%18 Spirulina"), "JBL BITS büyük ambalaj ağırlığı ve Malawi Spirulina oranı korunmalı");
+assert(careProductCatalog.find((item) => item.model === "PRONOVO CICHLID GRANO M 1000 ml")?.description.includes("520 g") && careProductCatalog.find((item) => item.model === "PRONOVO CICHLID GRANO XL 1000 ml")?.description.includes("15–25 cm"), "JBL CICHLID M büyük kutu ağırlığı ve XL hedef boyu korunmalı");
+const jblBettaGouramiPackages = jblCareProducts.filter((item) => /^(PRONOVO BETTA INSECT STICK S|PRONOVO BETTA FLAKES S|PRONOVO BETTA GRANO S|PRONOVO GOURAMI GRANO S) /.test(item.model));
+assert.equal(jblBettaGouramiPackages.length, 7, "JBL Betta ve Gourami ailelerinde yedi gerçek ambalaj seçeneği bulunmalı");
+assert(jblBettaGouramiPackages.every((item) => item.sourceUrl.includes("/detail/") && item.verifiedAt === "2026-09-18"), "JBL Betta ve Gourami ambalajları doğrudan resmî ürün sayfalarına bağlı olmalı");
+assert.equal(jblBettaGouramiPackages.filter((item) => item.model.startsWith("PRONOVO BETTA INSECT STICK S ")).length, 2, "JBL Betta böcek çubuğunun 20 ve 100 ml seçenekleri korunmalı");
+assert.equal(jblBettaGouramiPackages.filter((item) => item.model.startsWith("PRONOVO BETTA FLAKES S ")).length, 2, "JBL Betta pul yeminin arşiv 20 ml ve güncel 100 ml seçenekleri korunmalı");
+assert.equal(jblBettaGouramiPackages.filter((item) => item.model.startsWith("PRONOVO BETTA GRANO S ")).length, 2, "JBL Betta granül yeminin 20 ve 100 ml seçenekleri korunmalı");
+assert.equal(jblBettaGouramiPackages.filter((item) => item.model.startsWith("PRONOVO GOURAMI GRANO S ")).length, 1, "JBL Gourami granül yemi 250 ml ambalajıyla korunmalı");
+assert(careProductCatalog.find((item) => item.model === "PRONOVO BETTA FLAKES S 20 ml (Arşiv)")?.description.includes("artık satışta değildir"), "JBL Betta 20 ml pul yemin arşiv durumu açıkça belirtilmeli");
+assert(careProductCatalog.find((item) => item.model === "PRONOVO BETTA INSECT STICK S 100 ml")?.description.includes("Hermetia böcek proteini %15"), "JBL Betta böcek çubuğunun yayımlanan Hermetia oranı korunmalı");
+assert(careProductCatalog.find((item) => item.model === "PRONOVO GOURAMI GRANO S 250 ml")?.description.includes("karides unu %12") && careProductCatalog.find((item) => item.model === "PRONOVO GOURAMI GRANO S 250 ml")?.description.includes("oranı yayımlanmamıştır"), "JBL Gourami yeminde karides oranı korunmalı ve Hermetia oranı uydurulmamalı");
+const jblColdwaterFoodPackages = jblCareProducts.filter((item) => /^(PRONOVO RED INSECT STICK S|PRONOVO RED FLAKES M|PRONOVO RED GRANO M|PRONOVO RED HOLIDAY|PRONOVO FANTAIL GRANO S|PRONOVO FANTAIL GRANO M) /.test(item.model));
+assert.equal(jblColdwaterFoodPackages.length, 13, "JBL soğuk su ve Japon balığı grubunda 13 gerçek ambalaj seçeneği bulunmalı");
+assert(jblColdwaterFoodPackages.every((item) => item.sourceUrl.includes("/detail/") && item.verifiedAt === "2026-09-18"), "JBL soğuk su yemi ambalajları doğrudan resmî ürün sayfalarına bağlı olmalı");
+assert.equal(jblColdwaterFoodPackages.filter((item) => item.model.startsWith("PRONOVO RED INSECT STICK S ")).length, 2, "JBL RED INSECT 20 ve 100 ml seçenekleriyle korunmalı");
+assert.equal(jblColdwaterFoodPackages.filter((item) => item.model.startsWith("PRONOVO RED FLAKES M ")).length, 4, "JBL RED FLAKES dört gerçek ambalajla korunmalı");
+assert.equal(jblColdwaterFoodPackages.filter((item) => item.model.startsWith("PRONOVO RED GRANO M ")).length, 2, "JBL RED GRANO 100 ve 250 ml seçenekleriyle korunmalı");
+assert.equal(jblColdwaterFoodPackages.filter((item) => item.model.startsWith("PRONOVO FANTAIL GRANO ")).length, 4, "JBL FANTAIL S ve M ailelerinde dört gerçek ambalaj bulunmalı");
+assert(careProductCatalog.find((item) => item.model === "PRONOVO RED INSECT STICK S 20 ml (Arşiv)")?.description.includes("artık satışta değildir"), "JBL RED INSECT 20 ml arşiv durumu açıkça belirtilmeli");
+assert(careProductCatalog.find((item) => item.model === "PRONOVO RED FLAKES M 750 ml Refill")?.description.includes("135 g") && careProductCatalog.find((item) => item.model === "PRONOVO RED FLAKES M 1000 ml")?.description.includes("180 g"), "JBL RED FLAKES refill ve büyük kutu ağırlıkları korunmalı");
+assert(careProductCatalog.find((item) => item.model === "PRONOVO RED HOLIDAY 3 blok")?.description.includes("1–3 balığı 4–6 gün") && careProductCatalog.find((item) => item.model === "PRONOVO RED HOLIDAY 3 blok")?.description.includes("genel sertliği"), "JBL RED HOLIDAY kullanım süresi ve sertlik etkisini açıkça taşımalı");
+assert(careProductCatalog.find((item) => item.model === "PRONOVO FANTAIL GRANO M 1000 ml")?.description.includes("580 g") && careProductCatalog.find((item) => item.model === "PRONOVO FANTAIL GRANO S 100 ml")?.description.includes("3–10 cm"), "JBL FANTAIL M büyük paket ağırlığı ve S hedef boyu korunmalı");
+const jblBottomFoodPackages = jblCareProducts.filter((item) => /^(PRONOVO BOTIA TAB M|PRONOVO PLECO WAFER M|PRONOVO PLECO WAFER XL|PRONOVO CORYDORAS TAB M) /.test(item.model));
+assert.equal(jblBottomFoodPackages.length, 13, "JBL dip balığı grubunda 13 gerçek ambalaj seçeneği bulunmalı");
+assert(jblBottomFoodPackages.every((item) => item.sourceUrl.includes("/detail/") && item.verifiedAt === "2026-09-18"), "JBL dip balığı yemleri doğrudan resmî ürün sayfalarına bağlı olmalı");
+assert.equal(jblBottomFoodPackages.filter((item) => item.model.startsWith("PRONOVO BOTIA TAB M ")).length, 4, "JBL BOTIA dört gerçek ambalajla korunmalı");
+assert.equal(jblBottomFoodPackages.filter((item) => item.model.startsWith("PRONOVO PLECO WAFER M ")).length, 4, "JBL PLECO M dört gerçek ambalajla korunmalı");
+assert.equal(jblBottomFoodPackages.filter((item) => item.model.startsWith("PRONOVO PLECO WAFER XL ")).length, 3, "JBL PLECO XL üç gerçek ambalajla korunmalı");
+assert.equal(jblBottomFoodPackages.filter((item) => item.model.startsWith("PRONOVO CORYDORAS TAB M ")).length, 2, "JBL CORYDORAS iki gerçek ambalajla korunmalı");
+assert(careProductCatalog.find((item) => item.model === "PRONOVO BOTIA TAB M 5,5 L")?.description.includes("2900 g") && careProductCatalog.find((item) => item.model === "PRONOVO BOTIA TAB M 5,5 L")?.description.includes("Spirulina %14"), "JBL BOTIA büyük ambalaj ağırlığı ve Spirulina oranı korunmalı");
+assert(careProductCatalog.find((item) => item.model === "PRONOVO PLECO WAFER M 5,5 L")?.description.includes("2900 g") && careProductCatalog.find((item) => item.model === "PRONOVO PLECO WAFER M 5,5 L")?.description.includes("odun lifi %10"), "JBL PLECO M büyük ambalaj ağırlığı ve odun lifi oranı korunmalı");
+assert(careProductCatalog.find((item) => item.model === "PRONOVO PLECO WAFER XL 1000 ml")?.description.includes("510 g") && careProductCatalog.find((item) => item.model === "PRONOVO PLECO WAFER XL 5,5 L")?.description.includes("2800 g") && careProductCatalog.find((item) => item.model === "PRONOVO PLECO WAFER XL 250 ml")?.description.includes("15–40 cm"), "JBL PLECO XL ağırlıkları ve hedef boyu korunmalı");
+assert(careProductCatalog.find((item) => item.model === "PRONOVO CORYDORAS TAB M 250 ml")?.description.includes("150 g") && careProductCatalog.find((item) => item.model === "PRONOVO CORYDORAS TAB M 250 ml")?.description.includes("karides unu %10,53") && careProductCatalog.find((item) => item.model === "PRONOVO CORYDORAS TAB M 250 ml")?.description.includes("oranı yayımlanmamıştır"), "JBL CORYDORAS ağırlığı ile yayımlanan karides oranı korunmalı ve Hermetia oranı uydurulmamalı");
+const jblKillifishPackage = jblCareProducts.filter((item) => item.model === "PRONOVO KILLIFISH GRANO S 100 ml");
+assert.equal(jblKillifishPackage.length, 1, "JBL KILLIFISH 100 ml gerçek ambalajıyla korunmalı");
+assert(jblKillifishPackage[0].sourceUrl.includes("/detail/") && jblKillifishPackage[0].verifiedAt === "2026-09-18", "JBL KILLIFISH doğrudan resmî ürün sayfasına bağlı olmalı");
+assert(jblKillifishPackage[0].description.includes("3–10 cm") && jblKillifishPackage[0].description.includes("48 g") && jblKillifishPackage[0].description.includes("Hermetia böcek proteini %5") && jblKillifishPackage[0].description.includes("3134218"), "JBL KILLIFISH hedef boyu, ağırlığı, Hermetia oranı ve ürün kodu korunmalı");
+const jblDragonPackages = jblCareProducts.filter((item) => item.model.startsWith("PRONOVO DRAGON STICK L "));
+assert.equal(jblDragonPackages.length, 2, "JBL DRAGON 1000 ml ve 5,5 L gerçek ambalajlarıyla korunmalı");
+assert(jblDragonPackages.every((item) => item.sourceUrl.includes("/detail/") && item.verifiedAt === "2026-09-18"), "JBL DRAGON doğrudan resmî ürün sayfasına bağlı olmalı");
+assert(careProductCatalog.find((item) => item.model === "PRONOVO DRAGON STICK L 1000 ml")?.description.includes("3134773") && careProductCatalog.find((item) => item.model === "PRONOVO DRAGON STICK L 5,5 L")?.description.includes("2000 g") && careProductCatalog.find((item) => item.model === "PRONOVO DRAGON STICK L 5,5 L")?.description.includes("40–100 cm") && careProductCatalog.find((item) => item.model === "PRONOVO DRAGON STICK L 5,5 L")?.description.includes("somon unu %34"), "JBL DRAGON ürün kodu, büyük paket ağırlığı, hedef boyu ve somon oranı korunmalı");
+const jblLotlPackages = jblCareProducts.filter((item) => /^PRONOVO LOTL GRANO (S|M|XL) /.test(item.model));
+assert.equal(jblLotlPackages.length, 3, "JBL LOTL S, M ve XL gerçek ambalajlarıyla korunmalı");
+assert(jblLotlPackages.every((item) => item.sourceUrl.includes("/detail/") && item.verifiedAt === "2026-09-18"), "JBL LOTL yemleri doğrudan resmî ürün sayfalarına bağlı olmalı");
+assert(careProductCatalog.find((item) => item.model === "PRONOVO LOTL GRANO S 100 ml")?.description.includes("3–10 cm") && careProductCatalog.find((item) => item.model === "PRONOVO LOTL GRANO S 100 ml")?.description.includes("3135200"), "JBL LOTL S hedef boyu ve ürün kodu korunmalı");
+assert(careProductCatalog.find((item) => item.model === "PRONOVO LOTL GRANO M 250 ml")?.description.includes("8–20 cm") && careProductCatalog.find((item) => item.model === "PRONOVO LOTL GRANO M 250 ml")?.description.includes("150 g"), "JBL LOTL M hedef boyu ve yayımlanan ağırlığı korunmalı");
+assert(careProductCatalog.find((item) => item.model === "PRONOVO LOTL GRANO XL 250 ml")?.description.includes("15–25 cm") && jblLotlPackages.every((item) => item.description.includes("alabalık unu %40") && item.description.includes("Gammarus %10") && item.description.includes("karides unu %10")), "JBL LOTL XL hedef boyu ve üç boyun yayımlanan ana içerik oranları korunmalı");
+const jblInvertebratePackages = jblCareProducts.filter((item) => /^(PRONOVO SHRIMPS GRANO S|PRONOVO CRABS WAFER M) /.test(item.model));
+assert.equal(jblInvertebratePackages.length, 4, "JBL omurgasız grubunda dört gerçek ambalaj seçeneği bulunmalı");
+assert(jblInvertebratePackages.every((item) => item.sourceUrl.includes("/detail/") && item.verifiedAt === "2026-09-18"), "JBL omurgasız yemleri doğrudan resmî ürün sayfalarına bağlı olmalı");
+assert.equal(jblInvertebratePackages.filter((item) => item.model.startsWith("PRONOVO SHRIMPS GRANO S ")).length, 2, "JBL SHRIMPS 100 ve 250 ml seçenekleriyle korunmalı");
+assert.equal(jblInvertebratePackages.filter((item) => item.model.startsWith("PRONOVO CRABS WAFER M ")).length, 2, "JBL CRABS 100 ve 250 ml seçenekleriyle korunmalı");
+assert(careProductCatalog.find((item) => item.model === "PRONOVO SHRIMPS GRANO S 250 ml")?.description.includes("3156300") && jblInvertebratePackages.filter((item) => item.model.startsWith("PRONOVO SHRIMPS ")).every((item) => item.description.includes("ısırgan unu %20")), "JBL SHRIMPS büyük paket kodu ve ısırgan oranı korunmalı");
+assert(careProductCatalog.find((item) => item.model === "PRONOVO CRABS WAFER M 250 ml")?.description.includes("3156700") && jblInvertebratePackages.filter((item) => item.model.startsWith("PRONOVO CRABS ")).every((item) => item.description.includes("odun lifi %4")), "JBL CRABS büyük paket kodu ve odun lifi oranı korunmalı");
+const jblSpeciesFoods = jblCareProducts.filter((item) =>
+  item.category === "food" && (jblSpeciesDirectFoods.some((food) => food.id === item.id) || jblCichlidFoodPackages.some((food) => food.id === item.id) || jblBettaGouramiPackages.some((food) => food.id === item.id) || jblColdwaterFoodPackages.some((food) => food.id === item.id) || jblBottomFoodPackages.some((food) => food.id === item.id) || jblKillifishPackage.some((food) => food.id === item.id) || jblDragonPackages.some((food) => food.id === item.id) || jblLotlPackages.some((food) => food.id === item.id) || jblInvertebratePackages.some((food) => food.id === item.id))
+);
+assert.equal(jblSpeciesFoods.length, 71, "JBL PRONOVO türe özel 11 grupta 71 güncel ürün/ambalaj bulunmalı");
+assert(jblSpeciesFoods.every((item) => ["2026-09-14","2026-09-18"].includes(item.verifiedAt)), "JBL türe özel yemleri güncel doğrulama tarihi taşımalı");
+const jblNaturalFoods = jblCareProducts.filter((item) => /^(PRONOVO INSECT STICK S|PRONOVO ARTEMIO|PRONOVO DAPH|PRONOVO FEX|PRONOVO FIL) /.test(item.model));
+assert.equal(jblNaturalFoods.length, 10, "JBL PRONOVO doğal yem grubunda on gerçek ambalaj seçeneği bulunmalı");
+assert(jblNaturalFoods.every((item) => item.sourceUrl.includes("/detail/") && item.verifiedAt === "2026-09-18"), "JBL doğal yemleri doğrudan resmî ürün sayfalarına ve güncel doğrulama tarihine bağlı olmalı");
+assert.equal(jblNaturalFoods.filter((item) => item.model.startsWith("PRONOVO INSECT STICK S ")).length, 3, "JBL INSECT STICK 20, 100 ve 250 ml seçenekleriyle korunmalı");
+assert.equal(jblNaturalFoods.filter((item) => item.model.startsWith("PRONOVO ARTEMIO ")).length, 2, "JBL ARTEMIO 100 ve 250 ml seçenekleriyle korunmalı");
+assert.equal(jblNaturalFoods.filter((item) => item.model.startsWith("PRONOVO DAPH ")).length, 1, "JBL DAPH 100 ml gerçek ambalajıyla korunmalı");
+assert.equal(jblNaturalFoods.filter((item) => item.model.startsWith("PRONOVO FEX ")).length, 2, "JBL FEX 100 ve 250 ml seçenekleriyle korunmalı");
+assert.equal(jblNaturalFoods.filter((item) => item.model.startsWith("PRONOVO FIL ")).length, 2, "JBL FIL 100 ve 250 ml seçenekleriyle korunmalı");
+assert(careProductCatalog.find((item) => item.model === "PRONOVO INSECT STICK S 20 ml")?.description.includes("3130018") && jblNaturalFoods.filter((item) => item.model.startsWith("PRONOVO INSECT ")).every((item) => item.description.includes("Hermetia böcek proteini %15")), "JBL INSECT küçük paket kodu ve Hermetia oranı korunmalı");
+assert(careProductCatalog.find((item) => item.model === "PRONOVO ARTEMIO 250 ml")?.description.includes("18 g") && careProductCatalog.find((item) => item.model === "PRONOVO DAPH 100 ml")?.description.includes("13 g"), "JBL ARTEMIO ve DAPH yayımlanan ağırlıkları korunmalı");
+assert(careProductCatalog.find((item) => item.model === "PRONOVO FEX 250 ml")?.description.includes("3157700") && careProductCatalog.find((item) => item.model === "PRONOVO FEX 250 ml")?.description.includes("22 g"), "JBL FEX büyük paket kodu ve ağırlığı korunmalı");
+assert(careProductCatalog.find((item) => item.model === "PRONOVO FIL 250 ml")?.description.includes("3158100") && careProductCatalog.find((item) => item.model === "PRONOVO FIL 250 ml")?.description.includes("25 g"), "JBL FIL büyük paket kodu ve ağırlığı korunmalı");
+const jblSeptemberFoods = jblCareProducts.filter((item) => ["jbl-pronovo-snail","jbl-pronovo-medaka-flakes-xs"].includes(item.id));
+assert.equal(jblSeptemberFoods.length, 2, "JBL'nin Eylül 2026'da satışa çıkan iki yeni PRONOVO yemi bulunmalı");
+assert(jblSeptemberFoods.every((item) => item.sourceUrl.includes("/productsv2/detail/") && item.verifiedAt === "2026-09-15"), "JBL yeni PRONOVO yemleri doğrudan güncel ürün sayfalarına bağlanmalı");
+assert(careProductCatalog.find((item) => item.id === "jbl-pronovo-snail")?.description.includes("diş aşınmasına"), "JBL PRONOVO SNAIL kabuk ve diş aşınması bilgisini korumalı");
+assert(careProductCatalog.find((item) => item.id === "jbl-pronovo-medaka-flakes-xs")?.description.includes("Oryzias latipes"), "JBL PRONOVO MEDAKA hedef tür kimliğini korumalı");
+const jblArtemioPreparations = jblCareProducts.filter((item) => ["jbl-artemiomix-230-g","jbl-artemiofluid-50-ml","jbl-artemiosal-230-g","jbl-artemiopur-40-ml"].includes(item.id));
+assert.equal(jblArtemioPreparations.length, 4, "JBL Artemio hazırlık grubunda dört ürün bulunmalı");
+assert.deepEqual(jblArtemioPreparations.map((item) => item.model), ["ArtemioMix 230 g","ArtemioFluid 50 ml","ArtemioSal 230 g","ArtemioPur 40 ml"], "JBL Artemio hazırlıkları gerçek ambalajlarıyla model düzeyinde ayrılmalı");
+assert(jblArtemioPreparations.every((item) => !item.sourceUrl.includes("/group/") && item.verifiedAt === "2026-09-18"), "JBL Artemio hazırlıkları doğrudan resmî ürün sayfalarına bağlı olmalı");
+assert(careProductCatalog.find((item) => item.id === "jbl-artemiomix-230-g")?.description.includes("3090200") && careProductCatalog.find((item) => item.id === "jbl-artemiomix-230-g")?.description.includes("24–36 saatte"), "JBL ArtemioMix ürün kodu ve çıkım süresi korunmalı");
+assert(careProductCatalog.find((item) => item.id === "jbl-artemiofluid-50-ml")?.description.includes("Üçüncü günden") && careProductCatalog.find((item) => item.id === "jbl-artemiofluid-50-ml")?.description.includes("berraklaşınca"), "JBL ArtemioFluid başlangıç günü ve güvenli tekrar dozlama kuralı korunmalı");
+assert(careProductCatalog.find((item) => item.id === "jbl-artemiosal-230-g")?.description.includes("7 L") && careProductCatalog.find((item) => item.id === "jbl-artemiosal-230-g")?.description.includes("sofra tuzu kullanılmamalıdır"), "JBL ArtemioSal kapasitesi ve sofra tuzu uyarısı korunmalı");
+assert(careProductCatalog.find((item) => item.id === "jbl-artemiopur-40-ml")?.description.includes("20 g") && careProductCatalog.find((item) => item.id === "jbl-artemiopur-40-ml")?.description.includes("açıldıktan sonra 4 ay"), "JBL ArtemioPur ağırlığı ve açılış sonrası saklama süresi korunmalı");
+const jblPlanktonPur = jblCareProducts.filter((item) => item.model.startsWith("PlanktonPur "));
+assert.equal(jblPlanktonPur.length, 4, "JBL PlanktonPur SMALL ve MEDIUM ailelerinin 2 ve 5 g stick seçenekleri bulunmalı");
+assert(jblPlanktonPur.every((item) => item.sourceUrl.includes("/detail/") && item.verifiedAt === "2026-09-18" && item.description.includes("Arşiv ürün")), "JBL PlanktonPur doğrudan resmî ürün sayfalarına bağlanmalı ve arşiv durumu saklanmamalı");
+assert.deepEqual(jblPlanktonPur.map((item) => item.model), ["PlanktonPur SMALL 2","PlanktonPur SMALL 5","PlanktonPur MEDIUM 2","PlanktonPur MEDIUM 5"], "JBL PlanktonPur gerçek stick seçenekleriyle ayrılmalı");
+assert(careProductCatalog.find((item) => item.model === "PlanktonPur SMALL 2")?.description.includes("3003100") && careProductCatalog.find((item) => item.model === "PlanktonPur SMALL 5")?.description.includes("8 × 5 g"), "JBL PlanktonPur SMALL ürün kodu ve büyük stick paketi korunmalı");
+assert(careProductCatalog.find((item) => item.model === "PlanktonPur MEDIUM 2")?.description.includes("200 L") && careProductCatalog.find((item) => item.model === "PlanktonPur MEDIUM 5")?.description.includes("%95 Calanus finmarchicus"), "JBL PlanktonPur MEDIUM 2 g kapasitesi ve plankton bileşimi korunmalı");
+assert(jblPlanktonPur.filter((item) => item.model.startsWith("PlanktonPur SMALL")).every((item) => item.description.includes("en fazla 24 saat")), "JBL PlanktonPur açılmış stick saklama sınırı korunmalı");
+const jblLegacyPremiumTabis = jblCareProducts.filter((item) => item.model.startsWith("Tabis ") && item.sourceUrl.includes("/detail/2314/"));
+assert.equal(jblLegacyPremiumTabis.length, 2, "JBL eski Premium Tabis ailesi iki gerçek ambalaj seçeneği içermeli");
+assert.deepEqual(jblLegacyPremiumTabis.map((item) => item.model), ["Tabis 100 ml","Tabis 250 ml"], "JBL Tabis gerçek 100 ve 250 ml ambalajlarıyla ayrılmalı");
+assert(jblLegacyPremiumTabis.every((item) => item.verifiedAt === "2026-09-18" && item.description.includes("Arşiv Premium yem") && item.description.includes("%10 derin deniz krili") && item.description.includes("%6 Spirulina") && item.description.includes("bağlayıcı içermez")), "JBL Tabis arşiv durumu, bileşimi ve bağlayıcı güvenlik bilgisi korunmalı");
+assert(careProductCatalog.find((item) => item.model === "Tabis 100 ml")?.description.includes("58 g") && careProductCatalog.find((item) => item.model === "Tabis 100 ml")?.description.includes("4060000"), "JBL Tabis 100 ml ağırlığı ve ürün kodu korunmalı");
+assert(careProductCatalog.find((item) => item.model === "Tabis 250 ml")?.description.includes("160 g") && careProductCatalog.find((item) => item.model === "Tabis 250 ml")?.description.includes("40620"), "JBL Tabis 250 ml ağırlığı ve eski katalog kodu korunmalı");
+const jblLegacyPremiumGeneral = jblCareProducts.filter((item) => ["Gala ","Grana CLICK ","Grana 250 ml REFILL","Krill "].some((prefix) => item.model.startsWith(prefix)));
+assert.equal(jblLegacyPremiumGeneral.length, 9, "JBL eski Premium genel yem ailesi dokuz gerçek ambalaj seçeneği içermeli");
+assert(jblLegacyPremiumGeneral.every((item) => item.sourceUrl.includes("/detail/") && item.verifiedAt === "2026-09-18" && item.description.includes("Arşiv ürün")), "JBL Premium genel yemleri doğrudan resmî ürün sayfasına bağlı arşiv kayıtları olmalı");
+assert.deepEqual(jblLegacyPremiumGeneral.map((item) => item.model), ["Gala 100 ml","Gala 250 ml","Gala 1000 ml","Gala 5500 ml","Grana CLICK 100 ml","Grana CLICK 250 ml","Grana 250 ml REFILL","Krill 100 ml","Krill 250 ml"], "JBL Premium genel yemlerinin gerçek ambalajları korunmalı");
+assert(careProductCatalog.find((item) => item.model === "Gala 5500 ml")?.description.includes("950 g") && careProductCatalog.find((item) => item.model === "Gala 100 ml")?.description.includes("%2 sarımsak"), "JBL Gala büyük paket ağırlığı ve sarımsak oranı korunmalı");
+assert(careProductCatalog.find((item) => item.model === "Grana CLICK 100 ml")?.description.includes("4064600") && careProductCatalog.find((item) => item.model === "Grana CLICK 250 ml")?.description.includes("bir basış yaklaşık 5 balık"), "JBL Grana CLICK kodu ve dozaj kapağı bilgisi korunmalı");
+assert(careProductCatalog.find((item) => item.model === "Grana 250 ml REFILL")?.description.includes("4051200") && careProductCatalog.find((item) => item.model === "Grana 250 ml REFILL")?.description.includes("108 g"), "JBL Grana refill ürün kodu ve ağırlığı korunmalı");
+assert(careProductCatalog.find((item) => item.model === "Krill 100 ml")?.description.includes("4058100") && careProductCatalog.find((item) => item.model === "Krill 250 ml")?.description.includes("4058200"), "JBL Krill ambalaj kodları korunmalı");
+const jblLegacyPremiumCichlid = jblCareProducts.filter((item) => ["GranaDiscus ","GranaCichlid "].some((prefix) => item.model.startsWith(prefix)));
+assert.equal(jblLegacyPremiumCichlid.length, 6, "JBL eski Premium discus ve ciklet ailesi altı gerçek ambalaj seçeneği içermeli");
+assert(jblLegacyPremiumCichlid.every((item) => item.sourceUrl.includes("/detail/") && item.verifiedAt === "2026-09-18" && item.description.includes("Arşiv ürün")), "JBL Premium discus ve ciklet yemleri doğrudan resmî ürün sayfasına bağlı arşiv kayıtları olmalı");
+assert.deepEqual(jblLegacyPremiumCichlid.map((item) => item.model), ["GranaDiscus CLICK 250 ml","GranaDiscus 250 ml REFILL","GranaDiscus 1000 ml","GranaCichlid CLICK 100 ml","GranaCichlid CLICK 250 ml","GranaCichlid 250 ml REFILL"], "JBL Premium discus ve ciklet yemlerinin gerçek ambalajları korunmalı");
+assert(careProductCatalog.find((item) => item.model === "GranaDiscus 1000 ml")?.description.includes("440 g") && careProductCatalog.find((item) => item.model === "GranaDiscus CLICK 250 ml")?.description.includes("4065100"), "JBL GranaDiscus büyük paket ağırlığı ve Click ürün kodu korunmalı");
+assert(careProductCatalog.find((item) => item.model === "GranaCichlid CLICK 100 ml")?.description.includes("44 g") && careProductCatalog.find((item) => item.model === "GranaCichlid 250 ml REFILL")?.description.includes("105 g"), "JBL GranaCichlid küçük Click ve refill ağırlıkları korunmalı");
+const jblLegacyPremiumSpirulina = jblCareProducts.filter((item) => item.model.startsWith("Spirulina ") && item.sourceUrl.includes("/detail/3331/"));
+assert.equal(jblLegacyPremiumSpirulina.length, 4, "JBL eski Premium Spirulina ailesi dört gerçek ambalaj seçeneği içermeli");
+assert.deepEqual(jblLegacyPremiumSpirulina.map((item) => item.model), ["Spirulina 100 ml","Spirulina 250 ml","Spirulina 1000 ml","Spirulina 5500 ml"], "JBL Premium Spirulina gerçek hacimleri korunmalı");
+assert(jblLegacyPremiumSpirulina.every((item) => item.verifiedAt === "2026-09-18" && item.description.includes("%40 Spirulina") && item.description.includes("%6 bütün karides") && item.description.includes("%1 sarımsak")), "JBL Premium Spirulina bileşim oranları ve doğrulama tarihi korunmalı");
+assert(careProductCatalog.find((item) => item.model === "Spirulina 5500 ml")?.description.includes("950 g") && careProductCatalog.find((item) => item.model === "Spirulina 250 ml")?.description.includes("arşiv etiketi taşımamaktadır"), "JBL Spirulina büyük paket ağırlığı ve 250 ml arşiv istisnası korunmalı");
+const jblLegacyPremiumGoldPearls = jblCareProducts.filter((item) => item.model.startsWith("GoldPearls ") && item.sourceUrl.includes("/detail/"));
+assert.equal(jblLegacyPremiumGoldPearls.length, 7, "JBL eski Premium GoldPearls ailesi yedi doğrudan doğrulanmış ambalaj seçeneği içermeli");
+assert(jblLegacyPremiumGoldPearls.every((item) => item.verifiedAt === "2026-09-18" && item.description.includes("batan")), "JBL GoldPearls kayıtları güncel doğrulama tarihini ve batan yem davranışını taşımalı");
+assert.deepEqual(jblLegacyPremiumGoldPearls.map((item) => item.model), ["GoldPearls CLICK 100 ml","GoldPearls CLICK 250 ml","GoldPearls 100 ml","GoldPearls 250 ml","GoldPearls 1000 ml","GoldPearls mini CLICK 100 ml","GoldPearls mini 100 ml REFILL"], "JBL GoldPearls gerçek ambalajları korunmalı");
+assert(careProductCatalog.find((item) => item.model === "GoldPearls 1000 ml")?.description.includes("580 g") && careProductCatalog.find((item) => item.model === "GoldPearls mini CLICK 100 ml")?.description.includes("1–2 mm"), "JBL GoldPearls büyük paket ağırlığı ve mini granül boyu korunmalı");
+const jblLegacyNovoFlakes = jblCareProducts.filter((item) => ["/detail/2103/","/detail/2217/","/detail/3518/","/detail/2218/","/detail/2219/"].some((path) => item.sourceUrl.includes(path)));
+assert.equal(jblLegacyNovoFlakes.length, 11, "JBL eski Novo pul yem ailesi on bir gerçek ambalaj seçeneği içermeli");
+assert(jblLegacyNovoFlakes.every((item) => item.verifiedAt === "2026-09-18" && item.description.includes("Arşiv Novo")), "JBL eski Novo pul yemleri doğrudan ürün sayfasına bağlı arşiv kayıtları olmalı");
+assert.deepEqual(jblLegacyNovoFlakes.map((item) => item.model), ["NovoBel 100 ml","NovoBel 250 ml","NovoBel 1000 ml","NovoBel 5500 ml","NovoBel 10,5 L","NovoBel Refill 750 ml","NanoBel 60 ml","NovoGrand 1000 ml","NovoGrand 12,5 L","NovoColor 100 ml","NovoColor 250 ml"], "JBL Novo pul yemlerinin gerçek ambalajları korunmalı");
+assert(careProductCatalog.find((item) => item.model === "NovoBel 10,5 L")?.description.includes("1995 g") && careProductCatalog.find((item) => item.model === "NovoBel Refill 750 ml")?.description.includes("3014100"), "JBL NovoBel büyük paket ağırlığı ve refill ürün kodu korunmalı");
+assert(careProductCatalog.find((item) => item.model === "NanoBel 60 ml")?.description.includes("15 g ve 16 g") && careProductCatalog.find((item) => item.model === "NovoGrand 12,5 L")?.description.includes("2200 g") && careProductCatalog.find((item) => item.model === "NovoGrand 12,5 L")?.description.includes("2100 g"), "JBL NanoBel ve NovoGrand resmî ağırlık çelişkileri kullanıcıdan saklanmamalı");
+assert(careProductCatalog.find((item) => item.model === "NovoColor 250 ml")?.description.includes("3015700") && careProductCatalog.find((item) => item.model === "NovoColor 250 ml")?.description.includes("ham protein %43"), "JBL NovoColor ürün kodu ve besin değeri korunmalı");
+const jblLegacyNovoGranules = jblCareProducts.filter((item) => ["/detail/9122/","/detail/9124/","/detail/2220/","/detail/2221/","/detail/3520/","/detail/2222/","/detail/2223/","/detail/2224/","/detail/2225/","/detail/2226/","/detail/2227/","/detail/2228/","/detail/4340/"].some((path) => item.sourceUrl.includes(path)));
+assert.equal(jblLegacyNovoGranules.length, 17, "JBL eski Novo granül ailesi on yedi gerçek ambalaj seçeneği içermeli");
+assert(jblLegacyNovoGranules.every((item) => item.verifiedAt === "2026-09-18" && item.description.includes("Arşiv Novo")), "JBL eski Novo granülleri doğrudan ürün sayfasına bağlı arşiv kayıtları olmalı");
+assert.deepEqual(jblLegacyNovoGranules.map((item) => item.model), ["NovoGranoMix XXS 100 ml","NovoGranoMix XS 100 ml","NovoGranoMix mini CLICK 100 ml","NovoGranoMix mini 100 ml REFILL","NovoGranoMix mini 5500 ml","NanoMix 60 ml","NovoGranoColor mini CLICK 100 ml","NovoGranoColor mini 100 ml REFILL","NovoGranoMix CLICK 250 ml","NovoGranoMix 250 ml REFILL","NovoGranoColor CLICK 250 ml","NovoGranoColor 250 ml REFILL","NovoBits CLICK 250 ml","NovoBits 250 ml REFILL","NovoBits 1000 ml","NovoBits 12,5 L","NovoBits 10,5 L"], "JBL Novo granüllerinin gerçek ambalajları korunmalı");
+assert(careProductCatalog.find((item) => item.model === "NovoGranoMix XXS 100 ml")?.description.includes("3136000") && careProductCatalog.find((item) => item.model === "NovoGranoMix XS 100 ml")?.description.includes("3136300"), "JBL NovoGranoMix XXS ve XS ürün kodları korunmalı");
+assert(careProductCatalog.find((item) => item.model === "NovoGranoMix mini 5500 ml")?.description.includes("2400 g") && careProductCatalog.find((item) => item.model === "NanoMix 60 ml")?.description.includes("23174"), "JBL NovoGranoMix mini büyük paket ağırlığı ve NanoMix ürün kodu korunmalı");
+assert(careProductCatalog.find((item) => item.model === "NovoGranoColor CLICK 250 ml")?.description.includes("107 g") && careProductCatalog.find((item) => item.model === "NovoGranoColor CLICK 250 ml")?.description.includes("118 g"), "JBL NovoGranoColor CLICK resmî ağırlık çelişkisi kullanıcıdan saklanmamalı");
+assert(careProductCatalog.find((item) => item.model === "NovoGranoColor 250 ml REFILL")?.description.includes("120 g") && careProductCatalog.find((item) => item.model === "NovoGranoColor 250 ml REFILL")?.description.includes("118 g"), "JBL NovoGranoColor refill resmî ağırlık çelişkisi kullanıcıdan saklanmamalı");
+assert(careProductCatalog.find((item) => item.model === "NovoBits 12,5 L")?.description.includes("5500 g") && careProductCatalog.find((item) => item.model === "NovoBits 10,5 L")?.description.includes("4620 g"), "JBL NovoBits eski ve yeni büyük ambalajları birbirine karıştırılmamalı");
+const jblLegacyNovoFreezeDried = jblCareProducts.filter((item) => ["/detail/2229/","/detail/2230/","/detail/2231/","/detail/5983/"].some((path) => item.sourceUrl.includes(path)));
+assert.equal(jblLegacyNovoFreezeDried.length, 7, "JBL eski Novo dondurularak kurutulmuş yem ailesi yedi gerçek ambalaj seçeneği içermeli");
+assert(jblLegacyNovoFreezeDried.every((item) => item.verifiedAt === "2026-09-19" && item.description.includes("Arşiv Novo doğal yemi")), "JBL eski Novo doğal yemleri doğrudan ürün sayfasına bağlı arşiv kayıtları olmalı");
+assert.deepEqual(jblLegacyNovoFreezeDried.map((item) => item.model), ["NovoFil 100 ml","NovoFil 250 ml","NovoFex 100 ml","NovoFex 250 ml","NovoDaph 100 ml","NovoArtemio 100 ml","NovoArtemio 250 ml"], "JBL eski Novo doğal yemlerinin gerçek ambalajları korunmalı");
+assert(careProductCatalog.find((item) => item.model === "NovoFil 250 ml")?.description.includes("3027000") && careProductCatalog.find((item) => item.model === "NovoFex 250 ml")?.description.includes("3063000"), "JBL NovoFil ve NovoFex büyük paket ürün kodları korunmalı");
+assert(careProductCatalog.find((item) => item.model === "NovoDaph 100 ml")?.description.includes("9 g") && careProductCatalog.find((item) => item.model === "NovoArtemio 250 ml")?.description.includes("3026400"), "JBL NovoDaph ağırlığı ve NovoArtemio büyük paket kodu korunmalı");
+const jblLegacyNovoTablets = jblCareProducts.filter((item) => ["/detail/2301/","/detail/2303/","/detail/3511/","/detail/2302/","/detail/3294/"].some((path) => item.sourceUrl.includes(path)));
+assert.equal(jblLegacyNovoTablets.length, 16, "JBL eski Novo tablet ailesi on altı gerçek ambalaj seçeneği içermeli");
+assert(jblLegacyNovoTablets.every((item) => item.verifiedAt === "2026-09-19" && item.description.includes("Arşiv Novo")), "JBL eski Novo tabletleri doğrudan ürün sayfasına bağlı arşiv kayıtları olmalı");
+assert.deepEqual(jblLegacyNovoTablets.map((item) => item.model), ["NovoTab 100 ml","NovoTab 250 ml","NovoTab 1000 ml","NovoTab 10,5 L","NovoPleco 100 ml","NovoPleco 250 ml","NovoPleco 1000 ml","NovoPleco 5500 ml","NanoTabs 60 ml","NovoFect 100 ml","NovoFect 250 ml","NovoFect 1000 ml","NovoFect 10,5 L","NovoPleco XL 250 ml","NovoPleco XL 1000 ml","NovoPleco XL 5500 ml"], "JBL eski Novo tabletlerinin gerçek ambalajları korunmalı");
+assert(careProductCatalog.find((item) => item.model === "NovoTab 10,5 L")?.description.includes("5880 g") && careProductCatalog.find((item) => item.model === "NovoPleco 5500 ml")?.description.includes("3030900"), "JBL NovoTab büyük paket ağırlığı ve NovoPleco büyük paket kodu korunmalı");
+assert(careProductCatalog.find((item) => item.model === "NanoTabs 60 ml")?.description.includes("2317700") && careProductCatalog.find((item) => item.model === "NanoTabs 60 ml")?.description.includes("20–30 karidese bir tablet"), "JBL NanoTabs ürün kodu ve resmî doz bilgisi korunmalı");
+assert(careProductCatalog.find((item) => item.model === "NovoPleco XL 250 ml")?.description.includes("3034100") && careProductCatalog.find((item) => item.model === "NovoPleco XL 5500 ml")?.description.includes("2750 g"), "JBL NovoPleco XL kodu ve büyük paket ağırlığı korunmalı");
+const jblLegacyNovoHerbivore = jblCareProducts.filter((item) => ["/qr/30096","/detail/3613/","/detail/2232/","/detail/2917/"].some((path) => item.sourceUrl.includes(path)));
+assert.equal(jblLegacyNovoHerbivore.length, 6, "JBL eski Novo otçul yem ailesi altı gerçek ambalaj seçeneği içermeli");
+assert(jblLegacyNovoHerbivore.every((item) => item.verifiedAt === "2026-09-19" && item.description.includes("Arşiv Novo")), "JBL eski Novo otçul yemleri resmî ürün sayfasına bağlı arşiv kayıtları olmalı");
+assert.deepEqual(jblLegacyNovoHerbivore.map((item) => item.model), ["NovoGranoVert mini CLICK 100 ml","NovoGranoVert mini 100 ml REFILL","NovoVert 100 ml","NovoVert 250 ml","NovoGuppy 100 ml","NovoGuppy 250 ml"], "JBL eski Novo otçul yemlerinin gerçek ambalajları korunmalı");
+assert(careProductCatalog.find((item) => item.model === "NovoGranoVert mini CLICK 100 ml")?.description.includes("30096") && careProductCatalog.find((item) => item.model === "NovoGranoVert mini 100 ml REFILL")?.description.includes("3009500"), "JBL NovoGranoVert CLICK ve refill kodları korunmalı");
+assert(careProductCatalog.find((item) => item.model === "NovoVert 250 ml")?.description.includes("3019580") && careProductCatalog.find((item) => item.model === "NovoGuppy 250 ml")?.description.includes("3017600"), "JBL NovoVert ve NovoGuppy büyük ambalaj kodları korunmalı");
+const jblLegacyBreedingModels = new Set(["NovoBea 100 ml","NovoBea 12,5 L","NovoTom Artemia 100 ml","NovoBaby 3 × 10 ml","NobilFluid Artemia 50 ml"]);
+const jblLegacyBreeding = jblCareProducts.filter((item) => jblLegacyBreedingModels.has(item.model));
+assert.equal(jblLegacyBreeding.length, 5, "JBL eski Novo yavru ve büyütme ailesi beş gerçek ambalaj seçeneği içermeli");
+assert(jblLegacyBreeding.every((item) => item.verifiedAt === "2026-09-19" && item.description.includes("Arşiv Novo")), "JBL eski Novo yavru yemleri doğrudan ürün sayfası veya resmî kataloğa bağlı arşiv kayıtları olmalı");
+assert.deepEqual(jblLegacyBreeding.map((item) => item.model), ["NovoBea 100 ml","NovoBea 12,5 L","NovoTom Artemia 100 ml","NovoBaby 3 × 10 ml","NobilFluid Artemia 50 ml"], "JBL eski Novo yavru yemlerinin gerçek ambalajları korunmalı");
+assert(careProductCatalog.find((item) => item.model === "NovoBea 100 ml")?.description.includes("3016000") && careProductCatalog.find((item) => item.model === "NovoBea 12,5 L")?.description.includes("4000 g"), "JBL NovoBea küçük paket kodu ve büyük paket ağırlığı korunmalı");
+assert(careProductCatalog.find((item) => item.model === "NovoTom Artemia 100 ml")?.description.includes("3025300") && careProductCatalog.find((item) => item.model === "NovoTom Artemia 100 ml")?.description.includes("ham protein %43"), "JBL NovoTom Artemia ürün kodu ve besin değeri korunmalı");
+assert(careProductCatalog.find((item) => item.model === "NovoBaby 3 × 10 ml")?.description.includes("3025400") && careProductCatalog.find((item) => item.model === "NovoBaby 3 × 10 ml")?.description.includes("günde 3–4 kez"), "JBL NovoBaby ürün kodu ve besleme dozu korunmalı");
+assert(careProductCatalog.find((item) => item.model === "NobilFluid Artemia 50 ml")?.description.includes("3088100") && careProductCatalog.find((item) => item.model === "NobilFluid Artemia 50 ml")?.description.includes("10–15 damla") && careProductCatalog.find((item) => item.model === "NobilFluid Artemia 50 ml")?.description.includes("kuru madde %12,5"), "JBL NobilFluid ürün kodu, doz ve analiz bilgisi korunmalı");
+const jblLegacyNovoColdWater = jblCareProducts.filter((item) => ["/detail/2292/","/detail/4406/","/detail/4498/"].some((path) => item.sourceUrl.includes(path)));
+assert.equal(jblLegacyNovoColdWater.length, 7, "JBL eski Novo soğuk su ve Japon balığı ailesi yedi gerçek ambalaj seçeneği içermeli");
+assert(jblLegacyNovoColdWater.every((item) => item.verifiedAt === "2026-09-19" && item.description.includes("Arşiv Novo")), "JBL eski Novo soğuk su yemleri doğrudan ürün sayfasına bağlı arşiv kayıtları olmalı");
+assert.deepEqual(jblLegacyNovoColdWater.map((item) => item.model), ["NovoRed 100 ml","NovoRed 250 ml","NovoRed 1000 ml","NovoRed Refill 750 ml","NovoPearl CLICK 100 ml","NovoPearl 100 ml REFILL","NovoPearl 250 ml"], "JBL eski Novo soğuk su yemlerinin gerçek ambalajları korunmalı");
+assert(careProductCatalog.find((item) => item.model === "NovoRed 1000 ml")?.description.includes("3022000") && careProductCatalog.find((item) => item.model === "NovoRed Refill 750 ml")?.description.includes("3022180"), "JBL NovoRed kutu ve ekonomik dolum kodları korunmalı");
+assert(careProductCatalog.find((item) => item.model === "NovoPearl CLICK 100 ml")?.description.includes("bir basış beş balık") && careProductCatalog.find((item) => item.model === "NovoPearl 250 ml")?.description.includes("3030000"), "JBL NovoPearl Click dozu ve büyük kutu kodu korunmalı");
+const jblLegacyNovoCrustacea = jblCareProducts.filter((item) => ["/detail/2781/","/detail/3514/","/detail/4499/","/detail/2783/","/detail/3516/"].some((path) => item.sourceUrl.includes(path)));
+assert.equal(jblLegacyNovoCrustacea.length, 7, "JBL eski Novo kabuklu ve karides yem ailesi yedi gerçek ambalaj seçeneği içermeli");
+assert(jblLegacyNovoCrustacea.every((item) => item.verifiedAt === "2026-09-19" && item.description.includes("Arşiv Novo")), "JBL eski Novo kabuklu yemleri doğrudan ürün sayfasına bağlı arşiv kayıtları olmalı");
+assert.deepEqual(jblLegacyNovoCrustacea.map((item) => item.model), ["NovoCrabs 100 ml","NovoCrabs 250 ml","NanoCrabs 60 ml","NovoPrawn CLICK 100 ml","NovoPrawn 100 ml REFILL","NovoPrawn 250 ml","NanoPrawn 60 ml"], "JBL eski Novo kabuklu yemlerinin gerçek ambalajları korunmalı");
+assert(careProductCatalog.find((item) => item.model === "NovoCrabs 250 ml")?.description.includes("3027200") && careProductCatalog.find((item) => item.model === "NanoCrabs 60 ml")?.description.includes("2318000"), "JBL NovoCrabs ve NanoCrabs ürün kodları korunmalı");
+assert(careProductCatalog.find((item) => item.model === "NovoPrawn CLICK 100 ml")?.description.includes("hayvan başına boyuna göre 1–2 granül") && careProductCatalog.find((item) => item.model === "NovoPrawn 250 ml")?.description.includes("145 g"), "JBL NovoPrawn dozu ve büyük paket ağırlığı korunmalı");
+const jblLegacyNovoSpecialModels = new Set(["NovoDragon Shrimp 1000 ml","NovoBetta 100 ml","NanoGranoBetta 60 ml","NanoBetta 60 ml","NovoLotl 250 ml","NovoLotl M 250 ml","NovoLotl XL 250 ml"]);
+const jblLegacyNovoSpecial = jblCareProducts.filter((item) => jblLegacyNovoSpecialModels.has(item.model));
+assert.equal(jblLegacyNovoSpecial.length, 7, "JBL eski Novo özel yem ailesi yedi gerçek ambalaj seçeneği içermeli");
+assert(jblLegacyNovoSpecial.every((item) => item.verifiedAt === "2026-09-19" && item.description.includes("Arşiv Novo")), "JBL eski Novo özel yemleri doğrudan ürün sayfası veya resmî kataloğa bağlı arşiv kayıtları olmalı");
+assert.deepEqual(jblLegacyNovoSpecial.map((item) => item.model), ["NovoDragon Shrimp 1000 ml","NovoBetta 100 ml","NanoGranoBetta 60 ml","NanoBetta 60 ml","NovoLotl 250 ml","NovoLotl M 250 ml","NovoLotl XL 250 ml"], "JBL eski Novo özel yemlerinin gerçek ambalajları korunmalı");
+assert(careProductCatalog.find((item) => item.model === "NovoDragon Shrimp 1000 ml")?.description.includes("3028340") && careProductCatalog.find((item) => item.model === "NovoDragon Shrimp 1000 ml")?.description.includes("440 g"), "JBL NovoDragon Shrimp ürün kodu ve eski katalog ağırlığı korunmalı");
+assert(careProductCatalog.find((item) => item.model === "NovoBetta 100 ml")?.description.includes("20 g") && careProductCatalog.find((item) => item.model === "NovoBetta 100 ml")?.description.includes("25 g"), "JBL NovoBetta resmî nesil ağırlığı farkı kullanıcıdan saklanmamalı");
+assert(careProductCatalog.find((item) => item.model === "NanoGranoBetta 60 ml")?.description.includes("2318800") && careProductCatalog.find((item) => item.model === "NanoGranoBetta 60 ml")?.description.includes("ham protein %40"), "JBL NanoGranoBetta ürün kodu ve besin değeri korunmalı");
+assert(careProductCatalog.find((item) => item.model === "NanoBetta 60 ml")?.description.includes("12 g ve 15 g") && careProductCatalog.find((item) => item.model === "NanoBetta 60 ml")?.description.includes("2317300"), "JBL NanoBetta resmî ağırlık çelişkisi ve ürün kodu korunmalı");
+assert(careProductCatalog.find((item) => item.model === "NovoLotl 250 ml")?.description.includes("3035300") && careProductCatalog.find((item) => item.model === "NovoLotl M 250 ml")?.description.includes("3035480"), "JBL NovoLotl eski ve M nesilleri birbirine karıştırılmamalı");
+assert(careProductCatalog.find((item) => item.model === "NovoLotl XL 250 ml")?.description.includes("3035900") && careProductCatalog.find((item) => item.model === "NovoLotl XL 250 ml")?.description.includes("3035800"), "JBL NovoLotl XL ürün kodu nesilleri kullanıcıdan saklanmamalı");
+const jblLegacyHolidayModels = new Set(["Holiday 1 blok / 43 g","Holiday Red 3 blok / 17 g","Weekend 4 blok / 20 g"]);
+const jblLegacyHoliday = jblCareProducts.filter((item) => jblLegacyHolidayModels.has(item.model));
+assert.equal(jblLegacyHoliday.length, 3, "JBL eski Novo tatil ve hafta sonu ailesi üç gerçek paket içermeli");
+assert(jblLegacyHoliday.every((item) => item.sourceUrl.includes("/download/11627/") && item.verifiedAt === "2026-09-19"), "JBL eski Novo tatil yemleri resmî katalog kaynağı ve güncel doğrulama tarihi taşımalı");
+assert.deepEqual(jblLegacyHoliday.map((item) => item.model), ["Holiday 1 blok / 43 g","Holiday Red 3 blok / 17 g","Weekend 4 blok / 20 g"], "JBL eski Novo tatil yemlerinin gerçek paketleri korunmalı");
+assert(careProductCatalog.find((item) => item.model === "Holiday 1 blok / 43 g")?.description.includes("4031000") && careProductCatalog.find((item) => item.model === "Holiday 1 blok / 43 g")?.description.includes("iki haftalık"), "JBL Holiday ürün kodu ve besleme süresi korunmalı");
+assert(careProductCatalog.find((item) => item.model === "Holiday Red 3 blok / 17 g")?.description.includes("4032100") && careProductCatalog.find((item) => item.model === "Holiday Red 3 blok / 17 g")?.description.includes("1–3 Japon balığını 4–6 gün"), "JBL Holiday Red ürün kodu ve blok kapasitesi korunmalı");
+assert(careProductCatalog.find((item) => item.model === "Weekend 4 blok / 20 g")?.description.includes("4032000") && careProductCatalog.find((item) => item.model === "Weekend 4 blok / 20 g")?.description.includes("üçer günlük dört"), "JBL Weekend ürün kodu ve paket içeriği korunmalı");
+const jblLegacyNovoCichlids = jblCareProducts.filter((item) => ["/detail/2288/","/detail/2774/","/detail/3286/","/detail/3290/","/detail/2289/","/detail/2290/","/detail/2291/"].some((path) => item.sourceUrl.includes(path)));
+assert.equal(jblLegacyNovoCichlids.length, 16, "JBL eski Novo ciklet yem ailesi on altı gerçek ambalaj seçeneği içermeli");
+assert(jblLegacyNovoCichlids.every((item) => item.verifiedAt === "2026-09-19" && item.description.includes("Arşiv Novo")), "JBL eski Novo ciklet yemleri doğrudan ürün sayfasına bağlı arşiv kayıtları olmalı");
+assert.deepEqual(jblLegacyNovoCichlids.map((item) => item.model), ["NovoStick M 250 ml","NovoStick M 1000 ml","NovoStick M 5500 ml","NovoStick XL 1000 ml","NovoStick XL 5500 ml","NovoTanganjika 250 ml","NovoTanganjika 1000 ml","NovoTanganjika 5500 ml","NovoMalawi 250 ml","NovoMalawi 1000 ml","NovoMalawi 5500 ml","NovoRift 250 ml","NovoRift 1000 ml","NovoRift 5500 ml","NovoFlower mini 250 ml","NovoFlower maxi 1000 ml"], "JBL eski Novo ciklet yemlerinin gerçek ambalajları korunmalı");
+assert(careProductCatalog.find((item) => item.model === "NovoStick M 5500 ml")?.description.includes("2530 g") && careProductCatalog.find((item) => item.model === "NovoStick XL 5500 ml")?.description.includes("2200 g"), "JBL NovoStick M ve XL büyük paket ağırlıkları korunmalı");
+assert(careProductCatalog.find((item) => item.model === "NovoTanganjika 1000 ml")?.description.includes("3002100") && careProductCatalog.find((item) => item.model === "NovoMalawi 1000 ml")?.description.includes("3001100"), "JBL NovoTanganjika ve NovoMalawi ürün kodları korunmalı");
+assert(careProductCatalog.find((item) => item.model === "NovoRift 5500 ml")?.description.includes("2750 g") && careProductCatalog.find((item) => item.model === "NovoFlower mini 250 ml")?.description.includes("ham protein %46"), "JBL NovoRift büyük paket ağırlığı ve NovoFlower mini besin değeri korunmalı");
+const jblLegacyNovoAll = [...jblLegacyNovoFlakes,...jblLegacyNovoGranules,...jblLegacyNovoFreezeDried,...jblLegacyNovoTablets,...jblLegacyNovoHerbivore,...jblLegacyNovoCichlids,...jblLegacyNovoColdWater,...jblLegacyNovoCrustacea,...jblLegacyNovoSpecial,...jblLegacyHoliday,...jblLegacyBreeding];
+assert.equal(jblLegacyNovoAll.length, 102, "JBL resmî Novo ürün ağacı gerçek pul, granül, doğal yem, tablet, otçul, ciklet, soğuk su, kabuklu, özel ve yavru yem ambalajlarıyla 102 seçenek içermeli");
+assert.equal(new Set(jblLegacyNovoAll.map((item) => item.id)).size, 102, "JBL sitemapte yinelenen NovoLotl XL tek katalog kaydı olmalı");
+const jblLegacyMarineFoodModels = new Set(["Maris 250 ml","MariPearls CLICK 250 ml","MariPearls 1000 ml","KorallFluid 100 ml","KorallFluid 500 ml"]);
+const jblLegacyMarineFoods = jblCareProducts.filter((item) => jblLegacyMarineFoodModels.has(item.model));
+assert.equal(jblLegacyMarineFoods.length, 5, "JBL eski deniz yemi ailesi beş gerçek ambalaj seçeneği içermeli");
+assert(jblLegacyMarineFoods.every((item) => item.description.includes("Arşiv JBL") && item.verifiedAt === "2026-09-19" && item.sourceUrl.startsWith("https://www.jbl.de/")), "JBL eski deniz yemleri doğrudan resmî ürün sayfası veya üretici kataloğuna bağlı arşiv kayıtları olmalı");
+assert.deepEqual(jblLegacyMarineFoods.map((item) => item.model), ["Maris 250 ml","MariPearls CLICK 250 ml","MariPearls 1000 ml","KorallFluid 100 ml","KorallFluid 500 ml"], "JBL eski deniz yemlerinin gerçek ambalajları korunmalı");
+assert(careProductCatalog.find((item) => item.model === "Maris 250 ml")?.description.includes("3102060") && careProductCatalog.find((item) => item.model === "Maris 250 ml")?.description.includes("ham protein %43"), "JBL Maris ürün kodu ve besin değeri korunmalı");
+assert(careProductCatalog.find((item) => item.model === "MariPearls CLICK 250 ml")?.description.includes("4066100") && careProductCatalog.find((item) => item.model === "MariPearls CLICK 250 ml")?.description.includes("bir Click beş balığı"), "JBL MariPearls CLICK ürün kodu ve resmî Click dozu korunmalı");
+assert(careProductCatalog.find((item) => item.model === "MariPearls 1000 ml")?.description.includes("520 g") && careProductCatalog.find((item) => item.model === "MariPearls 1000 ml")?.description.includes("reçete nesilleri birleştirilmez"), "JBL MariPearls büyük ambalaj ağırlığı ve reçete nesli farkı korunmalı");
+assert(careProductCatalog.find((item) => item.model === "KorallFluid 100 ml")?.description.includes("10 damla 0,125 ml") && careProductCatalog.find((item) => item.model === "KorallFluid 100 ml")?.description.includes("tek başına akvaryum dozu değildir"), "JBL KorallFluid pipet dönüşümü akvaryum dozu gibi sunulmamalı");
+const jblLegacyMarineCareModels = new Set(["CalciuMarin 500 g","MagnesiuMarin 500 ml","MagnesiuMarin 5000 ml","TraceMarin 1 500 ml","TraceMarin 1 5000 ml","TraceMarin 2 500 ml","TraceMarin 2 5000 ml","TraceMarin 3 500 ml","TraceMarin 3 5000 ml"]);
+const jblLegacyMarineCare = jblCareProducts.filter((item) => jblLegacyMarineCareModels.has(item.model));
+assert.equal(jblLegacyMarineCare.length, 9, "JBL eski deniz bakım ailesi dokuz gerçek ambalaj seçeneği içermeli");
+assert(jblLegacyMarineCare.every((item) => item.category === "water_conditioner" && item.description.includes("Arşiv JBL deniz bakım ürünü") && item.verifiedAt === "2026-09-19" && item.sourceUrl.startsWith("https://www.jbl.de/")), "JBL eski deniz bakım ürünleri doğrudan resmî sayfa veya ürün bilgi formuna bağlı arşiv kayıtları olmalı");
+assert.deepEqual(jblLegacyMarineCare.map((item) => item.model), ["CalciuMarin 500 g","MagnesiuMarin 500 ml","MagnesiuMarin 5000 ml","TraceMarin 1 500 ml","TraceMarin 1 5000 ml","TraceMarin 2 500 ml","TraceMarin 2 5000 ml","TraceMarin 3 500 ml","TraceMarin 3 5000 ml"], "JBL eski deniz bakım ürünlerinin gerçek ambalajları korunmalı");
+assert(careProductCatalog.find((item) => item.model === "CalciuMarin 500 g")?.description.includes("2491000") && careProductCatalog.find((item) => item.model === "CalciuMarin 500 g")?.description.includes("10 dakika sonra") && careProductCatalog.find((item) => item.model === "CalciuMarin 500 g")?.description.includes("daima eşit miktarda"), "JBL CalciuMarin ürün kodu ve iki bileşenli güvenli kullanım sırası korunmalı");
+assert(careProductCatalog.find((item) => item.model === "MagnesiuMarin 500 ml")?.description.includes("2491100") && careProductCatalog.find((item) => item.model === "MagnesiuMarin 5000 ml")?.description.includes("2491200") && jblLegacyMarineCare.filter((item) => item.model.startsWith("MagnesiuMarin ")).every((item) => item.description.includes("50 ml ürün, 50 L suda magnezyumu 50 mg/L yükseltir")), "JBL MagnesiuMarin ambalaj kodları ve resmî doz bilgisi korunmalı");
+const jblTraceMarin = jblLegacyMarineCare.filter((item) => item.model.startsWith("TraceMarin "));
+assert.equal(jblTraceMarin.length, 6, "JBL TraceMarin üç bileşeni 500 ve 5000 ml ambalajlarla bulunmalı");
+assert(jblTraceMarin.every((item) => item.description.includes("haftada 7 ml/100 L") && item.description.includes("2–5 dakika arayla") && item.description.includes("doğrudan mercanların üzerine uygulanmaz") && item.description.includes("diğer bileşenlerin yerine geçmez")), "JBL TraceMarin doz, uygulama aralığı ve bileşen güvenliği korunmalı");
+const jblArchivedMedicationIds = [
+  "jbl-punktol-plus-125", "jbl-punktol-plus-250", "jbl-punktol-plus-1500", "jbl-oodinol-plus-250",
+  "jbl-ektol-fluid-plus-125", "jbl-ektol-fluid-plus-250", "jbl-fungol-plus-250", "jbl-furanol-plus-250",
+  "jbl-ektol-bac-plus-250", "jbl-gyrodol-plus-250", "jbl-aradol-plus-250", "jbl-nedol-plus-250",
+  "jbl-spirohexol-plus-250", "jbl-ektol-cristal", "jbl-ektol-cristal-240-g", "jbl-ektol-cristal-3000-g",
+];
+const jblArchivedMedications = jblArchivedMedicationIds.map((id) => careProductCatalog.find((item) => item.id === id));
+assert(jblArchivedMedications.every(Boolean), "JBL resmî ilaç arşivindeki 14 aile 16 gerçek paket kaydıyla bulunmalı");
+assert(jblArchivedMedications.every((item) => item.category === "treatment" && item.description.toLowerCase().includes("arşiv") && ["2026-09-15", "2026-09-19"].includes(item.verifiedAt)), "JBL arşiv ilaçları güncel ürün gibi gösterilmemeli");
+assert(jblArchivedMedications.every((item) => ["prospektüs","uzman","veteriner"].some((warning) => item.description.includes(warning))), "JBL ilaçları güvenli kullanım yönlendirmesi taşımalı");
+const jblPunktolModels = jblArchivedMedications.filter((item) => item.id.startsWith("jbl-punktol-plus-"));
+assert.deepEqual(new Set(jblPunktolModels.map((item) => item.model)), new Set(["Punktol Plus 125 100 ml", "Punktol Plus 250 100 ml", "Punktol Plus 1500 50 ml"]), "JBL Punktol gerçek ambalajları ayrı modeller olarak bulunmalı");
+assert(jblPunktolModels.every((item) => item.sourceUrl.includes("/products/detail/") || item.sourceUrl.includes("/produkte/detail/")), "JBL Punktol kayıtları doğrudan resmî ürün sayfalarına bağlanmalı");
+assert(jblPunktolModels.every((item) => item.description.includes("bakır içermez") && item.description.includes("yüzde 50 su değişimi") && item.description.includes("başka ilaçla eşzamanlı karıştırılmamalıdır")), "JBL Punktol kayıtları yayımlanan hazırlık ve karıştırmama güvenliğini taşımalı");
+assert(careProductCatalog.find((item) => item.id === "jbl-punktol-plus-125")?.description.includes("1006542") && careProductCatalog.find((item) => item.id === "jbl-punktol-plus-125")?.description.includes("10 ml/100 L"), "JBL Punktol Plus 125 ürün kodu ve yayımlanan dozu taşımalı");
+assert(careProductCatalog.find((item) => item.id === "jbl-punktol-plus-250")?.description.includes("1006642") && careProductCatalog.find((item) => item.id === "jbl-punktol-plus-250")?.description.includes("5 ml/100 L"), "JBL Punktol Plus 250 ürün kodu ve yayımlanan dozu taşımalı");
+assert(careProductCatalog.find((item) => item.id === "jbl-punktol-plus-1500")?.description.includes("1006800") && careProductCatalog.find((item) => item.id === "jbl-punktol-plus-1500")?.description.includes("1 damla/10 L"), "JBL Punktol Plus 1500 ürün kodu ve yayımlanan dozu taşımalı");
+const jblOodinol = careProductCatalog.find((item) => item.id === "jbl-oodinol-plus-250");
+assert(jblOodinol?.sourceUrl.includes("id=5567") && jblOodinol.description.includes("1007600") && jblOodinol.description.includes("0,3 mg/L") && jblOodinol.description.includes("bakır testi") && jblOodinol.description.includes("omurgasızlarında kullanılmaz"), "JBL Oodinol doğrudan kaynak, ürün kodu, ölçümlü bakır dozu ve omurgasız yasağını açıkça göstermeli");
+const jblEktolFluidModels = ["jbl-ektol-fluid-plus-125", "jbl-ektol-fluid-plus-250"].map((id) => careProductCatalog.find((item) => item.id === id));
+assert(jblEktolFluidModels.every((item) => item.sourceUrl.includes("/produkte/detail/") || item.sourceUrl.includes("/products/detail/")), "JBL Ektol fluid kayıtları doğrudan resmî ürün sayfalarına bağlanmalı");
+assert.deepEqual(new Set(jblEktolFluidModels.map((item) => item.model)), new Set(["Ektol fluid Plus 125 100 ml", "Ektol fluid Plus 250 100 ml"]), "JBL Ektol fluid gerçek 100 ml ambalajları ayrı modeller olarak bulunmalı");
+assert(jblEktolFluidModels.every((item) => item.description.includes("10 ml/50 L") && item.description.includes("5. gün") && item.description.includes("8 °dKH") && item.description.includes("yarım doz") && item.description.includes("amonyum/amonyak") && item.description.includes("nitrit")), "JBL Ektol fluid kayıtları doz, yumuşak su ve su ölçümü sınırlarını taşımalı");
+assert(careProductCatalog.find((item) => item.id === "jbl-ektol-fluid-plus-125")?.description.includes("1007800") && careProductCatalog.find((item) => item.id === "jbl-ektol-fluid-plus-250")?.description.includes("1006981"), "JBL Ektol fluid kayıtları yayımlanan ürün kodlarını taşımalı");
+const jblFungol = careProductCatalog.find((item) => item.id === "jbl-fungol-plus-250");
+assert(jblFungol?.model === "Fungol Plus 250 2 × 100 ml" && jblFungol.sourceUrl.includes("/detail/5557/") && jblFungol.description.includes("1006300") && jblFungol.description.includes("10 ml/80 L") && jblFungol.description.includes("0,5 mg/L") && jblFungol.description.includes("omurgasızları tedaviden çıkarılır"), "JBL Fungol gerçek set, iki aşamalı doz, nitrit eşiği ve omurgasız güvenliğini taşımalı");
+const jblFuranol = careProductCatalog.find((item) => item.id === "jbl-furanol-plus-250");
+assert(jblFuranol?.model === "Furanol Plus 250 20 tablet" && jblFuranol.sourceUrl.includes("id=5580") && jblFuranol.description.includes("1 tablet/25 L") && jblFuranol.description.includes("500 L") && jblFuranol.description.includes("nifurpirinol") && jblFuranol.description.includes("bazı ülkelerde") && jblFuranol.description.includes("serbest satılmaz") && jblFuranol.description.includes("mikroskobik inceleme"), "JBL Furanol gerçek tablet paketi, doz, antibiyotik ve satış/tanı kısıtını taşımalı");
+const jblEktolBac = careProductCatalog.find((item) => item.id === "jbl-ektol-bac-plus-250");
+assert(jblEktolBac?.model === "Ektol bac Plus 250 2 × 100 ml" && jblEktolBac.sourceUrl.includes("/detail/5582/") && jblEktolBac.description.includes("700 mg benzalkonyum klorür") && jblEktolBac.description.includes("8000 mg polivinilpirolidon iyot") && jblEktolBac.description.includes("altı günlük altı doz") && jblEktolBac.description.includes("omurgasızları tedaviden çıkarılmalı"), "JBL Ektol bac gerçek iki bileşenli paket, içerik, doz ve omurgasız güvenliğini taşımalı");
+const jblGyrodol = careProductCatalog.find((item) => item.id === "jbl-gyrodol-plus-250");
+assert(jblGyrodol?.model === "Gyrodol Plus 250 100 ml" && jblGyrodol.sourceUrl.includes("/detail/5569/") && jblGyrodol.description.includes("1500 mg/100 ml prazikuantel") && jblGyrodol.description.includes("10 ml/50 L") && jblGyrodol.description.includes("23 °C") && jblGyrodol.description.includes("mikroskobik tanı"), "JBL Gyrodol gerçek paket, etken madde, sıcaklığa bağlı tekrar ve tanı güvenliğini taşımalı");
+const jblAradol = careProductCatalog.find((item) => item.id === "jbl-aradol-plus-250");
+assert(jblAradol?.model === "Aradol Plus 250 100 ml" && jblAradol.sourceUrl.includes("/detail/5577/") && jblAradol.description.includes("10 ml/50 L") && jblAradol.description.includes("8. gün yüzde 50") && jblAradol.description.includes("14. gün") && jblAradol.description.includes("18 °C altında etkisizdir") && jblAradol.description.includes("büyümesini engeller"), "JBL Aradol gerçek paket, iki aşamalı şema, sıcaklık ve etki sınırını taşımalı");
+const jblNedol = careProductCatalog.find((item) => item.id === "jbl-nedol-plus-250");
+assert(jblNedol?.model === "Nedol Plus 250 100 ml" && jblNedol.description.includes("eski katalog no. 10074") && jblNedol.description.includes("10 ml/75 L") && jblNedol.description.includes("750 L") && jblNedol.description.includes("Camallanus") && jblNedol.description.includes("omurgasızlarında kullanılmaz"), "JBL Nedol gerçek paket, doz, hedef nematod ve omurgasız güvenliğini taşımalı");
+const jblSpirohexol = careProductCatalog.find((item) => item.id === "jbl-spirohexol-plus-250");
+assert(jblSpirohexol?.model === "Spirohexol Plus 250 100 ml" && jblSpirohexol.sourceUrl.includes("/detail/5575/") && jblSpirohexol.description.includes("10 ml/50 L") && jblSpirohexol.description.includes("7 gün") && jblSpirohexol.description.includes("8. gün") && jblSpirohexol.description.includes("kıkırdaklı balıklar") && jblSpirohexol.description.includes("karantina tankında"), "JBL Spirohexol gerçek paket, tekrar şeması, kıkırdaklı balık ve deniz karantinası güvenliğini taşımalı");
+const jblEktolCristal = jblArchivedMedications.filter((item) => item.id.startsWith("jbl-ektol-cristal"));
+assert.deepEqual(new Set(jblEktolCristal.map((item) => item.model)), new Set(["Ektol cristal 80 g","Ektol cristal 240 g","Ektol cristal 3000 g"]), "JBL Ektol cristal üç resmî ambalajıyla bulunmalı");
+assert(jblEktolCristal.every((item) => item.description.includes("ilaçların yerine geçmez") && item.description.includes("8 °dKH") && item.description.includes("0,5 mg/L") && item.description.includes("yüzde 75 su değişimi") && item.description.includes("3 g/L") && item.description.includes("10 dakika")), "JBL Ektol cristal ilaç gibi sunulmamalı; yumuşak su, nitrit, bakır ve tuz banyosu sınırlarını taşımalı");
+assert(jblCareProducts.every((item) => item.sourceUrl.startsWith("https://www.jbl.de/") && ["2026-09-14","2026-09-15","2026-09-17","2026-09-18","2026-09-19"].includes(item.verifiedAt)), "JBL bakım ürünleri resmî kaynak ve güncel doğrulama tarihi taşımalı");
+assert(jblCareProducts.some((item) => item.model === "FilterStart 10 ml" && item.description.includes("10 ml ürün 3 L filtre malzemesine uygulanır")), "JBL FilterStart resmî 10 ml/3 L kullanım bilgisini taşımalı");
+assert(careProductCatalog.find((item) => item.id === "jbl-algol")?.description.includes("hassas karidesler"), "JBL Algol kaydı üreticinin karides ve bitki riskini kullanıcıdan saklamamalı");
+
 const expectedAquaelOxyboost = [
   ["aquael-oxyboost-100", 100, 2.2, undefined, 100, false],
   ["aquael-oxyboost-150", 150, 2.2, 100, 150, true],
@@ -1005,13 +2229,14 @@ assert.deepEqual(
 for (const model of ["AQ-A3000"]) {
   const item = equipmentCatalog.find((entry) => entry.brand === "Aquawing" && entry.model === model);
   assert.equal(item?.ratedFlowLph, undefined, `Aquawing ${model} debisi yayımlanmadığı için tahmin edilmemeli`);
-  assert.match(item?.capacityDataNote || "", /yayımlanmamış/, `Aquawing ${model} kapasite boşluğunu kullanıcıya açıklamalı`);
+  assert.match(item?.capacityDataNote || "", /yayımlanmamış|yayımlanmadığı/, `Aquawing ${model} kapasite boşluğunu kullanıcıya açıklamalı`);
   assert.equal(item?.powerW, 25, `Aquawing ${model} doğrulanmış 25 W güç değerini taşımalı`);
   assert.match(item?.specifications || "", /çift çıkışlı/i, `Aquawing ${model} doğrulanmış çift çıkış bilgisini taşımalı`);
   assert.match(item?.specifications || "", /8690000438723/, `Aquawing ${model} doğrulanmış barkodu taşımalı`);
   assert.equal(item?.sourceUrl, "https://www.petlebi.com/akvaryum-urunleri/aquawing-aq-a3000-cift-cikisli-akvaryum-hava-kompresoru-25w.html", `Aquawing ${model} doğrudan ürün kaynağına bağlanmalı`);
+  assert(item?.additionalSourceUrls?.includes("https://www.batipettoptan.com/detay/16856/aqa3000-aquawing-hava-motoru-25w.html"), `Aquawing ${model} güncel tedarikçi ürün kaynağını taşımalı`);
   assert(item?.additionalSourceUrls?.includes("https://www.akvaryumexpress.com/aquawing"), `Aquawing ${model} ikinci güvenilir katalog kaynağını taşımalı`);
-  assert.equal(item?.verifiedAt, "2026-09-06", `Aquawing ${model} güncel doğrulama tarihini taşımalı`);
+  assert.equal(item?.verifiedAt, "2026-09-25", `Aquawing ${model} güncel doğrulama tarihini taşımalı`);
 }
 for (const [model, flow, power, barcode] of [
   ["AQ-WP750FA", 400, 4, "8681475615443"],
@@ -1101,7 +2326,8 @@ for (const [model, power, barcode] of [["AQ-A1000", 8, "8690000438709"], ["AQ-A2
   assert.match(item?.specifications || "", /çift çıkışlı/i, `Aquawing ${model} doğrulanmış çift çıkış bilgisini taşımalı`);
   assert.match(item?.specifications || "", new RegExp(barcode), `Aquawing ${model} doğrulanmış barkodu taşımalı`);
   assert.equal(new URL(item?.sourceUrl).hostname, "eksenpet.com", `Aquawing ${model} doğrudan ürün kaynağına bağlanmalı`);
-  assert.equal(item?.verifiedAt, "2026-09-09", `Aquawing ${model} güncel doğrulama tarihini taşımalı`);
+  assert(item?.additionalSourceUrls?.some((url) => url.includes(`aqa${model.slice(-4)}-aquawing-hava-motoru-${power}w`)), `Aquawing ${model} güncel tedarikçi çapraz kaynağını taşımalı`);
+  assert.equal(item?.verifiedAt, "2026-09-25", `Aquawing ${model} güncel doğrulama tarihini taşımalı`);
 }
 for (const [model, flow, power, barcode] of [
   ["AQ-WP950FA", 880, 12, "8681475615467"],
@@ -1263,22 +2489,74 @@ for (const model of ["6500", "7500", "8500", "9500"]) {
   const item = equipmentCatalog.find((entry) => entry.brand === "Regent" && entry.model === model);
   assert.equal(item?.sourceUrl, "https://hydroponic.co.za/hydroponics/air-pumps/", `Regent ${model} debisi model tablosuna bağlanmalı`);
   assert(item?.additionalSourceUrls?.some((url) => url.includes(`regent-${model}-`)), `Regent ${model} Türkiye ürün varyantı ayrıca kaynaklanmalı`);
-  assert.equal(item?.verifiedAt, "2026-09-11", `Regent ${model} güncel doğrulama tarihi taşımalı`);
+  assert.equal(item?.verifiedAt, "2026-09-23", `Regent ${model} güncel doğrulama tarihi taşımalı`);
+}
+const currentRegentTurkiyeFixtures = [
+  ["6500", "200-RE6500", "6938104012923", /5 × 12,2 × 6,2 cm/],
+  ["7500", "200-RE7500", "6938104012930", /5,8 × 14,5 × 8 cm/],
+  ["8500", "200-RE8500", "6938104012947", /8 × 17 × 9 cm/],
+  ["9500", "200-RE9500", "6938104012954", /8 × 17 × 9 cm/],
+];
+for (const [model, productCode, barcode, dimensions] of currentRegentTurkiyeFixtures) {
+  const item = equipmentCatalog.find((entry) => entry.brand === "Regent" && entry.model === model);
+  assert.match(item?.specifications ?? "", new RegExp(productCode), `Regent ${model} Türkiye ürün kodunu taşımalı`);
+  assert.match(item?.specifications ?? "", new RegExp(barcode), `Regent ${model} barkodunu taşımalı`);
+  assert.match(item?.specifications ?? "", dimensions, `Regent ${model} doğrulanmış gövde ölçüsünü taşımalı`);
 }
 assert.equal(equipmentCatalog.find((entry) => entry.brand === "Regent" && entry.model === "5500")?.sourceUrl, "https://hydroponic.co.za/size/regent-5500/", "Regent 5500 yanlışlıkla 9500 ürün kaynağına bağlanmamalı");
 assert.match(equipmentCatalog.find((entry) => entry.brand === "Regent" && entry.model === "6500")?.specifications ?? "", /2,4 W.*2,5 W/, "Regent 6500 bölgesel güç farkını açıklamalı");
 assert.match(equipmentCatalog.find((entry) => entry.brand === "Regent" && entry.model === "8500")?.specifications ?? "", /4 W.*3,5 W/, "Regent 8500 bölgesel güç farkını açıklamalı");
+assert.match(equipmentCatalog.find((entry) => entry.brand === "Regent" && entry.model === "9500")?.specifications ?? "", /4 W.*3,1–4 W.*5 W/, "Regent 9500 bölgesel güç çelişkisini saklamamalı");
+assert(equipmentCatalog.find((entry) => entry.brand === "Regent" && entry.model === "9500")?.additionalSourceUrls?.includes("https://www.akwa.co.za/product/regent-9500-double-flow-control-240-l-h/"), "Regent 9500 bağımsız debi ve ayar kaynağına bağlanmalı");
+assert(equipmentCatalog.find((entry) => entry.brand === "Regent" && entry.model === "9500")?.additionalSourceUrls?.includes("https://malawiizmir.com/regent-9500-hava-motoru"), "Regent 9500 güç çelişkisi yerel kaynağa bağlanmalı");
 assert.equal(equipmentCatalog.find((entry) => entry.brand === "Regent" && entry.model === "6500")?.adjustableFlow, false, "Güncel Regent 6500 ayar düğmesi varmış gibi gösterilmemeli");
 assert.equal(equipmentCatalog.find((entry) => entry.brand === "Regent" && entry.model === "7500")?.adjustableFlow, false, "Güncel Regent 7500 ayar düğmesi varmış gibi gösterilmemeli");
 assert.equal(equipmentCatalog.find((entry) => entry.brand === "Regent" && entry.model === "8500")?.adjustableFlow, false, "Güncel Regent 8500 ayar düğmesi varmış gibi gösterilmemeli");
 assert.equal(equipmentCatalog.find((entry) => entry.brand === "Regent" && entry.model === "9500")?.adjustableFlow, true, "Regent 9500 akış ayarı korunmalı");
 
-const xlproModels = new Set(equipmentCatalog.filter((entry) => entry.brand === "XLPro").map((entry) => entry.model));
+const xlproEntries = equipmentCatalog.filter((entry) => entry.brand === "XLPro");
+const xlproModels = new Set(xlproEntries.filter((entry) => entry.category === "filter").map((entry) => entry.model));
 assert.deepEqual(
   xlproModels,
   new Set(["MINI-230", "MINI-500", "MINI-500AT", "EX-1000", "EX-1200", "EX-1500"]),
   "XLPro'nun Türkiye'de doğrulanan altı güncel filtre modeli eksiksiz bulunmalı",
 );
+assert.equal(xlproEntries.length, 29, "XLPro'nun altı filtresi ve 23 doğrulanmış yedek parçası eksiksiz bulunmalı");
+const xlproReplacementFixtures = [
+  ["Dış Filtre Emiş Süzgeci Yedek Parça", "ST06776", "8690000432929"],
+  ["EX-1200/1500 Yedek Mıknatıs / Pervane ve Mil", "ST06778", "8690000432943"],
+  ["EX-1500 Yedek Vana Takımı", "ST06769", "8690000432851"],
+  ["Dış Filtre Yan Yedek Klipsi 2'li", "ST06779", "8690000432950"],
+  ["EX-1000 Yedek Mıknatıs", "ST06777", "8690000432936"],
+  ["EX-1000/1200 Yedek Vana Takımı", "ST06768", "8690000432844"],
+  ["MINI-230 Yedek Çanak", "ST07655", "8690000437429"],
+  ["MINI-500 Yedek Çanak", "ST07656", "8690000437436"],
+  ["EX-1000/1200 Delikli Fıskiye Çubuk", "ST06780", "8690000432967"],
+  ["MINI-230 Yedek Dış Filtre Kafası", "ST07663", "8690000437504"],
+  ["MINI-500AT Yedek Çanak", "ST07657", "8690000437443"],
+  ["MINI-500 Yedek Dış Filtre Kafası", "ST07661", "8690000437481"],
+  ["MINI-500AT Yedek Dış Filtre Kafası", "ST07662", "8690000437498"],
+  ["EX-1500 Yedek Çanak", "ST06772", "8690000432882"],
+  ["EX-1200 Yedek Dış Filtre Kafası", "ST07659", "8690000437467"],
+  ["12/16 Dirsek Boru Yedek Parça Small", "ST06774", "8690000432905"],
+  ["EX-1000 Yedek Dış Filtre Kafası", "ST07658", "8690000437450"],
+  ["EX-1000 Yedek Çanak", "ST06770", "8690000432868"],
+  ["EX-1500 Yedek Dış Filtre Kafası", "ST07660", "8690000437474"],
+  ["EX-1200 Yedek Çanak", "ST06771", "8690000432875"],
+  ["EX-1000/1200/1500 Yedek Kafa Contası", "ST06773", "8690000432899"],
+  ["16/22 Dirsek Boru Yedek Parça Large", "ST06775", "8690000432912"],
+  ["EX-1500 Delikli Fıskiye Çubuk", "ST06781", "8690000432974"],
+];
+for (const [model, stockCode, barcode] of xlproReplacementFixtures) {
+  const item = xlproEntries.find((entry) => entry.model === model);
+  assert.deepEqual([item?.category, item?.passiveComponent, item?.ratedFlowLph, item?.recommendedMaxL], ["other", true, undefined, undefined], `XLPro ${model} kapasite hesabına girmeyen pasif yedek parça olmalı`);
+  assert.match(item?.specifications ?? "", new RegExp(`${stockCode}.*${barcode}`), `XLPro ${model} doğrulanmış stok kodu ve barkodu taşımalı`);
+  assert.equal(item?.verifiedAt, "2026-09-20", `XLPro ${model} güncel doğrulama tarihini taşımalı`);
+}
+const xlproEx1500Valve = xlproEntries.find((entry) => entry.model === "EX-1500 Yedek Vana Takımı");
+assert.match(xlproEx1500Valve?.specifications ?? "", /yalnız kırmızı-siyah yeni kasa.*gri kasa ile uyumlu değil/, "XLPro EX-1500 vana takımının kasa uyumluluk sınırı görünür olmalı");
+const xlproRotor = xlproEntries.find((entry) => entry.model === "EX-1200\/1500 Yedek Mıknatıs \/ Pervane ve Mil");
+assert.match(xlproRotor?.specifications ?? "", /distribütör kaydı 'mıknatıs'.*AkvaryumExpress kaydı 'pervane ve mili'/, "XLPro ST06778 adlandırma çelişkisi kullanıcıdan saklanmamalı");
 for (const [model, power, maxL] of [["MINI-500", 6.9, 100], ["EX-1000", 22, 200], ["EX-1200", 28, 280], ["EX-1500", 36, 300]]) {
   const item = equipmentCatalog.find((entry) => entry.brand === "XLPro" && entry.model === model);
   assert.deepEqual([item?.powerW, item?.recommendedMaxL], [power, maxL], `XLPro ${model} doğrulanmış güç ve hacim sınırını taşımalı`);
@@ -1301,12 +2579,13 @@ for (const [model, productCode, barcode, dimensions, spongeDimensions] of [
   const item = equipmentCatalog.find((entry) => entry.brand === "Eurostar" && entry.model === model);
   assert.equal(item?.powerW, 5, `Eurostar ${model} doğrulanmış 5 W güç değerini taşımalı`);
   assert.equal(item?.ratedFlowLph, undefined, `Eurostar ${model} debisi yayımlanmadığı için tahmin edilmemeli`);
-  assert.match(item?.capacityDataNote || "", /yayımlanmamış/, `Eurostar ${model} kapasite boşluğunu kullanıcıya açıklamalı`);
+  assert.match(item?.capacityDataNote || "", /yayımlanmadı|yayımlanmamış/, `Eurostar ${model} kapasite boşluğunu kullanıcıya açıklamalı`);
+  assert.match(item?.capacityDataNote || "", /farklı marka\/voltaj/i, `Eurostar ${model} benzer OEM türevlerinden veri aktarılmadığını açıklamalı`);
   assert(item?.specifications.includes(productCode), `Eurostar ${model} yetkili satıcı ürün kodunu taşımalı`);
   assert(item?.specifications.includes(barcode), `Eurostar ${model} yetkili satıcı barkodunu taşımalı`);
   assert(item?.specifications.includes(dimensions) && item?.specifications.includes(spongeDimensions), `Eurostar ${model} cihaz ve sünger ölçülerini taşımalı`);
   assert(item?.sourceUrl.includes("atakanpetshop.com/eurostar-motorlu-pipo-filtre"), `Eurostar ${model} yetkili satıcı ürün sayfasına bağlanmalı`);
-  assert.equal(item?.verifiedAt, "2026-09-06", `Eurostar ${model} güncel doğrulama tarihini taşımalı`);
+  assert.equal(item?.verifiedAt, "2026-09-25", `Eurostar ${model} güncel doğrulama tarihini taşımalı`);
 }
 const eurostarHbl802 = equipmentCatalog.find((entry) => entry.brand === "Eurostar" && entry.model === "HBL802");
 assert.deepEqual([eurostarHbl802?.ratedFlowLph, eurostarHbl802?.powerW, eurostarHbl802?.recommendedMinL, eurostarHbl802?.recommendedMaxL], [500, 6, 60, 100], "Eurostar HBL802 yetkili satıcıdaki tüm kapasite verilerini taşımalı");
@@ -2143,8 +3422,8 @@ for (const model of ["GD-403", "GD-503"]) {
   assert.equal(item?.powerW, undefined, `Jeneca ${model} çelişkili güçle otomatik hesaba katılmamalı`);
   assert(item?.capacityDataNote?.includes("Çelişki çözülene kadar"), `Jeneca ${model} kaynak çelişkisini kullanıcıya açıklamalı`);
   assert.equal(item?.additionalSourceUrls?.length, 2, `Jeneca ${model} iki bağımsız karşılaştırma kaynağını izlenebilir tutmalı`);
+  assert.equal(item?.verifiedAt, "2026-09-25", `Jeneca ${model} güncel çelişki denetim tarihini taşımalı`);
   assert(item?.additionalSourceUrls?.some((url) => url.includes("seasunaquarium.com")), `Jeneca ${model} üretici tablosunu destekleyen bağımsız model sayfasına bağlanmalı`);
-  assert.equal(item?.verifiedAt, "2026-09-08", `Jeneca ${model} güncel kaynak denetim tarihini taşımalı`);
 }
 for (const model of ["TGD-15", "TGD-16", "TGD-17", "TGD-18", "TGD-19"]) {
   const item = equipmentCatalog.find((entry) => entry.brand === "Jeneca" && entry.model === model);
@@ -2253,7 +3532,7 @@ for (const model of ["GD-320"]) {
   assert(item?.capacityDataNote?.includes("otomatik filtrasyon hesabına katılmaz"), `Jeneca ${model} güvenli kapasite hesabının dışında kalmalı`);
   assert(item?.capacityDataNote?.includes("459 L/saat") && item.capacityDataNote.includes("4 W") && item.capacityDataNote.includes("6 W"), `Jeneca ${model} kaynaklardaki debi ve güç çelişkisini kullanıcıya açıklamalı`);
   assert.equal(item?.additionalSourceUrls?.length, 2, `Jeneca ${model} çelişen iki ikincil kaynağı izlenebilir tutmalı`);
-  assert.equal(item?.verifiedAt, "2026-09-07", `Jeneca ${model} güncel çelişki doğrulama tarihini taşımalı`);
+  assert.equal(item?.verifiedAt, "2026-09-25", `Jeneca ${model} güncel çelişki denetim tarihini taşımalı`);
 }
 for (const [model, flow, power] of [["XP-U1", 200, 3.5], ["XP-U3", 260, 4.2], ["XP-U5", 200, 3.5], ["XP-U6", 260, 4.2]]) {
   const item = jenecaProfiles.find((entry) => entry.model === model);
@@ -2357,8 +3636,9 @@ for (const model of ["EASY-1000AT", "Aqua Flow 250"]) {
   assert.equal(item.ratedFlowLph, undefined, `Haqos ${model} debisi benzer model kodlarından türetilmemeli`);
   assert.equal(item.powerW, undefined, `Haqos ${model} gücü doğrulanmadan katalogda kullanılmamalı`);
   assert(item.capacityDataNote?.includes("otomatik kapasite hesabına katılmaz"), `Haqos ${model} eksik teknik veri nedeniyle kapasite hesabından açıkça dışlanmalı`);
-  assert(item.capacityDataNote?.includes("görsel sunucusuna erişilemedi"), `Haqos ${model} teknik görselin neden doğrulanamadığını kullanıcıya açıklamalı`);
-  assert.equal(item.verifiedAt, "2026-09-08", `Haqos ${model} güncel kaynak denetim tarihini taşımalı`);
+  assert(/görsel sunucusu(?:na erişilemedi| yeniden bağlantıyı kabul etmedi)/.test(item.capacityDataNote || ""), `Haqos ${model} teknik görselin neden doğrulanamadığını kullanıcıya açıklamalı`);
+  const expectedVerifiedAt = "2026-09-25";
+  assert.equal(item.verifiedAt, expectedVerifiedAt, `Haqos ${model} güncel kaynak denetim tarihini taşımalı`);
 }
 assert.equal(equipmentCatalog.find((entry) => entry.id === "haqos-easy-1000at")?.sourceUrl, "https://www.haqos.com/productshow-45495781.html", "Haqos EASY-1000AT resmî model sayfasına bağlanmalı");
 assert.equal(equipmentCatalog.find((entry) => entry.id === "haqos-aqua-flow-250")?.sourceUrl, "https://www.haqos.com/productshow-45495780.html", "Haqos Aqua Flow 250 resmî model sayfasına bağlanmalı");
@@ -2374,7 +3654,7 @@ for (const [model, page] of [
 ]) {
   const item = haqosProfiles.find((entry) => entry.model === model);
   assert.equal(item?.sourceUrl, `https://www.haqos.com/productshow-${page}.html`, `Haqos ${model} doğrudan resmî model sayfasına bağlanmalı`);
-  const expectedVerifiedAt = ["EASY-1000AT", "Aqua Flow 250"].includes(model) ? "2026-09-08" : "2026-08-26";
+  const expectedVerifiedAt = ["EASY-1000AT", "Aqua Flow 250"].includes(model) ? "2026-09-25" : "2026-08-26";
   assert.equal(item?.verifiedAt, expectedVerifiedAt, `Haqos ${model} güncel doğrulama tarihini taşımalı`);
 }
 for (const [model, page] of [
@@ -2437,9 +3717,10 @@ for (const [model, productCode] of [["YU-118C", "771-YU118C1"], ["YU-119C", "771
   assert.equal(item.ratedFlowLph, undefined, `Nubios ${model} debisi model bazlı kaynak olmadan tahmin edilmemeli`);
   assert(item.capacityDataNote?.includes("otomatik filtrasyon hesabına katılmaz"), `Nubios ${model} yayımlanmamış debi nedeniyle kapasite hesabından açıkça dışlanmalı`);
   assert(item.specifications.includes(productCode), `Nubios ${model} doğrulanmış ürün kodunu taşımalı`);
-  assert.equal(item.verifiedAt, "2026-09-06", `Nubios ${model} güncel doğrulama tarihini taşımalı`);
+  assert.equal(item.powerW, 5, `Nubios ${model} doğrulanmış 5 W gücü taşımalı`);
+  assert.equal(item.verifiedAt, "2026-09-25", `Nubios ${model} güncel doğrulama tarihini taşımalı`);
 }
-assert.match(equipmentCatalog.find((entry) => entry.id === "nubios-yu118c")?.capacityDataNote || "", /XY-2900 verisi kopyalanmadı/, "Nubios YU-118C başka markanın teknik verisini devralmamalı");
+assert.match(equipmentCatalog.find((entry) => entry.id === "nubios-yu118c")?.capacityDataNote || "", /XY-2900(?:'un 450 L\/saat)? verisi(?:ni yayımlayan hatalı satıcı metni reddedildi| kopyalanmadı)/, "Nubios YU-118C başka markanın teknik verisini devralmamalı");
 for (const [model, flow, power, maxL] of [["MY03", 300, 3, 50], ["MY05", 450, 5, 100], ["MY07", 600, 7, 150], ["MY10", 800, 10, 250]]) {
   const item = equipmentCatalog.find((entry) => entry.brand === "Nubios" && entry.model === model);
   assert.deepEqual([item?.category, item?.ratedFlowLph, item?.powerW, item?.recommendedMaxL], ["filter", flow, power, maxL], `Nubios ${model} yayımlanmış model tablosundaki kapasiteyi taşımalı`);
@@ -2714,6 +3995,11 @@ assert.equal(
   speciesCatalog.length,
   "Canlı kataloğunda yinelenen kimlik bulunmamalı",
 );
+assert.equal(
+  speciesCatalog.filter((item) => item.scientificName === "Stiphodon semoni").length,
+  1,
+  "Stiphodon semoni çelişen iki ayrı bakım profili olarak çoğaltılmamalı",
+);
 assert.equal(speciesCatalog.find((item) => item.id === "sparkling-gourami")?.commonName, "Parıltılı gurami", "Trichopsis pumila, Trichogaster lalius ile aynı Türkçe adla gösterilmemeli");
 assert(speciesCatalog.filter((item) => speciesGroup(item) === "cichlid").length >= 38, "Cichlid kataloğu yaygın Amerika, Afrika ve Tanganika türlerini kapsamalı");
 for (const id of ["jack-dempsey", "texas-cichlid", "jewel-cichlid", "tropheus-duboisi"]) {
@@ -2725,9 +4011,9 @@ assert.equal(speciesCatalog.find((item) => item.id === "texas-cichlid")?.species
 assert.equal(speciesCatalog.find((item) => item.id === "tropheus-duboisi")?.minGroup, 10, "Duboisi Tropheus tekli veya küçük grup olarak önerilmemeli");
 assert(speciesCatalog.filter((item) => speciesGroup(item) === "livebearer").length >= 13, "Canlı doğuran kataloğu yaygın Poeciliid, Limia ve Goodeid türlerini kapsamalı");
 for (const [id, minVolumeL, minGroup] of [
-  ["butterfly-goodeid", 250, 8],
-  ["red-tailed-goodeid", 100, 6],
-  ["sparkling-limia", 100, 5],
+  ["butterfly-goodeid", 250, 6],
+  ["red-tailed-goodeid", 250, 6],
+  ["sparkling-limia", 75, 6],
   ["dark-edged-splitfin", 80, 6],
 ]) {
   const profile = speciesCatalog.find((item) => item.id === id);
@@ -2738,8 +4024,478 @@ for (const [id, minVolumeL, minGroup] of [
   assert(profile.husbandryCaution, `${id} özel bakım uyarısı taşımalı`);
 }
 assert.equal(speciesCatalog.find((item) => item.id === "butterfly-goodeid")?.flow, "high", "Kelebek Goodeid oksijenli ve akıntılı habitat gereksinimini taşımalı");
-assert.equal(speciesCatalog.find((item) => item.id === "red-tailed-goodeid")?.speciesOnly, true, "Kırmızı kuyruklu Goodeid güvenli topluluk balığı gibi önerilmemeli");
-assert.deepEqual(speciesCatalog.find((item) => item.id === "dark-edged-splitfin")?.temperature, [10, 22], "Koyu kenarlı Splitfin sürekli tropikal sıcaklığa önerilmemeli");
+const butterflyGoodeid = speciesCatalog.find((item) => item.id === "butterfly-goodeid");
+assert.deepEqual(
+  [butterflyGoodeid?.adultSizeCm,butterflyGoodeid?.minVolumeL,butterflyGoodeid?.minTankLengthCm,butterflyGoodeid?.minGroup,butterflyGoodeid?.temperature,butterflyGoodeid?.ph,butterflyGoodeid?.flow],
+  [9,250,undefined,6,[17,25],[7,8],"high"],
+  "Kelebek Goodeid kaynaklı boy, hacim, grup ve mevsimsel su eşiklerini taşımalı",
+);
+assert.equal(butterflyGoodeid?.speciesOnly,true,"Kelebek Goodeid sıradan topluluk balığı gibi önerilmemeli");
+assert.equal(butterflyGoodeid?.verifiedAt,"2026-09-30","Kelebek Goodeid güncel doğrulama tarihini taşımalı");
+assert.match(butterflyGoodeid?.sourceUrl || "",/^https:\/\/www\.goodeidworkinggroup\.com\/ameca-splendens$/,"Kelebek Goodeid doğrudan koruma ve tür uzmanı kaynağa bağlanmalı");
+assert(butterflyGoodeid?.tankLengthDataNote?.includes("eski 100 cm eşiği kaldırıldı"),"Kelebek Goodeid kaynakta olmayan tank uzunluğunu korumamalı");
+assert(butterflyGoodeid?.husbandryCaution?.includes("8 mg/L") && butterflyGoodeid.husbandryCaution.includes("%60–80") && butterflyGoodeid.husbandryCaution.includes("25 °C üzeri"),"Kelebek Goodeid oksijen, su değişimi ve sıcaklık güvenliğini taşımalı");
+const redTailedGoodeid = speciesCatalog.find((item) => item.id === "red-tailed-goodeid");
+assert.deepEqual(
+  [redTailedGoodeid?.adultSizeCm,redTailedGoodeid?.minVolumeL,redTailedGoodeid?.minTankLengthCm,redTailedGoodeid?.minGroup,redTailedGoodeid?.temperature,redTailedGoodeid?.ph,redTailedGoodeid?.flow],
+  [7.5,250,undefined,6,[17,25],[6,8],"high"],
+  "Kırmızı kuyruklu Goodeid kaynaklı boy, hacim, grup ve mevsimsel su eşiklerini taşımalı",
+);
+assert.equal(redTailedGoodeid?.speciesOnly,true,"Kırmızı kuyruklu Goodeid güvenli topluluk balığı gibi önerilmemeli");
+assert.deepEqual(redTailedGoodeid?.waterTypes,["freshwater"],"Kırmızı kuyruklu Goodeid yalnız tatlı su profili taşımalı");
+assert.equal(redTailedGoodeid?.verifiedAt,"2026-09-30","Kırmızı kuyruklu Goodeid güncel doğrulama tarihini taşımalı");
+assert.match(redTailedGoodeid?.sourceUrl || "",/^https:\/\/goodeidworkinggroup\.com\/xenotoca-eiseni$/,"Kırmızı kuyruklu Goodeid doğrudan koruma ve tür uzmanı kaynağa bağlanmalı");
+assert(redTailedGoodeid?.tankLengthDataNote?.includes("eski 80 cm eşiği kaldırıldı"),"Kırmızı kuyruklu Goodeid kaynakta olmayan tank uzunluğunu korumamalı");
+assert(redTailedGoodeid?.husbandryCaution?.includes("8 mg/L") && redTailedGoodeid.husbandryCaution.includes("%60–80") && redTailedGoodeid.husbandryCaution.includes("25 °C üzeri"),"Kırmızı kuyruklu Goodeid oksijen, su değişimi ve sıcaklık güvenliğini taşımalı");
+assert(redTailedGoodeid?.husbandryCaution?.includes("X. doadrioi") && redTailedGoodeid.husbandryCaution.includes("X. lyonsi") && redTailedGoodeid.husbandryCaution.includes("melez"),"Kırmızı kuyruklu Goodeid taksonomi ve akvaryum soyu riskini açıklamalı");
+const sparklingLimia = speciesCatalog.find((item) => item.id === "sparkling-limia");
+assert.deepEqual(
+  [sparklingLimia?.scientificName,sparklingLimia?.adultSizeCm,sparklingLimia?.minVolumeL,sparklingLimia?.minTankLengthCm,sparklingLimia?.minGroup,sparklingLimia?.temperature,sparklingLimia?.ph,sparklingLimia?.flow],
+  ["Limia perugiae",10,75,undefined,6,[22,28],[7.2,8.5],"medium"],
+  "Sparkling Limia kaynaklı kimlik, koruyucu boy, hacim, grup ve su eşiklerini taşımalı",
+);
+assert.deepEqual(sparklingLimia?.waterTypes,["freshwater"],"Sparkling Limia kökeni doğrulanmadan acı suya otomatik önerilmemeli");
+assert.equal(sparklingLimia?.verifiedAt,"2026-09-30","Sparkling Limia güncel doğrulama tarihini taşımalı");
+assert.match(sparklingLimia?.sourceUrl || "",/^https:\/\/www\.fishbase\.se\/summary\/27711$/,"Sparkling Limia geçerli taksonomi ve azami boya doğrudan bağlanmalı");
+assert(sparklingLimia?.tankLengthDataNote?.includes("eski 80 cm eşiği kaldırıldı"),"Sparkling Limia kaynakta olmayan tank uzunluğunu korumamalı");
+assert(sparklingLimia?.husbandryCaution?.includes("10 cm azami toplam boy") && sparklingLimia.husbandryCaution.includes("6–7 cm") && sparklingLimia.husbandryCaution.includes("tuz eklenmemelidir"),"Sparkling Limia boy farkını ve kökensiz tuz kullanım riskini açıklamalı");
+assert(sparklingLimia?.communityCaution?.includes("melezleşebildiğinden"),"Sparkling Limia yakın canlı doğuranlarla melezleşme riskini taşımalı");
+const darkEdgedSplitfin = speciesCatalog.find((item) => item.id === "dark-edged-splitfin");
+assert.deepEqual(
+  [darkEdgedSplitfin?.scientificName,darkEdgedSplitfin?.adultSizeCm,darkEdgedSplitfin?.minVolumeL,darkEdgedSplitfin?.minTankLengthCm,darkEdgedSplitfin?.minGroup,darkEdgedSplitfin?.temperature,darkEdgedSplitfin?.ph,darkEdgedSplitfin?.flow],
+  ["Girardinichthys multiradiatus",5,80,undefined,6,[10,22],[7.5,8.5],"medium"],
+  "Koyu kenarlı Splitfin kaynaklı kimlik, boy, hacim, grup ve serin su eşiklerini taşımalı",
+);
+assert.equal(darkEdgedSplitfin?.speciesOnly,true,"Koyu kenarlı Splitfin sıradan tropikal topluluk balığı gibi önerilmemeli");
+assert.deepEqual(darkEdgedSplitfin?.waterTypes,["freshwater"],"Koyu kenarlı Splitfin yalnız tatlı su profili taşımalı");
+assert.equal(darkEdgedSplitfin?.verifiedAt,"2026-09-30","Koyu kenarlı Splitfin güncel doğrulama tarihini taşımalı");
+assert.match(darkEdgedSplitfin?.sourceUrl || "",/^https:\/\/goodeidworkinggroup\.com\/girardinichthys-multiradiatus$/,"Koyu kenarlı Splitfin doğrudan koruma ve tür uzmanı kaynağa bağlanmalı");
+assert(darkEdgedSplitfin?.tankLengthDataNote?.includes("eski 60 cm eşiği kaldırıldı"),"Koyu kenarlı Splitfin kaynakta olmayan tank uzunluğunu korumamalı");
+assert(darkEdgedSplitfin?.husbandryCaution?.includes("8 mg/L") && darkEdgedSplitfin.husbandryCaution.includes("%60–80") && darkEdgedSplitfin.husbandryCaution.includes("22 °C üzeri") && darkEdgedSplitfin.husbandryCaution.includes("18 °C altı"),"Koyu kenarlı Splitfin oksijen, su değişimi ve mevsimsel sıcaklık güvenliğini taşımalı");
+assert(darkEdgedSplitfin?.communityCaution?.includes("Girmu1") && darkEdgedSplitfin.communityCaution.includes("Girmu2"),"Koyu kenarlı Splitfin koruma birimlerinin karıştırılmaması gerektiğini açıklamalı");
+const blackNeonTetra = speciesCatalog.find((item) => item.id === "black-neon-tetra");
+assert.deepEqual(
+  [blackNeonTetra?.scientificName,blackNeonTetra?.adultSizeCm,blackNeonTetra?.minVolumeL,blackNeonTetra?.minTankLengthCm,blackNeonTetra?.minGroup,blackNeonTetra?.temperature,blackNeonTetra?.ph,blackNeonTetra?.flow],
+  ["Hyphessobrycon herbertaxelrodi",3.5,72,80,8,[20,28],[5,7.5],"medium"],
+  "Siyah Neon Tetra kaynaklı kimlik, boy, tank tabanı, sürü ve su eşiklerini taşımalı",
+);
+assert.deepEqual(blackNeonTetra?.waterTypes,["freshwater"],"Siyah Neon Tetra yalnız tatlı su profili taşımalı");
+assert.equal(blackNeonTetra?.verifiedAt,"2026-10-02","Siyah Neon Tetra güncel doğrulama tarihini taşımalı");
+assert.match(blackNeonTetra?.sourceUrl || "",/^https:\/\/www\.seriouslyfish\.com\/species\/hyphessobrycon-herbertaxelrodi\/$/,"Siyah Neon Tetra doğrudan türe özel uzman bakım kaynağına bağlanmalı");
+assert(blackNeonTetra?.husbandryCaution?.includes("8–10") && blackNeonTetra.husbandryCaution.includes("80 × 30 cm") && blackNeonTetra.husbandryCaution.includes("FishBase"),"Siyah Neon Tetra sürü, taban ölçüsü ve kaynak farklarını açıklamalı");
+const glowlightTetra = speciesCatalog.find((item) => item.id === "glowlight-tetra");
+assert.deepEqual(
+  [glowlightTetra?.scientificName,glowlightTetra?.adultSizeCm,glowlightTetra?.minVolumeL,glowlightTetra?.minTankLengthCm,glowlightTetra?.minGroup,glowlightTetra?.temperature,glowlightTetra?.ph,glowlightTetra?.flow],
+  ["Hemigrammus erythrozonus",4,68,60,8,[24,28],[5.5,7.5],"medium"],
+  "Günışığı Tetra kaynaklı kimlik, boy, tank tabanı, sürü, su ve dolaşım eşiklerini taşımalı",
+);
+assert.deepEqual(glowlightTetra?.waterTypes,["freshwater"],"Günışığı Tetra yalnız tatlı su profili taşımalı");
+assert.equal(glowlightTetra?.verifiedAt,"2026-10-02","Günışığı Tetra güncel doğrulama tarihini taşımalı");
+assert.match(glowlightTetra?.sourceUrl || "",/^https:\/\/www\.seriouslyfish\.com\/species\/hemigrammus-erythrozonus$/,"Günışığı Tetra doğrudan türe özel uzman bakım kaynağına bağlanmalı");
+assert(glowlightTetra?.additionalSourceUrls?.some((url) => url.includes("fishbase.se/summary/Hemigrammus_erythrozonus")),"Günışığı Tetra FishBase taksonomi ve doğal su kaynağına bağlanmalı");
+assert(glowlightTetra?.husbandryCaution?.includes("60 × 38 cm") && glowlightTetra.husbandryCaution.includes("4–5 tank hacmi") && glowlightTetra.husbandryCaution.includes("en az beşli grup"),"Günışığı Tetra taban, dolaşım ve kaynaklardaki grup farkını açıklamalı");
+const blackSkirtTetra = speciesCatalog.find((item) => item.id === "black-skirt-tetra");
+assert.deepEqual(
+  [blackSkirtTetra?.scientificName,blackSkirtTetra?.adultSizeCm,blackSkirtTetra?.minVolumeL,blackSkirtTetra?.minTankLengthCm,blackSkirtTetra?.minGroup,blackSkirtTetra?.temperature,blackSkirtTetra?.ph,blackSkirtTetra?.flow],
+  ["Gymnocorymbus ternetzi",7.5,68,75,12,[20,26],[6,7],"medium"],
+  "Siyah Etek Tetra kaynaklı kimlik, koruyucu boy, tank tabanı, sürü ve su eşiklerini taşımalı",
+);
+assert.deepEqual(blackSkirtTetra?.waterTypes,["freshwater"],"Siyah Etek Tetra yalnız tatlı su profili taşımalı");
+assert.equal(blackSkirtTetra?.verifiedAt,"2026-10-02","Siyah Etek Tetra güncel doğrulama tarihini taşımalı");
+assert.match(blackSkirtTetra?.sourceUrl || "",/^https:\/\/www\.seriouslyfish\.com\/species\/gymnocorymbus-ternetzi$/,"Siyah Etek Tetra doğrudan türe özel uzman bakım kaynağına bağlanmalı");
+assert(blackSkirtTetra?.additionalSourceUrls?.some((url) => url.includes("fda.gov/animal-veterinary/intentional-genomic-alterations")),"Siyah Etek Tetra floresan varyant kimliğini FDA kaynağıyla doğrulamalı");
+assert(blackSkirtTetra?.husbandryCaution?.includes("7,5 cm azami standart boy") && blackSkirtTetra.husbandryCaution.includes("en az 12'li sürü") && blackSkirtTetra.husbandryCaution.includes("kalıtsal floresan"),"Siyah Etek Tetra boy, sürü ve floresan form ayrımını açıklamalı");
+assert(blackSkirtTetra?.communityCaution?.includes("yüzgeç ısırma"),"Siyah Etek Tetra düşük grup sayısındaki yüzgeç ısırma riskini göstermeli");
+assert.equal(speciesForCatalogExactSearch("TRANSGENETİK TETRA XXL BOY", "fish", "freshwater")?.id,"black-skirt-tetra","Türkiye'deki transgenetik tetra satış adı doğru türe bağlanmalı");
+assert.equal(speciesForCatalogExactSearch("GloFish Tetra", "fish", "freshwater")?.id,"black-skirt-tetra","GloFish Tetra satış adı FDA tarafından doğrulanan Gymnocorymbus ternetzi profiline bağlanmalı");
+const lemonTetra = speciesCatalog.find((item) => item.id === "lemon-tetra");
+assert.deepEqual(
+  [lemonTetra?.scientificName,lemonTetra?.adultSizeCm,lemonTetra?.minVolumeL,lemonTetra?.minTankLengthCm,lemonTetra?.minGroup,lemonTetra?.temperature,lemonTetra?.ph,lemonTetra?.flow],
+  ["Hyphessobrycon pulchripinnis",4,72,80,10,[20,28],[5,7.5],"low"],
+  "Limon Tetra kaynaklı kimlik, boy, tank tabanı, sürü, su ve akıntı eşiklerini taşımalı",
+);
+assert.deepEqual(lemonTetra?.waterTypes,["freshwater"],"Limon Tetra yalnız tatlı su profili taşımalı");
+assert.equal(lemonTetra?.verifiedAt,"2026-10-02","Limon Tetra güncel doğrulama tarihini taşımalı");
+assert.match(lemonTetra?.sourceUrl || "",/^https:\/\/www\.seriouslyfish\.com\/species\/hyphessobrycon-pulchripinnis$/,"Limon Tetra doğrudan türe özel uzman bakım kaynağına bağlanmalı");
+assert(lemonTetra?.husbandryCaution?.includes("80 × 30 cm") && lemonTetra.husbandryCaution.includes("en az beşli grup") && lemonTetra.husbandryCaution.includes("Orange Bolivia"),"Limon Tetra taban, kaynaklardaki grup farkı ve benzer ticari form kimlik riskini açıklamalı");
+assert.equal(speciesForCatalogExactSearch("Limon Tetra", "fish", "freshwater")?.id,"lemon-tetra","Limon Tetra satış adı doğru bilimsel profile bağlanmalı");
+assert.equal(speciesForCatalogExactSearch("Orange Bolivia", "fish", "freshwater"),undefined,"Belirsiz Orange Bolivia formu Limon Tetra profiline otomatik bağlanmamalı");
+const emperorTetra = speciesCatalog.find((item) => item.id === "emperor-tetra");
+assert.deepEqual(
+  [emperorTetra?.scientificName,emperorTetra?.adultSizeCm,emperorTetra?.minVolumeL,emperorTetra?.minTankLengthCm,emperorTetra?.minGroup,emperorTetra?.temperature,emperorTetra?.ph,emperorTetra?.flow],
+  ["Nematobrycon palmeri",4.2,81,90,10,[23,27],[5,7.5],"low"],
+  "İmparator Tetra kaynaklı kimlik, boy, tank tabanı, sürü, su ve akıntı eşiklerini taşımalı",
+);
+assert.deepEqual(emperorTetra?.waterTypes,["freshwater"],"İmparator Tetra yalnız tatlı su profili taşımalı");
+assert.equal(emperorTetra?.verifiedAt,"2026-10-02","İmparator Tetra güncel doğrulama tarihini taşımalı");
+assert.match(emperorTetra?.sourceUrl || "",/^https:\/\/www\.seriouslyfish\.com\/species\/nematobrycon-palmeri$/,"İmparator Tetra doğrudan türe özel uzman bakım kaynağına bağlanmalı");
+assert(emperorTetra?.husbandryCaution?.includes("mavi irisli") && emperorTetra.husbandryCaution.includes("kırmızı irisli") && emperorTetra.husbandryCaution.includes("yağ yüzgeçli"),"İmparator Tetra benzer Nematobrycon lacortei ve Inpaichthys kerri türlerinden ayırt edilmeli");
+assert.equal(speciesForCatalogExactSearch("BLACK PALMERİ TETRA", "fish", "freshwater")?.id,"emperor-tetra","Siyah Palmeri satış adı doğru Nematobrycon palmeri profiline bağlanmalı");
+const blueEmperorTetra = speciesCatalog.find((item) => item.id === "blue-emperor-tetra");
+assert.deepEqual(
+  [blueEmperorTetra?.scientificName,blueEmperorTetra?.adultSizeCm,blueEmperorTetra?.minVolumeL,blueEmperorTetra?.minTankLengthCm,blueEmperorTetra?.minGroup,blueEmperorTetra?.temperature,blueEmperorTetra?.ph,blueEmperorTetra?.flow],
+  ["Inpaichthys kerri",3.5,68,60,10,[24,27],[5.5,7],"low"],
+  "Mavi İmparator Tetra kaynaklı boy, tank tabanı, sürü, su ve akıntı eşiklerini taşımalı",
+);
+assert.deepEqual(blueEmperorTetra?.waterTypes,["freshwater"],"Mavi İmparator Tetra yalnız tatlı su profili taşımalı");
+assert.equal(blueEmperorTetra?.verifiedAt,"2026-10-02","Mavi İmparator Tetra güncel doğrulama tarihini taşımalı");
+assert.match(blueEmperorTetra?.sourceUrl || "",/^https:\/\/www\.seriouslyfish\.com\/species\/inpaichthys-kerri$/,"Mavi İmparator Tetra doğrudan türe özel uzman bakım kaynağına bağlanmalı");
+assert(blueEmperorTetra?.additionalSourceUrls?.some((url) => url.includes("fishkeeper.co.uk/fish/freshwater/characins/blue-emperor-tetra")),"Mavi İmparator Tetra onlu sürü ve varyant bilgisini kurumsal bakım kaynağıyla doğrulamalı");
+assert(blueEmperorTetra?.additionalSourceUrls?.some((url) => url.includes("fishbase.se/summary/12388")),"Mavi İmparator Tetra bilimsel boy ve dağılımını FishBase ile çapraz doğrulamalı");
+assert(blueEmperorTetra?.additionalSourceUrls?.some((url) => url.includes("doi.org/10.1590/1982-0224-2023-0113")),"Mavi İmparator Tetra güncel cins ayrımını hakemli taksonomi çalışmasına bağlamalı");
+assert(blueEmperorTetra?.husbandryCaution?.includes("bazı evcil kerri hatlarında") && blueEmperorTetra.husbandryCaution.includes("I. parauapiranga"),"Mavi İmparator Tetra yağ yüzgeci istisnası ve yakın tür ayrımını açıklamalı");
+assert.equal(speciesForCatalogExactSearch("Purple Emperor Tetra", "fish", "freshwater")?.id,"blue-emperor-tetra","Mor İmparator Tetra ayrı Inpaichthys kerri profiline bağlanmalı");
+assert.equal(speciesForCatalogExactSearch("Blue Emperor Tetra", "fish", "freshwater")?.id,"blue-emperor-tetra","Mavi İmparator Tetra Nematobrycon palmeri profiline kaymamalı");
+assert.equal(speciesForCatalogExactSearch("Super Blue Kerri Tetra", "fish", "freshwater")?.id,"blue-emperor-tetra","Super Blue Kerri üretim hattı doğru profile bağlanmalı");
+const buenosAiresTetra = speciesCatalog.find((item) => item.id === "buenos-aires-tetra");
+assert.deepEqual(
+  [buenosAiresTetra?.scientificName,buenosAiresTetra?.adultSizeCm,buenosAiresTetra?.minVolumeL,buenosAiresTetra?.minTankLengthCm,buenosAiresTetra?.minGroup,buenosAiresTetra?.temperature,buenosAiresTetra?.ph,buenosAiresTetra?.flow],
+  ["Psalidodon anisitsi",13.2,81,90,10,[16,28],[5.5,8.5],"medium"],
+  "Buenos Aires Tetra güncel taksonomi, bilimsel azami boy, tank tabanı, sürü, su ve akıntı eşiklerini taşımalı",
+);
+assert.deepEqual(buenosAiresTetra?.waterTypes,["freshwater"],"Buenos Aires Tetra yalnız tatlı su profili taşımalı");
+assert.equal(buenosAiresTetra?.verifiedAt,"2026-10-02","Buenos Aires Tetra güncel doğrulama tarihini taşımalı");
+assert.match(buenosAiresTetra?.sourceUrl || "",/^https:\/\/www\.seriouslyfish\.com\/species\/hyphessobrycon-anisitsi$/,"Buenos Aires Tetra doğrudan türe özel uzman bakım kaynağına bağlanmalı");
+assert(buenosAiresTetra?.additionalSourceUrls?.some((url) => url.includes("fishbase.se/summary/Psalidodon-anisitsi")),"Buenos Aires Tetra azami boy, bitki tüketimi ve güncel adı FishBase ile çapraz doğrulamalı");
+assert(buenosAiresTetra?.additionalSourceUrls?.some((url) => url.includes("fishcatget.asp?spid=4019")),"Buenos Aires Tetra güncel Psalidodon adını Eschmeyer kataloğuna bağlamalı");
+assert(buenosAiresTetra?.husbandryCaution?.includes("6 cm standart boy") && buenosAiresTetra.husbandryCaution.includes("13,2 cm azami toplam boy"),"Buenos Aires Tetra bakım boyu ile bilimsel azami boy farkını açıklamalı");
+assert(buenosAiresTetra?.husbandryCaution?.includes("28 °C civarında uzun süre") && buenosAiresTetra.husbandryCaution.includes("Yumuşak yapraklı bitkileri yiyebilir"),"Buenos Aires Tetra serin dönem ve bitki yeme riskini açıklamalı");
+assert.equal(speciesForCatalogExactSearch("Hyphessobrycon anisitsi", "fish", "freshwater")?.id,"buenos-aires-tetra","Eski Buenos Aires Tetra bilimsel adı güncel profile bağlanmalı");
+assert.equal(speciesForCatalogExactSearch("Golden Buenos Aires Tetra", "fish", "freshwater")?.id,"buenos-aires-tetra","Golden üretim hattı doğru Buenos Aires Tetra profiline bağlanmalı");
+const colombianTetra = speciesCatalog.find((item) => item.id === "colombian-tetra");
+assert.deepEqual(
+  [colombianTetra?.scientificName,colombianTetra?.adultSizeCm,colombianTetra?.minVolumeL,colombianTetra?.minTankLengthCm,colombianTetra?.minGroup,colombianTetra?.temperature,colombianTetra?.ph,colombianTetra?.flow],
+  ["Hyphessobrycon columbianus",7,81,90,10,[20,28],[5,7.5],"medium"],
+  "Kolombiya Tetra kaynaklı kimlik, bilimsel azami boy, tank tabanı, sürü, su ve akıntı eşiklerini taşımalı",
+);
+assert.deepEqual(colombianTetra?.waterTypes,["freshwater"],"Kolombiya Tetra yalnız tatlı su profili taşımalı");
+assert.equal(colombianTetra?.verifiedAt,"2026-10-02","Kolombiya Tetra güncel doğrulama tarihini taşımalı");
+assert.equal(colombianTetra?.sourceUrl,"https://www.seriouslyfish.com/species/hyphessobrycon-columbianus","Kolombiya Tetra doğrudan türe özel uzman bakım kaynağına bağlanmalı");
+assert(colombianTetra?.additionalSourceUrls?.some((url) => url.includes("fishbase.se/summary/hyphessobrycon-columbianus")),"Kolombiya Tetra azami toplam boyu ve dar doğal dağılımı FishBase ile çapraz doğrulamalı");
+assert(colombianTetra?.additionalSourceUrls?.some((url) => url.includes("fluvalaquatics.com/uk/wp-content/uploads/2022/02/Species-Spotlight_Colombian-Tetra_EN.pdf")),"Kolombiya Tetra topluluk ve asgari hacim bilgisini kurumsal bakım föyüyle çapraz doğrulamalı");
+assert(colombianTetra?.husbandryCaution?.includes("90 × 30 cm") && colombianTetra.husbandryCaution.includes("H. ecuadorensis"),"Kolombiya Tetra erişkin taban alanını ve geçmiş kimlik karışıklığını açıklamalı");
+assert(colombianTetra?.communityCaution?.includes("8–10") && colombianTetra.communityCaution.includes("uzun yüzgeçli"),"Kolombiya Tetra sürü ve yüzgeç güvenliğini açıklamalı");
+assert.equal(speciesForCatalogExactSearch("Blue Flame Tetra", "fish", "freshwater")?.id,"colombian-tetra","Blue Flame ticari adı Kolombiya Tetra profiline bağlanmalı");
+assert.equal(speciesForCatalogExactSearch("Colombian Redfin Tetra", "fish", "freshwater")?.id,"colombian-tetra","Colombian Redfin ticari adı doğru profile bağlanmalı");
+const redEyeTetra = speciesCatalog.find((item) => item.id === "red-eye-tetra");
+assert.deepEqual(
+  [redEyeTetra?.scientificName,redEyeTetra?.adultSizeCm,redEyeTetra?.minVolumeL,redEyeTetra?.minTankLengthCm,redEyeTetra?.minGroup,redEyeTetra?.temperature,redEyeTetra?.ph,redEyeTetra?.flow],
+  ["Bario sanctaefilomenae",7,103,90,8,[22,26],[6,8],"medium"],
+  "Kırmızı Göz Tetra güncel kimlik, boy, tank tabanı, sürü, su ve akıntı eşiklerini taşımalı",
+);
+assert.deepEqual(redEyeTetra?.waterTypes,["freshwater"],"Kırmızı Göz Tetra yalnız tatlı su profili taşımalı");
+assert.equal(redEyeTetra?.verifiedAt,"2026-10-02","Kırmızı Göz Tetra güncel doğrulama tarihini taşımalı");
+assert.equal(redEyeTetra?.sourceUrl,"https://www.seriouslyfish.com/species/bario-sanctaefilomenae","Kırmızı Göz Tetra doğrudan türe özel uzman bakım kaynağına bağlanmalı");
+assert(redEyeTetra?.additionalSourceUrls?.some((url) => url.includes("fishbase.se/summary/moenkhausia-sanctaefilomenae")),"Kırmızı Göz Tetra boy, su aralığı ve eski bilimsel adı FishBase ile çapraz doğrulamalı");
+assert(redEyeTetra?.husbandryCaution?.includes("90 × 38 cm") && redEyeTetra.husbandryCaution.includes("Moenkhausia sanctaefilomenae"),"Kırmızı Göz Tetra erişkin taban alanını ve eski bilimsel adını açıklamalı");
+assert(redEyeTetra?.communityCaution?.includes("6–8") && redEyeTetra.communityCaution.includes("uzun yüzgeçli"),"Kırmızı Göz Tetra sürü ve hareketlilik güvenliğini açıklamalı");
+assert.equal(speciesForCatalogExactSearch("Moenkhausia sanctaefilomenae", "fish", "freshwater")?.id,"red-eye-tetra","Eski Kırmızı Göz Tetra bilimsel adı güncel profile bağlanmalı");
+assert.equal(speciesForCatalogExactSearch("BALON KIRMIZI GÖZ TETRA", "fish", "freshwater")?.id,"red-eye-tetra","Balon satış adı aynı biyolojik profile bağlanmalı");
+const greenFireTetra = speciesCatalog.find((item) => item.id === "green-fire-tetra");
+assert.deepEqual(
+  [greenFireTetra?.scientificName,greenFireTetra?.adultSizeCm,greenFireTetra?.minVolumeL,greenFireTetra?.minTankLengthCm,greenFireTetra?.minGroup,greenFireTetra?.temperature,greenFireTetra?.ph,greenFireTetra?.flow],
+  ["Aphyocharax rathbuni",7.1,54,60,6,[20,26],[6.5,7.5],"medium"],
+  "Yeşil Ateş Tetra kaynaklı kimlik, koruyucu boy, tank tabanı, sürü, su ve akıntı eşiklerini taşımalı",
+);
+assert.deepEqual(greenFireTetra?.waterTypes,["freshwater"],"Yeşil Ateş Tetra yalnız tatlı su profili taşımalı");
+assert.equal(greenFireTetra?.verifiedAt,"2026-10-02","Yeşil Ateş Tetra güncel doğrulama tarihini taşımalı");
+assert.equal(greenFireTetra?.sourceUrl,"https://www.seriouslyfish.com/species/aphyocharax-rathbuni","Yeşil Ateş Tetra doğrudan türe özel uzman bakım kaynağına bağlanmalı");
+assert(greenFireTetra?.additionalSourceUrls?.some((url) => url.includes("fishbase.se/summary/aphyocharax-rathbuni")),"Yeşil Ateş Tetra bilimsel azami boy ve su aralığını FishBase ile çapraz doğrulamalı");
+assert(greenFireTetra?.additionalSourceUrls?.some((url) => url.includes("fishbase.se/Nomenclature/12340")),"Yeşil Ateş Tetra eski bilimsel eş adlarını taksonomi kaynağıyla doğrulamalı");
+assert(greenFireTetra?.husbandryCaution?.includes("4,5 cm standart boy") && greenFireTetra.husbandryCaution.includes("7,1 cm"),"Yeşil Ateş Tetra akvaryum bakım boyu ile bilimsel azami boy farkını açıklamalı");
+assert(greenFireTetra?.communityCaution?.includes("yüzgeç ısırmaya") && greenFireTetra.communityCaution.includes("uzun yüzgeçli"),"Yeşil Ateş Tetra sürü ve yüzgeç güvenliğini açıklamalı");
+assert.equal(speciesForCatalogExactSearch("Aphyocharax stramineus", "fish", "freshwater")?.id,"green-fire-tetra","Eski Yeşil Ateş Tetra bilimsel adı güncel profile bağlanmalı");
+assert.equal(speciesForCatalogExactSearch("Rathbun's Bloodfin", "fish", "freshwater")?.id,"green-fire-tetra","Rathbun's Bloodfin ortak adı doğru profile bağlanmalı");
+assert.equal(speciesForCatalogExactSearch("Green Fire Tetra", "fish", "saltwater"),undefined,"Yeşil Ateş Tetra deniz kataloğunda görünmemeli");
+const eightBandedFalseBarb = speciesCatalog.find((item) => item.id === "eight-banded-false-barb");
+assert.deepEqual(
+  [eightBandedFalseBarb?.scientificName,eightBandedFalseBarb?.adultSizeCm,eightBandedFalseBarb?.minVolumeL,eightBandedFalseBarb?.minTankLengthCm,eightBandedFalseBarb?.minGroup,eightBandedFalseBarb?.temperature,eightBandedFalseBarb?.ph,eightBandedFalseBarb?.flow],
+  ["Eirmotus octozona",3.6,54,60,10,[22,26],[5,7],"low"],
+  "Eirmotus octozona kaynaklı kimlik, boy, tank tabanı, sürü, su ve akıntı eşiklerini taşımalı",
+);
+assert.deepEqual(eightBandedFalseBarb?.waterTypes,["freshwater"],"Eirmotus octozona yalnız tatlı su profili taşımalı");
+assert.equal(eightBandedFalseBarb?.verifiedAt,"2026-10-02","Eirmotus octozona güncel doğrulama tarihini taşımalı");
+assert.equal(eightBandedFalseBarb?.sourceUrl,"https://www.seriouslyfish.com/species/eirmotus-octozona","Eirmotus octozona doğrudan türe özel uzman bakım kaynağına bağlanmalı");
+assert(eightBandedFalseBarb?.additionalSourceUrls?.some((url) => url.includes("fishbase.se/summary/Eirmotus-octozona")),"Eirmotus octozona bilimsel boy ve doğal sınıfını FishBase ile çapraz doğrulamalı");
+assert(eightBandedFalseBarb?.husbandryCaution?.includes("biyolojik olarak olgunlaşmamış") && eightBandedFalseBarb.husbandryCaution.includes("Eirmotus insignis"),"Eirmotus octozona olgun tank ve ticari kimlik karışıklığını açıklamalı");
+assert(eightBandedFalseBarb?.communityCaution?.includes("8–10") && eightBandedFalseBarb.communityCaution.includes("yem rekabetine"),"Eirmotus octozona sosyal grup ve yem rekabeti güvenliğini açıklamalı");
+assert.equal(speciesForCatalogExactSearch("Eirmotus octozona", "fish", "freshwater")?.id,"eight-banded-false-barb","Kesin Eirmotus octozona bilimsel adı güvenli profile bağlanmalı");
+assert.equal(speciesForLivestock({commonName:"EİGHT BANDED BARB",category:"fish",quantity:10}),undefined,"Belirsiz Eight Banded Barb mağaza adı E. octozona profiline tahminle bağlanmamalı");
+const unresolvedEightBandedBarb = unresolvedSpeciesForSearch("EİGHT BANDED BARB", "fish", "freshwater");
+assert.equal(unresolvedEightBandedBarb?.name,"EİGHT BANDED BARB","Belirsiz Eight Banded Barb mağaza adı açıklamalı güvenlik kaydını bulmalı");
+assert(unresolvedEightBandedBarb?.reason.includes("Eirmotus octozona") && unresolvedEightBandedBarb.reason.includes("Eirmotus insignis"),"Eight Banded Barb güvenlik kaydı iki olası bilimsel kimliği açıklamalı");
+assert.equal(unresolvedEightBandedBarb?.verifiedAt,"2026-10-02","Eight Banded Barb güvenlik kaydı güncel doğrulama tarihini taşımalı");
+const daisysBlueRicefish = speciesCatalog.find((item) => item.id === "daisys-blue-ricefish");
+assert.deepEqual(
+  [daisysBlueRicefish?.scientificName,daisysBlueRicefish?.adultSizeCm,daisysBlueRicefish?.minVolumeL,daisysBlueRicefish?.minTankLengthCm,daisysBlueRicefish?.minGroup,daisysBlueRicefish?.temperature,daisysBlueRicefish?.ph,daisysBlueRicefish?.flow],
+  ["Oryzias woworae",3,41,45,8,[23,27],[6,7.5],"low"],
+  "Oryzias woworae kaynaklı kimlik, boy, tank tabanı, sürü, su ve akıntı eşiklerini taşımalı",
+);
+assert.deepEqual(daisysBlueRicefish?.waterTypes,["freshwater"],"Oryzias woworae yalnız tatlı su profili taşımalı");
+assert.equal(daisysBlueRicefish?.verifiedAt,"2026-10-02","Oryzias woworae güncel doğrulama tarihini taşımalı");
+assert.equal(daisysBlueRicefish?.sourceUrl,"https://www.seriouslyfish.com/species/oryzias-woworae","Oryzias woworae doğrudan türe özel uzman bakım kaynağına bağlanmalı");
+assert(daisysBlueRicefish?.additionalSourceUrls?.some((url) => url.includes("fishbase.se/Summary/Oryzias-woworae")),"Oryzias woworae bilimsel boy, dağılım ve koruma durumunu FishBase ile çapraz doğrulamalı");
+assert(daisysBlueRicefish?.additionalSourceUrls?.some((url) => url.includes("repository.si.edu/bitstream/handle/10088/9776")),"Oryzias woworae özgün tür tanımına bağlanmalı");
+assert(daisysBlueRicefish?.husbandryCaution?.includes("O. wolasi") && daisysBlueRicefish.husbandryCaution.includes("Tehlikede") && daisysBlueRicefish.husbandryCaution.includes("üretim kökenli"),"Oryzias woworae melezlenme, koruma ve kaynak güvenliğini açıklamalı");
+assert.equal(speciesForCatalogExactSearch("ORYZİAS WOWORAE", "fish", "freshwater")?.id,"daisys-blue-ricefish","Türkiye satışındaki bilimsel ad Oryzias woworae profiline bağlanmalı");
+assert.equal(speciesForCatalogExactSearch("Daisy's Ricefish", "fish", "freshwater")?.id,"daisys-blue-ricefish","Daisy's Ricefish ortak adı doğru profile bağlanmalı");
+assert.equal(speciesForCatalogExactSearch("Daisy's Ricefish", "fish", "saltwater"),undefined,"Oryzias woworae deniz kataloğunda görünmemeli");
+const pacificBlueEye = speciesCatalog.find((item) => item.id === "pacific-blue-eye");
+assert.deepEqual(
+  [pacificBlueEye?.scientificName,pacificBlueEye?.adultSizeCm,pacificBlueEye?.minVolumeL,pacificBlueEye?.minTankLengthCm,pacificBlueEye?.minGroup,pacificBlueEye?.temperature,pacificBlueEye?.ph,pacificBlueEye?.flow],
+  ["Pseudomugil signifer",8.8,54,60,10,[20,26],[6.5,7.5],"medium"],
+  "Pseudomugil signifer kaynaklı kimlik, koruyucu boy, tank tabanı, sürü, su ve akıntı eşiklerini taşımalı",
+);
+assert.deepEqual(pacificBlueEye?.waterTypes,["freshwater"],"Pseudomugil signifer kaynaksız özgül ağırlık hedefi olmadan acı veya deniz suyu profiline açılmamalı");
+assert.equal(pacificBlueEye?.verifiedAt,"2026-10-02","Pseudomugil signifer güncel doğrulama tarihini taşımalı");
+assert.equal(pacificBlueEye?.sourceUrl,"https://www.seriouslyfish.com/species/pseudomugil-signifer","Pseudomugil signifer doğrudan türe özel uzman bakım kaynağına bağlanmalı");
+assert(pacificBlueEye?.additionalSourceUrls?.some((url) => url.includes("fishbase.se/summary/pseudomugil_signifer")),"Pseudomugil signifer bilimsel boy, tatlı/acı su sınıfı ve su aralığını FishBase ile çapraz doğrulamalı");
+assert(pacificBlueEye?.additionalSourceUrls?.some((url) => url.includes("australian.museum/learn/animals/fishes/pacific-blue-eye")),"Pseudomugil signifer büyük erkek boyunu Australian Museum ile doğrulamalı");
+assert(pacificBlueEye?.husbandryCaution?.includes("7 cm azami standart boy") && pacificBlueEye.husbandryCaution.includes("8,8 cm"),"Pseudomugil signifer kaynaklardaki boy ölçümü farkını açıklamalı");
+assert(pacificBlueEye?.husbandryCaution?.includes("özgül ağırlık hedefi") && pacificBlueEye.husbandryCaution.includes("tuz gerektirmez"),"Pseudomugil signifer tuzluluk varsayımı yapılmamasını açıklamalı");
+assert(pacificBlueEye?.communityCaution?.includes("8–10") && pacificBlueEye.communityCaution.includes("öldürebildiğinden"),"Pseudomugil signifer sürü ve büyük kuzey erkeği saldırganlık güvenliğini açıklamalı");
+assert.equal(speciesForCatalogExactSearch("PSEUDOMUGİL SİGNİFER", "fish", "freshwater")?.id,"pacific-blue-eye","Türkiye satışındaki bilimsel ad Pseudomugil signifer profiline bağlanmalı");
+assert.equal(speciesForCatalogExactSearch("Atherina signata", "fish", "freshwater")?.id,"pacific-blue-eye","Eski Pseudomugil signifer bilimsel adı güncel profile bağlanmalı");
+assert.equal(speciesForCatalogExactSearch("Pacific Blue-eye", "fish", "brackish"),undefined,"Pseudomugil signifer kaynaklı özgül ağırlık modeli olmadan acı su kataloğunda görünmemeli");
+const redPhantomTetra = speciesCatalog.find((item) => item.id === "red-phantom-tetra");
+assert.deepEqual(
+  [redPhantomTetra?.scientificName,redPhantomTetra?.adultSizeCm,redPhantomTetra?.minVolumeL,redPhantomTetra?.minTankLengthCm,redPhantomTetra?.minGroup,redPhantomTetra?.temperature,redPhantomTetra?.ph,redPhantomTetra?.flow],
+  ["Megalamphodus sweglesi",3.5,72,80,10,[20,28],[4.5,7.5],"low"],
+  "Kırmızı Fantom Tetra güncel kimlik, boy, tank tabanı, sürü, su ve akıntı eşiklerini taşımalı",
+);
+assert.deepEqual(redPhantomTetra?.waterTypes,["freshwater"],"Kırmızı Fantom Tetra yalnız tatlı su profili taşımalı");
+assert.equal(redPhantomTetra?.verifiedAt,"2026-10-02","Kırmızı Fantom Tetra güncel doğrulama tarihini taşımalı");
+assert.equal(redPhantomTetra?.sourceUrl,"https://www.seriouslyfish.com/species/megalamphodus-sweglesi","Kırmızı Fantom Tetra doğrudan güncel türe özel uzman bakım kaynağına bağlanmalı");
+assert(redPhantomTetra?.additionalSourceUrls?.some((url) => url.includes("fishbase.se/summary/Hyphessobrycon-sweglesi")),"Kırmızı Fantom Tetra bilimsel boy, eski ad ve su verilerini FishBase ile çapraz doğrulamalı");
+assert(redPhantomTetra?.husbandryCaution?.includes("Megalamphodus sweglesi") && redPhantomTetra.husbandryCaution.includes("Hyphessobrycon sweglesi"),"Kırmızı Fantom Tetra güncel ve eski bilimsel adı açıklamalı");
+assert(redPhantomTetra?.husbandryCaution?.includes("var. rubra") && redPhantomTetra.husbandryCaution.includes("aynı türdür"),"Kırmızı Fantom Tetra kırmızı üretim formunu ayrı tür gibi göstermemeli");
+assert(redPhantomTetra?.communityCaution?.includes("8–10") && redPhantomTetra.communityCaution.includes("çok hareketli"),"Kırmızı Fantom Tetra sürü ve tank arkadaşı güvenliğini açıklamalı");
+assert.equal(speciesForCatalogExactSearch("RED FANTOM TETRA BALIKLARI", "fish", "freshwater")?.id,"red-phantom-tetra","Türkiye satış adı doğru Kırmızı Fantom profiline bağlanmalı");
+assert.equal(speciesForCatalogExactSearch("Hyphessobrycon sweglesi", "fish", "freshwater")?.id,"red-phantom-tetra","Eski Kırmızı Fantom bilimsel adı güncel profile bağlanmalı");
+assert.equal(speciesForCatalogExactSearch("Hyphessobrycon sweglesi var. rubra", "fish", "freshwater")?.id,"red-phantom-tetra","Rubra formu aynı Kırmızı Fantom profiline bağlanmalı");
+const sawbwaResplendens = speciesCatalog.find((item) => item.id === "sawbwa-resplendens");
+assert.deepEqual(
+  [sawbwaResplendens?.scientificName,sawbwaResplendens?.adultSizeCm,sawbwaResplendens?.minVolumeL,sawbwaResplendens?.minTankLengthCm,sawbwaResplendens?.minGroup,sawbwaResplendens?.temperature,sawbwaResplendens?.ph,sawbwaResplendens?.flow],
+  ["Sawbwa resplendens",3.5,54,60,5,[18,22],[6,8],"low"],
+  "Sawbwa resplendens kaynaklı kimlik, boy, tank tabanı, cinsiyet grubu, su ve akıntı eşiklerini taşımalı",
+);
+assert.deepEqual(sawbwaResplendens?.waterTypes,["freshwater"],"Sawbwa resplendens yalnız tatlı su profili taşımalı");
+assert.equal(sawbwaResplendens?.verifiedAt,"2026-10-02","Sawbwa resplendens güncel doğrulama tarihini taşımalı");
+assert.equal(sawbwaResplendens?.sourceUrl,"https://www.seriouslyfish.com/species/sawbwa-resplendens","Sawbwa resplendens doğrudan türe özel uzman bakım kaynağına bağlanmalı");
+assert(sawbwaResplendens?.additionalSourceUrls?.some((url) => url.includes("fishbase.se/summary/sawbwa-resplendens")),"Sawbwa resplendens bilimsel boy, su ve koruma durumunu FishBase ile çapraz doğrulamalı");
+assert(sawbwaResplendens?.husbandryCaution?.includes("bir erkek ve en az dört dişi") && sawbwaResplendens.husbandryCaution.includes("25 °C üzerindeki"),"Sawbwa resplendens cinsiyet oranı ve yüksek sıcaklık üreme riskini açıklamalı");
+assert(sawbwaResplendens?.husbandryCaution?.includes("Tehlikede") && sawbwaResplendens.husbandryCaution.includes("üretim kökenli"),"Sawbwa resplendens koruma ve üretim kökeni güvenliğini açıklamalı");
+assert(sawbwaResplendens?.communityCaution?.includes("baskınlık mücadelesi") && sawbwaResplendens.communityCaution.includes("dört dişidir"),"Sawbwa resplendens erkek saldırganlığı ve cinsiyet oranını açıklamalı");
+assert.equal(speciesForCatalogExactSearch("SAWBWA REPLENDENS", "fish", "freshwater")?.id,"sawbwa-resplendens","Türkiye satışındaki bilimsel ad doğru Sawbwa profiline bağlanmalı");
+assert.equal(speciesForCatalogExactSearch("Asian Rummynose", "fish", "freshwater")?.id,"sawbwa-resplendens","Asian Rummynose ortak adı doğru profile bağlanmalı");
+const phoenixRasbora = speciesCatalog.find((item) => item.id === "phoenix-rasbora");
+assert.deepEqual(
+  [phoenixRasbora?.scientificName,phoenixRasbora?.adultSizeCm,phoenixRasbora?.minVolumeL,phoenixRasbora?.minTankLengthCm,phoenixRasbora?.minGroup,phoenixRasbora?.temperature,phoenixRasbora?.ph,phoenixRasbora?.flow],
+  ["Boraras merah",2,41,45,10,[20,28],[4,6.5],"low"],
+  "Phoenix Rasbora kaynaklı kimlik, boy, tank tabanı, sürü, su ve akıntı eşiklerini taşımalı",
+);
+assert.deepEqual(phoenixRasbora?.waterTypes,["freshwater"],"Phoenix Rasbora yalnız tatlı su profili taşımalı");
+assert.equal(phoenixRasbora?.verifiedAt,"2026-10-02","Phoenix Rasbora güncel doğrulama tarihini taşımalı");
+assert.equal(phoenixRasbora?.sourceUrl,"https://www.seriouslyfish.com/species/boraras-merah/","Phoenix Rasbora doğrudan türe özel uzman bakım kaynağına bağlanmalı");
+assert(phoenixRasbora?.additionalSourceUrls?.some((url) => url.includes("fishbase.se/summary/Boraras-merah")),"Phoenix Rasbora bilimsel boy, dağılım ve koruma durumunu FishBase ile çapraz doğrulamalı");
+assert(phoenixRasbora?.husbandryCaution?.includes("1–5 dGH") && phoenixRasbora.husbandryCaution.includes("biyolojik olarak olgun") && phoenixRasbora.husbandryCaution.includes("B. brigittae"),"Phoenix Rasbora su sertliği, olgun akvaryum ve kimlik karışıklığını açıklamalı");
+assert(phoenixRasbora?.husbandryCaution?.includes("Veri Yetersiz") && phoenixRasbora.husbandryCaution.includes("üretim kökenli"),"Phoenix Rasbora koruma ve üretim kökeni güvenliğini açıklamalı");
+assert.equal(speciesForCatalogExactSearch("RASBORA MERAH BORARAS BALIKLARI", "fish", "freshwater")?.id,"phoenix-rasbora","Türkiye satış adı doğru Phoenix Rasbora profiline bağlanmalı");
+const redNeonBlueEye = speciesCatalog.find((item) => item.id === "red-neon-blue-eye");
+assert.deepEqual(
+  [redNeonBlueEye?.scientificName,redNeonBlueEye?.adultSizeCm,redNeonBlueEye?.minVolumeL,redNeonBlueEye?.minTankLengthCm,redNeonBlueEye?.minGroup,redNeonBlueEye?.temperature,redNeonBlueEye?.ph,redNeonBlueEye?.flow],
+  ["Pseudomugil luminatus",3,60,60,10,[20,28],[6.5,8],"low"],
+  "Red Neon Blue-eye kaynaklı kimlik, koruyucu boy, tank tabanı, sürü, su ve akıntı eşiklerini taşımalı",
+);
+assert.deepEqual(redNeonBlueEye?.waterTypes,["freshwater"],"Red Neon Blue-eye yalnız tatlı su profili taşımalı");
+assert.equal(redNeonBlueEye?.verifiedAt,"2026-10-02","Red Neon Blue-eye güncel doğrulama tarihini taşımalı");
+assert.equal(redNeonBlueEye?.sourceUrl,"https://www.fishkeeper.co.uk/fish/freshwater/rainbow-fish/red-neon-blue-eye","Red Neon Blue-eye doğrudan kurumsal bakım kaynağına bağlanmalı");
+assert(redNeonBlueEye?.additionalSourceUrls?.some((url) => url.includes("fishbase.se/summary/Pseudomugil-luminatus")),"Red Neon Blue-eye bilimsel boy ve koruma durumunu FishBase ile çapraz doğrulamalı");
+assert(redNeonBlueEye?.additionalSourceUrls?.some((url) => url.includes("rainbowfish.angfa.org.au")),"Red Neon Blue-eye bilimsel kimliğini uzman gökkuşağı balığı kaynağıyla çapraz doğrulamalı");
+assert(redNeonBlueEye?.additionalSourceUrls?.some((url) => url.includes("dcceew.gov.au/environment/wildlife-trade/live-import-list")),"Red Neon Blue-eye üretim kökeni güvenliğini resmî ithalat listesiyle çapraz doğrulamalı");
+assert(redNeonBlueEye?.husbandryCaution?.includes("1,9 cm") && redNeonBlueEye.husbandryCaution.includes("P. paskai") && redNeonBlueEye.husbandryCaution.includes("Tehlikede"),"Red Neon Blue-eye boy farkı, kimlik karışıklığı ve koruma durumunu açıklamalı");
+assert.equal(speciesForCatalogExactSearch("Pseudomugil sp. Red Neon", "fish", "freshwater")?.id,"red-neon-blue-eye","Eski Red Neon ticari adı doğru profile bağlanmalı");
+const ninjaWoodcat = speciesCatalog.find((item) => item.id === "ninja-woodcat");
+assert.deepEqual(
+  [ninjaWoodcat?.scientificName,ninjaWoodcat?.adultSizeCm,ninjaWoodcat?.minVolumeL,ninjaWoodcat?.minTankLengthCm,ninjaWoodcat?.minGroup,ninjaWoodcat?.temperature,ninjaWoodcat?.ph,ninjaWoodcat?.flow],
+  ["Tatia musaica",7,56,60,5,[25,26],[6,7.2],"medium"],
+  "Ninja Woodcat kaynaklı kimlik, koruyucu boy, tank tabanı, grup, su ve akıntı eşiklerini taşımalı",
+);
+assert.deepEqual(ninjaWoodcat?.waterTypes,["freshwater"],"Ninja Woodcat yalnız tatlı su profili taşımalı");
+assert.equal(ninjaWoodcat?.predatory,true,"Ninja Woodcat çok küçük canlı avı riskini sağlık analizine taşımalı");
+assert.equal(ninjaWoodcat?.verifiedAt,"2026-10-02","Ninja Woodcat güncel doğrulama tarihini taşımalı");
+assert.equal(ninjaWoodcat?.sourceUrl,"https://www.fishkeeper.co.uk/fish/freshwater/catfish/ninja-woodcat","Ninja Woodcat doğrudan kurumsal bakım kaynağına bağlanmalı");
+assert(ninjaWoodcat?.additionalSourceUrls?.some((url) => url.includes("aquarismopaulista.com/ninja-woodcat")) && ninjaWoodcat.additionalSourceUrls.some((url) => url.includes("suedamerikafans.de/wels-datenbank")),"Ninja Woodcat alan, boy ve su verilerini iki uzman kaynakla çapraz doğrulamalı");
+assert(ninjaWoodcat?.husbandryCaution?.includes("22–26") && ninjaWoodcat.husbandryCaution.includes("24–30") && ninjaWoodcat.husbandryCaution.includes("25–29"),"Ninja Woodcat kaynaklar arasındaki sıcaklık farkını kullanıcıdan saklamamalı");
+assert(ninjaWoodcat?.husbandryCaution?.includes("Tatia sp. aff. musaica") && ninjaWoodcat.husbandryCaution.includes("bilimsel kimlik"),"Ninja Woodcat benzer ticari türün kimlik riskini açıklamalı");
+const redBelliedPiranha = speciesCatalog.find((item) => item.id === "red-bellied-piranha");
+assert.deepEqual(
+  [redBelliedPiranha?.scientificName,redBelliedPiranha?.adultSizeCm,redBelliedPiranha?.minVolumeL,redBelliedPiranha?.minTankLengthCm,redBelliedPiranha?.minGroup,redBelliedPiranha?.temperature,redBelliedPiranha?.ph,redBelliedPiranha?.flow],
+  ["Pygocentrus nattereri",50,1296,240,6,[23,27],[5.5,7.5],"medium"],
+  "Kırmızı Karınlı Pirana kaynaklı kimlik, koruyucu boy, erişkin tabanı, grup ve su eşiklerini taşımalı",
+);
+assert.deepEqual(redBelliedPiranha?.waterTypes,["freshwater"],"Kırmızı Karınlı Pirana yalnız tatlı su profili taşımalı");
+assert.equal(redBelliedPiranha?.predatory,true,"Kırmızı Karınlı Pirana avcı güvenliğini sağlık analizine taşımalı");
+assert.equal(redBelliedPiranha?.verifiedAt,"2026-10-02","Kırmızı Karınlı Pirana güncel doğrulama tarihini taşımalı");
+assert(redBelliedPiranha?.additionalSourceUrls?.some((url) => url.includes("fishbase.se/summary/Pygocentrus_nattereri")) && redBelliedPiranha.additionalSourceUrls.some((url) => url.includes("b-aqua.com/pages/fiche.aspx?id=3026")),"Kırmızı Karınlı Pirana bilimsel ve bakım verisini bağımsız kaynaklarla çapraz doğrulamalı");
+assert(redBelliedPiranha?.husbandryCaution?.includes("240 × 90 × 60 cm") && redBelliedPiranha.husbandryCaution.includes("600 litre") && redBelliedPiranha.husbandryCaution.includes("Canlı yem"),"Kırmızı Karınlı Pirana alan kaynak farkını ve yem güvenliğini açıklamalı");
+const endlicheriBichir = speciesCatalog.find((item) => item.id === "endlicheri-bichir");
+assert.deepEqual(
+  [endlicheriBichir?.scientificName,endlicheriBichir?.adultSizeCm,endlicheriBichir?.minVolumeL,endlicheriBichir?.minTankLengthCm,endlicheriBichir?.minGroup,endlicheriBichir?.temperature,endlicheriBichir?.ph,endlicheriBichir?.flow],
+  ["Polypterus endlicherii",70,2000,300,1,[26,28],[6.5,7.5],"low"],
+  "Endlicheri Biçir kaynaklı kimlik, koruyucu boy, uzman sistem tabanı ve su eşiklerini taşımalı",
+);
+assert.deepEqual(endlicheriBichir?.waterTypes,["freshwater"],"Endlicheri Biçir yalnız tatlı su profili taşımalı");
+assert.equal(endlicheriBichir?.verifiedAt,"2026-10-02","Endlicheri Biçir güncel doğrulama tarihini taşımalı");
+assert.equal(endlicheriBichir?.sourceUrl,"https://www.einrichtungsbeispiele.de/zierfische/afrika/polypterus-endlicherii-slnk.html","Endlicheri Biçir doğrudan uzman bakım kaynağına bağlanmalı");
+assert(endlicheriBichir?.additionalSourceUrls?.some((url) => url.includes("fishbase.se/summary/Polypterus_endlicherii")),"Endlicheri Biçir bilimsel boyu FishBase ile çapraz doğrulamalı");
+assert(endlicheriBichir?.husbandryCaution?.includes("3 metre") && endlicheriBichir.husbandryCaution.includes("65,5 cm") && endlicheriBichir.husbandryCaution.includes("ağır"),"Endlicheri Biçir alan, boy farkı ve kaçış güvenliğini açıklamalı");
+const monoculusPeacockBass = speciesCatalog.find((item) => item.id === "monoculus-peacock-bass");
+assert.deepEqual(
+  [monoculusPeacockBass?.scientificName,monoculusPeacockBass?.adultSizeCm,monoculusPeacockBass?.minVolumeL,monoculusPeacockBass?.minTankLengthCm,monoculusPeacockBass?.minGroup,monoculusPeacockBass?.temperature,monoculusPeacockBass?.ph,monoculusPeacockBass?.flow],
+  ["Cichla monoculus",80,1200,200,1,[25,31],[5.5,6.5],"low"],
+  "Monoculus Peacock Bass kaynaklı kimlik, toplam boy, uzman sistem tabanı ve su eşiklerini taşımalı",
+);
+assert.deepEqual(monoculusPeacockBass?.waterTypes,["freshwater"],"Monoculus Peacock Bass yalnız tatlı su profili taşımalı");
+assert.equal(monoculusPeacockBass?.verifiedAt,"2026-10-02","Monoculus Peacock Bass güncel doğrulama tarihini taşımalı");
+assert.equal(monoculusPeacockBass?.sourceUrl,"https://www.fishipedia.fr/fr/poissons/cichla-monoculus","Monoculus Peacock Bass doğrudan uzman bakım kaynağına bağlanmalı");
+assert(monoculusPeacockBass?.additionalSourceUrls?.some((url) => url.includes("fishbase.se/summary/Cichla-monoculus")),"Monoculus Peacock Bass bilimsel boy ve doğal su aralığını FishBase ile çapraz doğrulamalı");
+assert(monoculusPeacockBass?.husbandryCaution?.includes("70 cm azami standart boy") && monoculusPeacockBass.husbandryCaution.includes("80 cm toplam boy") && monoculusPeacockBass.husbandryCaution.includes("pH 7,0"),"Monoculus Peacock Bass boy ve su kaynağı farklarını kullanıcıdan saklamamalı");
+const celebesRainbowfish = speciesCatalog.find((item) => item.id === "celebes-rainbowfish");
+assert.deepEqual(
+  [celebesRainbowfish?.scientificName,celebesRainbowfish?.adultSizeCm,celebesRainbowfish?.minVolumeL,celebesRainbowfish?.minTankLengthCm,celebesRainbowfish?.minGroup,celebesRainbowfish?.temperature,celebesRainbowfish?.ph,celebesRainbowfish?.flow],
+  ["Marosatherina ladigesi",8,68,76,8,[22,28],[7,8],"medium"],
+  "Celebes Gökkuşağı kaynaklı kimlik, boy, tank tabanı, sürü, su ve akıntı eşiklerini taşımalı",
+);
+assert.deepEqual(celebesRainbowfish?.waterTypes,["freshwater"],"Celebes Gökkuşağı kaynaksız özgül ağırlık hedefi olmadan acı su profiline açılmamalı");
+assert.equal(celebesRainbowfish?.verifiedAt,"2026-10-02","Celebes Gökkuşağı güncel doğrulama tarihini taşımalı");
+assert.equal(celebesRainbowfish?.sourceUrl,"https://www.seriouslyfish.com/species/marosatherina-ladigesi","Celebes Gökkuşağı doğrudan türe özel uzman bakım kaynağına bağlanmalı");
+assert(celebesRainbowfish?.additionalSourceUrls?.some((url) => url.includes("fishbase.se/FieldGuide/FieldGuideSummary.php")),"Celebes Gökkuşağı boy, tatlı su sınıfı ve koruma durumunu FishBase ile çapraz doğrulamalı");
+assert(celebesRainbowfish?.additionalSourceUrls?.some((url) => url.includes("fishkeeper.co.uk/fish/freshwater/rainbow-fish/celebes-rainbowfish-")),"Celebes Gökkuşağı sürü ve su bakımını kurumsal kaynakla çapraz doğrulamalı");
+assert(celebesRainbowfish?.husbandryCaution?.includes("76 × 30 cm") && celebesRainbowfish.husbandryCaution.includes("özgül ağırlık hedefi") && celebesRainbowfish.husbandryCaution.includes("üretim kökenli"),"Celebes Gökkuşağı alan, tuzluluk varsayımı ve koruma kökeni güvenliğini açıklamalı");
+assert.equal(speciesForCatalogExactSearch("Telmatherina ladigesi", "fish", "freshwater")?.id,"celebes-rainbowfish","Eski Celebes bilimsel adı güncel profile bağlanmalı");
+assert.equal(speciesForCatalogExactSearch("CELEBES RAİNBOW", "fish", "freshwater")?.id,"celebes-rainbowfish","Türkiye satış adı doğru Celebes profiline bağlanmalı");
+const bleedingHeartTetra = speciesCatalog.find((item) => item.id === "bleeding-heart-tetra");
+assert.deepEqual(
+  [bleedingHeartTetra?.scientificName,bleedingHeartTetra?.adultSizeCm,bleedingHeartTetra?.minVolumeL,bleedingHeartTetra?.minTankLengthCm,bleedingHeartTetra?.minGroup,bleedingHeartTetra?.temperature,bleedingHeartTetra?.ph,bleedingHeartTetra?.flow],
+  ["Megalamphodus erythrostigma",6.1,81,90,10,[21,28],[4,7.5],"low"],
+  "Kanayan Kalp Tetra güncel taksonomi, koruyucu boy, tank tabanı, sürü, su ve akıntı eşiklerini taşımalı",
+);
+assert.deepEqual(bleedingHeartTetra?.waterTypes,["freshwater"],"Kanayan Kalp Tetra yalnız tatlı su profili taşımalı");
+assert.equal(bleedingHeartTetra?.verifiedAt,"2026-10-02","Kanayan Kalp Tetra güncel doğrulama tarihini taşımalı");
+assert.match(bleedingHeartTetra?.sourceUrl || "",/^https:\/\/seriouslyfish\.com\/species\/hyphessobrycon-erythrostigma$/,"Kanayan Kalp Tetra doğrudan türe özel uzman bakım kaynağına bağlanmalı");
+assert(bleedingHeartTetra?.additionalSourceUrls?.some((url) => url.includes("researcharchive.calacademy.org")),"Kanayan Kalp Tetra güncel bilimsel adı Eschmeyer katalog kaynağına bağlanmalı");
+assert(bleedingHeartTetra?.additionalSourceUrls?.some((url) => url.includes("academic.oup.com/zoolinnean")),"Kanayan Kalp Tetra Megalamphodus dönüşümünü hakemli filogenomik kaynağa bağlamalı");
+assert.equal(speciesForCatalogExactSearch("Hyphessobrycon erythrostigma", "fish", "freshwater")?.id,"bleeding-heart-tetra","Eski bilimsel ad güncel Megalamphodus erythrostigma profilini bulmalı");
+assert.equal(speciesForCatalogExactSearch("Megalamphodus erythrostigma", "fish", "freshwater")?.id,"bleeding-heart-tetra","Güncel bilimsel ad doğru profili bulmalı");
+assert.equal(speciesForCatalogExactSearch("Flame-back Bleeding Heart Tetra", "fish", "freshwater")?.id,"flameback-bleeding-heart-tetra","Alev sırtlı benzer tür genel Kanayan Kalp profiline kaymamalı");
+const diamondTetra = speciesCatalog.find((item) => item.id === "diamond-tetra");
+assert.deepEqual(
+  [diamondTetra?.scientificName,diamondTetra?.adultSizeCm,diamondTetra?.minVolumeL,diamondTetra?.minTankLengthCm,diamondTetra?.minGroup,diamondTetra?.temperature,diamondTetra?.ph,diamondTetra?.flow],
+  ["Makunaima pittieri",6,68,80,8,[24,28],[5.5,7],"low"],
+  "Elmas Tetra güncel taksonomi, boy, tank, sürü, su ve akıntı eşiklerini taşımalı",
+);
+assert.deepEqual(diamondTetra?.waterTypes,["freshwater"],"Elmas Tetra yalnız tatlı su profili taşımalı");
+assert.equal(diamondTetra?.verifiedAt,"2026-10-02","Elmas Tetra güncel doğrulama tarihini taşımalı");
+assert.match(diamondTetra?.sourceUrl || "",/^https:\/\/www\.seriouslyfish\.com\/species\/makunaima-pittieri$/,"Elmas Tetra doğrudan güncel türe özel uzman bakım kaynağına bağlanmalı");
+assert(diamondTetra?.additionalSourceUrls?.some((url) => url.includes("fishbase.se/summary/Moenkhausia-pittieri")),"Elmas Tetra boy, su ve 80 cm akvaryum verisini FishBase ile çapraz doğrulamalı");
+assert(diamondTetra?.additionalSourceUrls?.some((url) => url.includes("10.1093/zoolinnean/zlae101")),"Elmas Tetra Makunaima dönüşümünü hakemli filogenomik kaynağa bağlamalı");
+assert(diamondTetra?.husbandryCaution?.includes("4–5 tank hacmi") && diamondTetra.husbandryCaution.includes("tehlike altında"),"Elmas Tetra akıntı dağıtımı ile koruma kökeni güvenliğini açıklamalı");
+assert.equal(speciesForCatalogExactSearch("Moenkhausia pittieri", "fish", "freshwater")?.id,"diamond-tetra","Eski Elmas Tetra bilimsel adı güncel Makunaima pittieri profilini bulmalı");
+assert.equal(speciesForCatalogExactSearch("Makunaima pittieri", "fish", "freshwater")?.id,"diamond-tetra","Güncel Elmas Tetra bilimsel adı doğru profili bulmalı");
+const serpaeTetra = speciesCatalog.find((item) => item.id === "serpae-tetra");
+assert.deepEqual(
+  [serpaeTetra?.scientificName,serpaeTetra?.adultSizeCm,serpaeTetra?.minVolumeL,serpaeTetra?.minTankLengthCm,serpaeTetra?.minGroup,serpaeTetra?.temperature,serpaeTetra?.ph,serpaeTetra?.flow],
+  ["Megalamphodus eques",4,72,80,12,[20,28],[5,7.5],"low"],
+  "Serpae Tetra güncel taksonomi, boy, tank, sürü, su ve akıntı eşiklerini taşımalı",
+);
+assert.deepEqual(serpaeTetra?.waterTypes,["freshwater"],"Serpae Tetra yalnız tatlı su profili taşımalı");
+assert.equal(serpaeTetra?.verifiedAt,"2026-10-02","Serpae Tetra güncel doğrulama tarihini taşımalı");
+assert.match(serpaeTetra?.sourceUrl || "",/^https:\/\/www\.seriouslyfish\.com\/species\/megalamphodus-eques$/,"Serpae Tetra doğrudan güncel türe özel uzman bakım kaynağına bağlanmalı");
+assert(serpaeTetra?.additionalSourceUrls?.some((url) => url.includes("fishbase.se/summary/Hyphessobrycon-eques")),"Serpae Tetra boy, biyoloji ve kaynak farklarını FishBase ile çapraz doğrulamalı");
+assert(serpaeTetra?.additionalSourceUrls?.some((url) => url.includes("10.1093/zoolinnean/zlae101")),"Serpae Tetra Megalamphodus dönüşümünü hakemli filogenomik kaynağa bağlamalı");
+assert(serpaeTetra?.communityCaution?.includes("en az 12") && serpaeTetra.communityCaution.includes("uzun yüzgeçli"),"Serpae Tetra sürü ve yüzgeç ısırma güvenliğini açıklamalı");
+assert(serpaeTetra?.husbandryCaution?.includes("blood tetra") && serpaeTetra.husbandryCaution.includes("melez"),"Serpae Tetra ticari kan tetra melezliği belirsizliğini açıklamalı");
+assert.equal(speciesForCatalogExactSearch("Hyphessobrycon eques", "fish", "freshwater")?.id,"serpae-tetra","Eski Serpae Tetra bilimsel adı güncel Megalamphodus eques profilini bulmalı");
+assert.equal(speciesForCatalogExactSearch("Megalamphodus eques", "fish", "freshwater")?.id,"serpae-tetra","Güncel Serpae Tetra bilimsel adı doğru profili bulmalı");
+assert.equal(speciesForCatalogExactSearch("Callistus Tetra", "fish", "freshwater")?.id,"serpae-tetra","Callistus ticari adı Serpae Tetra profiline bağlanmalı");
+const xrayTetra = speciesCatalog.find((item) => item.id === "xray-tetra");
+assert.deepEqual(
+  [xrayTetra?.scientificName,xrayTetra?.adultSizeCm,xrayTetra?.minVolumeL,xrayTetra?.minTankLengthCm,xrayTetra?.minGroup,xrayTetra?.temperature,xrayTetra?.ph,xrayTetra?.flow],
+  ["Pristella maxillaris",4.5,54,60,10,[22,28],[6,7.5],"low"],
+  "X-ray Tetra kaynaklı boy, tank, sürü, su ve akıntı eşiklerini taşımalı",
+);
+assert.deepEqual(xrayTetra?.waterTypes,["freshwater"],"X-ray Tetra kıyısal dağılımına rağmen kaynaksız acı su profili taşımamalı");
+assert.equal(xrayTetra?.verifiedAt,"2026-10-02","X-ray Tetra güncel doğrulama tarihini taşımalı");
+assert.match(xrayTetra?.sourceUrl || "",/^https:\/\/www\.seriouslyfish\.com\/species\/pristella-maxillaris$/,"X-ray Tetra doğrudan türe özel uzman bakım kaynağına bağlanmalı");
+assert(xrayTetra?.additionalSourceUrls?.some((url) => url.includes("fishbase.se/summary/Pristella_maxillaris")),"X-ray Tetra boy, tatlı su sınıfı ve biyolojisini FishBase ile çapraz doğrulamalı");
+assert(xrayTetra?.additionalSourceUrls?.some((url) => url.includes("fda.gov/animal-veterinary")),"GloFish Pristella hatları FDA kaynağına bağlanmalı");
+assert(xrayTetra?.husbandryCaution?.includes("özgül ağırlık hedefi yayımlamaz") && xrayTetra.husbandryCaution.includes("sonradan boya"),"X-ray Tetra acı su varsayımını ve floresan/boyalı balık ayrımını açıklamalı");
+assert.equal(speciesForCatalogExactSearch("Pristella riddlei", "fish", "freshwater")?.id,"xray-tetra","Eski Pristella bilimsel adı güncel X-ray Tetra profilini bulmalı");
+assert.equal(speciesForCatalogExactSearch("Electric Green GloFish Pristella", "fish", "freshwater")?.id,"xray-tetra","FDA kaynaklı yeşil GloFish Pristella doğru profile bağlanmalı");
+assert.equal(speciesForCatalogExactSearch("Starfire Red GloFish Pristella", "fish", "freshwater")?.id,"xray-tetra","FDA kaynaklı kırmızı GloFish Pristella doğru profile bağlanmalı");
+const flameTetra = speciesCatalog.find((item) => item.id === "flame-tetra");
+assert.deepEqual(
+  [flameTetra?.scientificName,flameTetra?.adultSizeCm,flameTetra?.minVolumeL,flameTetra?.minTankLengthCm,flameTetra?.minGroup,flameTetra?.temperature,flameTetra?.ph,flameTetra?.flow],
+  ["Hyphessobrycon flammeus",2.5,54,60,10,[20,26],[5.5,7.5],"low"],
+  "Alev Tetra kaynaklı boy, tank, sürü, su ve akıntı eşiklerini taşımalı",
+);
+assert.deepEqual(flameTetra?.waterTypes,["freshwater"],"Alev Tetra yalnız tatlı su profili taşımalı");
+assert.equal(flameTetra?.verifiedAt,"2026-10-02","Alev Tetra güncel doğrulama tarihini taşımalı");
+assert.match(flameTetra?.sourceUrl || "",/^https:\/\/www\.seriouslyfish\.com\/species\/hyphessobrycon-flammeus$/,"Alev Tetra doğrudan türe özel uzman bakım kaynağına bağlanmalı");
+assert(flameTetra?.additionalSourceUrls?.some((url) => url.includes("fishbase.se/summary/Hyphessobrycon-flammeus")),"Alev Tetra boy ve su aralığını FishBase ile çapraz doğrulamalı");
+assert(flameTetra?.additionalSourceUrls?.some((url) => url.includes("scielo.br/j/ni/a/Xwr9kjjttqtf64YVvhXfgqt")),"Alev Tetra kimliği ve tehdit durumunu hakemli yeniden tanımla çapraz doğrulamalı");
+assert(flameTetra?.communityCaution?.includes("on bireylik") && flameTetra.communityCaution.includes("avlayabilecek"),"Alev Tetra sosyal sürü ve tank arkadaşı güvenliğini açıklamalı");
+assert(flameTetra?.husbandryCaution?.includes("biyolojik olarak olgun") && flameTetra.husbandryCaution.includes("haftalık") && flameTetra.husbandryCaution.includes("tehdit altındaki"),"Alev Tetra olgun tank, su kalitesi ve koruma risklerini açıklamalı");
+assert.equal(speciesForCatalogExactSearch("Orange Von Rio Tetra", "fish", "freshwater")?.id,"flame-tetra","Orange Von Rio ticari adı Alev Tetra profiline bağlanmalı");
+assert.equal(speciesForCatalogExactSearch("Hyphessobrycon flammeus", "fish", "freshwater")?.id,"flame-tetra","Alev Tetra bilimsel adı doğru profili bulmalı");
+const congoTetra = speciesCatalog.find((item) => item.id === "congo-tetra");
+assert.deepEqual(
+  [congoTetra?.scientificName,congoTetra?.adultSizeCm,congoTetra?.minVolumeL,congoTetra?.minTankLengthCm,congoTetra?.minGroup,congoTetra?.temperature,congoTetra?.ph,congoTetra?.flow],
+  ["Phenacogrammus interruptus",8,108,120,5,[23,28],[6,7.5],"medium"],
+  "Kongo Tetra kaynaklı boy, erişkin tank tabanı, sosyal grup, su ve akıntı eşiklerini taşımalı",
+);
+assert.deepEqual(congoTetra?.waterTypes,["freshwater"],"Kongo Tetra yalnız tatlı su profili taşımalı");
+assert.equal(congoTetra?.verifiedAt,"2026-10-02","Kongo Tetra güncel doğrulama tarihini taşımalı");
+assert.match(congoTetra?.sourceUrl || "",/^https:\/\/www\.seriouslyfish\.com\/species\/phenacogrammus-interruptus$/,"Kongo Tetra doğrudan türe özel uzman bakım kaynağına bağlanmalı");
+assert(congoTetra?.additionalSourceUrls?.some((url) => url.includes("fishbase.se/summary/10660")),"Kongo Tetra boy, grup ve 100 cm kaynak farkını FishBase ile çapraz doğrulamalı");
+assert(congoTetra?.communityCaution?.includes("yüzgeç ısıran") && congoTetra.communityCaution.includes("karma cinsiyetli"),"Kongo Tetra erkek yüzgeci ve sosyal sürü güvenliğini açıklamalı");
+assert(congoTetra?.husbandryCaution?.includes("sıfır amonyak/nitrit") && congoTetra.husbandryCaution.includes("erkek yüzgeçleri"),"Kongo Tetra su kalitesi ve erişkin erkek gelişimi riskini açıklamalı");
+assert.equal(speciesForCatalogExactSearch("Micralestes interruptus", "fish", "freshwater")?.id,"congo-tetra","Eski Kongo Tetra bilimsel adı güncel profile bağlanmalı");
+const endler = speciesCatalog.find((item) => item.id === "endler");
+assert.deepEqual(
+  [endler?.scientificName,endler?.adultSizeCm,endler?.minVolumeL,endler?.minTankLengthCm,endler?.minGroup,endler?.temperature,endler?.ph,endler?.flow],
+  ["Poecilia wingei",2.5,45,45,3,[24,28],[7,8],"medium"],
+  "Endler kaynaklı kimlik, boy, tank, sosyal grup ve ortak güvenli su eşiklerini taşımalı",
+);
+assert.deepEqual(endler?.waterTypes,["freshwater"],"Endler yalnız tatlı su profili taşımalı");
+assert.equal(endler?.verifiedAt,"2026-10-02","Endler güncel doğrulama tarihini taşımalı");
+assert.match(endler?.sourceUrl || "",/^https:\/\/www\.seriouslyfish\.com\/species\/poecilia-wingei$/,"Endler doğrudan türe özel uzman bakım kaynağına bağlanmalı");
+assert(endler?.husbandryCaution?.includes("20–28 °C") && endler.husbandryCaution.includes("24–30 °C") && endler.husbandryCaution.includes("guppy melezi"),"Endler kaynak sıcaklık farkını ve ticari melezlik riskini açıklamalı");
+assert(endler?.communityCaution?.includes("verimli melez"),"Endler ile guppy arasındaki verimli melezleşme riski görünür olmalı");
+const sailfinMolly = speciesCatalog.find((item) => item.id === "sailfin-molly");
+assert.deepEqual(
+  [sailfinMolly?.scientificName,sailfinMolly?.adultSizeCm,sailfinMolly?.minVolumeL,sailfinMolly?.minTankLengthCm,sailfinMolly?.minGroup,sailfinMolly?.temperature,sailfinMolly?.ph,sailfinMolly?.flow],
+  ["Poecilia latipinna",15,87,76,3,[21,26],[7,8.5],"medium"],
+  "Yelken Moli kaynaklı kimlik, koruyucu boy, tank, cinsiyet grubu ve su eşiklerini taşımalı",
+);
+assert.deepEqual(sailfinMolly?.waterTypes,["freshwater","brackish"],"Yelken Moli tatlı ve acı su toleransını taşımalı");
+assert.equal(sailfinMolly?.verifiedAt,"2026-10-02","Yelken Moli güncel doğrulama tarihini taşımalı");
+assert.match(sailfinMolly?.sourceUrl || "",/^https:\/\/www\.seriouslyfish\.com\/species\/poecilia-latipinna\/$/,"Yelken Moli doğrudan türe özel uzman bakım kaynağına bağlanmalı");
+assert(sailfinMolly?.husbandryCaution?.includes("15 cm azami toplam boy") && sailfinMolly.husbandryCaution.includes("12,5 cm standart boy") && sailfinMolly.husbandryCaution.includes("tuz sertliğin yerine geçmez"),"Yelken Moli boy ölçümü farkını ve gereksiz tuz kullanım riskini açıklamalı");
+assert(sailfinMolly?.communityCaution?.includes("Poecilia sphenops"),"Yelken Moli yakın molilerle melezleşme riskini taşımalı");
+const leastKillifish = speciesCatalog.find((item) => item.id === "least-killifish");
+assert.deepEqual(
+  [leastKillifish?.scientificName,leastKillifish?.adultSizeCm,leastKillifish?.minVolumeL,leastKillifish?.minTankLengthCm,leastKillifish?.minGroup,leastKillifish?.temperature,leastKillifish?.ph,leastKillifish?.flow],
+  ["Heterandria formosa",3.6,40,undefined,6,[20,26],[7,8],"low"],
+  "Cüce Canlı Doğuran kaynaklı kimlik, koruyucu boy, koloni hacmi ve su eşiklerini taşımalı",
+);
+assert.equal(leastKillifish?.speciesOnly,true,"Cüce Canlı Doğuran sıradan topluluk balığı gibi önerilmemeli");
+assert.deepEqual(leastKillifish?.waterTypes,["freshwater","brackish"],"Cüce Canlı Doğuran doğal tatlı/acı su kapsamını taşımalı");
+assert.equal(leastKillifish?.verifiedAt,"2026-10-02","Cüce Canlı Doğuran güncel doğrulama tarihini taşımalı");
+assert.match(leastKillifish?.sourceUrl || "",/^https:\/\/www\.seriouslyfish\.com\/species\/heterandria-formosa\/$/,"Cüce Canlı Doğuran doğrudan türe özel uzman bakım kaynağına bağlanmalı");
+assert(leastKillifish?.tankLengthDataNote?.includes("eski tahmini 40 cm uzunluk kaldırılmıştır"),"Cüce Canlı Doğuran grup için kaynaksız tank uzunluğunu korumamalı");
+assert(leastKillifish?.husbandryCaution?.includes("3,6 cm azami toplam boy") && leastKillifish.husbandryCaution.includes("2 cm standart boy") && leastKillifish.husbandryCaution.includes("Gambusia"),"Cüce Canlı Doğuran boy farkını ve ticari ad kimlik riskini açıklamalı");
 const starryBorneoSucker = speciesCatalog.find((item) => item.id === "starry-borneo-sucker");
 assert.deepEqual(
   [starryBorneoSucker?.scientificName,starryBorneoSucker?.adultSizeCm,starryBorneoSucker?.minVolumeL,starryBorneoSucker?.minTankLengthCm,starryBorneoSucker?.minGroup,starryBorneoSucker?.temperature,starryBorneoSucker?.ph,starryBorneoSucker?.flow],
@@ -2749,7 +4505,68 @@ assert.deepEqual(
 assert.equal(starryBorneoSucker?.speciesOnly, true, "Gastromyzon stellatus sıradan sıcak su topluluk balığı gibi sunulmamalı");
 assert.equal(starryBorneoSucker?.verifiedAt, "2026-09-10", "Gastromyzon stellatus güncel doğrulama tarihini taşımalı");
 assert.match(starryBorneoSucker?.sourceUrl || "", /^https:\/\/www\.seriouslyfish\.com\/species\/gastromyzon-stellatus$/, "Gastromyzon stellatus doğrudan türe özel uzman kaynağa bağlanmalı");
+const butterflyLoachBeaufortia = speciesForLivestock({commonName:"Çin kelebek loachu",scientificName:"Beaufortia kweichowensis",category:"fish",quantity:6});
+assert.deepEqual(
+  [butterflyLoachBeaufortia?.id,butterflyLoachBeaufortia?.adultSizeCm,butterflyLoachBeaufortia?.minVolumeL,butterflyLoachBeaufortia?.minTankLengthCm,butterflyLoachBeaufortia?.minGroup,butterflyLoachBeaufortia?.temperature,butterflyLoachBeaufortia?.ph,butterflyLoachBeaufortia?.flow],
+  ["butterfly-loach-beaufortia",7.5,54,60,6,[16,24],[6.5,8],"high"],
+  "Beaufortia kweichowensis kaynaklı boy, grup, akvaryum tabanı ve akarsu eşiklerini taşımalı",
+);
+assert.match(butterflyLoachBeaufortia?.husbandryCaution || "", /10–15 tank hacmi.*biyofilmli düz taşlar/, "Beaufortia kweichowensis akıntı, oksijen ve doğal otlak gereksinimini açıklamalı");
+assert.equal(butterflyLoachBeaufortia?.verifiedAt, "2026-09-23", "Beaufortia kweichowensis güncel doğrulama tarihini taşımalı");
+assert.match(butterflyLoachBeaufortia?.sourceUrl || "", /^https:\/\/www\.seriouslyfish\.com\/species\/beaufortia-kweichowensis$/, "Beaufortia kweichowensis doğrudan türe özel uzman kaynağa bağlanmalı");
+assert.equal(speciesForCatalogExactSearch("Beaufortia kweichowensis", "fish", "freshwater")?.id, "butterfly-loach-beaufortia", "Kesin Beaufortia kweichowensis bilimsel adı doğru profili bulmalı");
 assert.equal(speciesForLivestock({commonName:"Borneo Kelebek Vatoz",category:"fish",quantity:1}), undefined, "Genel Borneo Kelebek Vatoz adı Gastromyzon stellatus veya başka tepe loach profiline tahminle bağlanmamalı");
+const unresolvedBorneoButterfly = unresolvedSpeciesForSearch("Borneo Kelebek Vatoz", "fish", "freshwater");
+assert.equal(unresolvedBorneoButterfly?.verifiedAt, "2026-09-23", "Genel Borneo Kelebek Vatoz kaydı güncel tür ayrımı denetimini taşımalı");
+assert(unresolvedBorneoButterfly?.reason.includes("Beaufortia kweichowensis") && unresolvedBorneoButterfly.reason.includes("Gastromyzon stellatus"), "Genel Borneo Kelebek Vatoz kaydı iki doğrulanmış olası kimliği açıklamalı");
+assert.equal(speciesForCatalogExactSearch("Butterfly Loach", "fish", "freshwater"), undefined, "Genel Butterfly Loach adı bilimsel kimlik olmadan Beaufortia veya Gastromyzon profiline dönüşmemeli");
+const stripedTwigCatfish = speciesForLivestock({commonName:"Çizgili dal kedi balığı",scientificName:"Farlowella vittata",category:"fish",quantity:1});
+assert.deepEqual(
+  [stripedTwigCatfish?.id,stripedTwigCatfish?.adultSizeCm,stripedTwigCatfish?.minVolumeL,stripedTwigCatfish?.minTankLengthCm,stripedTwigCatfish?.minGroup,stripedTwigCatfish?.temperature,stripedTwigCatfish?.ph,stripedTwigCatfish?.flow],
+  ["striped-twig-catfish",22.5,115,90,1,[24,27],[6,7],"medium"],
+  "Farlowella vittata bilimsel azami boyu ve koruyucu bakım eşiklerini taşımalı",
+);
+assert(stripedTwigCatfish?.husbandryCaution?.includes("FishBase 22,5 cm") && stripedTwigCatfish.husbandryCaution.includes("ticaretteki bireyler için 15 cm"), "Farlowella vittata bilimsel boy ile bakım kaynağı farkını kullanıcıya açıklamalı");
+assert.equal(stripedTwigCatfish?.verifiedAt, "2026-09-23", "Farlowella vittata güncel doğrulama tarihini taşımalı");
+assert.equal(speciesForCatalogExactSearch("Farlowella vittata", "fish", "freshwater")?.id, "striped-twig-catfish", "Kesin Farlowella vittata bilimsel adı doğru profili bulmalı");
+assert.equal(speciesForLivestock({commonName:"COLOMBİAN FARLOWELLA",category:"fish",quantity:1}), undefined, "Genel Colombian Farlowella adı Farlowella vittata veya colombiensis profiline tahminle bağlanmamalı");
+const unresolvedColombianFarlowella = unresolvedSpeciesForSearch("COLOMBİAN FARLOWELLA", "fish", "freshwater");
+assert.equal(unresolvedColombianFarlowella?.verifiedAt, "2026-09-23", "Colombian Farlowella kaydı güncel ticaret ve tür ayrımı denetimini taşımalı");
+assert(unresolvedColombianFarlowella?.reason.includes("Farlowella vittata") && unresolvedColombianFarlowella.reason.includes("F. colombiensis"), "Colombian Farlowella kaydı olası iki kimliği ve ticaret farkını açıklamalı");
+const duckbillCatfish = speciesForLivestock({commonName:"Ördek gagalı kedi balığı",scientificName:"Sorubim lima",category:"fish",quantity:1});
+assert.deepEqual(
+  [duckbillCatfish?.id,duckbillCatfish?.adultSizeCm,duckbillCatfish?.minVolumeL,duckbillCatfish?.minTankLengthCm,duckbillCatfish?.minGroup,duckbillCatfish?.temperature,duckbillCatfish?.ph],
+  ["duckbill-catfish-sorubim-lima",54.2,1125,200,1,[23,30],[6.5,7.8]],
+  "Sorubim lima kaynaklı bilimsel boy ve uzun süreli bakım ölçeğini taşımalı",
+);
+assert.equal(duckbillCatfish?.predatory, true, "Sorubim lima küçük balık ve kabuklular için avlanma riski taşımalı");
+assert.equal(duckbillCatfish?.speciesOnly, true, "Sorubim lima sıradan topluluk balığı gibi önerilmemeli");
+const barredShovelnose = speciesForLivestock({commonName:"Çizgili kürek burun kedi balığı",scientificName:"Pseudoplatystoma fasciatum",category:"fish",quantity:1});
+assert.deepEqual(
+  [barredShovelnose?.id,barredShovelnose?.adultSizeCm,barredShovelnose?.minVolumeL,barredShovelnose?.minTankLengthCm,barredShovelnose?.temperature,barredShovelnose?.ph],
+  ["barred-shovelnose-catfish",104,10368,360,[22,26],[6,7.6]],
+  "Pseudoplatystoma fasciatum kamu akvaryumu ölçeğindeki kaynaklı eşikleri taşımalı",
+);
+const tigerShovelnose = speciesForLivestock({commonName:"Kaplan kürek burun kedi balığı",scientificName:"Pseudoplatystoma tigrinum",category:"fish",quantity:1});
+assert.deepEqual(
+  [tigerShovelnose?.id,tigerShovelnose?.adultSizeCm,tigerShovelnose?.minVolumeL,tigerShovelnose?.minTankLengthCm,tigerShovelnose?.temperature,tigerShovelnose?.ph],
+  ["tiger-shovelnose-catfish",130,10368,360,[22,26],[6,7.6]],
+  "Pseudoplatystoma tigrinum bilimsel azami boyu ve kamu akvaryumu ölçeğindeki eşikleri taşımalı",
+);
+for (const profile of [barredShovelnose,tigerShovelnose]) {
+  assert.equal(profile?.predatory, true, profile?.scientificName + " avlanma riski taşımalı");
+  assert.equal(profile?.speciesOnly, true, profile?.scientificName + " sıradan topluluk balığı gibi önerilmemeli");
+  assert.match(profile?.husbandryCaution || "", /10\.368 litre.*kamu akvaryumu/, profile?.scientificName + " erişkin bakım ölçeğini açıkça göstermeli");
+  assert.equal(profile?.verifiedAt, "2026-09-23", profile?.scientificName + " güncel doğrulama tarihini taşımalı");
+}
+assert.equal(speciesForCatalogExactSearch("Sorubim lima", "fish", "freshwater")?.id, "duckbill-catfish-sorubim-lima", "Kesin Sorubim lima adı doğru profile bağlanmalı");
+assert.equal(speciesForCatalogExactSearch("Pseudoplatystoma fasciatum", "fish", "freshwater")?.id, "barred-shovelnose-catfish", "Kesin Pseudoplatystoma fasciatum adı doğru profile bağlanmalı");
+assert.equal(speciesForCatalogExactSearch("Pseudoplatystoma tigrinum", "fish", "freshwater")?.id, "tiger-shovelnose-catfish", "Kesin Pseudoplatystoma tigrinum adı doğru profile bağlanmalı");
+assert.equal(speciesForLivestock({commonName:"KÜREK BURUN BALIKLARI",category:"fish",quantity:1}), undefined, "Genel Kürek Burun adı üç bilimsel profilden birine tahminle bağlanmamalı");
+const unresolvedShovelnose = unresolvedSpeciesForSearch("KÜREK BURUN BALIKLARI", "fish", "freshwater");
+assert.equal(unresolvedShovelnose?.verifiedAt, "2026-09-23", "Genel Kürek Burun kaydı güncel tür ayrımı denetimini taşımalı");
+assert(unresolvedShovelnose?.reason.includes("Sorubim lima") && unresolvedShovelnose.reason.includes("Pseudoplatystoma fasciatum/tigrinum"), "Genel Kürek Burun kaydı farklı boy ve bakım ölçeğindeki olası kimlikleri açıklamalı");
+assert.equal(speciesForCatalogExactSearch("Shovelnose catfish", "fish", "freshwater"), undefined, "Genel Shovelnose catfish adı bilimsel kimlik olmadan kesin profile dönüşmemeli");
 assert.deepEqual([speciesCatalog.find((item) => item.id === "tropheus-moorii")?.minGroup, speciesCatalog.find((item) => item.id === "tropheus-moorii")?.minTankLengthCm], [15, 150], "Moorii Tropheus küçük grup veya kısa tank için önerilmemeli");
 assert.equal(speciesCatalog.find((item) => item.id === "red-zebra-mbuna")?.ph[0], 7.5, "Kırmızı zebra asidik topluluk su koşullarına önerilmemeli");
 const grantsPeacock = speciesCatalog.find((item) => item.id === "grants-peacock");
@@ -2808,8 +4625,15 @@ for (const category of livestockCategories) {
     assert(species.every((item) => speciesGroup(item) === group), `${group} grubuna farklı canlı grubu sızdı`);
   }
 }
-assert.equal(speciesCatalog.filter((item) => speciesGroup(item) === "shrimp").length, 43, "Karides kataloğu doğrulanan yaygın tür ve renk varyeteleriyle 43 biyolojik bakım profili içermeli");
-assert.equal(speciesCatalog.filter((item) => speciesGroup(item) === "snail").length, 20, "Salyangoz kataloğu doğrulanan yaygın tatlı su türleri ve ticari varyantlarla 20 bakım profili içermeli");
+assert.equal(speciesCatalog.filter((item) => speciesGroup(item) === "shrimp").length, 44, "Karides kataloğu doğrulanmış Caridina serrata dahil yaygın tür ve renk varyeteleriyle 44 biyolojik bakım profili içermeli");
+assert.equal(speciesCatalog.filter((item) => speciesGroup(item) === "snail").length, 19, "Salyangoz kataloğu yinelenen Pomacea diffusa kaydı olmadan 19 benzersiz bakım profili içermeli");
+const mysterySnail = speciesCatalog.find((item) => item.id === "apple-snail");
+assert.deepEqual([mysterySnail?.scientificName,mysterySnail?.adultSizeCm,mysterySnail?.minVolumeL,mysterySnail?.minTankLengthCm,mysterySnail?.temperature,mysterySnail?.ph], ["Pomacea diffusa",6,40,undefined,[20,28],[7.2,7.8]], "Pomacea diffusa tek kaynaklı Mystery salyangoz profilinde güvenli eşikleri taşımalı");
+assert.equal(speciesCatalog.filter((item) => item.scientificName === "Pomacea diffusa").length, 1, "Pomacea diffusa çelişen iki ayrı bakım profili olarak çoğaltılmamalı");
+assert.equal(speciesForCatalogExactSearch("Mystery Snail", "snail", "freshwater")?.id, "apple-snail", "Kesin Mystery Snail ortak adı Pomacea diffusa profilini bulmalı");
+assert.equal(speciesForCatalogExactSearch("Elma salyangozu", "snail", "freshwater"), undefined, "Genel Elma salyangozu adı bilimsel kimlik olmadan Pomacea diffusa profiline dönüşmemeli");
+assert.equal(speciesForLivestock({ commonName:"Eski Mystery kaydı", scientificName:"Pomacea diffusa", category:"snail", quantity:1 })?.id, "apple-snail", "Eski localStorage canlısı bilimsel adıyla birleştirilen Pomacea diffusa profiline bağlanmalı");
+assert(mysterySnail?.husbandryCaution?.includes("bakırsız") && mysterySnail.husbandryCaution.includes("doğaya kesinlikle bırakılmamalıdır"), "Mystery salyangoz bakır ve doğaya salım güvenliği taşımalı");
 for (const id of ["blue-dream-shrimp", "yellow-fire-shrimp", "orange-sakura-shrimp", "green-jade-shrimp", "bloody-mary-shrimp", "red-rili-shrimp", "orange-rili-shrimp", "carbon-rili-shrimp", "green-jelly-shrimp", "chocolate-shrimp"]) {
   const item = speciesCatalog.find((entry) => entry.id === id);
   assert.equal(item?.scientificName, "Neocaridina davidi", `${id} renk varyetesi doğru biyolojik türü kullanmalı`);
@@ -3228,7 +5052,6 @@ for (const [id, scientificName, volume, length, group, temperature, ph] of [
   ["highfin-spotted-cory-cw027", "Hoplisoma sp. CW027", 100, 80, 6, [23,28], [5.8,7]],
   ["white-spotted-doras", "Agamyxis pectinifrons", 130, 100, 1, [22,26], [6,7.5]],
   ["orinoco-wood-pleco-lda38", "Hypostomus plecostomoides", 250, 150, 1, [24,29], [6,8]],
-  ["delhezi-bichir", "Polypterus delhezi", 680, 180, 1, [25,28], [6,8]],
   ["hujeta-gar", "Ctenolucius hujeta", 342, 150, 5, [22,25], [5.5,7.5]],
 ]) {
   const profile = speciesCatalog.find((item) => item.id === id);
@@ -3242,6 +5065,15 @@ for (const [id, scientificName, volume, length, group, temperature, ph] of [
   assert(profile.husbandryCaution, `${id} kullanıcıya özel bakım riskini açıklamalı`);
 }
 assert.equal(speciesCatalog.find((item) => item.id === "delhezi-bichir")?.predatory, true, "Delhezi bichir küçük canlılar için avlanma riski taşımalı");
+const delheziBichir = speciesCatalog.find((item) => item.id === "delhezi-bichir");
+assert.deepEqual(
+  [delheziBichir?.scientificName,delheziBichir?.adultSizeCm,delheziBichir?.minVolumeL,delheziBichir?.minTankLengthCm,delheziBichir?.minGroup,delheziBichir?.temperature,delheziBichir?.ph,delheziBichir?.flow],
+  ["Polypterus delhezi",44,648,180,1,[25,28],[6,8],"low"],
+  "Delhezi bichir bilimsel boyu ile 180 × 60 × 60 cm kaynaklı erişkin alanını taşımalı",
+);
+assert.equal(delheziBichir?.verifiedAt, "2026-10-02", "Delhezi bichir güncel doğrulama tarihini taşımalı");
+assert(delheziBichir?.husbandryCaution?.includes("648 litre") && delheziBichir?.husbandryCaution?.includes("hava boşluğu"), "Delhezi bichir erişkin tabanı ve yüzey havası güvenliğini açıklamalı");
+assert(delheziBichir?.additionalSourceUrls?.some((url) => url.includes("fishbase.se")), "Delhezi bichir bilimsel boy için FishBase çapraz kaynağını saklamalı");
 assert.equal(speciesCatalog.find((item) => item.id === "hujeta-gar")?.predatory, true, "Hujeta gar küçük canlılar için avlanma riski taşımalı");
 assert(speciesCatalog.find((item) => item.id === "royal-pleco-l190")?.husbandryCaution?.includes("yüksek atık"), "Royal Pleco yüksek biyolojik yük uyarısı taşımalı");
 assert(speciesCatalog.find((item) => item.id === "orinoco-angel-pleco-l201")?.husbandryCaution?.includes("kesin tür kimliği sayılmamalıdır"), "L201 mağaza adındaki inspector kimliği kesin tür gibi kullanılmamalı");
@@ -3266,21 +5098,26 @@ assert.equal(speciesCatalog.find((item) => item.id === "white-spotted-doras")?.p
 assert(speciesCatalog.find((item) => item.id === "orinoco-wood-pleco-lda38")?.husbandryCaution?.includes("çok yüksek miktarda atık"), "LDA38 odun tüketimi ve yüksek biyolojik yük uyarısını taşımalı");
 assert.equal(speciesForLivestock({commonName:"L-069 Peckoltia Ucayalensis",category:"fish",quantity:1}), undefined, "L069 ile Peckoltia ucayalensis arasındaki kimlik çelişkisi çözülmeden mağaza adı profile bağlanmamalı");
 assert.equal(speciesForLivestock({commonName:"L-146 Albino Pleco",category:"fish",quantity:1}), undefined, "L146 ile albino satış adı arasındaki kimlik çelişkisi çözülmeden mağaza adı profile bağlanmamalı");
-for (const [id, scientificName, sourcePath] of [
-  ["bola-pleco-l146", "Peckoltichthys cf. bachi", "art=236"],
-  ["ucayali-flathead-pleco", "Peckoltichthys ucayalensis", "art=2415"],
+for (const [id, scientificName, sourcePath, adultSizeCm, verifiedAt] of [
+  ["bola-pleco-l146", "Peckoltichthys cf. bachi", "art=236", 15, "2026-09-08"],
+  ["ucayali-flathead-pleco", "Peckoltia bachi", "Peckoltia-ucayalensis", 14, "2026-09-20"],
 ]) {
   const profile = speciesCatalog.find((item) => item.id === id);
   assert(profile, `${id} kesin bilimsel/L-numarası profili katalogda bulunmalı`);
   assert.deepEqual(
     [profile.scientificName,profile.adultSizeCm,profile.minVolumeL,profile.minTankLengthCm,profile.temperature,profile.ph],
-    [scientificName,15,120,100,[25,29],[6,8]],
+    [scientificName,adultSizeCm,120,100,[25,29],[6,8]],
     `${id} uzman kaynaktaki kimlik ve bakım eşiklerini taşımalı`,
   );
   assert(profile.sourceUrl?.includes(sourcePath), `${id} doğrudan uzman tür kaynağına bağlanmalı`);
-  assert.equal(profile.verifiedAt, "2026-09-08", `${id} güncel doğrulama tarihini taşımalı`);
+  assert.equal(profile.verifiedAt, verifiedAt, `${id} güncel doğrulama tarihini taşımalı`);
   assert(profile.husbandryCaution?.includes("otomatik bağlanmaz"), `${id} belirsiz mağaza adıyla neden otomatik eşleşmediğini açıklamalı`);
 }
+const ucayaliFlathead = speciesCatalog.find((item) => item.id === "ucayali-flathead-pleco");
+assert.deepEqual([ucayaliFlathead?.adultSizeCm, ucayaliFlathead?.verifiedAt], [14, "2026-09-20"], "Peckoltia bachi güncel FishBase boyu ve doğrulama tarihini taşımalı");
+assert(ucayaliFlathead?.aliases?.includes("Peckoltia ucayalensis") && ucayaliFlathead?.husbandryCaution?.includes("genç eş anlamlısı"), "Eski Peckoltia ucayalensis adı aranabilir kalmalı ve güncel eş anlamlılık açıklanmalı");
+const l069Unresolved = unresolvedSpeciesListings.find((item) => item.name === "L-069 Peckoltia Ucayalensis");
+assert(l069Unresolved?.reason.includes("Ancistrini sp.") && l069Unresolved.reason.includes("L146/L232/LDA30") && l069Unresolved.verifiedAt === "2026-09-20", "L069 ile Peckoltia bachi/L146 kimlik çelişkisi güncel kaynaklarla görünür kalmalı");
 assert.equal(speciesForCatalogSearch("L146", "fish", "freshwater")?.id, "bola-pleco-l146", "Kesin L146 araması doğrulanmış Bola vatoz profilini bulmalı");
 assert.equal(speciesForCatalogSearch("Peckoltichthys ucayalensis", "fish", "freshwater")?.id, "ucayali-flathead-pleco", "Kesin Peckoltichthys ucayalensis araması doğru profili bulmalı");
 for (const [id, scientificName, volume, length, temperature, ph, sourcePath] of [
@@ -3303,7 +5140,7 @@ assert(speciesCatalog.find((item) => item.id === "manacapuru-bristlenose-l148")?
 
 const unresolvedCatfishNames = cikletistCatfishListings.filter(([, expectedId]) => !expectedId).map(([name]) => name);
 const unresolvedCatfishSafetyListings = unresolvedSpeciesListings.filter((item) => unresolvedCatfishNames.includes(item.name));
-assert.equal(unresolvedSpeciesListings.length, 61, "Bilimsel kimliği veya güvenli bakım eşiği doğrulanamayan altmış bir benzersiz Cikletist satış adı görünür güvenlik listesinde tutulmalı");
+assert.equal(unresolvedSpeciesListings.length, 68, "Bilimsel kimliği, sucul bakım eşiği veya paludaryum modeli doğrulanamayan altmış sekiz benzersiz Cikletist satış adı görünür güvenlik listesinde tutulmalı");
 assert.equal(new Set(unresolvedSpeciesListings.map((item) => item.name)).size, unresolvedSpeciesListings.length, "Çözülmemiş canlı adları benzersiz olmalı");
 assert.deepEqual(
   [...unresolvedCatfishSafetyListings.map((item) => item.name)].sort((a, b) => a.localeCompare(b, "tr")),
@@ -3370,6 +5207,10 @@ assert.equal(unresolvedSpeciesForSearch("blue neon goby", "fish", "freshwater")?
 assert.equal(unresolvedSpeciesForSearch("colombian farlowella", "fish", "freshwater")?.name, "COLOMBİAN FARLOWELLA", "Türkçe karakter içermeyen arama Colombian Farlowella kaydını bulmalı");
 assert.equal(unresolvedSpeciesForSearch("albino sky", "fish", "freshwater")?.name, "ALBİNO SKY BLUE", "Belirsiz Albino Sky Blue adı canlı doğuran aramasında açıklamalı görünmeli");
 assert.equal(unresolvedSpeciesForSearch("albino sky", "fish", "saltwater"), undefined, "Belirsiz Albino Sky Blue deniz akvaryumu aramasında görünmemeli");
+const unresolvedAlbinoSkyBlue = unresolvedSpeciesForSearch("albino sky", "fish", "freshwater");
+assert.equal(unresolvedAlbinoSkyBlue?.verifiedAt, "2026-09-23", "Albino Sky Blue doğrudan satış sayfası yeniden denetim tarihini taşımalı");
+assert(unresolvedAlbinoSkyBlue?.reason.includes("canlı-256") && unresolvedAlbinoSkyBlue.reason.includes("temsili"), "Albino Sky Blue barkodu ve temsili görsel sınırı kullanıcıya açıklanmalı");
+assert(unresolvedAlbinoSkyBlue?.reason.includes("tür, bilimsel ad") && unresolvedAlbinoSkyBlue.reason.includes("lepistes ya da moli"), "Albino Sky Blue için bilimsel kimlik olmadan canlı doğuran türü tahmin edilmemeli");
 assert.equal(unresolvedSpeciesForSearch("meyan kökü", "fish", "freshwater")?.name, "MEYAN KÖKÜ GURAMİ", "Belirsiz Meyan Kökü Gurami adı labirentli aramasında açıklamalı görünmeli");
 assert.equal(unresolvedSpeciesForSearch("licorice gourami", "fish", "freshwater")?.name, "MEYAN KÖKÜ GURAMİ", "İngilizce ticari ad çözülmemiş Meyan Kökü Gurami kaydını bulmalı");
 assert.equal(unresolvedSpeciesForSearch("meyan kökü", "fish", "saltwater"), undefined, "Belirsiz Meyan Kökü Gurami deniz akvaryumu aramasında görünmemeli");
@@ -3432,7 +5273,6 @@ for (const [id, scientificName, size, volume, length, group, temperature, ph, so
   ["rainbow-snakehead", "Channa bleheri", 20, 150, 100, 2, [15,28], [6,7.5], "aquarium-dietzenbach.de"],
   ["peacock-snakehead", "Channa pulchra", 25, 200, 100, 1, [20,25], [6,7], "practicalfishkeeping.co.uk"],
   ["emperor-snakehead", "Channa marulioides", 65, 1000, 200, 1, [20,25], [4,6], "fishi-pedia.com"],
-  ["giant-snakehead", "Channa micropeltes", 130, 6000, 400, 1, [26,30], [6.5,7.2], "fishfish.fr"],
   ["half-banded-spiny-eel", "Macrognathus circumcinctus", 20, 215, 90, 1, [24,27], [6,7.5], "tankbud.com"],
 ]) {
   const profile = speciesCatalog.find((item) => item.id === id);
@@ -3455,8 +5295,17 @@ for (const id of ["emperor-snakehead", "giant-snakehead", "half-banded-spiny-eel
   assert((profile?.additionalSourceUrls?.length || 0) >= 2, `${id} bilimsel ve uzman ek doğrulama kaynaklarını saklamalı`);
   assert(profile?.additionalSourceUrls?.every((url) => url.startsWith("https://")), `${id} ek doğrulama kaynakları HTTPS olmalı`);
 }
+const giantSnakehead = speciesCatalog.find((item) => item.id === "giant-snakehead");
+assert.deepEqual(
+  [giantSnakehead?.scientificName,giantSnakehead?.adultSizeCm,giantSnakehead?.minVolumeL,giantSnakehead?.minTankLengthCm,giantSnakehead?.minGroup,giantSnakehead?.temperature,giantSnakehead?.ph,giantSnakehead?.flow],
+  ["Channa micropeltes",130,6000,400,1,[20,30],[6,8],"low"],
+  "Dev yılanbaş yalnız kaynaklı bilimsel boyu, uzman tesis eşiğini ve su aralığını taşımalı",
+);
+assert.equal(giantSnakehead?.verifiedAt, "2026-10-02", "Dev yılanbaş güncel doğrulama tarihini taşımalı");
+assert(giantSnakehead?.sourceUrl?.includes("seriouslyfish.com"), "Dev yılanbaş ana bakım kaynağı olarak tür uzmanı profiline bağlanmalı");
+assert(giantSnakehead?.husbandryCaution?.includes("sayısal taban yayımlamayıp") && giantSnakehead?.husbandryCaution?.includes("memeli/kanatlı eti"), "Dev yılanbaş kaynak sınırını ve beslenme güvenliğini açıklamalı");
 assert.equal(speciesForLivestock({commonName:"ZİGZAG EEL",category:"fish",quantity:1}), undefined, "Belirsiz Zigzag eel ticari adı bilimsel kimlik olmadan Half-banded profile bağlanmamalı");
-assert.equal(speciesCatalog.filter((item) => speciesGroup(item) === "monster").length, 36, "Büyük tür kataloğu Cichla piquiti, Channa limbata, Pink-lipped Moray, Tire-track Eel, Channa asiatica, Afrika Arowanası, Çin Ejderi, Cichla ocellaris, Pangasius ve Siyah Labeo dahil 36 profile ulaşmalı");
+assert.equal(speciesCatalog.filter((item) => speciesGroup(item) === "monster").length, 39, "Büyük tür kataloğu ayrı Sorubim lima ve iki Pseudoplatystoma profili dahil 39 doğrulanmış profile ulaşmalı");
 for (const [id, scientificName, minVolumeL, minTankLengthCm] of [
   ["iridescent-shark-catfish", "Pangasianodon hypophthalmus", 14580, 450],
   ["black-sharkminnow", "Labeo chrysophekadion", 2500, 360],
@@ -3467,7 +5316,7 @@ for (const [id, scientificName, minVolumeL, minTankLengthCm] of [
   assert.equal(profile.minVolumeL, minVolumeL, `${id} yayımlanmış koruyucu hacim eşiğini taşımalı`);
   assert.equal(profile.minTankLengthCm, minTankLengthCm, `${id} yayımlanmış uzunluk eşiğini taşımalı`);
   assert.equal(profile.speciesOnly, true, `${id} standart topluluk akvaryumundan dışlanmalı`);
-  assert.equal(profile.verifiedAt, "2026-08-28", `${id} güncel doğrulama tarihini taşımalı`);
+  assert.equal(profile.verifiedAt, "2026-10-02", `${id} güncel doğrulama tarihini taşımalı`);
   assert(profile.sourceUrl?.includes("fishbase"), `${id} bilimsel ana kaynağa bağlanmalı`);
   assert((profile.additionalSourceUrls?.length || 0) >= 2, `${id} kurumsal veya uzman ek kaynaklarla doğrulanmalı`);
   assert(/ev akvaryum/i.test(profile.husbandryCaution || ""), `${id} ev akvaryumu uygunluk riskini açıkça anlatmalı`);
@@ -3629,7 +5478,7 @@ for (const retailName of cikletistTetraMainInventory) {
   if (matched) tetraMainMappedCount += 1;
   if (unresolved) tetraMainUnresolvedCount += 1;
 }
-assert.deepEqual([tetraMainMappedCount,tetraMainUnresolvedCount], [100,29], "Tetra ana kategorisi 100 doğrulanmış ve 29 açıklamalı güvenlik kaydı olarak eksiksiz ayrılmalı");
+assert.deepEqual([tetraMainMappedCount,tetraMainUnresolvedCount], [99,30], "Tetra ana kategorisi 99 doğrulanmış ve 30 açıklamalı güvenlik kaydı olarak eksiksiz ayrılmalı");
 assert.equal(speciesForCatalogExactSearch("ARGUS BALIKLARI", "fish", "freshwater")?.id, "spotted-scat", "Doğrulanmış tam Argus adı daha uzun çözülmemiş Silver Argus kaydı tarafından engellenmemeli");
 
 const cikletistAmericanTetraListings = [
@@ -3689,25 +5538,6 @@ for (const [retailName, expectedId] of cikletistAmericanTetraListings) {
     assert.equal(matched, undefined, `Birden çok bilimsel türe işaret eden yerel satış adı tahminle eşleştirilmemeli: ${retailName}`);
   }
 }
-for (const [id, scientificName, size, volume, length, group, temperature, ph, sourceDomain] of [
-  ["flame-tetra", "Hyphessobrycon flammeus", 2.6, 60, 60, 8, [22,28], [5.8,7.8], "fishbase.se"],
-  ["blue-emperor-tetra", "Inpaichthys kerri", 4, 60, 60, 10, [24,27], [5.5,7], "fishkeeper.co.uk"],
-  ["buenos-aires-tetra", "Psalidodon anisitsi", 13.2, 120, 90, 10, [16,28], [5.5,8.5], "fishbase.se"],
-  ["colombian-tetra", "Hyphessobrycon columbianus", 7, 100, 80, 8, [24,27], [5.5,7], "fishbase.se"],
-  ["red-eye-tetra", "Bario sanctaefilomenae", 7, 105, 90, 8, [22,26], [6,8], "fishbase.se"],
-  ["celebes-rainbowfish", "Marosatherina ladigesi", 8, 120, 100, 8, [22,28], [7,8], "fishbase.org"],
-]) {
-  const profile = speciesCatalog.find((item) => item.id === id);
-  assert(profile, `${id} güvenilir kaynaklı canlı kataloğunda bulunmalı`);
-  assert.deepEqual(
-    [profile.scientificName,profile.adultSizeCm,profile.minVolumeL,profile.minTankLengthCm,profile.minGroup,profile.temperature,profile.ph],
-    [scientificName,size,volume,length,group,temperature,ph],
-    `${id} doğrulanmış kimlik, yetişkin boyu, akvaryum, sürü ve su eşiklerini taşımalı`,
-  );
-  assert.equal(profile.verifiedAt, "2026-08-28", `${id} güncel doğrulama tarihini taşımalı`);
-  assert(profile.sourceUrl?.includes(sourceDomain), `${id} yerel satış açıklaması yerine bilimsel veya uzman kaynağına bağlanmalı`);
-  assert((profile.additionalSourceUrls?.length || 0) >= 1, `${id} bağımsız ek doğrulama kaynağını saklamalı`);
-}
 assert.equal(speciesForLivestock({commonName:"BLUE KING TETRA",category:"fish",quantity:1}), undefined, "Blue King adı Inpaichthys kerri ve Boehlkea fredcochui arasında belirsizken tahminle bağlanmamalı");
 const cochusBlueTetra = speciesForLivestock({commonName:"Cochu'nun mavi tetrası",scientificName:"Boehlkea fredcochui",category:"fish",quantity:6});
 assert.deepEqual([cochusBlueTetra?.id,cochusBlueTetra?.adultSizeCm,cochusBlueTetra?.minVolumeL,cochusBlueTetra?.minTankLengthCm,cochusBlueTetra?.minGroup,cochusBlueTetra?.temperature,cochusBlueTetra?.ph,cochusBlueTetra?.flow],["cochus-blue-tetra",5.4,60,60,6,[22,26],[6,6.5],"medium"],"Boehlkea fredcochui kaynaklı boy, sürü, akvaryum ve su eşiklerini taşımalı");
@@ -3733,7 +5563,6 @@ assert.equal(speciesForLivestock({commonName:"Gül Tetra",category:"fish",quanti
 assert.equal(unresolvedSpeciesForSearch("Gül Tetra", "fish", "freshwater")?.name, "Gül Tetra", "Belirsiz Gül Tetra adı açıklamalı güvenlik listesinde kalmalı");
 
 for (const [retailName, expectedId] of [
-  ["EİGHT BANDED BARB", "eight-banded-false-barb"],
   ["ORYZİAS WOWORAE", "daisys-blue-ricefish"],
   ["PSEUDOMUGİL SİGNİFER", "pacific-blue-eye"],
   ["RED FANTOM TETRA BALIKLARI", "red-phantom-tetra"],
@@ -3773,19 +5602,19 @@ for (const [retailName, expectedId] of [
 ]) {
   assert.equal(speciesForLivestock({commonName:retailName,category:"fish",quantity:1})?.id, expectedId, `Cikletist Sazansıgiller adı güvenilir türe bağlanmalı: ${retailName}`);
 }
-for (const [id, scientificName, size, volume, length, group, temperature, ph] of [
-  ["eight-banded-false-barb", "Eirmotus octozona", 4, 100, 60, 10, [24,26], [6.5,7.2]],
-  ["daisys-blue-ricefish", "Oryzias woworae", 4, 40, 60, 8, [24,27], [6.5,7.5]],
-  ["pacific-blue-eye", "Pseudomugil signifer", 7.5, 60, 60, 10, [18,27], [6.5,7.5]],
-  ["red-phantom-tetra", "Megalamphodus sweglesi", 4, 80, 80, 10, [20,23], [5.5,7.5]],
-  ["sawbwa-resplendens", "Sawbwa resplendens", 4.5, 60, 60, 10, [15,25], [7,8]],
-  ["phoenix-rasbora", "Boraras merah", 2, 40, 45, 10, [20,28], [4,6.5]],
-  ["green-fire-tetra", "Aphyocharax rathbuni", 7.1, 75, 50, 12, [20,26], [6,7.5]],
-  ["red-neon-blue-eye", "Pseudomugil luminatus", 3, 60, 60, 8, [20,28], [6.5,8]],
-  ["ninja-woodcat", "Tatia musaica", 6, 60, 60, 5, [22,27], [6,7.5]],
-  ["red-bellied-piranha", "Pygocentrus nattereri", 50, 600, 200, 6, [24,27], [5.5,7.5]],
-  ["endlicheri-bichir", "Polypterus endlicherii", 75, 2000, 200, 1, [26,28], [6,7.5]],
-  ["monoculus-peacock-bass", "Cichla monoculus", 71, 1200, 200, 1, [25,31], [5.5,6.5]],
+for (const [id, scientificName, size, volume, length, group, temperature, ph, expectedVerifiedAt] of [
+  ["eight-banded-false-barb", "Eirmotus octozona", 3.6, 54, 60, 10, [22,26], [5,7], "2026-10-02"],
+  ["daisys-blue-ricefish", "Oryzias woworae", 3, 41, 45, 8, [23,27], [6,7.5], "2026-10-02"],
+  ["pacific-blue-eye", "Pseudomugil signifer", 8.8, 54, 60, 10, [20,26], [6.5,7.5], "2026-10-02"],
+  ["red-phantom-tetra", "Megalamphodus sweglesi", 3.5, 72, 80, 10, [20,28], [4.5,7.5], "2026-10-02"],
+  ["sawbwa-resplendens", "Sawbwa resplendens", 3.5, 54, 60, 5, [18,22], [6,8], "2026-10-02"],
+  ["phoenix-rasbora", "Boraras merah", 2, 41, 45, 10, [20,28], [4,6.5], "2026-10-02"],
+  ["green-fire-tetra", "Aphyocharax rathbuni", 7.1, 54, 60, 6, [20,26], [6.5,7.5], "2026-10-02"],
+  ["red-neon-blue-eye", "Pseudomugil luminatus", 3, 60, 60, 10, [20,28], [6.5,8], "2026-10-02"],
+  ["ninja-woodcat", "Tatia musaica", 7, 56, 60, 5, [25,26], [6,7.2], "2026-10-02"],
+  ["red-bellied-piranha", "Pygocentrus nattereri", 50, 1296, 240, 6, [23,27], [5.5,7.5], "2026-10-02"],
+  ["endlicheri-bichir", "Polypterus endlicherii", 70, 2000, 300, 1, [26,28], [6.5,7.5], "2026-10-02"],
+  ["monoculus-peacock-bass", "Cichla monoculus", 80, 1200, 200, 1, [25,31], [5.5,6.5], "2026-10-02"],
 ]) {
   const profile = speciesCatalog.find((item) => item.id === id);
   assert(profile, `${id} güvenilir kaynaklı canlı kataloğunda bulunmalı`);
@@ -3794,7 +5623,7 @@ for (const [id, scientificName, size, volume, length, group, temperature, ph] of
     [scientificName,size,volume,length,group,temperature,ph],
     `${id} doğrulanmış kimlik, boy, akvaryum, sürü ve su eşiklerini taşımalı`,
   );
-  assert.equal(profile.verifiedAt, "2026-08-28", `${id} güncel doğrulama tarihini taşımalı`);
+  assert.equal(profile.verifiedAt, expectedVerifiedAt, `${id} güncel doğrulama tarihini taşımalı`);
   assert(profile.sourceUrl?.startsWith("https://"), `${id} güvenilir HTTPS ana kaynağı taşımalı`);
   assert((profile.additionalSourceUrls?.length || 0) >= 2, `${id} en az iki ek doğrulama kaynağını saklamalı`);
 }
@@ -3826,8 +5655,12 @@ assert.deepEqual(
 );
 assert.deepEqual(celebesHalfbeak?.waterTypes, ["freshwater"], "Nomorhamphus liemi tatlı su profili olarak tutulmalı");
 assert.equal(celebesHalfbeak?.predatory, true, "Nomorhamphus liemi küçük canlı avı riskini sağlık analizine taşımalı");
-assert.equal(celebesHalfbeak?.verifiedAt, "2026-09-09", "Nomorhamphus liemi güncel doğrulama tarihini taşımalı");
+assert.equal(celebesHalfbeak?.verifiedAt, "2026-09-30", "Nomorhamphus liemi güncel doğrulama tarihini taşımalı");
 assert.match(celebesHalfbeak?.sourceUrl || "", /^https:\/\/tropicalfreshwaterfish\.com\/species\/Nomorhamphus_liemi_liemi\.html$/, "Nomorhamphus liemi doğrudan tür bakım kaynağına bağlanmalı");
+assert(celebesHalfbeak?.additionalSourceUrls?.some((url) => url.includes("fishbase.se/summary/Nomorhamphus-liemi")), "Nomorhamphus liemi doğal aralık ve boy için FishBase çapraz kaynağını taşımalı");
+assert(celebesHalfbeak?.additionalSourceUrls?.some((url) => url.includes("practicalfishkeeping.co.uk/features/what-conditions-do-halfbeaks-need")), "Nomorhamphus liemi uzman halfbeak bakım çapraz kaynağını taşımalı");
+assert(celebesHalfbeak?.husbandryCaution?.includes("20–24 °C") && celebesHalfbeak.husbandryCaution.includes("23–27 °C") && celebesHalfbeak.husbandryCaution.includes("24–27 °C"), "Nomorhamphus liemi kaynaklar arasındaki sıcaklık farkını kullanıcıdan saklamamalı");
+assert(celebesHalfbeak?.husbandryCaution?.includes("çözünmüş oksijen"), "Nomorhamphus liemi yüksek sıcaklıkta oksijen güvenliğini taşımalı");
 assert.equal(speciesForLivestock({commonName:"PLATİNİUM HALF BEAK CÜCE ZARGANA",category:"fish",quantity:1}), undefined, "Genel Platinum Halfbeak satış adı Dermogenys veya Nomorhamphus profiline tahminle bağlanmamalı");
 assert.equal(speciesCatalog.filter((item) => speciesGroup(item) === "rasbora").length, 14, "Rasbora kataloğu Phoenix rasbora ve Sawbwa dahil 14 güvenilir profile ulaşmalı");
 assert.equal(speciesCatalog.filter((item) => speciesGroup(item) === "rainbowfish").length, 12, "Rainbowfish kataloğu doğrulanmış 12 profile sahip olmalı");
@@ -3869,7 +5702,7 @@ const cikletistCyprinidInventory = [
   ["BLACK TİGER BADİS DARİO FİSH", "black-tiger-dario"],
   ["COLOMBİA TETRA", "colombian-tetra"],
   ["DWARF İNDİAN PUFFER", "pea-puffer"],
-  ["EİGHT BANDED BARB", "eight-banded-false-barb"],
+  ["EİGHT BANDED BARB"],
   ["ETÇİL PİRANA NATTERİ", "red-bellied-piranha"],
   ["KIRMIZI TRANSGENETİK TETRAZONE", "tiger-barb"],
   ["ODESSA BARB", "odessa-barb"],
@@ -3940,22 +5773,34 @@ assert.deepEqual(
   ["Osteoglossum bicirrhosum",90,4500,500,1,[24,28],[6,7.2]],
   "Gümüş arowana bilimsel kimlik, erişkin boyu, profesyonel ölçekli akvaryum ve su eşiklerini taşımalı",
 );
-assert.equal(silverArowana.verifiedAt, "2026-08-28", "Gümüş arowana güncel doğrulama tarihini taşımalı");
+assert.equal(silverArowana.verifiedAt, "2026-10-02", "Gümüş arowana güncel doğrulama tarihini taşımalı");
 assert(silverArowana.sourceUrl?.includes("fishbase.se"), "Gümüş arowana bilimsel ana kaynağa bağlanmalı");
 assert((silverArowana.additionalSourceUrls?.length || 0) >= 3, "Gümüş arowana bakım eşikleri bağımsız güvenilir kaynaklarla doğrulanmalı");
 assert.equal(silverArowana.predatory, true, "Gümüş arowana avcılık uyarısını taşımalı");
 assert.equal(silverArowana.speciesOnly, true, "Gümüş arowana sıradan topluluk akvaryumuna önerilmemeli");
-assert(silverArowana.husbandryCaution?.includes("kapak"), "Gümüş arowana sıçrama ve kapak güvenliğini açıklamalı");
+assert(silverArowana.husbandryCaution?.includes("kapak") && silverArowana.husbandryCaution?.includes("%30–50"), "Gümüş arowana sıçrama, kapak ve su değişimi güvenliğini açıklamalı");
+
+const redtailCatfish = speciesCatalog.find((item) => item.id === "redtail-catfish");
+assert.deepEqual(
+  [redtailCatfish?.scientificName,redtailCatfish?.adultSizeCm,redtailCatfish?.minVolumeL,redtailCatfish?.minTankLengthCm,redtailCatfish?.minGroup,redtailCatfish?.temperature,redtailCatfish?.ph,redtailCatfish?.flow],
+  ["Phractocephalus hemioliopterus",135,10368,360,1,[21,26],[6,7.5],undefined],
+  "Kırmızı kuyruk kedi balığı yalnız doğrudan kaynaklı dev erişkin ve kamusal akvaryum eşiklerini taşımalı",
+);
+assert.equal(redtailCatfish?.verifiedAt, "2026-10-02", "Kırmızı kuyruk kedi balığı güncel kaynak denetim tarihini taşımalı");
+assert(redtailCatfish?.husbandryCaution?.includes("360 × 240 × 120 cm") && redtailCatfish?.husbandryCaution?.includes("10.368 litre"), "Kırmızı kuyruk kedi balığı doğrudan yayımlanan mutlak taban ölçüsünü açıklamalı");
+assert(redtailCatfish?.husbandryCaution?.includes("tahmin edilmedi"), "Kırmızı kuyruk kedi balığı için yayımlanmayan tek akıntı hedefi uydurulmamalı");
+assert(redtailCatfish?.additionalSourceUrls?.some((url) => url.includes("seriouslyfish.com/species/phractocephalus")), "Kırmızı kuyruk kedi balığı uzman bakım kaynağına bağlanmalı");
 const africanArowana = speciesCatalog.find((item) => item.id === "african-arowana");
 assert.deepEqual(
-  [africanArowana?.scientificName,africanArowana?.adultSizeCm,africanArowana?.minVolumeL,africanArowana?.minTankLengthCm,africanArowana?.minGroup,africanArowana?.temperature,africanArowana?.ph],
-  ["Heterotis niloticus",100,1000,undefined,1,[25,30],[6,7.5]],
+  [africanArowana?.scientificName,africanArowana?.adultSizeCm,africanArowana?.minVolumeL,africanArowana?.minTankLengthCm,africanArowana?.minGroup,africanArowana?.temperature,africanArowana?.ph,africanArowana?.flow],
+  ["Heterotis niloticus",100,1000,undefined,1,[25,28],[6,7.5],undefined],
   "Afrika Arowanası yalnız kaynaklı kimlik, boy, hacim, sosyal yapı ve su eşiklerini taşımalı",
 );
 assert(africanArowana?.tankLengthDataNote?.includes("uzunluk değeri tahmin edilmedi"), "Afrika Arowanası yayımlanmayan santimetre eşiğini uydurmamalı");
 assert.equal(africanArowana?.predatory, true, "Afrika Arowanası küçük canlı avlama riskini taşımalı");
-assert.equal(africanArowana?.verifiedAt, "2026-09-01", "Afrika Arowanası güncel doğrulama tarihini taşımalı");
+assert.equal(africanArowana?.verifiedAt, "2026-10-02", "Afrika Arowanası güncel doğrulama tarihini taşımalı");
 assert((africanArowana?.additionalSourceUrls?.length || 0) >= 4, "Afrika Arowanası kimlik, bakım ve Türkiye satış adı kaynaklarını saklamalı");
+assert(africanArowana?.husbandryCaution?.includes("10,2 kg") && africanArowana?.husbandryCaution?.includes("omnivor"), "Afrika Arowanası bilimsel ağırlık ve gerçek beslenme güvenliğini açıklamalı");
 
 const cikletistCurrentMonsterInventory = [
   ["AFRİKAN AROWANA", "african-arowana"],
@@ -3989,15 +5834,25 @@ for (const [retailName, expectedId] of cikletistCurrentMonsterInventory) {
 const chineseHighFinSucker = speciesCatalog.find((item) => item.id === "chinese-high-fin-sucker");
 assert.deepEqual(
   [chineseHighFinSucker?.scientificName,chineseHighFinSucker?.adultSizeCm,chineseHighFinSucker?.minVolumeL,chineseHighFinSucker?.minTankLengthCm,chineseHighFinSucker?.minGroup,chineseHighFinSucker?.temperature,chineseHighFinSucker?.ph,chineseHighFinSucker?.flow],
-  ["Myxocyprinus asiaticus",68,1135,undefined,1,[15,26],[6,8],"high"],
+  ["Myxocyprinus asiaticus",68,1135,undefined,1,[15,26],[6,8],undefined],
   "Çin Ejderi yalnız kaynaklı kimlik, boy, yetişkin hacmi, sosyal yapı ve su eşiklerini taşımalı",
 );
 assert(chineseHighFinSucker?.tankLengthDataNote?.includes("uzunluk değeri tahmin edilmedi"), "Çin Ejderi yayımlanmayan santimetre eşiğini uydurmamalı");
 assert(chineseHighFinSucker?.husbandryCaution?.includes("havuz"), "Çin Ejderi yetişkin bakımının havuz ölçeğini açıklamalı");
-assert.equal(chineseHighFinSucker?.verifiedAt, "2026-09-01", "Çin Ejderi güncel doğrulama tarihini taşımalı");
+assert.equal(chineseHighFinSucker?.verifiedAt, "2026-10-02", "Çin Ejderi güncel doğrulama tarihini taşımalı");
 assert((chineseHighFinSucker?.additionalSourceUrls?.length || 0) >= 3, "Çin Ejderi kimlik, bakım ve Türkiye satış adı kaynaklarını saklamalı");
+assert(chineseHighFinSucker?.husbandryCaution?.includes("80–90 cm") && chineseHighFinSucker?.husbandryCaution?.includes("Hassas"), "Çin Ejderi bakım boyu farkını ve koruma durumunu açıklamalı");
+const oscar = speciesCatalog.find((item) => item.id === "oscar");
+assert.deepEqual(
+  [oscar?.scientificName,oscar?.adultSizeCm,oscar?.minVolumeL,oscar?.minTankLengthCm,oscar?.minGroup,oscar?.temperature,oscar?.ph,oscar?.flow],
+  ["Astronotus ocellatus",45.7,540,150,1,[20,28],[6,7.5],"low"],
+  "Astronot bilimsel azami boyu ile uzman kaynaktaki erişkin tabanı ve su eşiklerini taşımalı",
+);
+assert.equal(oscar?.verifiedAt, "2026-10-02", "Astronot güncel doğrulama tarihini taşımalı");
+assert(oscar?.sourceUrl?.includes("seriouslyfish.com"), "Astronot ana bakım kaynağı olarak tür uzmanı profiline bağlanmalı");
+assert(oscar?.additionalSourceUrls?.some((url) => url.includes("fishbase.se")), "Astronot azami toplam boy için FishBase çapraz kaynağını saklamalı");
+assert(oscar?.husbandryCaution?.includes("45,7 cm") && oscar?.husbandryCaution?.includes("%30–50"), "Astronot boy ölçümü farkını ve su değişimi gereksinimini açıklamalı");
 for (const [id,sourceDomain,extraSourceCount] of [
-  ["oscar","fishbase.se",3],
   ["flowerhorn","fishkeeping.co.uk",1],
 ]) {
   const profile = speciesCatalog.find((item) => item.id === id);
@@ -4208,6 +6063,20 @@ for (const [retailName, expectedId] of cikletistDwarfCichlidInventory) {
   else assert.equal(matched, undefined, `Bilimsel kimliği veya güvenli bakım eşiği tamamlanmayan cüce ciklet sayfası adı tahminle eşleştirilmemeli: ${retailName}`);
 }
 
+const redhumpEartheater = speciesForCatalogExactSearch("Geophagus steindachneri", "fish", "freshwater");
+assert.deepEqual(
+  [redhumpEartheater?.id, redhumpEartheater?.adultSizeCm, redhumpEartheater?.minVolumeL, redhumpEartheater?.minTankLengthCm, redhumpEartheater?.minGroup, redhumpEartheater?.temperature, redhumpEartheater?.ph, redhumpEartheater?.flow],
+  ["redhump-eartheater", 19.8, 243, 120, 4, [20, 30], [6, 7.5], undefined],
+  "Geophagus steindachneri bilimsel boy ve kaynaklı yetişkin bakım eşikleriyle bulunmalı",
+);
+assert.equal(speciesForCatalogExactSearch("Geophagus hondae", "fish", "freshwater")?.id, "redhump-eartheater", "Geophagus hondae doğrulanmış eş anlamlı olarak steindachneri profiline bağlanmalı");
+assert.equal(speciesForCatalogExactSearch("GEOPHAGUS HONGDEA", "fish", "freshwater"), undefined, "Kanıtlanmamış Hongdea yazımı hondae eş anlamlısına tahminle dönüştürülmemeli");
+assert(redhumpEartheater?.husbandryCaution?.includes("yüzde 40–70"), "Redhump Eartheater kaynaklı su değişimi ve kum güvenliği uyarısını taşımalı");
+assert(redhumpEartheater?.additionalSourceUrls?.some((url) => url.includes("SynonymSummary")), "Redhump Eartheater hondae eş anlamlısının taksonomi kaynağını taşımalı");
+const unresolvedHongdea = unresolvedSpeciesForSearch("GEOPHAGUS HONGDEA", "fish", "freshwater");
+assert.equal(unresolvedHongdea?.verifiedAt, "2026-09-19", "Hongdea belirsizlik kaydı güncel doğrulama tarihini taşımalı");
+assert(unresolvedHongdea?.reason.includes("harf hatası olduğu kanıtlanmadan"), "Hongdea kaydı olası yazım hatasını neden otomatik eşleştirmediğini açıklamalı");
+
 const cikletistTropheusTanganyikaInventory = [
   ["İKOLA KAISER TROPHEUS", "tropheus-ikola"],
   ["DEMASONİ BALIKLARI", "demasoni-cichlid"],
@@ -4270,12 +6139,55 @@ for (const [retailName, expectedId] of cikletistShrimpCrayfishInventory) {
   if (expectedId) assert.equal(matched?.id, expectedId, `Karides/kerevit satış adı doğru güvenilir profile bağlanmalı: ${retailName}`);
   else assert.equal(matched, undefined, `Belirsiz satış adı bilimsel kimlik veya uygun yaşam modeli olmadan eşleştirilmemeli: ${retailName}`);
 }
+const unresolvedMixedShrimpPack = unresolvedSpeciesForSearch("Karışık Karides Paketi 10 ADET", "shrimp", "freshwater");
+assert.equal(unresolvedMixedShrimpPack?.name, "Karışık Karides Paketi 10 ADET", "İçeriği stokla değişen karışık karides paketi kullanıcıya görünür güvenlik kaydıyla bulunmalı");
+assert.equal(unresolvedMixedShrimpPack?.verifiedAt, "2026-09-19", "Karışık karides paketi güncel kaynak denetim tarihini taşımalı");
+assert(unresolvedMixedShrimpPack?.reason.includes("stok durumuna göre") && unresolvedMixedShrimpPack.reason.includes("Neocaridina") && unresolvedMixedShrimpPack.reason.includes("Caridina"), "Karışık karides paketi değişken içerik ve tür kaynaklı su gereksinimi riskini açıklamalı");
+assert.equal(unresolvedSpeciesForSearch("Karışık Karides Paketi", "shrimp", "saltwater"), undefined, "Karışık tatlı su karides paketi deniz akvaryumunda görünmemeli");
+const unresolvedPintoHybrid = unresolvedSpeciesForSearch("PİNTO MELEZ KARİDESLER", "shrimp", "freshwater");
+assert.equal(unresolvedPintoHybrid?.name, "PİNTO MELEZ KARİDESLER", "Pinto melez satış adı kullanıcıya görünür güvenlik kaydıyla bulunmalı");
+assert.equal(unresolvedPintoHybrid?.verifiedAt, "2026-09-19", "Pinto melez kaydı güncel kaynak denetim tarihini taşımalı");
+assert(unresolvedPintoHybrid?.reason.includes("Caridina serrata") && unresolvedPintoHybrid.reason.includes("ebeveynleri") && unresolvedPintoHybrid.reason.includes("nesli"), "Pinto melez kaydı tek tür varsaymadan hibrit köken belirsizliğini açıklamalı");
+assert.equal(unresolvedPintoHybrid?.additionalSourceUrls.length, 3, "Pinto melez kaydı üretici damızlık kataloğu ve iki bağımsız hobi kaynağı taşımalı");
+assert.equal(unresolvedSpeciesForSearch("Pinto Mischling Shrimp", "shrimp", "saltwater"), undefined, "Pinto melez güvenlik kaydı deniz akvaryumunda görünmemeli");
+const unresolvedVampireCrabNames = [
+  "GEOSESARMA DENNERLE HALLOWEEN VAMPIRE CRAB TANGERİNE VAMPİR YENGEÇ (STRAFOR+ISITICILI GÖNDERİM,AÇIKLAMAYI OKUYUNUZ)",
+  "GEOSESARMA TRİCOLOR VAMPİRE CRAB",
+  "ASSORTED VAMPİRE CRAB ORANGE",
+  "RED DEVİL VAMPİRE CRAB ORANGE",
+];
+for (const retailName of unresolvedVampireCrabNames) {
+  const unresolved = unresolvedSpeciesForSearch(retailName, "other", "freshwater");
+  assert.equal(unresolved?.name, retailName, `${retailName} kullanıcıya görünür güvenlik kaydıyla bulunmalı`);
+  assert.equal(unresolved?.verifiedAt, "2026-09-19", `${retailName} güncel paludaryum denetim tarihini taşımalı`);
+  assert(unresolved?.reason.includes("yarı karasal"), `${retailName} tamamen sucul canlı gibi sunulmamalı`);
+  assert(unresolved?.reason.includes("paludaryum"), `${retailName} kara alanı gereksinimini açıklamalı`);
+  assert.equal(unresolvedSpeciesForSearch(retailName, "other", "saltwater"), undefined, `${retailName} deniz akvaryumu aramasında görünmemeli`);
+}
+assert(unresolvedSpeciesForSearch("Geosesarma dennerle Halloween", "other", "freshwater")?.reason.includes("nem"), "Geosesarma dennerle kaydı paludaryum nem gereksinimini açıklamalı");
+assert(unresolvedSpeciesForSearch("Red Devil Vampire Crab", "other", "freshwater")?.reason.includes("Geosesarma hagen"), "Red Devil adı olası fakat kanıtlanmamış G. hagen kimliğini açıklamalı");
 for (const id of ["red-rili-shrimp", "orange-rili-shrimp", "carbon-rili-shrimp", "green-jelly-shrimp", "chocolate-shrimp"]) {
   const profile = speciesCatalog.find((item) => item.id === id);
   assert.equal(profile?.scientificName, "Neocaridina davidi", `${id} satış rengi ayrı tür gibi tanımlanmamalı`);
   assert.equal(profile?.verifiedAt, "2026-08-29", `${id} güncel doğrulama tarihi taşımalı`);
   assert(profile?.additionalSourceUrls?.some((url) => url.startsWith("https://www.cikletistpetshop.com/")), `${id} doğrulanan yerel satış kaynağını taşımalı`);
 }
+const unresolvedTangerineTiger = unresolvedSpeciesForSearch("Tangerine Tiger Shrimp", "shrimp", "freshwater");
+assert.equal(unresolvedTangerineTiger?.verifiedAt, "2026-09-19", "Tangerine Tiger bilimsel kimlik çelişkisi güncel denetim tarihini taşımalı");
+for (const scientificName of ["Caridina serrata", "Caridina cantonensis", "Caridina mariae"]) {
+  assert(unresolvedTangerineTiger?.reason.includes(scientificName), `Tangerine Tiger güvenlik kaydı çelişen ${scientificName} kimliğini açıklamalı`);
+}
+assert.equal(unresolvedTangerineTiger?.additionalSourceUrls.length, 4, "Tangerine Tiger kaydı taksonomi ve ticari kullanım çelişkisini ayrı kaynaklarla göstermeli");
+assert.equal(speciesForCatalogExactSearch("Tangerine Tiger Shrimp", "shrimp", "freshwater"), undefined, "Bilimsel türü doğrulanmayan Tangerine Tiger güvenli profile otomatik bağlanmamalı");
+assert.equal(unresolvedSpeciesForSearch("Tangerine Tiger Shrimp", "shrimp", "saltwater"), undefined, "Tangerine Tiger güvenlik kaydı deniz akvaryumunda görünmemeli");
+const serrataDwarfShrimp = speciesCatalog.find((item) => item.id === "serrata-dwarf-shrimp");
+assert.deepEqual([serrataDwarfShrimp?.scientificName, serrataDwarfShrimp?.adultSizeCm, serrataDwarfShrimp?.minVolumeL, serrataDwarfShrimp?.minTankLengthCm, serrataDwarfShrimp?.minGroup], ["Caridina serrata", 3, 20, undefined, 10], "Caridina serrata kaynaklı kimlik, boy, hacim ve grup eşiklerini taşımalı");
+assert.deepEqual([serrataDwarfShrimp?.temperature, serrataDwarfShrimp?.ph, serrataDwarfShrimp?.flow], [[22, 26], [6, 7], "low"], "Caridina serrata kaynaklı su gereksinimlerini taşımalı");
+assert.equal(serrataDwarfShrimp?.speciesOnly, true, "Caridina serrata bilimsel kimliği doğrulanmış ayrı koloni profili olmalı");
+assert(serrataDwarfShrimp?.husbandryCaution?.includes("Tangerine Tiger") && serrataDwarfShrimp.husbandryCaution.includes("Pinto/Mischling"), "Caridina serrata ticari hat adlarıyla otomatik eşlenmeme uyarısını taşımalı");
+assert(serrataDwarfShrimp?.tankLengthDataNote?.includes("tahmin edilmedi"), "Caridina serrata yayımlanmayan akvaryum uzunluğunu tahmin etmemeli");
+assert.equal(speciesForCatalogExactSearch("Caridina serrata", "shrimp", "freshwater")?.id, "serrata-dwarf-shrimp", "Kesin Caridina serrata adı doğru profili bulmalı");
+assert.equal(speciesForCatalogExactSearch("Tangerine Tiger Shrimp", "shrimp", "freshwater"), undefined, "Caridina serrata profili belirsiz Tangerine Tiger ticari adını üstlenmemeli");
 
 const greenNeon = speciesCatalog.find((item) => item.id === "green-neon-tetra");
 assert.equal(greenNeon?.minGroup, 10, "Green Neon tetra küçük bir grup yerine güvenli sürü sayısıyla önerilmeli");
@@ -4367,10 +6279,12 @@ assert.deepEqual(
 assert.equal(ocellarisPeacockBass?.predatory, true, "Ocellaris Peacock Bass küçük canlılar için avlanma riski taşımalı");
 assert.equal(ocellarisPeacockBass?.speciesOnly, true, "Ocellaris Peacock Bass sıradan topluluk canlısı gibi sunulmamalı");
 assert.equal(ocellarisPeacockBass?.additionalSourceUrls?.length, 2, "Ocellaris Peacock Bass kimlik ve Türkiye satış adı kaynaklarını saklamalı");
-assert.equal(ocellarisPeacockBass?.verifiedAt, "2026-08-31", "Ocellaris Peacock Bass güncel doğrulama tarihini taşımalı");
-assert.equal(speciesCatalog.filter((item) => speciesGroup(item) === "cichlid").length, 72, "Cichlid kataloğu ayrı Aulonocara baenschi, A. stuartgranti, Herichthys carpintis ve H. cyanoguttatus profilleri dahil doğrulanmış 72 profil içermeli");
-assert.equal(speciesCatalog.filter((item) => speciesGroup(item) === "bottom").length, 72, "Dip balığı kataloğu ayrı Gastromyzon stellatus, gerçek Julii, doğrulanmış Garra türleri, Ninja woodcat ve kesin L146/Ucayalensis profilleri dahil 72 profil içermeli");
-assert.equal(speciesCatalog.filter((item) => speciesGroup(item) === "goby").length, 13, "Goby kataloğu üç ayrı Lipstick Sicyopus türü ve ayrıştırılmış Blue Neon profilleri dahil 13 profil içermeli");
+assert.deepEqual(ocellarisPeacockBass?.waterTypes, ["freshwater"], "Ocellaris Peacock Bass akvaryum profilinde güvenli tatlı su kapsamını taşımalı");
+assert(ocellarisPeacockBass?.husbandryCaution?.includes("10–20 kat") && ocellarisPeacockBass?.husbandryCaution?.includes("74 cm"), "Ocellaris Peacock Bass kaynaklı filtrasyon ve boy güvenliğini açıklamalı");
+assert.equal(ocellarisPeacockBass?.verifiedAt, "2026-10-02", "Ocellaris Peacock Bass güncel doğrulama tarihini taşımalı");
+assert.equal(speciesCatalog.filter((item) => speciesGroup(item) === "cichlid").length, 73, "Cichlid kataloğu doğrulanmış Geophagus steindachneri profili dahil 73 profil içermeli");
+assert.equal(speciesCatalog.filter((item) => speciesGroup(item) === "bottom").length, 74, "Dip balığı kataloğu ayrı Beaufortia kweichowensis, Gastromyzon stellatus ve Farlowella vittata; gerçek Julii, doğrulanmış Garra türleri, Ninja woodcat ve kesin L146/Ucayalensis profilleri dahil 74 profil içermeli");
+assert.equal(speciesCatalog.filter((item) => speciesGroup(item) === "goby").length, 12, "Goby kataloğu üç ayrı Lipstick Sicyopus türü ve yinelenmeyen iki Blue Neon adayı dahil 12 benzersiz profil içermeli");
 assert.equal(speciesCatalog.filter((item) => speciesGroup(item) === "crayfish").length, 4, "Kerevit kataloğu Cambarellus diminutus dahil dört tür içermeli");
 for (const [id,group,volume,length,count,temperature,ph,flow] of [
   ["goldeneye-dwarf-cichlid","cichlid",80,80,2,[22,25],[6,7.2],"low"],
@@ -4407,21 +6321,24 @@ assert.equal(ropeFish?.verifiedAt, "2026-09-10", "Ropefish güncel kaynak deneti
 assert(ropeFish?.husbandryCaution?.includes("37 cm") && ropeFish?.husbandryCaution?.includes("90 cm"), "Ropefish çelişen erişkin boy kaynaklarını kullanıcıya açıklamalı");
 assert(ropeFish?.husbandryCaution?.includes("ağırlıklı kapak") && ropeFish?.husbandryCaution?.includes("yüzey havasına"), "Ropefish kaçış ve hava soluma güvenlik uyarılarını taşımalı");
 assert.equal(speciesCatalog.find((item)=>item.id==="panda-loach")?.speciesOnly,true,"Panda Loach akarsu tipi özel kurulum uyarısı taşımalı");
-for (const [id, scientificName, minVolumeL, minTankLengthCm, minGroup] of [
-  ["winemillers-eartheater", "Geophagus winemilleri", 350, 180, 6],
-  ["threadfin-acara", "Acarichthys heckelii", 250, 120, 1],
+for (const [id, scientificName, minVolumeL, minTankLengthCm, minGroup, temperature, ph, flow] of [
+  ["winemillers-eartheater", "Geophagus winemilleri", 648, 180, 6, [26, 30], [4, 7], "medium"],
+  ["threadfin-acara", "Acarichthys heckelii", 250, 150, 1, [24, 30], [6, 8], "low"],
 ]) {
   const profile = speciesCatalog.find((item) => item.id === id);
   assert(profile, `${id} Amerikan ciklet kataloğunda bulunmalı`);
   assert.deepEqual(
-    [profile.scientificName, profile.minVolumeL, profile.minTankLengthCm, profile.minGroup],
-    [scientificName, minVolumeL, minTankLengthCm, minGroup],
-    `${id} doğrulanmış kimlik ve alan gereksinimlerini taşımalı`,
+    [profile.scientificName, profile.minVolumeL, profile.minTankLengthCm, profile.minGroup, profile.temperature, profile.ph, profile.flow],
+    [scientificName, minVolumeL, minTankLengthCm, minGroup, temperature, ph, flow],
+    `${id} doğrulanmış kimlik, alan ve su gereksinimlerini taşımalı`,
   );
-  assert.equal(profile.verifiedAt, "2026-08-28", `${id} doğrulama tarihini taşımalı`);
-  assert.match(profile.sourceUrl ?? "", /^https:\/\/www\.fishbase\.(?:se|org)\//, `${id} bilimsel kimlik için FishBase kaynağı taşımalı`);
+  assert.equal(profile.verifiedAt, "2026-10-02", `${id} güncel doğrulama tarihini taşımalı`);
+  assert.match(profile.sourceUrl ?? "", /^https:\/\/www\.seriouslyfish\.com\//, `${id} ayrıntılı uzman bakım kaynağı taşımalı`);
+  assert((profile.additionalSourceUrls ?? []).some((url) => url.includes("fishbase")), `${id} bilimsel kimlik için FishBase çapraz kaynağı taşımalı`);
   assert(profile.husbandryCaution, `${id} özel bakım uyarısını taşımalı`);
 }
+assert(speciesCatalog.find((item) => item.id === "winemillers-eartheater")?.husbandryCaution?.includes("180 × 60 cm") && speciesCatalog.find((item) => item.id === "winemillers-eartheater")?.husbandryCaution?.includes("%50–70"), "Geophagus winemilleri kaynaklı taban ve bakım sıklığını açıklamalı");
+assert(speciesCatalog.find((item) => item.id === "threadfin-acara")?.husbandryCaution?.includes("150 × 45 cm") && speciesCatalog.find((item) => item.id === "threadfin-acara")?.husbandryCaution?.includes("ayırıcı"), "Acarichthys heckelii çift alanı ve saldırganlık güvenliğini açıklamalı");
 for (const [id, scientificName, minVolumeL, minTankLengthCm, minGroup] of [
   ["altum-angelfish", "Pterophyllum altum", 450, 150, 4],
   ["blackbelt-cichlid", "Vieja maculicauda", 600, 180, 1],
@@ -4479,7 +6396,28 @@ assert(trueJulii?.additionalSourceUrls?.some((url) => url.includes("fishbase.se/
 assert.notEqual(trueJulii?.scientificName, falseJulii?.scientificName, "Gerçek Julii ve False Julii ayrı bilimsel profiller olarak kalmalı");
 const wrestlingHalfbeak = speciesCatalog.find((item) => item.id === "wrestling-halfbeak");
 assert.equal(wrestlingHalfbeak?.predatory, true, "Wrestling Halfbeak küçük balık ve yavrular için avlanma riski taşımalı");
-assert.equal(wrestlingHalfbeak?.minGroup, 6, "Wrestling Halfbeak tek veya küçük grupla önerilmemeli");
+assert.deepEqual([wrestlingHalfbeak?.scientificName, wrestlingHalfbeak?.adultSizeCm, wrestlingHalfbeak?.minVolumeL, wrestlingHalfbeak?.minTankLengthCm, wrestlingHalfbeak?.minGroup], ["Dermogenys pusilla", 16.1, 68, 60, 1], "Wrestling Halfbeak kaynaklı kimlik, koruyucu azami boy, taban ve sosyal seçenekleri taşımalı");
+assert.deepEqual([wrestlingHalfbeak?.temperature, wrestlingHalfbeak?.ph, wrestlingHalfbeak?.flow], [[24, 28], [6.5, 8], "low"], "Wrestling Halfbeak kaynaklı su ve düşük akıntı gereksinimini taşımalı");
+assert.deepEqual(wrestlingHalfbeak?.waterTypes, ["freshwater", "brackish"], "Wrestling Halfbeak tatlı ve hafif acı su kapsamını taşımalı");
+assert.deepEqual(wrestlingHalfbeak?.specificGravity, [1, 1.005], "Wrestling Halfbeak yalnız kaynaklı hafif acı su üst sınırını taşımalı");
+assert.equal(wrestlingHalfbeak?.verifiedAt, "2026-09-30", "Wrestling Halfbeak güncel kaynak denetim tarihini taşımalı");
+assert(wrestlingHalfbeak?.husbandryCaution?.includes("boşluksuz kapak") && wrestlingHalfbeak.husbandryCaution.includes("tuz zorunlu değildir"), "Wrestling Halfbeak sıçrama ve gereksiz tuz güvenliğini taşımalı");
+assert(wrestlingHalfbeak?.husbandryCaution?.includes("16,1 cm") && wrestlingHalfbeak.husbandryCaution.includes("5,5 cm"), "Wrestling Halfbeak kaynaklardaki TL/SL boy farkını görünür tutmalı");
+assert.equal(speciesForCatalogExactSearch("Dermogenys pusilla", "fish", "freshwater")?.id, "wrestling-halfbeak", "Kesin Dermogenys pusilla adı doğru profile bağlanmalı");
+assert.equal(speciesForLivestock({commonName:"PLATİNİUM HALF BEAK CÜCE ZARGANA",category:"fish",quantity:1}), undefined, "Genel Platinum Halfbeak adı güncellenen Dermogenys veya Nomorhamphus profiline tahminle bağlanmamalı");
+const humpbackLimia = speciesCatalog.find((item) => item.id === "humpback-limia");
+assert.deepEqual(
+  [humpbackLimia?.scientificName,humpbackLimia?.adultSizeCm,humpbackLimia?.minVolumeL,humpbackLimia?.minTankLengthCm,humpbackLimia?.minGroup,humpbackLimia?.temperature,humpbackLimia?.ph,humpbackLimia?.flow],
+  ["Limia nigrofasciata",6.3,57,undefined,6,[22,26],[7,8],"low"],
+  "Humpback Limia güncel taksonomi, kaynaklı boy, grup, hacim ve su eşiklerini taşımalı",
+);
+assert.deepEqual(humpbackLimia?.waterTypes,["freshwater","brackish"],"Humpback Limia kaynaklı tatlı ve düşük düzey acı su kapsamını taşımalı");
+assert.equal(humpbackLimia?.verifiedAt,"2026-09-30","Humpback Limia güncel doğrulama tarihini taşımalı");
+assert.match(humpbackLimia?.sourceUrl || "",/^https:\/\/www\.seriouslyfish\.com\/species\/limia-nigrofasciata$/,"Humpback Limia doğrudan türe özel uzman bakım kaynağına bağlanmalı");
+assert(humpbackLimia?.additionalSourceUrls?.some((url) => url.includes("fishbase.se/summary/Limia-nigrofasciata")),"Humpback Limia taksonomi, doğal boy ve koruma durumu için FishBase çapraz kaynağını taşımalı");
+assert(humpbackLimia?.additionalSourceUrls?.some((url) => url.includes("chicagolivebearer.com")),"Humpback Limia altılı grup ve hacim için canlı doğuran uzman kulübü kaynağını taşımalı");
+assert(humpbackLimia?.tankLengthDataNote?.includes("kesin minimum uzunluk yayımlamadığı"),"Humpback Limia kaynakta olmayan santimetre uzunluğunu tahmin etmemeli");
+assert(humpbackLimia?.husbandryCaution?.includes("kritik tehlike") && humpbackLimia.husbandryCaution.includes("biyolojik yük"),"Humpback Limia koruma ve hızlı üreme güvenliğini taşımalı");
 const blackPhantom = speciesCatalog.find((item) => item.id === "black-phantom-tetra");
 assert.equal(blackPhantom?.minGroup, 8, "Siyah Fantom tetra güvenli sürü sayısıyla önerilmeli");
 const spottedRasbora = speciesCatalog.find((item) => item.id === "spotted-rasbora");
@@ -4553,6 +6491,486 @@ assert(
   careProductCatalog.every((item) => /^\d{4}-\d{2}-\d{2}$/.test(item.verifiedAt || "") && !Number.isNaN(Date.parse(item.verifiedAt))),
   "Her bakım ürünü geçerli bir doğrulama tarihi taşımalı",
 );
+const fluvalCare = careProductCatalog.filter((item) => item.brand === "Fluval");
+assert.equal(fluvalCare.length, 251, "Fluval resmî su, bitki, test, yem ve filtre medyası dizinindeki 251 doğrulanmış seçenek bulunmalı");
+assert.deepEqual(fluvalCare.slice(0,14).map((item) => item.model), [
+  "Aqua Plus Water Conditioner 30 ml","Aqua Plus Water Conditioner 120 ml","Aqua Plus Water Conditioner 250 ml","Aqua Plus Water Conditioner 500 ml","Aqua Plus Water Conditioner 2 L",
+  "Cycle Biological Enhancer 30 ml","Cycle Biological Enhancer 120 ml","Cycle Biological Enhancer 250 ml","Cycle Biological Enhancer 500 ml","Cycle Biological Enhancer 2 L",
+  "Waste Control Biological Aquarium Cleaner 30 ml","Waste Control Biological Aquarium Cleaner 120 ml","Waste Control Biological Aquarium Cleaner 250 ml","Waste Control Biological Aquarium Cleaner 2 L",
+], "Fluval su bakım ürünleri gerçek ambalaj seçenekleriyle ayrı kayıtlar olmalı");
+assert.equal(fluvalCare.filter((item) => item.category === "water_conditioner").length, 17, "Fluval su düzenleyicileri tatlı su ürünleri, yedi deniz takviyesi ve iki Marine Salt seçeneğini taşımalı");
+assert.equal(fluvalCare.filter((item) => item.category === "bacteria").length, 10, "Fluval bakteri ürünleri Cycle, Waste Control ve Betta Enviro Clean seçeneklerini taşımalı");
+assert.equal(fluvalCare.filter((item) => item.category === "fertilizer").length, 2, "Fluval Plant Gro+ iki gerçek şişe seçeneğiyle gübre kategorisinde bulunmalı");
+assert.equal(fluvalCare.filter((item) => item.category === "substrate").length, 7, "Fluval Stratum, Bio-Stratum ve Betta Stratum yedi gerçek paket seçeneğiyle bulunmalı");
+assert.equal(fluvalCare.filter((item) => item.category === "test").length, 28, "Fluval on tekli kit, Professional Test Kit ve 17 doğrulanmış yedek reaktif ayrı bulunmalı");
+assert.equal(fluvalCare.filter((item) => item.category === "food").length, 43, "Fluval doğrulanmış yem grubu 40 Bug Bites ve üç Betta ürünüyle 43 gerçek seçenek içermeli");
+assert.equal(fluvalCare.filter((item) => item.category === "food" && item.id.startsWith("fluval-bug-bites-") && item.sourceUrl.includes("/us/shop/product/bug-bites")).length, 40, "Fluval resmî üç sayfalık Bug Bites dizinindeki 40 ürünün tamamı doğrudan ürün sayfasına bağlı olmalı");
+assert.equal(fluvalCare.filter((item) => item.category === "filter_media").length, 143, "Fluval doğrulanmış filtre medyası portföyü 143 gerçek seçenek içermeli");
+assert(fluvalCare.every((item) => item.description.includes("ürün kodu") && item.sourceUrl?.startsWith("https://fluvalaquatics.com/") && ["2026-09-28","2026-09-29","2026-09-30"].includes(item.verifiedAt)), "Fluval bakım ürünleri ürün kodu, doğrudan resmî kaynak ve güncel tarih taşımalı");
+assert(careProductCatalog.find((item) => item.id === "fluval-cycle-30ml")?.description.includes("yayımlanmıyor"), "Fluval Cycle 30 ml için yayımlanmayan toplam kullanım hacmi tahmin edilmemeli");
+assert(careProductCatalog.find((item) => item.id === "fluval-waste-control-120ml")?.description.includes("ürün kodu A8354") && careProductCatalog.find((item) => item.id === "fluval-waste-control-120ml")?.description.includes("toplam kullanım hacmi yayımlanmıyor"), "Fluval Waste Control 120 ml doğrulanmış ürün koduyla bulunmalı ve yayımlanmayan kullanım hacmi tahmin edilmemeli");
+assert.deepEqual(["fluval-betta-plus-60ml","fluval-betta-enviro-clean-60ml","fluval-quick-clear-120ml","fluval-bio-clear-120ml"].map((id) => careProductCatalog.find((item) => item.id === id)?.category), ["water_conditioner","bacteria","water_conditioner","water_conditioner"], "Fluval Betta ve berraklaştırıcı ürünleri doğru bakım kategorilerine ayrılmalı");
+assert(careProductCatalog.find((item) => item.id === "fluval-quick-clear-120ml")?.description.includes("1816 L") && careProductCatalog.find((item) => item.id === "fluval-bio-clear-120ml")?.description.includes("908 L"), "Fluval berraklaştırıcıları yalnız yayımlanan toplam kullanım hacimlerini taşımalı");
+assert.deepEqual(["fluval-sea-alkalinity-a8253-237ml","fluval-sea-calcium-a8257-237ml","fluval-sea-iodine-a8264-237ml","fluval-sea-trace-elements-a8269-237ml","fluval-sea-3-ions-a8272-237ml"].map((id) => careProductCatalog.find((item) => item.id === id)?.description.match(/ürün kodu ([A-Z0-9-]+)/)?.[1]), ["A8253","A8257","A8264","A8269","A8272"], "Fluval SEA mineral ve iz element takviyeleri doğru ürün kodlarıyla bulunmalı");
+assert(careProductCatalog.find((item) => item.id === "fluval-sea-alkalinity-a8253-237ml")?.description.includes("yüzde 20") && careProductCatalog.find((item) => item.id === "fluval-sea-calcium-a8257-237ml")?.description.includes("doz tahmin edilmemiştir") && careProductCatalog.find((item) => item.id === "fluval-sea-3-ions-a8272-237ml")?.description.includes("mükerrer doz"), "Fluval SEA takviyeleri net su hacmi, ölçüm ve mükerrer doz güvenliğini korumalı");
+assert.deepEqual(["fluval-sea-magnesium-a8261-237ml","fluval-sea-magnesium-a8262-473ml"].map((id) => careProductCatalog.find((item) => item.id === id)?.description.match(/ürün kodu ([A-Z0-9-]+)/)?.[1]), ["A8261","A8262"], "Fluval SEA Magnesium iki gerçek ambalaj ve doğru ürün kodlarıyla bulunmalı");
+assert(["fluval-sea-magnesium-a8261-237ml","fluval-sea-magnesium-a8262-473ml"].every((id) => { const item=careProductCatalog.find((entry) => entry.id === id); return item?.description.includes("yalnız tuzlu su") && item.description.includes("kalsiyum çökelmesini") && item.description.includes("mükerrer doz") && item.description.includes("doz tahmin edilmemiştir") && item.additionalSourceUrls?.some((url) => url.includes("water-care/page/3")); }), "Fluval SEA Magnesium tuzlu su, ölçüm, çökelme ve mükerrer doz güvenliğini doğrudan resmî dizinle taşımalı");
+assert.deepEqual(["fluval-marine-salt-a8279-6-8kg","fluval-marine-salt-a8280-22-5kg"].map((id) => careProductCatalog.find((item) => item.id === id)?.description.match(/ürün kodu ([A-Z0-9-]+)/)?.[1]), ["L-A8279","L-A8280"], "Fluval Marine Salt ambalajları doğru ürün kodlarıyla ayrı bulunmalı");
+assert(["fluval-marine-salt-a8279-6-8kg","fluval-marine-salt-a8280-22-5kg"].every((id) => careProductCatalog.find((item) => item.id === id)?.description.includes("tuzluluk ölçülmelidir")), "Fluval Marine Salt seçenekleri ayrı kapta hazırlama ve tuzluluk ölçümü güvenliğini taşımalı");
+assert(careProductCatalog.find((item) => item.id === "fluval-freshwater-salt-a1091-675g")?.category === "treatment" && careProductCatalog.find((item) => item.id === "fluval-freshwater-salt-a1091-675g")?.description.includes("tuza hassastır") && careProductCatalog.find((item) => item.id === "fluval-freshwater-salt-a1091-675g")?.description.includes("1 yemek kaşığı/37,8 L"), "Fluval Freshwater Salt tür hassasiyeti ve yayımlanan kullanım oranıyla tedavi kategorisinde bulunmalı");
+assert.deepEqual(["fluval-plant-gro-plus-120ml","fluval-plant-gro-plus-250ml"].map((id) => careProductCatalog.find((item) => item.id === id)?.description.match(/toplam kullanım hacmi (\d+) L/)?.[1]), ["5450","13000"], "Fluval Plant Gro+ şişeleri yalnız üreticinin yayımladığı kullanım hacimlerini taşımalı");
+assert.deepEqual([2,4,8].map((weight) => careProductCatalog.find((item) => item.id === `fluval-stratum-${weight}kg`)?.description.match(/ürün kodu (\d+)/)?.[1]), ["12693","12694","12695"], "Fluval Stratum paketleri doğru ürün kodlarıyla eşleşmeli");
+assert.deepEqual([2,4,8].map((weight) => careProductCatalog.find((item) => item.id === `fluval-bio-stratum-${weight}kg`)?.description.match(/ürün kodu (\d+)/)?.[1]), ["12696","12697","12698"], "Fluval Bio-Stratum paketleri doğru ürün kodlarıyla eşleşmeli");
+assert(careProductCatalog.find((item) => item.id === "fluval-betta-stratum-0-8kg")?.description.includes("ürün kodu 12689") && careProductCatalog.find((item) => item.id === "fluval-betta-stratum-0-8kg")?.description.includes("22,7 L"), "Fluval Betta Stratum ürün kodu ve kit kullanım miktarıyla bulunmalı");
+assert.deepEqual(["fluval-nitrate-test-a7871","fluval-nitrite-test-a7870","fluval-iron-test-a7873","fluval-ph-wide-test-a7868","fluval-ph-high-test-a7877","fluval-phosphate-test-a7872"].map((id) => careProductCatalog.find((item) => item.id === id)?.category), ["test","test","test","test","test","test"], "Fluval test kitleri doğru ürün kodu ve kategoriyle bulunmalı");
+assert(careProductCatalog.find((item) => item.id === "fluval-nitrate-test-a7871")?.description.includes("yüksek nitrit") && careProductCatalog.find((item) => item.id === "fluval-phosphate-test-a7872")?.additionalSourceUrls?.some((url) => url.endsWith("A7872_Manual_Map.pdf")), "Fluval test kitlerinin ölçüm sınırlamaları ve kılavuz kaynakları korunmalı");
+assert(careProductCatalog.find((item) => item.id === "fluval-ammonia-test-a7869")?.description.includes("A7855 bölgesel/eski") && careProductCatalog.find((item) => item.id === "fluval-ammonia-test-a7869")?.description.includes("20 dakika"), "Fluval amonyak testinin bölgesel kod farkı ve sonuç süresi gizlenmemeli");
+assert(careProductCatalog.find((item) => item.id === "fluval-kh-gh-test-a7876")?.description.includes("×20") && careProductCatalog.find((item) => item.id === "fluval-kh-gh-test-a7876")?.description.includes("×10"), "Fluval KH/GH testi üreticinin damla dönüşümlerini taşımalı");
+assert(careProductCatalog.find((item) => item.id === "fluval-calcium-test-a7875")?.description.includes("20 mg/L altını") && careProductCatalog.find((item) => item.id === "fluval-calcium-test-a7875")?.description.includes("A7850") && careProductCatalog.find((item) => item.id === "fluval-calcium-test-a7875")?.sourceUrl.endsWith("A7875_Calcium_Fresh-Salt-2018-FCB.pdf"), "Fluval kalsiyum testinin hassasiyet sınırı, resmî kılavuzu ve bölgesel paket kodu korunmalı");
+const fluvalPhLowTest = careProductCatalog.find((item) => item.id === "fluval-ph-low-test-a7810-a7874");
+assert(fluvalPhLowTest?.description.includes("A7810") && fluvalPhLowTest.description.includes("A7874") && fluvalPhLowTest.description.includes("225 test") && fluvalPhLowTest.description.includes("günde 0,5"), "Fluval pH Low Range güncel ve uluslararası kodları, test sayısı ve güvenli pH değişim sınırıyla bulunmalı");
+assert(careProductCatalog.find((item) => item.id === "fluval-ph-high-test-a7877")?.description.includes("A7812") && careProductCatalog.find((item) => item.id === "fluval-ph-high-test-a7877")?.description.includes("A7877"), "Fluval pH High Range bölgesel paket kodu farkını görünür tutmalı");
+const fluvalProfessionalTestKit = careProductCatalog.find((item) => item.id === "fluval-professional-test-kit-a7860");
+assert(fluvalProfessionalTestKit?.description.includes("ürün kodu A7860") && fluvalProfessionalTestKit.description.includes("10 test") && fluvalProfessionalTestKit.description.includes("beş cam tüp") && fluvalProfessionalTestKit.description.includes("iki pipet"), "Fluval Professional Test Kit ürün kodu, on test ve gerçek kutu içeriğiyle bulunmalı");
+assert(fluvalProfessionalTestKit?.description.includes("015561178600") && fluvalProfessionalTestKit.description.includes("015561183543") && fluvalProfessionalTestKit.description.includes("benzersiz doğrulayıcı sayılmamalıdır") && fluvalProfessionalTestKit.additionalSourceUrls?.some((url) => url.includes("/fr/shop/product/")), "Fluval Professional Test Kit resmî dil sayfalarındaki UPC çelişkisini görünür tutmalı");
+const fluvalVerifiedReagentIds = ["fluval-ammonia-reagent-1-a7856","fluval-ammonia-reagent-2-a7857","fluval-ammonia-reagent-3-a7858","fluval-calcium-reagent-1-a7851","fluval-calcium-reagent-2-a7852","fluval-calcium-reagent-3-a7853","fluval-iron-reagent-1-a7836","fluval-iron-reagent-2-a7837","fluval-ph-high-reagent-a7813","fluval-ph-low-reagent-a7811","fluval-ph-wide-reagent-a7816","fluval-kh-reagent-a7831","fluval-nitrate-nitrite-reagent-1-a7846","fluval-nitrate-nitrite-reagent-2-a7847","fluval-nitrate-reagent-3-a7848","fluval-phosphate-reagent-1-a7841","fluval-phosphate-reagent-3-a7843"];
+assert.equal(fluvalVerifiedReagentIds.filter((id) => careProductCatalog.some((item) => item.id === id)).length, 17, "Fluval doğrulanmış yedek reaktif grubu 17 gerçek ürün içermeli");
+assert(fluvalVerifiedReagentIds.every((id) => { const item=careProductCatalog.find((entry) => entry.id === id); return item?.category === "test" && item.description.includes("ürün kodu") && item.description.includes("tek başına") && item.sourceUrl.includes("fluvalaquatics.com/") && ["2026-09-29","2026-09-30"].includes(item.verifiedAt); }), "Fluval yedek reaktifleri ürün kodu, uyumluluk sınırı, doğrudan resmî kaynak ve güncel tarih taşımalı");
+const fluvalCurrentReagentIds = ["fluval-nitrate-nitrite-reagent-1-a7846","fluval-ammonia-reagent-2-a7857","fluval-ammonia-reagent-3-a7858","fluval-calcium-reagent-1-a7851","fluval-calcium-reagent-2-a7852","fluval-calcium-reagent-3-a7853","fluval-iron-reagent-1-a7836","fluval-iron-reagent-2-a7837","fluval-kh-reagent-a7831","fluval-nitrate-nitrite-reagent-2-a7847","fluval-nitrate-reagent-3-a7848","fluval-ph-high-reagent-a7813","fluval-ph-low-reagent-a7811","fluval-phosphate-reagent-1-a7841","fluval-phosphate-reagent-3-a7843"];
+assert.equal(fluvalCurrentReagentIds.filter((id) => careProductCatalog.some((item) => item.id === id)).length, 15, "Fluval güncel resmî Reagent Refills dizinindeki 15 ürünün tamamı katalogda bulunmalı");
+assert(careProductCatalog.find((item) => item.id === "fluval-phosphate-reagent-1-a7841")?.description.includes("yüzde 10 sülfürik asit") && careProductCatalog.find((item) => item.id === "fluval-nitrate-nitrite-reagent-2-a7847")?.description.includes("A7870") && careProductCatalog.find((item) => item.id === "fluval-nitrate-nitrite-reagent-2-a7847")?.description.includes("A7871"), "Fluval reaktif güvenliği ve paylaşılan kit uyumluluğu korunmalı");
+assert(careProductCatalog.find((item) => item.id === "fluval-ammonia-reagent-2-a7857")?.description.includes("sodyum hidroksit") && careProductCatalog.find((item) => item.id === "fluval-ammonia-reagent-3-a7858")?.description.includes("fenol") && careProductCatalog.find((item) => item.id === "fluval-ammonia-reagent-3-a7858")?.description.includes("iyi havalandırılan"), "Fluval amonyak reaktiflerinin resmî kimyasal güvenlik uyarıları korunmalı");
+assert(careProductCatalog.find((item) => item.id === "fluval-nitrate-nitrite-reagent-1-a7846")?.description.includes("4-aminobenzenesülfonik asit") && careProductCatalog.find((item) => item.id === "fluval-nitrate-reagent-3-a7848")?.description.includes("yüzde 75 etoksidiglikol") && careProductCatalog.find((item) => item.id === "fluval-nitrate-reagent-3-a7848")?.description.includes("30 saniye"), "Fluval nitrat/nitrit reaktiflerinin kimyasal ve kullanım güvenliği korunmalı");
+assert(["fluval-calcium-reagent-2-a7852","fluval-iron-reagent-2-a7837"].every((id) => careProductCatalog.find((item) => item.id === id)?.description.includes("UPC kaydı bulunmadığı için numara tahmin edilmemiştir")), "Fluval reaktiflerinde yayımlanmayan UPC değerleri uydurulmamalı");
+assert(["fluval-calcium-reagent-2-a7852","fluval-iron-reagent-2-a7837"].every((id) => careProductCatalog.find((item) => item.id === id)?.sourceUrl.endsWith("/water-testing/reagent-refills")), "Ürün sayfası güvenle açılamayan Fluval reaktifleri kırık bağlantı yerine güncel resmî dizine bağlanmalı");
+const fluvalBugBitesIds = ["fluval-bug-bites-betta-micro-granules-a6575-30g","fluval-bug-bites-goldfish-granules-a6583-45g","fluval-bug-bites-tropical-granules-a6578-45g","fluval-bug-bites-betta-flakes-a7366-18g","fluval-bug-bites-tropical-flakes-a7330-18g","fluval-bug-bites-tropical-micro-granules-a6577-45g","fluval-bug-bites-goldfish-flakes-a7339-45g","fluval-bug-bites-cichlid-pellets-a6595-1-7kg"];
+assert.deepEqual(fluvalBugBitesIds.map((id) => careProductCatalog.find((item) => item.id === id)?.description.match(/ürün kodu ([A-Z0-9-]+)/)?.[1]), ["A6575","A6583","A6578","A7366","A7330","A6577","A7339","A6595"], "Fluval Bug Bites yemleri doğru ürün kodlarıyla eşleşmeli");
+assert(fluvalBugBitesIds.every((id) => careProductCatalog.find((item) => item.id === id)?.category === "food" && careProductCatalog.find((item) => item.id === id)?.sourceUrl.startsWith("https://fluvalaquatics.com/us/shop/product/bug-bites-") && careProductCatalog.find((item) => item.id === id)?.verifiedAt === "2026-09-29"), "Fluval Bug Bites yemleri gıda kategorisi, doğrudan resmî kaynak ve güncel doğrulama tarihi taşımalı");
+assert(careProductCatalog.find((item) => item.id === "fluval-bug-bites-tropical-micro-granules-a6577-45g")?.description.includes("0,25–1,4 mm") && careProductCatalog.find((item) => item.id === "fluval-bug-bites-tropical-granules-a6578-45g")?.description.includes("1,4–2,0 mm") && careProductCatalog.find((item) => item.id === "fluval-bug-bites-cichlid-pellets-a6595-1-7kg")?.description.includes("5–7 mm"), "Fluval Bug Bites yem formları üreticinin yayımladığı doğru parçacık boylarını korumalı");
+assert(careProductCatalog.find((item) => item.id === "fluval-bug-bites-betta-flakes-a7366-18g")?.description.includes("beslenme çeşitliliğini") && careProductCatalog.find((item) => item.id === "fluval-bug-bites-goldfish-flakes-a7339-45g")?.description.includes("iki dakikada"), "Fluval Bug Bites kullanım sınırları ve beslenme çeşitliliği görünür olmalı");
+assert.deepEqual(["fluval-bug-bites-tropical-flakes-a7330-18g","fluval-bug-bites-tropical-flakes-a7331-45g","fluval-bug-bites-tropical-flakes-a7332-90g","fluval-bug-bites-tropical-flakes-a7334-1kg"].map((id) => careProductCatalog.find((item) => item.id === id)?.description.match(/ürün kodu ([A-Z0-9-]+)/)?.[1]), ["A7330","A7331","A7332","A7334"], "Fluval Tropical Flakes gramajları doğru ürün kodlarıyla ayrı bulunmalı");
+assert.deepEqual(["fluval-bug-bites-goldfish-flakes-a7338-18g","fluval-bug-bites-goldfish-flakes-a7339-45g","fluval-bug-bites-goldfish-flakes-a7340-90g","fluval-bug-bites-goldfish-flakes-a7342-1kg"].map((id) => careProductCatalog.find((item) => item.id === id)?.description.match(/ürün kodu ([A-Z0-9-]+)/)?.[1]), ["A7338","A7339","A7340","A7342"], "Fluval Goldfish Flakes gramajları doğru ürün kodlarıyla ayrı bulunmalı");
+assert.deepEqual(["fluval-bug-bites-shrimp-micro-granules-a6931-30g","fluval-bug-bites-bottom-feeder-granules-a6586-45g","fluval-bug-bites-cichlid-granules-a6580-45g"].map((id) => careProductCatalog.find((item) => item.id === id)?.description.match(/ürün kodu ([A-Z0-9-]+)/)?.[1]), ["A6931","A6586","A6580"], "Fluval karides, dip balığı ve ciklet granülleri doğru ürün kodlarıyla bulunmalı");
+assert.deepEqual(["fluval-bug-bites-color-enhancing-flakes-a7346-18g","fluval-bug-bites-color-enhancing-flakes-a7347-45g","fluval-bug-bites-color-enhancing-flakes-a7348-90g","fluval-bug-bites-color-enhancing-flakes-a7350-1kg"].map((id) => careProductCatalog.find((item) => item.id === id)?.description.match(/ürün kodu ([A-Z0-9-]+)/)?.[1]), ["A7346","A7347","A7348","A7350"], "Fluval Color Enhancing Flakes gramajları doğru ürün kodlarıyla ayrı bulunmalı");
+assert.deepEqual(["fluval-bug-bites-color-enhancing-granules-a6589-45g","fluval-bug-bites-color-enhancing-granules-a6590-125g","fluval-bug-bites-color-enhancing-granules-a6599-2kg"].map((id) => careProductCatalog.find((item) => item.id === id)?.description.match(/ürün kodu ([A-Z0-9-]+)/)?.[1]), ["A6589","A6590","A6599"], "Fluval Color Enhancing Granules gramajları doğru ürün kodlarıyla ayrı bulunmalı");
+assert.deepEqual(["fluval-bug-bites-cichlid-pellets-a6581-100g","fluval-bug-bites-cichlid-pellets-a6582-450g","fluval-bug-bites-cichlid-pellets-a6595-1-7kg"].map((id) => careProductCatalog.find((item) => item.id === id)?.description.match(/ürün kodu ([A-Z0-9-]+)/)?.[1]), ["A6581","A6582","A6595"], "Fluval Cichlid Pellets gramajları doğru ürün kodlarıyla ayrı bulunmalı");
+assert(careProductCatalog.find((item) => item.id === "fluval-bug-bites-shrimp-micro-granules-a6931-30g")?.description.includes("günde bir kez") && careProductCatalog.find((item) => item.id === "fluval-bug-bites-shrimp-micro-granules-a6931-30g")?.description.includes("dış iskelet"), "Fluval karides yeminin üretici besleme sıklığı ve dış iskelet desteği görünür olmalı");
+assert(careProductCatalog.find((item) => item.id === "fluval-bug-bites-bottom-feeder-granules-a6586-45g")?.description.includes("1,4–2,0 mm") && careProductCatalog.find((item) => item.id === "fluval-bug-bites-cichlid-granules-a6580-45g")?.description.includes("1,4–2,0 mm") && careProductCatalog.find((item) => item.id === "fluval-bug-bites-cichlid-pellets-a6581-100g")?.description.includes("5–7 mm"), "Fluval dip balığı ve ciklet yemleri doğru parçacık boylarını korumalı");
+assert.deepEqual(["fluval-bug-bites-pleco-sticks-a6587-130g","fluval-bug-bites-cichlid-granules-a6598-1-7kg","fluval-bug-bites-turtle-pellets-a6592-45g","fluval-bug-bites-turtle-sticks-a6593-100g","fluval-bug-bites-turtle-sticks-a6596-1-7kg","fluval-bug-bites-algae-crisps-a7360-40g","fluval-bug-bites-algae-crisps-a7361-100g","fluval-bug-bites-goldfish-pellets-a6584-100g"].map((id) => careProductCatalog.find((item) => item.id === id)?.description.match(/ürün kodu ([A-Z0-9-]+)/)?.[1]), ["A6587","A6598","A6592","A6593","A6596","A7360","A7361","A6584"], "Fluval Pleco, ciklet, kaplumbağa, alg crisp ve Japon balığı yemleri doğru ürün kodlarıyla bulunmalı");
+assert(careProductCatalog.find((item) => item.id === "fluval-bug-bites-cichlid-granules-a6598-1-7kg")?.description.includes("Cichlid Pellets A6582") && careProductCatalog.find((item) => item.id === "fluval-bug-bites-cichlid-granules-a6598-1-7kg")?.description.includes("benzersiz doğrulayıcı sayılmamıştır"), "Fluval A6598 ve A6582 üretici UPC çelişkisi kullanıcıdan saklanmamalı");
+assert(careProductCatalog.find((item) => item.id === "fluval-bug-bites-pleco-sticks-a6587-130g")?.description.includes("17–20 mm") && careProductCatalog.find((item) => item.id === "fluval-bug-bites-turtle-pellets-a6592-45g")?.description.includes("5–7 mm") && careProductCatalog.find((item) => item.id === "fluval-bug-bites-turtle-sticks-a6593-100g")?.description.includes("17–20 mm"), "Fluval Pleco ve kaplumbağa yemleri doğru stick ve pelet boylarını korumalı");
+assert.deepEqual(["fluval-bug-bites-algae-crisps-a7360-40g","fluval-bug-bites-algae-crisps-a7361-100g"].map((id) => careProductCatalog.find((item) => item.id === id)?.description.includes("%43,5 ham protein")), [true,true], "Fluval Algae Crisps gramajları üreticinin ortak protein bilgisini korumalı");
+assert.deepEqual(["fluval-bug-bites-tropical-granules-a6578-45g","fluval-bug-bites-tropical-granules-a6579-125g","fluval-bug-bites-tropical-granules-a6597-1-7kg"].map((id) => careProductCatalog.find((item) => item.id === id)?.description.match(/ürün kodu ([A-Z0-9-]+)/)?.[1]), ["A6578","A6579","A6597"], "Fluval Tropical Granules gramajları doğru ürün kodlarıyla ayrı bulunmalı");
+assert(["fluval-bug-bites-tropical-granules-a6579-125g","fluval-bug-bites-tropical-granules-a6597-1-7kg"].every((id) => careProductCatalog.find((item) => item.id === id)?.description.includes("benzersiz doğrulayıcı sayılmamıştır")), "Fluval A6579 ve A6597 üretici UPC çelişkisi iki kayıtta da görünür olmalı");
+assert.deepEqual(["fluval-bug-bites-spirulina-flakes-a7354-18g","fluval-bug-bites-spirulina-flakes-a7355-45g","fluval-bug-bites-spirulina-flakes-a7358-1kg"].map((id) => careProductCatalog.find((item) => item.id === id)?.description.match(/ürün kodu ([A-Z0-9-]+)/)?.[1]), ["A7354","A7355","A7358"], "Fluval Spirulina Flakes gramajları doğru ürün kodlarıyla ayrı bulunmalı");
+assert(["fluval-bug-bites-spirulina-flakes-a7354-18g","fluval-bug-bites-spirulina-flakes-a7355-45g","fluval-bug-bites-spirulina-flakes-a7358-1kg"].every((id) => careProductCatalog.find((item) => item.id === id)?.description.includes("ilk bileşeni Hawaii spirulinası") && careProductCatalog.find((item) => item.id === id)?.description.includes("%37 ham protein")), "Fluval Spirulina Flakes seçenekleri ortak resmî formül bilgisini korumalı");
+const fluvalVacationFood = careProductCatalog.find((item) => item.id === "fluval-bug-bites-vacation-food-a7367-20g");
+assert(fluvalVacationFood?.description.includes("ürün kodu A7367") && fluvalVacationFood.description.includes("yeni kurulmuş akvaryumlarda kullanılmamalı") && fluvalVacationFood.description.includes("kabul testi") && fluvalVacationFood.description.includes("su öncesi/sonrası test"), "Fluval Vacation Food ürün kodu ve üreticinin kritik kullanım güvenliği görünür olmalı");
+assert.deepEqual(["fluval-betta-protein-rich-food-a6678","fluval-betta-vacation-food-a6675","fluval-betta-freeze-dried-bloodworms-14840-5g"].map((id) => careProductCatalog.find((item) => item.id === id)?.description.match(/ürün kodu ([A-Z0-9-]+)/)?.[1]), ["A6678","A6675","14840"], "Fluval Bug Bites dışındaki Betta yemleri doğru ürün kodlarıyla bulunmalı");
+assert(careProductCatalog.find((item) => item.id === "fluval-betta-protein-rich-food-a6678")?.description.includes("günde iki kez") && careProductCatalog.find((item) => item.id === "fluval-betta-protein-rich-food-a6678")?.description.includes("30 saniyede"), "Fluval Betta Protein-Rich Food üreticinin porsiyon ve sıklık sınırını taşımalı");
+assert(careProductCatalog.find((item) => item.id === "fluval-betta-vacation-food-a6675")?.description.includes("kısmi su değişimi") && careProductCatalog.find((item) => item.id === "fluval-betta-vacation-food-a6675")?.description.includes("A7367"), "Fluval Betta tatil bloğu dönüş bakımı ve toplum akvaryumu ayrımını korumalı");
+assert(careProductCatalog.find((item) => item.id === "fluval-betta-freeze-dried-bloodworms-14840-5g")?.description.includes("haftada iki-üç kez") && careProductCatalog.find((item) => item.id === "fluval-betta-freeze-dried-bloodworms-14840-5g")?.description.includes("tam günlük diyet"), "Fluval Betta kan kurdu tamamlayıcı yem sınırı görünür olmalı");
+assert.equal(fluvalCare.filter((item) => item.model.startsWith("Bug Bites Tropical Flakes")).length, 4, "Fluval Tropical Flakes dört doğrulanmış ABD gramajını taşımalı");
+assert.equal(fluvalCare.filter((item) => item.model.startsWith("Bug Bites Goldfish Flakes")).length, 4, "Fluval Goldfish Flakes dört doğrulanmış ABD gramajını taşımalı");
+assert.deepEqual(["fluval-carbon-a1440-100g-3pack","fluval-biomax-a1456-500g","fluval-biomax-a495-u2-u3-u4","fluval-biomax-19660-ac20-ac30-42g","fluval-biomax-19662-ac50-80g","fluval-carbon-19641-ac20-ac30-50g","fluval-carbon-19642-ac20-ac30-150g-3pack","fluval-ammonia-remover-19630-ac20-ac30-90g","fluval-ammonia-remover-ll-a1487-2800g"].map((id) => careProductCatalog.find((item) => item.id === id)?.category), Array(9).fill("filter_media"), "Fluval doğrulanmış filtre medyaları doğru kategoride bulunmalı");
+assert(careProductCatalog.find((item) => item.id === "fluval-biomax-a495-u2-u3-u4")?.description.includes("110 g") && careProductCatalog.find((item) => item.id === "fluval-biomax-a495-u2-u3-u4")?.description.includes("170 g") && careProductCatalog.find((item) => item.id === "fluval-biomax-a495-u2-u3-u4")?.description.includes("kesin alan olarak kullanılmamıştır"), "Fluval A495 ağırlık çelişkisi kullanıcıdan saklanmamalı ve kesin değere dönüştürülmemeli");
+assert(careProductCatalog.find((item) => item.id === "fluval-ammonia-remover-19630-ac20-ac30-90g")?.description.includes("deniz suyuna uygun değildir") && careProductCatalog.find((item) => item.id === "fluval-carbon-a1440-100g-3pack")?.description.includes("bir–iki hafta"), "Fluval medya kullanım sınırları korunmalı");
+assert.deepEqual(["fluval-biomax-19664-ac70-ac110-125g","fluval-biomax-19665-ac70-ac110-250g-2pack","fluval-carbon-19644-ac50-210g-3pack","fluval-ammonia-remover-19634-ac70-ac110-346g"].map((id) => careProductCatalog.find((item) => item.id === id)?.description.match(/ürün kodu ([A-Z0-9-]+)/)?.[1]), ["19664","19665","19644","19634"], "Fluval AC70/AC110 ve AC50 medya paketleri doğru ürün kodlarıyla eşleşmeli");
+assert.deepEqual(["fluval-carbon-19643-ac50-70g","fluval-carbon-19646-ac70-ac110-435g-3pack","fluval-ammonia-remover-19631-ac20-ac30-272g-3pack","fluval-ammonia-remover-19632-ac50-143g","fluval-clear-carb-19628-ac70-ac110-310g-2pack"].map((id) => careProductCatalog.find((item) => item.id === id)?.description.match(/ürün kodu ([A-Z0-9-]+)/)?.[1]), ["19643","19646","19631","19632","19628"], "Fluval AC karbon, amonyak ve Clear-Carb paketleri doğru ürün kodlarıyla eşleşmeli");
+assert(careProductCatalog.find((item) => item.id === "fluval-clear-carb-19628-ac70-ac110-310g-2pack")?.description.includes("fosfat, nitrit ve nitrat") && careProductCatalog.find((item) => item.id === "fluval-ammonia-remover-19632-ac50-143g")?.description.includes("deniz suyuna uygun değildir"), "Fluval Clear-Carb işlevi ve amonyak medyasının tatlı su sınırı korunmalı");
+assert.deepEqual(["fluval-carbon-19645-ac70-ac110-145g","fluval-ammonia-remover-19633-ac50-429g-3pack","fluval-ammonia-remover-19635-ac70-ac110-1038g-3pack","fluval-zeo-carb-19650-ac20-ac30-60g","fluval-zeo-carb-19651-ac20-ac30-180g-3pack","fluval-zeo-carb-19652-ac50-90g","fluval-zeo-carb-19653-ac50-270g-3pack","fluval-clear-carb-19626-ac20-ac30-55g","fluval-clear-carb-19627-ac50-75g"].map((id) => careProductCatalog.find((item) => item.id === id)?.description.match(/ürün kodu ([A-Z0-9-]+)/)?.[1]), ["19645","19633","19635","19650","19651","19652","19653","19626","19627"], "Fluval kalan AC medya paketleri doğru ürün kodlarıyla eşleşmeli");
+assert(careProductCatalog.find((item) => item.id === "fluval-carbon-19645-ac70-ac110-145g")?.description.includes("aynı UPC BIOMAX 19665") && careProductCatalog.find((item) => item.id === "fluval-carbon-19645-ac70-ac110-145g")?.description.includes("benzersiz ürün doğrulayıcısı olarak kullanılmamıştır"), "Fluval 19645 ve 19665 arasındaki resmî UPC çakışması görünür tutulmalı");
+assert.equal(fluvalCare.filter((item) => item.id.startsWith("fluval-zeo-carb-196")).length, 4, "Fluval AC Zeo-Carb ailesinin dört doğrulanmış paketi bulunmalı");
+assert.equal(fluvalCare.filter((item) => item.model.startsWith("Clear-Carb")).length, 3, "Fluval AC Clear-Carb ailesinin üç doğrulanmış paketi bulunmalı");
+const fluvalBioFoamIds = ["fluval-bio-foam-19598-ac20","fluval-bio-foam-19670-ac20-3pack","fluval-bio-foam-19605-ac30","fluval-bio-foam-19672-ac30-3pack","fluval-bio-foam-19613-ac50","fluval-bio-foam-19674-ac50-3pack","fluval-bio-foam-19618-ac70","fluval-bio-foam-19676-ac70-3pack","fluval-bio-foam-19623-ac110"];
+assert.deepEqual(fluvalBioFoamIds.map((id) => careProductCatalog.find((item) => item.id === id)?.description.match(/ürün kodu ([A-Z0-9-]+)/)?.[1]), ["19598","19670","19605","19672","19613","19674","19618","19676","19623"], "Fluval AC Bio-Foam tekli ve çoklu paketleri doğru ürün kodlarıyla eşleşmeli");
+assert.equal(fluvalBioFoamIds.filter((id) => careProductCatalog.find((item) => item.id === id)?.description.includes("30 PPI")).length, 8, "Fluval AC20–AC70 Bio-Foam seçeneklerinin sekizi resmî 30 PPI yoğunluğunu taşımalı");
+assert(careProductCatalog.find((item) => item.id === "fluval-bio-foam-19623-ac110")?.description.includes("20 PPI") && careProductCatalog.find((item) => item.id === "fluval-bio-foam-19623-ac110")?.description.includes("farklı olarak"), "Fluval AC110 Bio-Foam'ın resmî 20 PPI farkı görünür olmalı");
+const fluvalMaintenanceKitIds = ["fluval-media-maintenance-kit-19690-ac20","fluval-media-maintenance-kit-19691-ac30","fluval-media-maintenance-kit-19692-ac50","fluval-media-maintenance-kit-19693-ac70","fluval-media-maintenance-kit-19694-ac110"];
+assert.deepEqual(fluvalMaintenanceKitIds.map((id) => careProductCatalog.find((item) => item.id === id)?.description.match(/ürün kodu ([A-Z0-9-]+)/)?.[1]), ["19690","19691","19692","19693","19694"], "Fluval AC bakım kitleri doğru ürün kodlarıyla eşleşmeli");
+assert(fluvalMaintenanceKitIds.slice(0,4).every((id) => careProductCatalog.find((item) => item.id === id)?.description.includes("iki Carbon, bir Bio-Foam ve bir BIOMAX")), "Fluval AC20–AC70 bakım kitlerinin yayımlanan içerikleri korunmalı");
+assert(careProductCatalog.find((item) => item.id === "fluval-media-maintenance-kit-19694-ac110")?.description.includes("dört Carbon, bir Bio-Foam ve iki BIOMAX"), "Fluval AC110 bakım kitinin daha büyük resmî içeriği korunmalı");
+const fluvalInsertBagIds = ["fluval-filter-insert-bag-a1360-ac20-2pack","fluval-filter-insert-bag-a1362-ac30-2pack","fluval-filter-insert-bag-a1364-ac50-2pack","fluval-filter-insert-bag-a1366-ac70-2pack","fluval-filter-insert-bag-a1368-ac110-2pack"];
+assert.deepEqual(fluvalInsertBagIds.map((id) => careProductCatalog.find((item) => item.id === id)?.description.match(/ürün kodu ([A-Z0-9-]+)/)?.[1]), ["A1360","A1362","A1364","A1366","A1368"], "Fluval AC filtre medya torbaları doğru ürün kodlarıyla eşleşmeli");
+assert(fluvalInsertBagIds.every((id) => careProductCatalog.find((item) => item.id === id)?.description.includes("yeniden kullanılabilir") && careProductCatalog.find((item) => item.id === id)?.category === "filter_media"), "Fluval AC medya torbaları kapasite üretmeyen yeniden kullanılabilir filtre medyası olmalı");
+assert.deepEqual(["fluval-flex-2-foam-block-a1409-3pack","fluval-kuhl-coarse-filter-pad-a1381-4pack","fluval-kuhl-fine-filter-pad-a1383-3pack","fluval-flex-2-poly-carb-a1407-3pack"].map((id) => careProductCatalog.find((item) => item.id === id)?.description.match(/ürün kodu ([A-Z0-9-]+)/)?.[1]), ["A1409","A1381","A1383","A1407"], "Fluval Flex 2.0 ve Kühl filtre sarfları doğru ürün kodlarıyla eşleşmeli");
+assert(careProductCatalog.find((item) => item.id === "fluval-flex-2-foam-block-a1409-3pack")?.description.includes("57 L") && careProductCatalog.find((item) => item.id === "fluval-flex-2-poly-carb-a1407-3pack")?.description.includes("34 ve 57 L"), "Fluval Flex 2.0 sarflarının farklı kit uyumlulukları korunmalı");
+assert(careProductCatalog.find((item) => item.id === "fluval-kuhl-fine-filter-pad-a1383-3pack")?.description.includes("amonyak giderici") && careProductCatalog.find((item) => item.id === "fluval-kuhl-fine-filter-pad-a1383-3pack")?.description.includes("karbon granülleri"), "Fluval Kühl Fine pedin yayımlanan üç aşamalı medya yapısı korunmalı");
+const fluvalAquariumMediaIds = ["fluval-clearx-a1336-4pack","fluval-foam-block-a1376-spec-evo-flex-betta","fluval-foam-block-10532-spec16-evo13-5","fluval-foam-block-a1375-flex15","fluval-edge-foam-biomax-renewal-a1389","fluval-betta-diffusion-pad-a1337-4pack"];
+assert.deepEqual(fluvalAquariumMediaIds.map((id) => careProductCatalog.find((item) => item.id === id)?.description.match(/ürün kodu ([A-Z0-9-]+)/)?.[1]), ["A1336","A1376","10532","A1375","A1389","A1337"], "Fluval akvaryuma özel medya ürünleri doğru kodlarla eşleşmeli");
+assert(careProductCatalog.find((item) => item.id === "fluval-clearx-a1336-4pack")?.description.includes("60 L'ye kadar") && careProductCatalog.find((item) => item.id === "fluval-clearx-a1336-4pack")?.description.includes("su değişiminin yerine geçmez"), "Fluval ClearX kapasite ve bakım sınırını görünür tutmalı");
+assert(careProductCatalog.find((item) => item.id === "fluval-foam-block-10532-spec16-evo13-5")?.description.includes("aynı parça değildir") && careProductCatalog.find((item) => item.id === "fluval-foam-block-a1375-flex15")?.description.includes("önceki nesil"), "Fluval benzer köpük bloklarının nesil ve ölçü farkları korunmalı");
+const fluvalKitMediaIds = ["fluval-biomax-a1378-spec-evo-flex-betta-60g","fluval-carbon-a1377-spec-evo-flex-45g-3pack","fluval-edge-carbon-a1379-45g-3pack","fluval-betta-poly-carb-a1338-4pack"];
+assert.deepEqual(fluvalKitMediaIds.map((id) => careProductCatalog.find((item) => item.id === id)?.description.match(/ürün kodu ([A-Z0-9-]+)/)?.[1]), ["A1378","A1377","A1379","A1338"], "Fluval BIOMAX ve kit karbon medyaları doğru ürün kodlarıyla eşleşmeli");
+assert(careProductCatalog.find((item) => item.id === "fluval-biomax-a1378-spec-evo-flex-betta-60g")?.description.includes("biyolojik döngü ve testin yerine geçmez"), "Fluval kit BIOMAX kaydı biyolojik güvenlik sınırını taşımalı");
+assert(careProductCatalog.find((item) => item.id === "fluval-betta-poly-carb-a1338-4pack")?.additionalSourceUrls?.some((url) => url.endsWith("10496_Betta-Aquarium_Manual.pdf")), "Fluval Betta Poly-Carb resmî bakım kılavuzuyla çapraz doğrulanmalı");
+const fluvalSmallKitMediaIds = ["fluval-edge-prefilter-sponge-a1387","fluval-chi-foam-pad-combo-a1426","fluval-chi-filter-pad-a1424-3pack","fluval-ammonia-remover-a1333-flex-spec-evo-4pack"];
+assert.deepEqual(fluvalSmallKitMediaIds.map((id) => careProductCatalog.find((item) => item.id === id)?.description.match(/ürün kodu ([A-Z0-9-]+)/)?.[1]), ["A1387","A1426","A1424","A1333"], "Fluval Edge, Chi ve Flex/Spec/Evo sarfları doğru ürün kodlarıyla eşleşmeli");
+assert(careProductCatalog.find((item) => item.id === "fluval-edge-prefilter-sponge-a1387")?.description.includes("küçük ve yavru balıkların") && careProductCatalog.find((item) => item.id === "fluval-edge-prefilter-sponge-a1387")?.description.includes("bağımsız filtre kapasitesi üretmez"), "Fluval Edge ön filtrenin küçük balık koruması ve pasif yapısı korunmalı");
+assert(careProductCatalog.find((item) => item.id === "fluval-ammonia-remover-a1333-flex-spec-evo-4pack")?.description.includes("aylık ya da su testi gerektirdiğinde") && careProductCatalog.find((item) => item.id === "fluval-ammonia-remover-a1333-flex-spec-evo-4pack")?.description.includes("biyolojik döngü, su testi ve uygun su değişiminin yerine geçmez"), "Fluval A1333 kullanım aralığı test sonucuna bağlı kalmalı ve temel bakımı ikame etmemeli");
+const fluvalNanoMediaIds = ["fluval-chi-foam-pad-a1425-2pack","fluval-nano-bio-foam-a456","fluval-nano-fine-foam-a457-2pack","fluval-nano-carbon-a458-2pack"];
+assert.deepEqual(fluvalNanoMediaIds.map((id) => careProductCatalog.find((item) => item.id === id)?.description.match(/ürün kodu ([A-Z0-9-]+)/)?.[1]), ["A1425","A456","A457","A458"], "Fluval Chi köpük ve Nano filtre medya seçenekleri doğru ürün kodlarıyla eşleşmeli");
+assert(careProductCatalog.find((item) => item.id === "fluval-chi-foam-pad-a1425-2pack")?.description.includes("A1424 filtre pediyle birlikte") && careProductCatalog.find((item) => item.id === "fluval-chi-filter-pad-a1424-3pack")?.description.includes("A1425 köpük pedle birlikte"), "Fluval Chi mekanik ve kimyasal pedlerin karşılıklı kullanım eşleşmesi korunmalı");
+assert(fluvalNanoMediaIds.slice(1).every((id) => careProductCatalog.find((item) => item.id === id)?.description.includes("A455 Nano Aquarium Filter")), "Fluval Nano sarflarının A455 cihaz uyumluluğu açık olmalı");
+assert(careProductCatalog.find((item) => item.id === "fluval-nano-carbon-a458-2pack")?.description.includes("su değişiminin yerine geçmez") && careProductCatalog.find((item) => item.id === "fluval-nano-bio-foam-a456")?.description.includes("bağımsız filtre kapasitesi üretmez"), "Fluval Nano karbonun bakım sınırı ve Bio-Foam'ın pasif medya yapısı korunmalı");
+const fluvalUBioFoamIds = ["fluval-u1-bio-foam-a485-2pack","fluval-u2-bio-foam-a486-2pack","fluval-u3-bio-foam-a487-2pack","fluval-u4-bio-foam-a488-2pack"];
+assert.deepEqual(fluvalUBioFoamIds.map((id) => careProductCatalog.find((item) => item.id === id)?.description.match(/ürün kodu ([A-Z0-9-]+)/)?.[1]), ["A485","A486","A487","A488"], "Fluval U1–U4 Bio-Foam pedleri doğru ürün kodlarıyla eşleşmeli");
+const fluvalUPolyCarbIds = ["fluval-u2-poly-carb-a490-2pack","fluval-u3-poly-carb-a491-2pack","fluval-u4-poly-carb-a492-2pack"];
+assert.deepEqual(fluvalUPolyCarbIds.map((id) => careProductCatalog.find((item) => item.id === id)?.description.match(/ürün kodu ([A-Z0-9-]+)/)?.[1]), ["A490","A491","A492"], "Fluval U2–U4 Poly-Carb kartuşları doğru ürün kodlarıyla eşleşmeli");
+assert(fluvalUPolyCarbIds.every((id) => careProductCatalog.find((item) => item.id === id)?.description.includes("polyester yüz") && careProductCatalog.find((item) => item.id === id)?.description.includes("karbon yüz")), "Fluval U Poly-Carb kartuşlarının iki farklı filtre yüzü korunmalı");
+const fluvalUPolyMaxIds = ["fluval-u2-poly-max-a481-2pack","fluval-u3-poly-max-a482-2pack","fluval-u4-poly-max-a483-2pack"];
+assert.deepEqual(fluvalUPolyMaxIds.map((id) => careProductCatalog.find((item) => item.id === id)?.description.match(/ürün kodu ([A-Z0-9-]+)/)?.[1]), ["A481","A482","A483"], "Fluval U2–U4 Poly-Max kartuşları doğru ürün kodlarıyla eşleşmeli");
+assert(fluvalUPolyMaxIds.every((id) => careProductCatalog.find((item) => item.id === id)?.description.includes("fosfat, nitrit ve nitrat")), "Fluval U Poly-Max kartuşlarının yayımlanan adsorpsiyon kapsamı korunmalı");
+assert(careProductCatalog.find((item) => item.id === "fluval-u2-poly-max-a481-2pack")?.description.includes("Poly-Max") && careProductCatalog.find((item) => item.id === "fluval-u2-poly-max-a481-2pack")?.description.includes("Clearmax") && careProductCatalog.find((item) => item.id === "fluval-u2-poly-max-a481-2pack")?.additionalSourceUrls?.some((url) => url.endsWith("Underwater-Filter_Manual.pdf")), "Fluval A481 güncel ürün adı ile resmî kılavuzdaki ad farkını görünür tutmalı");
+const fluvalCFoamIds = ["fluval-c2-foam-pad-14005-2pack","fluval-c3-foam-pad-14006-2pack","fluval-c4-foam-pad-14007-2pack"];
+assert.deepEqual(fluvalCFoamIds.map((id) => careProductCatalog.find((item) => item.id === id)?.description.match(/ürün kodu ([A-Z0-9-]+)/)?.[1]), ["14005","14006","14007"], "Fluval C2–C4 mekanik köpük pedleri doğru ürün kodlarıyla eşleşmeli");
+assert(fluvalCFoamIds.every((id) => careProductCatalog.find((item) => item.id === id)?.description.includes("bağımsız filtre kapasitesi üretmez")), "Fluval C serisi köpük pedleri pasif medya olarak kalmalı");
+const fluvalCPolyFoamIds = ["fluval-c2-poly-foam-pad-14008-3pack","fluval-c3-poly-foam-pad-14009-3pack","fluval-c4-poly-foam-pad-14010-3pack"];
+assert.deepEqual(fluvalCPolyFoamIds.map((id) => careProductCatalog.find((item) => item.id === id)?.description.match(/ürün kodu ([A-Z0-9-]+)/)?.[1]), ["14008","14009","14010"], "Fluval C2–C4 Poly/Foam pedleri doğru ürün kodlarıyla eşleşmeli");
+assert(fluvalCPolyFoamIds.every((id) => careProductCatalog.find((item) => item.id === id)?.description.includes("birinci aşamada") && careProductCatalog.find((item) => item.id === id)?.description.includes("ikinci aşamada")), "Fluval C serisi Poly/Foam pedlerin iki mekanik aşaması korunmalı");
+const fluvalCBioScreenIds = ["fluval-c2-bio-screen-14020-3pack","fluval-c3-bio-screen-14021-3pack","fluval-c4-bio-screen-14022-3pack"];
+assert.deepEqual(fluvalCBioScreenIds.map((id) => careProductCatalog.find((item) => item.id === id)?.description.match(/ürün kodu ([A-Z0-9-]+)/)?.[1]), ["14020","14021","14022"], "Fluval C2–C4 Bio-Screen pedleri doğru ürün kodlarıyla eşleşmeli");
+assert(fluvalCBioScreenIds.every((id) => careProductCatalog.find((item) => item.id === id)?.description.includes("damlatma haznesine eşit dağıtır") && careProductCatalog.find((item) => item.id === id)?.description.includes("biyolojik döngü ve testin yerine geçmez")), "Fluval C serisi Bio-Screen işlevi ve biyolojik güvenlik sınırı korunmalı");
+const fluvalCCarbonIds = ["fluval-c2-carbon-14011-45g-3pack","fluval-c3-carbon-14012-70g-3pack","fluval-c4-carbon-14013-140g-3pack"];
+assert.deepEqual(fluvalCCarbonIds.map((id) => careProductCatalog.find((item) => item.id === id)?.description.match(/ürün kodu ([A-Z0-9-]+)/)?.[1]), ["14011","14012","14013"], "Fluval C2–C4 aktif karbon paketleri doğru ürün kodlarıyla eşleşmeli");
+assert.deepEqual(fluvalCCarbonIds.map((id) => careProductCatalog.find((item) => item.id === id)?.description.match(/paket toplamı (\d+) g/)?.[1]), ["45","70","140"], "Fluval C2–C4 aktif karbon paketleri yayımlanan toplam ağırlıkları taşımalı");
+const fluvalCAmmoniaIds = ["fluval-c2-ammonia-remover-14014-90g-3pack","fluval-c3-ammonia-remover-14015-140g-3pack","fluval-c4-ammonia-remover-14016-290g-3pack"];
+assert.deepEqual(fluvalCAmmoniaIds.map((id) => careProductCatalog.find((item) => item.id === id)?.description.match(/ürün kodu ([A-Z0-9-]+)/)?.[1]), ["14014","14015","14016"], "Fluval C2–C4 amonyak medyaları doğru ürün kodlarıyla eşleşmeli");
+assert(fluvalCAmmoniaIds.every((id) => careProductCatalog.find((item) => item.id === id)?.description.includes("tatlı su") && careProductCatalog.find((item) => item.id === id)?.description.includes("biyolojik döngü, su testi ve su değişiminin yerine geçmez")), "Fluval C amonyak medyalarının tatlı su ve temel bakım sınırları korunmalı");
+const fluvalCZeoCarbIds = ["fluval-c2-zeo-carb-14017-70g-3pack","fluval-c3-zeo-carb-14018-3pack","fluval-c4-zeo-carb-14019-3pack"];
+assert.deepEqual(fluvalCZeoCarbIds.map((id) => careProductCatalog.find((item) => item.id === id)?.description.match(/ürün kodu ([A-Z0-9-]+)/)?.[1]), ["14017","14018","14019"], "Fluval C2–C4 Zeo-Carb paketleri doğru ürün kodlarıyla eşleşmeli");
+assert(careProductCatalog.find((item) => item.id === "fluval-c3-zeo-carb-14018-3pack")?.description.includes("4,58 oz ile 140 g") && careProductCatalog.find((item) => item.id === "fluval-c4-zeo-carb-14019-3pack")?.description.includes("2,47 oz ile 230 g") && fluvalCZeoCarbIds.slice(1).every((id) => careProductCatalog.find((item) => item.id === id)?.description.includes("ağırlık kesin alan olarak kullanılmamıştır")), "Fluval C3/C4 Zeo-Carb resmî ağırlık çelişkileri kesin değere dönüştürülmemeli");
+const fluvalCNodeIds = ["fluval-c-nodes-14023-c2-c3-100g","fluval-c-nodes-14024-c4-200g"];
+assert.deepEqual(fluvalCNodeIds.map((id) => careProductCatalog.find((item) => item.id === id)?.description.match(/ürün kodu ([A-Z0-9-]+)/)?.[1]), ["14023","14024"], "Fluval C-Nodes seçenekleri doğru ürün kodlarıyla eşleşmeli");
+assert(fluvalCNodeIds.every((id) => careProductCatalog.find((item) => item.id === id)?.description.includes("yıldız biçimli") && careProductCatalog.find((item) => item.id === id)?.description.includes("biyolojik döngü ve testin yerine geçmez")), "Fluval C-Nodes yapısı ve biyolojik güvenlik sınırı korunmalı");
+const fluvalCSeriesMediaIds = [...fluvalCFoamIds,...fluvalCPolyFoamIds,...fluvalCBioScreenIds,...fluvalCCarbonIds,...fluvalCAmmoniaIds,...fluvalCZeoCarbIds,...fluvalCNodeIds];
+assert.equal(fluvalCSeriesMediaIds.length, 20, "Fluval resmî C-Series medya arşivindeki 20 ayrı ürün seçeneğinin tamamı testte izlenmeli");
+assert.equal(new Set(fluvalCSeriesMediaIds).size, 20, "Fluval C-Series medya test listesinde yinelenen kayıt olmamalı");
+assert(fluvalCSeriesMediaIds.every((id) => {
+  const item = careProductCatalog.find((candidate) => candidate.id === id);
+  return item?.brand === "Fluval" && item.category === "filter_media" && item.verifiedAt === "2026-09-28" && item.sourceUrl.startsWith("https://fluvalaquatics.com/");
+}), "Fluval C-Series'in 20 medya kaydı güncel resmî üretici sayfasına bağlı filtre medyası olmalı");
+const fluvalFxMediaIds = ["fluval-fx2-bio-foam-a227-2pack","fluval-fx4-fx5-fx6-bio-foam-a228-3pack","fluval-fx-bio-foam-plus-a239-2pack","fluval-fx-carbon-foam-a249-2pack","fluval-fx-quick-clear-a246-3pack","fluval-fx-max-clean-a248-3pack","fluval-fx-nitrite-remover-a265-3pack","fluval-fx-ammonia-remover-a259-3pack","fluval-fx-phosphate-remover-a262-3pack"];
+assert.deepEqual(fluvalFxMediaIds.map((id) => careProductCatalog.find((item) => item.id === id)?.description.match(/ürün kodu ([A-Z0-9-]+)/)?.[1]), ["A227","A228","A239","A249","A246","A248","A265","A259","A262"], "Fluval FX medya paketleri doğru resmî ürün kodlarıyla eşleşmeli");
+assert(fluvalFxMediaIds.every((id) => {
+  const item = careProductCatalog.find((candidate) => candidate.id === id);
+  return item?.brand === "Fluval" && item.category === "filter_media" && item.verifiedAt === "2026-09-28" && item.sourceUrl.startsWith("https://fluvalaquatics.com/us/shop/product/");
+}), "Fluval FX medya kayıtları güncel doğrudan üretici sayfalarına bağlı olmalı");
+assert(careProductCatalog.find((item) => item.id === "fluval-fx-max-clean-a248-3pack")?.description.includes("A246 Quick-Clear ile birlikte"), "Fluval FX Max-Clean resmî tamamlayıcı Quick-Clear ilişkisini korumalı");
+assert(careProductCatalog.find((item) => item.id === "fluval-fx-nitrite-remover-a265-3pack")?.description.includes("su testi sonucuna göre") && careProductCatalog.find((item) => item.id === "fluval-fx-nitrite-remover-a265-3pack")?.description.includes("biyolojik döngü ve su değişiminin yerine geçmez"), "Fluval FX nitrit pedinin test temelli kullanım ve temel bakım sınırı korunmalı");
+assert(careProductCatalog.find((item) => item.id === "fluval-fx-ammonia-remover-a259-3pack")?.description.includes("biyolojik döngü, su testi ve uygun su değişiminin yerine geçmez"), "Fluval FX amonyak pedinin temel bakım güvenlik sınırı korunmalı");
+assert(careProductCatalog.find((item) => item.id === "fluval-fx-phosphate-remover-a262-3pack")?.additionalSourceUrls?.some((url) => url.includes("/uk/shop/product/")) && careProductCatalog.find((item) => item.id === "fluval-fx-phosphate-remover-a262-3pack")?.description.includes("su testi sonucuna göre"), "Fluval FX fosfat pedi resmî bölgesel bakım sıklığı kaynağına bağlı olmalı");
+const fluvalBioFxIds = ["fluval-bio-fx-a1458-2l","fluval-bio-fx-a1459-5l"];
+assert.deepEqual(fluvalBioFxIds.map((id) => careProductCatalog.find((item) => item.id === id)?.description.match(/ürün kodu ([A-Z0-9-]+)/)?.[1]), ["A1458","A1459"], "Fluval BIO-FX hacimleri doğru resmî ürün kodlarıyla eşleşmeli");
+assert.deepEqual(fluvalBioFxIds.map((id) => careProductCatalog.find((item) => item.id === id)?.description.match(/(2|5) L güvenli/)?.[1]), ["2","5"], "Fluval BIO-FX iki gerçek hacim seçeneğini ayrı tutmalı");
+assert(fluvalBioFxIds.every((id) => careProductCatalog.find((item) => item.id === id)?.description.includes("2.250 m²") && careProductCatalog.find((item) => item.id === id)?.description.includes("biyolojik döngü ve su testinin yerine geçmez")), "Fluval BIO-FX yayımlanan yüzey alanını ve biyolojik güvenlik sınırını taşımalı");
+const fluval07BioFoamValuePackIds = ["fluval-106-107-bio-foam-value-pack-a334","fluval-206-207-bio-foam-value-pack-a335","fluval-306-307-bio-foam-value-pack-a336","fluval-406-407-bio-foam-value-pack-a337"];
+assert.deepEqual(fluval07BioFoamValuePackIds.map((id) => careProductCatalog.find((item) => item.id === id)?.description.match(/ürün kodu ([A-Z0-9-]+)/)?.[1]), ["A334","A335","A336","A337"], "Fluval 06/07 Bio-Foam Value Pack seçenekleri doğru ürün kodlarıyla eşleşmeli");
+assert.deepEqual(fluval07BioFoamValuePackIds.map((id) => careProductCatalog.find((item) => item.id === id)?.description.match(/UPC (\d+)/)?.[1]), ["015561103343","015561103350","015561103367","015561103374"], "Fluval 06/07 Bio-Foam Value Pack seçenekleri doğru UPC'leri taşımalı");
+assert(careProductCatalog.find((item) => item.id === "fluval-106-107-bio-foam-value-pack-a334")?.description.includes("2 × A187") && careProductCatalog.find((item) => item.id === "fluval-206-207-bio-foam-value-pack-a335")?.description.includes("2 × A188") && careProductCatalog.find((item) => item.id === "fluval-306-307-bio-foam-value-pack-a336")?.description.includes("2 × A237") && careProductCatalog.find((item) => item.id === "fluval-406-407-bio-foam-value-pack-a337")?.description.includes("2 × A189"), "Fluval 06/07 Value Pack içerikleri filtre modeline göre ayrışmalı");
+const fluval07BioFoamIds = ["fluval-106-107-bio-foam-a220-2pack","fluval-206-306-207-307-bio-foam-a222-2pack","fluval-406-407-bio-foam-a226-2pack"];
+assert.deepEqual(fluval07BioFoamIds.map((id) => careProductCatalog.find((item) => item.id === id)?.description.match(/ürün kodu ([A-Z0-9-]+)/)?.[1]), ["A220","A222","A226"], "Fluval 06/07 standart Bio-Foam paketleri doğru ürün kodlarıyla eşleşmeli");
+const fluval07BioFoamPlusIds = ["fluval-106-206-107-207-bio-foam-plus-a236-3pack","fluval-306-406-307-407-bio-foam-plus-a237-2pack"];
+assert.deepEqual(fluval07BioFoamPlusIds.map((id) => careProductCatalog.find((item) => item.id === id)?.description.match(/ürün kodu ([A-Z0-9-]+)/)?.[1]), ["A236","A237"], "Fluval 06/07 Bio-Foam+ paketleri doğru ürün kodlarıyla eşleşmeli");
+const fluval07BioFoamMaxIds = ["fluval-106-107-bio-foam-max-a187-2pack","fluval-206-306-207-307-bio-foam-max-a188-2pack","fluval-406-407-bio-foam-max-a189-2pack"];
+assert.deepEqual(fluval07BioFoamMaxIds.map((id) => careProductCatalog.find((item) => item.id === id)?.description.match(/ürün kodu ([A-Z0-9-]+)/)?.[1]), ["A187","A188","A189"], "Fluval 06/07 Bio-Foam Max paketleri doğru ürün kodlarıyla eşleşmeli");
+assert(fluval07BioFoamMaxIds.every((id) => careProductCatalog.find((item) => item.id === id)?.description.includes("%30 daha fazla alan") && careProductCatalog.find((item) => item.id === id)?.description.includes("altı ayda değişim")), "Fluval 06/07 Bio-Foam Max yayımlanan yüzey ve değişim bilgisini taşımalı");
+const fluval07BioFoamAllIds = [...fluval07BioFoamValuePackIds,...fluval07BioFoamIds,...fluval07BioFoamPlusIds,...fluval07BioFoamMaxIds];
+assert.equal(fluval07BioFoamAllIds.length, 12, "Fluval 06/07 Bio-Foam alt ailesindeki 12 gerçek satış paketi testte izlenmeli");
+assert(fluval07BioFoamAllIds.every((id) => {
+  const item = careProductCatalog.find((candidate) => candidate.id === id);
+  return item?.category === "filter_media" && item.verifiedAt === "2026-09-28" && item.sourceUrl.startsWith("https://fluvalaquatics.com/us/shop/product/");
+}), "Fluval 06/07 Bio-Foam alt ailesi güncel doğrudan üretici sayfalarına bağlı olmalı");
+const fluval07ChemicalPadIds = ["fluval-106-206-107-207-quick-clear-a242-3pack","fluval-306-406-307-407-quick-clear-a244-6pack","fluval-106-206-107-207-ammonia-remover-a257-3pack","fluval-306-406-307-407-ammonia-remover-a258-6pack","fluval-106-206-107-207-nitrite-remover-a263-3pack","fluval-306-406-307-407-nitrite-remover-a264-6pack","fluval-106-206-107-207-phosphate-remover-a260-3pack","fluval-306-406-307-407-phosphate-remover-a261-6pack"];
+assert.deepEqual(fluval07ChemicalPadIds.map((id) => careProductCatalog.find((item) => item.id === id)?.description.match(/ürün kodu ([A-Z0-9-]+)/)?.[1]), ["A242","A244","A257","A258","A263","A264","A260","A261"], "Fluval 06/07 kimyasal ve parlatma pedleri doğru resmî ürün kodlarıyla eşleşmeli");
+assert.deepEqual(fluval07ChemicalPadIds.map((id) => careProductCatalog.find((item) => item.id === id)?.description.match(/UPC (\d+)/)?.[1]), ["015561102421","015561102445","015561102575","015561102582","015561102636","015561102643","015561102605","015561102612"], "Fluval 06/07 kimyasal ve parlatma pedleri doğru UPC'leri taşımalı");
+assert.deepEqual(fluval07ChemicalPadIds.map((id) => {
+  const model = careProductCatalog.find((item) => item.id === id)?.model || "";
+  return model.includes("3'lü paket") ? "3" : model.includes("6'lı paket") ? "6" : undefined;
+}), ["3","6","3","6","3","6","3","6"], "Fluval 06/07 küçük ve büyük filtre pedleri üçlü ve altılı gerçek paketler olarak ayrılmalı");
+assert(fluval07ChemicalPadIds.every((id) => {
+  const item = careProductCatalog.find((candidate) => candidate.id === id);
+  return item?.category === "filter_media" && item.verifiedAt === "2026-09-28" && item.sourceUrl.startsWith("https://fluvalaquatics.com/us/shop/product/");
+}), "Fluval 06/07 kimyasal ve parlatma pedleri güncel doğrudan üretici sayfalarına bağlı olmalı");
+assert(fluval07ChemicalPadIds.slice(2,4).every((id) => careProductCatalog.find((item) => item.id === id)?.description.includes("biyolojik döngü, su testi ve uygun su değişiminin yerine geçmez")), "Fluval 06/07 amonyak pedlerinin temel bakım güvenlik sınırı korunmalı");
+assert(fluval07ChemicalPadIds.slice(4,6).every((id) => careProductCatalog.find((item) => item.id === id)?.description.includes("su testiyle değerlendirilmelidir") && careProductCatalog.find((item) => item.id === id)?.description.includes("biyolojik döngü ve su değişiminin yerine geçmez")), "Fluval 06/07 nitrit pedleri test temelli kullanım ve biyolojik güvenlik sınırı taşımalı");
+assert(fluval07ChemicalPadIds.slice(6).every((id) => careProductCatalog.find((item) => item.id === id)?.description.includes("su testiyle değerlendirilmelidir") && careProductCatalog.find((item) => item.id === id)?.description.includes("temel bakım ve su değişiminin yerine geçmez")), "Fluval 06/07 fosfat pedleri test temelli kullanım ve temel bakım sınırı taşımalı");
+const fluval07MediaValuePackIds = ["fluval-106-206-107-207-media-value-pack-a1461","fluval-306-406-307-407-media-value-pack-a1462"];
+assert.deepEqual(fluval07MediaValuePackIds.map((id) => careProductCatalog.find((item) => item.id === id)?.description.match(/ürün kodu ([A-Z0-9-]+)/)?.[1]), ["A1461","A1462"], "Fluval 06/07 Media Value Pack seçenekleri doğru ürün kodlarıyla eşleşmeli");
+assert.deepEqual(fluval07MediaValuePackIds.map((id) => careProductCatalog.find((item) => item.id === id)?.description.match(/UPC (\d+)/)?.[1]), ["015561114615","015561114622"], "Fluval 06/07 Media Value Pack seçenekleri doğru UPC'leri taşımalı");
+assert(careProductCatalog.find((item) => item.id === "fluval-106-206-107-207-media-value-pack-a1461")?.description.includes("6 × Carbon A1440") && careProductCatalog.find((item) => item.id === "fluval-106-206-107-207-media-value-pack-a1461")?.description.includes("3 × Quick-Clear A242") && careProductCatalog.find((item) => item.id === "fluval-106-206-107-207-media-value-pack-a1461")?.description.includes("6 × Phosphate Remover A260"), "Fluval küçük 06/07 medya paketinin resmî içeriği korunmalı");
+assert(careProductCatalog.find((item) => item.id === "fluval-306-406-307-407-media-value-pack-a1462")?.description.includes("12 × Carbon A1440") && careProductCatalog.find((item) => item.id === "fluval-306-406-307-407-media-value-pack-a1462")?.description.includes("6 × Quick-Clear A242") && careProductCatalog.find((item) => item.id === "fluval-306-406-307-407-media-value-pack-a1462")?.description.includes("12 × Phosphate Remover A260"), "Fluval büyük 06/07 medya paketinin resmî içeriği korunmalı");
+assert(fluval07MediaValuePackIds.every((id) => {
+  const item = careProductCatalog.find((candidate) => candidate.id === id);
+  return item?.category === "filter_media" && item.verifiedAt === "2026-09-28" && item.sourceUrl.startsWith("https://fluvalaquatics.com/us/shop/product/") && item.description.includes("altı aylık");
+}), "Fluval 06/07 Media Value Pack seçenekleri altı aylık ve doğrudan resmî kaynaklı olmalı");
+const fluvalGeneralCanisterMediaIds = ["fluval-ammonia-remover-a1480-180g-3pack","fluval-ammonia-remover-a1486-1600g","fluval-zeo-carb-a1490-150g-3pack","fluval-zeo-carb-a1492-1200g","fluval-clearmax-a1348-100g-3pack","fluval-pre-filter-a1470-750g"];
+assert.deepEqual(fluvalGeneralCanisterMediaIds.map((id) => careProductCatalog.find((item) => item.id === id)?.description.match(/ürün kodu ([A-Z0-9-]+)/)?.[1]), ["A1480","A1486","A1490","A1492","A1348","A1470"], "Fluval genel dış filtre medyaları doğru resmî ürün kodlarıyla eşleşmeli");
+assert.deepEqual(fluvalGeneralCanisterMediaIds.map((id) => careProductCatalog.find((item) => item.id === id)?.model.match(/(180 g|1600 g|150 g|1200 g|100 g|750 g)/)?.[1]), ["180 g","1600 g","150 g","1200 g","100 g","750 g"], "Fluval genel dış filtre medyaları gerçek paket boyutlarını ayrı tutmalı");
+assert(fluvalGeneralCanisterMediaIds.every((id) => {
+  const item = careProductCatalog.find((candidate) => candidate.id === id);
+  return item?.category === "filter_media" && item.verifiedAt === "2026-09-28" && item.sourceUrl.startsWith("https://fluvalaquatics.com/") && item.additionalSourceUrls?.every((url) => url.startsWith("https://fluvalaquatics.com/"));
+}), "Fluval genel dış filtre medyaları güncel ve yalnız resmî üretici kaynaklarına bağlı olmalı");
+const fluvalGeneralAmmoniaMediaIds = fluvalGeneralCanisterMediaIds.slice(0,4);
+assert(fluvalGeneralAmmoniaMediaIds.every((id) => {
+  const description = careProductCatalog.find((item) => item.id === id)?.description || "";
+  return description.includes("yalnız tatlı su") && description.includes("aylık değişim") && description.includes("tüm filtre medyasını aynı anda değiştirmemeyi") && description.includes("biyolojik döngü, su testi ve uygun su değişiminin yerine geçmez");
+}), "Fluval genel amonyak ve Zeo-Carb medyaları tatlı su, bakım sıklığı ve biyolojik güvenlik sınırlarını taşımalı");
+const fluvalClearMax = careProductCatalog.find((item) => item.id === "fluval-clearmax-a1348-100g-3pack");
+assert(fluvalClearMax?.description.includes("UPC 015561113489") && fluvalClearMax.description.includes("300 L") && fluvalClearMax.description.includes("deniz suyunda nitratı gidermez") && fluvalClearMax.description.includes("tüm medya aynı anda değiştirilmemelidir"), "Fluval ClearMax kod, kapasite, deniz suyu istisnası ve medya değişim sınırını taşımalı");
+const fluvalPreFilter = careProductCatalog.find((item) => item.id === "fluval-pre-filter-a1470-750g");
+assert(fluvalPreFilter?.description.includes("UPC 015561114707") && fluvalPreFilter.description.includes("inert seramik") && fluvalPreFilter.description.includes("orta ve kaba filtrasyonda") && fluvalPreFilter.description.includes("bağımsız filtre kapasitesi üretmez"), "Fluval Pre-Filter resmî kod, malzeme, işlev ve pasif medya sınırını taşımalı");
+const fluvalBulkCarbonBiomaxIds = ["fluval-carbon-a1447-900g","fluval-carbon-a1448-1650g-archive","fluval-biomax-a1457-1100g"];
+assert.deepEqual(fluvalBulkCarbonBiomaxIds.map((id) => careProductCatalog.find((item) => item.id === id)?.description.match(/ürün kodu ([A-Z0-9-]+)/)?.[1]), ["A1447","A1448","A1457"], "Fluval toplu Carbon ve BIOMAX seçenekleri doğru resmî ürün kodlarıyla eşleşmeli");
+assert.deepEqual(fluvalBulkCarbonBiomaxIds.map((id) => careProductCatalog.find((item) => item.id === id)?.model.match(/(900 g|1650 g|1100 g)/)?.[1]), ["900 g","1650 g","1100 g"], "Fluval toplu Carbon ve BIOMAX seçenekleri gerçek paket boyutlarını ayrı tutmalı");
+assert(fluvalBulkCarbonBiomaxIds.every((id) => {
+  const item = careProductCatalog.find((candidate) => candidate.id === id);
+  return item?.category === "filter_media" && item.verifiedAt === "2026-09-28" && item.sourceUrl.startsWith("https://fluvalaquatics.com/");
+}), "Fluval toplu Carbon ve BIOMAX seçenekleri güncel resmî üretici kaynaklarına bağlı olmalı");
+assert(careProductCatalog.find((item) => item.id === "fluval-carbon-a1447-900g")?.description.includes("aylık değiştirilmeli") && careProductCatalog.find((item) => item.id === "fluval-carbon-a1448-1650g-archive")?.description.includes("arşiv etiketiyle korunur"), "Fluval toplu Carbon seçenekleri bakım sıklığı ile güncel/arşiv ayrımını korumalı");
+assert(careProductCatalog.find((item) => item.id === "fluval-biomax-a1457-1100g")?.description.includes("UPC 015561114578") && careProductCatalog.find((item) => item.id === "fluval-biomax-a1457-1100g")?.description.includes("altı ayda değişim") && careProductCatalog.find((item) => item.id === "fluval-biomax-a1457-1100g")?.description.includes("biyolojik döngü ve su testinin yerine geçmez"), "Fluval BIOMAX 1100 g kimlik, bakım ve biyolojik güvenlik sınırını taşımalı");
+const fluvalPeat = careProductCatalog.find((item) => item.id === "fluval-peat-granules-a1465-500g");
+assert(fluvalPeat?.description.includes("ürün kodu A1465") && fluvalPeat.description.includes("UPC 015561114653") && fluvalPeat.description.includes("yalnız tatlı su") && fluvalPeat.description.includes("pH ve KH düzenli ölçülmeli") && fluvalPeat.description.includes("3–5 dKH"), "Fluval Peat Granules kimlik, tatlı su, test ve kaynaklı KH sınırını taşımalı");
+assert(fluvalPeat?.sourceUrl.startsWith("https://fluvalaquatics.com/") && fluvalPeat.additionalSourceUrls?.every((url) => url.startsWith("https://fluvalaquatics.com/")) && fluvalPeat.verifiedAt === "2026-09-29", "Fluval Peat Granules güncel ve yalnız resmî üretici kaynaklarına bağlı olmalı");
+const fluvalZeoCarb2100 = careProductCatalog.find((item) => item.id === "fluval-zeo-carb-a1493-2100g");
+assert(fluvalZeoCarb2100?.description.includes("ürün kodu A1493") && fluvalZeoCarb2100.description.includes("UPC 015561114936") && fluvalZeoCarb2100.description.includes("yalnız tatlı su") && fluvalZeoCarb2100.description.includes("aylık değişim") && fluvalZeoCarb2100.description.includes("biyolojik döngü, su testi ve uygun su değişiminin yerine geçmez"), "Fluval Zeo-Carb 2100 g kimlik, bakım ve biyolojik güvenlik sınırını taşımalı");
+assert(fluvalZeoCarb2100?.sourceUrl.startsWith("https://fluvalaquatics.com/") && fluvalZeoCarb2100.additionalSourceUrls?.every((url) => url.startsWith("https://fluvalaquatics.com/")) && fluvalZeoCarb2100.verifiedAt === "2026-09-29", "Fluval Zeo-Carb 2100 g güncel ve yalnız resmî üretici kaynaklarına bağlı olmalı");
+const fluvalUniversalMediaBag = careProductCatalog.find((item) => item.id === "fluval-universal-nylon-bags-a1428-2pack");
+assert(fluvalUniversalMediaBag?.description.includes("ürün kodu A1428") && fluvalUniversalMediaBag.description.includes("UPC 015561114288") && fluvalUniversalMediaBag.description.includes("16,5 × 25,4 cm") && fluvalUniversalMediaBag.description.includes("bağımsız filtrasyon kapasitesi üretmez"), "Fluval evrensel medya torbası doğru kimlik, ölçü ve pasif kapasite sınırını taşımalı");
+assert(fluvalUniversalMediaBag?.sourceUrl.startsWith("https://fluvalaquatics.com/") && fluvalUniversalMediaBag.additionalSourceUrls?.every((url) => url.startsWith("https://fluvalaquatics.com/")) && fluvalUniversalMediaBag.verifiedAt === "2026-09-29", "Fluval evrensel medya torbası güncel ve yalnız resmî üretici kaynaklarına bağlı olmalı");
+const tetraCare = careProductCatalog.filter((item) => item.brand === "Tetra");
+const tetraExpectedModels = `TetraMin Flakes
+TetraMin Granules
+TetraMin XL Granules
+TetraMin XL Flakes
+TetraMin Mini Granules
+TetraMin Crisps
+TetraMin Baby
+TetraMin Junior
+Tetra Cichlid Sticks
+Tetra Cichlid XL Flakes
+Tetra Rubin Granules
+Tetra Betta Mini Flakes
+Tetra Goldfish Flakes
+Tetra Goldfish WaveSticks
+Tetra Cichlid Granules
+Tetra Cichlid Colour Mini Pellets
+Tetra Rubin Flakes
+Tetra Phyll Flakes
+Tetra Phyll Granules
+Tetra Malawi Flakes
+Tetra Discus Granules
+Tetra Goldfish Granules
+Tetra Goldfish Colour Sticks
+Tetra Goldfish Energy Sticks
+TetraMin XL Crisps
+Tetra Cichlid Mini Granules
+Tetra Cichlid Shrimp Sticks
+Tetra Cichlid Colour Pellets
+Tetra Cichlid Algae Mini Pellets
+Tetra Cichlid Algae Pellets
+Tetra Discus Colour Granules
+Tetra Guppy Mini Flakes
+Tetra Guppy Colour Mini Flakes
+Tetra Malawi Granules
+Tetra Delica 4in1 Menu
+Tetra Delica 4in1 Mix
+Tetra Delica Brine Shrimps
+Tetra Delica Daphnia
+Tetra Delica Bloodworms
+Tetra Delica Krill
+Tetra Goldfish Menu
+Tetra Wafer Mix
+Tetra Wafer Mini Mix
+Tetra Micro Granules
+Tetra Micro Pellets
+Tetra Micro Sticks
+Tetra Selection
+Tetra Crusta Menu
+Tetra Micro Crisps
+Tetra Menu
+Tetra Micro Menu
+Tetra Weekend
+Tetra Crusta Granules
+Tetra Crusta Sticks
+TetraPRO Fertility
+TetraPRO Algae
+TetraPRO Energy
+TetraPRO Colour
+TetraPRO Menu
+Tetra Cichlid Crisps
+Tetra TabiMin Tablets
+Tetra Pleco Tablets
+Tetra Pleco Tablets XL
+Tetra FunTips Tablets
+Tetra Medica GeneralTonic Plus
+Tetra Medica FungiStop Plus
+Tetra Medica ContraIck Plus
+Tetra AlguMin
+Tetra Algetten
+Tetra Algizit
+Tetra AlgoStop depot
+Tetra VitaMinPro 3in1
+Tetra AquaSafe
+Tetra EasyBalance
+Tetra CrystalWater
+Tetra NitrateMinus
+Tetra PhosphateMinus
+Tetra pH/KH Minus
+Tetra pH/KH Plus
+Tetra Goldfish AquaSafe
+Tetra ToruMin
+Tetra Vital
+Tetra Wasserpflege Plus
+Tetra NitrateMinus Pearls
+Tetra Bactozym
+Tetra FilterActive Bacteria
+Tetra SafeStart Bacteria
+Tetra Biocoryn Bacteria
+Tetra Test 7in1
+Tetra Test pH
+Tetra Test NO2-
+Tetra Test NO3-
+Tetra CO2 Optimat Set
+Tetra CO2 Optimat Refill
+Tetra CO2 Plus
+Tetra Crypto
+Tetra PlantaStart
+Tetra PlantaMin
+Tetra ActiveSubstrate
+Tetra CompleteSubstrate`.split("\n");
+assert.equal(tetraCare.length, 100, "Tetra resmî akvaryum dizinindeki 64 yem ve 36 bakım ürünü katalogda bulunmalı");
+assert.equal(tetraExpectedModels.length, 100, "Tetra beklenen model listesi 100 benzersiz ürün içermeli");
+for (const model of tetraExpectedModels) {
+  assert(tetraCare.some((item) => item.model === model), `Tetra ${model} bakım kataloğunda bulunmalı`);
+}
+for (const [category,count] of [["food",64],["treatment",7],["water_conditioner",13],["bacteria",4],["test",4],["fertilizer",6],["substrate",2]]) {
+  assert.equal(tetraCare.filter((item) => item.category === category).length, count, `Tetra ${category} sınıfında ${count} ürün bulunmalı`);
+}
+assert(tetraCare.every((item) => item.verifiedAt === "2026-09-25"), "Tetra ürünleri güncel doğrulama tarihi taşımalı");
+assert(tetraCare.every((item) => item.sourceUrl === "https://www.tetra.net/en-eu/products/nutrition-and-care/aquarium/food" || item.sourceUrl === "https://www.tetra.net/en-eu/products/nutrition-and-care/aquarium/care"), "Tetra ürünleri resmî yem veya bakım dizinine bağlanmalı");
+assert(!tetraCare.some((item) => item.model === "Tetra GC Gravel Cleaner"), "Tetra GC Gravel Cleaner bakım kimyasalı gibi sınıflandırılmamalı");
+const tetraGravelCleaners = equipmentCatalog.filter((item) => item.brand === "Tetra" && item.model.endsWith("Gravel Cleaner"));
+assert.deepEqual(tetraGravelCleaners.map((item) => item.model), ["GC 30 Gravel Cleaner","GC 40 Gravel Cleaner","GC 50 Gravel Cleaner"], "Tetra GC dip süpürgesinin üç resmî boyu ayrı seçilebilmeli");
+assert(tetraGravelCleaners.every((item) => item.category === "other" && item.passiveComponent && item.sourceUrl === "https://www.tetra.net/en-eu/products/tetra-gc-gravel-cleaner" && item.verifiedAt === "2026-09-25"), "Tetra GC dip süpürgeleri pasif ekipman ve resmî kaynaklı olmalı");
+assert(tetraGravelCleaners.every((item) => item.specifications.includes("180 cm hortum") && !item.ratedFlowLph && !item.powerW && !item.recommendedMaxL), "Tetra GC dip süpürgelerine motor, debi veya hacim kapasitesi uydurulmamalı");
+const tetraAccessoryModels = ["myFeeder","FN Net S","FN Net M","FN Net L","FN Net XL","FN Net XXL","Magnet Cleaner Flexible","Magnet Cleaner Flat S","Magnet Cleaner Flat M","Magnet Cleaner Flat L"];
+for (const model of tetraAccessoryModels) {
+  const item = equipmentCatalog.find((entry) => entry.brand === "Tetra" && entry.model === model);
+  assert(item, `Tetra ${model} teknik katalogda bulunmalı`);
+  assert.equal(item?.category, "other", `Tetra ${model} kapasite hesaplayan filtre veya ısıtıcı kategorisine karışmamalı`);
+  assert.equal(item?.verifiedAt, "2026-09-25", `Tetra ${model} güncel doğrulama tarihini taşımalı`);
+}
+assert.equal(equipmentCatalog.find((item) => item.id === "tetra-myfeeder")?.passiveComponent, undefined, "Tetra myFeeder aktif cihaz olarak kalmalı");
+assert(equipmentCatalog.find((item) => item.id === "tetra-myfeeder")?.specifications.includes("günde üç programa kadar"), "Tetra myFeeder resmî program kapasitesini taşımalı");
+assert(tetraAccessoryModels.slice(1).every((model) => equipmentCatalog.find((item) => item.brand === "Tetra" && item.model === model)?.passiveComponent), "Tetra kepçe ve mıknatıslı temizleyiciler pasif ekipman olmalı");
+const tetraCleaningAndThermometerModels = ["Magnet Cleaner Bowl","EasyWipes 10 pcs","GS 45 Aquarium Glass Scraper","SB 45 Replacement Blades 2 pcs","TH Digital Thermometer","TH 30 Thermometer","TH 35 Thermometer"];
+for (const model of tetraCleaningAndThermometerModels) {
+  const item = equipmentCatalog.find((entry) => entry.brand === "Tetra" && entry.model === model);
+  assert(item, `Tetra ${model} teknik katalogda bulunmalı`);
+  assert.equal(item?.category, "other", `Tetra ${model} kapasite hesaplayan sınıflara karışmamalı`);
+  assert.equal(item?.verifiedAt, "2026-09-25", `Tetra ${model} güncel doğrulama tarihini taşımalı`);
+  assert.match(item?.sourceUrl || "", /^https:\/\/www\.tetra\.net\/en-eu\/products\//, `Tetra ${model} doğrudan resmî kaynağa bağlanmalı`);
+}
+assert(tetraCleaningAndThermometerModels.filter((model) => model !== "TH Digital Thermometer").every((model) => equipmentCatalog.find((item) => item.brand === "Tetra" && item.model === model)?.passiveComponent), "Tetra manuel temizleme araçları ve sıvı kristal termometreler pasif ekipman olmalı");
+const tetraDigitalThermometer = equipmentCatalog.find((item) => item.id === "tetra-th-digital");
+assert.equal(tetraDigitalThermometer?.passiveComponent, undefined, "Tetra dijital termometre pilli aktif cihaz olarak kalmalı");
+assert(tetraDigitalThermometer?.specifications.includes("95 cm") && tetraDigitalThermometer?.specifications.includes("-10–+50 °C") && tetraDigitalThermometer?.specifications.includes("LR44"), "Tetra dijital termometre resmî kablo, ölçüm aralığı ve pil bilgisini taşımalı");
+assert(equipmentCatalog.find((item) => item.id === "tetra-easywipes-10")?.specifications.includes("10 tek kullanımlık mendil"), "Tetra EasyWipes resmî paket adedini taşımalı");
+assert(equipmentCatalog.find((item) => item.id === "tetra-gs-45")?.specifications.includes("bir yedek bıçak dahil"), "Tetra GS 45 kutu içeriğindeki yedek bıçağı belirtmeli");
+assert(equipmentCatalog.find((item) => item.id === "tetra-sb-45")?.specifications.includes("iki paslanmaz yedek bıçak"), "Tetra SB 45 resmî iki bıçaklık paketi belirtmeli");
+assert(equipmentCatalog.find((item) => item.id === "tetra-th-30")?.specifications.includes("20–30 °C"), "Tetra TH 30 doğru ölçüm aralığını taşımalı");
+assert(equipmentCatalog.find((item) => item.id === "tetra-th-35")?.specifications.includes("20–35 °C"), "Tetra TH 35 doğru ölçüm aralığını taşımalı");
+const tetraAquaArtLights = equipmentCatalog.filter((item) => item.brand === "Tetra" && item.model.startsWith("AquaArt LED"));
+assert.deepEqual(tetraAquaArtLights.map((item) => [item.model,item.powerW,item.recommendedMinL,item.recommendedMaxL]), [["AquaArt LED 20L/30L Lamp 4.8 W",4.8,20,30],["AquaArt LED 60L Lamp 9.6 W",9.6,60,60]], "Tetra AquaArt LED lambaları resmî güç ve uyumlu hacimleriyle ayrı seçilebilmeli");
+assert(tetraAquaArtLights.every((item) => item.category === "lighting" && item.sourceUrl.startsWith("https://www.tetra.net/") && item.verifiedAt === "2026-09-25"), "Tetra AquaArt LED lambaları güncel resmî kaynaklı aydınlatma olmalı");
+const tetraTetronicExpected = [[380,12.5,756,38,62],[580,19,1258,58,82],[780,24.5,1728,78,102],[980,28,1868,98,122],[1180,34,2380,118,142],[1380,38,2520,138,162]];
+for (const [model,powerW,lumens,minLength,maxLength] of tetraTetronicExpected) {
+  const item = equipmentCatalog.find((entry) => entry.brand === "Tetra" && entry.model === `Tetronic LED ProLine ${model}`);
+  assert(item, `Tetra Tetronic LED ProLine ${model} teknik katalogda bulunmalı`);
+  assert.deepEqual([item?.category,item?.powerW,item?.recommendedTankLengthCm], ["lighting",powerW,[minLength,maxLength]], `Tetra Tetronic ${model} resmî güç ve akvaryum uzunluğunu taşımalı`);
+  assert(item?.specifications.includes(`${lumens} lm`) && item?.specifications.includes("6000 K") && item?.specifications.includes("50.000 saat"), `Tetra Tetronic ${model} resmî lümen, renk sıcaklığı ve ömür bilgisini taşımalı`);
+  assert(item?.additionalSourceUrls?.some((url) => url.endsWith("TH53489_9074_2022_03_GA_Tetronic_LED_ProLine_Online.pdf")), `Tetra Tetronic ${model} resmî teknik kılavuza bağlanmalı`);
+}
+const tetraFilterJetExpected = [[400,400,4,50,120],[600,550,6,120,170],[900,900,12,170,230]];
+for (const [model,flow,power,minL,maxL] of tetraFilterJetExpected) {
+  const item = equipmentCatalog.find((entry) => entry.brand === "Tetra" && entry.model === `FilterJet ${model}`);
+  assert.deepEqual([item?.category,item?.ratedFlowLph,item?.powerW,item?.recommendedMinL,item?.recommendedMaxL,item?.adjustableFlow], ["filter",flow,power,minL,maxL,true], `Tetra FilterJet ${model} resmî debi, güç ve hacim aralığını taşımalı`);
+  assert(item?.additionalSourceUrls?.some((url) => url.endsWith("TH54181_9074_GA_FilterJet_400-900_KAZ_Online.pdf")), `Tetra FilterJet ${model} resmî teknik kılavuza bağlanmalı`);
+}
+const tetraFilterJet600 = equipmentCatalog.find((item) => item.id === "tetra-filterjet-600");
+assert(tetraFilterJet600?.dataConflictNote?.includes("600 L/saat") && tetraFilterJet600?.dataConflictNote?.includes("550 L/saat"), "Tetra FilterJet 600 ürün sayfası ile kılavuz arasındaki debi farkını görünür tutmalı");
+const tetraInxExpected = [[50,265,4,10,50],[100,425,5,40,100],[150,470,5.5,90,150],[200,740,10.5,140,200],[250,890,13.5,190,250]];
+for (const [model,flow,power,minL,maxL] of tetraInxExpected) {
+  const item = equipmentCatalog.find((entry) => entry.brand === "Tetra" && entry.model === `INX ${model}`);
+  assert.deepEqual([item?.category,item?.ratedFlowLph,item?.powerW,item?.recommendedMinL,item?.recommendedMaxL,item?.adjustableFlow], ["filter",flow,power,minL,maxL,true], `Tetra INX ${model} resmî debi, güç ve hacim aralığını taşımalı`);
+  assert(item?.specifications.includes("IP68") && item?.additionalSourceUrls?.some((url) => url.endsWith("TH54440_9074_GA_INX50_250.pdf")), `Tetra INX ${model} koruma sınıfı ve resmî teknik kılavuzu taşımalı`);
+}
+const tetraAirSilentExpected = [["Mini",21,1.6,10,40,34],["Maxi",42,1.8,40,80,35]];
+for (const [model,flow,power,minL,maxL,noise] of tetraAirSilentExpected) {
+  const item = equipmentCatalog.find((entry) => entry.brand === "Tetra" && entry.model === `AirSilent ${model}`);
+  assert.deepEqual([item?.category,item?.ratedFlowLph,item?.powerW,item?.recommendedMinL,item?.recommendedMaxL], ["air_pump",flow,power,minL,maxL], `Tetra AirSilent ${model} resmî debi, güç ve hacim aralığını taşımalı`);
+  assert(item?.specifications.includes(`${noise} dB(A)`) && item?.additionalSourceUrls?.some((url) => url.endsWith("TH52802_9074_2020-06_InstrucManual_AirSilent_Airpump_online.pdf")), `Tetra AirSilent ${model} resmî ses düzeyi ve kılavuza bağlanmalı`);
+}
+const tetraWaterPumpExpected = [[300,300,5,10,80,"0,5"],[600,600,11,80,200,"1,3"],[1000,1000,25,200,300,"2,0"]];
+for (const [model,flow,power,minL,maxL,head] of tetraWaterPumpExpected) {
+  const item = equipmentCatalog.find((entry) => entry.brand === "Tetra" && entry.model === `WP ${model} Water Pump`);
+  assert.deepEqual([item?.category,item?.ratedFlowLph,item?.powerW,item?.recommendedMinL,item?.recommendedMaxL,item?.adjustableFlow], ["other",flow,power,minL,maxL,true], `Tetra WP ${model} resmî debi, güç ve hacim aralığını taşımalı`);
+  assert(item?.specifications.includes(`${head} m`) && item?.specifications.includes("IPX8") && item?.additionalSourceUrls?.some((url) => url.endsWith("TH54003_9074_GA_WP300_600_1000_Online.pdf")), `Tetra WP ${model} resmî basma yüksekliği, koruma sınıfı ve kılavuza bağlanmalı`);
+}
+const tetraAirAccessories = ["AS 25 Air Stone","AS 30 Air Stone","AS 35 Air Stone","AS 40 Air Stone","AS 45 Air Stone","CV4 CheckValve","AH 50-400 Air Pump Hose (PVC)","AH 50-400 Air Hose (Silicone)"];
+for (const model of tetraAirAccessories) {
+  const item = equipmentCatalog.find((entry) => entry.brand === "Tetra" && entry.model === model);
+  assert(item, `Tetra ${model} teknik katalogda bulunmalı`);
+  assert.equal(item?.category, "other", `Tetra ${model} aktif hava motoru sınıfına karışmamalı`);
+  assert(item?.passiveComponent && item?.requiresAirPump, `Tetra ${model} pasif ve hava motoru gerektiren aksesuar olmalı`);
+  assert(!item?.ratedFlowLph && !item?.powerW && !item?.recommendedMaxL, `Tetra ${model} için bağımsız motor kapasitesi uydurulmamalı`);
+  assert.match(item?.sourceUrl || "", /^https:\/\/www\.tetra\.net\/en-eu\/products\//, `Tetra ${model} doğrudan resmî sayfaya bağlanmalı`);
+  assert.equal(item?.verifiedAt, "2026-09-27", `Tetra ${model} güncel doğrulama tarihini taşımalı`);
+}
+const tetraLightWaveExpected = [[270,6.3,661,6478,27,33],[430,12,1234,6612,43,49],[520,14.2,1460,6526,52,60],[720,19.4,1975,6566,72,80],[830,21,2544,6582,83,91],[990,23.4,2870,6570,99,107],[1140,28.4,3460,6654,114,122]];
+for (const [model,power,lumens,kelvin,minLength,maxLength] of tetraLightWaveExpected) {
+  for (const form of ["Complete Set","Single Light"]) {
+    const item = equipmentCatalog.find((entry) => entry.brand === "Tetra" && entry.model === `LightWave ${model} ${form}`);
+    assert.deepEqual([item?.category,item?.powerW,item?.recommendedTankLengthCm], ["lighting",power,[minLength,maxLength]], `Tetra LightWave ${model} ${form} resmî güç ve uzunluk aralığını taşımalı`);
+    assert(item?.specifications.includes(`${lumens} lm`) && item?.specifications.includes(`${kelvin} K`) && item?.specifications.includes("IP68") && item?.additionalSourceUrls?.some((url) => url.endsWith("TH54308_9074.pdf")), `Tetra LightWave ${model} ${form} resmî lümen, renk sıcaklığı, koruma sınıfı ve kılavuza bağlanmalı`);
+  }
+}
+assert(equipmentCatalog.filter((item) => item.brand === "Tetra" && item.model.endsWith("Single Light")).every((item) => item.specifications.includes("güç kaynağı içermez")), "Tetra LightWave Single Light kayıtları güç kaynağı içermediğini göstermeli");
+const tetraLightingAccessoryModels = ["LightWave Splitter","LightWave Timer","Tetronic Arms"];
+for (const model of tetraLightingAccessoryModels) {
+  const item = equipmentCatalog.find((entry) => entry.brand === "Tetra" && entry.model === model);
+  assert(item && item.category === "other" && item.verifiedAt === "2026-09-27", `Tetra ${model} aydınlatma armatürü yerine ayrı aksesuar olarak kataloglanmalı`);
+}
+assert(equipmentCatalog.find((item) => item.id === "tetra-lightwave-splitter")?.passiveComponent, "Tetra LightWave Splitter pasif bağlantı parçası olmalı");
+assert.equal(equipmentCatalog.find((item) => item.id === "tetra-lightwave-timer")?.passiveComponent, undefined, "Tetra LightWave Timer aktif elektronik cihaz olmalı");
+assert(equipmentCatalog.find((item) => item.id === "tetra-tetronic-arms")?.specifications.includes("380/580/780/980"), "Tetra Tetronic Arms yalnız resmî uyumlu dört boyu belirtmeli");
+const tetraFilterMedia = equipmentCatalog.filter((item) => item.brand === "Tetra" && (
+  item.id.startsWith("tetra-cf-plus-") || item.id.startsWith("tetra-bf-plus-") ||
+  item.id.startsWith("tetra-bb-bioballs-") || item.id.startsWith("tetra-bf-biofoam-") ||
+  item.id.startsWith("tetra-cf-carbon-") || item.id.startsWith("tetra-cr-filterrings-") ||
+  item.id.startsWith("tetra-ff-filterfloss-") || item.id.startsWith("tetra-easycrystal-pack-") ||
+  item.id === "tetra-easycrystal-600-biogrid"
+));
+assert.equal(tetraFilterMedia.length, 21, "Tetra resmî filtre medyası ve EasyCrystal kartuş dizini 21 seçilebilir varyant içermeli");
+assert(tetraFilterMedia.every((item) => item.category === "other" && item.passiveComponent && item.verifiedAt === "2026-09-27"), "Tetra filtre medyaları aktif filtre gibi değerlendirilmemeli ve güncel doğrulama tarihi taşımalı");
+assert(tetraFilterMedia.every((item) => !item.ratedFlowLph && !item.powerW && !item.recommendedMaxL), "Tetra filtre medyalarına bağımsız motor kapasitesi uydurulmamalı");
+for (const [id,ean] of [["tetra-cf-plus-300","4004218175693"],["tetra-cf-plus-400-600","4004218134652"],["tetra-cf-plus-800-1000","4004218134669"],["tetra-bf-plus-300","4004218175709"],["tetra-bf-plus-400-600","4004218134676"],["tetra-bf-plus-800-1000","4004218134683"]]) {
+  assert(equipmentCatalog.find((item) => item.id === id)?.specifications.includes(ean), `Tetra ${id} resmî EAN bilgisini taşımalı`);
+}
+assert.equal(equipmentCatalog.filter((item) => item.id.startsWith("tetra-easycrystal-pack-")).length, 4, "Tetra EasyCrystal dört gerçek üçlü kartuş paketiyle kataloglanmalı");
+assert(equipmentCatalog.find((item) => item.id === "tetra-easycrystal-pack-c250-300")?.specifications.includes("aktif karbonlu C sürümü"), "Tetra EasyCrystal C250/300 aktif karbonlu sürüm olarak ayrılmalı");
+assert(equipmentCatalog.find((item) => item.id === "tetra-easycrystal-pack-c600")?.specifications.includes("aktif karbonlu C sürümü"), "Tetra EasyCrystal C600 aktif karbonlu sürüm olarak ayrılmalı");
+assert(equipmentCatalog.find((item) => item.id === "tetra-easycrystal-600-biogrid")?.specifications.includes("4004218174719"), "Tetra EasyCrystal 600 BioGrid resmî EAN bilgisini taşımalı");
+assert(equipmentCatalog.filter((item) => item.id.startsWith("tetra-ff-filterfloss-")).every((item) => item.specifications.includes("4–8 haftada")), "Tetra FF FilterFloss değişim aralığı görünür olmalı");
+const tetraHeaterExpected = [[25,10,25],[50,25,60],[75,60,100],[100,100,150],[150,150,225],[200,225,300],[300,300,450]];
+for (const [power,minL,maxL] of tetraHeaterExpected) {
+  const item = equipmentCatalog.find((entry) => entry.id === `tetra-ht-${power}`);
+  assert.deepEqual([item?.category,item?.powerW,item?.recommendedMinL,item?.recommendedMaxL], ["heater",power,minL,maxL], `Tetra HT ${power} resmî güç ve hacim aralığını taşımalı`);
+  assert(item?.specifications.includes("20–32 °C") && item?.specifications.includes("IPX8") && item?.additionalSourceUrls?.some((url) => url.endsWith("TH53436_9074.pdf")), `Tetra HT ${power} resmî sıcaklık aralığı, koruma sınıfı ve kılavuza bağlanmalı`);
+  assert.equal(item?.verifiedAt, "2026-09-27", `Tetra HT ${power} güncel doğrulama tarihini taşımalı`);
+}
+assert.equal(equipmentCatalog.filter((item) => item.brand === "Tetra").length, 111, "Tetra teknik kataloğu bu aşamada 111 seçilebilir ekipman içermeli");
 const tropicalCare = careProductCatalog.filter((item) => item.brand === "Tropical");
 assert.equal(tropicalCare.length, 63, "Tropical'ın doğrulanan yem ve bitki bakım portföyü 63 ürün ailesi içermeli");
 for (const model of ["Herbs & Vegetables", "Leaves & Flowers", "Betta Granulat", "Bio-Vit", "Ichtio-Vit", "Aqua Plant", "Aquaflorin Potassium", "Carbo"]) {
@@ -4857,7 +7275,17 @@ assert.equal(malayanRiverSole?.predatory, true, "Brachirus panoides küçük can
 assert.equal(malayanRiverSole?.speciesOnly, true, "Brachirus panoides uzman kurulumu gerektirmeli");
 assert(malayanRiverSole?.husbandryCaution?.includes("ince kum"), "Brachirus panoides gömülme zemini ve hedefli besleme uyarısını taşımalı");
 assert.equal(speciesForCatalogExactSearch("Brachirus panoides", "fish", "freshwater")?.id, "malayan-river-sole", "Kesin Brachirus panoides adı doğru profili bulmalı");
-assert.equal(speciesForLivestock({commonName:"TATLI SU DİL BALIKLARI",category:"fish",quantity:1}), undefined, "Genel Tatlı Su Dil Balıkları adı Brachirus panoides profiline tahminle bağlanmamalı");
+const selheimsFreshwaterSole = speciesCatalog.find((item) => item.id === "selheims-freshwater-sole");
+assert.deepEqual([selheimsFreshwaterSole?.scientificName, selheimsFreshwaterSole?.adultSizeCm, selheimsFreshwaterSole?.minVolumeL, selheimsFreshwaterSole?.minTankLengthCm, selheimsFreshwaterSole?.minGroup], ["Brachirus selheimi", 15, 100, undefined, 1], "Brachirus selheimi kaynaklı kimlik, boy ve akvaryum eşiklerini taşımalı");
+assert.deepEqual([selheimsFreshwaterSole?.temperature, selheimsFreshwaterSole?.ph, selheimsFreshwaterSole?.flow], [[22, 26], [6.5, 7.5], "low"], "Brachirus selheimi kaynaklı su ve düşük akıntı gereksinimini taşımalı");
+assert.deepEqual(selheimsFreshwaterSole?.waterTypes, ["freshwater", "brackish"], "Brachirus selheimi doğrulanan tatlı ve acı su kapsamını taşımalı");
+assert.equal(selheimsFreshwaterSole?.specificGravity, undefined, "Brachirus selheimi için kaynakta yayımlanmayan tuzluluk değeri tahmin edilmemeli");
+assert.equal(selheimsFreshwaterSole?.predatory, true, "Brachirus selheimi küçük canlılar için avlanma riskini taşımalı");
+assert.equal(selheimsFreshwaterSole?.speciesOnly, true, "Brachirus selheimi uzman kurulumu gerektirmeli");
+assert(selheimsFreshwaterSole?.husbandryCaution?.includes("ince kum"), "Brachirus selheimi gömülme zemini ve hedefli besleme uyarısını taşımalı");
+assert(selheimsFreshwaterSole?.tankLengthDataNote?.includes("tahmin edilmedi"), "Brachirus selheimi yayımlanmayan akvaryum uzunluğunu tahmin etmemeli");
+assert.equal(speciesForCatalogExactSearch("Brachirus selheimi", "fish", "freshwater")?.id, "selheims-freshwater-sole", "Kesin Brachirus selheimi adı doğru profili bulmalı");
+assert.equal(speciesForLivestock({commonName:"TATLI SU DİL BALIKLARI",category:"fish",quantity:1}), undefined, "Genel Tatlı Su Dil Balıkları adı Brachirus panoides veya Brachirus selheimi profiline tahminle bağlanmamalı");
 const indianGlassFish = speciesCatalog.find((item) => item.id === "indian-glass-fish");
 assert.deepEqual(
   [indianGlassFish?.scientificName, indianGlassFish?.adultSizeCm, indianGlassFish?.minVolumeL, indianGlassFish?.minTankLengthCm, indianGlassFish?.minGroup],
@@ -4924,7 +7352,7 @@ for (const [retailCategory, retailName] of cikletistMainCategoryInventory) {
   if (matched) mainMappedRows += 1;
   else mainUnresolvedRows += 1;
 }
-assert.deepEqual([mainMappedRows, mainUnresolvedRows, mainExcludedRows], [315, 66, 3], "Ana kategori satırları doğrulanmış, çözülmemiş ve canlı olmayan sonuçlara eksiksiz ayrılmalı");
+assert.deepEqual([mainMappedRows, mainUnresolvedRows, mainExcludedRows], [314, 67, 3], "Ana kategori satırları doğrulanmış, çözülmemiş ve canlı olmayan sonuçlara eksiksiz ayrılmalı");
 const blackTigerDario = speciesForLivestock({ commonName: "BLACK TİGER BADİS DARİO FİSH", category: "fish", quantity: 2 });
 assert.equal(blackTigerDario?.id, "black-tiger-dario", "Black Tiger Dario satış adı güncel Dario tigris profiline bağlanmalı");
 assert.deepEqual(
@@ -4977,13 +7405,14 @@ assert.deepEqual([senegalBichir?.adultSizeCm, senegalBichir?.minVolumeL, senegal
 assert.equal(senegalBichir?.verifiedAt, "2026-09-10", "Senegal bichir güncel kaynak denetim tarihini taşımalı");
 assert(senegalBichir?.husbandryCaution?.includes("150 × 60 cm") && senegalBichir?.husbandryCaution?.includes("70 cm"), "Senegal bichir boy ve taban kaynağı farkını açıklamalı");
 const giantGourami = speciesForLivestock({ commonName: "Dev gurami", scientificName: "Osphronemus goramy", category: "fish", quantity: 1 });
-assert.deepEqual([giantGourami?.adultSizeCm, giantGourami?.minVolumeL, giantGourami?.minTankLengthCm, giantGourami?.temperature, giantGourami?.ph], [70, 681, 183, [20, 30], [6.5, 8]], "Dev gurami kaynaklı erişkin, akvaryum ve su eşiklerini taşımalı");
-assert.equal(giantGourami?.verifiedAt, "2026-09-10", "Dev gurami güncel kaynak denetim tarihini taşımalı");
-assert(giantGourami?.husbandryCaution?.includes("mutlak alt sınır"), "Dev gurami yayımlanan minimumun çıplak alt sınır olduğunu açıklamalı");
+assert.deepEqual([giantGourami?.adultSizeCm, giantGourami?.minVolumeL, giantGourami?.minTankLengthCm, giantGourami?.temperature, giantGourami?.ph, giantGourami?.flow], [70, 681, 183, [20, 30], [6.5, 8], "low"], "Dev gurami kaynaklı erişkin, akvaryum, su ve akıntı eşiklerini taşımalı");
+assert.equal(giantGourami?.verifiedAt, "2026-10-02", "Dev gurami güncel kaynak denetim tarihini taşımalı");
+assert(giantGourami?.husbandryCaution?.includes("mutlak çıplak alt sınır") && giantGourami?.husbandryCaution?.includes("4–5 hacim"), "Dev gurami yayımlanan minimumu ve filtrasyon-akıntı ayrımını açıklamalı");
 const redBelliedPacu = speciesForLivestock({ commonName: "Kırmızı karınlı pacu", scientificName: "Piaractus brachypomus", category: "fish", quantity: 1 });
-assert.deepEqual([redBelliedPacu?.adultSizeCm, redBelliedPacu?.minVolumeL, redBelliedPacu?.minTankLengthCm, redBelliedPacu?.minGroup, redBelliedPacu?.temperature, redBelliedPacu?.ph], [88, 3000, 300, 1, [23, 28], [4.8, 7.5]], "Kırmızı karınlı pacu kaynaklı erişkin, havuz ölçeği ve su eşiklerini taşımalı");
-assert.equal(redBelliedPacu?.verifiedAt, "2026-09-10", "Kırmızı karınlı pacu güncel kaynak denetim tarihini taşımalı");
+assert.deepEqual([redBelliedPacu?.adultSizeCm, redBelliedPacu?.minVolumeL, redBelliedPacu?.minTankLengthCm, redBelliedPacu?.minGroup, redBelliedPacu?.temperature, redBelliedPacu?.ph, redBelliedPacu?.flow], [88, 2550, 300, 1, [23, 28], [4.8, 7.5], "low"], "Kırmızı karınlı pacu kaynaklı erişkin, havuz ölçeği, su ve akıntı eşiklerini taşımalı");
+assert.equal(redBelliedPacu?.verifiedAt, "2026-10-02", "Kırmızı karınlı pacu güncel kaynak denetim tarihini taşımalı");
 assert.equal(redBelliedPacu?.speciesOnly, true, "Kırmızı karınlı pacu standart topluluk önerilerine girmemeli");
+assert(redBelliedPacu?.husbandryCaution?.includes("2.550 litre") && redBelliedPacu?.husbandryCaution?.includes("2.430 litre"), "Kırmızı karınlı pacu kaynak içi hacim farkını kullanıcıdan saklamamalı");
 const blackGhostKnifefish = speciesForLivestock({ commonName: "Black Ghost bıçak balığı", scientificName: "Apteronotus albifrons", category: "fish", quantity: 1 });
 assert.deepEqual([blackGhostKnifefish?.adultSizeCm, blackGhostKnifefish?.minVolumeL, blackGhostKnifefish?.minTankLengthCm, blackGhostKnifefish?.temperature, blackGhostKnifefish?.ph, blackGhostKnifefish?.flow], [50, 454, undefined, [23, 28], [6, 8], undefined], "Black Ghost bıçak balığı yalnız yayımlanmış erişkin, hacim ve su eşiklerini taşımalı");
 assert.equal(blackGhostKnifefish?.verifiedAt, "2026-09-10", "Black Ghost bıçak balığı güncel kaynak denetim tarihini taşımalı");
@@ -4998,12 +7427,14 @@ assert(unresolvedBlueAzulPeacockBass?.additionalSourceUrls.some((url) => url.inc
 assert(unresolvedBlueAzulPeacockBass?.additionalSourceUrls.some((url) => url.includes("fishi-pedia.com/fishes/cichla-piquiti")), "Blue Azul kaydı uzman bakım kaynağına bağlanmalı");
 assert.equal(speciesForLivestock({ commonName: "BLUE AZUL PEACOCK BASS", category: "fish", quantity: 1 }), undefined, "Bilimsel kimliği ve erişkin ölçeği çelişkili Blue Azul için sahte hacim profili üretilmemeli");
 const piquitiPeacockBass = speciesForLivestock({ commonName: "Piquiti peacock bass", scientificName: "Cichla piquiti", category: "fish", quantity: 1 });
-assert.deepEqual([piquitiPeacockBass?.id, piquitiPeacockBass?.adultSizeCm, piquitiPeacockBass?.minVolumeL, piquitiPeacockBass?.minTankLengthCm, piquitiPeacockBass?.minGroup, piquitiPeacockBass?.temperature, piquitiPeacockBass?.ph, piquitiPeacockBass?.flow], ["piquiti-peacock-bass", 80, 5000, 300, 1, [21, 32], [5.8, 7.3], "high"], "Kesin Cichla piquiti koruyucu erişkin boy, akvaryum ve su eşiklerini taşımalı");
+assert.deepEqual([piquitiPeacockBass?.id, piquitiPeacockBass?.adultSizeCm, piquitiPeacockBass?.minVolumeL, piquitiPeacockBass?.minTankLengthCm, piquitiPeacockBass?.minGroup, piquitiPeacockBass?.temperature, piquitiPeacockBass?.ph, piquitiPeacockBass?.flow], ["piquiti-peacock-bass", 80, 5000, 300, 1, [21, 32], [5.8, 7.3], undefined], "Kesin Cichla piquiti koruyucu erişkin boy, akvaryum ve yayımlanmış su eşiklerini taşımalı");
 assert.equal(piquitiPeacockBass?.predatory, true, "Cichla piquiti küçük canlılar için avcılık riskini taşımalı");
 assert.equal(piquitiPeacockBass?.speciesOnly, true, "Cichla piquiti genel topluluk balığı olarak önerilmemeli");
 assert(piquitiPeacockBass?.husbandryCaution?.includes("48 cm") && piquitiPeacockBass?.husbandryCaution?.includes("80 cm"), "Cichla piquiti bilimsel ölçüm ile koruyucu bakım boyu farkını açıklamalı");
 assert(piquitiPeacockBass?.sourceUrl?.includes("fishi-pedia.com/fishes/cichla-piquiti"), "Cichla piquiti ayrıntılı uzman bakım kaynağına bağlanmalı");
-assert(piquitiPeacockBass?.additionalSourceUrls?.some((url) => url.includes("fishbase.se/summary/Cichla-piquiti")), "Cichla piquiti bilimsel kimlik ve boy kaynağına bağlanmalı");
+assert(piquitiPeacockBass?.additionalSourceUrls?.some((url) => url.toLowerCase().includes("fishbase.se/summary/cichla-piquiti")), "Cichla piquiti bilimsel kimlik ve boy kaynağına bağlanmalı");
+assert.equal(piquitiPeacockBass?.verifiedAt, "2026-10-02", "Cichla piquiti güncel kaynak denetim tarihini taşımalı");
+assert(piquitiPeacockBass?.husbandryCaution?.includes("akıntı değeri tahmin edilmedi"), "Cichla piquiti yayımlanmayan akıntı eşiğini uydurmamalı");
 assert.equal(speciesForCatalogExactSearch("Cichla piquiti", "fish", "freshwater")?.id, "piquiti-peacock-bass", "Kesin Cichla piquiti bilimsel adı doğru profili bulmalı");
 assert.equal(speciesForCatalogExactSearch("Azul Peacock Bass", "fish", "freshwater"), undefined, "Belirsiz Azul ticari adı kesin Cichla piquiti profiline dönüşmemeli");
 const unresolvedSilverArgus = unresolvedSpeciesForSearch("SİLVER ARGUS BALIKLARI", "fish", "freshwater");
