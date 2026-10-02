@@ -37,7 +37,8 @@ const { catalogBrandCoverage } = require(path.join(projectRoot, "src/data/catalo
 const { allNavigationItems, primaryNavigationItems, settingsNavigationItem } = require(path.join(projectRoot, "src/data/navigation.ts"));
 const cikletistMainCategoryInventory = require(path.join(projectRoot, "scripts/fixtures/cikletist-main-category.cjs"));
 
-assert.deepEqual(primaryNavigationItems.map((item) => item.href), ["/", "/aquariums", "/water", "/maintenance", "/livestock", "/plants", "/equipment", "/products", "/calculators"], "Masaüstü ve mobil menü tüm ana uygulama başlıklarını ortak sırayla taşımalı");
+assert.deepEqual(primaryNavigationItems.map((item) => item.href), ["/", "/aquariums", "/water", "/maintenance", "/livestock", "/plants", "/equipment", "/products", "/calculators", "/aquamatch"], "Masaüstü ve mobil menü tüm ana uygulama başlıklarını ortak sırayla taşımalı");
+assert.deepEqual(primaryNavigationItems.find((item) => item.key === "aquamatch"), {key:"aquamatch",label:"AquaMatch",href:"/aquamatch",comingSoon:true}, "AquaMatch yalnız Yakında durumundaki pasif menü seçeneği olarak kalmalı");
 assert.deepEqual(settingsNavigationItem, {key:"settings",label:"Ayarlar",href:"/settings"}, "Ayarlar bağlantısı ortak menü kaynağında korunmalı");
 assert.equal(new Set(allNavigationItems.map((item) => item.href)).size, allNavigationItems.length, "Ortak navigasyonda yinelenen bağlantı bulunmamalı");
 
@@ -5852,6 +5853,112 @@ assert.equal(oscar?.verifiedAt, "2026-10-02", "Astronot güncel doğrulama tarih
 assert(oscar?.sourceUrl?.includes("seriouslyfish.com"), "Astronot ana bakım kaynağı olarak tür uzmanı profiline bağlanmalı");
 assert(oscar?.additionalSourceUrls?.some((url) => url.includes("fishbase.se")), "Astronot azami toplam boy için FishBase çapraz kaynağını saklamalı");
 assert(oscar?.husbandryCaution?.includes("45,7 cm") && oscar?.husbandryCaution?.includes("%30–50"), "Astronot boy ölçümü farkını ve su değişimi gereksinimini açıklamalı");
+const dwarfGourami = speciesCatalog.find((item) => item.id === "dwarf-gourami");
+assert.deepEqual(
+  [dwarfGourami?.scientificName,dwarfGourami?.adultSizeCm,dwarfGourami?.minVolumeL,dwarfGourami?.minTankLengthCm,dwarfGourami?.minGroup,dwarfGourami?.temperature,dwarfGourami?.ph,dwarfGourami?.flow],
+  ["Trichogaster lalius",9.5,56,60,2,[22,27],[6,7.5],"low"],
+  "Cüce gurami kaynaklı erişkin boy, çift, alan ve su eşiklerini taşımalı",
+);
+assert.equal(dwarfGourami?.verifiedAt, "2026-10-03", "Cüce gurami güncel doğrulama tarihini taşımalı");
+assert(dwarfGourami?.sourceUrl?.includes("seriouslyfish.com"), "Cüce gurami ayrıntılı bakım kaynağına bağlanmalı");
+assert(dwarfGourami?.additionalSourceUrls?.some((url) => url.includes("fishbase.se")), "Cüce gurami kimlik ve toplam boy için FishBase çapraz kaynağını saklamalı");
+assert(dwarfGourami?.husbandryCaution?.includes("DGIV") && dwarfGourami?.husbandryCaution?.includes("56 litre"), "Cüce gurami iridovirüs ve çift alanı güvenliğini açıklamalı");
+const pearlGourami = speciesCatalog.find((item) => item.id === "pearl-gourami");
+assert.deepEqual(
+  [pearlGourami?.scientificName,pearlGourami?.adultSizeCm,pearlGourami?.minVolumeL,pearlGourami?.minTankLengthCm,pearlGourami?.minGroup,pearlGourami?.temperature,pearlGourami?.ph,pearlGourami?.flow],
+  ["Trichopodus leerii",12,81,120,1,[24,30],[5.5,8],undefined],
+  "İnci gurami iki bakım kaynağındaki hacim, uzunluk ve su eşiklerini uydurmadan taşımalı",
+);
+assert.equal(pearlGourami?.verifiedAt, "2026-10-03", "İnci gurami güncel doğrulama tarihini taşımalı");
+assert(pearlGourami?.husbandryCaution?.includes("81 litre") && pearlGourami?.husbandryCaution?.includes("120 cm"), "İnci gurami kaynaklar arasındaki alan farkını kullanıcıya açıklamalı");
+const clownLoach = speciesCatalog.find((item) => item.id === "clown-loach");
+assert.deepEqual(
+  [clownLoach?.scientificName,clownLoach?.adultSizeCm,clownLoach?.minVolumeL,clownLoach?.minTankLengthCm,clownLoach?.minGroup,clownLoach?.temperature,clownLoach?.ph,clownLoach?.flow],
+  ["Chromobotia macracanthus",40,648,180,5,[24,30],[5,7],"medium"],
+  "Makrakanta kaynaklı erişkin boy, grup, alan ve su eşiklerini taşımalı",
+);
+assert.equal(clownLoach?.verifiedAt, "2026-10-03", "Makrakanta güncel doğrulama tarihini taşımalı");
+assert(clownLoach?.husbandryCaution?.includes("20 yıldan uzun") && clownLoach?.husbandryCaution?.includes("%30–50"), "Makrakanta ömür ve su bakımı güvenliğini açıklamalı");
+assert(clownLoach?.additionalSourceUrls?.some((url) => url.includes("fishbase.se")), "Makrakanta bilimsel karşılaştırma kaynağını saklamalı");
+const neonTetra = speciesCatalog.find((item) => item.id === "neon-tetra");
+assert.deepEqual(
+  [neonTetra?.scientificName,neonTetra?.adultSizeCm,neonTetra?.minVolumeL,neonTetra?.minTankLengthCm,neonTetra?.minGroup,neonTetra?.temperature,neonTetra?.ph,neonTetra?.flow],
+  ["Paracheirodon innesi",3,54,60,8,[21,25],[4,7.5],undefined],
+  "Neon tetra kaynaklı boy, alan, sürü ve su eşiklerini taşımalı; akıntı tahmin edilmemeli",
+);
+assert.equal(neonTetra?.verifiedAt, "2026-10-03", "Neon tetra güncel doğrulama tarihini taşımalı");
+assert(neonTetra?.husbandryCaution?.includes("Neon Tetra Hastalığı") && neonTetra?.husbandryCaution?.includes("54 litre"), "Neon tetra hastalık ve alan güvenliğini açıklamalı");
+const cardinalTetra = speciesCatalog.find((item) => item.id === "cardinal-tetra");
+assert.deepEqual(
+  [cardinalTetra?.scientificName,cardinalTetra?.adultSizeCm,cardinalTetra?.minVolumeL,cardinalTetra?.minTankLengthCm,cardinalTetra?.minGroup,cardinalTetra?.temperature,cardinalTetra?.ph,cardinalTetra?.flow],
+  ["Paracheirodon axelrodi",3.5,54,60,8,[23,29],[3.5,7.5],"low"],
+  "Kardinal tetra kaynaklı boy, alan, sürü ve su eşiklerini taşımalı",
+);
+assert.equal(cardinalTetra?.verifiedAt, "2026-10-03", "Kardinal tetra güncel doğrulama tarihini taşımalı");
+assert(cardinalTetra?.husbandryCaution?.includes("Doğadan yakalanan") && cardinalTetra?.husbandryCaution?.includes("54 litre"), "Kardinal tetra köken ve su kalitesi farkını açıklamalı");
+const pandaCory = speciesCatalog.find((item) => item.id === "corydoras-panda");
+assert.deepEqual(
+  [pandaCory?.scientificName,pandaCory?.adultSizeCm,pandaCory?.minVolumeL,pandaCory?.minTankLengthCm,pandaCory?.minGroup,pandaCory?.temperature,pandaCory?.ph,pandaCory?.flow],
+  ["Hoplisoma panda",5,41,45,6,[22,25],[6,7.4],undefined],
+  "Panda çöpçü güncel bilimsel adı ile kaynaklı boy, alan, sürü ve su eşiklerini taşımalı",
+);
+assert.equal(pandaCory?.verifiedAt, "2026-10-03", "Panda çöpçü güncel doğrulama tarihini taşımalı");
+assert(pandaCory?.aliases?.includes("Corydoras panda"), "Panda çöpçünün eski bilimsel adı aramada korunmalı");
+assert(pandaCory?.husbandryCaution?.includes("bıyıklara zarar") && pandaCory?.husbandryCaution?.includes("25 °C üzerindeki"), "Panda çöpçü taban ve sıcaklık güvenliğini açıklamalı");
+const molly = speciesCatalog.find((item) => item.id === "molly");
+assert.deepEqual(
+  [molly?.scientificName,molly?.adultSizeCm,molly?.minVolumeL,molly?.minTankLengthCm,molly?.minGroup,molly?.temperature,molly?.ph,molly?.flow],
+  ["Poecilia sphenops",7.5,45,60,3,[20,28],[7,8],undefined],
+  "Moli kaynaklı boy, alan, sosyal yapı ve su eşiklerini taşımalı; akıntı tahmin edilmemeli",
+);
+assert.deepEqual(molly?.waterTypes, ["freshwater","brackish"], "Moli FishBase doğal tatlı ve acı su kapsamını taşımalı");
+assert.equal(molly?.verifiedAt, "2026-10-03", "Moli güncel doğrulama tarihini taşımalı");
+assert(molly?.husbandryCaution?.includes("Poecilia mexicana") && molly?.husbandryCaution?.includes("%25"), "Moli kimlik ve haftalık bakım güvenliğini açıklamalı");
+const platy = speciesCatalog.find((item) => item.id === "platy");
+assert.deepEqual(
+  [platy?.scientificName,platy?.adultSizeCm,platy?.minVolumeL,platy?.minTankLengthCm,platy?.minGroup,platy?.temperature,platy?.ph,platy?.flow],
+  ["Xiphophorus maculatus",6,45,60,3,[17,27],[7,8],"low"],
+  "Plati kaynaklı boy, alan, sosyal yapı ve su eşiklerini taşımalı",
+);
+assert.equal(platy?.verifiedAt, "2026-10-03", "Plati güncel doğrulama tarihini taşımalı");
+assert(platy?.husbandryCaution?.includes("melez") && platy?.husbandryCaution?.includes("%25"), "Plati ticari melezlik ve haftalık bakım güvenliğini açıklamalı");
+const swordtail = speciesCatalog.find((item) => item.id === "swordtail");
+assert.deepEqual(
+  [swordtail?.scientificName,swordtail?.adultSizeCm,swordtail?.minVolumeL,swordtail?.minTankLengthCm,swordtail?.minGroup,swordtail?.temperature,swordtail?.ph,swordtail?.flow],
+  ["Xiphophorus hellerii",14,80,91,3,[22,27],[7,8],"high"],
+  "Kılıçkuyruk kaynaklı boy, alan, sosyal yapı, su ve akıntı eşiklerini taşımalı",
+);
+assert.equal(swordtail?.verifiedAt, "2026-10-03", "Kılıçkuyruk güncel doğrulama tarihini taşımalı");
+assert(swordtail?.husbandryCaution?.includes("91 cm") && swordtail?.husbandryCaution?.includes("yüksek oksijen"), "Kılıçkuyruk uzunluk ve oksijen güvenliğini açıklamalı");
+const emberTetra = speciesCatalog.find((item) => item.id === "ember-tetra");
+assert.deepEqual(
+  [emberTetra?.scientificName,emberTetra?.adultSizeCm,emberTetra?.minVolumeL,emberTetra?.minTankLengthCm,emberTetra?.minGroup,emberTetra?.temperature,emberTetra?.ph,emberTetra?.flow],
+  ["Hyphessobrycon amandae",2,41,45,8,[20,28],[5,7],"low"],
+  "Ember tetra kaynaklı boy, alan, sürü, su ve nazik akıntı eşiklerini taşımalı",
+);
+assert.equal(emberTetra?.verifiedAt, "2026-10-03", "Ember tetra güncel doğrulama tarihini taşımalı");
+assert(emberTetra?.sourceUrl?.includes("seriouslyfish.com"), "Ember tetra ayrıntılı uzman bakım kaynağına bağlanmalı");
+assert(emberTetra?.additionalSourceUrls?.some((url) => url.includes("fishbase.se")), "Ember tetra bilimsel boy kaynağıyla çapraz doğrulanmalı");
+assert(emberTetra?.husbandryCaution?.includes("41 litre") && emberTetra?.husbandryCaution?.includes("nazik"), "Ember tetra alan ve filtrasyon güvenliğini açıklamalı");
+const rummyNose = speciesCatalog.find((item) => item.id === "rummy-nose");
+assert.deepEqual(
+  [rummyNose?.scientificName,rummyNose?.adultSizeCm,rummyNose?.minVolumeL,rummyNose?.minTankLengthCm,rummyNose?.minGroup,rummyNose?.temperature,rummyNose?.ph,rummyNose?.flow],
+  ["Petitella bleheri",5,120,90,10,[23,26],[5.5,7],undefined],
+  "Kırmızı burun tetra güncel bilimsel adla kaynaklı boy, alan, sürü ve su eşiklerini taşımalı; akıntı tahmin edilmemeli",
+);
+assert.equal(rummyNose?.verifiedAt, "2026-10-03", "Kırmızı burun tetra güncel doğrulama tarihini taşımalı");
+assert(rummyNose?.aliases?.includes("Hemigrammus bleheri"), "Kırmızı burun tetranın eski bilimsel adı aramada korunmalı");
+assert(rummyNose?.additionalSourceUrls?.some((url) => url.includes("fishbase.se")) && rummyNose?.additionalSourceUrls?.some((url) => url.includes("fishipedia")), "Kırmızı burun tetra taksonomi, boy ve hacim kaynaklarını saklamalı");
+assert(rummyNose?.husbandryCaution?.includes("120 litre/90 cm") && rummyNose?.husbandryCaution?.includes("tahmin edilmez"), "Kırmızı burun tetra alan, bakım ve belirsiz akıntı güvenliğini açıklamalı");
+const harlequinRasbora = speciesCatalog.find((item) => item.id === "harlequin-rasbora");
+assert.deepEqual(
+  [harlequinRasbora?.scientificName,harlequinRasbora?.adultSizeCm,harlequinRasbora?.minVolumeL,harlequinRasbora?.minTankLengthCm,harlequinRasbora?.minGroup,harlequinRasbora?.temperature,harlequinRasbora?.ph,harlequinRasbora?.flow],
+  ["Trigonostigma heteromorpha",5,54,60,8,[21,28],[5,7.5],"low"],
+  "Harlequin rasbora kaynaklı boy, alan, sürü, su ve düşük akıntı eşiklerini taşımalı",
+);
+assert.equal(harlequinRasbora?.verifiedAt, "2026-10-03", "Harlequin rasbora güncel doğrulama tarihini taşımalı");
+assert(harlequinRasbora?.aliases?.includes("Rasbora heteromorpha"), "Harlequin rasboranın eski bilimsel adı aramada korunmalı");
+assert(harlequinRasbora?.husbandryCaution?.includes("54 litre") && harlequinRasbora?.husbandryCaution?.includes("5 cm"), "Harlequin rasbora alan ve koruyucu boy farkını açıklamalı");
 for (const [id,sourceDomain,extraSourceCount] of [
   ["flowerhorn","fishkeeping.co.uk",1],
 ]) {

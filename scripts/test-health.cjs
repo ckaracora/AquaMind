@@ -1245,4 +1245,136 @@ const metric = (analysis, key) => analysis.metrics.find(item => item.key === key
   assert(warningTitles(analysis).includes("Dev kırmızı yılanbaş: özel bakım gereksinimi"), "Dev yılanbaş kamu tesisi, kapak ve beslenme güvenliğini göstermeli");
 }
 
-console.log("Sağlık analizi: 101 senaryo başarıyla doğrulandı.");
+{
+  const analysis = analyzeAquarium(
+    aquarium({ netVolumeLiters: 50, lengthCm: 50 }),
+    [animal("dwarf-gourami", "Cüce gurami", 1)],
+    [],
+  );
+  assert(warningTitles(analysis).includes("Cüce gurami: alan sınırda"), "Cüce gurami 56 litre/60 cm altındaki akvaryuma önerilmemeli");
+  assert(warningTitles(analysis).includes("Cüce gurami: grup sayısı düşük"), "Cüce gurami tek girildiğinde kaynaklı çift önerisi gösterilmeli");
+  assert(warningTitles(analysis).includes("Cüce gurami: özel bakım gereksinimi"), "Cüce gurami DGIV, düşük akıntı ve bitki güvenliğini göstermeli");
+}
+
+{
+  const analysis = analyzeAquarium(
+    aquarium({ netVolumeLiters: 100, lengthCm: 100 }),
+    [animal("pearl-gourami", "İnci gurami", 1)],
+    [],
+  );
+  assert(warningTitles(analysis).includes("İnci gurami: alan sınırda"), "İnci gurami 120 cm kaynak eşiğinin altındaki akvaryuma önerilmemeli");
+  assert(!warningTitles(analysis).includes("İnci gurami: grup sayısı düşük"), "İnci gurami kaynak olmadan zorunlu çift veya sürü uyarısı üretmemeli");
+  assert(warningTitles(analysis).includes("İnci gurami: özel bakım gereksinimi"), "İnci gurami kaynak farkı, bitki ve davranış güvenliğini göstermeli");
+}
+
+{
+  const analysis = analyzeAquarium(
+    aquarium({ netVolumeLiters: 500, lengthCm: 150 }),
+    [animal("clown-loach", "Makrakanta", 3)],
+    [],
+  );
+  assert(warningTitles(analysis).includes("Makrakanta: alan sınırda"), "Makrakanta 648 litre/180 cm altındaki akvaryuma önerilmemeli");
+  assert(warningTitles(analysis).includes("Makrakanta: grup sayısı düşük"), "Makrakanta beşli grubun altında sosyal uyarı üretmeli");
+  assert(warningTitles(analysis).includes("Makrakanta: özel bakım gereksinimi"), "Makrakanta olgun tank, oksijen, kapak ve uzun ömür güvenliğini göstermeli");
+}
+
+{
+  const analysis = analyzeAquarium(
+    aquarium({ netVolumeLiters: 45, lengthCm: 50 }),
+    [animal("neon-tetra", "Neon tetra", 6)],
+    [],
+  );
+  assert(warningTitles(analysis).includes("Neon tetra: alan sınırda"), "Neon tetra 54 litre/60 cm altındaki akvaryuma önerilmemeli");
+  assert(warningTitles(analysis).includes("Neon tetra: grup sayısı düşük"), "Neon tetra sekizli sürünün altında sosyal uyarı üretmeli");
+  assert(warningTitles(analysis).includes("Neon tetra: özel bakım gereksinimi"), "Neon tetra stok, hastalık ve kararlı su güvenliğini göstermeli");
+}
+
+{
+  const analysis = analyzeAquarium(
+    aquarium({ netVolumeLiters: 45, lengthCm: 50 }),
+    [animal("cardinal-tetra", "Kardinal tetra", 6)],
+    [],
+  );
+  assert(warningTitles(analysis).includes("Kardinal tetra: alan sınırda"), "Kardinal tetra 54 litre/60 cm altındaki akvaryuma önerilmemeli");
+  assert(warningTitles(analysis).includes("Kardinal tetra: grup sayısı düşük"), "Kardinal tetra sekizli sürünün altında sosyal uyarı üretmeli");
+  assert(warningTitles(analysis).includes("Kardinal tetra: özel bakım gereksinimi"), "Kardinal tetra köken, düşük akıntı ve su kalitesi güvenliğini göstermeli");
+}
+
+{
+  const analysis = analyzeAquarium(
+    aquarium({ netVolumeLiters: 35, lengthCm: 40 }),
+    [animal("corydoras-panda", "Panda çöpçü", 4)],
+    [],
+  );
+  assert(warningTitles(analysis).includes("Panda çöpçü: alan sınırda"), "Panda çöpçü 41 litre/45 cm altındaki akvaryuma önerilmemeli");
+  assert(warningTitles(analysis).includes("Panda çöpçü: grup sayısı düşük"), "Panda çöpçü altılı grubun altında sosyal uyarı üretmeli");
+  assert(warningTitles(analysis).includes("Panda çöpçü: özel bakım gereksinimi"), "Panda çöpçü güncel kimlik, taban ve sıcaklık güvenliğini göstermeli");
+}
+
+{
+  const analysis = analyzeAquarium(
+    aquarium({ netVolumeLiters: 40, lengthCm: 50 }),
+    [animal("molly", "Moli", 2)],
+    [],
+  );
+  assert(warningTitles(analysis).includes("Moli: alan sınırda"), "Moli 45 litre/60 cm altındaki akvaryuma önerilmemeli");
+  assert(warningTitles(analysis).includes("Moli: grup sayısı düşük"), "Moli üçlü grubun altında sosyal uyarı üretmeli");
+  assert(warningTitles(analysis).includes("Moli: özel bakım gereksinimi"), "Moli sert su, kimlik ve haftalık bakım güvenliğini göstermeli");
+}
+
+{
+  const analysis = analyzeAquarium(
+    aquarium({ netVolumeLiters: 40, lengthCm: 50 }),
+    [animal("platy", "Plati", 2)],
+    [],
+  );
+  assert(warningTitles(analysis).includes("Plati: alan sınırda"), "Plati 45 litre/60 cm altındaki akvaryuma önerilmemeli");
+  assert(warningTitles(analysis).includes("Plati: grup sayısı düşük"), "Plati üçlü grubun altında sosyal uyarı üretmeli");
+  assert(warningTitles(analysis).includes("Plati: özel bakım gereksinimi"), "Plati sert su, melezlik ve haftalık bakım güvenliğini göstermeli");
+}
+
+{
+  const analysis = analyzeAquarium(
+    aquarium({ netVolumeLiters: 70, lengthCm: 80 }),
+    [animal("swordtail", "Kılıçkuyruk", 2)],
+    [],
+  );
+  assert(warningTitles(analysis).includes("Kılıçkuyruk: alan sınırda"), "Kılıçkuyruk 80 litre/91 cm altındaki akvaryuma önerilmemeli");
+  assert(warningTitles(analysis).includes("Kılıçkuyruk: grup sayısı düşük"), "Kılıçkuyruk üçlü grubun altında sosyal uyarı üretmeli");
+  assert(warningTitles(analysis).includes("Kılıçkuyruk: özel bakım gereksinimi"), "Kılıçkuyruk oksijen, akıntı, melezlik ve haftalık bakım güvenliğini göstermeli");
+}
+
+{
+  const analysis = analyzeAquarium(
+    aquarium({ netVolumeLiters: 35, lengthCm: 40 }),
+    [animal("ember-tetra", "Ember tetra", 6)],
+    [],
+  );
+  assert(warningTitles(analysis).includes("Ember tetra: alan sınırda"), "Ember tetra 41 litre/45 cm altındaki akvaryuma önerilmemeli");
+  assert(warningTitles(analysis).includes("Ember tetra: grup sayısı düşük"), "Ember tetra sekizli sürünün altında sosyal uyarı üretmeli");
+  assert(warningTitles(analysis).includes("Ember tetra: özel bakım gereksinimi"), "Ember tetra nazik filtrasyon, bitki ve küçük yem güvenliğini göstermeli");
+}
+
+{
+  const analysis = analyzeAquarium(
+    aquarium({ netVolumeLiters: 100, lengthCm: 80 }),
+    [animal("rummy-nose", "Kırmızı burun tetra", 8)],
+    [],
+  );
+  assert(warningTitles(analysis).includes("Kırmızı burun tetra: alan sınırda"), "Kırmızı burun tetra 120 litre/90 cm altındaki akvaryuma önerilmemeli");
+  assert(warningTitles(analysis).includes("Kırmızı burun tetra: grup sayısı düşük"), "Kırmızı burun tetra onlu sürünün altında sosyal uyarı üretmeli");
+  assert(warningTitles(analysis).includes("Kırmızı burun tetra: özel bakım gereksinimi"), "Kırmızı burun tetra olgun tank, kimlik ve haftalık bakım güvenliğini göstermeli");
+}
+
+{
+  const analysis = analyzeAquarium(
+    aquarium({ netVolumeLiters: 45, lengthCm: 50 }),
+    [animal("harlequin-rasbora", "Harlequin rasbora", 6)],
+    [],
+  );
+  assert(warningTitles(analysis).includes("Harlequin rasbora: alan sınırda"), "Harlequin rasbora 54 litre/60 cm altındaki akvaryuma önerilmemeli");
+  assert(warningTitles(analysis).includes("Harlequin rasbora: grup sayısı düşük"), "Harlequin rasbora sekizli sürünün altında sosyal uyarı üretmeli");
+  assert(warningTitles(analysis).includes("Harlequin rasbora: özel bakım gereksinimi"), "Harlequin rasbora kimlik, düşük akıntı ve bitki güvenliğini göstermeli");
+}
+
+console.log("Sağlık analizi: 113 senaryo başarıyla doğrulandı.");

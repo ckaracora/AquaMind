@@ -1,9 +1,10 @@
-export type NavigationKey = "overview"|"aquariums"|"water"|"maintenance"|"livestock"|"plants"|"equipment"|"products"|"calculators"|"settings";
+export type NavigationKey = "overview"|"aquariums"|"water"|"maintenance"|"livestock"|"plants"|"equipment"|"products"|"calculators"|"aquamatch"|"settings";
 
 export interface NavigationItem {
   key: NavigationKey;
   label: string;
   href: string;
+  comingSoon?: boolean;
 }
 
 export const primaryNavigationItems: NavigationItem[] = [
@@ -16,6 +17,7 @@ export const primaryNavigationItems: NavigationItem[] = [
   {key:"equipment",label:"Ekipmanlar",href:"/equipment"},
   {key:"products",label:"Ürün Kataloğu",href:"/products"},
   {key:"calculators",label:"Hesaplayıcılar",href:"/calculators"},
+  {key:"aquamatch",label:"AquaMatch",href:"/aquamatch",comingSoon:true},
 ];
 
 export const settingsNavigationItem: NavigationItem = {key:"settings",label:"Ayarlar",href:"/settings"};
