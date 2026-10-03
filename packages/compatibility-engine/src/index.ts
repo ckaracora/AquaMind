@@ -176,7 +176,8 @@ export function createAnalyzer(resolver:KnowledgeResolver):AnalyzeAquarium{
  const filterFit:"ok"|"warning"|"danger"|undefined=sizedFilters.length?(aquarium.netVolumeLiters<=filterOkL?"ok":aquarium.netVolumeLiters<=filterLimitL?"warning":"danger"):undefined;
  const fitScore=!primaryFilters.length?35:filterFit?(filterFit==="ok"?95:filterFit==="warning"?60:35):airDrivenFilters.length?(airDrivenReady?80:45):60;
  const filterScore=turnover>targetMax?Math.min(fitScore,clamp(75-(turnover-targetMax)*8)):fitScore;
- const heaters=verifiedEquipment.filter(p=>p.category==="heater"||p.integratedHeaterW);
+ // Taban ısıtma kablosu gibi pasif kayıtlar ısıtıcı seçicisinde bulunur ama ana su ısıtma kapasitesi sağlamaz (1.5.0).
+ const heaters=verifiedEquipment.filter(p=>!p.passiveComponent&&(p.category==="heater"||p.integratedHeaterW));
  const heaterPowerW=heaters.reduce((sum,h)=>sum+(h.integratedHeaterW??(h.category==="heater"?(h.powerW??0):0)),0);
  const manufacturerHeaterRanges=heaters.filter(h=>h.recommendedMinL||h.recommendedMaxL);
  // Oda sıcaklığı bilinmediğinde güvenli tarafta kalan geniş bir 0,5–1,5 W/L bandı kullanılır.

@@ -1,10 +1,10 @@
 "use client";
 
-import { Box, Calculator, CalendarCheck, Droplets, Fish, Gauge, Leaf, PackageSearch, Settings, SlidersHorizontal, UserRound, Waves } from "lucide-react";
+import { Box, Calculator, CalendarCheck, Droplets, Fish, Gauge, HeartHandshake, Leaf, PackageSearch, Settings, SlidersHorizontal, UserRound, Waves } from "lucide-react";
 import { usePathname } from "next/navigation";
 import { primaryNavigationItems, settingsNavigationItem, type NavigationKey } from "@/data/navigation";
 
-const navIcons: Record<NavigationKey,typeof Gauge> = {overview:Gauge,aquariums:Box,water:Droplets,maintenance:CalendarCheck,livestock:Fish,plants:Leaf,equipment:SlidersHorizontal,products:PackageSearch,calculators:Calculator,settings:Settings};
+const navIcons: Record<NavigationKey,typeof Gauge> = {overview:Gauge,aquariums:Box,water:Droplets,maintenance:CalendarCheck,livestock:Fish,plants:Leaf,equipment:SlidersHorizontal,products:PackageSearch,calculators:Calculator,aquamatch:HeartHandshake,settings:Settings};
 
 export function Sidebar() {
   const pathname = usePathname();
@@ -14,7 +14,7 @@ export function Sidebar() {
       <div><div className="text-lg font-extrabold tracking-tight">AquaMind</div><div className="text-[9px] font-bold uppercase tracking-[.24em] text-aqua/70">Aquarium intelligence</div></div>
     </div>
     <nav className="space-y-1">
-      {primaryNavigationItems.map(({key,label,href}) => { const Icon=navIcons[key]; const active = href === "/" ? pathname === "/" : pathname.startsWith(href); return <a key={label} href={href} className={`flex items-center gap-3 rounded-xl px-3 py-3 text-[13px] font-semibold transition ${active ? "bg-aqua/10 text-aqua" : "text-[#82969e] hover:bg-white/[.04] hover:text-white"}`}><Icon size={18}/>{label}{active&&<span className="ml-auto size-1.5 rounded-full bg-aqua"/>}</a>})}
+      {primaryNavigationItems.map(({key,label,href,comingSoon}) => { const Icon=navIcons[key]; if(comingSoon)return <div key={label} aria-disabled="true" className="flex cursor-default items-center gap-3 rounded-xl px-3 py-3 text-[13px] font-semibold text-[#82969e]"><Icon size={18}/><span>{label}<span className="mt-0.5 block text-[9px] font-bold uppercase tracking-wider text-aqua/60">Yakında</span></span></div>; const active = href === "/" ? pathname === "/" : pathname.startsWith(href); return <a key={label} href={href} className={`flex items-center gap-3 rounded-xl px-3 py-3 text-[13px] font-semibold transition ${active ? "bg-aqua/10 text-aqua" : "text-[#82969e] hover:bg-white/[.04] hover:text-white"}`}><Icon size={18}/>{label}{active&&<span className="ml-auto size-1.5 rounded-full bg-aqua"/>}</a>})}
     </nav>
     <div className="mt-auto border-t border-white/[.06] pt-4">
       <a href={settingsNavigationItem.href} className={`flex items-center gap-3 rounded-xl px-3 py-3 text-[13px] font-semibold ${pathname.startsWith(settingsNavigationItem.href)?"bg-aqua/10 text-aqua":"text-[#82969e]"}`}><Settings size={18}/>{settingsNavigationItem.label}</a>

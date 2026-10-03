@@ -4,8 +4,490 @@ const VERIFIED_AT = "2026-08-17";
 const CO2ART_VERIFIED_AT = "2026-08-27";
 const aquawingSource = "https://www.akvaryumexpress.com/aquawing";
 const istaCatalogSource = "https://www.istaproducts.com/wp-content/uploads/2014/08/ista-catalog1.pdf";
+const JBL_PROFLORA_VERIFIED_AT = "2026-09-14";
+
+const jblProfloraCurrentCatalog:EquipmentProfile[] = [
+  ...([
+    ["basic","BASIC",300,"Manuel basınç ayarlı","https://www.jbl.de/en/products/group/9388/proflora-co2-basic"],
+    ["advanced","ADVANCED",600,"Gece kapatması için solenoid valfli","https://www.jbl.de/en/products/group/9395/proflora-co2-advanced"],
+    ["professional","PROFESSIONAL",600,"CO₂/pH kontrol cihazı ve solenoid valfli; fabrikadan yeni pH elektrodu ayrıca alınır","https://www.jbl.de/en/products/group/9402/proflora-co2-professional"],
+  ] as const).flatMap(([key,family,maxL,feature,sourceUrl])=>[
+    {id:`jbl-proflora-co2-${key}-set-u`,category:"co2" as const,brand:"JBL",model:`PROFLORA CO₂ ${family} SET U`,specifications:`${feature} tam CO₂ seti · 500 g tek kullanımlık tüp · 40–${maxL} L tatlı su akvaryumu`,recommendedMinL:40,recommendedMaxL:maxL,sourceUrl,verifiedAt:JBL_PROFLORA_VERIFIED_AT},
+    {id:`jbl-proflora-co2-${key}-set-m`,category:"co2" as const,brand:"JBL",model:`PROFLORA CO₂ ${family} SET M`,specifications:`${feature} tam CO₂ seti · 500 g yeniden doldurulabilir tüp · 40–${maxL} L tatlı su akvaryumu`,recommendedMinL:40,recommendedMaxL:maxL,sourceUrl,verifiedAt:JBL_PROFLORA_VERIFIED_AT},
+    {id:`jbl-proflora-co2-${key}-set-v`,category:"co2" as const,brand:"JBL",model:`PROFLORA CO₂ ${family} SET V`,specifications:`${feature} tüpsüz CO₂ teknik seti · U ve M tüplerle uyumlu · 40–${maxL} L tatlı su akvaryumu`,recommendedMinL:40,recommendedMaxL:maxL,sourceUrl,verifiedAt:JBL_PROFLORA_VERIFIED_AT},
+  ]),
+  {id:"jbl-proflora-co2-control",category:"co2",brand:"JBL",model:"PROFLORA CO₂ CONTROL",specifications:"pH elektrodundan ölçüm yaparak solenoid valf üzerinden CO₂ beslemesini otomatik yöneten 12 V dijital kontrol cihazı · pH elektrodu ayrıca alınır",sourceUrl:"https://www.jbl.de/en/products/group/9405/proflora-co2-control",verifiedAt:JBL_PROFLORA_VERIFIED_AT},
+  {id:"jbl-proflora-co2-ph-sensor-set",category:"co2",brand:"JBL",model:"PROFLORA CO₂ pH SENSOR SET",specifications:"PROFLORA CO₂ CONTROL için fabrikadan yeni pH elektrodu seti · bağımsız CO₂ kaynağı değildir",passiveComponent:true,sourceUrl:"https://www.jbl.de/en/products/group/9405/proflora-co2-control",verifiedAt:JBL_PROFLORA_VERIFIED_AT},
+  {id:"jbl-proflora-co2-calibration-set",category:"co2",brand:"JBL",model:"PROFLORA CO₂ CALIBRATION SET",specifications:"PROFLORA pH elektrodu için kalibrasyon ve bakım sıvıları seti · bağımsız CO₂ kaynağı değildir",passiveComponent:true,sourceUrl:"https://www.jbl.de/en/products/group/9405/proflora-co2-control",verifiedAt:JBL_PROFLORA_VERIFIED_AT},
+  ...([
+    ["basic","PROFLORA CO₂ REGULATOR BASIC","Basınç göstergesiz hassas CO₂ basınç düşürücü",false],
+    ["advanced","PROFLORA CO₂ REGULATOR ADVANCED","Tüp ve çalışma basıncı göstergeli hassas CO₂ basınç düşürücü",false],
+    ["professional","PROFLORA CO₂ REGULATOR PROFESSIONAL","Solenoid valfli profesyonel CO₂ basınç düşürücü",false],
+    ["valve","PROFLORA CO₂ VALVE","12 V gece kapatma solenoid valfi",false],
+    ["adapt-u-m","PROFLORA CO₂ ADAPT U-M","U tipi tek kullanımlık tüp regülatörünü M tipi yeniden doldurulabilir tüpe bağlayan adaptör",true],
+    ["adapt-u-u201","PROFLORA CO₂ ADAPT U-u201","U sistemi regülatörü için u201 tüp adaptörü",true],
+    ["adapt-u-dennerle","PROFLORA CO₂ ADAPT U-Dennerle","JBL U sistemi regülatörünü uyumlu Dennerle tek kullanımlık tüpe bağlayan adaptör",true],
+  ] as const).map(([id,model,specifications,passiveComponent])=>({
+    id:`jbl-proflora-co2-${id}`,category:"co2" as const,brand:"JBL",model,specifications,passiveComponent,
+    sourceUrl:"https://www.jbl.de/en/products/group/9427/proflora-co2-regulator-adapt",verifiedAt:JBL_PROFLORA_VERIFIED_AT,
+  })),
+  {
+    id:"jbl-proflora-co2-taifun-count-safe",category:"co2",brand:"JBL",model:"PROFLORA CO₂ TAIFUN COUNT SAFE",
+    specifications:"Güncel harici kabarcık sayacı · entegre geri akış koruması, vidalı hortum bağlantıları ve cam/mobilya montajı · 105 × 175 × 40 mm · başka çek valfle birlikte kullanılmamalı · bağımsız CO₂ difüzörü değildir",
+    passiveComponent:true,sourceUrl:"https://www.jbl.de/en/products/detail/9437/jbl-proflora-co2-taifun-count-safe",additionalSourceUrls:["https://www.jbl.de/en/products/group/9436/proflora-co2-taifun"],verifiedAt:"2026-09-16",
+  },
+  {
+    id:"jbl-proflora-co2-taifun-safestop",category:"co2",brand:"JBL",model:"PROFLORA CO₂ TAIFUN SAFESTOP",
+    specifications:"Güncel 4/6 mm CO₂ hortumu için geri akış emniyet valfi · ok akvaryuma bakacak şekilde takılır; kilit somunları hortumu sabitler · her CO₂ hattında yalnız bir çek valf kullanılmalı · bağımsız dozaj ekipmanı değildir",
+    passiveComponent:true,sourceUrl:"https://www.jbl.de/en/products/detail/9439/jbl-proflora-co2-taifun-safestop",additionalSourceUrls:["https://www.jbl.de/en/products/group/9436/proflora-co2-taifun"],verifiedAt:"2026-09-16",
+  },
+  {
+    id:"jbl-proflora-co2-taifun-tube",category:"co2",brand:"JBL",model:"PROFLORA CO₂ TAIFUN TUBE BLACK",
+    specifications:"Güncel siyah, CO₂ gazına dayanıklı özel bağlantı hortumu · 3 m uzunluk ve 4/6 mm çap · sıradan hava hortumu CO₂ için kullanılmamalı · bağımsız dozaj ekipmanı değildir",
+    passiveComponent:true,sourceUrl:"https://www.jbl.de/en/products/detail/9441/jbl-proflora-co2-taifun-tube",additionalSourceUrls:["https://www.jbl.de/en/products/group/9436/proflora-co2-taifun"],verifiedAt:"2026-09-16",
+  },
+  {
+    id:"jbl-proflora-co2-taifun-tube-clear",category:"co2",brand:"JBL",model:"PROFLORA CO₂ TAIFUN TUBE CLEAR",
+    specifications:"Güncel şeffaf/beyaz, CO₂ gazına dayanıklı özel bağlantı hortumu · 3 m uzunluk ve 4/6 mm çap · sıradan hava hortumu CO₂ için kullanılmamalı · bağımsız dozaj ekipmanı değildir",
+    passiveComponent:true,sourceUrl:"https://www.jbl.de/en/products/detail/9441/jbl-proflora-co2-taifun-tube",additionalSourceUrls:["https://www.jbl.de/en/products/group/9436/proflora-co2-taifun"],verifiedAt:"2026-09-16",
+  },
+  {
+    id:"jbl-proflora-co2-taifun-spiral-5",category:"co2",brand:"JBL",model:"PROFLORA CO₂ TAIFUN SPIRAL 5",
+    specifications:"Güncel beş modüllü genişletilebilir pasif CO₂ reaktörü · 40–200 L tatlı su akvaryumu ve en az 12 cm akvaryum yüksekliği · 4 °KH'de en çok 200 L, 10 °KH'de en çok 100 L · ilave pompa veya ayrı kabarcık sayacı gerektirmez",
+    recommendedMinL:40,recommendedMaxL:200,sourceUrl:"https://www.jbl.de/en/products/detail/9446/jbl-proflora-co2-taifun-spiral-5",additionalSourceUrls:["https://www.jbl.de/en-hr/productsv2/download_instruction_manual_pdf/25000438","https://www.jbl.de/en/products/group/9436/proflora-co2-taifun"],verifiedAt:"2026-09-16",
+  },
+  {
+    id:"jbl-proflora-co2-taifun-spiral-10",category:"co2",brand:"JBL",model:"PROFLORA CO₂ TAIFUN SPIRAL 10",
+    specifications:"Güncel on modüllü genişletilebilir pasif CO₂ reaktörü · 40–400 L tatlı su akvaryumu ve en az 20 cm akvaryum yüksekliği · 4 °KH'de en çok 400 L, 10 °KH'de en çok 200 L · ilave pompa veya ayrı kabarcık sayacı gerektirmez",
+    recommendedMinL:40,recommendedMaxL:400,sourceUrl:"https://www.jbl.de/en/products/detail/9447/jbl-proflora-co2-taifun-spiral-10",additionalSourceUrls:["https://www.jbl.de/en-hr/productsv2/download_instruction_manual_pdf/25000438","https://www.jbl.de/en/products/group/9436/proflora-co2-taifun"],verifiedAt:"2026-09-16",
+  },
+  {
+    id:"jbl-proflora-co2-taifun-spiral-extend",category:"co2",brand:"JBL",model:"PROFLORA CO₂ TAIFUN SPIRAL EXTEND",
+    specifications:"Güncel TAIFUN SPIRAL 5/10 uzatma paketi · 16 mm yüksekliğinde beş modül difüzyon yolunu uzatır ve 4 °KH'de erişimi 200 L veya desteklenen su sertliğini 10 °dKH artırır · tek başına CO₂ reaktörü değildir",
+    passiveComponent:true,sourceUrl:"https://www.jbl.de/en/products/detail/9448/jbl-proflora-co2-taifun-spiral-extend",additionalSourceUrls:["https://www.jbl.de/en/products/group/9436/proflora-co2-taifun"],verifiedAt:"2026-09-16",
+  },
+  ...([
+    ["inline","PROFLORA CO₂ TAIFUN INLINE 12/16",40,300,"12/16 mm"],
+    ["inline-16-22","PROFLORA CO₂ TAIFUN INLINE 16/22",160,600,"16/22 mm"],
+    ["inline-19-25","PROFLORA CO₂ TAIFUN INLINE 19/25",200,800,"19/25 mm"],
+  ] as const).map(([id,model,minL,maxL,hose])=>({
+    id:"jbl-proflora-co2-taifun-" + id,category:"co2" as const,brand:"JBL",model,
+    specifications:"Güncel dış filtre dönüş hattına bağlanan CO₂ difüzörü · " + hose + " hortum · " + minL + "–" + maxL + " L · entegre kabarcık sayacı ve geri akış koruması · etkili membranla %20 CO₂ tasarrufu · membran ilk kullanım öncesi 24 saat suda bekletilir",
+    recommendedMinL:minL,recommendedMaxL:maxL,sourceUrl:"https://www.jbl.de/en/products/detail/9450/jbl-proflora-co2-taifun-inline",additionalSourceUrls:["https://www.jbl.de/en/products/group/9436/proflora-co2-taifun"],verifiedAt:"2026-09-16",
+  })),
+  {
+    id:"jbl-proflora-co2-taifun-inline-membrane",category:"co2",brand:"JBL",model:"PROFLORA CO₂ TAIFUN INLINE MEMBRANE",
+    specifications:"Güncel TAIFUN INLINE ve eski ProFlora Direct'in 12/16, 16/22 ve 19/25 ölçülerine ortak seramik yedek membran · iki sızdırmazlık halkası içerir; üretici yıllık değişim önerir · tek başına difüzör değildir",
+    passiveComponent:true,sourceUrl:"https://www.jbl.de/en/products/detail/9454/jbl-proflora-co2-taifun-inline-membrane",additionalSourceUrls:["https://www.jbl.de/en/products/group/9436/proflora-co2-taifun"],verifiedAt:"2026-09-16",
+  },
+  ...([
+    ["glass-mini","PROFLORA CO₂ TAIFUN GLASS MINI",40,120],
+    ["glass","PROFLORA CO₂ TAIFUN GLASS MIDI",40,300],
+    ["glass-maxi","PROFLORA CO₂ TAIFUN GLASS MAXI",160,800],
+  ] as const).map(([id,model,minL,maxL])=>({
+    id:"jbl-proflora-co2-taifun-" + id,category:"co2" as const,brand:"JBL",model,
+    specifications:"Güncel 4/6 mm hortumlu cam CO₂ difüzörü · " + minL + "–" + maxL + " L · çok küçük kabarcıklar için dahili özel seramik membran · uzatılamaz; temizlik için tamamı 24 saat PROCLEAN POWER içinde bekletilebilir",
+    recommendedMinL:minL,recommendedMaxL:maxL,sourceUrl:"https://www.jbl.de/en/products/detail/9456/jbl-proflora-co2-taifun-glass",additionalSourceUrls:["https://www.jbl.de/en/products/group/9436/proflora-co2-taifun"],verifiedAt:"2026-09-16",
+  })),
+];
+
+const jblProfloraPhControlArchiveCatalog: EquipmentProfile[] = [
+  {
+    id:"jbl-proflora-ph-control-touch-archive",category:"co2",brand:"JBL",model:"PROFLORA pH-Control Touch",
+    specifications:"2016 nesli arşiv pH/CO₂ ölçüm ve kontrol bilgisayarı · renkli dokunmatik ekran, sıcaklık sensörü, duvar aparatı, güç kaynağı, solenoid bağlantı kablosu ve kalibrasyon küveti tablası · pH elektrodu ve harici solenoid valf dahil değildir · güncel PROFLORA CO₂ CONTROL ile karıştırılmamalı",
+    sourceUrl:"https://www.jbl.de/en/products/detail/7395/jbl-proflora-ph-control-touch",additionalSourceUrls:["https://www.jbl.de/en/products/group/1067/ph-control","https://www.jbl.de/en-mg/press/detail/650"],verifiedAt:"2026-09-16",
+  },
+  {
+    id:"jbl-proflora-ph-control-archive",category:"co2",brand:"JBL",model:"PROFLORA pH Control",
+    specifications:"Daha eski arşiv pH/CO₂ ölçüm ve kontrol bilgisayarı · entegre hassas solenoid valf, sıcaklık sensörü, duvar aparatı, güç kaynağı, pH 7/pH 4 tamponları, saklama çözeltisi, distile su, KH testi ve kalibrasyon küvetleri · pH elektrodu ayrıca alınır · Touch ve güncel CONTROL nesilleriyle karıştırılmamalı",
+    sourceUrl:"https://www.jbl.de/en/products/detail/2365/jbl-proflora-ph-control",additionalSourceUrls:["https://www.jbl.de/en/download/457/Gebrauchsanleitungen/JBL_ProFlora_pH_Control.pdf","https://www.jbl.de/en/products/group/1067/ph-control"],verifiedAt:"2026-09-16",
+  },
+  {
+    id:"jbl-proflora-ph-sensor-cal-archive",category:"co2",brand:"JBL",model:"PROFLORA pH-Sensor+Cal",
+    specifications:"Arşiv laboratuvar kalitesinde BNC bağlantılı pH elektrodu seti · 2 m kablo, iki vantuz, üç kalibrasyon küveti; pH 7,0 ve pH 4,0 tamponu, saklama çözeltisi ve distile sudan oluşan dört adet 50 ml şişe · bağımsız CO₂ kontrol cihazı değildir · güncel PROFLORA CO₂ pH SENSOR SET'in önceki neslidir",
+    passiveComponent:true,sourceUrl:"https://www.jbl.de/es/productos/detail/7397/jbl-proflora-ph-sensor-cal",additionalSourceUrls:["https://www.jbl.de/en/products/group/1067/ph-control","https://www.jbl.de/en/blog/detail/127/interzoo-2016-jbl-proflora-co2-fertiliser-systems-now-even-better"],verifiedAt:"2026-09-16",
+  },
+  {
+    id:"jbl-proflora-cal-legacy",category:"co2",brand:"JBL",model:"ProFlora Cal (eski nesil)",
+    specifications:"Daha eski arşiv kalibrasyon, bakım ve temizlik seti · pH 7,00 ve pH 4,00 tamponları, pH sensörü saklama/canlandırma çözeltisi, deiyonize su ve üç kalibrasyon küveti · bağımsız ölçüm veya CO₂ kontrol cihazı değildir",
+    passiveComponent:true,sourceUrl:"https://www.jbl.de/en/products/detail/2367/jbl-proflora-cal",additionalSourceUrls:["https://www.jbl.de/en/download/482/Gebrauchsanleitungen/JBL_ProFlora_m1003.pdf","https://www.jbl.de/en/products/group/1067/ph-control"],verifiedAt:"2026-09-16",
+  },
+  {
+    id:"jbl-proflora-cal-archive",category:"co2",brand:"JBL",model:"PROFLORA Cal (2016 nesli)",
+    specifications:"2016 nesli arşiv tam pH elektrodu kalibrasyon seti · pH 7,0 ve pH 4,0 tamponu, saklama çözeltisi ve distile sudan oluşan dört ayrı 50 ml sıvı · bağımsız ölçüm veya CO₂ kontrol cihazı değildir · güncel PROFLORA CO₂ CALIBRATION SET'in önceki neslidir",
+    passiveComponent:true,sourceUrl:"https://www.jbl.de/en/products/detail/7588/jbl-proflora-cal",additionalSourceUrls:["https://www.jbl.de/de-at/press/detail/637","https://www.jbl.de/en/products/group/1067/ph-control"],verifiedAt:"2026-09-16",
+  },
+  {
+    id:"jbl-buffer-solution-ph-4",category:"co2",brand:"JBL",model:"Buffer Solution pH 4.0",
+    specifications:"pH elektrotlarının kalibrasyonu için güncel tekli 50 ml pH 4,0 tampon çözeltisi · sarımsı renk kodu · bağımsız ölçüm veya CO₂ kontrol cihazı değildir",
+    passiveComponent:true,sourceUrl:"https://www.jbl.de/en/products/detail/4006/jbl-buffer-solution-ph-40",additionalSourceUrls:["https://www.jbl.de/en/products/group/1067/ph-control"],verifiedAt:"2026-09-16",
+  },
+  {
+    id:"jbl-buffer-solution-ph-7-archive",category:"co2",brand:"JBL",model:"Buffer Solution pH 7.0",
+    specifications:"Arşiv tekli 50 ml pH 7,0 elektrot kalibrasyon çözeltisi · açık mavi renk kodu · bağımsız ölçüm veya CO₂ kontrol cihazı değildir; güncel CALIBRATION SET ile karıştırılmamalı",
+    passiveComponent:true,sourceUrl:"https://www.jbl.de/en/products/detail/4008/jbl-buffer-solution-ph-70",additionalSourceUrls:["https://www.jbl.de/en/faq/detail?country=us&faqid=426&glossary_id=65","https://www.jbl.de/en/products/group/1067/ph-control"],verifiedAt:"2026-09-16",
+  },
+  {
+    id:"jbl-dest-archive",category:"co2",brand:"JBL",model:"Dest",
+    specifications:"Arşiv 50 ml distile su · kalibrasyon adımları arasında ve elektrot akvaryuma dönmeden önce pH elektrodunu durulamak için · bağımsız ölçüm veya CO₂ kontrol cihazı değildir",
+    passiveComponent:true,sourceUrl:"https://www.jbl.de/en/products/detail/4010/jbl-dest",additionalSourceUrls:["https://www.jbl.de/en/products/group/1067/ph-control"],verifiedAt:"2026-09-16",
+  },
+  {
+    id:"jbl-storage-solution-archive",category:"co2",brand:"JBL",model:"Storage Solution",
+    specifications:"Arşiv 50 ml, 3 mol KCl pH elektrodu temizleme, saklama ve canlandırma çözeltisi · koruyucu kapağa seyreltilmeden doldurulur · bağımsız ölçüm veya CO₂ kontrol cihazı değildir",
+    passiveComponent:true,sourceUrl:"https://www.jbl.de/en/products/detail/4012/jbl-storage-solution",additionalSourceUrls:["https://www.jbl.de/en/products/group/1067/ph-control"],verifiedAt:"2026-09-16",
+  },
+  {
+    id:"jbl-proflora-cal-tray-archive",category:"co2",brand:"JBL",model:"PROFLORA Cal Tray",
+    specifications:"Arşiv suya dayanıklı kalibrasyon tablası · üç kalibrasyon küvetini sabit tutan yuvalar ve pH elektrodu için dördüncü tutucu delik · sıvı, sensör veya kontrol cihazı içermez",
+    passiveComponent:true,sourceUrl:"https://www.jbl.de/en/products/detail/7565/jbl-proflora-cal-tray",additionalSourceUrls:["https://www.jbl.de/en/products/group/1067/ph-control"],verifiedAt:"2026-09-16",
+  },
+];
+
+const jblProfloraLegacyRegulatorCatalog: EquipmentProfile[] = [
+  {
+    id:"jbl-proflora-u001-archive",category:"co2",brand:"JBL",model:"PROFLORA u001",
+    specifications:"Arşiv tek kullanımlık tüp basınç düşürücüsü · M10×1 tüp bağlantısı, 0–160 bar tüp ve 0–4 bar çalışma basıncı göstergeleri, ayarlanabilir yaklaşık 1,5 bar çalışma basıncı, hassas iğne valfi, emniyet valfi ve 4/6 mm hortum bağlantısı · Adapt u-m ile yeniden doldurulabilir tüpe çevrilebilir · güncel REGULATOR ailesiyle karıştırılmamalı",
+    sourceUrl:"https://www.jbl.de/en/products/detail/7577/jbl-proflora-u001",additionalSourceUrls:["https://www.jbl.de/en/download/8296/Gebrauchsanleitungen/JBL_ProFlora_u001_.pdf","https://www.jbl.de/en/products/group/1064/disposable-u"],verifiedAt:"2026-09-16",
+  },
+  {
+    id:"jbl-proflora-m001-legacy",category:"co2",brand:"JBL",model:"ProFlora m001 (eski nesil)",
+    specifications:"Daha eski arşiv yeniden doldurulabilir tüp basınç düşürücüsü · W21,8×1/14 tüp bağlantısı, iki basınç göstergesi, ayarlanabilir yaklaşık 1,5 bar çalışma basıncı, hassas iğne valfi ve emniyet valfi · bağlantı somunu çıkarıldığında M10×1 tek kullanımlık tüpe uyarlanabilir · sonraki m001 ve güncel REGULATOR ADVANCED ile karıştırılmamalı",
+    sourceUrl:"https://www.jbl.de/en/products/detail/2370/jbl-proflora-m001-pressure-reducer",additionalSourceUrls:["https://www.jbl.de/en/download/482/Gebrauchsanleitungen/JBL_ProFlora_m1003.pdf","https://www.jbl.de/en/products/group/1068/accessories-co2"],verifiedAt:"2026-09-16",
+  },
+  {
+    id:"jbl-proflora-m001-archive",category:"co2",brand:"JBL",model:"PROFLORA m001 (2016 nesli)",
+    specifications:"2016 nesli arşiv yeniden doldurulabilir tüp basınç düşürücüsü · 60 bardan 1,5 bara düzenleme, W21,8×1/14 bağlantı, iki basınç göstergesi, hassas iğne valfi, ayarlanabilir çalışma basıncı ve aşırı basınç emniyet valfi · bağlantı somunu çıkarıldığında tek kullanımlık tüpe çevrilebilir · güncel REGULATOR ADVANCED'ın önceki neslidir",
+    sourceUrl:"https://www.jbl.de/en/products/detail/7586/jbl-proflora-m001",additionalSourceUrls:["https://www.jbl.de/en/download/8296/Gebrauchsanleitungen/JBL_ProFlora_u001_.pdf","https://www.jbl.de/en/products/group/1068/accessories-co2"],verifiedAt:"2026-09-16",
+  },
+  {
+    id:"jbl-proflora-v002-archive",category:"co2",brand:"JBL",model:"PROFLORA v002",
+    specifications:"Arşiv 12 V, 4/6 mm hortumlu sessiz solenoid gece kapatma valfi · üretici sayfası ve resmî SSS 0,8 W, 1,3 W ve 2 W olarak birbiriyle çelişen güç değerleri yayımladığı için güç otomatik hesaba alınmaz · güncel PROFLORA CO₂ VALVE'ın önceki neslidir",
+    sourceUrl:"https://www.jbl.de/en/products/detail/7587/jbl-proflora-v002",additionalSourceUrls:["https://www.jbl.de/en/faq/detail?faqid=339&glossary_id=72","https://www.jbl.de/en/products/group/1068/accessories-co2"],verifiedAt:"2026-09-16",
+  },
+  {
+    id:"jbl-proflora-adapt-u-m-legacy",category:"co2",brand:"JBL",model:"ProFlora Adapt u-m (eski nesil)",
+    specifications:"Daha eski arşiv adaptörü · M10×1 u001 tek kullanımlık tüp regülatörünü W21,8×1/14 yeniden doldurulabilir tüpe çevirir; 6 mm alyanla takılır ve dönüşüm geri alınabilir · güncel CO₂ ADAPT U-M ile karıştırılmamalı",
+    passiveComponent:true,sourceUrl:"https://www.jbl.de/en/products/detail/3635/jbl-proflora-adapt-u-m",additionalSourceUrls:["https://www.jbl.de/en/download/11627/Allgemein/JBL_Hauptkatalog_fr.pdf","https://www.jbl.de/en/products/group/1064/disposable-u"],verifiedAt:"2026-09-16",
+  },
+  {
+    id:"jbl-proflora-adapt-u-m-archive",category:"co2",brand:"JBL",model:"PROFLORA Adapt u-m (2016 nesli)",
+    specifications:"2016 nesli arşiv adaptörü · JBL u001 tek kullanımlık tüp basınç düşürücüsünü yeniden doldurulabilir tüpe çevirir; hızlı takılır ve dönüşüm geri alınabilir · aynı anda başka adaptörle zincirlenmemelidir · güncel CO₂ ADAPT U-M'nin önceki neslidir",
+    passiveComponent:true,sourceUrl:"https://www.jbl.de/en/products/detail/7578/jbl-proflora-adapt-u-m",additionalSourceUrls:["https://www.jbl.de/en/products/group/1064/disposable-u"],verifiedAt:"2026-09-16",
+  },
+  {
+    id:"jbl-proflora-adapt-u201-u500-archive",category:"co2",brand:"JBL",model:"PROFLORA Adapt u201-u500",
+    specifications:"Arşiv adaptörü · u201 basınç düşürücüsünün 5/8 inç UNF bağlantısını u500 tipi M10×1 tek kullanımlık tüpe çevirir · 22 × 24 × 22 mm · başka adaptörle zincirlenmemelidir · güncel CO₂ ADAPT U-u201'in önceki neslidir",
+    passiveComponent:true,sourceUrl:"https://www.jbl.de/en/products/detail/7845/jbl-proflora-adapt-u201-u500",additionalSourceUrls:["https://www.jbl.de/en/blog/detail/305/nano-co2-system-with-large-co2-cylinder-thanks-to-adapter","https://www.jbl.de/en/products/group/1064/disposable-u"],verifiedAt:"2026-09-16",
+  },
+  {
+    id:"jbl-proflora-adapt-u-dennerle-archive",category:"co2",brand:"JBL",model:"PROFLORA ADAPT u disposal for Dennerle",
+    specifications:"Arşiv adaptörü · M10×1,25 bağlantılı Dennerle tek kullanımlık tüp regülatörünü M10×1 JBL u500 tüpe bağlar · 22 × 22 × 22 mm · ters yönde JBL regülatörünü Dennerle tüpe bağlamak için değildir · güncel CO₂ ADAPT U-Dennerle'nin önceki neslidir",
+    passiveComponent:true,sourceUrl:"https://www.jbl.de/en/products/detail/8940/jbl-proflora-adapt-u-disposal-for-dennerle",additionalSourceUrls:["https://www.jbl.de/en/promotion/co2_2019","https://www.jbl.de/en/products/group/1064/disposable-u"],verifiedAt:"2026-09-16",
+  },
+];
+
+const jblProfloraLegacyAccessoryCatalog: EquipmentProfile[] = [
+  {
+    id:"jbl-proflora-m001-duo-legacy",category:"co2",brand:"JBL",model:"ProFlora m001 duo (eski nesil)",
+    specifications:"Daha eski arşiv basınç düşürücüsü · tek CO₂ tüpünden iki akvaryumu veya iki reaktörü ayrı ayrı besleyen iki bağımsız hassas iğne valfi · iki basınç göstergesi, yaklaşık 1,5 bar ayarlanabilir çalışma basıncı ve emniyet valfi · W21,8×1/14 yeniden doldurulabilir bağlantı somunu çıkarıldığında M10×1 tek kullanımlık tüpe uyarlanabilir",
+    sourceUrl:"https://www.jbl.de/en/products/detail/6428/jbl-proflora-m001-duo",additionalSourceUrls:["https://www.jbl.de/en/press/detail/535/co2-for-two","https://www.jbl.de/en/products/group/1068/accessories-co2"],verifiedAt:"2026-09-16",
+  },
+  {
+    id:"jbl-proflora-m001-duo-archive",category:"co2",brand:"JBL",model:"PROFLORA m001 duo (2016 nesli)",
+    specifications:"2016 nesli arşiv basınç düşürücüsü · tek CO₂ tüpünden iki akvaryumu ayrı ayarlayan iki çıkış ve iki hassas iğne valfi · 60 bardan 1,5 bara düzenleme, iki basınç göstergesi, W21,8×1/14 bağlantı ve emniyet valfi · bağlantı somunu çıkarıldığında M10×1 tek kullanımlık tüpe uyarlanabilir",
+    sourceUrl:"https://www.jbl.de/en/products/detail/7585/jbl-proflora-m001-duo",additionalSourceUrls:["https://www.jbl.de/en/blog/detail/254/components-of-a-proflora-co2-system-the-right-setup","https://www.jbl.de/en/products/group/1068/accessories-co2"],verifiedAt:"2026-09-16",
+  },
+  {
+    id:"jbl-proflora-cylinder-stand-archive",category:"co2",brand:"JBL",model:"PROFLORA stand CO₂ storage cylinder 500 g",
+    specifications:"Arşiv delmesiz plastik tüp standı · 60 mm çaplı 500 g CO₂ tüplerini zorunlu dik çalışma konumunda sabit tutar · tüp veya regülatör içermez · güncel CYLINDER STAND/WALLMOUNT ailesinin önceki neslidir",
+    passiveComponent:true,sourceUrl:"https://www.jbl.de/en/products/detail/7584/jbl-proflora-stand-co2-storage-cylinder-500-g",additionalSourceUrls:["https://www.jbl.de/en/products/group/1068/accessories-co2"],verifiedAt:"2026-09-16",
+  },
+  {
+    id:"jbl-proflora-t3-black-legacy",category:"co2",brand:"JBL",model:"ProFlora T3 BLACK",
+    specifications:"Daha eski arşiv siyah CO₂ dirençli özel hortum · 3 m uzunluk, 4/6 mm çap · sıradan hava hortumunun CO₂ için uygun olmadığı eski nesil bağlantı ürünü · güncel TAIFUN TUBE ile karıştırılmamalı",
+    passiveComponent:true,sourceUrl:"https://www.jbl.de/en/products/detail/2373/jbl-proflora-t3-black",additionalSourceUrls:["https://www.jbl.de/en/products/group/1068/accessories-co2"],verifiedAt:"2026-09-16",
+  },
+  {
+    id:"jbl-proflora-t3-archive",category:"co2",brand:"JBL",model:"PROFLORA T3",
+    specifications:"Arşiv CO₂ dirençli özel bağlantı hortumu · 3 m uzunluk, 4/6 mm çap · CO₂ sistemi ile difüzör arasında kayıpsız gaz aktarımı için · güncel PROFLORA CO₂ TAIFUN TUBE'ın önceki neslidir",
+    passiveComponent:true,sourceUrl:"https://www.jbl.de/en/products/detail/7583/jbl-proflora-t3",additionalSourceUrls:["https://www.jbl.de/en/blog/detail/254/components-of-a-proflora-co2-system-the-right-setup","https://www.jbl.de/en/products/group/1068/accessories-co2"],verifiedAt:"2026-09-16",
+  },
+  {
+    id:"jbl-proflora-co2-count-safe-archive",category:"co2",brand:"JBL",model:"PROFLORA CO₂ Count Safe (arşiv)",
+    specifications:"Arşiv harici kabarcık sayacı · büyüteçli şeffaf gövde, hortum vidalı bağlantılar, O-ringli bayonet kapak, cam veya mobilya montajı ve entegre geri akış koruması · ayrıca ikinci çek valf kullanılması açılma sorununa yol açabilir · güncel TAIFUN COUNT SAFE'ın önceki neslidir",
+    passiveComponent:true,sourceUrl:"https://www.jbl.de/en/products/detail/2368/jbl-proflora-co2-count-safe",additionalSourceUrls:["https://www.jbl.de/?country=id&id=2368&lang=en&mod=productpdf","https://www.jbl.de/en/products/group/1068/accessories-co2"],verifiedAt:"2026-09-16",
+  },
+  {
+    id:"jbl-proflora-safestop-legacy",category:"co2",brand:"JBL",model:"ProFlora SafeStop (eski nesil)",
+    specifications:"Daha eski arşiv su geri akış emniyet valfi · 4/6 mm CO₂ hortumunda ok akvaryuma bakacak şekilde difüzör ile sistem arasına takılır · CO₂ sistemi, pH kontrol cihazı ve solenoid valfi sudan korur · bağımsız dozaj ekipmanı değildir",
+    passiveComponent:true,sourceUrl:"https://www.jbl.de/en/products/detail/3634/jbl-proflora-safestop",additionalSourceUrls:["https://www.jbl.de/en/products/group/1068/accessories-co2"],verifiedAt:"2026-09-16",
+  },
+  {
+    id:"jbl-proflora-safestop-archive",category:"co2",brand:"JBL",model:"PROFLORA SafeStop (2016 nesli)",
+    specifications:"2016 nesli arşiv su geri akış emniyet valfi · 4/6 mm CO₂ hortumunda ok akvaryuma bakacak şekilde takılır · entegre çek valfli başka bir parça ile birlikte kullanılması açılma sorununa yol açabilir; her CO₂ hattında yalnız bir çek valf kullanılmalı · güncel TAIFUN SAFESTOP'ın önceki neslidir",
+    passiveComponent:true,sourceUrl:"https://www.jbl.de/en/products/detail/7582/jbl-proflora-safestop",additionalSourceUrls:["https://www.jbl.de/en/products/group/1068/accessories-co2"],verifiedAt:"2026-09-16",
+  },
+];
+
+const jblProfloraLegacyDiffuserCatalog: EquipmentProfile[] = [
+  {
+    id:"jbl-proflora-taifun-p-legacy",category:"co2",brand:"JBL",model:"ProFlora Taifun P (eski nesil)",
+    specifications:"Daha eski arşiv mini CO₂ difüzörü · 4/6 mm CO₂ hortumuna bağlanan cam gövde ve özel seramik membranla ince kabarcık üretir · üretici bu eski ürün kimliği için akvaryum hacim aralığı yayımlamadığından otomatik kapasite değerlendirmesine katılmaz · sonraki Taifun P ve güncel TAIFUN GLASS ile karıştırılmamalı",
+    sourceUrl:"https://www.jbl.de/en/products/detail/3411/jbl-proflora-taifun-p",additionalSourceUrls:["https://www.jbl.de/?country=tw&id=3411&lang=en&mod=productpdf","https://www.jbl.de/en/products/group/1066/addition-of-co2"],verifiedAt:"2026-09-16",
+  },
+  {
+    id:"jbl-proflora-taifun-p-archive",category:"co2",brand:"JBL",model:"PROFLORA Taifun P (2016 nesli)",
+    specifications:"2016 nesli arşiv cam CO₂ difüzörü · 20–400 L tatlı su akvaryumu · 4/6 mm hortum bağlantısı ve çok küçük kabarcıklar için dahili özel seramik membran · güncel PROFLORA CO₂ TAIFUN GLASS'ın önceki neslidir",
+    recommendedMinL:20,recommendedMaxL:400,sourceUrl:"https://www.jbl.de/en/products/detail/7592/jbl-proflora-taifun-p",additionalSourceUrls:["https://www.jbl.de/en/products/group/1066/addition-of-co2"],verifiedAt:"2026-09-16",
+  },
+  {
+    id:"jbl-proflora-taifun-s5-legacy",category:"co2",brand:"JBL",model:"ProFlora Taifun S5 (eski nesil)",
+    specifications:"Daha eski arşiv, beş modüllü genişletilebilir pasif CO₂ reaktörü · 200 L'ye kadar · ilave pompa veya ayrı kabarcık sayacı gerektirmez · bir Taifun Extend beş modülle erişimi 200 L artırır · sonraki Taifun S ve güncel TAIFUN SPIRAL 5 ile karıştırılmamalı",
+    recommendedMaxL:200,sourceUrl:"https://www.jbl.de/en/products/detail/4016/jbl-proflora-taifun-s5",additionalSourceUrls:["https://www.jbl.de/en/download/490/Gebrauchsanleitungen/JBL_ProFlora_Taifun_S.pdf","https://www.jbl.de/en/products/group/1066/addition-of-co2"],verifiedAt:"2026-09-16",
+  },
+  {
+    id:"jbl-proflora-taifun-s-archive",category:"co2",brand:"JBL",model:"PROFLORA Taifun S (2016 nesli)",
+    specifications:"2016 nesli arşiv, beş modüllü genişletilebilir CO₂ reaktörü · 50–200 L tatlı su akvaryumu ve en az 20 cm akvaryum yüksekliği · 4 °KH'de en çok 200 L, 10 °KH'de en çok 100 L · 110 mm reaktör ve 2 m CO₂ hortumu · güncel TAIFUN SPIRAL 5'ın önceki neslidir",
+    recommendedMinL:50,recommendedMaxL:200,sourceUrl:"https://www.jbl.de/en/products/detail/7591/jbl-proflora-taifun-s",additionalSourceUrls:["https://www.jbl.de/en/download/490/Gebrauchsanleitungen/JBL_ProFlora_Taifun_S.pdf","https://www.jbl.de/en/products/group/1066/addition-of-co2"],verifiedAt:"2026-09-16",
+  },
+  {
+    id:"jbl-proflora-taifun-m10-legacy",category:"co2",brand:"JBL",model:"ProFlora Taifun M10 (eski nesil)",
+    specifications:"Daha eski arşiv, on modüllü genişletilebilir CO₂ reaktörü · 400 L'ye kadar ve en az 30 cm akvaryum yüksekliği · 4 °KH'de en çok 400 L, 10 °KH'de en çok 200 L · 190 mm reaktör ve 2 m CO₂ hortumu · sonraki Taifun M ve güncel TAIFUN SPIRAL 10 ile karıştırılmamalı",
+    recommendedMaxL:400,sourceUrl:"https://www.jbl.de/en/products/detail/3491/jbl-proflora-taifun-m10",additionalSourceUrls:["https://www.jbl.de/en/download/482/Gebrauchsanleitungen/JBL_ProFlora_m1003.pdf","https://www.jbl.de/en/products/group/1066/addition-of-co2"],verifiedAt:"2026-09-16",
+  },
+  {
+    id:"jbl-proflora-taifun-m-archive",category:"co2",brand:"JBL",model:"PROFLORA Taifun M (2016 nesli)",
+    specifications:"2016 nesli arşiv, on modüllü genişletilebilir CO₂ reaktörü · 400 L'ye kadar ve en az 30 cm akvaryum yüksekliği · 4 °KH'de en çok 400 L, 10 °KH'de en çok 200 L · güncel TAIFUN SPIRAL 10'un önceki neslidir",
+    recommendedMaxL:400,sourceUrl:"https://www.jbl.de/en/products/detail/7590/jbl-proflora-taifun-m",additionalSourceUrls:["https://www.jbl.de/en/products/group/1066/addition-of-co2"],verifiedAt:"2026-09-16",
+  },
+  {
+    id:"jbl-proflora-taifun-extend-legacy",category:"co2",brand:"JBL",model:"ProFlora Taifun Extend (eski nesil)",
+    specifications:"Daha eski arşiv uzatma paketi · Taifun reaktörüne eklenen beş modül CO₂ difüzyon yolunu uzatır ve erişimi 200 L artırır · tek başına CO₂ difüzörü veya bağımsız akvaryum kapasitesi değildir",
+    passiveComponent:true,sourceUrl:"https://www.jbl.de/en/products/detail/3243/jbl-proflora-taifun-extend",additionalSourceUrls:["https://www.jbl.de/en/download/490/Gebrauchsanleitungen/JBL_ProFlora_Taifun_S.pdf","https://www.jbl.de/en/products/group/1066/addition-of-co2"],verifiedAt:"2026-09-16",
+  },
+  {
+    id:"jbl-proflora-taifun-extend-archive",category:"co2",brand:"JBL",model:"PROFLORA Taifun Extend (2016 nesli)",
+    specifications:"2016 nesli arşiv uzatma paketi · beş modül ve tutucu ile Taifun S/M reaktörünün difüzyon yolunu uzatır; 4 °KH'de erişimi 200 L veya desteklenen su sertliğini 10 °dKH artırır · tek başına CO₂ difüzörü veya bağımsız akvaryum kapasitesi değildir · güncel TAIFUN SPIRAL EXTEND'in önceki neslidir",
+    passiveComponent:true,sourceUrl:"https://www.jbl.de/en/products/detail/7589/jbl-proflora-taifun-extend",additionalSourceUrls:["https://www.jbl.de/en/products/group/1066/addition-of-co2"],verifiedAt:"2026-09-16",
+  },
+  ...([
+    ["12-16","PROFLORA Direct 12/16",40,300,"12/16 mm"],
+    ["16-22","PROFLORA Direct 16/22",160,600,"16/22 mm"],
+    ["19-25","PROFLORA Direct 19/25",200,800,"19/25 mm"],
+  ] as const).map(([id,model,minL,maxL,hose])=>(
+    {id:"jbl-proflora-direct-" + id + "-archive",category:"co2" as const,brand:"JBL",model,
+      specifications:"Arşiv dış filtre dönüş hortumuna bağlanan hat üstü CO₂ difüzörü · " + hose + " hortum · " + minL + "–" + maxL + " L · entegre kabarcık sayacı ve geri akış koruması · üreticiye göre etkili membranla %20 CO₂ tasarrufu · önerilen çalışma basıncı 1,0–1,5 bar · güncel TAIFUN INLINE'ın önceki neslidir",
+      recommendedMinL:minL,recommendedMaxL:maxL,sourceUrl:"https://www.jbl.de/en/products/detail/7319/jbl-proflora-direct",additionalSourceUrls:["https://www.jbl.de/en/products/group/1066/addition-of-co2"],verifiedAt:"2026-09-16"}
+  )),
+  {
+    id:"jbl-proflora-direct-membrane-archive",category:"co2",brand:"JBL",model:"PROFLORA Direct Membrane 12/16, 16/22, 19/25",
+    specifications:"Arşiv ProFlora Direct 12/16, 16/22 ve 19/25 difüzörleri için seramik-PE hibrit yedek membran · iki sızdırmazlık halkası içerir; ilk kullanım öncesi 24 saat suda bekletilir ve üretici yıllık değişim önerir · tek başına difüzör veya bağımsız akvaryum kapasitesi değildir · güncel TAIFUN INLINE MEMBRANE'ın önceki neslidir",
+    passiveComponent:true,sourceUrl:"https://www.jbl.de/en/products/detail/7363/jbl-proflora-direct-membrane-121616221925",additionalSourceUrls:["https://www.jbl.de/en/products/group/1066/addition-of-co2"],verifiedAt:"2026-09-16",
+  },
+];
+
+const jblProfloraLegacyBioCatalog: EquipmentProfile[] = [
+  {
+    id:"jbl-proflora-bio80-eco",category:"co2",brand:"JBL",model:"PROFLORA Bio80 eco",
+    specifications:"Arşiv Bio-CO₂ başlangıç seti · biyolojik fermantasyonla 40 gün CO₂ üretimi · 30–80 L · reaksiyon kabı, bio bileşeni, 3 m CO₂ hortumu, vantuz ve hava taşı; güncel PROFLORA CO₂ STARTER BIO SET ile karıştırılmamalı",
+    recommendedMinL:30,recommendedMaxL:80,sourceUrl:"https://www.jbl.de/en/products/detail/7571/jbl-proflora-bio80-eco",additionalSourceUrls:["https://www.jbl.de/en/products/group/1065/proflora-bio"],verifiedAt:"2026-09-15",
+  },
+  {
+    id:"jbl-proflora-bio80",category:"co2",brand:"JBL",model:"PROFLORA Bio80",
+    specifications:"Arşiv Bio-CO₂ seti · biyolojik fermantasyonla 40 gün CO₂ üretimi · 30–80 L · reaksiyon kabı, iki bio bileşeni, cam-seramik difüzör, 3 m CO₂ hortumu ve geri akış valfi; güncel BASIC BIO SET ile karıştırılmamalı",
+    recommendedMinL:30,recommendedMaxL:80,sourceUrl:"https://www.jbl.de/en/products/detail/7572/jbl-proflora-bio80",additionalSourceUrls:["https://www.jbl.de/en/products/group/1065/proflora-bio"],verifiedAt:"2026-09-15",
+  },
+  {
+    id:"jbl-proflora-bio160",category:"co2",brand:"JBL",model:"PROFLORA Bio160",
+    specifications:"Arşiv Bio-CO₂ seti · biyolojik fermantasyonla toplam 80 gün CO₂ üretimi · 50–160 L · termal kılıflı reaksiyon kabı, iki refill, uzatılabilir difüzör, 3 m CO₂ hortumu ve geri akış valfi; güncel ADVANCED BIO SET ile karıştırılmamalı",
+    recommendedMinL:50,recommendedMaxL:160,sourceUrl:"https://www.jbl.de/en/products/detail/7573/jbl-proflora-bio160",additionalSourceUrls:["https://www.jbl.de/en/products/group/1065/proflora-bio"],verifiedAt:"2026-09-15",
+  },
+  {
+    id:"jbl-proflora-biorefill",category:"co2",brand:"JBL",model:"PROFLORA BioRefill",
+    specifications:"Arşiv Bio-CO₂ refill · 30–80 L sistem için 40 günlük A ve B fermantasyon bileşenleri · reaksiyon kabı ve difüzör içermez; tek başına CO₂ sistemi değildir",
+    passiveComponent:true,sourceUrl:"https://www.jbl.de/en/products/detail/7574/jbl-proflora-biorefill",additionalSourceUrls:["https://www.jbl.de/en/products/group/1065/proflora-bio"],verifiedAt:"2026-09-15",
+  },
+];
+
+const jblProfloraLegacyPressureSetsCatalog: EquipmentProfile[] = [
+  {
+    id:"jbl-proflora-u501",category:"co2",brand:"JBL",model:"PROFLORA u501",
+    specifications:"Arşiv basınçlı CO₂ tam seti · 500 g tek kullanımlık tüp · gece kapatma valfi içermez · uzatılabilir difüzör · 400 L'ye kadar tatlı su akvaryumu; güncel PROFLORA CO₂ BASIC SET U ile karıştırılmamalı · tüp yalnız dik konumda çalıştırılmalı, güneşten ve ısıdan korunmalı",
+    recommendedMaxL:400,sourceUrl:"https://www.jbl.de/en/blog/detail/127/interzoo-2016-jbl-proflora-co2-fertiliser-systems-now-even-better",additionalSourceUrls:["https://www.jbl.de/en/products/group/1064/disposable-u"],verifiedAt:"2026-09-15",
+  },
+  {
+    id:"jbl-proflora-u502",category:"co2",brand:"JBL",model:"PROFLORA u502",
+    specifications:"Arşiv basınçlı CO₂ tam seti · 500 g tek kullanımlık tüp · solenoid gece kapatma valfi · uzatılabilir difüzör · 600 L'ye kadar tatlı su akvaryumu; güncel PROFLORA CO₂ ADVANCED SET U ile karıştırılmamalı · tüp yalnız dik konumda çalıştırılmalı, güneşten ve ısıdan korunmalı",
+    recommendedMaxL:600,sourceUrl:"https://www.jbl.de/en/blog/detail/127/interzoo-2016-jbl-proflora-co2-fertiliser-systems-now-even-better",additionalSourceUrls:["https://www.jbl.de/en/products/group/1064/disposable-u"],verifiedAt:"2026-09-15",
+  },
+  {
+    id:"jbl-proflora-u504",category:"co2",brand:"JBL",model:"PROFLORA u504",
+    specifications:"Arşiv ekonomik basınçlı CO₂ tam seti · 500 g ayaklı tek kullanımlık tüp · mini regülatör, 3 m CO₂ hortumu, seramik difüzör, geri akış korumalı kabarcık sayacı ve kalıcı CO₂ testi · üretici akvaryum hacim sınırı yayımlamadığı için otomatik kapasite değerlendirmesi yapılmaz; güncel setlerle karıştırılmamalı · tüp yalnız dik konumda çalıştırılmalı, güneşten ve ısıdan korunmalı",
+    sourceUrl:"https://www.jbl.de/cs-cz/press/detail/674",additionalSourceUrls:["https://www.jbl.de/en/products/group/1064/disposable-u"],verifiedAt:"2026-09-15",
+  },
+  {
+    id:"jbl-proflora-m501",category:"co2",brand:"JBL",model:"PROFLORA m501",
+    specifications:"Arşiv basınçlı CO₂ tam seti · yeniden doldurulabilir 500 g tüp · 190 mm başlangıç yüksekliğinde uzatılabilir difüzör · 400 L'ye kadar tatlı su akvaryumu; güncel PROFLORA CO₂ BASIC SET M ile karıştırılmamalı · tüp yalnız dik konumda çalıştırılmalı, güneşten ve ısıdan korunmalı",
+    recommendedMaxL:400,sourceUrl:"https://www.jbl.de/en/blog/detail/127/interzoo-2016-jbl-proflora-co2-fertiliser-systems-now-even-better",additionalSourceUrls:["https://www.jbl.de/en/products/group/1063/refillable-m"],verifiedAt:"2026-09-15",
+  },
+  {
+    id:"jbl-proflora-m502",category:"co2",brand:"JBL",model:"PROFLORA m502",
+    specifications:"Arşiv basınçlı CO₂ tam seti · yeniden doldurulabilir 500 g tüp · solenoid gece kapatma valfi · 270 mm başlangıç yüksekliğinde uzatılabilir difüzör · 600 L'ye kadar tatlı su akvaryumu; güncel PROFLORA CO₂ ADVANCED SET M ile karıştırılmamalı · tüp yalnız dik konumda çalıştırılmalı, güneşten ve ısıdan korunmalı",
+    recommendedMaxL:600,sourceUrl:"https://www.jbl.de/en/products/detail/7389/jbl-proflora-m502",additionalSourceUrls:["https://www.jbl.de/en/blog/detail/127/interzoo-2016-jbl-proflora-co2-fertiliser-systems-now-even-better","https://www.jbl.de/en/products/group/1063/refillable-m"],verifiedAt:"2026-09-15",
+  },
+  {
+    id:"jbl-proflora-m503",category:"co2",brand:"JBL",model:"PROFLORA m503",
+    specifications:"Arşiv basınçlı CO₂ tam seti · yeniden doldurulabilir 500 g tüp · pH kontrollü besleme · 270 mm başlangıç yüksekliğinde uzatılabilir difüzör · 600 L'ye kadar tatlı su akvaryumu; güncel PROFLORA CO₂ PROFESSIONAL SET M ile karıştırılmamalı · tüp yalnız dik konumda çalıştırılmalı, güneşten ve ısıdan korunmalı",
+    recommendedMaxL:600,sourceUrl:"https://www.jbl.de/en/blog/detail/127/interzoo-2016-jbl-proflora-co2-fertiliser-systems-now-even-better",additionalSourceUrls:["https://www.jbl.de/en/products/group/1063/refillable-m"],verifiedAt:"2026-09-15",
+  },
+  {
+    id:"jbl-proflora-m2003",category:"co2",brand:"JBL",model:"PROFLORA m2003",
+    specifications:"Arşiv basınçlı CO₂ tam seti · yeniden doldurulabilir 2000 g tüp · pH kontrollü besleme, pH sensörü ayrıca alınır · 430 mm başlangıç yüksekliğinde uzatılabilir difüzör · 1000 L'ye kadar tatlı su akvaryumu; güncel setlerle karıştırılmamalı · tüp yalnız dik konumda çalıştırılmalı, güneşten ve ısıdan korunmalı",
+    recommendedMaxL:1000,sourceUrl:"https://www.jbl.de/en/products/detail/7393/jbl-proflora-m2003",additionalSourceUrls:["https://www.jbl.de/en/blog/detail/127/interzoo-2016-jbl-proflora-co2-fertiliser-systems-now-even-better","https://www.jbl.de/en/products/group/1063/refillable-m"],verifiedAt:"2026-09-15",
+  },
+];
+
+const jblProfloraOlderPressureSetsCatalog: EquipmentProfile[] = [
+  {
+    id:"jbl-proflora-u401",category:"co2",brand:"JBL",model:"PROFLORA u401",
+    specifications:"Daha eski arşiv basınçlı CO₂ tam seti · 500 g tek kullanımlık tüp · regülatör, 190 mm/10 modüllü TAIFUN difüzör, 2 m CO₂ hortumu, geri akış valfi ve kalıcı CO₂/pH testi · 400 L'ye kadar tatlı su akvaryumu · tüp yalnız dik konumda çalıştırılmalı, 50 °C üzerindeki sıcaklıktan korunmalı ve havalandırılan yerde saklanmalı",
+    recommendedMaxL:400,sourceUrl:"https://www.jbl.de/en/download/482/Gebrauchsanleitungen/JBL_ProFlora_m1003.pdf",additionalSourceUrls:["https://www.jbl.de/en/download/11627/Allgemein/JBL_Hauptkatalog_fr.pdf","https://www.jbl.de/en/products/group/1064/disposable-u"],verifiedAt:"2026-09-15",
+  },
+  {
+    id:"jbl-proflora-u402",category:"co2",brand:"JBL",model:"PROFLORA u402",
+    specifications:"Daha eski arşiv basınçlı CO₂ tam seti · 500 g tek kullanımlık tüp · u401 donanımına ek 12 V/0,8 W solenoid gece kapatma valfi · 10 modüllü TAIFUN difüzör · 400 L'ye kadar tatlı su akvaryumu · tüp yalnız dik konumda çalıştırılmalı, 50 °C üzerindeki sıcaklıktan korunmalı ve havalandırılan yerde saklanmalı",
+    powerW:0.8,recommendedMaxL:400,sourceUrl:"https://www.jbl.de/en/download/482/Gebrauchsanleitungen/JBL_ProFlora_m1003.pdf",additionalSourceUrls:["https://www.jbl.de/en/download/11627/Allgemein/JBL_Hauptkatalog_fr.pdf","https://www.jbl.de/en/products/group/1064/disposable-u"],verifiedAt:"2026-09-15",
+  },
+  {
+    id:"jbl-proflora-u403",category:"co2",brand:"JBL",model:"PROFLORA u403",
+    specifications:"Daha eski arşiv basınçlı CO₂ tam seti · 500 g tek kullanımlık tüp · entegre solenoid valfli pH/CO₂ kontrol cihazı, pH sensörü ayrıca alınır · 10 modüllü TAIFUN difüzör · 400 L'ye kadar tatlı su akvaryumu · tüp yalnız dik konumda çalıştırılmalı, 50 °C üzerindeki sıcaklıktan korunmalı ve havalandırılan yerde saklanmalı",
+    recommendedMaxL:400,sourceUrl:"https://www.jbl.de/en/download/482/Gebrauchsanleitungen/JBL_ProFlora_m1003.pdf",additionalSourceUrls:["https://www.jbl.de/en/download/11627/Allgemein/JBL_Hauptkatalog_fr.pdf","https://www.jbl.de/en/products/group/1064/disposable-u"],verifiedAt:"2026-09-15",
+  },
+  {
+    id:"jbl-proflora-m601",category:"co2",brand:"JBL",model:"PROFLORA m601",
+    specifications:"Daha eski arşiv basınçlı CO₂ tam seti · yeniden doldurulabilir 500 g tüp · regülatör, 270 mm/15 modüllü TAIFUN difüzör, 2 m CO₂ hortumu, geri akış valfi ve kalıcı CO₂/pH testi · 100–600 L tatlı su akvaryumu · tüp yalnız dik konumda çalıştırılmalı, 50 °C üzerindeki sıcaklıktan korunmalı ve yetkili dolum noktasında doldurulmalı",
+    recommendedMinL:100,recommendedMaxL:600,sourceUrl:"https://www.jbl.de/en/download/11627/Allgemein/JBL_Hauptkatalog_fr.pdf",additionalSourceUrls:["https://www.jbl.de/en/download/482/Gebrauchsanleitungen/JBL_ProFlora_m1003.pdf","https://www.jbl.de/en/products/group/1063/refillable-m"],verifiedAt:"2026-09-15",
+  },
+  {
+    id:"jbl-proflora-m602",category:"co2",brand:"JBL",model:"PROFLORA m602",
+    specifications:"Daha eski arşiv basınçlı CO₂ tam seti · yeniden doldurulabilir 500 g tüp · 12 V/0,8 W solenoid gece kapatma valfi · 270 mm/15 modüllü TAIFUN difüzör · 100–600 L tatlı su akvaryumu · tüp yalnız dik konumda çalıştırılmalı, 50 °C üzerindeki sıcaklıktan korunmalı ve yetkili dolum noktasında doldurulmalı",
+    powerW:0.8,recommendedMinL:100,recommendedMaxL:600,sourceUrl:"https://www.jbl.de/en/download/11627/Allgemein/JBL_Hauptkatalog_fr.pdf",additionalSourceUrls:["https://www.jbl.de/en/download/482/Gebrauchsanleitungen/JBL_ProFlora_m1003.pdf","https://www.jbl.de/en/products/group/1063/refillable-m"],verifiedAt:"2026-09-15",
+  },
+  {
+    id:"jbl-proflora-m603",category:"co2",brand:"JBL",model:"PROFLORA m603",
+    specifications:"Daha eski arşiv basınçlı CO₂ tam seti · yeniden doldurulabilir 500 g tüp · entegre solenoid valfli pH/CO₂ kontrol cihazı, pH sensörü ayrıca alınır · 270 mm/15 modüllü TAIFUN difüzör · 100–600 L tatlı su akvaryumu · tüp yalnız dik konumda çalıştırılmalı, 50 °C üzerindeki sıcaklıktan korunmalı ve yetkili dolum noktasında doldurulmalı",
+    recommendedMinL:100,recommendedMaxL:600,sourceUrl:"https://www.jbl.de/en/download/482/Gebrauchsanleitungen/JBL_ProFlora_m1003.pdf",additionalSourceUrls:["https://www.jbl.de/en/download/11627/Allgemein/JBL_Hauptkatalog_fr.pdf","https://www.jbl.de/en/products/group/1063/refillable-m"],verifiedAt:"2026-09-15",
+  },
+  {
+    id:"jbl-proflora-m1003",category:"co2",brand:"JBL",model:"PROFLORA m1003",
+    specifications:"Daha eski arşiv basınçlı CO₂ tam seti · yeniden doldurulabilir 2000 g tüp · entegre solenoid valfli pH/CO₂ kontrol cihazı, pH sensörü ayrıca alınır · 430 mm/25 modüllü TAIFUN difüzör · 600–1000 L tatlı su akvaryumu · tüp yalnız dik konumda çalıştırılmalı, 50 °C üzerindeki sıcaklıktan korunmalı ve yetkili dolum noktasında doldurulmalı",
+    recommendedMinL:600,recommendedMaxL:1000,sourceUrl:"https://www.jbl.de/en/download/482/Gebrauchsanleitungen/JBL_ProFlora_m1003.pdf",additionalSourceUrls:["https://www.jbl.de/en/products/group/1063/refillable-m"],verifiedAt:"2026-09-15",
+  },
+];
+
+const jblProfloraLegacyCylindersCatalog: EquipmentProfile[] = [
+  {
+    id:"jbl-proflora-u201",category:"co2",brand:"JBL",model:"PROFLORA u201",
+    specifications:"Arşiv mini basınçlı CO₂ tam seti · 95 g tek kullanımlık kartuş ve ayak, 2 m bükülme korumalı hortum, mini regülatör/manometre, seramik difüzör, geri akış korumalı kabarcık sayacı ve kalıcı CO₂ testi · 10–200 L tatlı su akvaryumu · tüp yalnız dik konumda çalıştırılmalı, güneşten ve ısıdan korunmalı",
+    recommendedMinL:10,recommendedMaxL:200,sourceUrl:"https://www.jbl.de/en/download/10976/Ratgeber/JBL_ProScape_Equipment_for_professional_Aquascaping_en.pdf",additionalSourceUrls:["https://www.jbl.de/de-de/press/detail/474","https://www.jbl.de/en/products/group/1064/disposable-u"],verifiedAt:"2026-09-15",
+  },
+  {
+    id:"jbl-proflora-u95",category:"co2",brand:"JBL",model:"PROFLORA u95",
+    specifications:"Arşiv 95 g tek kullanımlık CO₂ kartuşu · 17,5 × 4 cm · u201 mini sisteminin 5/8 inç UNF bağlantısıyla uyumlu; normal M10×1 U tipi regülatöre doğrudan bağlanmaz · tek başına CO₂ dozaj sistemi değildir · yalnız dik konumda kullanılmalı, güneşten ve ısıdan korunmalı",
+    passiveComponent:true,sourceUrl:"https://www.jbl.de/en/download/11627/Allgemein/JBL_Hauptkatalog_fr.pdf",additionalSourceUrls:["https://www.jbl.de/en/products/group/1064/disposable-u"],verifiedAt:"2026-09-15",
+  },
+  {
+    id:"jbl-proflora-u95-3x",category:"co2",brand:"JBL",model:"PROFLORA u95 (3x)",
+    specifications:"Arşiv üçlü 95 g tek kullanımlık CO₂ yedek kartuş paketi · u201 mini sisteminin 5/8 inç UNF bağlantısıyla uyumlu · tek başına CO₂ dozaj sistemi değildir · kartuşlar yalnız dik konumda kullanılmalı, güneşten ve ısıdan korunmalı",
+    passiveComponent:true,sourceUrl:"https://www.jbl.de/en/download/11627/Allgemein/JBL_Hauptkatalog_fr.pdf",additionalSourceUrls:["https://www.jbl.de/de-de/press/detail/474"],verifiedAt:"2026-09-15",
+  },
+  {
+    id:"jbl-proflora-u500",category:"co2",brand:"JBL",model:"PROFLORA u500",
+    specifications:"Arşiv 500 g tek kullanımlık CO₂ tüpü · yaklaşık 29 × 7,5 cm · entegre ayak · M10×1 bağlantı · tek başına CO₂ dozaj sistemi değildir · yalnız dik konumda kullanılmalı, güneşten ve ısıdan korunmalı",
+    passiveComponent:true,sourceUrl:"https://www.jbl.de/en/download/11627/Allgemein/JBL_Hauptkatalog_fr.pdf",additionalSourceUrls:["https://www.jbl.de/en/products/group/1064/disposable-u"],verifiedAt:"2026-09-15",
+  },
+  {
+    id:"jbl-proflora-u500-3x",category:"co2",brand:"JBL",model:"PROFLORA 3 x u500",
+    specifications:"Arşiv üçlü 500 g tek kullanımlık CO₂ yedek tüp paketi · her tüp yaklaşık 29 × 7,5 cm, entegre ayak ve M10×1 bağlantı · tek başına CO₂ dozaj sistemi değildir · tüpler yalnız dik konumda kullanılmalı, güneşten ve ısıdan korunmalı",
+    passiveComponent:true,sourceUrl:"https://www.jbl.de/en/download/11627/Allgemein/JBL_Hauptkatalog_fr.pdf",additionalSourceUrls:["https://www.jbl.de/en/products/group/1064/disposable-u"],verifiedAt:"2026-09-15",
+  },
+  {
+    id:"jbl-proflora-m500",category:"co2",brand:"JBL",model:"ProFlora m500",
+    specifications:"Daha eski arşiv yeniden doldurulabilir 500 g CO₂ tüpü · 43 × 11 cm · W21.8×1/14 bağlantı ve valf koruma kafesi · tek başına CO₂ dozaj sistemi değildir · yalnız dik konumda kullanılmalı, güneşten korunmalı ve yetkili dolum noktasında doldurulmalı",
+    passiveComponent:true,sourceUrl:"https://www.jbl.de/en/download/11627/Allgemein/JBL_Hauptkatalog_fr.pdf",additionalSourceUrls:["https://www.jbl.de/en/products/group/1063/refillable-m"],verifiedAt:"2026-09-15",
+  },
+  {
+    id:"jbl-proflora-m500-silver",category:"co2",brand:"JBL",model:"PROFLORA m500 SILVER",
+    specifications:"Arşiv SILVER nesli yeniden doldurulabilir 500 g CO₂ tüpü · 43 × 11 cm · W21.8×1/14 bağlantı · devrilmeyi önlemek için ayrı ayak gerekir · tek başına CO₂ dozaj sistemi değildir · yalnız dik konumda kullanılmalı, güneşten korunmalı ve yetkili dolum noktasında doldurulmalı",
+    passiveComponent:true,sourceUrl:"https://www.jbl.de/en/products/detail/7372/jbl-proflora-m500-silver",additionalSourceUrls:["https://www.jbl.de/en/products/group/1063/refillable-m"],verifiedAt:"2026-09-15",
+  },
+  {
+    id:"jbl-proflora-m2000-silver",category:"co2",brand:"JBL",model:"PROFLORA m2000 SILVER",
+    specifications:"Arşiv SILVER nesli yeniden doldurulabilir 2000 g CO₂ tüpü · W21.8×1/14 bağlantı · yaklaşık 45,5 cm yükseklik · tek başına CO₂ dozaj sistemi değildir · yalnız dik konumda kullanılmalı, güneşten korunmalı ve yetkili dolum noktasında doldurulmalı",
+    passiveComponent:true,sourceUrl:"https://www.jbl.de/en/blog/detail/254/components-of-a-proflora-co2-system-the-right-setup",additionalSourceUrls:["https://www.jbl.de/en/products/group/1063/refillable-m"],verifiedAt:"2026-09-15",
+  },
+];
+
+const jblProfloraCurrentCylindersCatalog: EquipmentProfile[] = [
+  {
+    id:"jbl-proflora-co2-cylinder-500-m",category:"co2",brand:"JBL",model:"PROFLORA CO₂ CYLINDER 500 M",
+    specifications:"Güncel yeniden doldurulabilir 500 g CO₂ tüpü · 43 × 11 cm · W21.8×1/14 bağlantı ve basınç emniyet valfi · kendi başına dik durmaz; CYLINDER STAND veya WALLMOUNT gerekir · tek başına CO₂ dozaj sistemi değildir · yalnız dik konumda kullanılmalı, güneşten korunmalı ve havalandırılan yerde saklanmalı",
+    passiveComponent:true,sourceUrl:"https://www.jbl.de/en/products/detail/9413/jbl-proflora-co2-cylinder-500-m",additionalSourceUrls:["https://www.jbl.de/en/products/group/9412/proflora-co2-cylinder"],verifiedAt:"2026-09-15",
+  },
+  {
+    id:"jbl-proflora-co2-cylinder-2000-m",category:"co2",brand:"JBL",model:"PROFLORA CO₂ CYLINDER 2000 M",
+    specifications:"Güncel yeniden doldurulabilir 2000 g CO₂ tüpü · entegre tabanı sayesinde dik durur · tek başına CO₂ dozaj sistemi değildir · yalnız dik konumda kullanılmalı, güneşten korunmalı, havalandırılan yerde saklanmalı ve yetkili dolum noktasında doldurulmalı",
+    passiveComponent:true,sourceUrl:"https://www.jbl.de/en/products/group/9412/proflora-co2-cylinder",verifiedAt:"2026-09-15",
+  },
+  {
+    id:"jbl-proflora-co2-cylinder-500-u",category:"co2",brand:"JBL",model:"PROFLORA CO₂ CYLINDER 500 U",
+    specifications:"Güncel geri dönüştürülebilir 500 g tek kullanımlık CO₂ tüpü · yaklaşık 31 × 7,5 cm · M10×1 bağlantı ve monte kauçuk ayak · tek başına CO₂ dozaj sistemi değildir · yalnız dik konumda kullanılmalı, güneşten korunmalı ve havalandırılan yerde saklanmalı",
+    passiveComponent:true,sourceUrl:"https://www.jbl.de/en/products/group/9412/proflora-co2-cylinder",additionalSourceUrls:["https://www.jbl.de/en/products/detail/9419/jbl-proflora-co2-cylinder-500-u-3x"],verifiedAt:"2026-09-15",
+  },
+  {
+    id:"jbl-proflora-co2-cylinder-500-u-3x",category:"co2",brand:"JBL",model:"PROFLORA CO₂ CYLINDER 500 U 3x",
+    specifications:"Güncel üçlü geri dönüştürülebilir tek kullanımlık CO₂ tüp paketi · her tüp 500 g, yaklaşık 31 × 7,5 cm, M10×1 bağlantı ve monte kauçuk ayak · tek başına CO₂ dozaj sistemi değildir · yalnız dik konumda kullanılmalı, güneşten korunmalı ve havalandırılan yerde saklanmalı",
+    passiveComponent:true,sourceUrl:"https://www.jbl.de/en/products/detail/9419/jbl-proflora-co2-cylinder-500-u-3x",additionalSourceUrls:["https://www.jbl.de/en/products/group/9412/proflora-co2-cylinder"],verifiedAt:"2026-09-15",
+  },
+  {
+    id:"jbl-proflora-co2-cylinder-1200-u",category:"co2",brand:"JBL",model:"PROFLORA CO₂ CYLINDER 1200 U",
+    specifications:"Güncel geri dönüştürülebilir 1200 g tek kullanımlık CO₂ çelik tüpü · yaklaşık 45 × 10 cm · M10×1 bağlantı ve monte kauçuk ayak · eski JBL PROFLORA U regülatörleriyle uyumlu · tek başına CO₂ dozaj sistemi değildir · yalnız dik konumda kullanılmalı, güneşten korunmalı ve havalandırılan yerde saklanmalı",
+    passiveComponent:true,sourceUrl:"https://www.jbl.de/en/products/detail/9421/jbl-proflora-co2-cylinder-1200-u",additionalSourceUrls:["https://www.jbl.de/en/products/group/9412/proflora-co2-cylinder"],verifiedAt:"2026-09-15",
+  },
+  {
+    id:"jbl-proflora-co2-cylinder-wallmount",category:"co2",brand:"JBL",model:"PROFLORA CO₂ CYLINDER WALLMOUNT",
+    specifications:"Güvenlik kafesli tüm 500 g yeniden doldurulabilir CO₂ tüplerini mobilya veya duvara dik sabitleyen vidalı plastik askı · tüp veya regülatör içermez; pasif montaj yardımcısıdır",
+    passiveComponent:true,sourceUrl:"https://www.jbl.de/en/products/detail/9423/jbl-proflora-co2-cylinder-wallmount",additionalSourceUrls:["https://www.jbl.de/en/products/group/9412/proflora-co2-cylinder"],verifiedAt:"2026-09-15",
+  },
+  {
+    id:"jbl-proflora-co2-cylinder-stand",category:"co2",brand:"JBL",model:"PROFLORA CO₂ CYLINDER STAND",
+    specifications:"Yuvarlak tabanlı, çapı 60 mm'ye kadar tüm 500 g yeniden doldurulabilir CO₂ tüplerini delme gerektirmeden dik tutan plastik stand · tüp veya regülatör içermez; pasif montaj yardımcısıdır",
+    passiveComponent:true,sourceUrl:"https://www.jbl.de/en/products/detail/9425/jbl-proflora-co2-cylinder-stand",additionalSourceUrls:["https://www.jbl.de/en/products/group/9412/proflora-co2-cylinder"],verifiedAt:"2026-09-15",
+  },
+];
 
 export const specializedEquipmentCatalog: EquipmentProfile[] = [
+  ...jblProfloraCurrentCatalog,
+  ...jblProfloraPhControlArchiveCatalog,
+  ...jblProfloraLegacyRegulatorCatalog,
+  ...jblProfloraLegacyAccessoryCatalog,
+  ...jblProfloraLegacyDiffuserCatalog,
+  ...jblProfloraLegacyBioCatalog,
+  ...jblProfloraLegacyPressureSetsCatalog,
+  ...jblProfloraOlderPressureSetsCatalog,
+  ...jblProfloraLegacyCylindersCatalog,
+  ...jblProfloraCurrentCylindersCatalog,
+  {
+    id:"jbl-limcollect",category:"other",brand:"JBL",model:"LimCollect",
+    specifications:"İstenmeyen salyangoz, karides veya kerevitleri kimyasal kullanmadan yakalayan pasif tuzak · giriş yüksekliği balıkların yanlışlıkla girmesini azaltmak için ayarlanabilir · 11,7 × 9 cm",
+    passiveComponent:true,sourceUrl:"https://www.jbl.de/en/products/detail/4496/jbl-limcollect",verifiedAt:"2026-09-15",
+  },
+  {
+    id:"jbl-placollect",category:"other",brand:"JBL",model:"PlaCollect",
+    specifications:"Tatlı ve deniz suyunda planaryaları toksik madde kullanmadan yemle yakalayan 13 cm pasif tuzak · vantuz ve şeffaf ip ile tabana yaklaşık 45° açıyla yerleştirilir; kıl kurtları için uygun değildir",
+    passiveComponent:true,sourceUrl:"https://www.jbl.de/en/products/detail/7956/jbl-placollect",verifiedAt:"2026-09-15",
+  },
   {id:"chihiros-doctor-5",category:"other",brand:"Chihiros",model:"Doctor 5",specifications:"Otomatik çalışan beşinci nesil Chihiros Doctor su bakım cihazı · Plants, Fishes ve Shrimps modları · sıcaklık göstergesi · filtre veya UV kapasitesi olarak değerlendirilmez",sourceUrl:"https://bbs.chihirosaquaticstudio.com/threads/chihiros-doctor-gen-5.343/",verifiedAt:"2026-09-12"},
   ...[
     ["12-16","Dosing Flow Adapter — 12/16 mm"],
@@ -389,9 +871,9 @@ export const specializedEquipmentCatalog: EquipmentProfile[] = [
   { id:"aquawing-aq818", category:"air_pump", brand:"Aquawing", model:"AQ818", specifications:"Tek çıkışlı ayarlanabilir hava motoru · 3 L/dakika · 2,5 W", ratedFlowLph:180, powerW:2.5, sourceUrl:"https://www.aksuakvaryum.com.tr/urun-kategori/akvaryum/hava-motorlari/", verifiedAt:"2026-08-18" },
   { id:"aquawing-aq838", category:"air_pump", brand:"Aquawing", model:"AQ838", specifications:"Çift çıkışlı hava motoru · 2 × 3,5 L/dakika · 8 W", ratedFlowLph:420, powerW:8, sourceUrl:"https://www.petgross.com/products/aquawing-cift-cikisli-hava-motoru-8w-2x3-5l-min", verifiedAt:"2026-08-18" },
   { id:"aquawing-aq848", category:"air_pump", brand:"Aquawing", model:"AQ848", specifications:"Çift çıkışlı hava motoru · 2 × 4 L/dakika · 10 W", ratedFlowLph:480, powerW:10, sourceUrl:"https://www.cihanakvaryum.com/akvaryum-hava-motorlari", verifiedAt:"2026-08-18" },
-  { id:"aquawing-aqa3000", category:"air_pump", brand:"Aquawing", model:"AQ-A3000", specifications:"Çift çıkışlı akvaryum hava kompresörü · 25 W · barkod 8690000438723 · hava debisi yayımlanmamış", powerW:25, capacityDataNote:"Doğrudan ürün sayfası ve ikinci güvenilir satıcı kaynağı çıkış sayısı ile gücü yayımlıyor; hava debisi yayımlanmamış olduğundan otomatik kapasite hesabına katılmaz.", sourceUrl:"https://www.petlebi.com/akvaryum-urunleri/aquawing-aq-a3000-cift-cikisli-akvaryum-hava-kompresoru-25w.html", additionalSourceUrls:[aquawingSource], verifiedAt:"2026-09-06" },
-  { id:"aquawing-aqa1000", category:"air_pump", brand:"Aquawing", model:"AQ-A1000", specifications:"Çift çıkışlı akvaryum hava motoru · 8 W · barkod 8690000438709 · hava debisi yayımlanmamış", powerW:8, capacityDataNote:"Doğrudan ürün sayfası çift çıkış ve 8 W güç bilgisini yayımlıyor; hava debisi veya önerilen akvaryum hacmi yayımlanmadığı için otomatik kapasite hesabına katılmaz.", sourceUrl:"https://eksenpet.com/akvaryum/hava-motorlari/hava-komprosorleri/prd-aq-a1000-aquawing-hava-motoru-8w", verifiedAt:"2026-09-09" },
-  { id:"aquawing-aqa2000", category:"air_pump", brand:"Aquawing", model:"AQ-A2000", specifications:"Çift çıkışlı akvaryum hava motoru · 12 W · barkod 8690000438716 · hava debisi yayımlanmamış", powerW:12, capacityDataNote:"Doğrudan ürün sayfası çift çıkış ve 12 W güç bilgisini yayımlıyor; hava debisi veya önerilen akvaryum hacmi yayımlanmadığı için otomatik kapasite hesabına katılmaz.", sourceUrl:"https://eksenpet.com/akvaryum/hava-motorlari/hava-komprosorleri/prd-aq-a2000-aquawing-hava-motoru-12w", verifiedAt:"2026-09-09" },
+  { id:"aquawing-aqa3000", category:"air_pump", brand:"Aquawing", model:"AQ-A3000", specifications:"Çift çıkışlı akvaryum hava kompresörü · 25 W · ürün kodu AQ-A3000 · barkod 8690000438723 · hava debisi yayımlanmamış", powerW:25, capacityDataNote:"2026-09-25 yeniden denetiminde doğrudan ürün sayfası ile güncel Türkiye marka/tedarikçi listesi çift çıkış, 25 W güç ve barkodu doğruladı; hava debisi veya önerilen akvaryum hacmi yayımlanmadığı için otomatik kapasite hesabına katılmaz.", sourceUrl:"https://www.petlebi.com/akvaryum-urunleri/aquawing-aq-a3000-cift-cikisli-akvaryum-hava-kompresoru-25w.html", additionalSourceUrls:["https://www.batipettoptan.com/detay/16856/aqa3000-aquawing-hava-motoru-25w.html",aquawingSource], verifiedAt:"2026-09-25" },
+  { id:"aquawing-aqa1000", category:"air_pump", brand:"Aquawing", model:"AQ-A1000", specifications:"Çift çıkışlı akvaryum hava motoru · 8 W · ürün kodu AQ-A1000 · barkod 8690000438709 · hava debisi yayımlanmamış", powerW:8, capacityDataNote:"2026-09-25 yeniden denetiminde doğrudan ürün sayfası ile güncel Türkiye marka/tedarikçi listesi çift çıkış, 8 W güç ve barkodu doğruladı; hava debisi veya önerilen akvaryum hacmi yayımlanmadığı için otomatik kapasite hesabına katılmaz.", sourceUrl:"https://eksenpet.com/akvaryum/hava-motorlari/hava-komprosorleri/prd-aq-a1000-aquawing-hava-motoru-8w", additionalSourceUrls:["https://www.batipettoptan.com/detay/16855/aqa1000-aquawing-hava-motoru-8w.html"], verifiedAt:"2026-09-25" },
+  { id:"aquawing-aqa2000", category:"air_pump", brand:"Aquawing", model:"AQ-A2000", specifications:"Çift çıkışlı akvaryum hava motoru · 12 W · ürün kodu AQ-A2000 · barkod 8690000438716 · hava debisi yayımlanmamış", powerW:12, capacityDataNote:"2026-09-25 yeniden denetiminde doğrudan ürün sayfası ile güncel Türkiye marka/tedarikçi listesi çift çıkış, 12 W güç ve barkodu doğruladı; hava debisi veya önerilen akvaryum hacmi yayımlanmadığı için otomatik kapasite hesabına katılmaz.", sourceUrl:"https://eksenpet.com/akvaryum/hava-motorlari/hava-komprosorleri/prd-aq-a2000-aquawing-hava-motoru-12w", additionalSourceUrls:["https://www.batipettoptan.com/detay/16857/aqa2000-aquawing-hava-motoru-12w.html"], verifiedAt:"2026-09-25" },
   { id:"aquawing-aq008", category:"air_pump", brand:"Aquawing", model:"AQ008", specifications:"Tek çıkışlı ayarlanabilir hava motoru · 3 L/dakika · 2,5 W · barkod 8681475613104", ratedFlowLph:180, powerW:2.5, sourceUrl:"https://www.aksuakvaryum.com.tr/urun-kategori/akvaryum/hava-motorlari/", additionalSourceUrls:["https://eksenpet.com/akvaryum/hava-motorlari/hava-motorlari/prd-aq008-aquawing-tek-cikisli-hava-motoru-2-5w"], verifiedAt:"2026-09-09" },
   { id:"aquawing-aq311", category:"air_pump", brand:"Aquawing", model:"AQ311", specifications:"Tek çıkışlı hava motoru · 108 L/saat (1,8 L/dk) · 2,5 W · 220–240 V · 50–60 Hz · barkod 8681475611063", ratedFlowLph:108, powerW:2.5, sourceUrl:"https://www.petlebi.com/akvaryum-urunleri/aquawing-aq311-tek-cikisli-akvaryum-hava-motoru-108l-s.html", additionalSourceUrls:["https://eksenpet.com/markalar/aquawing"], verifiedAt:"2026-09-10" },
   { id:"aquawing-aq820", category:"air_pump", brand:"Aquawing", model:"AQ820", specifications:"Pilli tek çıkışlı hava motoru · 2 L/dakika · 2 adet D pil · 200 litreye kadar", ratedFlowLph:120, recommendedMaxL:200, adjustableFlow:true, sourceUrl:"https://atakanpetshop.com/aquawing-aq820-pilli-hava-motoru", verifiedAt:"2026-08-25" },

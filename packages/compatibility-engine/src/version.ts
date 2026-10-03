@@ -20,5 +20,8 @@
 //
 // 1.4.0: kaynaklı davranış uyarıları: yüzgeç ısırma, cüce karides, fırsatçı avcı ve aynı tür
 // saldırganlığı; hepsi uyarı seviyesinde (bkz. docs/DECISIONS/0010-davranis-uyarilari.md).
-export const ENGINE_VERSION = "1.4.0";
-export const RULESET_VERSION = "1.4.0";
+//
+// 1.5.0: taban ısıtma kablosu gibi pasif ısıtıcı kayıtları ısıtıcı kapasitesine katılmaz
+// (bkz. docs/DECISIONS/0011-katalog-entegrasyonu-2-taban-isiticisi.md).
+export const ENGINE_VERSION = "1.5.0";
+export const RULESET_VERSION = "1.5.0";

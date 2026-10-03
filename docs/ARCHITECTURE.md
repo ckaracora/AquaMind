@@ -1,6 +1,6 @@
 # AquaMind mimarisi
 
-Son güncelleme: 2026-09-29 (motor 1.4.0 — kaynaklı tür davranış verisi `src/data/species-behavior.ts`; önceki büyük güncelleme 2026-09-03, Issue #8 — yerel depolama bütünlüğü). Bu belge iki bölümden oluşur: **mevcut yapı** (depoda bugün olan) ve **hedef mimari** (planlanan, henüz uygulanmamış). Planlanan kısımlar tamamlanmış gibi gösterilmez.
+Son güncelleme: 2026-10-03 (Canberk'in `b1fb27d` katalog işinin ikinci entegrasyonu ve motor 1.5.0 — taban ısıtıcısı; 2026-09-29'da motor 1.4.0 — kaynaklı tür davranış verisi `src/data/species-behavior.ts`; önceki büyük güncelleme 2026-09-03, Issue #8 — yerel depolama bütünlüğü). Bu belge iki bölümden oluşur: **mevcut yapı** (depoda bugün olan) ve **hedef mimari** (planlanan, henüz uygulanmamış). Planlanan kısımlar tamamlanmış gibi gösterilmez.
 
 ## Mevcut yapı (Phase 0B sonrası)
 
@@ -65,7 +65,7 @@ Ayarlar sayfasındaki JSON yedeği yapılandırılmıştır: ana koleksiyonlar y
 pnpm verify
 ```
 
-Sırasıyla: `tsc --noEmit`, `scripts/test-catalog-flow.cjs`, `scripts/test-health.cjs`, `scripts/test-calculators.cjs`, `scripts/audit-catalog.cjs`, `vitest run`, `next build`. Vitest paketi testleri `pnpm test` ile ayrıca çalıştırılabilir. Motorun değişmezliği `packages/compatibility-engine/test/golden.test.ts` ile 1020 vakalık altın fikstüre karşı denetlenir (bkz. `docs/COMPATIBILITY.md`).
+Sırasıyla: `tsc --noEmit`, `scripts/test-catalog-flow.cjs`, `scripts/test-health.cjs`, `scripts/test-calculators.cjs`, `scripts/audit-catalog.cjs`, `vitest run`, `next build`. Vitest paketi testleri `pnpm test` ile ayrıca çalıştırılabilir. Motorun değişmezliği `packages/compatibility-engine/test/golden.test.ts` ile 1033 vakalık altın fikstüre karşı denetlenir (bkz. `docs/COMPATIBILITY.md`).
 
 ## Hedef mimari (planlanan)
 
