@@ -4,7 +4,7 @@ import { equipmentById, speciesById } from "@/data/catalog";
 import { analyzeAquarium } from "@/lib/health-analysis";
 
 // 2026-09-24 uyumluluk denetimindeki, akvaryumculukta cevabı bilinen senaryolar.
-// Düzeltilenler gerçek test olarak sabitlenir; henüz düzeltilmeyenler `it.todo` ile görünür kalır.
+// Düzeltilenler gerçek test olarak sabitlenir. Son bulgu (alan uyarısının şiddeti) kural seti 1.6.0 ile kapandı.
 
 const tank = (lengthCm: number, netVolumeLiters: number, type: AquariumType = "freshwater"): Aquarium => ({
   id: "t", name: "T", type, lengthCm, widthCm: 40, heightCm: 40, netVolumeLiters, setupDate: "2026-01-01",
@@ -154,6 +154,24 @@ describe("denetim senaryoları: davranış", () => {
   });
 });
 
-describe("denetim senaryoları: henüz düzeltilmeyenler", () => {
-  it.todo("Alan uyarısının şiddeti hacim açığıyla artmalı: 60 L'deki astronot (katalogda en az 300 L) yalnızca 'alan sınırda' uyarısı almamalı (alan kuralı)");
+describe("denetim senaryoları: alan uyarısının şiddeti (kural seti 1.6.0)", () => {
+  const spaceWarning = (result: ReturnType<typeof analyzeAquarium>, id: string) => result.warnings.find((warning) => warning.title.startsWith(`${speciesById(id)!.commonName}: `) && /(alan sınırda|akvaryum çok küçük)$/.test(warning.title));
+
+  it("60 L'deki astronot: kaynağın ve İsviçre ölçü sınırının altında, alan uyarısı tehlike; genel durum en fazla dikkat", () => {
+    const result = analyzeAquarium(tank(60, 60), [fish("oscar", 1)], [device("jbl-cristalprofi-i60"), device("eheim-thermo-50")], water());
+    expect(spaceWarning(result, "oscar")).toMatchObject({ level: "danger", title: `${speciesById("oscar")!.commonName}: akvaryum çok küçük` });
+    expect(result.score).toBeLessThanOrEqual(74);
+    expect(result.status).not.toBe("good");
+  });
+
+  it("kaynağın önerdiği ölçüdeki astronot alan uyarısı almaz", () => {
+    const profile = speciesById("oscar")!;
+    const result = analyzeAquarium(tank(profile.minTankLengthCm!, profile.minVolumeL), [fish("oscar", 1)], [device("jbl-e1502"), device("eheim-thermo-200")], water());
+    expect(spaceWarning(result, "oscar")).toBeUndefined();
+  });
+
+  it("küçük açıkta yalnızca sarı: 50 cm'lik 40 L'de neon tetra", () => {
+    const result = analyzeAquarium(tank(50, 40), [fish("neon-tetra", 10)], [device("jbl-cristalprofi-i60"), device("eheim-thermo-50")], water());
+    expect(spaceWarning(result, "neon-tetra")).toMatchObject({ level: "warning" });
+  });
 });

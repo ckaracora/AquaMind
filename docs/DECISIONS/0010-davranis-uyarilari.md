@@ -1,7 +1,7 @@
 # 0010 — Davranış uyarıları: yüzgeç ısırma, cüce karides, fırsatçı avcı ve aynı tür saldırganlığı
 
 - Tarih: 2026-09-29
-- Durum: Önerildi — ürün sahibi (`buraksenfx`) dört kuralı 2026-09-29'da karar sayfası ve soru formuyla açıkça onayladı; dördünde de önerilen seçenek. `codex/behavior-warnings` dalında. Codex denetimi üç turda tamamlandı (son tur 2026-09-29 temiz). Kod ve belgeler (`5226649`) ile altın fikstür (`df8683b`) ayrı commit'ler olarak kaydedildi ve PR #14 (`https://github.com/ckaracora/AquaMind/pull/14`) açıldı; PR üzerinde GitHub Actions `Doğrulama` ve Vercel önizlemesi başarılı. `main` birleştirmesi ürün sahibinin onayını bekliyor. `main` dalına birleştirilene kadar kabul edilmiş sayılmaz
+- Durum: Kabul edildi — ürün sahibi (`buraksenfx`) dört kuralı 2026-09-29'da karar sayfası ve soru formuyla açıkça onayladı; dördünde de önerilen seçenek. Codex denetimi üç turda tamamlandı (son tur 2026-09-29 temiz). Kod ve belgeler (`5226649`) ile altın fikstür (`df8683b`) ayrı commit'ler olarak kaydedildi; PR #14 (`https://github.com/ckaracora/AquaMind/pull/14`) kullanıcı onayıyla 2026-10-03'te merge commit yöntemiyle `main` dalına birleştirildi (`5e77f12`) ve canlıda (`f3fd24b` ile birlikte yayımlandı; `main` push'unda `Doğrulama` ve Vercel üretim dağıtımı başarılı)
 - Karar sayfası: https://claude.ai/artifact/VnfqPSmsKrkSQUStML6dXK (özel; paylaşım ürün sahibinde)
 
 ## Bağlam

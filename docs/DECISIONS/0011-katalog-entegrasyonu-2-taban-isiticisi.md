@@ -1,7 +1,7 @@
 # 0011 — İkinci katalog entegrasyonu (`b1fb27d`) ve taban ısıtıcısı kuralı
 
 - Tarih: 2026-10-03
-- Durum: Önerildi. Ürün sahibi (`buraksenfx`) 2026-10-03'te iki kararı açıkça onayladı. Taban ısıtıcısı kuralını soru formuyla, önerilen seçeneği seçerek onayladı. AquaMatch menü öğesinin "Yakında" olarak görünmesini de sohbette onayladı. Değişiklik `codex/catalog-integration-2` dalında. Codex denetimi 2026-10-03'te ilk turda temiz geçti. Birleştirme, kod ve belgeler (`9e3dac6`) ile altın fikstür (`d1b29cd`) ayrı commit'ler olarak kaydedildi ve PR #15 (`https://github.com/ckaracora/AquaMind/pull/15`) açıldı; PR üzerinde GitHub Actions `Doğrulama` ve Vercel önizlemesi başarılı. `main` birleştirmesi, PR #14'ten sonra, ürün sahibinin onayını bekliyor. `main` dalına birleştirilene kadar kabul edilmiş sayılmaz.
+- Durum: Kabul edildi — ürün sahibi (`buraksenfx`) 2026-10-03'te taban ısıtıcısı kuralını soru formuyla (önerilen seçenek) ve AquaMatch menü öğesinin "Yakında" olarak görünmesini sohbette açıkça onayladı. Codex denetimi ilk turda temiz geçti (2026-10-03). Birleştirme, kod ve belgeler (`9e3dac6`) ile altın fikstür (`d1b29cd`) ayrı commit'ler olarak kaydedildi; PR #15 (`https://github.com/ckaracora/AquaMind/pull/15`) kullanıcı onayıyla 2026-10-03'te merge commit yöntemiyle `main` dalına birleştirildi (`f3fd24b`) ve canlıda (`main` push'unda `Doğrulama` `37122563141` ve Vercel üretim dağıtımı başarılı; canlı menüde AquaMatch görünüyor)
 
 ## Bağlam
 

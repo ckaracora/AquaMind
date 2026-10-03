@@ -113,6 +113,15 @@ const DANGER_WARNING_SCORE_CAP=74;
 const PREY_SIZE_RATIO=.4;
 /** Cüce karides: yetişkin boyu bu değer veya altındaki karidesler (OATA: cüce karidesler yaklaşık 3 cm). */
 const DWARF_SHRIMP_MAX_CM=4;
+// Kural seti 1.6.0 (docs/DECISIONS/0012-alan-uyarisinin-siddeti.md). İsviçre Hayvan Koruma Yönetmeliği (TSchV, SR 455.1)
+// Ek 2 Tablo 8 not b): akvaryum ölçüleri en büyük balığın boyuna göre en az bu katlar olmalı. Kaynağın önerisinin altındaki
+// akvaryum bu ölçülerin de altındaysa alan uyarısı tehlikedir; kaynağın önerisini karşılayan akvaryum hiç alan uyarısı almaz.
+const SWISS_MIN_LENGTH_RATIO=3;
+const SWISS_MIN_WIDTH_RATIO=2;
+/** Yönetmelik su derinliği ister; akvaryum yüksekliği su derinliğinden küçük olamayacağı için yükseklik kullanılır. */
+const SWISS_MIN_DEPTH_RATIO=1;
+/** Tehlike seviyesindeki alan sorununda yüzme alanı ölçütünün üst sınırı (filtre tehlikesindeki puanla aynı). */
+const SEVERE_SPACE_SCORE=35;
 const status=(score:number):HealthMetric["status"]=>score>=75?"good":score>=50?"warning":"danger";
 
 export function createAnalyzer(resolver:KnowledgeResolver):AnalyzeAquarium{
@@ -135,7 +144,10 @@ export function createAnalyzer(resolver:KnowledgeResolver):AnalyzeAquarium{
  const loadRatio=loadUnits/Math.max(1,aquarium.netVolumeLiters*.85); const loadScore=loadRatio>LOAD_WARNING_RATIO?60:clamp(100-loadRatio*10);
  const requiredVolume=({item,profile}:(typeof profiles)[number])=>profile!.minVolumeL+Math.max(0,item.quantity-1)*(profile!.additionalVolumePerAnimalL??0);
  const spaceIssues=profiles.filter(entry=>aquarium.netVolumeLiters<requiredVolume(entry)||(entry.profile!.minTankLengthCm!==undefined&&aquarium.lengthCm<entry.profile!.minTankLengthCm));
- const spaceScore=profiles.length?clamp(100-spaceIssues.length/profiles.length*80):100;
+ // Ölçü girilmemişse (0) o ölçü denetlenmez. Yalnızca balıklar için; yönetmelik süs balıklarını kapsar.
+ const belowSwiss=(dimensionCm:number,sizeCm:number,ratio:number)=>dimensionCm>0&&dimensionCm<sizeCm*ratio;
+ const severeSpaceIssues=new Set(spaceIssues.filter(({item,profile})=>item.category==="fish"&&(belowSwiss(aquarium.lengthCm,profile!.adultSizeCm,SWISS_MIN_LENGTH_RATIO)||belowSwiss(aquarium.widthCm,profile!.adultSizeCm,SWISS_MIN_WIDTH_RATIO)||belowSwiss(aquarium.heightCm,profile!.adultSizeCm,SWISS_MIN_DEPTH_RATIO))));
+ const spaceScore=profiles.length?Math.min(clamp(100-spaceIssues.length/profiles.length*80),severeSpaceIssues.size?SEVERE_SPACE_SCORE:100):100;
  const groupIssues=profiles.filter(({item,profile})=>item.quantity<profile!.minGroup); const socialScore=profiles.length?clamp(100-groupIssues.length/profiles.length*65):100;
  const tempIntersection:[number,number]=profiles.length?[Math.max(...profiles.map(x=>x.profile!.temperature[0])),Math.min(...profiles.map(x=>x.profile!.temperature[1]))]:[0,40];
  const phIntersection:[number,number]=profiles.length?[Math.max(...profiles.map(x=>x.profile!.ph[0])),Math.min(...profiles.map(x=>x.profile!.ph[1]))]:[0,14];
@@ -210,7 +222,7 @@ export function createAnalyzer(resolver:KnowledgeResolver):AnalyzeAquarium{
  const totalDataCount=animals.length+safetyEquipmentInputCount; const verifiedDataCount=verifiedMatchedProfiles.length+calculationReadyEquipment.length; const confidenceScore=totalDataCount?clamp(verifiedDataCount/totalDataCount*100):50;
  const metrics:HealthMetric[]=[
   {key:"load",label:"Biyolojik yük",score:loadScore,status:status(loadScore),detail:`Tahmini yük oranı %${Math.round(loadRatio*100)}`},
-  {key:"space",label:"Yüzme alanı",score:spaceScore,status:status(spaceScore),detail:spaceIssues.length?`${spaceIssues.length} tür için alan sınırda`:"Kayıtlı türler için uygun"},
+  {key:"space",label:"Yüzme alanı",score:spaceScore,status:status(spaceScore),detail:severeSpaceIssues.size?`${severeSpaceIssues.size} tür için akvaryum çok küçük`:spaceIssues.length?`${spaceIssues.length} tür için alan sınırda`:"Kayıtlı türler için uygun"},
   {key:"social",label:"Sosyal ihtiyaç",score:socialScore,status:status(socialScore),detail:groupIssues.length?`${groupIssues.length} türün grup sayısı düşük`:"Grup ihtiyaçları uygun"},
   {key:"compatibility",label:"Tür uyumu",score:compatibilityScore,status:status(compatibilityScore),detail:habitatIssues.length?"Akvaryum türüyle yaşam ortamı uyuşmuyor":speciesOnlyIssues.length?"Tür akvaryumu önerilen canlı var":predationIssues.length?"Küçük canlılar için avlanma riski var":temperatureConflict||phConflict?"Su değeri aralıkları kesişmiyor":smallFishPredationIssues.length?"Küçük balıklar avlanabilir":finNipIssues.length?"Yüzgeç ısırma riski var":conspecificIssues.length?"Aynı tür bireyleri kavga edebilir":shrimpEaters.length?"Karidesler yenebilir":flowConflict?"Akıntı ihtiyaçları farklı":communityCautionIssues.length?"Tank arkadaşı seçimi dikkat gerektiriyor":shrimpUnverified.length?"Karides uyumu doğrulanmadı":"Ortak yaşam aralıkları mevcut"},
   {key:"filter",label:"Filtrasyon uygunluğu",score:filterScore,status:status(filterScore),detail:sizedByManufacturer?`Üretici önerisi en fazla ${filterOkL} L`:sizedByFlow?`Etiket debisiyle ${ratedTurnover.toFixed(1).replace(".",",")} çevrim/saat`:sizedFilters.length?`Üretici önerisi ve etiket debisine göre en fazla ${Math.round(filterOkL)} L`:airDrivenFilters.length?(airDrivenReady?"Hava motorlu sünger filtre bağlantısı hazır":"Sünger filtre için hava motoru gerekli"):primaryFilters.length?"Debi bilgisi doğrulanmayı bekliyor":auxiliaryFilters.length?"Yalnız yardımcı yüzey skimmeri kayıtlı; ana filtre gerekli":"Katalogdan filtre bulunamadı"},
@@ -259,7 +271,8 @@ export function createAnalyzer(resolver:KnowledgeResolver):AnalyzeAquarium{
  for(const {profile} of profiles.filter(({profile})=>profile!.husbandryCaution))warnings.push({level:"warning",title:`${profile!.commonName}: özel bakım gereksinimi`,message:profile!.husbandryCaution!});
  for(const {profile} of profiles.filter(({profile})=>profile!.tankLengthDataNote))warnings.push({level:"warning",title:`${profile!.commonName}: tank uzunluğu verisi sınırlı`,message:profile!.tankLengthDataNote!});
  for(const {item,profile} of groupIssues)warnings.push({level:"warning",title:`${profile!.commonName}: grup sayısı düşük`,message:`Kayıtlı adet ${item.quantity}; katalog önerisi en az ${profile!.minGroup}.`});
- for(const entry of spaceIssues){const {profile}=entry;const volume=requiredVolume(entry);warnings.push({level:"warning",title:`${profile!.commonName}: alan sınırda`,message:profile!.minTankLengthCm===undefined?`Kayıtlı adet için minimum ${volume} L referansı kullanıldı; kaynak tank uzunluğu yayımlamıyor.`:`Kayıtlı adet için minimum ${volume} L ve ${profile!.minTankLengthCm} cm uzunluk referansı kullanıldı.`});}
+ for(const entry of spaceIssues){const {profile}=entry;const volume=requiredVolume(entry);const reference=profile!.minTankLengthCm===undefined?`Kayıtlı adet için minimum ${volume} L referansı kullanıldı; kaynak tank uzunluğu yayımlamıyor.`:`Kayıtlı adet için minimum ${volume} L ve ${profile!.minTankLengthCm} cm uzunluk referansı kullanıldı.`;const size=profile!.adultSizeCm;const cm=(n:number)=>`${Math.round(n*10)/10} cm`;
+  warnings.push(severeSpaceIssues.has(entry)?{level:"danger",title:`${profile!.commonName}: akvaryum çok küçük`,message:`${reference} Akvaryum ayrıca İsviçre Hayvan Koruma Yönetmeliği'nin ölçü kuralından (uzunluk 3×, genişlik 2×, su derinliği 1× vücut boyu) uyarlanan AquaMind sınırının altında. Yönetmelik kuyruk yüzgeci hariç boyu kullanır; AquaMind daha sıkı davranıp katalogdaki ${cm(size)} yetişkin boyu (çoğu türde toplam boy) kullanır: uzunluk en az ${cm(size*SWISS_MIN_LENGTH_RATIO)}, genişlik en az ${cm(size*SWISS_MIN_WIDTH_RATIO)}, su derinliği en az ${cm(size*SWISS_MIN_DEPTH_RATIO)}.`}:{level:"warning",title:`${profile!.commonName}: alan sınırda`,message:reference});}
  // Kesin tehlikeler (yanlış su türü, kesişmeyen sıcaklık veya pH, avlanma, tür akvaryumu, tuzluluk, zehirli
  // amonyak veya nitrit) genel durumu "tehlike"ye çeker; sekiz ölçütün ortalaması bunları gizleyemez.
  // Diğer tehlike uyarıları (ör. üretici önerisini çok aşan filtre, yetersiz ısıtıcı) genel durumu "tehlike"ye
