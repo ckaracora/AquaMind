@@ -15,6 +15,38 @@ const orionDrgbwSource = "https://orionled.com.tr/urun/orionled-d-rgbw-black-wi-
 const orionDrgbwGraySource = "https://orionled.com.tr/urun/orionled-d-rgbw-wi-fi-telefon-app-kontrollu-yeni-d-serisi/";
 const orionESeriesSource = "https://orionled.com.tr/urun/orionled-e-serisi-5-sira-led-aydinlatma/";
 const ORION_VERIFIED_AT = "2026-09-14";
+const JBL_VERIFIED_AT = "2026-09-14";
+
+const jblLedSolarGen2Catalog:EquipmentProfile[] = [
+  ...([
+    [16,"438",45,70],
+    [20,"549/590",55,80],
+    [28,"742",75,100],
+    [31,"849/895",85,110],
+    [47,"1047",105,130],
+    [48,"1149/1200",115,140],
+    [53,"1449/1500",145,170],
+  ] as const).map(([powerW,retrofitMm,minLength,maxLength])=>({
+    id:`jbl-led-solar-natur-gen2-${powerW}w`,category:"lighting" as const,brand:"JBL",model:`LED SOLAR NATUR ${powerW} W — ${retrofitMm} mm (Gen 2)`,
+    specifications:`IP68 tam spektrum bitki LED'i · ${powerW} W lamba gücü · 2700/4000/6700 K · ${minLength}–${maxLength} cm akvaryum`,
+    powerW,recommendedTankLengthCm:[minLength,maxLength] as [number,number],
+    sourceUrl:"https://www.jbl.de/en/products/detail/9480/jbl-led-solar-natur-gen-2",verifiedAt:JBL_VERIFIED_AT,
+  })),
+  ...([
+    [8,"438",45,70],
+    [9,"549/590",55,80],
+    [14,"742",75,100],
+    [17,"849/895",85,110],
+    [20,"1047",105,130],
+    [21,"1149/1200",115,140],
+    [22,"1449/1500",145,170],
+  ] as const).map(([powerW,retrofitMm,minLength,maxLength])=>({
+    id:`jbl-led-solar-effect-gen2-${powerW}w`,category:"lighting" as const,brand:"JBL",model:`LED SOLAR EFFECT ${powerW} W — ${retrofitMm} mm (Gen 2)`,
+    specifications:`NATUR Gen 2 ile aynı uzunlukta kullanılması gereken IP68 RGB efekt LED'i · ${powerW} W · ${minLength}–${maxLength} cm akvaryum · kendi güç kaynağı yoktur`,
+    powerW,recommendedTankLengthCm:[minLength,maxLength] as [number,number],
+    sourceUrl:"https://www.jbl.de/en/products/detail/9488/jbl-led-solar-effect-gen-2",verifiedAt:JBL_VERIFIED_AT,
+  })),
+];
 
 const orionAquaslimCatalog:EquipmentProfile[] = Array.from({length:14},(_,index)=>{
   const lengthCm=(index+2)*10;
@@ -241,7 +273,127 @@ const twinstarSterilizers: EquipmentProfile[] = [
   {id:"twinstar-nano-plus",category:"other",brand:"Twinstar",model:"NANO Plus Sterilizer",specifications:"UV kullanmayan elektroliz sterilizatörü · M9 reaktör · 50–250 L",recommendedMinL:50,recommendedMaxL:250,sourceUrl:twinstarNanoSource,verifiedAt:"2026-08-27"},
 ];
 
+const tetraLightingCatalog: EquipmentProfile[] = [
+  {id:"tetra-aquaart-led-20-30",category:"lighting",brand:"Tetra",model:"AquaArt LED 20L/30L Lamp 4.8 W",specifications:"AquaArt Discovery Line 20/30 L için beyaz ve mavi LED · gündüz ve ay ışığı · 4,8 W",powerW:4.8,recommendedMinL:20,recommendedMaxL:30,sourceUrl:"https://www.tetra.net/en-eu/products/tetra-aquaart-led-20l-30l-lamp-48w",verifiedAt:"2026-09-25"},
+  {id:"tetra-aquaart-led-60",category:"lighting",brand:"Tetra",model:"AquaArt LED 60L Lamp 9.6 W",specifications:"AquaArt Discovery Line 60 L için beyaz ve mavi LED · gündüz ve ay ışığı · 9,6 W",powerW:9.6,recommendedMinL:60,recommendedMaxL:60,sourceUrl:"https://www.tetra.net/en-eu/products/tetra-aquaart-led-60l-lamp-96w",verifiedAt:"2026-09-25"},
+  ...([
+    [380,12.5,756,38,62],
+    [580,19,1258,58,82],
+    [780,24.5,1728,78,102],
+    [980,28,1868,98,122],
+    [1180,34,2380,118,142],
+    [1380,38,2520,138,162],
+  ] as const).map(([model,powerW,lumens,minLength,maxLength])=>({
+    id:`tetra-tetronic-led-proline-${model}`,category:"lighting" as const,brand:"Tetra",model:`Tetronic LED ProLine ${model}`,
+    specifications:`Ayarlanabilir IP67 LED · 6000 K · gündüz ${powerW} W / ${lumens} lm · mavi gece modu · 50.000 saat · ${minLength}–${maxLength} cm akvaryum`,
+    powerW,recommendedTankLengthCm:[minLength,maxLength] as [number,number],
+    sourceUrl:"https://www.tetra.net/en-eu/products/tetra-tetronic-led-proline",
+    additionalSourceUrls:["https://www.tetra.net/fileadmin/pictures/TH53489_9074_2022_03_GA_Tetronic_LED_ProLine_Online.pdf"],
+    verifiedAt:"2026-09-25",
+  })),
+  ...([[
+    270,6.3,661,6478,27,33,
+  ],[
+    430,12,1234,6612,43,49,
+  ],[
+    520,14.2,1460,6526,52,60,
+  ],[
+    720,19.4,1975,6566,72,80,
+  ],[
+    830,21,2544,6582,83,91,
+  ],[
+    990,23.4,2870,6570,99,107,
+  ],[
+    1140,28.4,3460,6654,114,122,
+  ]] as const).flatMap(([model,powerW,lumens,colorTemperatureK,minLength,maxLength])=>([
+    {
+      id:`tetra-lightwave-${model}-complete`,category:"lighting" as const,brand:"Tetra",model:`LightWave ${model} Complete Set`,
+      specifications:`IP68 LED tam set · ${powerW} W · ${lumens} lm · ${colorTemperatureK} K · ${minLength}–${maxLength} cm · güç kaynağı, T5/T8 adaptörleri, klips ve vantuz dahil · 30.000 saat`,
+      powerW,recommendedTankLengthCm:[minLength,maxLength] as [number,number],
+      sourceUrl:"https://www.tetra.net/en-eu/products/tetra-lightwave-complete-set",
+      additionalSourceUrls:["https://www.tetra.net/fileadmin/pictures/TH54308_9074.pdf"],verifiedAt:"2026-09-27",
+    },{
+      id:`tetra-lightwave-${model}-single`,category:"lighting" as const,brand:"Tetra",model:`LightWave ${model} Single Light`,
+      specifications:`İkinci IP68 LED armatür · ${powerW} W · ${lumens} lm · ${colorTemperatureK} K · ${minLength}–${maxLength} cm · aynı boy Complete Set ve LightWave Splitter ile kullanılır · güç kaynağı içermez · 30.000 saat`,
+      powerW,recommendedTankLengthCm:[minLength,maxLength] as [number,number],
+      sourceUrl:"https://www.tetra.net/en-eu/products/tetra-lightwave-single-light",
+      additionalSourceUrls:["https://www.tetra.net/fileadmin/pictures/TH54308_9074.pdf"],verifiedAt:"2026-09-27",
+    },
+  ])),
+];
+
+const fluvalCurrentLighting: EquipmentProfile[] = [
+  ...([
+    ["12w",12,38,63,950],
+    ["18w",18,61,93,1550],
+    ["27w",27,91,123,2250],
+    ["35w",35,123,154,3000],
+  ] as const).map(([id,powerW,minLength,maxLength,lumens])=>({
+    id:`fluval-aquasky-3-${id}`,category:"lighting" as const,brand:"Fluval",model:`Aquasky 3.0 LED ${powerW} W`,
+    specifications:`FluvalConnect uygulamalı RGB + çift beyaz LED · Wi-Fi/Bluetooth · ${powerW} W · ${lumens} lm · 6500 K · IP67 · ${minLength}–${maxLength} cm`,
+    powerW,recommendedTankLengthCm:[minLength,maxLength] as [number,number],sourceUrl:"https://fluvalaquatics.com/us/shop/product/aquasky-3-0",verifiedAt:"2026-09-28",
+  })),
+  ...([
+    ["22w",22,38,63,1600],
+    ["32w",32,59,89,2550],
+    ["46w",46,88,126,3650],
+    ["59w",59,117,155,4700],
+  ] as const).map(([id,powerW,minLength,maxLength,lumens])=>({
+    id:`fluval-plant-4-${id}`,category:"lighting" as const,brand:"Fluval",model:`Plant 4.0 LED ${powerW} W`,
+    specifications:`FluvalConnect uygulamalı altı bantlı bitki LED'i · ${powerW} W · ${lumens} lm · 7500 K · IP67 · ${minLength}–${maxLength} cm`,
+    powerW,recommendedTankLengthCm:[minLength,maxLength] as [number,number],sourceUrl:"https://fluvalaquatics.com/us/shop/product/plant-4-0",verifiedAt:"2026-09-28",
+  })),
+  ...([
+    ["22w",22,38,63],
+    ["32w",32,59,89],
+    ["46w",46,88,126],
+    ["59w",59,117,155],
+  ] as const).map(([id,powerW,minLength,maxLength])=>({
+    id:`fluval-reef-4-${id}`,category:"lighting" as const,brand:"Fluval",model:`Reef 4.0 LED ${powerW} W`,
+    specifications:`FluvalConnect uygulamalı yedi bantlı resif LED'i · ${powerW} W · IP67 · ${minLength}–${maxLength} cm`,
+    powerW,recommendedTankLengthCm:[minLength,maxLength] as [number,number],sourceUrl:"https://fluvalaquatics.com/us/shop/product/reef-4-0-led-59w-46-25-61-117-155-cm",verifiedAt:"2026-09-28",
+  })),
+  ...([
+    [60,38,38,60],
+    [90,60,59,88],
+    [120,90,88,124],
+    [150,120,117,154],
+  ] as const).map(([model,powerW,minLength,maxLength])=>({
+    id:`fluval-plant-pro-${model}`,category:"lighting" as const,brand:"Fluval",model:`Plant Pro ${model}`,
+    specifications:`FluvalConnect uygulamalı yüksek güçlü bitki LED'i · ${powerW} W · 7500 K · IP67 · ${minLength}–${maxLength} cm`,
+    powerW,recommendedTankLengthCm:[minLength,maxLength] as [number,number],sourceUrl:"https://fluvalaquatics.com/us/shop/product/plant-pro",verifiedAt:"2026-09-28",
+  })),
+  {id:"fluval-plant-4-nano-20w",category:"lighting",brand:"Fluval",model:"Plant 4.0 LED Nano 20 W",specifications:"FluvalConnect uygulamalı altı bantlı nano bitki LED'i · 20 W · 1300 lm · 7500 K · IP67 · 11,5–20 cm",powerW:20,recommendedTankLengthCm:[11.5,20],sourceUrl:"https://fluvalaquatics.com/us/shop/product/plant-4-0-nano",verifiedAt:"2026-09-28"},
+  {id:"fluval-reef-4-nano-25w",category:"lighting",brand:"Fluval",model:"Reef 4.0 LED Nano 25 W",specifications:"FluvalConnect uygulamalı yedi bantlı nano resif LED'i · 25 W · 1200 lm · 25000 K · IP67 · 11,5–20 cm",powerW:25,recommendedTankLengthCm:[11.5,20],sourceUrl:"https://fluvalaquatics.com/us/shop/product/reef-4-0-nano",verifiedAt:"2026-09-28"},
+];
+
+const fluvalPreviousGenerationLighting: EquipmentProfile[] = [
+  ...([12,18,27,35] as const).map((powerW,index)=>{
+    const ranges = [[38,61],[61,91],[91,122],[122,153]] as const;
+    const [minLength,maxLength] = ranges[index];
+    return {id:`fluval-aquasky-2-${powerW}w`,category:"lighting" as const,brand:"Fluval",model:`Aquasky 2.0 Bluetooth LED ${powerW} W`,specifications:`FluvalSmart uygulamalı önceki nesil RGB + 6500 K beyaz LED · ${powerW} W · IP67 · ${minLength}–${maxLength} cm`,powerW,recommendedTankLengthCm:[minLength,maxLength] as [number,number],sourceUrl:"https://fluvalaquatics.com/us/shop/product/aquasky-2-0",verifiedAt:"2026-09-28"};
+  }),
+  ...([22,32,46,59] as const).map((powerW,index)=>{
+    const ranges = [[38,61],[61,85],[91,115],[122,153]] as const;
+    const [minLength,maxLength] = ranges[index];
+    return {id:`fluval-plant-3-${powerW}w`,category:"lighting" as const,brand:"Fluval",model:`Plant 3.0 Bluetooth LED ${powerW} W`,specifications:`FluvalSmart uygulamalı önceki nesil altı bantlı bitki LED'i · ${powerW} W · 7500 K · IP67 · ${minLength}–${maxLength} cm`,powerW,recommendedTankLengthCm:[minLength,maxLength] as [number,number],sourceUrl:"https://fluvalaquatics.com/us/shop/product/plant-3-0",verifiedAt:"2026-09-28"};
+  }),
+  ...([22,32,46,59] as const).map((powerW,index)=>{
+    const ranges = [[38,61],[61,85],[91,122],[122,153]] as const;
+    const [minLength,maxLength] = ranges[index];
+    return {id:`fluval-marine-3-${powerW}w`,category:"lighting" as const,brand:"Fluval",model:`Marine 3.0 Bluetooth LED ${powerW} W`,specifications:`FluvalSmart uygulamalı önceki nesil yedi bantlı deniz ve resif LED'i · ${powerW} W · 25000 K · IP67 · ${minLength}–${maxLength} cm`,powerW,recommendedTankLengthCm:[minLength,maxLength] as [number,number],sourceUrl:"https://fluvalaquatics.com/us/shop/product/marine-3-0",verifiedAt:"2026-09-28"};
+  }),
+  {id:"fluval-plant-3-nano-15w",category:"lighting",brand:"Fluval",model:"Plant 3.0 Nano Bluetooth LED 15 W",specifications:"FluvalSmart uygulamalı önceki nesil altı bantlı nano bitki LED'i · 15 W · 1000 lm · 7500 K · IP67 · 12,7 × 12,7 cm",powerW:15,sourceUrl:"https://fluvalaquatics.com/us/shop/product/plant-3-0-nano",verifiedAt:"2026-09-28"},
+  {id:"fluval-marine-3-nano-20w",category:"lighting",brand:"Fluval",model:"Marine 3.0 Nano Bluetooth LED 20 W",specifications:"FluvalSmart uygulamalı önceki nesil yedi bantlı nano resif LED'i · 20 W · 850 lm · 25000 K · IP67 · 12,7 × 12,7 cm",powerW:20,sourceUrl:"https://fluvalaquatics.com/us/shop/product/marine-3-0-nano",verifiedAt:"2026-09-28"},
+  {id:"fluval-cob-nano-6-5w",category:"lighting",brand:"Fluval",model:"C.O.B. Nano LED 6,5 W",specifications:"Tatlı veya deniz nano akvaryumu için hibrit spektrumlu C.O.B. LED · 6,5 W · 290 lm · 9000 K · IP67 · 6,3 cm çap",powerW:6.5,sourceUrl:"https://fluvalaquatics.com/us/shop/product/c-o-b-nano",verifiedAt:"2026-09-28"},
+  {id:"fluval-prism-2-6-5w",category:"lighting",brand:"Fluval",model:"Prism 2.0 Underwater Spotlight LED 6,5 W",specifications:"Yalnız su altında kullanılan uzaktan kumandalı RGB + beyaz efekt LED'i · 6,5 W · 60 lm · 3000–25000 K · IP68 · 1,8 m ışık erişimi",powerW:6.5,sourceUrl:"https://fluvalaquatics.com/us/shop/product/prism-2-0",verifiedAt:"2026-09-28"},
+];
+
 export const lightingCatalog: EquipmentProfile[] = [
+  ...fluvalCurrentLighting,
+  ...fluvalPreviousGenerationLighting,
+  ...tetraLightingCatalog,
+  ...jblLedSolarGen2Catalog,
   ...orionAquaslimCatalog,
   ...orionDrgbwCatalog,
   ...orionDrgbwGrayCatalog,
