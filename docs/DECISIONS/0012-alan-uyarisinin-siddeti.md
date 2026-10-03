@@ -1,7 +1,7 @@
 # 0012 — Alan uyarısının şiddeti
 
 - Tarih: 2026-10-03
-- Durum: Önerildi. Ürün sahibi (`buraksenfx`) 2026-10-03'te soru formuyla iki kararı açıkça onayladı; ikisinde de önerilen seçenek seçildi: kırmızı uyarı için "kaynak + İsviçre" kuralı ve genel durumun en fazla "dikkat" olması. Değişiklik `codex/space-warning-severity` dalında. Codex denetimi iki turda tamamlandı (son tur 2026-10-03 temiz); kod ve belgeler ile altın fikstürün ayrı commit'ler olarak kaydedilmesi ve PR planlandı, `main` birleştirmesi ürün sahibinin onayını bekleyecek. `main` dalına birleştirilene kadar kabul edilmiş sayılmaz.
+- Durum: Önerildi. Ürün sahibi (`buraksenfx`) 2026-10-03'te soru formuyla iki kararı açıkça onayladı; ikisinde de önerilen seçenek seçildi: kırmızı uyarı için "kaynak + İsviçre" kuralı ve genel durumun en fazla "dikkat" olması. Değişiklik `codex/space-warning-severity` dalında. Codex denetimi iki turda tamamlandı (son tur 2026-10-03 temiz); kod ve belgeler (`39af083`) ile altın fikstür (`6886a2a`) ayrı commit'ler olarak kaydedildi ve PR #16 (`https://github.com/ckaracora/AquaMind/pull/16`) açıldı; PR üzerinde GitHub Actions `Doğrulama` ve Vercel önizlemesi başarılı. `main` birleştirmesi ürün sahibinin onayını bekliyor. `main` dalına birleştirilene kadar kabul edilmiş sayılmaz.
 
 ## Bağlam
 
@@ -84,4 +84,4 @@ Yönetmelik standart boyu (kuyruk yüzgeci hariç) kullanır. Katalogdaki yetiş
 
 ## Geri alma
 
-Kod ve belge değişikliğinin tek bir commit, altın fikstürün de ayrı bir commit olarak kaydedilmesi planlandı. Kod commit'i geri alındığında motor 1.5.0 davranışına döner; o durumda altın fikstür commit'i de geri alınmalıdır. Kullanıcı verisi ve depolama biçimi etkilenmez.
+Kod ve belge değişikliği tek bir commit'tir (`39af083`), altın fikstür ayrı bir commit'tir (`6886a2a`). Kod commit'i geri alındığında motor 1.5.0 davranışına döner; o durumda altın fikstür commit'i de geri alınmalıdır. Kullanıcı verisi ve depolama biçimi etkilenmez.
