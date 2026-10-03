@@ -127,11 +127,33 @@ describe("denetim senaryoları: filtre ve biyolojik yük", () => {
   });
 });
 
+describe("denetim senaryoları: davranış", () => {
+  it("Japon balığı ile neon tetra: küçük balık avlama uyarısı", () => {
+    const result = analyzeAquarium(tank(80, 100), [fish("goldfish", 2), fish("neon-tetra", 10)], communityDevices(), water({ temperature: 23 }));
+    expect(result.warnings.find((warning) => warning.title === "Neon tetra: avlanabilir")?.level).toBe("warning");
+  });
+
+  it("Melek balığı ile neon tetra: küçük balık avlama uyarısı", () => {
+    const result = analyzeAquarium(tank(100, 200), [fish("angelfish", 2), fish("neon-tetra", 15)], [device("jbl-e902"), device("eheim-thermo-150")], water({ temperature: 26 }));
+    expect(result.warnings.find((warning) => warning.title === "Neon tetra: avlanabilir")?.message).toContain("Kaynak: Seriously Fish.");
+  });
+
+  it("Sumatra barb ile beta: yüzgeç ısırma uyarısı", () => {
+    const result = analyzeAquarium(tank(80, 120), [fish("tiger-barb", 8), fish("betta", 1)], [device("jbl-cristalprofi-i200"), device("eheim-thermo-100")], water());
+    expect(titles(result)).toContain("Beta balığı: yüzgeç ısırma riski");
+  });
+
+  it("İki beta: erkekler kavga eder uyarısı", () => {
+    const result = analyzeAquarium(tank(50, 40), [fish("betta", 2)], [device("jbl-cristalprofi-i60"), device("eheim-thermo-50")], water({ temperature: 26 }));
+    expect(result.warnings.find((warning) => warning.title === "Beta balığı: erkekler kavga eder")?.level).toBe("warning");
+  });
+
+  it("Cüce gurami ile kiraz karides: kaynaklara göre bitkili akvaryumda uyumlu, karides uyarısı çıkmaz", () => {
+    const result = analyzeAquarium(tank(60, 60), [fish("dwarf-gourami", 1), fish("cherry-shrimp", 10)], [device("jbl-cristalprofi-i60"), device("eheim-thermo-50")], water());
+    expect(titles(result).some((title) => title.startsWith("Karides"))).toBe(false);
+  });
+});
+
 describe("denetim senaryoları: henüz düzeltilmeyenler", () => {
-  it.todo("Japon balığı ile neon tetra için küçük balık avlama uyarısı çıkmalı (davranış işareti)");
-  it.todo("Melek balığı ile neon tetra için küçük balık avlama uyarısı çıkmalı (davranış işareti)");
-  it.todo("Sumatra barb için yüzgeç ısırma uyarısı çıkmalı (davranış işareti)");
-  it.todo("İki beta için 'erkekse birlikte tutulmamalı' uyarısı çıkmalı (aynı tür içi kural)");
-  it.todo("Cüce gurami ile kiraz karides için karides avlama uyarısı çıkmalı (davranış işareti)");
   it.todo("Alan uyarısının şiddeti hacim açığıyla artmalı: 60 L'deki astronot (katalogda en az 300 L) yalnızca 'alan sınırda' uyarısı almamalı (alan kuralı)");
 });

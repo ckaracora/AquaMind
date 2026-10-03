@@ -1,7 +1,7 @@
 # 0009 — Filtre yeterliliği, tahmini biyolojik yük ve tehlike uyarısının genel duruma etkisi
 
 - Tarih: 2026-09-28
-- Durum: Önerildi — ürün sahibi (`buraksenfx`) üç kuralı 2026-09-28'de karar sayfası üzerinden açıkça onayladı. Akvaryum uzmanı Canberk eşik kararlarını aynı gün güvenilir kaynaklara bıraktı; karar sayfasındaki dört soru kaynaklara göre cevaplandı (aşağıda "Sonuçlar"). `codex/filter-load-recalibration` dalında; Codex denetimi iki turda tamamlandı (son tur 2026-09-29 temiz); PR #13 (`https://github.com/ckaracora/AquaMind/pull/13`) açıldı ve kontrolleri başarılı; `main` birleştirmesi için kullanıcı onayı bekliyor. `main` dalına birleştirilene kadar kabul edilmiş sayılmaz
+- Durum: Kabul edildi — ürün sahibi (`buraksenfx`) üç kuralı 2026-09-28'de karar sayfası üzerinden açıkça onayladı; Canberk eşik kararlarını güvenilir kaynaklara bıraktı. Codex denetimi iki turda tamamlandı (son tur 2026-09-29 temiz). PR #13 (`https://github.com/ckaracora/AquaMind/pull/13`) ile 2026-09-29'da merge commit yöntemiyle `main` dalına birleştirildi (`98c8dc9`) ve canlıda
 - Karar sayfası: https://claude.ai/artifact/NSCBZ1orfPNYa4wRucL8VZ (özel; paylaşım ürün sahibinde)
 
 ## Bağlam
