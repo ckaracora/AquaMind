@@ -23,5 +23,9 @@
 //
 // 1.5.0: taban ısıtma kablosu gibi pasif ısıtıcı kayıtları ısıtıcı kapasitesine katılmaz
 // (bkz. docs/DECISIONS/0011-katalog-entegrasyonu-2-taban-isiticisi.md).
-export const ENGINE_VERSION = "1.5.0";
-export const RULESET_VERSION = "1.5.0";
+//
+// 1.6.0: alan uyarısının şiddeti. Akvaryum kaynağın önerisinin ve İsviçre Hayvan Koruma Yönetmeliği'nin
+// balık boyuna göre ölçü sınırının (uzunluk 3×, genişlik 2×, derinlik 1×) altındaysa alan uyarısı tehlikedir
+// (bkz. docs/DECISIONS/0012-alan-uyarisinin-siddeti.md).
+export const ENGINE_VERSION = "1.6.0";
+export const RULESET_VERSION = "1.6.0";

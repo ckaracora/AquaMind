@@ -220,7 +220,7 @@ const metric = (analysis, key) => analysis.metrics.find(item => item.key === key
     [animal("oscar", "Astronot"), animal("neon-tetra", "Neon tetra", 8)],
     [],
   );
-  assert(warningTitles(analysis).includes("Astronot: alan sınırda"), "Astronot 540 litre/150 cm altındaki akvaryuma önerilmemeli");
+  assert.equal(analysis.warnings.find((warning) => warning.title === "Astronot: akvaryum çok küçük")?.level, "danger", "Astronot 540 litre/150 cm altındaki akvaryuma önerilmemeli");
   assert(warningTitles(analysis).includes("Neon tetra için avlanma riski"), "Yırtıcı-küçük tür eşleşmesi uyarılmalı");
   assert(warningTitles(analysis).includes("Astronot: özel bakım gereksinimi"), "Astronot filtrasyon, ısıtıcı, su değişimi ve beslenme güvenliğini göstermeli");
   assert.equal(metric(analysis, "compatibility").status, "danger");
@@ -441,7 +441,7 @@ const metric = (analysis, key) => analysis.metrics.find(item => item.key === key
     [animal("bala-shark", "Bala Shark", 3)],
     [],
   );
-  assert(warningTitles(analysis).includes("Bala Shark: alan sınırda"), "Bala Shark yetişkin sürüsü küçük hacim ve kısa akvaryuma önerilmemeli");
+  assert.equal(analysis.warnings.find((warning) => warning.title === "Bala Shark: akvaryum çok küçük")?.level, "danger", "Bala Shark yetişkin sürüsü küçük hacim ve kısa akvaryuma önerilmemeli");
   assert(warningTitles(analysis).includes("Bala Shark: grup sayısı düşük"), "Bala Shark üçlü girildiğinde altılı sürü gereksinimi uyarılmalı");
   assert(warningTitles(analysis).includes("Bala Shark: özel bakım gereksinimi"), "Bala Shark için büyüme, kapak ve oksijen uyarısı görünmeli");
   assert.equal(metric(analysis, "social").status, "danger");
@@ -465,7 +465,7 @@ const metric = (analysis, key) => analysis.metrics.find(item => item.key === key
     [animal("jaguar-cichlid", "Jaguar ciklet"), animal("neon-tetra", "Neon tetra", 8)],
     [],
   );
-  assert(warningTitles(analysis).includes("Jaguar ciklet: alan sınırda"), "Jaguar ciklet 680 litreden ve 182 cm'den küçük akvaryuma önerilmemeli");
+  assert.equal(analysis.warnings.find((warning) => warning.title === "Jaguar ciklet: akvaryum çok küçük")?.level, "danger", "Jaguar ciklet 680 litreden ve 182 cm'den küçük akvaryuma önerilmemeli");
   assert(warningTitles(analysis).includes("Neon tetra için avlanma riski"), "Jaguar ciklet küçük balıklarla seçildiğinde avlanma uyarısı vermeli");
   assert(warningTitles(analysis).includes("Jaguar ciklet için tür akvaryumu önerilir"), "Jaguar ciklet karma toplulukta tehlike üretmeli");
   assert.equal(metric(analysis, "compatibility").status, "danger");
@@ -574,7 +574,8 @@ const metric = (analysis, key) => analysis.metrics.find(item => item.key === key
 {
   const analysis = analyzeAquarium(
     aquarium({ type: "saltwater", netVolumeLiters: 250, lengthCm: 150 }),
-    [animal("long-tentacle-anemone", "Uzun tentaküllü anemon"), animal("ocellaris-clownfish", "Ocellaris palyaço balığı", 2)],
+    // Anemon katalogda "other" kategorisindedir; alan uyarısının tehlike basamağı yalnızca balıklar için geçerlidir (kural seti 1.6.0).
+    [{ ...animal("long-tentacle-anemone", "Uzun tentaküllü anemon"), category: "other" }, animal("ocellaris-clownfish", "Ocellaris palyaço balığı", 2)],
     [],
     { id: "marine-water-anemone", aquariumId: "test-aquarium", measuredAt: "2026-08-31", temperature: 25, ph: 8.2, specificGravity: 1.024 },
   );
@@ -622,7 +623,7 @@ const metric = (analysis, key) => analysis.metrics.find(item => item.key === key
     [animal("ocellaris-peacock-bass", "Ocellaris peacock bass"), animal("neon-tetra", "Neon tetra", 8)],
     [],
   );
-  assert(warningTitles(analysis).includes("Ocellaris peacock bass: alan sınırda"), "Cichla ocellaris 5.000 litre ve 300 cm altındaki akvaryuma önerilmemeli");
+  assert.equal(analysis.warnings.find((warning) => warning.title === "Ocellaris peacock bass: akvaryum çok küçük")?.level, "danger", "Cichla ocellaris 5.000 litre ve 300 cm altındaki akvaryuma önerilmemeli");
   assert(warningTitles(analysis).includes("Ocellaris peacock bass: grup sayısı düşük"), "Cichla ocellaris tek birey yerine doğrulanmış beşli grup gereksinimini göstermeli");
   assert(warningTitles(analysis).includes("Neon tetra için avlanma riski"), "Cichla ocellaris küçük balıklarla seçildiğinde avlanma uyarısı vermeli");
   assert(warningTitles(analysis).includes("Ocellaris peacock bass için tür akvaryumu önerilir"), "Cichla ocellaris topluluk akvaryumunda tehlike üretmeli");
@@ -635,7 +636,7 @@ const metric = (analysis, key) => analysis.metrics.find(item => item.key === key
     [animal("winemillers-eartheater", "Winemiller toprak yiyen ciklet", 4)],
     [],
   );
-  const spaceWarning = analysis.warnings.find((warning) => warning.title === "Winemiller toprak yiyen ciklet: alan sınırda");
+  const spaceWarning = analysis.warnings.find((warning) => warning.title === "Winemiller toprak yiyen ciklet: akvaryum çok küçük");
   assert(spaceWarning, "Geophagus winemilleri 648 litre/180 cm altındaki akvaryuma önerilmemeli");
   assert(spaceWarning.message.includes("648 L") && spaceWarning.message.includes("180 cm"), "Geophagus winemilleri alan uyarısı kaynaklı hacim ve uzunluğu göstermeli");
   assert(warningTitles(analysis).includes("Winemiller toprak yiyen ciklet: grup sayısı düşük"), "Geophagus winemilleri altılı grubun altında önerilmemeli");
@@ -648,7 +649,7 @@ const metric = (analysis, key) => analysis.metrics.find(item => item.key === key
     [animal("threadfin-acara", "Threadfin acara")],
     [],
   );
-  const spaceWarning = analysis.warnings.find((warning) => warning.title === "Threadfin acara: alan sınırda");
+  const spaceWarning = analysis.warnings.find((warning) => warning.title === "Threadfin acara: akvaryum çok küçük");
   assert(spaceWarning, "Acarichthys heckelii 150 cm altındaki akvaryuma önerilmemeli");
   assert(spaceWarning.message.includes("150 cm"), "Acarichthys heckelii alan uyarısı kaynaklı çift taban uzunluğunu göstermeli");
   assert(warningTitles(analysis).includes("Threadfin acara: özel bakım gereksinimi"), "Acarichthys heckelii su kalitesi ve saldırganlık uyarısını göstermeli");
@@ -660,7 +661,7 @@ const metric = (analysis, key) => analysis.metrics.find(item => item.key === key
     [animal("african-arowana", "Afrika arowanası"), animal("neon-tetra", "Neon tetra", 8)],
     [],
   );
-  assert(warningTitles(analysis).includes("Afrika arowanası: alan sınırda"), "Afrika Arowanası 1.000 litre altındaki akvaryuma önerilmemeli");
+  assert.equal(analysis.warnings.find((warning) => warning.title === "Afrika arowanası: akvaryum çok küçük")?.level, "danger", "Afrika Arowanası 1.000 litre altındaki akvaryuma önerilmemeli");
   assert(warningTitles(analysis).includes("Afrika arowanası: tank uzunluğu verisi sınırlı"), "Afrika Arowanası için yayımlanmayan santimetre eşiği açıkça belirtilmeli");
   assert(warningTitles(analysis).includes("Neon tetra için avlanma riski"), "Afrika Arowanası küçük balıklarla seçildiğinde avlanma uyarısı vermeli");
   assert(warningTitles(analysis).includes("Afrika arowanası: özel bakım gereksinimi"), "Afrika Arowanası gerçek omnivor beslenme ve uzman bakım uyarısını göstermeli");
@@ -673,7 +674,7 @@ const metric = (analysis, key) => analysis.metrics.find(item => item.key === key
     [animal("chinese-high-fin-sucker", "Çin ejderi"), animal("betta", "Beta balığı")],
     [],
   );
-  assert(warningTitles(analysis).includes("Çin ejderi: alan sınırda"), "Çin Ejderi 1.135 litre altındaki akvaryuma önerilmemeli");
+  assert.equal(analysis.warnings.find((warning) => warning.title === "Çin ejderi: akvaryum çok küçük")?.level, "danger", "Çin Ejderi 1.135 litre altındaki akvaryuma önerilmemeli");
   assert(warningTitles(analysis).includes("Çin ejderi: tank uzunluğu verisi sınırlı"), "Çin Ejderi için yayımlanmayan santimetre eşiği açıkça belirtilmeli");
   assert(!warningTitles(analysis).includes("Akıntı ihtiyaçları farklı"), "Çin Ejderi için kaynaksız akıntı çatışması üretilmemeli");
   assert(warningTitles(analysis).includes("Çin ejderi: özel bakım gereksinimi"), "Çin Ejderi boy farkı, havuz ve koruma uyarısını göstermeli");
@@ -686,7 +687,7 @@ const metric = (analysis, key) => analysis.metrics.find(item => item.key === key
     [animal("piquiti-peacock-bass", "Piquiti peacock bass"), animal("neon-tetra", "Neon tetra", 8)],
     [],
   );
-  const spaceWarning = analysis.warnings.find((warning) => warning.title === "Piquiti peacock bass: alan sınırda");
+  const spaceWarning = analysis.warnings.find((warning) => warning.title === "Piquiti peacock bass: akvaryum çok küçük");
   assert(spaceWarning, "Cichla piquiti 5.000 litre/300 cm altındaki akvaryuma önerilmemeli");
   assert(spaceWarning.message.includes("5000 L") && spaceWarning.message.includes("300 cm"), "Cichla piquiti alan uyarısı kaynaklı hacim ve uzunluğu göstermeli");
   assert(warningTitles(analysis).includes("Neon tetra için avlanma riski"), "Cichla piquiti küçük balıklarla seçildiğinde avlanma uyarısı vermeli");
@@ -975,7 +976,7 @@ const metric = (analysis, key) => analysis.metrics.find(item => item.key === key
     [animal("red-bellied-piranha", "Kırmızı karınlı piranha", 5), animal("neon-tetra", "Neon tetra", 10)],
     [],
   );
-  assert(warningTitles(analysis).includes("Kırmızı karınlı piranha: alan sınırda"), "Pygocentrus nattereri 1296 litre/240 cm altındaki akvaryuma önerilmemeli");
+  assert.equal(analysis.warnings.find((warning) => warning.title === "Kırmızı karınlı piranha: akvaryum çok küçük")?.level, "danger", "Pygocentrus nattereri 1296 litre/240 cm altındaki akvaryuma önerilmemeli");
   assert(warningTitles(analysis).includes("Kırmızı karınlı piranha: grup sayısı düşük"), "Pygocentrus nattereri altılı grubun altında sosyal uyarı üretmeli");
   assert(warningTitles(analysis).includes("Kırmızı karınlı piranha için tür akvaryumu önerilir"), "Pygocentrus nattereri tür akvaryumu güvenliğini göstermeli");
   assert(warningTitles(analysis).includes("Kırmızı karınlı piranha: özel bakım gereksinimi"), "Pygocentrus nattereri bakım güvenliği, yem, alan ve filtrasyon uyarılarını göstermeli");
@@ -987,7 +988,7 @@ const metric = (analysis, key) => analysis.metrics.find(item => item.key === key
     [animal("endlicheri-bichir", "Endlicheri bichir", 1), animal("neon-tetra", "Neon tetra", 10)],
     [],
   );
-  assert(warningTitles(analysis).includes("Endlicheri bichir: alan sınırda"), "Polypterus endlicherii 2000 litre/300 cm altındaki akvaryuma önerilmemeli");
+  assert.equal(analysis.warnings.find((warning) => warning.title === "Endlicheri bichir: akvaryum çok küçük")?.level, "danger", "Polypterus endlicherii 2000 litre/300 cm altındaki akvaryuma önerilmemeli");
   assert(warningTitles(analysis).includes("Endlicheri bichir için tür akvaryumu önerilir"), "Polypterus endlicherii uzman tür akvaryumu güvenliğini göstermeli");
   assert(warningTitles(analysis).includes("Endlicheri bichir: özel bakım gereksinimi"), "Polypterus endlicherii yüzey havası, kaçış kapağı, alan ve sosyal kaynak farkını göstermeli");
 }
@@ -998,7 +999,7 @@ const metric = (analysis, key) => analysis.metrics.find(item => item.key === key
     [animal("monoculus-peacock-bass", "Monoculus peacock bass", 1), animal("neon-tetra", "Neon tetra", 10)],
     [],
   );
-  assert(warningTitles(analysis).includes("Monoculus peacock bass: alan sınırda"), "Cichla monoculus 1200 litre/200 cm altındaki akvaryuma önerilmemeli");
+  assert.equal(analysis.warnings.find((warning) => warning.title === "Monoculus peacock bass: akvaryum çok küçük")?.level, "danger", "Cichla monoculus 1200 litre/200 cm altındaki akvaryuma önerilmemeli");
   assert(warningTitles(analysis).includes("Monoculus peacock bass için tür akvaryumu önerilir"), "Cichla monoculus tür akvaryumu güvenliğini göstermeli");
   assert(warningTitles(analysis).includes("Monoculus peacock bass: özel bakım gereksinimi"), "Cichla monoculus boy, su kaynağı, yem, filtrasyon ve doğaya bırakmama uyarılarını göstermeli");
 }
@@ -1131,7 +1132,7 @@ const metric = (analysis, key) => analysis.metrics.find(item => item.key === key
     [animal("goldfish", "Japon balığı", 2)],
     [],
   );
-  const spaceWarning = analysis.warnings.find((warning) => warning.title === "Japon balığı: alan sınırda");
+  const spaceWarning = analysis.warnings.find((warning) => warning.title === "Japon balığı: akvaryum çok küçük");
   assert(spaceWarning, "İki yetişkin Japon balığı 150 litreden küçük akvaryuma önerilmemeli");
   assert(spaceWarning.message.includes("150 L"), "Japon balığı alan uyarısı kayıtlı adede göre gereken hacmi göstermeli");
   assert(warningTitles(analysis).includes("Japon balığı: özel bakım gereksinimi"), "Japon balığı filtrasyon, oksijen ve bakım uyarılarını göstermeli");
@@ -1143,7 +1144,7 @@ const metric = (analysis, key) => analysis.metrics.find(item => item.key === key
     [animal("tiger-shovelnose-catfish", "Kaplan kürek burun kedi balığı"), animal("neon-tetra", "Neon tetra", 8)],
     [],
   );
-  const spaceWarning = analysis.warnings.find((warning) => warning.title === "Kaplan kürek burun kedi balığı: alan sınırda");
+  const spaceWarning = analysis.warnings.find((warning) => warning.title === "Kaplan kürek burun kedi balığı: akvaryum çok küçük");
   assert(spaceWarning, "Pseudoplatystoma tigrinum 10.368 litre/360 cm altındaki akvaryuma önerilmemeli");
   assert(spaceWarning.message.includes("10368 L") && spaceWarning.message.includes("360 cm"), "Kürek burun alan uyarısı kaynaklı erişkin hacim ve uzunluk eşiğini göstermeli");
   assert(warningTitles(analysis).includes("Neon tetra için avlanma riski"), "Pseudoplatystoma tigrinum küçük balıklarla seçildiğinde avlanma uyarısı vermeli");
@@ -1162,7 +1163,7 @@ const metric = (analysis, key) => analysis.metrics.find(item => item.key === key
     [animal("black-sharkminnow", "Siyah labeo", 1), animal("neon-tetra", "Neon tetra", 10)],
     [],
   );
-  assert(warningTitles(analysis).includes("Siyah labeo: alan sınırda"), "Siyah Labeo 2500 litre/360 cm altındaki akvaryuma önerilmemeli");
+  assert.equal(analysis.warnings.find((warning) => warning.title === "Siyah labeo: akvaryum çok küçük")?.level, "danger", "Siyah Labeo 2500 litre/360 cm altındaki akvaryuma önerilmemeli");
   assert(warningTitles(analysis).includes("Siyah labeo için tür akvaryumu önerilir"), "Siyah Labeo standart topluluk akvaryumuna önerilmemeli");
   assert(warningTitles(analysis).includes("Siyah labeo: özel bakım gereksinimi"), "Siyah Labeo kamu tesisi ölçeği, oksijen ve bakım uyarılarını göstermeli");
 }
@@ -1173,7 +1174,7 @@ const metric = (analysis, key) => analysis.metrics.find(item => item.key === key
     [animal("giant-gourami", "Dev gurami", 1)],
     [],
   );
-  assert(warningTitles(analysis).includes("Dev gurami: alan sınırda"), "Dev Gurami 681 litre/183 cm altındaki akvaryuma önerilmemeli");
+  assert.equal(analysis.warnings.find((warning) => warning.title === "Dev gurami: akvaryum çok küçük")?.level, "danger", "Dev Gurami 681 litre/183 cm altındaki akvaryuma önerilmemeli");
   assert(warningTitles(analysis).includes("Dev gurami: özel bakım gereksinimi"), "Dev Gurami çıplak minimum, yüzey havası ve filtrasyon uyarılarını göstermeli");
 }
 
@@ -1183,7 +1184,7 @@ const metric = (analysis, key) => analysis.metrics.find(item => item.key === key
     [animal("red-bellied-pacu", "Kırmızı karınlı pacu", 1), animal("neon-tetra", "Neon tetra", 10)],
     [],
   );
-  assert(warningTitles(analysis).includes("Kırmızı karınlı pacu: alan sınırda"), "Kırmızı Karınlı Pacu 2550 litre/300 cm altındaki akvaryuma önerilmemeli");
+  assert.equal(analysis.warnings.find((warning) => warning.title === "Kırmızı karınlı pacu: akvaryum çok küçük")?.level, "danger", "Kırmızı Karınlı Pacu 2550 litre/300 cm altındaki akvaryuma önerilmemeli");
   assert(warningTitles(analysis).includes("Neon tetra için avlanma riski"), "Kırmızı Karınlı Pacu küçük balıklarla seçildiğinde fırsatçı avlanma uyarısı vermeli");
   assert(warningTitles(analysis).includes("Kırmızı karınlı pacu için tür akvaryumu önerilir"), "Kırmızı Karınlı Pacu standart topluluk akvaryumuna önerilmemeli");
   assert(warningTitles(analysis).includes("Kırmızı karınlı pacu: özel bakım gereksinimi"), "Kırmızı Karınlı Pacu kaynak hacmi farkı, filtrasyon ve bakım güvenliğini göstermeli");
@@ -1195,7 +1196,7 @@ const metric = (analysis, key) => analysis.metrics.find(item => item.key === key
     [animal("redtail-catfish", "Kırmızı kuyruk kedi balığı", 1), animal("neon-tetra", "Neon tetra", 10)],
     [],
   );
-  assert(warningTitles(analysis).includes("Kırmızı kuyruk kedi balığı: alan sınırda"), "Kırmızı Kuyruk Kedi Balığı 10368 litre/360 cm altındaki sisteme önerilmemeli");
+  assert.equal(analysis.warnings.find((warning) => warning.title === "Kırmızı kuyruk kedi balığı: akvaryum çok küçük")?.level, "danger", "Kırmızı Kuyruk Kedi Balığı 10368 litre/360 cm altındaki sisteme önerilmemeli");
   assert(warningTitles(analysis).includes("Neon tetra için avlanma riski"), "Kırmızı Kuyruk Kedi Balığı küçük balıklarla seçildiğinde avlanma uyarısı vermeli");
   assert(warningTitles(analysis).includes("Kırmızı kuyruk kedi balığı için tür akvaryumu önerilir"), "Kırmızı Kuyruk Kedi Balığı standart topluluk akvaryumuna önerilmemeli");
   assert(warningTitles(analysis).includes("Kırmızı kuyruk kedi balığı: özel bakım gereksinimi"), "Kırmızı Kuyruk Kedi Balığı kamusal ölçek ve beslenme güvenliğini göstermeli");
@@ -1207,7 +1208,7 @@ const metric = (analysis, key) => analysis.metrics.find(item => item.key === key
     [animal("arowana", "Gümüş arowana", 1), animal("neon-tetra", "Neon tetra", 10)],
     [],
   );
-  assert(warningTitles(analysis).includes("Gümüş arowana: alan sınırda"), "Gümüş Arowana 4500 litre/500 cm altındaki sisteme önerilmemeli");
+  assert.equal(analysis.warnings.find((warning) => warning.title === "Gümüş arowana: akvaryum çok küçük")?.level, "danger", "Gümüş Arowana 4500 litre/500 cm altındaki sisteme önerilmemeli");
   assert(warningTitles(analysis).includes("Neon tetra için avlanma riski"), "Gümüş Arowana küçük balıklarla seçildiğinde avlanma uyarısı vermeli");
   assert(warningTitles(analysis).includes("Gümüş arowana için tür akvaryumu önerilir"), "Gümüş Arowana standart topluluk akvaryumuna önerilmemeli");
   assert(warningTitles(analysis).includes("Gümüş arowana: özel bakım gereksinimi"), "Gümüş Arowana kapak, filtrasyon ve beslenme güvenliğini göstermeli");
@@ -1219,7 +1220,7 @@ const metric = (analysis, key) => analysis.metrics.find(item => item.key === key
     [animal("iridescent-shark-catfish", "Pangasius köpek balığı", 1), animal("neon-tetra", "Neon tetra", 10)],
     [],
   );
-  assert(warningTitles(analysis).includes("Pangasius köpek balığı: alan sınırda"), "Pangasius 14580 litre/450 cm altındaki sisteme önerilmemeli");
+  assert.equal(analysis.warnings.find((warning) => warning.title === "Pangasius köpek balığı: akvaryum çok küçük")?.level, "danger", "Pangasius 14580 litre/450 cm altındaki sisteme önerilmemeli");
   assert(warningTitles(analysis).includes("Neon tetra için avlanma riski"), "Pangasius küçük balıklarla seçildiğinde avlanma uyarısı vermeli");
   assert(warningTitles(analysis).includes("Pangasius köpek balığı için tür akvaryumu önerilir"), "Pangasius standart topluluk akvaryumuna önerilmemeli");
   assert(warningTitles(analysis).includes("Pangasius köpek balığı: özel bakım gereksinimi"), "Pangasius çarpma, sürü ve kamusal ölçek güvenliğini göstermeli");
@@ -1231,7 +1232,7 @@ const metric = (analysis, key) => analysis.metrics.find(item => item.key === key
     [animal("delhezi-bichir", "Delhezi bichir", 1), animal("neon-tetra", "Neon tetra", 10)],
     [],
   );
-  assert(warningTitles(analysis).includes("Delhezi bichir: alan sınırda"), "Delhezi bichir 648 litre/180 cm altındaki akvaryuma önerilmemeli");
+  assert.equal(analysis.warnings.find((warning) => warning.title === "Delhezi bichir: akvaryum çok küçük")?.level, "danger", "Delhezi bichir 648 litre/180 cm altındaki akvaryuma önerilmemeli");
   assert(warningTitles(analysis).includes("Neon tetra için avlanma riski"), "Delhezi bichir küçük balıklarla seçildiğinde avlanma uyarısı vermeli");
   assert(warningTitles(analysis).includes("Delhezi bichir: özel bakım gereksinimi"), "Delhezi bichir yüzey havası, kaçış ve gece beslenmesi güvenliğini göstermeli");
 }
@@ -1242,7 +1243,7 @@ const metric = (analysis, key) => analysis.metrics.find(item => item.key === key
     [animal("giant-snakehead", "Dev kırmızı yılanbaş", 1), animal("neon-tetra", "Neon tetra", 10)],
     [],
   );
-  assert(warningTitles(analysis).includes("Dev kırmızı yılanbaş: alan sınırda"), "Dev yılanbaş 6000 litre/400 cm altındaki sisteme önerilmemeli");
+  assert.equal(analysis.warnings.find((warning) => warning.title === "Dev kırmızı yılanbaş: akvaryum çok küçük")?.level, "danger", "Dev yılanbaş 6000 litre/400 cm altındaki sisteme önerilmemeli");
   assert(warningTitles(analysis).includes("Neon tetra için avlanma riski"), "Dev yılanbaş küçük balıklarla seçildiğinde avlanma uyarısı vermeli");
   assert(warningTitles(analysis).includes("Dev kırmızı yılanbaş için tür akvaryumu önerilir"), "Dev yılanbaş standart topluluk akvaryumuna önerilmemeli");
   assert(warningTitles(analysis).includes("Dev kırmızı yılanbaş: özel bakım gereksinimi"), "Dev yılanbaş kamu tesisi, kapak ve beslenme güvenliğini göstermeli");
@@ -1276,7 +1277,7 @@ const metric = (analysis, key) => analysis.metrics.find(item => item.key === key
     [animal("clown-loach", "Makrakanta", 3)],
     [],
   );
-  assert(warningTitles(analysis).includes("Makrakanta: alan sınırda"), "Makrakanta 648 litre/180 cm altındaki akvaryuma önerilmemeli");
+  assert.equal(analysis.warnings.find((warning) => warning.title === "Makrakanta: akvaryum çok küçük")?.level, "danger", "Makrakanta 648 litre/180 cm altındaki akvaryuma önerilmemeli");
   assert(warningTitles(analysis).includes("Makrakanta: grup sayısı düşük"), "Makrakanta beşli grubun altında sosyal uyarı üretmeli");
   assert(warningTitles(analysis).includes("Makrakanta: özel bakım gereksinimi"), "Makrakanta olgun tank, oksijen, kapak ve uzun ömür güvenliğini göstermeli");
 }
