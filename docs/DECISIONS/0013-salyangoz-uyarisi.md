@@ -1,7 +1,7 @@
 # 0013 — Salyangoz uyarısı
 
 - Tarih: 2026-10-03
-- Durum: Önerildi — ürün sahibi (`buraksenfx`) kuralı 2026-10-03'te soru formuyla açıkça onayladı (önerilen seçenek). `codex/snail-warning` dalında. Codex denetimi iki turda tamamlandı (son tur 2026-10-04 temiz; 1. turdaki iki P3 bulgu yalnızca belgeleriyle ilgiliydi); kod ve belgelerin tek commit olarak kaydedilmesi ve PR planlandı, `main` birleştirmesi ürün sahibinin onayını bekleyecek. `main` dalına birleştirilene kadar kabul edilmiş sayılmaz
+- Durum: Önerildi — ürün sahibi (`buraksenfx`) kuralı 2026-10-03'te soru formuyla açıkça onayladı (önerilen seçenek). `codex/snail-warning` dalında. Codex denetimi iki turda tamamlandı (son tur 2026-10-04 temiz; 1. turdaki iki P3 bulgu yalnızca belgeleriyle ilgiliydi); kod ve belgeler tek commit olarak kaydedildi (`a836123`) ve PR #17 (`https://github.com/ckaracora/AquaMind/pull/17`) açıldı; PR üzerinde GitHub Actions `Doğrulama` ve Vercel önizlemesi başarılı. `main` birleştirmesi ürün sahibinin onayını bekliyor. `main` dalına birleştirilene kadar kabul edilmiş sayılmaz
 
 ## Bağlam
 
@@ -36,4 +36,4 @@ Davranış verisi (`src/data/species-behavior.ts`, 0010) kaynağı açıkça "sa
 
 ## Geri alma
 
-Kod değişikliği tek commit olarak planlandı. Geri alındığında motor 1.6.0 davranışına döner; altın fikstür değişmediği için ayrı bir geri alma gerekmez. Kullanıcı verisi ve depolama biçimi etkilenmez.
+Kod değişikliği tek commit'tir (`a836123`). Geri alındığında motor 1.6.0 davranışına döner; altın fikstür değişmediği için ayrı bir geri alma gerekmez. Kullanıcı verisi ve depolama biçimi etkilenmez.
