@@ -1,6 +1,6 @@
 # AquaMind mimarisi
 
-Son güncelleme: 2026-10-03 (motor 1.6.0 — alan uyarısının şiddeti; aynı gün Canberk'in `b1fb27d` katalog işinin ikinci entegrasyonu ve motor 1.5.0 — taban ısıtıcısı; 2026-09-29'da motor 1.4.0 — kaynaklı tür davranış verisi `src/data/species-behavior.ts`; önceki büyük güncelleme 2026-09-03, Issue #8 — yerel depolama bütünlüğü). Bu belge iki bölümden oluşur: **mevcut yapı** (depoda bugün olan) ve **hedef mimari** (planlanan, henüz uygulanmamış). Planlanan kısımlar tamamlanmış gibi gösterilmez.
+Son güncelleme: 2026-10-03 (motor 1.7.0 — salyangoz uyarısı; motor 1.6.0 — alan uyarısının şiddeti; aynı gün Canberk'in `b1fb27d` katalog işinin ikinci entegrasyonu ve motor 1.5.0 — taban ısıtıcısı; 2026-09-29'da motor 1.4.0 — kaynaklı tür davranış verisi `src/data/species-behavior.ts`; önceki büyük güncelleme 2026-09-03, Issue #8 — yerel depolama bütünlüğü). Bu belge iki bölümden oluşur: **mevcut yapı** (depoda bugün olan) ve **hedef mimari** (planlanan, henüz uygulanmamış). Planlanan kısımlar tamamlanmış gibi gösterilmez.
 
 ## Mevcut yapı (Phase 0B sonrası)
 

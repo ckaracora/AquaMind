@@ -107,3 +107,23 @@ describe("kaynağın av boyu sınırı (gerçek katalog)", () => {
     expect(predation(analyzeAquarium(tank, [fish("winemillers-eartheater", 1), fish("chili-rasbora", 10)], []))).toEqual([]);
   });
 });
+
+describe("salyangoz uyarısı (gerçek katalog, kural seti 1.7.0)", () => {
+  const tank: Aquarium = { id: "t", name: "T", type: "freshwater", lengthCm: 200, widthCm: 60, heightCm: 60, netVolumeLiters: 700, setupDate: "2026-01-01" };
+  const animal = (id: string, quantity: number): Livestock => {
+    const profile = speciesById(id)!;
+    return { id: `${id}-${quantity}`, aquariumId: "t", catalogId: id, commonName: profile.commonName, scientificName: profile.scientificName, category: profile.category, quantity, addedAt: "2026-01-01" };
+  };
+  const snailWarning = (result: ReturnType<typeof analyzeAquarium>) => result.warnings.find((warning) => warning.title === "Salyangozlar yenebilir");
+
+  it("palyaço çöpçü ile nerit salyangozu: kaynağın notuyla sarı uyarı", () => {
+    const warning = snailWarning(analyzeAquarium(tank, [animal("clown-loach", 5), animal("nerite-snail", 3)], []));
+    expect(warning?.level).toBe("warning");
+    expect(warning?.message).toContain(`${speciesById("clown-loach")!.commonName}: Salyangoz yer ama istilayı tek başına çözmez.`);
+    expect(warning?.message).toContain("Kaynak: Seriously Fish.");
+  });
+
+  it("salyangoz yediği bilinmeyen balıkla uyarı yok", () => {
+    expect(snailWarning(analyzeAquarium(tank, [animal("neon-tetra", 10), animal("nerite-snail", 3)], []))).toBeUndefined();
+  });
+});
