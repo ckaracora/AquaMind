@@ -4945,6 +4945,12 @@ assert.equal(verifiedGoldfish?.verifiedAt, "2026-09-02", "Japon balığı günce
 assert(verifiedGoldfish?.sourceUrl?.includes("ornamentalfish.org"), "Japon balığı kurumsal bakım kaynağına bağlanmalı");
 assert(verifiedGoldfish?.additionalSourceUrls?.some((url) => url.includes("fishbase.se")), "Japon balığı bilimsel kimlik ve 100 cm akvaryum kaynağına bağlanmalı");
 assert(verifiedGoldfish?.husbandryCaution?.includes("her ek yetişkin için 50 litre"), "Japon balığı ek birey hacmi kullanıcıya açıklanmalı");
+// Seriously Fish'in 120 × 45 × 45 cm ölçüsü yavrular veya üreyen çift içindir; katalog en az beş yetişkin istediği için hacim OATA'nın yetişkin sürü değerindedir.
+const verifiedDiscus = speciesCatalog.find((item) => item.id === "discus");
+assert.deepEqual([verifiedDiscus?.adultSizeCm,verifiedDiscus?.minVolumeL,verifiedDiscus?.minTankLengthCm,verifiedDiscus?.minGroup,verifiedDiscus?.temperature,verifiedDiscus?.ph], [20,300,120,5,[27,30],[6,6.5]], "Diskus yetişkin sürü için OATA ve Fishkeeper bakım eşiklerini taşımalı");
+assert(verifiedDiscus.minVolumeL >= verifiedDiscus.minGroup * 50, "Diskus hacmi en az grubun her yetişkini için OATA'nın 50 litresini karşılamalı");
+assert(verifiedDiscus?.sourceUrl?.includes("ornamentalfish.org"), "Diskus yetişkin sürü hacmini veren OATA bakım kaynağına bağlanmalı");
+assert(["seriouslyfish.com","fishkeeper.co.uk","fishbase.se"].every((host) => verifiedDiscus?.additionalSourceUrls?.some((url) => url.includes(host))), "Diskusun uzunluk, su değerleri ve kimlik kaynakları korunmalı");
 const koiCarp = speciesCatalog.find((item) => item.id === "koi-carp");
 assert(koiCarp, "Koi, Japon balığından ayrı bir biyolojik profil taşımalı");
 assert.equal(koiCarp.scientificName, "Cyprinus carpio", "Koi doğru bilimsel kimlikle tutulmalı");

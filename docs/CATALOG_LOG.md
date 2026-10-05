@@ -2003,3 +2003,70 @@ Güncel alt adım: JBL filtre medyası, bakteri başlangıcı, sorun giderici/pH
 - Kırmızı burun tetranın güncel bilimsel adı `Petitella bleheri` olarak düzeltildi; `Hemigrammus bleheri` eski ad ve arama eş adı olarak korundu. Seriously Fish'in 5 cm, en az onlu sürü, 90 cm, 23–26 °C ve pH 5,5–7,0 verileri ile Fishipedia'nın 120 litre bakım eşiği birlikte kullanıldı. Kaynaklar genel bakım için tek akıntı sınıfı yayımlamadığından eski tahmini orta akıntı kaldırıldı; benzer üç türün ticari adla karışma riski açıklandı.
 - `Trigonostigma heteromorpha` Seriously Fish ve FishBase ile yenilendi. Koruyucu 5 cm erişkin boy, 54 litre/60 cm, 21–28 °C, pH 5,0–7,5, en az sekizli sürü ve düşük/dağıtılmış akıntı sağlık analizine bağlandı; eski 60 litre ve pH 6,0 alt sınırı düzeltildi.
 - Üç yeni uçtan uca sağlık senaryosuyla toplam 113'e çıktı. Hedefli katalog/sağlık testleri ve tam `pnpm verify` başarılıdır: TypeScript, yedi ekipman kategorisi, dört canlı sınıfı, 1.893 bakım ürünü, 113 sağlık senaryosu, hacim/su değişimi/beş kum türü hesaplayıcıları, 49 marka kapasite denetimi ve 14 sayfalık üretim derlemesi geçti. Değişiklikler henüz GitHub/Vercel'e gönderilmedi.
+
+## 2026-10-04 Kaynağı yalnızca FishBase olan 42 türün kaynak yenilemesi (Claude)
+
+- Ürün sahibinin isteğiyle bu işi Claude üstlendi. `docs/CATALOG_SOURCE_GAPS.md` listesindeki 45 türün 42'sinin değerleri, her türün Seriously Fish tür sayfası açılıp okunarak kaynaklandı. Seriously Fish diskus için sıcaklık ve pH vermediği için bu ikisi Fishkeeper'dan; en az grup sayısı ve hacim OATA'dan alındı (diskusun `sourceUrl`'i OATA bakım sayfası oldu). FishBase özet sayfalarındaki en küçük akvaryum uzunlukları ayrıca okundu (17 türde var). Her değerin kaynak cümlesi araştırma kayıtlarında tutuldu.
+- Kurallar (bu günlükteki önceki yöntemle aynı):
+  - En küçük uzunluk: kaynağın taban uzunluğu. FishBase daha uzun bir en küçük akvaryum veriyorsa güvenli tarafta o kullanıldı (kribensis 80 cm, kalın dudaklı gurami 100 cm).
+  - En küçük hacim: taban uzunluğu × genişlik × genişlik (ör. 60 × 30 cm → 54 L). Kaynağın ölçüsü yalnızca yavrular ya da bir çift içinse ve katalog daha büyük bir yetişkin grubu istiyorsa, yetişkin grup için yayımlanan hacim kullanıldı. Bu yalnızca diskusta oldu: Seriously Fish'in 120 × 45 × 45 cm (255 L) ölçüsü "a few juvenile fish or a pair of breeding adults" için; katalog en az 5 yetişkin istediğinden OATA'nın "approximately 300 litres will house a shoal of six adults" değeri (yetişkin başına 50 L) kullanıldı. Diğer 41 türde kaynak ölçüsü katalogdaki en az grubu kapsıyor (ya genel bakım ya da grup için verilmiş, ya da "tek çift" için verilmiş ve en az grup 1–2).
+  - Yetişkin boy: katalogdaki boy ile kaynağın boyundan büyük olanı.
+  - Sıcaklık ve pH: kaynağın aralığı. Apistogramma'da kaynağın pH'ı yabani popülasyonların üreme koşulu olduğu için katalogdaki pH korundu.
+  - En az grup: kaynağın verdiği en az sayı (aralıkta alt sınır). Yalnızca "ideally N or more" diyorsa N; "çift halinde" diyorsa 2. Sayı vermiyorsa grup zorunluluğu kaldırıldı ("kaynak zorunlu sürü bildirmediğinden ... kaldırıldı" kararıyla aynı).
+  - Kaynak alanları: `sourceUrl` kaynak sayfası oldu (diskusta OATA). Eski FishBase bağlantısı, diskusta Seriously Fish ve ikincil kaynaklar `additionalSourceUrls` içinde korundu; `verifiedAt` 2026-10-04.
+- Değişmeyenler: `ancistrus`, `common-pleco` ve `siamese-algae-eater`. Kaynaklara göre bu adlarla satılan balıklar katalogdaki bilimsel türler değil ya da kimlikleri belirsiz (cüce vatoz: Seriously Fish'te yalnızca *Ancistrus* sp. '3' sayfası var ve kaynak genetik verinin *A. cirrhosus* yakınlığını desteklemediğini söylüyor; Pterygoplichthys pardalis/disjunctivus; Crossocheilus atrilimes/langei). Kimlik kararı ayrı bir iştir.
+- Kaynaktaki bilimsel ad bazı türlerde farklı: Seriously Fish yeni cins adlarını kullanıyor (ör. *Osteogaster aenea*, *Hoplisoma sterbai*, *Celestichthys margaritatus*). Katalogdaki bilimsel adlar ve kimlikler değiştirilmedi.
+- Çelişki notları:
+  - Cennet balığı için Seriously Fish 10–22 °C, Fishkeeper 15–26 °C veriyor. İkisi de sürekli tropik sıcaklığın uygun olmadığını söylüyor. Birincil kaynak olarak Seriously Fish kullanıldı.
+  - Diskusta Fishkeeper 27–30 °C ve pH 6,0–6,5, OATA 26–30 °C ve pH 6,0–7,5 veriyor. İkisinin ortak aralığı olan Fishkeeper değerleri kullanıldı.
+  - Diskus hacmi: OATA yetişkin başına 50 L ve altı yetişkin için yaklaşık 300 L diyor; Practical Fishkeeping ([rehber](https://www.practicalfishkeeping.co.uk/features/definitive-guide-to-discus-part-two/)) "beş ya da altı" balık ve yetişkin başına 40–50 L öneriyor. Kaynakların başlangıç sürüsü 5–6 olduğundan güvenli tarafta altı yetişkinlik 300 L kullanıldı (en az grup 5 için OATA kuralıyla 250 L). Motor hacmi adet arttıkça büyütmüyor; daha büyük diskus sürülerinde ek hacim uyarısı yok (önceki 300 L değerinde de yoktu).
+- Kullanıcıya etkisi: önerilen en küçük akvaryumlar kaynağa göre değişti; bazıları küçüldü (ör. sterbai corydoras 80 L'den 41 L'ye), bazıları büyüdü (ör. frontosa 600 L'den 864 L'ye). Serin su seven türler (cennet balığı, beyaz bulut, medaka, dojo, gül barbı) tropik türlerle aynı akvaryumdaysa sıcaklık uyuşmazlığı uyarısı alabilir.
+- Değişiklik tablosu ("eski → yeni"; değişmeyen değer tek yazıldı):
+
+| Kimlik | Boy | Hacim (L) | Uzunluk (cm) | Grup | Sıcaklık | pH | Not |
+|---|---|---|---|---|---|---|---|
+| `ancistrus` | — | — | — | — | — | — | Değişmedi: Seriously Fish'te Ancistrus cirrhosus sayfası yok; bulunan sayfa ticari cüce vatozu Ancistrus sp. '3' (cf. cirrhosus) olarak ele alıyor ve genetik verinin A. cirrhosus yakınlığını desteklemediğini söylüyor. Katalogdaki bilimsel ad doğrulanamadı; kimlik kararı ayrı iş. |
+| `chili-rasbora` | 2 | 30 → 41 | 40 → 45 | 10 → 8 (kaynağın en az sayısı) | 20–28 | 4–7 |  |
+| `cherry-barb` | 5 | 60 → 54 | 60 | 8 → 6 (kaynağın en az sayısı) | 22–27 → 20–27 | 6–8 | FishBase en küçük akvaryum uzunluğu 60 cm (kaynağın tabanı 60 cm) |
+| `tiger-barb` | 7 | 100 → 72 | 80 | 8 (kaynağın en az sayısı) | 20–27 → 20–26 | 6–8 → 5–8 | FishBase en küçük akvaryum uzunluğu 60 cm (kaynağın tabanı 80 cm) |
+| `discus` | 20 | 300 | 120 | 6 → 5 (kaynağın en az sayısı) | 28–31 → 27–30 | 5–7 → 6–6,5 | FishBase en küçük akvaryum uzunluğu 120 cm (kaynağın tabanı 120 cm); Seriously Fish'in 120 × 45 × 45 cm (255 L) ölçüsü birkaç yavru ya da üreyen bir çift için; katalog en az 5 yetişkin istediği için hacim OATA'nın yetişkin sürü değerinden alındı: "approximately 300 litres will house a shoal of six adults" (yetişkin başına 50 L) |
+| `kuhli-loach` | 10 | 70 → 54 | 70 → 60 | 6 → 5 (kaynağın en az sayısı) | 24–30 → 21–26 | 5,5–7,5 → 3,5–7 | kaynaktaki ad: Pangio semicincta ('Kuhli' Loach) |
+| `lambchop-rasbora` | 3,5 | 50 → 54 | 60 | 10 → 8 (kaynağın en az sayısı) | 23–28 | 5,5–7,5 |  |
+| `hengeli-rasbora` | 3,5 | 50 → 54 | 60 | 10 → 8 (kaynağın en az sayısı) | 23–28 | 5–7,5 |  |
+| `galaxy-rasbora` | 2,5 | 40 → 41 | 45 | 8 → 20 (kaynak: "ideally 20 or more") | 20–26 | 6,5–7,5 | kaynaktaki ad: Celestichthys margaritatus (Celestial Pearl 'Danio') |
+| `emerald-dwarf-rasbora` | 3 | 45 → 54 | 50 → 60 | 10 → 20 (kaynak: "ideally 20 or more") | 20–25 → 20–24 | 7–8 | kaynaktaki ad: Celestichthys erythromicron |
+| `kubotai-rasbora` | 3 | 50 → 54 | 60 | 10 → 8 (kaynağın en az sayısı) | 22–27 → 20–27 | 6–7,5 → 6–7 |  |
+| `scissortail-rasbora` | 12 → 15 | 180 → 243 | 120 | 8 → 6 (kaynağın en az sayısı) | 23–27 → 22–25 | 5–8 | yetişkin boy kaynağa göre 12 → 15 cm |
+| `rosy-barb` | 10 | 120 → 90 | 90 → 100 | 8 (kaynağın en az sayısı) | 18–25 → 16–24 | 6–8 | FishBase en küçük akvaryum uzunluğu 80 cm (kaynağın tabanı 100 cm) |
+| `odessa-barb` | 7 | 100 → 72 | 80 | 8 (kaynağın en az sayısı) | 20–26 → 16–25 | 6–7,5 → 6,5–8,5 |  |
+| `gold-barb` | 7 → 7,5 | 100 → 81 | 80 → 90 | 8 (kaynağın en az sayısı) | 18–26 → 16–24 | 6–8 | FishBase en küçük akvaryum uzunluğu 60 cm (kaynağın tabanı 90 cm); yetişkin boy kaynağa göre 7 → 7,5 cm |
+| `denison-barb` | 15 | 250 → 243 | 120 | 8 → 6 (kaynağın en az sayısı) | 20–26 → 15–25 | 6,5–7,8 |  |
+| `checker-barb` | 5 | 70 → 68 | 70 → 75 | 8 → 6 (kaynağın en az sayısı) | 20–26 → 18–25 | 6–7,5 → 5,5–7,5 |  |
+| `apisto-cacatuoides` | 8 | 80 → 54 | 70 → 60 | 2 → 1 (kaynak en az sayı vermiyor; grup zorunluluğu kaldırıldı) | 23–29 → 22–29 | 5,5–7,5 | Seriously Fish pH 5,0–6,0 yabani popülasyonların üreme koşulu; ticari üretim balıklar için genel aralık değil; katalogdaki pH korundu |
+| `apisto-agassizii` | 9 | 90 → 54 | 75 → 60 | 2 → 1 (kaynak en az sayı vermiyor; grup zorunluluğu kaldırıldı) | 24–29 → 22–29 | 5–7 | FishBase en küçük akvaryum uzunluğu 60 cm (kaynağın tabanı 60 cm); Seriously Fish pH 3,0–4,0 yabani popülasyonların üreme koşulu; ticari üretim balıklar için genel aralık değil; katalogdaki pH korundu |
+| `kribensis` | 10 | 100 → 84 | 80 | 2 (kaynağın en az sayısı) | 24–28 → 24–27 | 5,5–8 → 5–7,5 | FishBase en küçük akvaryum uzunluğu 80 cm, kaynağın tabanından (60 cm) uzun; güvenli tarafta 80 cm kullanıldı |
+| `keyhole-cichlid` | 12 | 150 → 81 | 100 → 90 | 2 → 1 (kaynak en az sayı vermiyor; grup zorunluluğu kaldırıldı) | 22–27 → 21–28 | 5,5–7,5 → 4–7,5 |  |
+| `blue-acara` | 16 | 200 → 108 | 110 → 120 | 2 → 1 (kaynak en az sayı vermiyor; grup zorunluluğu kaldırıldı) | 22–28 | 6–8 → 6,5–8 | FishBase en küçük akvaryum uzunluğu 100 cm (kaynağın tabanı 120 cm) |
+| `severum` | 25 → 30 | 300 → 243 | 120 | 2 → 1 (kaynak en az sayı vermiyor; grup zorunluluğu kaldırıldı) | 24–29 → 22–29 | 5,5–7,5 → 5,5–7 | yetişkin boy kaynağa göre 25 → 30 cm |
+| `yellow-lab` | 12 | 200 → 182 | 100 → 90 | 5 → 1 (kaynak en az sayı vermiyor; grup zorunluluğu kaldırıldı) | 24–28 | 7,5–8,6 → 7,7–8,6 | FishBase en küçük akvaryum uzunluğu 80 cm (kaynağın tabanı 90 cm) |
+| `frontosa` | 35 | 600 → 864 | 180 → 240 | 6 → 5 (kaynağın en az sayısı) | 24–27 → 23–27 | 7,8–9 → 8–9 | FishBase en küçük akvaryum uzunluğu 200 cm (kaynağın tabanı 240 cm) |
+| `jack-dempsey` | 25 | 300 → 243 | 120 | 1 (kaynak en az sayı vermiyor; grup zorunluluğu kaldırıldı) | 22–30 → 20–30 | 6–8 → 6,5–8 |  |
+| `jewel-cichlid` | 14 → 15 | 180 → 108 | 100 → 120 | 2 (kaynak: "best kept in pairs") | 21–26 → 22–28 | 6,5–7,5 → 6–7,8 | kaynaktaki ad: Hemichromis bimaculatus; FishBase en küçük akvaryum uzunluğu 100 cm (kaynağın tabanı 120 cm); yetişkin boy kaynağa göre 14 → 15 cm |
+| `honey-gourami` | 5 → 5,5 | 60 → 54 | 60 | 2 → 4 (kaynağın en az sayısı) | 22–28 → 22–27 | 6–7,5 | FishBase en küçük akvaryum uzunluğu 60 cm (kaynağın tabanı 60 cm); yetişkin boy kaynağa göre 5 → 5,5 cm |
+| `sparkling-gourami` | 4 | 45 → 41 | 50 → 45 | 6 → 2 (kaynak: "Best maintained in a pair or small group") | 24–28 → 22–28 | 5–7,5 |  |
+| `thicklip-gourami` | 10 | 100 → 67 | 80 → 100 | 2 → 1 (kaynak en az sayı vermiyor; grup zorunluluğu kaldırıldı) | 22–28 → 22–27 | 6–7,5 | FishBase en küçük akvaryum uzunluğu 100 cm, kaynağın tabanından (74 cm) uzun; güvenli tarafta 100 cm kullanıldı |
+| `paradise-fish` | 10 | 100 → 72 | 80 | 1 (kaynak en az sayı vermiyor; grup zorunluluğu kaldırıldı) | 16–26 → 10–22 | 6–8 | FishBase en küçük akvaryum uzunluğu 80 cm (kaynağın tabanı 80 cm) |
+| `kissing-gourami` | 25 | 300 → 304 | 120 → 150 | 2 → 1 (kaynak en az sayı vermiyor; grup zorunluluğu kaldırıldı) | 22–28 → 22–30 | 6–8 | kaynaktaki ad: Helostoma temminkii; FishBase en küçük akvaryum uzunluğu 150 cm (kaynağın tabanı 150 cm) |
+| `bronze-cory` | 7 → 7,5 | 80 → 72 | 75 → 80 | 6 → 4 (kaynağın en az sayısı) | 21–27 | 6–8 | kaynaktaki ad: Osteogaster aenea; FishBase en küçük akvaryum uzunluğu 60 cm (kaynağın tabanı 80 cm); yetişkin boy kaynağa göre 7 → 7,5 cm |
+| `sterbai-cory` | 7 | 80 → 41 | 75 → 45 | 6 (kaynağın en az sayısı) | 24–28 | 6–7,5 → 6–7,6 | kaynaktaki ad: Hoplisoma sterbai |
+| `pygmy-cory` | 3 | 45 → 41 | 50 → 45 | 8 → 6 (kaynağın en az sayısı) | 22–26 | 6–7,5 → 6,4–7,4 | kaynaktaki ad: Gastrodermus pygmaeus |
+| `salt-pepper-cory` | 3,5 | 45 → 54 | 50 → 60 | 8 → 4 (kaynağın en az sayısı) | 20–26 | 6–7,5 → 5,5–7,5 | kaynaktaki ad: Hoplisoma habrosum |
+| `otocinclus` | 4 | 60 → 41 | 60 → 45 | 6 (kaynağın en az sayısı) | 21–26 | 5,5–7,5 |  |
+| `common-pleco` | — | — | — | — | — | — | Değişmedi: Kaynaklara göre bu adla satılan balık Hypostomus plecostomus değil (Pterygoplichthys pardalis / disjunctivus); kimlik kararı ayrı iş. |
+| `hillstream-loach` | 6 → 6,5 | 100 → 68 | 80 → 75 | 6 (kaynağın en az sayısı) | 20–25 → 20–24 | 6,5–8 → 6–7,5 | yetişkin boy kaynağa göre 6 → 6,5 cm |
+| `yoyo-loach` | 15 → 16 | 200 → 243 | 120 | 6 → 5 (kaynağın en az sayısı) | 24–30 → 19–27,5 | 6–7,5 | yetişkin boy kaynağa göre 15 → 16 cm |
+| `zebra-loach` | 10 | 150 → 108 | 100 → 120 | 6 → 5 (kaynağın en az sayısı) | 23–28 → 21–26 | 6–7,5 |  |
+| `siamese-algae-eater` | — | — | — | — | — | — | Değişmedi: Seriously Fish'e göre satılan balık Crossocheilus oblongus değil (C. atrilimes / C. langei); kimlik kararı ayrı iş. |
+| `white-cloud` | 4 | 60 → 54 | 60 | 10 (kaynak: "ideally a group comprising 10+") | 16–24 → 14–22 | 6–8 → 6–8,5 | FishBase en küçük akvaryum uzunluğu 60 cm (kaynağın tabanı 60 cm) |
+| `medaka` | 4 | 60 → 41 | 60 → 45 | 8 (kaynağın en az sayısı) | 15–28 → 16–22 | 6,5–8,5 |  |
+| `dojo-loach` | 25 → 28 | 250 → 243 | 120 | 3 → 1 (kaynak en az sayı vermiyor; grup zorunluluğu kaldırıldı) | 10–25 → 17,8–23,3 | 6–8 | yetişkin boy kaynağa göre 25 → 28 cm |
