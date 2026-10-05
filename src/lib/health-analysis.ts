@@ -24,7 +24,7 @@ export function withBehavior(profile: SpeciesProfile | undefined): (SpeciesProfi
   if (!profile || !records) return profile;
   const pick = (flag: BehaviorFlag) => records.find((record) => record.flag === flag && record.confidence === "explicit") ?? records.find((record) => record.flag === flag);
   const behavior: SpeciesBehaviorInput = {};
-  for (const flag of ["finNipper", "finNipTarget", "eatsShrimp", "shrimpSafe", "eatsSmallFish"] as const) {
+  for (const flag of ["finNipper", "finNipTarget", "eatsShrimp", "shrimpSafe", "eatsSnails", "eatsSmallFish"] as const) {
     const record = pick(flag);
     if (record) behavior[flag] = noteFrom(record);
   }

@@ -17,7 +17,7 @@
   - Threadfin acara: 2 cm. Seriously Fish "will not prey on anything larger than a couple of centimetres" diyor, yani iki santimetre kadardan büyük hiçbir şeyi avlamaz. Tam 2 cm'lik chili rasbora uyarı alır; kullanıcıya gösterilen not "Yaklaşık 2 cm ve altındaki balıklar ile yavrular için risk sürer."
   - Winemilleri: sınır yok. Seriously Fish yalnızca üreme dışında "a few millimetres" boyundan büyük balıkları avlamadığını söylüyor; bu bir sayı değil, yavru boyudur. Motor yetişkin boylarıyla çalıştığı için bu risk modellenemez ve kaynakta olmayan bir sayı uydurulmaz. Tür fırsatçı avcı uyarısı üretmez (katalogdaki en küçük balık 1,8 cm; kaynağa göre bu boydaki balıklar zaten risk altında değil).
   - Bu ayrım Codex'in 1. tur (av boyu) ve 2. tur (winemilleri sayısı, threadfin acara'nın metni) bulguları üzerine yapıldı.
-- Salyangoz yiyen 17 tür verisi de dosyadadır ama onay kapsamı dışında olduğu için uyarı üretmez.
+- Salyangoz yiyen 17 tür verisi de dosyadadır. 1.4.0'da onay kapsamı dışında olduğu için uyarı üretmiyordu; 1.7.0'dan beri "Salyangozlar yenebilir" uyarısı üretir (bkz. `docs/DECISIONS/0013-salyangoz-uyarisi.md`).
 - 2026-10-03 ikinci katalog entegrasyonunda Canberk aynı türü (Stiphodon semoni) gösteren yinelenen `cobalt-goby` profilini kaldırdığı için o kimliğin tek kaydı çıkarıldı; aynı Seriously Fish kaydı `cobalt-blue-goby-semoni` altında zaten vardı. Dosya artık 156 tür için 201 kayıt (121 Seriously Fish). Bkz. `docs/DECISIONS/0011-katalog-entegrasyonu-2-taban-isiticisi.md`.
 
 ## Karar

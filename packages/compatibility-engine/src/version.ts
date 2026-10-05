@@ -27,5 +27,8 @@
 // 1.6.0: alan uyarısının şiddeti. Akvaryum kaynağın önerisinin ve İsviçre Hayvan Koruma Yönetmeliği'nin
 // balık boyuna göre ölçü sınırının (uzunluk 3×, genişlik 2×, derinlik 1×) altındaysa alan uyarısı tehlikedir
 // (bkz. docs/DECISIONS/0012-alan-uyarisinin-siddeti.md).
-export const ENGINE_VERSION = "1.6.0";
-export const RULESET_VERSION = "1.6.0";
+//
+// 1.7.0: kaynağı açıkça "salyangoz yer" diyen balık salyangozla birlikteyse sarı uyarı
+// (bkz. docs/DECISIONS/0013-salyangoz-uyarisi.md).
+export const ENGINE_VERSION = "1.7.0";
+export const RULESET_VERSION = "1.7.0";

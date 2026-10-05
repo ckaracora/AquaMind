@@ -1,7 +1,7 @@
 # 0012 — Alan uyarısının şiddeti
 
 - Tarih: 2026-10-03
-- Durum: Önerildi. Ürün sahibi (`buraksenfx`) 2026-10-03'te soru formuyla iki kararı açıkça onayladı; ikisinde de önerilen seçenek seçildi: kırmızı uyarı için "kaynak + İsviçre" kuralı ve genel durumun en fazla "dikkat" olması. Değişiklik `codex/space-warning-severity` dalında. Codex denetimi iki turda tamamlandı (son tur 2026-10-03 temiz); kod ve belgeler (`39af083`) ile altın fikstür (`6886a2a`) ayrı commit'ler olarak kaydedildi ve PR #16 (`https://github.com/ckaracora/AquaMind/pull/16`) açıldı; PR üzerinde GitHub Actions `Doğrulama` ve Vercel önizlemesi başarılı. `main` birleştirmesi ürün sahibinin onayını bekliyor. `main` dalına birleştirilene kadar kabul edilmiş sayılmaz.
+- Durum: Kabul edildi — ürün sahibi (`buraksenfx`) 2026-10-03'te soru formuyla iki kararı açıkça onayladı (kırmızı uyarı için "kaynak + İsviçre" kuralı, genel durumun en fazla "dikkat" olması; ikisinde de önerilen seçenek). Codex denetimi iki turda tamamlandı (son tur 2026-10-03 temiz). Kod ve belgeler (`39af083`) ile altın fikstür (`6886a2a`) ayrı commit'ler olarak kaydedildi; PR #16 (`https://github.com/ckaracora/AquaMind/pull/16`) kullanıcı onayıyla 2026-10-03'te merge commit yöntemiyle `main` dalına birleştirildi (`18fdfeb`); `main` push'unda `Doğrulama` (`37143621266`) ve Vercel üretim dağıtımı başarılı, canlıda.
 
 ## Bağlam
 
