@@ -1,7 +1,7 @@
 # 0013 — Salyangoz uyarısı
 
 - Tarih: 2026-10-03
-- Durum: Önerildi — ürün sahibi (`buraksenfx`) kuralı 2026-10-03'te soru formuyla açıkça onayladı (önerilen seçenek). `codex/snail-warning` dalında. Codex denetimi iki turda tamamlandı (son tur 2026-10-04 temiz; 1. turdaki iki P3 bulgu yalnızca belgeleriyle ilgiliydi); kod ve belgeler tek commit olarak kaydedildi (`a836123`) ve PR #17 (`https://github.com/ckaracora/AquaMind/pull/17`) açıldı; PR üzerinde GitHub Actions `Doğrulama` ve Vercel önizlemesi başarılı. `main` birleştirmesi ürün sahibinin onayını bekliyor. `main` dalına birleştirilene kadar kabul edilmiş sayılmaz
+- Durum: Kabul edildi — ürün sahibi (`buraksenfx`) kuralı 2026-10-03'te soru formuyla açıkça onayladı (önerilen seçenek). Codex denetimi iki turda tamamlandı (son tur 2026-10-04 temiz; 1. turdaki iki P3 bulgu yalnızca belgeleriyle ilgiliydi); kod ve belgeler tek commit olarak kaydedildi (`a836123`); PR #17 (`https://github.com/ckaracora/AquaMind/pull/17`) kullanıcı onayıyla 2026-10-05'te merge commit yöntemiyle `main` dalına birleştirildi (`e80578d`); hemen ardından birleştirilen PR #18'in `f347a62` push'unda `Doğrulama` (`37299016200`) ve Vercel üretim dağıtımı başarılı, canlıda.
 
 ## Bağlam
 
