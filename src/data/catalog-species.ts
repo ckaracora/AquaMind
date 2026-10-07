@@ -1,6 +1,6 @@
 import type { AquariumType, Livestock } from "@/types/aquarium";
 import { expandedSpeciesCatalog } from "./catalog-species-expanded";
-import { assertUniqueIds, normalize } from "./catalog-shared";
+import { assertUniqueIds, isVerifiedSpeciesProfile, normalize } from "./catalog-shared";
 
 export interface SpeciesProfile {
   id: string; commonName: string; scientificName: string; category: Livestock["category"];
@@ -121,7 +121,13 @@ function speciesLookup(): SpeciesLookup {
   return speciesLookupCache;
 }
 export const speciesById = (id?: string) => id === undefined ? undefined : speciesByIdIndex().get(id);
-export const isVerifiedSpeciesProfile = (profile?: SpeciesProfile): profile is SpeciesProfile => Boolean(profile?.sourceUrl&&profile?.verifiedAt);
+// Ad dizini katalog parçalarına da yazılır (src/data/catalog-bucket-builders.ts); tarayıcıdaki yükleyici böylece aynı eşlemeyi kullanır.
+export function speciesNameIndex(): { scientific: ReadonlyMap<string, number>; names: ReadonlyMap<string, number> } {
+  const { scientific, names } = speciesLookup();
+  return { scientific, names };
+}
+// Doğrulanmış kayıt kuralı veri içermeyen ortak modülde (tarayıcıdaki parça yükleyici de kullanır).
+export { isVerifiedSpeciesProfile };
 export const speciesWaterTypes = (profile:SpeciesProfile): AquariumType[] => profile.waterTypes ?? ["freshwater"];
 export const speciesGroupLabels: Record<NonNullable<SpeciesProfile["group"]>,string> = {livebearer:"Canlı doğuranlar",tetra:"Tetralar",rasbora:"Rasboralar",danio:"Daniolar",barb:"Barblar",rainbowfish:"Gökkuşağı balıkları",killifish:"Killifishler",cichlid:"Cichlidler",labyrinth:"Labirentliler",bottom:"Dip balıkları ve vatozlar",goby:"Goby ve kaya balıkları",puffer:"Puffer / balon balıkları",monster:"Monster / büyük türler",coldwater:"Soğuk su balıkları",shrimp:"Karidesler",snail:"Salyangozlar",crayfish:"Kerevitler",other:"Diğer canlılar"};
 export const speciesGroup = (item: SpeciesProfile): NonNullable<SpeciesProfile["group"]> => item.group ?? (item.category==="shrimp"?"shrimp":item.category==="snail"?"snail":item.id.includes("tetra")?"tetra":item.id==="guppy"?"livebearer":item.id==="betta"?"labyrinth":["ancistrus","corydoras-panda"].includes(item.id)?"bottom":item.id==="goldfish"?"coldwater":"other");

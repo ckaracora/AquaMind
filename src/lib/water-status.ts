@@ -1,15 +1,19 @@
 // Ana sayfadaki su değeri kartları ve özet cümlesi. Etiketler sabit yazılmaz; son ölçüm,
 // akvaryumdaki türlerin katalog aralıkları ve uyumluluk motorunun sonucundan hesaplanır.
 import { assessWaterQuality, type HealthAnalysis } from "@aquamind/compatibility-engine";
-import { isVerifiedSpeciesProfile, speciesForLivestock } from "@/data/catalog-species";
+import { isVerifiedSpeciesProfile } from "@/data/catalog-shared";
+import type { SpeciesProfile } from "@/data/catalog-species";
 import type { AquariumType, Livestock, WaterParameters } from "@/types/aquarium";
 
 export type StatusTone = "good" | "warning" | "danger" | "neutral";
 export interface ParameterStatus { label: string; tone: StatusTone; }
 
-/** Doğrulanmış türlerin ortak sıcaklık ve pH aralığı. Kesişim yoksa alt sınır üst sınırdan büyük olur. */
-export function commonSpeciesRanges(animals: Livestock[]): { temperature?: [number, number]; ph?: [number, number] } {
-  const profiles = animals.map(speciesForLivestock).filter(isVerifiedSpeciesProfile);
+/**
+ * Doğrulanmış türlerin ortak sıcaklık ve pH aralığı. Kesişim yoksa alt sınır üst sınırdan büyük olur.
+ * Türler verilen eşleme fonksiyonuyla bulunur (tam katalog ya da yalnızca gereken parçalar; docs/DECISIONS/0016-gereken-katalog-kayitlarinin-yuklenmesi.md).
+ */
+export function commonSpeciesRanges(animals: Livestock[], speciesFor: (item: Livestock) => SpeciesProfile | undefined): { temperature?: [number, number]; ph?: [number, number] } {
+  const profiles = animals.map((item) => speciesFor(item)).filter(isVerifiedSpeciesProfile);
   if (!profiles.length) return {};
   const common = (pick: (profile: (typeof profiles)[number]) => [number, number]): [number, number] =>
     [Math.max(...profiles.map((profile) => pick(profile)[0])), Math.min(...profiles.map((profile) => pick(profile)[1]))];
