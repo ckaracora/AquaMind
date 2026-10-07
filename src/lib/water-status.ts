@@ -1,7 +1,7 @@
 // Ana sayfadaki su değeri kartları ve özet cümlesi. Etiketler sabit yazılmaz; son ölçüm,
 // akvaryumdaki türlerin katalog aralıkları ve uyumluluk motorunun sonucundan hesaplanır.
 import { assessWaterQuality, type HealthAnalysis } from "@aquamind/compatibility-engine";
-import { isVerifiedSpeciesProfile, speciesForLivestock } from "@/data/catalog";
+import { isVerifiedSpeciesProfile, speciesForLivestock } from "@/data/catalog-species";
 import type { AquariumType, Livestock, WaterParameters } from "@/types/aquarium";
 
 export type StatusTone = "good" | "warning" | "danger" | "neutral";

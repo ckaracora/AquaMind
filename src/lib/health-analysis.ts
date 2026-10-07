@@ -1,7 +1,8 @@
 // Uyumluluk motoru `packages/compatibility-engine` içine taşındı (bkz. docs/COMPATIBILITY.md).
 // Bu dosya motoru katalogla bağlayan uyarlayıcıdır; `analyzeAquarium` imzası ve çıktısı
 // Phase 0B'de birebir korunmuştur. Sağlık sayfası ve scripts/test-health.cjs bu yolu kullanır.
-import { isVerifiedEquipmentProfile, isVerifiedSpeciesProfile, profileForEquipment, speciesForLivestock, type SpeciesProfile } from "@/data/catalog";
+import { isVerifiedEquipmentProfile, profileForEquipment } from "@/data/catalog-equipment";
+import { isVerifiedSpeciesProfile, speciesForLivestock, type SpeciesProfile } from "@/data/catalog-species";
 import { speciesBehavior, type BehaviorFlag, type BehaviorRecord } from "@/data/species-behavior";
 import { createAnalyzer, type BehaviorNote, type SpeciesBehaviorInput } from "@aquamind/compatibility-engine";
 

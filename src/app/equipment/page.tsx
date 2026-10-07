@@ -3,7 +3,7 @@ import { FormEvent, useEffect, useMemo, useState } from "react";
 import { ChevronDown, Filter, LampDesk, Plus, Search, SlidersHorizontal, Trash2, Waves, Wind, X, Zap } from "lucide-react";
 import { AppShell } from "@/components/app-shell";
 import { PageHeader } from "@/components/page-header";
-import { equipmentBrandsForCategory, equipmentById, equipmentForBrandInCategory, equipmentForCategory, hasStandaloneCapacityData } from "@/data/catalog";
+import { equipmentBrandsForCategory, equipmentById, equipmentForBrandInCategory, equipmentForCategory, hasStandaloneCapacityData } from "@/data/catalog-equipment";
 import { useAquariums } from "@/providers/aquarium-provider";
 import type { Aquarium, Equipment } from "@/types/aquarium";
 const categories: Array<[

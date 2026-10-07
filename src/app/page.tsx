@@ -23,7 +23,9 @@ export default function Dashboard() {
   useEffect(() => setGreeting(greetingForHour(new Date().getHours())), []);
   // Durum hesapları kataloğun tamamını gerektirir; ilk yükü küçük tutmak için sayfa açıldıktan sonra yüklenir.
   const [computeStatus, setComputeStatus] = useState<typeof dashboardStatus>();
-  useEffect(() => { import("@/lib/dashboard-status").then((module) => setComputeStatus(() => module.dashboardStatus)); }, []);
+  // Yükleme bağlantı hatasıyla başarısız olursa "hesaplanıyor" yazısı sonsuza kadar kalmaz.
+  const [statusLoadFailed, setStatusLoadFailed] = useState(false);
+  useEffect(() => { import("@/lib/dashboard-status").then((module) => setComputeStatus(() => module.dashboardStatus)).catch(() => setStatusLoadFailed(true)); }, []);
   const aquarium = aquariums.find((item) => item.id === selectedId) ?? aquariums[0];
   if (!aquarium) return <div className="min-h-screen"><Sidebar/><main className="pb-28 lg:ml-[248px]"><div className="grid min-h-screen place-items-center px-5 text-center"><div><Waves size={45} className="mx-auto mb-5 text-aqua"/><h1 className="text-2xl font-extrabold">AquaMind’e hoş geldin</h1><p className="mt-2 text-sm text-[#71858d]">Dashboard’u kullanmaya başlamak için ilk akvaryumunu oluştur.</p><a href="/aquariums/new" className="mt-6 inline-flex items-center gap-2 rounded-xl bg-aqua px-5 py-3 text-xs font-extrabold text-ink"><Plus size={16}/>Akvaryum oluştur</a></div></div></main><MobileNav/></div>;
   const aquariumReadings = waterReadings.filter((item) => item.aquariumId === aquarium.id);
@@ -31,7 +33,7 @@ export default function Dashboard() {
   const latest = [...aquariumReadings].sort((a, b) => +new Date(b.measuredAt) - +new Date(a.measuredAt))[0];
   const animals = livestock.filter((item) => item.aquariumId === aquarium.id);
   const status = computeStatus?.(aquarium, animals, equipment.filter((item) => item.aquariumId === aquarium.id), latest);
-  const summary = status?.summary ?? { text: "Durum hesaplanıyor…", tone: "neutral" as const };
+  const summary = status?.summary ?? { text: statusLoadFailed ? "Durum yüklenemedi; sayfayı yenileyin." : "Durum hesaplanıyor…", tone: "neutral" as const };
   const temperatureStatus = status?.temperature ?? pendingStatus;
   const phStatus = status?.ph ?? pendingStatus;
   const nitrate = status?.nitrate ?? pendingStatus;
