@@ -5,7 +5,7 @@ import { Bug, ChevronDown, Fish, ImagePlus, Plus, Search, Shell, Trash2, X } fro
 import { AppShell } from "@/components/app-shell";
 import { PageHeader } from "@/components/page-header";
 import { CatalogLivestockForm } from "@/components/catalog-livestock-form";
-import { speciesById, speciesCatalog, speciesForLivestock, speciesWaterTypes } from "@/data/catalog";
+import { speciesById, speciesCatalog, speciesForLivestock, speciesWaterTypes } from "@/data/catalog-species";
 import { useAquariums } from "@/providers/aquarium-provider";
 import type { Aquarium, Livestock } from "@/types/aquarium";
 

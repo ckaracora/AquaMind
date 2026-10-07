@@ -1,4 +1,4 @@
-import type { EquipmentProfile } from "./catalog";
+import type { EquipmentProfile } from "./catalog-equipment";
 
 const VERIFIED_AT = "2026-08-17";
 const CHIHIROS_VERIFIED_AT = "2026-09-12";

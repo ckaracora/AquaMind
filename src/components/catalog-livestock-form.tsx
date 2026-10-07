@@ -2,9 +2,9 @@
 
 import { FormEvent, useState } from "react";
 import { Search, X } from "lucide-react";
-import { speciesById, speciesCatalog, speciesForCatalogExactSearch, speciesForCatalogSearch, speciesForCategoryAndWaterType, speciesGroup, speciesGroupLabels, speciesGroupsForCategoryAndWaterType, speciesWaterTypes } from "@/data/catalog";
+import { speciesById, speciesCatalog, speciesForCatalogExactSearch, speciesForCatalogSearch, speciesForCategoryAndWaterType, speciesGroup, speciesGroupLabels, speciesGroupsForCategoryAndWaterType, speciesWaterTypes } from "@/data/catalog-species";
 import { unresolvedSpeciesForSearch } from "@/data/catalog-species-unresolved";
-import type { SpeciesProfile } from "@/data/catalog";
+import type { SpeciesProfile } from "@/data/catalog-species";
 import type { Aquarium, Livestock } from "@/types/aquarium";
 
 const allCategories: Array<[Livestock["category"], string]> = [["fish", "Balık"], ["shrimp", "Karides"], ["snail", "Salyangoz"], ["other", "Diğer"]];

@@ -1,4 +1,4 @@
-import type { SpeciesProfile } from "./catalog";
+import type { SpeciesProfile } from "./catalog-species";
 
 type FishGroup = NonNullable<SpeciesProfile["group"]>;
 type Flow = SpeciesProfile["flow"];

@@ -1,5 +1,5 @@
 import { careProductCatalog } from "./care-product-catalog";
-import { equipmentCatalog } from "./catalog";
+import { equipmentCatalog } from "./catalog-equipment";
 
 const requiredBrands = [
   "ADA", "Aquael", "Aquamins", "Aquapro", "Aquawing", "Armatürk", "Boyu",

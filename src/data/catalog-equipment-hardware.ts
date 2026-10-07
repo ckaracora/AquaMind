@@ -1,4 +1,4 @@
-import type { EquipmentProfile } from "./catalog";
+import type { EquipmentProfile } from "./catalog-equipment";
 
 const verifiedAt = "2026-08-17";
 

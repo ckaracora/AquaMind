@@ -1,7 +1,7 @@
 # 0014 — Birden fazla türü kapsayan satış adı profilleri
 
 - Tarih: 2026-10-05
-- Durum: Önerildi — ürün sahibi (`buraksenfx`) 2026-10-05'te soru formuyla "en koruyucu değerler" seçeneğini açıkça onayladı (önerilen seçenek). Codex denetimi dört turda tamamlandı (son tur 2026-10-05 temiz); kod ve belgeler (`56cafa1`) ile altın fikstür (`82c4ddc`) ayrı commit'ler olarak kaydedildi ve PR #19 (`https://github.com/ckaracora/AquaMind/pull/19`) açıldı; `Doğrulama` ve Vercel önizlemesi başarılı. `main` birleştirmesi ürün sahibinin onayını bekliyor. `main` dalına birleştirilene kadar kabul edilmiş sayılmaz
+- Durum: Kabul edildi — ürün sahibi (`buraksenfx`) 2026-10-05'te soru formuyla "en koruyucu değerler" seçeneğini açıkça onayladı (önerilen seçenek). Codex denetimi dört turda tamamlandı (son tur 2026-10-05 temiz); kod ve belgeler (`56cafa1`) ile altın fikstür (`82c4ddc`) ayrı commit'ler olarak kaydedildi; PR #19 (`https://github.com/ckaracora/AquaMind/pull/19`) kullanıcı onayıyla 2026-10-07'de merge commit yöntemiyle `main` dalına birleştirildi (`a1cb731`); `a1cb731` push'unda `Doğrulama` (çalıştırma `37554417118`) ve Vercel üretim dağıtımı başarılı, canlıda.
 
 ## Bağlam
 

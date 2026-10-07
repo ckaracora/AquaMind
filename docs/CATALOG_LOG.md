@@ -2116,3 +2116,17 @@ Güncel alt adım: JBL filtre medyası, bakteri başlangıcı, sorun giderici/pH
 
 - Altın fikstür motor değişmeden yeniden üretildi: 1033 vakadan 7'si değişti (üç türün "sığar" ve "dar" vakaları ile örnek akvaryum). Hepsinin girdisi ya da tür kaydı değişmişti, açıklanamayan fark yok, hiçbir vakanın genel durumu değişmedi. Cüce vatozun "dar" vakasında (42 cm) uyarı İsviçre ölçü sınırının altında kaldığı için "akvaryum çok küçük" oldu. Plekonun en düşük sıcaklığı 25 °C olduğu için ısıtıcısız iki pleko vakasında ısıtıcı ölçütü 75'ten 35'e düştü (genel puan 84 → 78 ve 65 → 60).
 - Katalog akışı testine üç kayıt için regresyon kontrolü eklendi.
+
+## 2026-10-07 Çözülmemiş satış adlarının gözden geçirilmesi (Claude)
+
+- `src/data/catalog-species-unresolved.ts` 68 kayıt içeriyor, hepsi Cikletist'ten. Daha önce durum belgelerine "680" olarak yazılan sayı yanlıştı. Cikletist ana kategori envanterinin 384 satırı şöyle ayrılıyor: 314 doğrulanmış profile bağlı, 67 çözülmemiş, 3 canlı değil.
+- Her kayıtta Canberk'in kaynaklı bir nedeni var. Bunlar şöyle gruplanıyor:
+  - Aynı satış adı birden fazla türe uyuyor (ör. Red Belly Tetra, Jully çöpçü, Blue Neon Goby, Green Texas).
+  - Karışık paket (karides, nerit, ciklet).
+  - Yalnızca renk ya da seçilim adı (ör. Şeker Pembe Ciklet, Albino Sky Blue, Red Ruby).
+  - Genel kategori adı (ör. Rasbora, Gurami, Malawi Ciklet, Bıçak Balıkları).
+  - Yarı karasal Geosesarma yengeçleri. Bu yengeçler kara alanı istediği için akvaryum profiline bağlanamaz.
+  - Mağaza başlığının iki ayrı kimliği birleştirmesi (ör. Panda Garra Rufa, Channa Asiatica … Bleheri).
+- `docs/DATA_SOURCES.md` gereği bu kayıtlar mevcut haliyle eşlenmez. Hiçbir kayıt değiştirilmedi.
+- Mağaza sayfalarında artık bilimsel ad yayımlanıp yayımlanmadığı otomatik denetlenemedi: istekler HTTP 403 aldı, tarayıcıda Cloudflare insan doğrulaması çıktı ve bu doğrulama geçilmedi.
+- Sonraki adım ürün sahibiyle birlikte yapılacak: sayfaları o Chrome'da açacak, Claude okuyacak. Yalnızca sayfada ya da kabul edilen uzman kaynakta açıkça yazan bilgi kullanılacak; belirsiz olan çözülmemiş kalacak.
