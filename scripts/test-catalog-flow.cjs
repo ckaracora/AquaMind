@@ -4951,6 +4951,25 @@ assert.deepEqual([verifiedDiscus?.adultSizeCm,verifiedDiscus?.minVolumeL,verifie
 assert(verifiedDiscus.minVolumeL >= verifiedDiscus.minGroup * 50, "Diskus hacmi en az grubun her yetişkini için OATA'nın 50 litresini karşılamalı");
 assert(verifiedDiscus?.sourceUrl?.includes("ornamentalfish.org"), "Diskus yetişkin sürü hacmini veren OATA bakım kaynağına bağlanmalı");
 assert(["seriouslyfish.com","fishkeeper.co.uk","fishbase.se"].every((host) => verifiedDiscus?.additionalSourceUrls?.some((url) => url.includes(host))), "Diskusun uzunluk, su değerleri ve kimlik kaynakları korunmalı");
+// Satış adı tek bir bilimsel türe denk gelmeyen kayıtlar satılan balığa göre tanımlanır; birden fazla aday varsa en koruyucu kaynaklı değerler kullanılır (docs/DECISIONS/0014).
+const identityRecords = [
+  ["ancistrus", "Ancistrus sp. '3'", 15, 54, 60, 1, [21,26], [5.5,7.5], "seriouslyfish.com/species/ancistrus-cf-cirrhosus", "Ancistrus cirrhosus"],
+  ["common-pleco", "Pterygoplichthys pardalis / P. disjunctivus", 70, 400, 200, 1, [25,26], [6.5,7.2], "fishkeeper.co.uk/fish/freshwater/catfish/common-plec", "Hypostomus plecostomus"],
+  ["siamese-algae-eater", "Crossocheilus langei / C. atrilimes", 16.4, 304, 150, 6, [20,26], [6,7.5], "seriouslyfish.com/species/crossocheilus-langei", "Crossocheilus oblongus"],
+];
+for (const [id, scientificName, size, volume, length, group, temperature, ph, source, formerName] of identityRecords) {
+  const profile = speciesCatalog.find((item) => item.id === id);
+  assert.deepEqual([profile?.scientificName,profile?.adultSizeCm,profile?.minVolumeL,profile?.minTankLengthCm,profile?.minGroup,profile?.temperature,profile?.ph], [scientificName,size,volume,length,group,temperature,ph], `${id} satılan balığın kaynaklı kimliğini ve değerlerini taşımalı`);
+  assert(profile?.sourceUrl?.includes(source), `${id} ana bakım kaynağına bağlanmalı`);
+  assert.equal(profile?.verifiedAt, "2026-10-05", `${id} kimlik düzeltmesinin doğrulama tarihini taşımalı`);
+  assert(profile?.aliases?.includes(formerName), `${id} eski bilimsel adla aranabilmeli`);
+  assert(profile?.husbandryCaution, `${id} kimlik belirsizliğini kullanıcıya açıklamalı`);
+}
+const commonPleco = speciesCatalog.find((item) => item.id === "common-pleco");
+assert(["art=108","art=552"].every((page) => commonPleco?.additionalSourceUrls?.some((url) => url.includes("suedamerikafans.de") && url.includes(page))), "Pleko uzunluğu iki aday tür için Welsfans kaynağına bağlanmalı");
+assert(["fishipedia.fr","scotcat.com"].every((host) => commonPleco?.additionalSourceUrls?.some((url) => url.includes(host))), "Pleko hacmi ve su aralığını belirleyen Fishipedia ve ScotCat kaynaklarına bağlanmalı");
+assert(commonPleco?.husbandryCaution?.includes("hacim önerileri farklıdır"), "Pleko hacim önerilerindeki fark kullanıcıya açıklanmalı");
+assert(commonPleco?.husbandryCaution?.includes("ortak aralığını"), "Pleko su değerlerinin kaynakların ortak aralığı olduğu kullanıcıya açıklanmalı");
 const koiCarp = speciesCatalog.find((item) => item.id === "koi-carp");
 assert(koiCarp, "Koi, Japon balığından ayrı bir biyolojik profil taşımalı");
 assert.equal(koiCarp.scientificName, "Cyprinus carpio", "Koi doğru bilimsel kimlikle tutulmalı");

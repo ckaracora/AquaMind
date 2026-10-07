@@ -1,6 +1,6 @@
 # Kaynağı yalnızca FishBase olan türler
 
-Son güncelleme: 2026-10-04. İlk liste 2026-10-03'te `main` `18fdfeb` kataloğuyla üretildi (45 tür); 42'si 2026-10-04'te kaynaklandı (`docs/CATALOG_LOG.md` → "2026-10-04 Kaynağı yalnızca FishBase olan 42 türün kaynak yenilemesi").
+Son güncelleme: 2026-10-05. İlk liste 2026-10-03'te `main` `18fdfeb` kataloğuyla üretildi (45 tür); 42'si 2026-10-04'te kaynaklandı (`docs/CATALOG_LOG.md` → "2026-10-04 Kaynağı yalnızca FishBase olan 42 türün kaynak yenilemesi"). Kalan 3 türün kimliği 2026-10-05'te düzeltildi (`docs/CATALOG_LOG.md` → "2026-10-05 Kimliği belirsiz 3 türün kimlik ve kaynak düzeltmesi"); liste boş.
 
 ## Neden önemli
 
@@ -22,16 +22,16 @@ Bu değerler doğrudan alan uyarısını belirler. Kaynağın önerisinin altı 
 - Kaynak taban ölçüsü veriyorsa, katalog günlüğündeki mevcut yöntem kullanılır (ör. 180 × 60 cm taban → yaklaşık 648 L).
 - Kaynakta olmayan değer uydurulmaz. Kaynaklar çelişirse fark not edilir.
 
-Bu liste önce Canberk'in sıradaki katalog işi olarak önerildi (2026-10-03). Ürün sahibinin isteğiyle 2026-10-04'te işi Claude üstlendi ve 42 türü kaynaklandırdı; bu türler tablodan çıkarıldı. Kalan üç türde sorun kaynak eksikliğinden çok kimlik belirsizliği; ayrı bir işte çözülecek.
+Bu liste önce Canberk'in sıradaki katalog işi olarak önerildi (2026-10-03). Ürün sahibinin isteğiyle 2026-10-04'te işi Claude üstlendi ve 42 türü kaynaklandırdı; bu türler tablodan çıkarıldı. Kalan üç türde sorun kaynak eksikliğinden çok kimlik belirsizliğiydi; 2026-10-05'te ayrı bir işte çözüldü.
 
-## Kalan liste (3 tür)
+## Kalan liste (yok)
 
-| Kimlik | Ad | Bilimsel ad | Kategori | Boy (cm) | En az hacim (L) | En az uzunluk (cm) | Sıcaklık (°C) | pH | Bağlantı |
-|---|---|---|---|---|---|---|---|---|---|
-| `ancistrus` | Cüce vatoz | *Ancistrus cirrhosus* | balık | 13 | 80 | 80 | 22–26 | 5,8–7,6 | elle |
-| `common-pleco` | Common vatoz | *Hypostomus plecostomus* | balık | 45 | 500 | 150 | 22–28 | 6–8 | otomatik |
-| `siamese-algae-eater` | Siamese algae eater | *Crossocheilus oblongus* | balık | 15 | 180 | 120 | 22–28 | 6–8 | otomatik |
+Kalan üç kaydın sorunu kaynak eksikliği değil kimlikti. Ürün sahibinin 2026-10-05 onayıyla (`docs/DECISIONS/0014-coklu-tur-satis-adi-profilleri.md`) üçü de satılan balığa göre yeniden tanımlandı ve kaynaklandı:
 
-- `ancistrus`: Seriously Fish'te *Ancistrus cirrhosus* sayfası yok. Bulunan sayfa ticari "bristlenose" balığını *Ancistrus* sp. '3' (cf. *cirrhosus*) olarak ele alıyor ve genetik verinin *A. cirrhosus* yakınlığını desteklemediğini, balığın melez olabileceğini söylüyor. Bu sayfanın bakım değerleri (54 L, 60 cm, 21–26 °C, pH 5,5–7,5) katalogdaki bilimsel ada bağlanmadı; kimlik kararıyla birlikte değerlendirilecek. Kayıttaki L144 gibi satış adları da ayrı *Ancistrus* formları olabilir.
-- `common-pleco`: Seriously Fish'te *Hypostomus plecostomus* sayfası yok. Practical Fishkeeping'e göre "common plec" adıyla satılan balıklar çoğunlukla *Pterygoplichthys pardalis* ve *P. disjunctivus*; Fishkeeper'ın "Common Plec" sayfası da *P. pardalis*.
-- `siamese-algae-eater`: Seriously Fish'e göre *Crossocheilus oblongus* neredeyse kesinlikle Siyam yosun yiyicisi adıyla satılan balık değil; satılanlar *C. atrilimes* ve *C. langei*. OATA bakım kılavuzu yalnızca en az 120 cm uzunluk veriyor.
+| Kimlik | Ad | Eski bilimsel ad | Yeni bilimsel ad | Ana kaynak |
+|---|---|---|---|---|
+| `ancistrus` | Cüce vatoz | *Ancistrus cirrhosus* | *Ancistrus* sp. '3' | Seriously Fish |
+| `common-pleco` | Common vatoz | *Hypostomus plecostomus* | *Pterygoplichthys pardalis* / *P. disjunctivus* | Fishkeeper |
+| `siamese-algae-eater` | Siamese algae eater | *Crossocheilus oblongus* | *Crossocheilus langei* / *C. atrilimes* | Seriously Fish |
+
+Değerler, çelişkiler ve kaynak cümleleri katalog günlüğündedir. Yeni bir tarama bu ölçüte uyan tür bulursa bu bölüme eklenmelidir.
