@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 import type { HealthAnalysis } from "@aquamind/compatibility-engine";
-import { speciesById } from "@/data/catalog";
+import { speciesById, speciesForLivestock } from "@/data/catalog";
 import type { Livestock } from "@/types/aquarium";
 import { commonSpeciesRanges, healthSummary, nitrateStatus, rangeStatus, tdsStatus } from "@/lib/water-status";
 
@@ -15,13 +15,13 @@ describe("commonSpeciesRanges", () => {
   it("türlerin ortak sıcaklık ve pH aralığını verir", () => {
     const neon = speciesById("neon-tetra")!;
     const cory = speciesById("corydoras-panda")!;
-    const ranges = commonSpeciesRanges([animal("neon-tetra"), animal("corydoras-panda")]);
+    const ranges = commonSpeciesRanges([animal("neon-tetra"), animal("corydoras-panda")], speciesForLivestock);
     expect(ranges.temperature).toEqual([Math.max(neon.temperature[0], cory.temperature[0]), Math.min(neon.temperature[1], cory.temperature[1])]);
     expect(ranges.ph).toEqual([Math.max(neon.ph[0], cory.ph[0]), Math.min(neon.ph[1], cory.ph[1])]);
   });
 
   it("canlı yoksa aralık vermez", () => {
-    expect(commonSpeciesRanges([])).toEqual({});
+    expect(commonSpeciesRanges([], speciesForLivestock)).toEqual({});
   });
 });
 

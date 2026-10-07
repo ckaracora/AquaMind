@@ -1,13 +1,14 @@
 "use client";
 
 import { Activity, Bell, CalendarDays, ChevronRight, CircleGauge, Droplets, FlaskConical, Plus, Search, Thermometer, Waves } from "lucide-react";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { MobileNav } from "@/components/mobile-nav";
 import { ParameterCard } from "@/components/parameter-card";
 import { Sidebar } from "@/components/sidebar";
 import { greetingForHour } from "@/lib/greeting";
-import type { dashboardStatus } from "@/lib/dashboard-status";
+import { dashboardStatus } from "@/lib/dashboard-status";
 import type { ParameterStatus } from "@/lib/water-status";
+import { useCatalogLookup } from "@/lib/use-catalog-lookup";
 import { useAquariums } from "@/providers/aquarium-provider";
 
 const summaryTones = { good: "text-[#71858d]", neutral: "text-[#71858d]", warning: "text-amber-300", danger: "text-red-300" } as const;
@@ -21,18 +22,18 @@ export default function Dashboard() {
   // Sayfa önceden derlendiği için saat, derleme sunucusunda değil tarayıcıda okunur.
   const [greeting, setGreeting] = useState<string>();
   useEffect(() => setGreeting(greetingForHour(new Date().getHours())), []);
-  // Durum hesapları kataloğun tamamını gerektirir; ilk yükü küçük tutmak için sayfa açıldıktan sonra yüklenir.
-  const [computeStatus, setComputeStatus] = useState<typeof dashboardStatus>();
-  // Yükleme bağlantı hatasıyla başarısız olursa "hesaplanıyor" yazısı sonsuza kadar kalmaz.
-  const [statusLoadFailed, setStatusLoadFailed] = useState(false);
-  useEffect(() => { import("@/lib/dashboard-status").then((module) => setComputeStatus(() => module.dashboardStatus)).catch(() => setStatusLoadFailed(true)); }, []);
   const aquarium = aquariums.find((item) => item.id === selectedId) ?? aquariums[0];
+  // Durum hesapları yalnızca seçili akvaryumun canlı ve ekipman kayıtlarını içeren katalog parçalarıyla yapılır; kataloğun tamamı
+  // indirilmez (docs/DECISIONS/0016-gereken-katalog-kayitlarinin-yuklenmesi.md). Parçalar alınamazsa "hesaplanıyor" yazısı sonsuza kadar kalmaz.
+  const aquariumId = aquarium?.id;
+  const animals = useMemo(() => livestock.filter((item) => item.aquariumId === aquariumId), [livestock, aquariumId]);
+  const devices = useMemo(() => equipment.filter((item) => item.aquariumId === aquariumId), [equipment, aquariumId]);
+  const { lookup, failed: statusLoadFailed } = useCatalogLookup(animals, devices, Boolean(aquarium));
   if (!aquarium) return <div className="min-h-screen"><Sidebar/><main className="pb-28 lg:ml-[248px]"><div className="grid min-h-screen place-items-center px-5 text-center"><div><Waves size={45} className="mx-auto mb-5 text-aqua"/><h1 className="text-2xl font-extrabold">AquaMind’e hoş geldin</h1><p className="mt-2 text-sm text-[#71858d]">Dashboard’u kullanmaya başlamak için ilk akvaryumunu oluştur.</p><a href="/aquariums/new" className="mt-6 inline-flex items-center gap-2 rounded-xl bg-aqua px-5 py-3 text-xs font-extrabold text-ink"><Plus size={16}/>Akvaryum oluştur</a></div></div></main><MobileNav/></div>;
   const aquariumReadings = waterReadings.filter((item) => item.aquariumId === aquarium.id);
   // Sağlık sayfasıyla aynı kural: en son ölçüm tarihe göre seçilir.
   const latest = [...aquariumReadings].sort((a, b) => +new Date(b.measuredAt) - +new Date(a.measuredAt))[0];
-  const animals = livestock.filter((item) => item.aquariumId === aquarium.id);
-  const status = computeStatus?.(aquarium, animals, equipment.filter((item) => item.aquariumId === aquarium.id), latest);
+  const status = lookup ? dashboardStatus(lookup, aquarium, animals, devices, latest) : undefined;
   const summary = status?.summary ?? { text: statusLoadFailed ? "Durum yüklenemedi; sayfayı yenileyin." : "Durum hesaplanıyor…", tone: "neutral" as const };
   const temperatureStatus = status?.temperature ?? pendingStatus;
   const phStatus = status?.ph ?? pendingStatus;

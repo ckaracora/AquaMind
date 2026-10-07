@@ -1,6 +1,6 @@
-// Ana sayfanın durum hesapları. Uyumluluk motoru kataloğun tamamını gerektirdiği için bu modül
-// ana sayfaya dinamik olarak yüklenir; böylece sayfanın ilk yükü kataloğu içermez (bkz. src/app/page.tsx).
-import { analyzeAquarium } from "@/lib/health-analysis";
+// Ana sayfanın durum hesapları. Katalog verisi içermez: türler ve ekipman verilen `CatalogLookup` üzerinden gelir; ana sayfa
+// yalnızca seçili akvaryumun kayıtlarını yükler (src/lib/catalog-slice.ts, docs/DECISIONS/0016-gereken-katalog-kayitlarinin-yuklenmesi.md).
+import { createHealthAnalyzer, type CatalogLookup } from "@/lib/health-analysis-core";
 import { commonSpeciesRanges, healthSummary, nitrateStatus, rangeStatus, tdsStatus, type ParameterStatus, type StatusTone } from "@/lib/water-status";
 import type { Aquarium, Equipment, Livestock, WaterParameters } from "@/types/aquarium";
 
@@ -12,10 +12,10 @@ export interface DashboardStatus {
   tds: ParameterStatus;
 }
 
-export function dashboardStatus(aquarium: Aquarium, animals: Livestock[], equipment: Equipment[], latest?: WaterParameters): DashboardStatus {
-  const ranges = commonSpeciesRanges(animals);
+export function dashboardStatus(lookup: CatalogLookup, aquarium: Aquarium, animals: Livestock[], equipment: Equipment[], latest?: WaterParameters): DashboardStatus {
+  const ranges = commonSpeciesRanges(animals, lookup.speciesForLivestock);
   return {
-    summary: healthSummary(analyzeAquarium(aquarium, animals, equipment, latest), animals.length > 0 || latest !== undefined),
+    summary: healthSummary(createHealthAnalyzer(lookup)(aquarium, animals, equipment, latest), animals.length > 0 || latest !== undefined),
     temperature: rangeStatus(latest?.temperature, ranges.temperature),
     ph: rangeStatus(latest?.ph, ranges.ph),
     nitrate: nitrateStatus(latest, aquarium.type),

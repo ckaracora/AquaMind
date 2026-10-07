@@ -1,7 +1,7 @@
 # 0015 — Katalog modülleri ve sayfa hızı
 
 - Tarih: 2026-10-07
-- Durum: Önerildi — ürün sahibi (`buraksenfx`) 2026-10-07'de sayfa hızı işinin önceliklendirilmesini onayladı ("onaylıyorum"). Yöntem teknik karardır (Claude). `codex/page-speed` dalında; Codex denetimi ve `main` birleştirmesi bekleniyor. `main` dalına birleştirilene kadar kabul edilmiş sayılmaz
+- Durum: Kabul edildi — ürün sahibi (`buraksenfx`) 2026-10-07'de sayfa hızı işinin önceliklendirilmesini onayladı ("onaylıyorum"). Yöntem teknik karardır (Claude). Codex denetimi iki turda tamamlandı (son tur temiz); PR #20 (`https://github.com/ckaracora/AquaMind/pull/20`) kullanıcı onayıyla 2026-10-07'de merge commit yöntemiyle `main` dalına birleştirildi (`5ef4383`); `5ef4383` push'unda `Doğrulama` (çalıştırma `37562778204`) ve Vercel üretim dağıtımı başarılı, canlıda. Sonraki adım: `docs/DECISIONS/0016-gereken-katalog-kayitlarinin-yuklenmesi.md`.
 
 ## Bağlam
 

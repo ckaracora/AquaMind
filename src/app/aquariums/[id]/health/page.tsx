@@ -2,26 +2,26 @@
 
 import { AlertTriangle, ArrowLeft, CheckCircle2, ChevronRight, CircleGauge, Droplets, Fish, Heater, ShieldAlert, Waves } from "lucide-react";
 import { useParams } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useMemo } from "react";
 import { AppShell } from "@/components/app-shell";
 import { PageHeader } from "@/components/page-header";
-import type { analyzeAquarium } from "@/lib/health-analysis";
+import { createHealthAnalyzer } from "@/lib/health-analysis-core";
+import { useCatalogLookup } from "@/lib/use-catalog-lookup";
 import { useAquariums } from "@/providers/aquarium-provider";
 
 const tones={good:{text:"text-emerald-400",bg:"bg-emerald-400",soft:"bg-emerald-400/10",label:"İyi"},warning:{text:"text-amber-300",bg:"bg-amber-300",soft:"bg-amber-300/10",label:"Dikkat"},danger:{text:"text-red-400",bg:"bg-red-400",soft:"bg-red-400/10",label:"Yüksek risk"}};
 
 export default function HealthPage(){
  const {id}=useParams<{id:string}>(); const {aquariums,hydrated,livestock,equipment,waterReadings}=useAquariums(); const aquarium=aquariums.find(a=>a.id===id);
- // Analiz tür ve ekipman kataloğunun tamamını gerektirir; sayfa iskeleti hemen görünsün diye analiz kodu sayfa açıldıktan sonra yüklenir (ana sayfadaki durum hesabıyla aynı yöntem).
- // Yükleme bağlantı hatasıyla başarısız olursa sayfa sonsuza kadar beklemez; kullanıcıya hata ve yeniden deneme gösterilir.
- const [analyze,setAnalyze]=useState<typeof analyzeAquarium>();
- const [loadFailed,setLoadFailed]=useState(false);
- const [loadAttempt,setLoadAttempt]=useState(0);
- useEffect(()=>{let active=true;setLoadFailed(false);import("@/lib/health-analysis").then(module=>{if(active)setAnalyze(()=>module.analyzeAquarium);}).catch(()=>{if(active)setLoadFailed(true);});return()=>{active=false;};},[loadAttempt]);
- if(hydrated&&!analyze&&loadFailed)return <AppShell><PageHeader title="Sağlık Analizi"/><div className="grid min-h-[60vh] place-items-center px-5 text-center"><div><p className="text-sm font-extrabold">Analiz yüklenemedi.</p><p className="mt-2 text-xs text-[#71858d]">Bağlantınızı kontrol edip yeniden deneyin.</p><button type="button" onClick={()=>setLoadAttempt(attempt=>attempt+1)} className="mt-5 rounded-xl bg-aqua px-5 py-3 text-xs font-extrabold text-ink">Yeniden dene</button></div></div></AppShell>;
- if(!hydrated||!analyze)return <AppShell><PageHeader title="Sağlık Analizi"/><div className="grid min-h-[60vh] place-items-center text-sm text-[#71858d]">Analiz hazırlanıyor…</div></AppShell>;
+ // Analiz yalnızca bu akvaryumun canlı ve ekipman kayıtlarını içeren katalog parçalarıyla yapılır; kataloğun tamamı indirilmez
+ // (docs/DECISIONS/0016-gereken-katalog-kayitlarinin-yuklenmesi.md). Parçalar alınamazsa sayfa sonsuza kadar beklemez; hata ve yeniden deneme gösterilir.
+ const animals=useMemo(()=>livestock.filter(i=>i.aquariumId===id),[livestock,id]); const devices=useMemo(()=>equipment.filter(i=>i.aquariumId===id),[equipment,id]);
+ const {lookup,failed,retry}=useCatalogLookup(animals,devices,hydrated&&Boolean(aquarium));
+ if(hydrated&&aquarium&&!lookup&&failed)return <AppShell><PageHeader title="Sağlık Analizi"/><div className="grid min-h-[60vh] place-items-center px-5 text-center"><div><p className="text-sm font-extrabold">Analiz yüklenemedi.</p><p className="mt-2 text-xs text-[#71858d]">Bağlantınızı kontrol edip yeniden deneyin.</p><button type="button" onClick={retry} className="mt-5 rounded-xl bg-aqua px-5 py-3 text-xs font-extrabold text-ink">Yeniden dene</button></div></div></AppShell>;
+ if(!hydrated)return <AppShell><PageHeader title="Sağlık Analizi"/><div className="grid min-h-[60vh] place-items-center text-sm text-[#71858d]">Analiz hazırlanıyor…</div></AppShell>;
  if(!aquarium)return <AppShell><PageHeader title="Sağlık Analizi"/><div className="p-16 text-center">Akvaryum bulunamadı.</div></AppShell>;
- const animals=livestock.filter(i=>i.aquariumId===id); const devices=equipment.filter(i=>i.aquariumId===id); const latest=waterReadings.filter(i=>i.aquariumId===id).sort((a,b)=>+new Date(b.measuredAt)-+new Date(a.measuredAt))[0]; const analysis=analyze(aquarium,animals,devices,latest); const overall=tones[analysis.status];
+ if(!lookup)return <AppShell><PageHeader title="Sağlık Analizi"/><div className="grid min-h-[60vh] place-items-center text-sm text-[#71858d]">Analiz hazırlanıyor…</div></AppShell>;
+ const latest=waterReadings.filter(i=>i.aquariumId===id).sort((a,b)=>+new Date(b.measuredAt)-+new Date(a.measuredAt))[0]; const analysis=createHealthAnalyzer(lookup)(aquarium,animals,devices,latest); const overall=tones[analysis.status];
  return <AppShell><PageHeader title="Sağlık Analizi"/><div className="mx-auto max-w-[1180px] px-5 py-8 sm:px-8 lg:px-10 lg:py-10"><a href={`/aquariums/${id}`} className="mb-6 inline-flex items-center gap-2 text-xs font-bold text-[#82969e]"><ArrowLeft size={15}/>{aquarium.name}</a><div className="mb-7"><p className="eyebrow mb-2 text-aqua">Uyumluluk ve biyolojik yük</p><h1 className="text-2xl font-extrabold sm:text-3xl">Sağlık Analizi</h1><p className="mt-2 text-sm text-[#71858d]">Akvaryum, canlı, ekipman ve son ölçümlerin birlikte değerlendirildi.</p></div>
   <div className="grid gap-5 lg:grid-cols-[.75fr_1.5fr]"><section className="surface grid place-items-center p-7 text-center"><ScoreRing score={analysis.score} status={analysis.status}/><p className={`mt-5 rounded-full px-3 py-1.5 text-[10px] font-extrabold uppercase ${overall.soft} ${overall.text}`}>{overall.label}</p><p className="mt-3 text-[10px] leading-relaxed text-[#647981]">Bu skor bir tanı değil, kayıtlı bilgilere dayalı açıklanabilir bir rehberdir.</p></section><section className="surface p-5 sm:p-6"><div className="mb-5"><p className="eyebrow">Alt başlıklar</p><h2 className="mt-1 text-lg font-extrabold">Uygunluk göstergeleri</h2></div><div className="space-y-5">{analysis.metrics.map(({key,...metric})=><MetricBar key={key} {...metric}/>)}</div></section></div>
   <section className="surface mt-5 overflow-hidden"><div className="border-b border-white/[.06] p-5 sm:p-6"><p className="eyebrow">Öneriler</p><h2 className="mt-1 text-lg font-extrabold">Dikkat edilmesi gerekenler</h2></div>{analysis.warnings.length?<div className="divide-y divide-white/[.05]">{analysis.warnings.map((warning,index)=><div key={`${warning.title}-${index}`} className="flex gap-4 p-5"><span className={`grid size-10 shrink-0 place-items-center rounded-xl ${warning.level==="danger"?"bg-red-400/10 text-red-400":"bg-amber-300/10 text-amber-300"}`}>{warning.level==="danger"?<ShieldAlert size={19}/>:<AlertTriangle size={19}/>}</span><div><p className="text-sm font-extrabold">{warning.title}</p><p className="mt-1 text-[10px] leading-relaxed text-[#71858d]">{warning.message}</p></div></div>)}</div>:<div className="flex items-center gap-4 p-6"><span className="grid size-10 place-items-center rounded-xl bg-emerald-400/10 text-emerald-400"><CheckCircle2 size={19}/></span><div><p className="text-sm font-extrabold">Belirgin bir risk görünmüyor</p><p className="mt-1 text-[10px] text-[#71858d]">Düzenli ölçüm ve bakım kayıtlarına devam et.</p></div></div>}</section>

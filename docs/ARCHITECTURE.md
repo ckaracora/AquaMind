@@ -1,6 +1,6 @@
 # AquaMind mimarisi
 
-Son güncelleme: 2026-10-07 (sayfa hızı: katalog tür/ekipman modüllerine ayrıldı, aramalar dizinlendi, sağlık analizi sonradan yükleniyor — `docs/DECISIONS/0015-katalog-modulleri-ve-sayfa-hizi.md`); 2026-10-03 (motor 1.7.0 — salyangoz uyarısı; motor 1.6.0 — alan uyarısının şiddeti; aynı gün Canberk'in `b1fb27d` katalog işinin ikinci entegrasyonu ve motor 1.5.0 — taban ısıtıcısı; 2026-09-29'da motor 1.4.0 — kaynaklı tür davranış verisi `src/data/species-behavior.ts`; önceki büyük güncelleme 2026-09-03, Issue #8 — yerel depolama bütünlüğü). Bu belge iki bölümden oluşur: **mevcut yapı** (depoda bugün olan) ve **hedef mimari** (planlanan, henüz uygulanmamış). Planlanan kısımlar tamamlanmış gibi gösterilmez.
+Son güncelleme: 2026-10-07 (sayfa hızı 2: sağlık sayfası ve ana sayfa yalnızca gereken katalog parçalarını yükler — `docs/DECISIONS/0016-gereken-katalog-kayitlarinin-yuklenmesi.md`; sayfa hızı 1: katalog tür/ekipman modüllerine ayrıldı, aramalar dizinlendi, sağlık analizi sonradan yükleniyor — `docs/DECISIONS/0015-katalog-modulleri-ve-sayfa-hizi.md`); 2026-10-03 (motor 1.7.0 — salyangoz uyarısı; motor 1.6.0 — alan uyarısının şiddeti; aynı gün Canberk'in `b1fb27d` katalog işinin ikinci entegrasyonu ve motor 1.5.0 — taban ısıtıcısı; 2026-09-29'da motor 1.4.0 — kaynaklı tür davranış verisi `src/data/species-behavior.ts`; önceki büyük güncelleme 2026-09-03, Issue #8 — yerel depolama bütünlüğü). Bu belge iki bölümden oluşur: **mevcut yapı** (depoda bugün olan) ve **hedef mimari** (planlanan, henüz uygulanmamış). Planlanan kısımlar tamamlanmış gibi gösterilmez.
 
 ## Mevcut yapı (Phase 0B sonrası)
 
@@ -11,7 +11,8 @@ Depo, kökünde çalışan Next.js 15 web uygulamasını barındıran bir pnpm �
 | `src/` | Next.js App Router uygulaması, bileşenler, sağlayıcı, `localStorage` katmanı | Ürün davranışı Phase 0B'de değişmedi |
 | `src/data/` | Canlı, ekipman ve bakım ürünü katalogları; kaynaklı tür davranış verisi (`species-behavior.ts`, motor 1.4.0); içe aktarma anı bütünlük denetimleri (geliştirmede, testlerde ve CI'da; üretim derlemesinde tarayıcıda çalışmaz). Katalog 2026-10-07'den beri iki modül: `catalog-species.ts` (canlılar) ve `catalog-equipment.ts` (ekipman), ortak yardımcılar `catalog-shared.ts`; `catalog.ts` yalnızca ikisini yeniden dışa aktarır (betikler ve testler için) | Yerinde kaldı; Phase 0B'de değişmedi, 2026-09 katalog entegrasyonuyla genişledi. Uygulama kodu birleşik `catalog.ts`'yi değer olarak içe aktarmaz (`src/lib/__tests__/catalog-lookup.test.ts` denetler) |
 | `src/types/aquarium.ts` | Tip köprüsü: aynı adları `@aquamind/domain` üzerinden yeniden dışa aktarır | 13 tüketici değişmeden çalışır |
-| `src/lib/health-analysis.ts` | Uyarlayıcı: kataloğu motora bağlar ve `analyzeAquarium`'u aynı imzayla dışa aktarır | Sağlık sayfası bu modülü sayfa açıldıktan sonra dinamik `import()` ile yükler (ana sayfadaki `dashboard-status` gibi); `scripts/test-health.cjs` doğrudan kullanır |
+| `src/lib/health-analysis.ts` | Uyarlayıcı: tam kataloğu motora bağlar ve `analyzeAquarium`'u aynı imzayla dışa aktarır | `scripts/test-health.cjs` ve testler kullanır. Çekirdek veri içermeyen `src/lib/health-analysis-core.ts`'tedir (`createHealthAnalyzer(lookup)`) |
+| `src/lib/catalog-slice.ts`, `src/lib/use-catalog-lookup.ts` | Bir akvaryumun analizi için yalnızca gereken katalog parçalarını yükler (0016) | Sağlık sayfası ve ana sayfa kullanır; parçalar derleme anında `src/app/catalog-data/**/route.ts` ile durağan JSON olarak üretilir |
 | `packages/domain` | `@aquamind/domain`: alan tipleri, Zod şemaları, tercihler, depo anahtarları ve günlük/arşiv şemaları, `LocalExportV1` | Şemalar uygulamada kullanılıyor: `src/lib/aquarium-storage.ts` yüklemeyi ve dışa aktarmayı bunlarla doğruluyor. Bu nedenle zod istemci paketine dahildir |
 | `packages/compatibility-engine` | `@aquamind/compatibility-engine`: deterministik uyumluluk/sağlık motoru, `createAnalyzer(resolver)` | Kataloğu içe aktarmaz; bilgiye `KnowledgeResolver` ile ulaşır |
 | `scripts/` | CommonJS doğrulama betikleri (katalog akışı, sağlık senaryoları, hesaplayıcılar, katalog denetimi) | `pnpm verify` içinde kalır; hesaplayıcı betiği katalog entegrasyonuyla eklendi |
@@ -21,12 +22,18 @@ Depo, kökünde çalışan Next.js 15 web uygulamasını barındıran bir pnpm �
 ### Bağımlılık yönü
 
 ```
-src/app (Next.js sayfaları)
-  └─► src/lib/health-analysis.ts  (uyarlayıcı)
-        ├─► src/data/catalog-species.ts           (bilgi: canlı profilleri)
-        ├─► src/data/catalog-equipment.ts         (bilgi: ekipman profilleri)
+src/app/page.tsx, src/app/aquariums/[id]/health (tarayıcı)
+  ├─► src/lib/use-catalog-lookup.ts ─► src/lib/catalog-slice.ts ─► fetch /catalog-data/<tür>/<parça> (durağan JSON)
+  └─► src/lib/health-analysis-core.ts  (çekirdek; katalog verisi içermez)
         └─► @aquamind/compatibility-engine        (hesaplama; kataloğu bilmez)
               └─► @aquamind/domain (yalnızca tip)
+
+src/app/catalog-data/**/route.ts (derleme anında, sunucu) ─► src/data/catalog-bucket-builders.ts
+  ├─► src/data/catalog-species.ts           (bilgi: canlı profilleri, ad dizini)
+  ├─► src/data/catalog-equipment.ts         (bilgi: ekipman profilleri, marka/model dizini)
+  └─► src/data/species-behavior.ts          (bilgi: davranış kayıtları)
+
+src/lib/health-analysis.ts (tam katalog; betikler ve testler) ─► health-analysis-core + katalog modülleri
 
 src/types/aquarium.ts ─► @aquamind/domain (yalnızca tip; çalışma zamanında silinir)
 scripts/*.cjs ─► src/data, src/lib/health-analysis.ts (kendi TS yükleyicileriyle)
@@ -34,7 +41,7 @@ src/app/livestock, src/components/catalog-livestock-form.tsx ─► src/data/cat
 src/app/equipment ─► src/data/catalog-equipment.ts
 ```
 
-Sayfa hızı (2026-10-07, `docs/DECISIONS/0015-katalog-modulleri-ve-sayfa-hizi.md`): katalog verisi istemciye gönderilir; bu yüzden her sayfa yalnızca ihtiyaç duyduğu katalog modülünü içe aktarır. Katalog aramaları (`speciesForLivestock`, `profileForEquipment`, katalog araması) Türkçe biçimlendirmeyi kayıt başına bir kez yapan dizinler kullanır; sonuçlar eski doğrusal aramalarla aynıdır.
+Sayfa hızı (2026-10-07, `docs/DECISIONS/0015-katalog-modulleri-ve-sayfa-hizi.md` ve `0016-gereken-katalog-kayitlarinin-yuklenmesi.md`): liste sayfaları (canlılar, ekipman, ürünler) katalog verisini istemciye gönderir; bu yüzden her sayfa yalnızca ihtiyaç duyduğu katalog modülünü içe aktarır. Sağlık sayfası ve ana sayfa ise katalog modüllerini hiç içe aktarmaz; yalnızca akvaryumdaki kayıtların parçalarını JSON olarak ister (eşleme kuralı katalog modülleriyle aynı; kullanıcı verisi sunucuya gitmez). Katalog aramaları (`speciesForLivestock`, `profileForEquipment`, katalog araması) Türkçe biçimlendirmeyi kayıt başına bir kez yapan dizinler kullanır; sonuçlar eski doğrusal aramalarla aynıdır.
 
 Kural: paketler uygulamaya (`src/`) bağımlı olamaz. Uygulama paketlere bağımlıdır. Katalog bugün `src/data` içinde olduğu için motor kataloğa değil, uyarlayıcının verdiği çözümleyiciye bağlıdır.
 

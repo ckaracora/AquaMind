@@ -76,4 +76,29 @@ describe("katalog modülleri", () => {
       .filter((file) => readFileSync(file, "utf8").split("\n").some((line) => /from "@\/data\/catalog"/.test(line) && !/^import type /.test(line.trim())));
     expect(offenders).toEqual([]);
   });
+
+  // Sağlık sayfası ve ana sayfa yalnızca gereken katalog parçalarını indirir (docs/DECISIONS/0016-gereken-katalog-kayitlarinin-yuklenmesi.md);
+  // bu modüller katalog verisini değer olarak içe aktarırsa kataloğun tamamı yeniden tarayıcıya gider.
+  it("parça yükleyen modüller katalog verisini değer olarak içe aktarmaz", () => {
+    const dataFree = [
+      "src/lib/catalog-slice.ts", "src/lib/health-analysis-core.ts", "src/lib/use-catalog-lookup.ts", "src/lib/dashboard-status.ts", "src/lib/water-status.ts",
+      "src/data/catalog-buckets.ts", "src/data/catalog-shared.ts", "src/app/page.tsx", "src/app/aquariums/[id]/health/page.tsx",
+    ];
+    const dataModules = /from "(@\/data\/(catalog|catalog-species|catalog-equipment|catalog-species-expanded|catalog-equipment-[a-z]+|catalog-bucket-builders|species-behavior)|@\/lib\/health-analysis|\.\/(catalog|catalog-species|catalog-equipment|catalog-species-expanded|catalog-equipment-[a-z]+|catalog-bucket-builders|species-behavior))"/;
+    const offenders = dataFree.flatMap((file) => readFileSync(file, "utf8").split("\n")
+      .filter((line) => /^\s*import /.test(line) && !/^\s*import type /.test(line) && dataModules.test(line))
+      .map((line) => `${file}: ${line.trim()}`));
+    expect(offenders).toEqual([]);
+  });
+
+  it("kaynak dosyalarında NUL baytı yok (Git dosyayı ikili sayar)", () => {
+    const textFiles = (dir: string): string[] => readdirSync(dir).flatMap((entry) => {
+      const path = join(dir, entry);
+      if (statSync(path).isDirectory()) return entry === "node_modules" || entry.startsWith(".") ? [] : textFiles(path);
+      return /\.(ts|tsx|cjs|mjs|js|json|md|css)$/.test(entry) ? [path] : [];
+    });
+    const files = ["src", "packages", "scripts", "docs"].flatMap((dir) => textFiles(dir));
+    expect(files.length).toBeGreaterThan(50);
+    expect(files.filter((file) => readFileSync(file).includes(0))).toEqual([]);
+  });
 });

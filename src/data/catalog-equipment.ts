@@ -2,7 +2,7 @@ import type { Equipment } from "@/types/aquarium";
 import { lightingCatalog } from "./catalog-equipment-lighting";
 import { specializedEquipmentCatalog } from "./catalog-equipment-specialized";
 import { hardwareEquipmentCatalog } from "./catalog-equipment-hardware";
-import { assertUniqueIds, normalize } from "./catalog-shared";
+import { assertUniqueIds, brandModelKey, isVerifiedEquipmentProfile, normalize } from "./catalog-shared";
 
 export interface EquipmentProfile {
   id: string; category: Equipment["category"]; brand: string; model: string; specifications: string;
@@ -547,7 +547,6 @@ function equipmentByIdIndex() {
   return equipmentByIdCache;
 }
 let equipmentByBrandModelCache: Map<string, EquipmentProfile> | undefined;
-const brandModelKey = (brand: string, model: string) => `${brand}\u0000${model}`;
 function equipmentByBrandModelIndex() {
   if (equipmentByBrandModelCache) return equipmentByBrandModelCache;
   equipmentByBrandModelCache = new Map();
@@ -558,10 +557,13 @@ function equipmentByBrandModelIndex() {
   return equipmentByBrandModelCache;
 }
 export const equipmentById = (id?: string) => id === undefined ? undefined : equipmentByIdIndex().get(id);
+// Marka/model dizini katalog parçalarına da yazılır (src/data/catalog-bucket-builders.ts); tarayıcıdaki yükleyici böylece aynı eşlemeyi kullanır.
+export const equipmentModelIndex = (): ReadonlyMap<string, EquipmentProfile> => equipmentByBrandModelIndex();
 export const equipmentForCategory = (category: Equipment["category"]) => equipmentCatalog.filter(item=>item.category===category);
 export const equipmentBrandsForCategory = (category: Equipment["category"]) => [...new Set(equipmentForCategory(category).map(item=>item.brand))].sort((a,b)=>a.localeCompare(b,"tr"));
 export const equipmentForBrandInCategory = (category: Equipment["category"], brand: string) => equipmentForCategory(category).filter(item=>item.brand===brand);
-export const isVerifiedEquipmentProfile = (profile?: EquipmentProfile): profile is EquipmentProfile => Boolean(profile?.sourceUrl&&profile?.verifiedAt&&!profile.specifications.toLocaleLowerCase("tr-TR").includes("doğrulama bekliyor"));
+// Doğrulanmış kayıt kuralı veri içermeyen ortak modülde (tarayıcıdaki parça yükleyici de kullanır).
+export { isVerifiedEquipmentProfile };
 export const hasStandaloneCapacityData = (profile?: EquipmentProfile) => {
   return profile?hasCapacityData(profile):false;
 };
