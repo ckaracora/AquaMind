@@ -42,6 +42,19 @@ Canlı sitede sağlık analizi yeni bir tarayıcıda ilk açılışta yaklaşık
 
 Yerel üretim sunucusunda sağlık analizi 1,1 saniyede hazırlandı. Puan (90), yük (%70) ve uyarılar canlıdakiyle aynı. Hata yolu da denendi: analiz kodunun parçası derleme çıktısında geçici olarak kaldırılınca hata ekranı çıktı, parça geri konunca "Yeniden dene" analizi açtı.
 
+### Önizleme ölçümü (2026-10-07)
+
+Ölçüm aynı masaüstü tarayıcıda, sayfa açılışından analizin ekrana gelmesine kadar yapıldı:
+
+- **Canlı site (eski kod):** 2.322 ms (önbelleği soğuk ilk açılış), 823 ms ve 832 ms.
+- **PR #20 önizlemesi (yeni kod):** 1.058, 1.041 ve 858 ms.
+
+Hızlı bir masaüstünde fark ölçüm gürültüsü düzeyinde. Toplam indirilen kod da değişmedi (383 kB). Önizlemede analiz parçaları sayfa açıldıktan sonra isteniyor; bu ek bir bekleme sırası yaratıyor.
+
+Beklenen kazanç işlemcisi yavaş cihazlarda. Analiz hesabı 160 ms yerine 0,14 ms sürüyor, bütünlük denetimi cihazda çalışmıyor ve sayfa iskeleti hemen görünüyor. Bu ölçülemedi, çünkü kullanılan aracın işlemci yavaşlatma özelliği yok.
+
+Sonraki adımda analiz kodu sayfa kodu çalışır çalışmaz istenecek ve sağlık sayfası yalnızca gereken kayıtları indirecek.
+
 ## Davranışın değişmediğinin kanıtı
 
 - Değişiklikten önce ve sonra aynı betikle döküm alındı (`speciesCatalog`, `equipmentCatalog`, yaklaşık 11.400 arama sonucu, gruplar, markalar, doğrulama sayıları). İki döküm bayt bayt aynı.
