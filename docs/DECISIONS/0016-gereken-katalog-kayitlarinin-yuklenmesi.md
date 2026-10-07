@@ -49,6 +49,19 @@
 - JSON'u çözmek, aynı veriyi JavaScript kodu olarak çalıştırmaktan daha hızlıdır.
 - Canlılar, ekipman ve ürünler sayfaları değişmedi; onlar katalogun tamamını listeler.
 
+### Önizleme ölçümü (2026-10-07)
+
+Ölçüm aynı masaüstü tarayıcıda, sırayla, sayfa açılışından analizin ekrana gelmesine kadar yapıldı:
+
+- **Canlı site (PR #20):** 2.791 ms (önbelleği soğuk ilk açılış), 769 ve 773 ms.
+- **PR #21 önizlemesi:** 2.321 ms (soğuk), 775 ve 703 ms.
+
+Soğuk ilk açılışta yaklaşık 0,5 saniye kazanç var. Isınmış önbellekle hızlı masaüstünde fark gürültü düzeyinde.
+
+Önizlemenin ilk açılışında toplam indirme 222 kB (HTML, JavaScript ve 6 JSON parçası); canlıda yalnızca JavaScript 383 kB. Vercel parçaları önceden üretilmiş, Brotli ile sıkıştırılmış (~7 kB) ve `application/json` türünde sunuyor; olmayan parça numarası 404 dönüyor.
+
+Kazancın çoğunun işlemcisi yavaş cihazlarda olması bekleniyor, çünkü ~1,5 MB katalog kodu artık çalıştırılmıyor. Bu ölçülemedi.
+
 ## Davranışın değişmediğinin kanıtı
 
 - `src/lib/__tests__/catalog-slice.test.ts`:
