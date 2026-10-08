@@ -2130,3 +2130,53 @@ Güncel alt adım: JBL filtre medyası, bakteri başlangıcı, sorun giderici/pH
 - `docs/DATA_SOURCES.md` gereği bu kayıtlar mevcut haliyle eşlenmez. Hiçbir kayıt değiştirilmedi.
 - Mağaza sayfalarında artık bilimsel ad yayımlanıp yayımlanmadığı otomatik denetlenemedi: istekler HTTP 403 aldı, tarayıcıda Cloudflare insan doğrulaması çıktı ve bu doğrulama geçilmedi.
 - Sonraki adım ürün sahibiyle birlikte yapılacak: sayfaları o Chrome'da açacak, Claude okuyacak. Yalnızca sayfada ya da kabul edilen uzman kaynakta açıkça yazan bilgi kullanılacak; belirsiz olan çözülmemiş kalacak.
+
+## 2026-10-07 Ekipman kaynak yenilemesi 1: Boyu (Claude)
+
+- Neden: Hesapta kullanılan 1.255 ekipman kaydının (filtre, ısıtıcı, hava motoru, ısıtıcılı cihaz) 475'inin tek kaynağı `docs/DATA_SOURCES.md` sırasına uymuyordu:
+  - 147'si yabancı pazar yeri ya da mağaza,
+  - 125'i kabul edilen listede olmayan Türk mağazası ya da pazar yeri,
+  - 72'si yabancı distribütör kataloğu,
+  - 131'i üretici sitesi olabilecek ama henüz doğrulanmamış alan adı.
+  - En çok etkilenen markalar: Jeneca (182), Dophin (63), Aquawing (62), Boyu (38). Kayıtlar marka marka yenileniyor; ilk paket Boyu.
+- Ürün sahibi kararı (2026-10-07): kabul edilen yerel mağaza listesi değişmeyecek. Listede olmayan mağazanın sayfası tek başına yetmez.
+- Uygulanan kurallar:
+  1. Üreticinin resmî ürün sayfası varsa değerler oradan alınır. Boyu'nun teknik tabloları sayfadaki model görsellerinde; görseller açılıp okundu (bağlantılar aşağıda).
+  2. Üreticinin yayımlamadığı bir değer (ör. akvaryum hacmi) için yabancı distribütör kataloğu tek başına yetmez. Kabul edilen yerel mağaza ya da birbirini doğrulayan ikinci bir güvenilir kaynak gerekir. Bulunamazsa alan boş kalır; filtrenin debisi resmîyse motor debiye göre hesaplar.
+  3. Aynı model için kaynaklar çelişiyorsa üreticinin değeri kullanılır ve fark ürün açıklamasında yazılır.
+  4. Hiçbir değer doğrulanamazsa kayıt silinmez, çünkü kullanıcı kayıtları ona bağlı olabilir. Değerler kaldırılır, `capacityDataNote` nedeni açıklar ve cihaz otomatik hesaba girmez.
+- Değişen kayıtlar (40 Boyu kaydı):
+  - **EF-10/15/20:** 602/700/799 L/saat ve en çok 95/190/285 L (ABD'de JBJ etiketiyle satılan filtrelerin kılavuzu) → 300/350/400 L/saat ve 100–300/150–350/200–400 L (Boyu). JBJ etiketli ürünün kılavuzu Boyu ürünü için kaynak sayılmadı.
+  - **EF-25/35/45:** Değerler aynı; kaynak İspanyol distribütörün teknik fişi → Boyu.
+  - **EFU-10…45:** Debi ve hacim aynı. Güç 11/13/15/22/24/26 W → 16/18/20/32/34/36 W. UV-C 5/5/5/5/6/7 W → hepsi 5 W. Kaynak Brezilya distribütörünün kataloğu → Boyu.
+  - **FEF-230/230A/280/280A:** Debi ve güç aynı. 100–300 L ve 150–400 L hacimleri kaldırıldı: Boyu hacim yayımlamıyor; Brezilya kataloğu 100–300 L yazıyor; İngiltere'deki iki satıcı ilanının başlığı ise FEF-230 için "Tanks up to 200L". 1,2 m basma yüksekliği eklendi.
+  - **DGN-410/460/520:** Debi (300–1610 L/saat) ve güç (4–30 W) aynı. UV-C 4 W → 3 W; DGN-410'a da resmî tablodaki 3 W eklendi. DGN-460'ın 120–480 L ve DGN-520'nin 100–650 L hacmi kaldırıldı: Boyu yayımlamıyor ve tek kaynaklar bir Rus ve bir Ukrayna mağazasıydı.
+  - **DGN-80/80A/120/120A:** Değerler aynı; kaynak Sri Lanka ve Endonezya mağazaları → Boyu. Resmî tablo UV-C sütununda "7M" ve "13M" yazıyor. A olmayan modellere UV-C gücü eklenmedi (mevcut regresyon kuralı).
+  - **SP-1000C:** 300 L/saat aynı, 8 W ve 0,5 m eklendi; kaynak İspanyol bayi listesi → Boyu.
+  - **SP-2300B:** 1200 L/saat, 28 W, 300–450 L (İspanyol distribütörün Boyu kataloğu) → 300 L/saat, 8 W, hacim yok (Boyu). Fark açıklamada yazılı. Not: Surtropic bayi listesinde "SP-2300 1200 L/H" ayrıca pompa olarak listeleniyor.
+  - **SP-2500B:** 1400 L/saat aynı. Güç 32 W → 34 W, 2,0 m basma yüksekliği eklendi. 350–500 L kaldırıldı (tek kaynak distribütör kataloğu).
+  - **SP-601E/602E/603E/604E/601F/602F/800F/1800B:** Debiler kaldırıldı, cihazlar hesap dışı. Boyu güncel sitesinde bu modelleri yayımlamıyor. Tek kaynak Surtropic bayi listesi ve aynı liste SP-2500B için 2000 L/H yazıyor (üretici 1400 L/saat). Bulunan eski satıcı sayfaları kapanmış (404).
+  - **EFU-8000A/10000A/15000A (havuz filtresi):** Hacim ve UV-C değerleri kaldırıldı, cihazlar hesap dışı. Boyu'nun bahçe filtresi sayfası A sürümlerini adıyla listeliyor ama teknik tabloda yalnız A olmayan modellerin değerleri var: EFU-8000 için 9 W ve 5000–8000 L, EFU-10000 için 18 W ve 6000–10000 L, EFU-15000 için 24 W ve 8000–15000 L. A sürümleri için kaynaklar çelişiyor: İspanyol distribütör seri için 1000–10000 L yazıyor, satıcılar 6000–10000 L, 8000–15000 L ve 20000 L yazıyor.
+  - **ACQ-009:** Değerler aynı (160 L/dakika, 105 W), 0,03 MPa eklendi; kaynak Hindistan mağazası → Boyu.
+  - **WF-2015/2025:** Değerler aynı; kaynak Boyu Meksika sitesi → Boyu.
+- Sonuç:
+  - Boyu'da hesaba giren kayıtların hepsi artık üretici sayfasına ya da kabul edilen yerel mağazaya dayanıyor.
+  - Boyu'da kapasite verisi hazır kayıt 87'den 76'ya indi (11 eski ya da havuz modeli hesap dışı). Bütün katalogda hesap dışı ekipman 12'den 23'e çıktı.
+- Motor sonucuna etkisi (filtre tek başına kullanıldığında "uygun" sınırı / tehlike sınırı):
+  - EF-10: 95 / 142,5 L → 300 / 450 L. EF-15: 190 / 285 L → 350 / 525 L. EF-20: 285 / 427,5 L → 400 / 600 L (üreticinin hacmi).
+  - FEF-230: 300 / 450 L → 200 / 400 L. FEF-280: 400 / 600 L → 250 / 500 L (debiye göre: saatte 4 ve 2 tur).
+  - DGN-460: 480 / 720 L → 402,5 / 805 L. DGN-520: 650 / 975 L → 402,5 / 805 L.
+  - SP-2300B: 450 / 675 L → 75 / 150 L. SP-2500B: 500 / 750 L → 350 / 700 L.
+  - Altın fikstürde Boyu filtresi yok (yalnız DR ısıtıcılar); fikstür değişmedi.
+- Kanıt (Boyu resmî görselleri, 2026-10-07'de okundu):
+  - EF: `https://www.boyuaquarium.com/SdwlUploads/Ed/image/20201102/1604304220250891.jpg`
+  - EFU: `https://www.boyuaquarium.com/SdwlUploads/Ed/image/20201102/1604305780995208.jpg`
+  - FEF: `https://www.boyuaquarium.com/SdwlUploads/Ed/image/20201102/1604300666315011.jpg`
+  - DGN-410/460/520: `https://www.boyuaquarium.com/SdwlUploads/Ed/image/20201102/1604286313355420.jpg`
+  - DGN-80/120: `https://www.boyuaquarium.com/SdwlUploads/Ed/image/20221116/1668571010565110.jpg`
+  - SP: `https://www.boyuaquarium.com/SdwlUploads/Ed/image/20201031/1604136410354101.jpg`
+  - ACQ: `https://www.boyuaquarium.com/SdwlUploads/Ed/image/20201105/1604569966108193.jpg`
+  - WF-2015/2025: `https://www.boyuaquarium.com/SdwlUploads/Ed/image/20201103/1604399003311254.jpg`
+  - Havuz filtreleri: `https://www.boyuaquarium.com/SdwlUploads/Ed/image/20201030/1604026040882695.jpg`
+- Regresyon: `scripts/test-catalog-flow.cjs` Boyu bölümüne yeni değerler, kaldırılan hacimler, SP-2300B farkı ve hesap dışı 11 kayıt için denetimler eklendi.
+- Sonraki paket: Dophin (63 kayıt; kaynak `qimeigroup.com`, üretici sitesi olup olmadığı doğrulanacak), ardından Jeneca ve Aquawing.

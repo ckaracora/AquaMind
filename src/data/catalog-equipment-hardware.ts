@@ -255,6 +255,18 @@ const ferplastCurrentEquipment: EquipmentProfile[] = [
 ];
 
 const boyuSource = "https://www.boyuaquarium.com/En_Pr_d_gci_39_id_39.html";
+// Boyu'nun resmî ürün sayfaları; teknik tablolar sayfadaki model görsellerinde (2026-10-07'de okundu).
+const boyuOfficial = {
+  ef:"https://www.boyuaquarium.com/En_Pr_d_gci_27_id_75.html",
+  efu:"https://www.boyuaquarium.com/En_Pr_d_gci_27_id_76.html",
+  fef:"https://www.boyuaquarium.com/En_Pr_d_gci_27_id_74.html",
+  dgn:"https://www.boyuaquarium.com/En_Pr_d_gci_27_id_72.html",
+  dgnCanister:"https://www.boyuaquarium.com/En_Pr_d_gci_27_id_151.html",
+  sp:"https://www.boyuaquarium.com/En_Pr_d_gci_27_id_64.html",
+  wf:"https://www.boyuaquarium.com/En_Pr_d_gci_27_id_78.html",
+  acq:"https://www.boyuaquarium.com/En_Pr_d_gci_56_id_105.html",
+};
+const boyuOfficialVerifiedAt = "2026-10-07";
 const boyuFilters: EquipmentProfile[] = ["EF-25","EF-35","EF-45"].map(model => ({
   id:`boyu-${model.toLowerCase()}`, category:"filter", brand:"Boyu", model,
   specifications:"Çok kademeli dış filtre · model teknik bilgisi doğrulama bekliyor",
@@ -279,42 +291,40 @@ boyuFilters.push(
   ...["SF-02","SF-03"].map(model=>({id:`boyu-${model.toLowerCase()}`,category:"filter" as const,brand:"Boyu",model,specifications:"Hava motoruyla çalışan biyolojik sünger üretim filtresi",requiresAirPump:true,sourceUrl:"https://atakanpetshop.com/boyu",verifiedAt})),
 );
 boyuFilters.push(
-  {id:"boyu-dgn-410",category:"filter",brand:"Boyu",model:"DGN-410",specifications:"Ayarlanabilir dış filtre · 300–1610 L/saat · en fazla 30 W",ratedFlowLph:1610,powerW:30,adjustableFlow:true,sourceUrl:"https://thietbibeca.com/loc-thung-boyu-dgn-410.html",verifiedAt:"2026-08-18"},
-  {id:"boyu-dgn-460",category:"filter",brand:"Boyu",model:"DGN-460",specifications:"Ayarlanabilir dış filtre · 300–1610 L/saat · en fazla 30 W · 4 W UV-C",ratedFlowLph:1610,powerW:30,adjustableFlow:true,integratedUvcW:4,recommendedMinL:120,recommendedMaxL:480,sourceUrl:"https://www.shop.aqvadesign.ru/catalogue/filtry_i_nagrevateli_dlja_akvariuma/vneshnij_reguliruemyj_akvariumnyj_filtr_boyu_dgn_460_s_uv_sterilizatorom_i_napolniteljami_ot_120do_480l/",verifiedAt:"2026-08-18"},
-  {id:"boyu-dgn-520",category:"filter",brand:"Boyu",model:"DGN-520",specifications:"Ayarlanabilir dış filtre · 300–1610 L/saat · en fazla 30 W · 4 W UV-C",ratedFlowLph:1610,powerW:30,adjustableFlow:true,integratedUvcW:4,recommendedMinL:100,recommendedMaxL:650,sourceUrl:"https://rozetka.com.ua/ua/boyu-dgn-520/p317101675/",verifiedAt:"2026-08-18"},
+  ...["DGN-410","DGN-460","DGN-520"].map(model=>({id:`boyu-${model.toLowerCase()}`,category:"filter" as const,brand:"Boyu",model,specifications:"24 V DC ayarlanabilir dış filtre · 300–1610 L/saat · 4–30 W · 3 W UV-C · 0,5–3 m basma yüksekliği",ratedFlowLph:1610,powerW:30,adjustableFlow:true,integratedUvcW:3,sourceUrl:boyuOfficial.dgn,verifiedAt:boyuOfficialVerifiedAt})),
   {id:"boyu-dgn-520a",category:"filter",brand:"Boyu",model:"DGN-520A",specifications:"Ayarlanabilir dış filtre · 1610 L/saat · 30 W",ratedFlowLph:1610,powerW:30,adjustableFlow:true,sourceUrl:"https://atakanpetshop.com/boyu-dgn-520a-dis-filtre-30w-1610ls-dgn-520a",verifiedAt:"2026-08-18"},
-  {id:"boyu-dgn-80",category:"filter",brand:"Boyu",model:"DGN-80",specifications:"Çok katmanlı kutu dış filtre · 800 L/saat · 35 W",ratedFlowLph:800,powerW:35,sourceUrl:"https://minipuraaqua.lk/product/boyu-dgn-80-canister-filter/",verifiedAt:"2026-08-18"},
-  {id:"boyu-dgn-80a",category:"filter",brand:"Boyu",model:"DGN-80A",specifications:"UV-C'li çok katmanlı kutu dış filtre · 800 L/saat · 35 W + 7 W UV-C",ratedFlowLph:800,powerW:35,integratedUvcW:7,sourceUrl:"https://aquadelsa.com/product/dgn-80a/",verifiedAt:"2026-08-18"},
-  {id:"boyu-dgn-120",category:"filter",brand:"Boyu",model:"DGN-120",specifications:"DGN serisi dört katmanlı UV donanımlı kutu dış filtre · 1200 L/saat · 55 W",ratedFlowLph:1200,powerW:55,sourceUrl:"https://www.ruparupa.com/p/boyu-filter-akuarium-120-hitam-biru.html",verifiedAt:"2026-08-24"},
-  {id:"boyu-dgn-120a",category:"filter",brand:"Boyu",model:"DGN-120A",specifications:"UV-C'li çok katmanlı kutu dış filtre · 1200 L/saat · 55 W + 13 W UV-C",ratedFlowLph:1200,powerW:55,integratedUvcW:13,sourceUrl:"https://fishfixsrilanka.lk/product/boyu-dgn-120a-canister-filter/",verifiedAt:"2026-08-24"},
+  {id:"boyu-dgn-80",category:"filter",brand:"Boyu",model:"DGN-80",specifications:"Çok katmanlı kutu dış filtre · 800 L/saat · 35 W",ratedFlowLph:800,powerW:35,sourceUrl:boyuOfficial.dgnCanister,verifiedAt:boyuOfficialVerifiedAt},
+  {id:"boyu-dgn-80a",category:"filter",brand:"Boyu",model:"DGN-80A",specifications:"UV-C'li çok katmanlı kutu dış filtre · 800 L/saat · 35 W + 7 W UV-C",ratedFlowLph:800,powerW:35,integratedUvcW:7,sourceUrl:boyuOfficial.dgnCanister,verifiedAt:boyuOfficialVerifiedAt},
+  {id:"boyu-dgn-120",category:"filter",brand:"Boyu",model:"DGN-120",specifications:"DGN serisi dört katmanlı UV donanımlı kutu dış filtre · 1200 L/saat · 55 W",ratedFlowLph:1200,powerW:55,sourceUrl:boyuOfficial.dgnCanister,verifiedAt:boyuOfficialVerifiedAt},
+  {id:"boyu-dgn-120a",category:"filter",brand:"Boyu",model:"DGN-120A",specifications:"UV-C'li çok katmanlı kutu dış filtre · 1200 L/saat · 55 W + 13 W UV-C",ratedFlowLph:1200,powerW:55,integratedUvcW:13,sourceUrl:boyuOfficial.dgnCanister,verifiedAt:boyuOfficialVerifiedAt},
+  // EF-10/15/20: Boyu'nun resmî tablosu. ABD'de JBJ etiketiyle satılan aynı adlı filtrelerin kılavuzu farklı değer (602/700/799 L/saat, 95/190/285 L) yayımlıyor; o kılavuz Boyu ürünü için kaynak sayılmaz.
   ...[
-    {model:"EF-10",flow:602,power:11,max:95},
-    {model:"EF-15",flow:700,power:13,max:190},
-    {model:"EF-20",flow:799,power:15,max:285},
-  ].map(({model,flow,power,max})=>({id:`boyu-${model.toLowerCase()}`,category:"filter" as const,brand:"Boyu",model,specifications:`Çok kademeli dış filtre · ${flow} L/saat · ${power} W`,ratedFlowLph:flow,powerW:power,recommendedMaxL:max,sourceUrl:"https://jbjaquarium.com/wp-content/uploads/2019/03/EFU-253545_Manual.pdf",verifiedAt:"2026-08-18"})),
+    {model:"EF-10",flow:300,power:11,min:100,max:300},
+    {model:"EF-15",flow:350,power:13,min:150,max:350},
+    {model:"EF-20",flow:400,power:15,min:200,max:400},
+  ].map(({model,flow,power,min,max})=>({id:`boyu-${model.toLowerCase()}`,category:"filter" as const,brand:"Boyu",model,specifications:`Çok kademeli dış filtre · ${flow} L/saat · ${power} W · ${min}–${max} litre`,ratedFlowLph:flow,powerW:power,recommendedMinL:min,recommendedMaxL:max,sourceUrl:boyuOfficial.ef,verifiedAt:boyuOfficialVerifiedAt})),
   ...[
-    {model:"EFU-10",flow:300,power:11,min:100,max:300,uv:5},
-    {model:"EFU-15",flow:350,power:13,min:150,max:350,uv:5},
-    {model:"EFU-20",flow:400,power:15,min:200,max:400,uv:5},
-    {model:"EFU-25",flow:750,power:22,min:250,max:450,uv:5},
-    {model:"EFU-35",flow:950,power:24,min:350,max:550,uv:6},
-    {model:"EFU-45",flow:1100,power:26,min:450,max:650,uv:7},
-  ].map(({model,flow,power,min,max,uv})=>({id:`boyu-${model.toLowerCase()}`,category:"filter" as const,brand:"Boyu",model,specifications:`UV-C sistemli dış filtre · ${flow} L/saat · ${power} W · ${uv} W UV-C`,ratedFlowLph:flow,powerW:power,recommendedMinL:min,recommendedMaxL:max,integratedUvcW:uv,sourceUrl:"https://ondaaquarios.com.br/catalgos/boyu/CATALOGO%20BOYU%20GRUPO%20ONDA%20V1.26.pdf",verifiedAt:"2026-08-18"})),
-  ...["FEF-230","FEF-230A"].map(model=>({id:`boyu-${model.toLowerCase()}`,category:"filter" as const,brand:"Boyu",model,specifications:"Dış filtre · 800 L/saat · 15 W · 100–300 litre",ratedFlowLph:800,powerW:15,recommendedMinL:100,recommendedMaxL:300,sourceUrl:"https://ondaaquarios.com.br/catalgos/boyu/CATALOGO%20BOYU%20GRUPO%20ONDA%20V1.26.pdf",verifiedAt:"2026-08-18"})),
-  ...["FEF-280","FEF-280A"].map(model=>({id:`boyu-${model.toLowerCase()}`,category:"filter" as const,brand:"Boyu",model,specifications:"Dış filtre · 1000 L/saat · 18 W · 150–400 litre",ratedFlowLph:1000,powerW:18,recommendedMinL:150,recommendedMaxL:400,sourceUrl:"https://ondaaquarios.com.br/catalgos/boyu/CATALOGO%20BOYU%20GRUPO%20ONDA%20V1.26.pdf",verifiedAt:"2026-08-18"})),
-  ...[
-    {model:"SP-601E",flow:150},{model:"SP-602E",flow:340},{model:"SP-603E",flow:400},{model:"SP-604E",flow:750},
-    {model:"SP-601F",flow:150},{model:"SP-602F",flow:340},{model:"SP-800F",flow:300},{model:"SP-1800B",flow:700},
-  ].map(({model,flow})=>({id:`boyu-${model.toLowerCase()}`,category:"filter" as const,brand:"Boyu",model,specifications:`Dalgıç iç filtre · ${flow} L/saat`,ratedFlowLph:flow,sourceUrl:"https://www.sanisvet.es/photos/PECES-SURTROPIC.pdf",verifiedAt:"2026-08-18"})),
-  {id:"boyu-sp-1000c",category:"filter",brand:"Boyu",model:"SP-1000C",specifications:"Dalgıç iç filtre · 300 L/saat",ratedFlowLph:300,sourceUrl:"https://www.sanisvet.es/photos/PECES-SURTROPIC.pdf",verifiedAt:"2026-08-18"},
+    {model:"EFU-10",flow:300,power:16,min:100,max:300},
+    {model:"EFU-15",flow:350,power:18,min:150,max:350},
+    {model:"EFU-20",flow:400,power:20,min:200,max:400},
+    {model:"EFU-25",flow:750,power:32,min:250,max:450},
+    {model:"EFU-35",flow:950,power:34,min:350,max:550},
+    {model:"EFU-45",flow:1100,power:36,min:450,max:650},
+  ].map(({model,flow,power,min,max})=>({id:`boyu-${model.toLowerCase()}`,category:"filter" as const,brand:"Boyu",model,specifications:`UV-C sistemli dış filtre · ${flow} L/saat · ${power} W · 5 W UV-C · ${min}–${max} litre`,ratedFlowLph:flow,powerW:power,recommendedMinL:min,recommendedMaxL:max,integratedUvcW:5,sourceUrl:boyuOfficial.efu,verifiedAt:boyuOfficialVerifiedAt})),
+  // FEF: üretici akvaryum hacmi yayımlamıyor; ikincil kaynakların hacimleri birbirini tutmadığı için yalnız debi kullanılır.
+  ...["FEF-230","FEF-230A"].map(model=>({id:`boyu-${model.toLowerCase()}`,category:"filter" as const,brand:"Boyu",model,specifications:"Dış filtre · 800 L/saat · 15 W · 1,2 m azami basma yüksekliği",ratedFlowLph:800,powerW:15,sourceUrl:boyuOfficial.fef,verifiedAt:boyuOfficialVerifiedAt})),
+  ...["FEF-280","FEF-280A"].map(model=>({id:`boyu-${model.toLowerCase()}`,category:"filter" as const,brand:"Boyu",model,specifications:"Dış filtre · 1000 L/saat · 18 W · 1,2 m azami basma yüksekliği",ratedFlowLph:1000,powerW:18,sourceUrl:boyuOfficial.fef,verifiedAt:boyuOfficialVerifiedAt})),
+  ...["SP-601E","SP-602E","SP-603E","SP-604E","SP-601F","SP-602F","SP-800F","SP-1800B"].map(model=>({id:`boyu-${model.toLowerCase()}`,category:"filter" as const,brand:"Boyu",model,specifications:"Dalgıç iç filtre · debi doğrulanamadı",capacityDataNote:"Boyu bu modeli güncel sitesinde yayımlamıyor. Tek kaynak, aynı listede SP-2500B için üreticiden farklı debi veren bir İspanyol bayi fiyat listesi; ikinci bir güvenilir kaynak bulunamadı. Debi doğrulanamadığı için otomatik hesapta kullanılmaz.",sourceUrl:"https://www.sanisvet.es/photos/PECES-SURTROPIC.pdf",verifiedAt:boyuOfficialVerifiedAt})),
+  {id:"boyu-sp-1000c",category:"filter",brand:"Boyu",model:"SP-1000C",specifications:"SP serisi dalgıç iç filtre · 300 L/saat · 8 W · 0,5 m azami basma yüksekliği",ratedFlowLph:300,powerW:8,sourceUrl:boyuOfficial.sp,verifiedAt:boyuOfficialVerifiedAt},
   {id:"boyu-sp-1300c",category:"filter",brand:"Boyu",model:"SP-1300C",specifications:"SP serisi dalgıç iç filtre · 400 L/saat · 9 W · 0,5 m azami basma yüksekliği",ratedFlowLph:400,powerW:9,sourceUrl:"https://www.boyuaquarium.com/En_Pr_d_gci_27_id_64.html",verifiedAt:"2026-09-06"},
-  {id:"boyu-sp-2300b",category:"filter",brand:"Boyu",model:"SP-2300B",specifications:"Dalgıç iç filtre · 1200 L/saat · 28 W · 300–450 litre",ratedFlowLph:1200,powerW:28,recommendedMinL:300,recommendedMaxL:450,sourceUrl:"https://ideasmarinas.com/archivo/catalogos/BOYU/catalogo_boyu.pdf",verifiedAt:"2026-08-18"},
-  {id:"boyu-sp-2500b",category:"filter",brand:"Boyu",model:"SP-2500B",specifications:"Dalgıç iç filtre · 1400 L/saat · 32 W · 350–500 litre",ratedFlowLph:1400,powerW:32,recommendedMinL:350,recommendedMaxL:500,sourceUrl:"https://ideasmarinas.com/archivo/catalogos/BOYU/catalogo_boyu.pdf",verifiedAt:"2026-08-18"},
-  {id:"boyu-wf-2015",category:"filter",brand:"Boyu",model:"WF-2015",specifications:"Askı şelale filtre · 150 L/saat · 6 W",ratedFlowLph:150,powerW:6,adjustableFlow:true,sourceUrl:"https://boyu.com.mx/producto/filtros-de-cascada-boyu-wf-compactos/",verifiedAt:"2026-08-18"},
-  {id:"boyu-wf-2025",category:"filter",brand:"Boyu",model:"WF-2025",specifications:"Askı şelale filtre · 300 L/saat · 11 W",ratedFlowLph:300,powerW:11,adjustableFlow:true,sourceUrl:"https://boyu.com.mx/producto/filtros-de-cascada-boyu-wf-compactos/",verifiedAt:"2026-08-18"},
+  {id:"boyu-sp-2300b",category:"filter",brand:"Boyu",model:"SP-2300B",specifications:"SP serisi dalgıç iç filtre · 300 L/saat · 8 W · 0,5 m azami basma yüksekliği · İspanyol bir distribütörün Boyu kataloğu 1200 L/saat ve 28 W yazıyor; üreticinin güncel değeri kullanılır",ratedFlowLph:300,powerW:8,sourceUrl:boyuOfficial.sp,verifiedAt:boyuOfficialVerifiedAt},
+  // SP-2500B: üretici akvaryum hacmi yayımlamıyor; distribütör kataloğundaki 350–500 L tek kaynak olduğu için kullanılmaz.
+  {id:"boyu-sp-2500b",category:"filter",brand:"Boyu",model:"SP-2500B",specifications:"SP serisi dalgıç iç filtre · 1400 L/saat · 34 W · 2,0 m azami basma yüksekliği",ratedFlowLph:1400,powerW:34,sourceUrl:boyuOfficial.sp,verifiedAt:boyuOfficialVerifiedAt},
+  {id:"boyu-wf-2015",category:"filter",brand:"Boyu",model:"WF-2015",specifications:"Askı şelale filtre · 150 L/saat · 6 W",ratedFlowLph:150,powerW:6,adjustableFlow:true,sourceUrl:boyuOfficial.wf,verifiedAt:boyuOfficialVerifiedAt},
+  {id:"boyu-wf-2025",category:"filter",brand:"Boyu",model:"WF-2025",specifications:"Askı şelale filtre · 300 L/saat · 11 W",ratedFlowLph:300,powerW:11,adjustableFlow:true,sourceUrl:boyuOfficial.wf,verifiedAt:boyuOfficialVerifiedAt},
 );
 const boyuAirAndCo2:EquipmentProfile[]=[
-  {id:"boyu-acq-009",category:"air_pump",brand:"Boyu",model:"ACQ-009",specifications:"Elektromanyetik hava kompresörü · 160 L/dakika · 105 W",ratedFlowLph:9600,powerW:105,sourceUrl:"https://www.toolsvilla.com/air-pump-power-f-ul-motor",verifiedAt},
+  {id:"boyu-acq-009",category:"air_pump",brand:"Boyu",model:"ACQ-009",specifications:"Elektromanyetik hava kompresörü · 160 L/dakika · 105 W · 0,03 MPa",ratedFlowLph:9600,powerW:105,sourceUrl:boyuOfficial.acq,verifiedAt:boyuOfficialVerifiedAt},
   {id:"boyu-electromagnetic-110",category:"air_pump",brand:"Boyu",model:"Electro Magnetic 110 L/min",specifications:"ACQ-008 elektromanyetik hava kompresörü · 110 L/dakika · 100 W",ratedFlowLph:6600,powerW:100,sourceUrl:"https://atakanpetshop.com/boyu-electro-magnetic-hava-kompresoru-100w-110l-min",verifiedAt},
   {id:"boyu-cjy-1000",category:"air_pump",brand:"Boyu",model:"CJY-1000",specifications:"Tek çıkışlı hava motoru · 1 L/dakika · 1,7 W",ratedFlowLph:60,powerW:1.7,sourceUrl:"https://www.akvaryumexpress.com/boyu/sayfa/4",verifiedAt:"2026-08-25"},
   {id:"boyu-cjy-1500",category:"air_pump",brand:"Boyu",model:"CJY-1500",specifications:"Tek çıkışlı hava motoru · 1,5 L/dakika · 2,2 W",ratedFlowLph:90,powerW:2.2,sourceUrl:"https://www.akvaryumexpress.com/cjy-1500-boyu-tek-cikisli-hava-motoru-15l-min-22-w",verifiedAt:"2026-08-25"},
@@ -333,12 +343,15 @@ boyuAirAndCo2.push(
   ...([100,150,200,250,300] as const).map(powerW=>({id:`boyu-gr-${powerW}`,category:"heater" as const,brand:"Boyu",model:`GR-${powerW}`,specifications:`Termostatlı akvaryum ısıtıcısı · ${powerW} W`,powerW,sourceUrl:"https://www.boyuaquarium.com/En_Pr_index_gci_57.html",verifiedAt:"2026-08-18"})),
 );
 const boyuEfVerified:Record<string,Partial<EquipmentProfile>>={
-  "EF-25":{specifications:"Çok kademeli dış filtre · 750 L/saat · 22 W · 250–450 litre",ratedFlowLph:750,powerW:22,recommendedMinL:250,recommendedMaxL:450,sourceUrl:"https://ideasmarinas.com/archivo/fichas/BOYU/Filtracion/filtros_canister_ef-efu_25-35-45_ft.pdf"},
-  "EF-35":{specifications:"Çok kademeli dış filtre · 950 L/saat · 24 W · 350–550 litre",ratedFlowLph:950,powerW:24,recommendedMinL:350,recommendedMaxL:550,sourceUrl:"https://ideasmarinas.com/archivo/fichas/BOYU/Filtracion/filtros_canister_ef-efu_25-35-45_ft.pdf"},
-  "EF-45":{specifications:"Çok kademeli dış filtre · 1100 L/saat · 26 W · 450–650 litre",ratedFlowLph:1100,powerW:26,recommendedMinL:450,recommendedMaxL:650,sourceUrl:"https://ideasmarinas.com/archivo/fichas/BOYU/Filtracion/filtros_canister_ef-efu_25-35-45_ft.pdf"},
-  "EFU-10000A":{specifications:"Pompası ayrıca kullanılan basınçlı havuz filtresi · 18 W UV-C · 1000–5000 litre",integratedUvcW:18,recommendedMinL:1000,recommendedMaxL:5000,sourceUrl:"https://ideasmarinas.com/archivo/manuales/BOYU/Filtracion/PDF/filtros_estanque_efu-10000a-15000a_mi.pdf"},
-  "EFU-15000A":{specifications:"Pompası ayrıca kullanılan basınçlı havuz filtresi · 24 W UV-C · 2000–10000 litre",integratedUvcW:24,recommendedMinL:2000,recommendedMaxL:10000,sourceUrl:"https://ideasmarinas.com/archivo/manuales/BOYU/Filtracion/PDF/filtros_estanque_efu-10000a-15000a_mi.pdf"},
-  "EFU-8000A":{specifications:"Pompası ayrıca kullanılan basınçlı havuz filtresi · 11 W UV-C · 5000–8000 litre",integratedUvcW:11,recommendedMinL:5000,recommendedMaxL:8000,sourceUrl:"https://isuruaqua.com/shop/?filter_category=air-pumps%2Cjpd%2Cwater-pumps%2Cfeeders%2Cjtp-pumps%2Cwater-treatment-medicine%2Cpower-filters%2Cuv-filters%2Cnt-labs&per_page=24&stock_status=onsale"},
+  "EF-25":{specifications:"Çok kademeli dış filtre · 750 L/saat · 22 W · 250–450 litre",ratedFlowLph:750,powerW:22,recommendedMinL:250,recommendedMaxL:450,sourceUrl:boyuOfficial.ef,verifiedAt:boyuOfficialVerifiedAt},
+  "EF-35":{specifications:"Çok kademeli dış filtre · 950 L/saat · 24 W · 350–550 litre",ratedFlowLph:950,powerW:24,recommendedMinL:350,recommendedMaxL:550,sourceUrl:boyuOfficial.ef,verifiedAt:boyuOfficialVerifiedAt},
+  "EF-45":{specifications:"Çok kademeli dış filtre · 1100 L/saat · 26 W · 450–650 litre",ratedFlowLph:1100,powerW:26,recommendedMinL:450,recommendedMaxL:650,sourceUrl:boyuOfficial.ef,verifiedAt:boyuOfficialVerifiedAt},
+  // Havuz filtrelerinin A sürümleri: Boyu'nun bahçe filtresi sayfası bu modelleri adıyla listeliyor ama teknik tabloda yalnız A olmayan EFU-8000/10000/15000 değerlerini veriyor.
+  ...Object.fromEntries(["EFU-8000A","EFU-10000A","EFU-15000A"].map(model=>[model,{
+    specifications:"Pompası ayrıca kullanılan UV-C'li basınçlı havuz filtresi · A sürümünün teknik değerleri doğrulanamadı",
+    capacityDataNote:"Üretici A sürümünün değerlerini yayımlamıyor; ikincil kaynaklardaki havuz hacimleri birbiriyle çelişiyor (ör. EFU-10000A için 1000–5000 L ve 6000–10000 L). Otomatik hesapta kullanılmaz.",
+    sourceUrl:boyuSource,verifiedAt:boyuOfficialVerifiedAt,
+  }])),
 };
 for(const item of boyuFilters){Object.assign(item,boyuEfVerified[item.model]??{});}
 
