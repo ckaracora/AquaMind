@@ -2180,3 +2180,64 @@ Güncel alt adım: JBL filtre medyası, bakteri başlangıcı, sorun giderici/pH
   - Havuz filtreleri: `https://www.boyuaquarium.com/SdwlUploads/Ed/image/20201030/1604026040882695.jpg`
 - Regresyon: `scripts/test-catalog-flow.cjs` Boyu bölümüne yeni değerler, kaldırılan hacimler, SP-2300B farkı ve hesap dışı 11 kayıt için denetimler eklendi.
 - Sonraki paket: Dophin (63 kayıt; kaynak `qimeigroup.com`, üretici sitesi olup olmadığı doğrulanacak), ardından Jeneca ve Aquawing.
+
+## 2026-10-09 Ekipman kaynak yenilemesi 2: Jeneca ve Dophin (Claude)
+
+- Kurallar 1. paketteki gibi (yukarıda, "Ekipman kaynak yenilemesi 1: Boyu").
+- Üretici siteleri doğrulandı:
+  - `qimeigroup.com`, Dophin markasının sahibi ve üreticisi Jinjiang Qimei'nin sitesi. Sitede "Our own aquatic brands KW, Dophin, Aquafin…" yazıyor.
+  - `aleas.cn`, Jeneca markasını kullanan üretici Jin Li Jia Electromechanical'ın sitesi.
+  - Bu iki alan adına dayanan 120 kayıt, 1. paketteki "doğrulanmamış olası üretici sitesi" grubundan çıktı. Dophin'de zayıf kaynaklı yalnız 2 kayıt kalmıştı; ikisi bu pakete alındı.
+- Yöntem:
+  - Jeneca'nın İngilizce ürün kataloğundaki 182 ürün sayfası tarandı.
+  - Teknik tablolar bir kısım sayfada metin, bir kısım sayfada görsel.
+  - Görselli 29 sayfanın 208 açıklama görseli ürün sahibinin onayıyla (2026-10-09) geçici klasöre indirildi ve okundu. Sitenin resim sunucusu başka siteden gelen isteği reddediyor.
+  - Açıklama metinlerinde yalnız üreticinin yazdığı özellikler bırakıldı (ör. BX-29 ve SX-265 için "titanyum çekirdekli", "dijital" ifadeleri kaldırıldı).
+- Hesabı değiştiren düzeltmeler (üreticinin değeri):
+  - **AP-02 ve AP-03 hava motorları:** değerler katalogda yer değiştirmişti. AP-02 artık 7 L/dk (420 L/saat) ve 3,2 W, tek çıkış. AP-03 artık 2 × 3 L/dk (360 L/saat) ve 4,4 W.
+  - **AP-601:** 180 → 96 L/saat, 2 → 1,5 W. **AP-602:** 360 → 192 L/saat, 4 → 3 W.
+  - **XP-006 Ultra:** 500 → 300 L/saat, 6 → 3,5 W. **XP-007 Ultra:** 800 → 500 L/saat, 8 → 5,5 W.
+  - **LT-600:** 600 → 500 L/saat.
+  - **XP-02:** 160 → 150 L/saat, 2,5 → 2,2 W; 25 L sınırı kaldırıldı.
+  - **GD-17:** 220 → 300 L/saat.
+  - **XP-09D:** güç 5 → 3,5 W.
+  - **AE dış filtreleri:** üreticinin "Suitable for tank size" satırı kullanıldı.
+    - AE-800 ve AE-800UV en çok 70 L (önce AE-800 için 50–80 L).
+    - AE-1000 ve AE-1000UV 80 L (önce AE-1000 için 170 L).
+    - AE-1300/1300UV 90 L, AE-1500UV 110 L, AE-1800UV 140 L.
+    - UV'li modellerin gücü üreticinin tablosuna çekildi (20,8 / 25,5 / 29,3 W; önce 21 / 26 / 30 W).
+    - AE-1300'e 9,3 W eklendi.
+  - **Kaldırılan hacimler (üretici yayımlamıyor):** IPF-010 (100 L), XP-33 (200 L), XP-36 (40–200 L), GD-16 (60 L), GD-17 (80 L), GD-18 (100–130 L), AP-8806 (300–600 L).
+  - **Kaldırılan ısıtıcı hacimleri:** BX-20 (25 W 20 L, 50 W 30 L), BX-22 (25–300 W), BX-28 500 W, BX-29 (200/300/500 W) ve SX-265 500 W. Bu ısıtıcılar artık motorun watt'a göre genel aralığıyla hesaplanıyor.
+  - **Eklenen güçler:** IPF-060 10 W, XP-33 Pro 10 W, AP-22000 8 W. AP-22000 için bir satıcının 12 W yazdığı açıklamada duruyor.
+- Hesap dışı kalanlar (`capacityDataNote`, 9 kayıt):
+  - IPF-020: sayfada teknik tablo yok.
+  - LT-300: seri tablosunda yalnız LT-400/500/600 var.
+  - XP-15 ve XP-17: 182 sayfada bulunamadı.
+  - AL-28 50 W ve 100 W, BX-22 500 W: üreticinin tablosunda bu güç seçenekleri yok.
+  - YM-03: sayfada yalnız ölçü var. Yardımcı yüzey emici olduğu için ana hesaba zaten girmiyordu.
+  - Dophin AP1302: üreticinin sitesinde yok; kabul edilen mağazada da debi yayımlanmıyor (Malawi İzmir sayfası kapanmış).
+- **Dophin CF-300:** 410 L/saat ve 6,7 W kaldırıldı (tek kaynak listede olmayan bir mağazaydı). Atakan Petshop ve Akvaryum Express'in yazdığı "40 litreye kadar" sınırı korundu.
+- Değeri aynı kalan, yalnız kaynağı üreticiye çekilen kayıtlar:
+  - XP-03/05/06/06L/07/08/09/11/11D/13/13D/606, XP-33/36 Ultra, XP-33D/36D, XP-36 Pro, XGD-15…19, LT-400/500, GD-16/18/19, GD-400/500/600.
+  - IPF-060/080/180/280/380, IPF-228/628, IPF-260…560, GLB-600/800/1000, CDA-200L…1000L.
+  - AP-01, AP-548/648, AP-960, AP-9801/9802/9804, AP-8801/8803/8804/8806, AP-10000/12000/15000/30000/40000, DB-21/31/51/81.
+  - AL-22, AL-28 300/500 W.
+- Sonuç:
+  - Jeneca ve Dophin'de hesaba giren bütün kayıtlar üretici sayfasına ya da kabul edilen yerel mağazaya dayanıyor.
+  - Kapasite verisi hazır kayıt: Jeneca 183 → 175, Dophin 69 → 68. Katalogda hesap dışı ekipman 23 → 32.
+  - Bütün katalogda tek kaynağı kurala uymayan, hesaba giren kayıt 180 kaldı: Aquawing 59, Netlea 14, RS Electrical 13, Nubios 13, Sobo 12, Xinyou 12, WaterBear 12, Eurostar 8, Ejet 8, Meç 8, Regent 6, Resun 5, Haqos 5, SunSun 3, XLPro 2.
+- Motor sonucuna etkisi ("uygun" sınırı, filtre tek başına):
+  - AE-1000: 170 → 80 L. AE-800: 80 → 70 L. AE-1300: 237,5 → 90 L (önce debiye göre).
+  - AE-800UV/1000UV/1300UV/1500UV/1800UV: debiye göre 187,5 / 212,5 / 237,5 / 325 / 375 L → üreticinin 70 / 80 / 90 / 110 / 140 L sınırı.
+  - XP-006 Ultra: 125 → 75 L. XP-007 Ultra: 200 → 125 L. LT-600: 150 → 125 L.
+  - XP-33: 200 → 250 L, XP-36: 200 → 300 L, IPF-010: 100 → 125 L, GD-16: 60 → 75 L, GD-17: 80 → 75 L, GD-18: 130 → 75 L. Bunların hepsi debiye göre (saatte 4 tur).
+  - Isıtıcılarda hacim kaldırılınca motorun genel aralığı (watt başına 0,67–2 L) kullanılıyor. Örnek: BX-22 100 W için 50–120 L yerine 67–200 L.
+  - Altın fikstürde Jeneca ya da Dophin cihazı yok; fikstür değişmedi.
+- Kanıt:
+  - Metin tablolu sayfalar: 411, 412, 413/655/656/657, 416, 452, 454, 456, 457, 458, 464, 471, 473, 481, 482, 483, 484, 518, 531, 729, 730.
+  - Görsel tablolu sayfalar: 459, 478, 638, 652, 653, 669, 670–673, 681–688, 700, 701, 703, 711, 714, 717, 718, 726, 731, 732, 733.
+  - Sayfa adresi `https://www.aleas.cn/product/<numara>.html`. Hangi görselin hangi modelin tablosunu taşıdığı Codex anlık görüntüsündeki `kanit/bulgular.md` dosyasında.
+- Regresyon: `scripts/test-catalog-flow.cjs`'teki eski Jeneca beklentileri (ör. AP-02 360 L/saat, AE-1000 170 L, YM-03 300 L/saat) üreticinin değerlerine çekildi. Düzeltilen 12 kayıt, 9 hesap dışı kayıt ve Dophin CF-300/AP1302 için yeni denetimler eklendi.
+- Ortam notu: `node_modules` içindeki 6 bağlantı silinmiş bir geçici denetim klasörünü gösterdiği için `tsc` çalışmıyordu. Bağlantılar projenin kendi paket deposundaki aynı sürümlere yeniden yöneltildi; depo dosyası değişmedi.
+- Sonraki paket: Aquawing (59 kayıt; çoğunun kaynağı listede olmayan Türk mağazaları).
