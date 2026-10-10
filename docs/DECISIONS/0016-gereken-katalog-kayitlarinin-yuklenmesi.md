@@ -1,7 +1,7 @@
 # 0016 — Gereken katalog kayıtlarının yüklenmesi
 
 - Tarih: 2026-10-07
-- Durum: Önerildi — ürün sahibi (`buraksenfx`) 2026-10-07'de sayfa hızının ikinci adımına geçilmesini istedi ("sayfa hızından devam"). Yöntem teknik karardır (Claude). `codex/page-speed-2` dalında; Codex denetimi ve `main` birleştirmesi bekleniyor. `main` dalına birleştirilene kadar kabul edilmiş sayılmaz
+- Durum: Kabul edildi — ürün sahibi (`buraksenfx`) 2026-10-07'de sayfa hızının ikinci adımına geçilmesini istedi ("sayfa hızından devam"). Yöntem teknik karardır (Claude). Codex denetimi ilk turda temiz; PR #21 (`https://github.com/ckaracora/AquaMind/pull/21`) kullanıcı onayıyla 2026-10-07'de merge commit yöntemiyle `main` dalına birleştirildi (`40056c9`); `40056c9` push'unda `Doğrulama` (çalıştırma `37638093875`) ve Vercel üretim dağıtımı başarılı, canlıda. Canlıda sağlık analizi (puan 90, yük %70, cüce vatoz notu) 6 katalog parçasıyla açıldı; yayından sonraki ilk açılış 3,65 sn sürdü (yeni dosyalar ilk kez indirildi)
 
 ## Bağlam
 

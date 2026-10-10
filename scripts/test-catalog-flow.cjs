@@ -3049,6 +3049,30 @@ assert.deepEqual([boyuSp1300c?.ratedFlowLph, boyuSp1300c?.powerW], [400, 9], "Bo
 assert.equal(boyuSp1300c?.sourceUrl, "https://www.boyuaquarium.com/En_Pr_d_gci_27_id_64.html", "Boyu SP-1300C doğrudan üretici ürün sayfasına bağlanmalı");
 assert.equal(boyuSp1300c?.verifiedAt, "2026-09-06", "Boyu SP-1300C güncel doğrulama tarihini taşımalı");
 assert.equal(boyuSp1300c?.capacityDataNote, undefined, "Boyu SP-1300C otomatik filtrasyon hesabına katılmalı");
+// 2026-10-07 Boyu kaynak yenilemesi (docs/CATALOG_LOG.md): değerler Boyu'nun resmî ürün sayfalarındaki model görsellerinden.
+const boyuEquipment = (model) => equipmentCatalog.find((entry) => entry.brand === "Boyu" && entry.model === model);
+for (const [model, flow, power, min, max] of [["EF-10", 300, 11, 100, 300], ["EF-15", 350, 13, 150, 350], ["EF-20", 400, 15, 200, 400], ["EF-25", 750, 22, 250, 450], ["EF-35", 950, 24, 350, 550], ["EF-45", 1100, 26, 450, 650], ["EFU-10", 300, 16, 100, 300], ["EFU-15", 350, 18, 150, 350], ["EFU-20", 400, 20, 200, 400], ["EFU-25", 750, 32, 250, 450], ["EFU-35", 950, 34, 350, 550], ["EFU-45", 1100, 36, 450, 650]]) {
+  const item = boyuEquipment(model);
+  assert.deepEqual([item?.ratedFlowLph, item?.powerW, item?.recommendedMinL, item?.recommendedMaxL], [flow, power, min, max], `Boyu ${model} resmî tablodaki debi, güç ve akvaryum hacmini taşımalı`);
+  assert.match(item?.sourceUrl ?? "", /boyuaquarium\.com\/En_Pr_d_gci_27_id_7[56]\.html$/, `Boyu ${model} üreticinin ürün sayfasına bağlanmalı`);
+}
+assert.deepEqual(["EFU-10", "EFU-45"].map((model) => boyuEquipment(model)?.integratedUvcW), [5, 5], "Boyu EFU serisi resmî tablodaki 5 W UV-C değerini taşımalı");
+for (const [model, flow, power] of [["FEF-230", 800, 15], ["FEF-230A", 800, 15], ["FEF-280", 1000, 18], ["FEF-280A", 1000, 18], ["DGN-410", 1610, 30], ["DGN-460", 1610, 30], ["DGN-520", 1610, 30], ["SP-1000C", 300, 8], ["SP-2500B", 1400, 34]]) {
+  const item = boyuEquipment(model);
+  assert.deepEqual([item?.ratedFlowLph, item?.powerW, item?.recommendedMinL, item?.recommendedMaxL], [flow, power, undefined, undefined], `Boyu ${model} resmî debiyi taşımalı; üreticinin yayımlamadığı akvaryum hacmi eklenmemeli`);
+  assert(item?.sourceUrl.startsWith("https://www.boyuaquarium.com/"), `Boyu ${model} üreticinin ürün sayfasına bağlanmalı`);
+}
+assert.deepEqual(["DGN-410", "DGN-460", "DGN-520"].map((model) => boyuEquipment(model)?.integratedUvcW), [3, 3, 3], "Boyu DGN-410/460/520 resmî tablodaki 3 W UV-C değerini taşımalı");
+const boyuSp2300b = boyuEquipment("SP-2300B");
+assert.deepEqual([boyuSp2300b?.ratedFlowLph, boyuSp2300b?.powerW, boyuSp2300b?.recommendedMaxL], [300, 8, undefined], "Boyu SP-2300B üreticinin 300 L/saat değerini taşımalı; distribütör kataloğundaki 1200 L/saat kullanılmamalı");
+assert(boyuSp2300b?.specifications.includes("1200 L/saat"), "Boyu SP-2300B kaynaklar arasındaki farkı kullanıcıdan saklamamalı");
+for (const model of ["SP-601E", "SP-602E", "SP-603E", "SP-604E", "SP-601F", "SP-602F", "SP-800F", "SP-1800B", "EFU-8000A", "EFU-10000A", "EFU-15000A"]) {
+  const item = boyuEquipment(model);
+  assert(item?.capacityDataNote, `Boyu ${model} doğrulanamayan kapasite nedenini açıklamalı`);
+  assert.deepEqual([item?.ratedFlowLph, item?.recommendedMinL, item?.recommendedMaxL, item?.integratedUvcW], [undefined, undefined, undefined, undefined], `Boyu ${model} doğrulanamayan teknik değer taşımamalı`);
+}
+assert.equal(boyuEquipment("ACQ-009")?.sourceUrl, "https://www.boyuaquarium.com/En_Pr_d_gci_56_id_105.html", "Boyu ACQ-009 üreticinin ürün sayfasına bağlanmalı");
+assert.deepEqual(["WF-2015", "WF-2025"].map((model) => boyuEquipment(model)?.sourceUrl), Array(2).fill("https://www.boyuaquarium.com/En_Pr_d_gci_27_id_78.html"), "Boyu WF-2015/2025 üreticinin ürün sayfasına bağlanmalı");
 for (const [model, flow, power] of [["CJY-1000", 60, 1.7], ["CJY-1500", 90, 2.2], ["SES-20", 1200, 15], ["SES-30", 1800, 25], ["SES-60", 3600, 35]]) {
   const item = equipmentCatalog.find((entry) => entry.brand === "Boyu" && entry.model === model);
   assert.deepEqual([item?.category, item?.ratedFlowLph, item?.powerW], ["air_pump", flow, power], `Boyu ${model} doğrulanmış hava debisi ve güç değerini taşımalı`);
