@@ -3403,7 +3403,7 @@ const aquawingAq820 = equipmentCatalog.find((entry) => entry.brand === "Aquawing
 assert.equal(aquawingAq820?.sourceUrl, "https://atakanpetshop.com/aquawing-aq820-pilli-hava-motoru", "AQ820 yanlış model sayfasına bağlanmamalı");
 assert.equal(aquawingAq820?.recommendedMaxL, 200, "AQ820 yayımlanmış 200 litre üst sınırını taşımalı");
 
-for (const [model, flow, power] of [["AP-01", 180, 2.4], ["AP-02", 360, 4.4], ["AP-03", 420, 3.2], ["AP-910", 96, 2.8], ["AP-920", 420, 4], ["AP-1688", 96, 1.5], ["AP-2688A", 192, 3], ["AP-8801", 126, 1.5], ["AP-8803", 174, 2], ["AP-8804", 396, 3.5]]) {
+for (const [model, flow, power] of [["AP-01", 180, 2.4], ["AP-02", 420, 3.2], ["AP-03", 360, 4.4], ["AP-910", 96, 2.8], ["AP-920", 420, 4], ["AP-1688", 96, 1.5], ["AP-2688A", 192, 3], ["AP-8801", 126, 1.5], ["AP-8803", 174, 2], ["AP-8804", 396, 3.5]]) {
   const item = equipmentCatalog.find((entry) => entry.brand === "Jeneca" && entry.model === model);
   assert.deepEqual([item?.category, item?.ratedFlowLph, item?.powerW], ["air_pump", flow, power], `Jeneca ${model} yayımlanmış hava debisi ve güç değerini taşımalı`);
   assert.equal(item?.capacityDataNote, undefined, `Jeneca ${model} doğrulanmış hava debisine rağmen kapasite hesabından dışlanmamalı`);
@@ -3411,11 +3411,9 @@ for (const [model, flow, power] of [["AP-01", 180, 2.4], ["AP-02", 360, 4.4], ["
 
 const expectedJenecaXp = new Map([
   ["XP-03", [160, 2.5]],
-  ["XP-09D", [200, 5]],
+  ["XP-09D", [200, 3.5]],
   ["XP-11D", [260, 4.2]],
   ["XP-13D", [290, 4.8]],
-  ["XP-15", [270, 5.5]],
-  ["XP-17", [330, 8]],
 ]);
 for (const [model, [flow, power]] of expectedJenecaXp) {
   const item = equipmentCatalog.find((entry) => entry.brand === "Jeneca" && entry.model === model);
@@ -3506,9 +3504,10 @@ for (const [model, flow, power] of [["GL-3", 250, 3], ["GL-5", 300, 3.5], ["GL-7
   assert.equal(item?.capacityDataNote, undefined, `Jeneca ${model} otomatik filtrasyon hesabına katılmalı`);
 }
 const jenecaYm03 = jenecaProfiles.find((entry) => entry.model === "YM-03");
-assert.deepEqual([jenecaYm03?.ratedFlowLph, jenecaYm03?.powerW, jenecaYm03?.recommendedMaxL], [300, 5, 300], "Jeneca YM-03 çapraz doğrulanmış debi, güç ve hacim sınırını taşımalı");
+assert.deepEqual([jenecaYm03?.ratedFlowLph, jenecaYm03?.powerW, jenecaYm03?.recommendedMaxL], [undefined, undefined, undefined], "Jeneca YM-03 üreticinin yayımlamadığı debi, güç ve hacmi taşımamalı");
 assert.equal(jenecaYm03?.auxiliaryFiltration, true, "Jeneca YM-03 ana biyolojik filtre gibi değerlendirilmemeli");
-assert.equal(jenecaYm03?.additionalSourceUrls?.length, 1, "Jeneca YM-03 bağımsız çapraz doğrulama kaynağını saklamalı");
+assert.equal(jenecaYm03?.sourceUrl, "https://www.aleas.cn/product/518.html", "Jeneca YM-03 üretici ürün sayfasına bağlanmalı");
+assert(jenecaYm03?.capacityDataNote, "Jeneca YM-03 değerlerin neden kullanılmadığını açıklamalı");
 const jenecaYm01 = jenecaProfiles.find((entry) => entry.model === "YM-01");
 assert.deepEqual([jenecaYm01?.ratedFlowLph, jenecaYm01?.passiveComponent, jenecaYm01?.auxiliaryFiltration], [undefined, true, true], "Jeneca YM-01 pompasız yardımcı yüzey emiş aparatı olarak tutulmalı");
 assert.equal(hasStandaloneCapacityData(jenecaYm01), false, "Jeneca YM-01 bağımsız filtre kapasitesi varmış gibi gösterilmemeli");
@@ -3516,33 +3515,31 @@ assert.match(jenecaYm01?.capacityDataNote || "", /pompasız/, "Jeneca YM-01'in n
 const jenecaAe1000 = jenecaProfiles.find((entry) => entry.model === "AE-1000");
 assert.deepEqual(
   [jenecaAe1000?.ratedFlowLph, jenecaAe1000?.powerW, jenecaAe1000?.recommendedMaxL, jenecaAe1000?.adjustableFlow],
-  [850, 9.3, 170, true],
-  "Jeneca AE-1000 çapraz doğrulanmış debi, güç, hacim ve ayarlanabilir akış bilgisini taşımalı",
+  [850, 9.3, 80, true],
+  "Jeneca AE-1000 üreticinin tablosundaki debi, güç, 80 L akvaryum sınırı ve ayarlanabilir akış bilgisini taşımalı",
 );
-assert.equal(jenecaAe1000?.additionalSourceUrls?.length, 1, "Jeneca AE-1000 bağımsız çapraz doğrulama kaynağını saklamalı");
 const jenecaAe1300 = jenecaProfiles.find((entry) => entry.model === "AE-1300");
 assert.deepEqual(
   [jenecaAe1300?.ratedFlowLph, jenecaAe1300?.powerW, jenecaAe1300?.recommendedMaxL, jenecaAe1300?.adjustableFlow],
-  [950, undefined, undefined, true],
-  "Jeneca AE-1300 yalnızca kaynaklarda ortak olan debiyi ve ayarlanabilir akış bilgisini taşımalı",
+  [950, 9.3, 90, true],
+  "Jeneca AE-1300 üreticinin tablosundaki debi, güç, 90 L akvaryum sınırı ve ayarlanabilir akış bilgisini taşımalı",
 );
-assert(jenecaAe1300?.specifications.includes("çelişkili"), "Jeneca AE-1300 güç ve hacim kaynak çelişkisini kullanıcıdan saklamamalı");
-assert.equal(jenecaAe1300?.additionalSourceUrls?.length, 1, "Jeneca AE-1300 bağımsız çapraz doğrulama kaynağını saklamalı");
 for (const model of ["AE-1000", "AE-1300"]) {
   const item = jenecaProfiles.find((entry) => entry.model === model);
   assert.equal(item?.capacityDataNote, undefined, `Jeneca ${model} doğrulanmış debiyle otomatik filtrasyon hesabına katılmalı`);
-  assert.equal(item?.verifiedAt, "2026-08-30", `Jeneca ${model} güncel doğrulama tarihini taşımalı`);
+  assert.equal(item?.verifiedAt, "2026-10-09", `Jeneca ${model} güncel doğrulama tarihini taşımalı`);
 }
 for (const [model, flow, power] of [
   ["GLB-600", 150, 3.5], ["GLB-800", 180, 5.5], ["GLB-1000", 220, 7.5],
-  ["IPF-060", 500, undefined], ["IPF-080", 800, 18], ["IPF-180", 1200, 25], ["IPF-280", 1800, 30], ["IPF-380", 2500, 40],
+  ["IPF-060", 500, 10], ["IPF-080", 800, 18], ["IPF-180", 1200, 25], ["IPF-280", 1800, 30], ["IPF-380", 2500, 40],
   ["IPF-228", 220, 4], ["IPF-628", 450, 7], ["IPF-260", 400, 5], ["IPF-360", 600, 8], ["IPF-460", 800, 15], ["IPF-480", 1000, 20], ["IPF-560", 1500, 25],
   ["GD-400", 500, 7], ["GD-500", 500, 7], ["GD-600", 1100, 17],
 ]) {
   const item = jenecaProfiles.find((entry) => entry.model === model);
   assert.deepEqual([item?.ratedFlowLph, item?.powerW], [flow, power], `Jeneca ${model} yalnızca doğrulanmış debi ve güç değerlerini taşımalı`);
   assert.equal(item?.capacityDataNote, undefined, `Jeneca ${model} doğrulanmış debiyle otomatik filtrasyon hesabına katılmalı`);
-  assert.equal(item?.verifiedAt, "2026-08-30", `Jeneca ${model} güncel doğrulama tarihini taşımalı`);
+  assert.equal(item?.verifiedAt, "2026-10-09", `Jeneca ${model} güncel doğrulama tarihini taşımalı`);
+  assert(item?.sourceUrl.startsWith("https://www.aleas.cn/product/"), `Jeneca ${model} üretici ürün sayfasına bağlanmalı`);
 }
 const jenecaIpf338 = jenecaProfiles.find((entry) => entry.model === "IPF-338");
 assert.deepEqual([jenecaIpf338?.ratedFlowLph, jenecaIpf338?.powerW], [300, 5], "Jeneca IPF-338 resmî model tablosundaki debi ve gücü taşımalı");
@@ -3576,13 +3573,13 @@ for (const model of ["AP-602", "AP-8806", "AP-601", "AP-18000", "AP-06", "AP-100
   assert.equal(jenecaProfiles.find((entry) => entry.model === model)?.category, "air_pump", `Jeneca ${model} resmî hava motoru portföyünde bulunmalı`);
 }
 for (const [model, flow, power, maxL, adjustable] of [
-  ["AP-601", 180, 2, undefined, undefined],
-  ["AP-602", 360, 4, undefined, undefined],
-  ["AP-8806", 516, 4.1, 600, true],
+  ["AP-601", 96, 1.5, undefined, undefined],
+  ["AP-602", 192, 3, undefined, undefined],
+  ["AP-8806", 516, 4.1, undefined, true],
   ["AP-10000", 396, 3.3, undefined, true],
   ["AP-12000", 360, 4, undefined, true],
   ["AP-15000", 360, 6, undefined, true],
-  ["AP-22000", 480, undefined, undefined, true],
+  ["AP-22000", 480, 8, undefined, true],
   ["AP-30000", 600, 10, undefined, true],
   ["AP-40000", 1200, 12, undefined, true],
   ["DB-58", 3300, 25, undefined, true],
@@ -3598,9 +3595,9 @@ for (const [model, flow, power, maxL, adjustable] of [
     "Jeneca " + model + " yalnızca doğrulanmış hava kapasitesi ve güç değerlerini taşımalı",
   );
   assert.equal(item?.capacityDataNote, undefined, "Jeneca " + model + " doğrulanmış kapasiteyle otomatik hava hesabına katılmalı");
-  assert.equal(item?.verifiedAt, "2026-08-30", "Jeneca " + model + " güncel doğrulama tarihini taşımalı");
+  assert.equal(item?.verifiedAt, model === "DB-58" ? "2026-08-30" : "2026-10-09", "Jeneca " + model + " güncel doğrulama tarihini taşımalı");
 }
-assert.equal(jenecaProfiles.find((entry) => entry.model === "AP-22000")?.specifications.includes("çelişkili"), true, "Jeneca AP-22000 güç çelişkisi kullanıcıdan saklanmamalı");
+assert.equal(jenecaProfiles.find((entry) => entry.model === "AP-22000")?.specifications.includes("12 W"), true, "Jeneca AP-22000 satıcıdaki farklı güç değeri kullanıcıdan saklanmamalı");
 const jenecaAp06 = jenecaProfiles.find((entry) => entry.model === "AP-06");
 assert.deepEqual([jenecaAp06?.ratedFlowLph, jenecaAp06?.powerW, jenecaAp06?.adjustableFlow], [840, 7, true], "Jeneca AP-06 resmî çift çıkış toplam debisini, gücünü ve ayar özelliğini taşımalı");
 assert.equal(jenecaAp06?.sourceUrl, "https://www.aleas.cn/product/412.html", "Jeneca AP-06 doğrudan üretici teknik tablosuna bağlanmalı");
@@ -3636,16 +3633,37 @@ for (const model of ["AL-3201 25 W", "AL-3201 50 W", "AL-3201 75 W", "AL-3201 10
   assert.equal(jenecaProfiles.find((entry) => entry.model === model)?.category, "heater", `Jeneca ${model} resmî ısıtıcı portföyünde bulunmalı`);
 }
 for (const [model, power, minL, maxL] of [
-  ["SX-366 1000 W", 1000, undefined, undefined], ["SX-388 1500 W", 1500, undefined, undefined], ["SX-265 500 W", 500, undefined, 500],
+  ["SX-366 1000 W", 1000, undefined, undefined], ["SX-388 1500 W", 1500, undefined, undefined], ["SX-265 500 W", 500, undefined, undefined],
   ["AL-22 25 W", 25, undefined, undefined], ["AL-28 500 W", 500, undefined, undefined],
-  ["BX-22 25 W", 25, 5, 40], ["BX-22 300 W", 300, 250, 350], ["BX-22 500 W", 500, undefined, 500],
-  ["BX-28 500 W", 500, undefined, 500], ["BX-29 200 W", 200, undefined, 200], ["BX-29 500 W", 500, undefined, 500],
+  ["BX-22 25 W", 25, undefined, undefined], ["BX-22 300 W", 300, undefined, undefined],
+  ["BX-28 500 W", 500, undefined, undefined], ["BX-29 200 W", 200, undefined, undefined], ["BX-29 500 W", 500, undefined, undefined],
 ]) {
   const item = jenecaProfiles.find((entry) => entry.model === model);
   assert.deepEqual([item?.powerW, item?.recommendedMinL, item?.recommendedMaxL], [power, minL, maxL], `Jeneca ${model} yalnızca kaynakta yayımlanan ısıtıcı değerlerini taşımalı`);
   assert.equal(item?.capacityDataNote, undefined, `Jeneca ${model} doğrulanmış güçle otomatik ısıtıcı hesabına katılmalı`);
-  assert.equal(item?.verifiedAt, "2026-08-30", `Jeneca ${model} güncel doğrulama tarihini taşımalı`);
+  assert.equal(item?.verifiedAt, model.startsWith("SX-3") ? "2026-08-30" : "2026-10-09", `Jeneca ${model} güncel doğrulama tarihini taşımalı`);
 }
+// 2026-10-09 kaynak yenilemesi (docs/CATALOG_LOG.md): üreticinin aleas.cn ürün sayfalarındaki tablolar.
+for (const [model, flow, power] of [["LT-600", 500, 7], ["XP-02", 150, 2.2], ["XP-006 Ultra", 300, 3.5], ["XP-007 Ultra", 500, 5.5], ["GD-17", 300, 5], ["XP-33 Pro", 1000, 10]]) {
+  const item = jenecaProfiles.find((entry) => entry.model === model);
+  assert.deepEqual([item?.ratedFlowLph, item?.powerW, item?.recommendedMaxL], [flow, power, undefined], `Jeneca ${model} üreticinin tablosundaki debi ve gücü taşımalı; yayımlanmayan hacim eklenmemeli`);
+  assert.equal(item?.verifiedAt, "2026-10-09", `Jeneca ${model} güncel doğrulama tarihini taşımalı`);
+}
+for (const [model, flow, maxL] of [["AE-800", 750, 70], ["AE-800UV", 750, 70], ["AE-1000UV", 850, 80], ["AE-1300UV", 950, 90], ["AE-1500UV", 1300, 110], ["AE-1800UV", 1500, 140]]) {
+  const item = jenecaProfiles.find((entry) => entry.model === model);
+  assert.deepEqual([item?.ratedFlowLph, item?.recommendedMinL, item?.recommendedMaxL, item?.sourceUrl], [flow, undefined, maxL, "https://www.aleas.cn/product/478.html"], `Jeneca ${model} üreticinin tablosundaki debi ve akvaryum sınırını taşımalı`);
+}
+for (const model of ["IPF-020", "LT-300", "XP-15", "XP-17", "AL-28 50 W", "AL-28 100 W", "BX-22 500 W"]) {
+  const item = jenecaProfiles.find((entry) => entry.model === model);
+  assert(item?.capacityDataNote, `Jeneca ${model} doğrulanamayan değerin neden kullanılmadığını açıklamalı`);
+  assert.deepEqual([item?.ratedFlowLph, item?.powerW, item?.recommendedMinL, item?.recommendedMaxL], [undefined, undefined, undefined, undefined], `Jeneca ${model} doğrulanamayan teknik değer taşımamalı`);
+}
+const dophinCf300 = equipmentCatalog.find((entry) => entry.brand === "Dophin" && entry.model === "CF-300");
+assert.deepEqual([dophinCf300?.ratedFlowLph, dophinCf300?.powerW, dophinCf300?.recommendedMaxL], [undefined, undefined, 40], "Dophin CF-300 yalnız kabul edilen yerel mağazaların yayımladığı 40 L sınırını taşımalı");
+assert(dophinCf300?.sourceUrl.includes("atakanpetshop.com"), "Dophin CF-300 kabul edilen yerel mağazaya bağlanmalı");
+const dophinAp1302 = equipmentCatalog.find((entry) => entry.brand === "Dophin" && entry.model === "AP1302");
+assert.deepEqual([dophinAp1302?.ratedFlowLph, dophinAp1302?.powerW], [undefined, undefined], "Dophin AP1302 doğrulanamayan hava debisi taşımamalı");
+assert(dophinAp1302?.capacityDataNote, "Dophin AP1302 neden hesap dışı olduğunu açıklamalı");
 for (const model of ["T8-LY", "T8-YW", "T8-JL", "T8-BS", "T12-LY", "T12-JL", "SZ-40D", "SZ-50D", "SZ-60D", "X1", "X3", "X5", "D3", "D5", "D7"]) {
   assert.equal(jenecaProfiles.find((entry) => entry.model === model)?.category, "lighting", `Jeneca ${model} resmî aydınlatma portföyünde bulunmalı`);
 }
