@@ -2130,3 +2130,114 @@ Güncel alt adım: JBL filtre medyası, bakteri başlangıcı, sorun giderici/pH
 - `docs/DATA_SOURCES.md` gereği bu kayıtlar mevcut haliyle eşlenmez. Hiçbir kayıt değiştirilmedi.
 - Mağaza sayfalarında artık bilimsel ad yayımlanıp yayımlanmadığı otomatik denetlenemedi: istekler HTTP 403 aldı, tarayıcıda Cloudflare insan doğrulaması çıktı ve bu doğrulama geçilmedi.
 - Sonraki adım ürün sahibiyle birlikte yapılacak: sayfaları o Chrome'da açacak, Claude okuyacak. Yalnızca sayfada ya da kabul edilen uzman kaynakta açıkça yazan bilgi kullanılacak; belirsiz olan çözülmemiş kalacak.
+
+## 2026-10-07 Ekipman kaynak yenilemesi 1: Boyu (Claude)
+
+- Neden: Hesapta kullanılan 1.255 ekipman kaydının (filtre, ısıtıcı, hava motoru, ısıtıcılı cihaz) 475'inin tek kaynağı `docs/DATA_SOURCES.md` sırasına uymuyordu:
+  - 147'si yabancı pazar yeri ya da mağaza,
+  - 125'i kabul edilen listede olmayan Türk mağazası ya da pazar yeri,
+  - 72'si yabancı distribütör kataloğu,
+  - 131'i üretici sitesi olabilecek ama henüz doğrulanmamış alan adı.
+  - En çok etkilenen markalar: Jeneca (182), Dophin (63), Aquawing (62), Boyu (38). Kayıtlar marka marka yenileniyor; ilk paket Boyu.
+- Ürün sahibi kararı (2026-10-07): kabul edilen yerel mağaza listesi değişmeyecek. Listede olmayan mağazanın sayfası tek başına yetmez.
+- Uygulanan kurallar:
+  1. Üreticinin resmî ürün sayfası varsa değerler oradan alınır. Boyu'nun teknik tabloları sayfadaki model görsellerinde; görseller açılıp okundu (bağlantılar aşağıda).
+  2. Üreticinin yayımlamadığı bir değer (ör. akvaryum hacmi) için yabancı distribütör kataloğu tek başına yetmez. Kabul edilen yerel mağaza ya da birbirini doğrulayan ikinci bir güvenilir kaynak gerekir. Bulunamazsa alan boş kalır; filtrenin debisi resmîyse motor debiye göre hesaplar.
+  3. Aynı model için kaynaklar çelişiyorsa üreticinin değeri kullanılır ve fark ürün açıklamasında yazılır.
+  4. Hiçbir değer doğrulanamazsa kayıt silinmez, çünkü kullanıcı kayıtları ona bağlı olabilir. Değerler kaldırılır, `capacityDataNote` nedeni açıklar ve cihaz otomatik hesaba girmez.
+- Değişen kayıtlar (40 Boyu kaydı):
+  - **EF-10/15/20:** 602/700/799 L/saat ve en çok 95/190/285 L (ABD'de JBJ etiketiyle satılan filtrelerin kılavuzu) → 300/350/400 L/saat ve 100–300/150–350/200–400 L (Boyu). JBJ etiketli ürünün kılavuzu Boyu ürünü için kaynak sayılmadı.
+  - **EF-25/35/45:** Değerler aynı; kaynak İspanyol distribütörün teknik fişi → Boyu.
+  - **EFU-10…45:** Debi ve hacim aynı. Güç 11/13/15/22/24/26 W → 16/18/20/32/34/36 W. UV-C 5/5/5/5/6/7 W → hepsi 5 W. Kaynak Brezilya distribütörünün kataloğu → Boyu.
+  - **FEF-230/230A/280/280A:** Debi ve güç aynı. 100–300 L ve 150–400 L hacimleri kaldırıldı: Boyu hacim yayımlamıyor; Brezilya kataloğu 100–300 L yazıyor; İngiltere'deki iki satıcı ilanının başlığı ise FEF-230 için "Tanks up to 200L". 1,2 m basma yüksekliği eklendi.
+  - **DGN-410/460/520:** Debi (300–1610 L/saat) ve güç (4–30 W) aynı. UV-C 4 W → 3 W; DGN-410'a da resmî tablodaki 3 W eklendi. DGN-460'ın 120–480 L ve DGN-520'nin 100–650 L hacmi kaldırıldı: Boyu yayımlamıyor ve tek kaynaklar bir Rus ve bir Ukrayna mağazasıydı.
+  - **DGN-80/80A/120/120A:** Değerler aynı; kaynak Sri Lanka ve Endonezya mağazaları → Boyu. Resmî tablo UV-C sütununda "7M" ve "13M" yazıyor. A olmayan modellere UV-C gücü eklenmedi (mevcut regresyon kuralı).
+  - **SP-1000C:** 300 L/saat aynı, 8 W ve 0,5 m eklendi; kaynak İspanyol bayi listesi → Boyu.
+  - **SP-2300B:** 1200 L/saat, 28 W, 300–450 L (İspanyol distribütörün Boyu kataloğu) → 300 L/saat, 8 W, hacim yok (Boyu). Fark açıklamada yazılı. Not: Surtropic bayi listesinde "SP-2300 1200 L/H" ayrıca pompa olarak listeleniyor.
+  - **SP-2500B:** 1400 L/saat aynı. Güç 32 W → 34 W, 2,0 m basma yüksekliği eklendi. 350–500 L kaldırıldı (tek kaynak distribütör kataloğu).
+  - **SP-601E/602E/603E/604E/601F/602F/800F/1800B:** Debiler kaldırıldı, cihazlar hesap dışı. Boyu güncel sitesinde bu modelleri yayımlamıyor. Tek kaynak Surtropic bayi listesi ve aynı liste SP-2500B için 2000 L/H yazıyor (üretici 1400 L/saat). Bulunan eski satıcı sayfaları kapanmış (404).
+  - **EFU-8000A/10000A/15000A (havuz filtresi):** Hacim ve UV-C değerleri kaldırıldı, cihazlar hesap dışı. Boyu'nun bahçe filtresi sayfası A sürümlerini adıyla listeliyor ama teknik tabloda yalnız A olmayan modellerin değerleri var: EFU-8000 için 9 W ve 5000–8000 L, EFU-10000 için 18 W ve 6000–10000 L, EFU-15000 için 24 W ve 8000–15000 L. A sürümleri için kaynaklar çelişiyor: İspanyol distribütör seri için 1000–10000 L yazıyor, satıcılar 6000–10000 L, 8000–15000 L ve 20000 L yazıyor.
+  - **ACQ-009:** Değerler aynı (160 L/dakika, 105 W), 0,03 MPa eklendi; kaynak Hindistan mağazası → Boyu.
+  - **WF-2015/2025:** Değerler aynı; kaynak Boyu Meksika sitesi → Boyu.
+- Sonuç:
+  - Boyu'da hesaba giren kayıtların hepsi artık üretici sayfasına ya da kabul edilen yerel mağazaya dayanıyor.
+  - Boyu'da kapasite verisi hazır kayıt 87'den 76'ya indi (11 eski ya da havuz modeli hesap dışı). Bütün katalogda hesap dışı ekipman 12'den 23'e çıktı.
+- Motor sonucuna etkisi (filtre tek başına kullanıldığında "uygun" sınırı / tehlike sınırı):
+  - EF-10: 95 / 142,5 L → 300 / 450 L. EF-15: 190 / 285 L → 350 / 525 L. EF-20: 285 / 427,5 L → 400 / 600 L (üreticinin hacmi).
+  - FEF-230: 300 / 450 L → 200 / 400 L. FEF-280: 400 / 600 L → 250 / 500 L (debiye göre: saatte 4 ve 2 tur).
+  - DGN-460: 480 / 720 L → 402,5 / 805 L. DGN-520: 650 / 975 L → 402,5 / 805 L.
+  - SP-2300B: 450 / 675 L → 75 / 150 L. SP-2500B: 500 / 750 L → 350 / 700 L.
+  - Altın fikstürde Boyu filtresi yok (yalnız DR ısıtıcılar); fikstür değişmedi.
+- Kanıt (Boyu resmî görselleri, 2026-10-07'de okundu):
+  - EF: `https://www.boyuaquarium.com/SdwlUploads/Ed/image/20201102/1604304220250891.jpg`
+  - EFU: `https://www.boyuaquarium.com/SdwlUploads/Ed/image/20201102/1604305780995208.jpg`
+  - FEF: `https://www.boyuaquarium.com/SdwlUploads/Ed/image/20201102/1604300666315011.jpg`
+  - DGN-410/460/520: `https://www.boyuaquarium.com/SdwlUploads/Ed/image/20201102/1604286313355420.jpg`
+  - DGN-80/120: `https://www.boyuaquarium.com/SdwlUploads/Ed/image/20221116/1668571010565110.jpg`
+  - SP: `https://www.boyuaquarium.com/SdwlUploads/Ed/image/20201031/1604136410354101.jpg`
+  - ACQ: `https://www.boyuaquarium.com/SdwlUploads/Ed/image/20201105/1604569966108193.jpg`
+  - WF-2015/2025: `https://www.boyuaquarium.com/SdwlUploads/Ed/image/20201103/1604399003311254.jpg`
+  - Havuz filtreleri: `https://www.boyuaquarium.com/SdwlUploads/Ed/image/20201030/1604026040882695.jpg`
+- Regresyon: `scripts/test-catalog-flow.cjs` Boyu bölümüne yeni değerler, kaldırılan hacimler, SP-2300B farkı ve hesap dışı 11 kayıt için denetimler eklendi.
+- Sonraki paket: Dophin (63 kayıt; kaynak `qimeigroup.com`, üretici sitesi olup olmadığı doğrulanacak), ardından Jeneca ve Aquawing.
+
+## 2026-10-09 Ekipman kaynak yenilemesi 2: Jeneca ve Dophin (Claude)
+
+- Kurallar 1. paketteki gibi (yukarıda, "Ekipman kaynak yenilemesi 1: Boyu").
+- Üretici siteleri doğrulandı:
+  - `qimeigroup.com`, Dophin markasının sahibi ve üreticisi Jinjiang Qimei'nin sitesi. Sitede "Our own aquatic brands KW, Dophin, Aquafin…" yazıyor.
+  - `aleas.cn`, Jeneca markasını kullanan üretici Jin Li Jia Electromechanical'ın sitesi.
+  - Bu iki alan adına dayanan 120 kayıt, 1. paketteki "doğrulanmamış olası üretici sitesi" grubundan çıktı. Dophin'de zayıf kaynaklı yalnız 2 kayıt kalmıştı; ikisi bu pakete alındı.
+- Yöntem:
+  - Jeneca'nın İngilizce ürün kataloğundaki 182 ürün sayfası tarandı.
+  - Teknik tablolar bir kısım sayfada metin, bir kısım sayfada görsel.
+  - Görselli 29 sayfanın 208 açıklama görseli ürün sahibinin onayıyla (2026-10-09) geçici klasöre indirildi ve okundu. Sitenin resim sunucusu başka siteden gelen isteği reddediyor.
+  - Açıklama metinlerinde yalnız üreticinin yazdığı özellikler bırakıldı (ör. BX-29 ve SX-265 için "titanyum çekirdekli", "dijital" ifadeleri kaldırıldı).
+- Hesabı değiştiren düzeltmeler (üreticinin değeri):
+  - **AP-02 ve AP-03 hava motorları:** değerler katalogda yer değiştirmişti. AP-02 artık 7 L/dk (420 L/saat) ve 3,2 W, tek çıkış. AP-03 artık 2 × 3 L/dk (360 L/saat) ve 4,4 W.
+  - **AP-601:** 180 → 96 L/saat, 2 → 1,5 W. **AP-602:** 360 → 192 L/saat, 4 → 3 W.
+  - **XP-006 Ultra:** 500 → 300 L/saat, 6 → 3,5 W. **XP-007 Ultra:** 800 → 500 L/saat, 8 → 5,5 W.
+  - **LT-600:** 600 → 500 L/saat.
+  - **XP-02:** 160 → 150 L/saat, 2,5 → 2,2 W; 25 L sınırı kaldırıldı.
+  - **GD-17:** 220 → 300 L/saat.
+  - **XP-09D:** güç 5 → 3,5 W.
+  - **AE dış filtreleri:** üreticinin "Suitable for tank size" satırı kullanıldı.
+    - AE-800 ve AE-800UV en çok 70 L (önce AE-800 için 50–80 L).
+    - AE-1000 ve AE-1000UV 80 L (önce AE-1000 için 170 L).
+    - AE-1300/1300UV 90 L, AE-1500UV 110 L, AE-1800UV 140 L.
+    - UV'li modellerin gücü üreticinin tablosuna çekildi (20,8 / 25,5 / 29,3 W; önce 21 / 26 / 30 W).
+    - AE-1300'e 9,3 W eklendi.
+  - **Kaldırılan hacimler (üretici yayımlamıyor):** IPF-010 (100 L), XP-33 (200 L), XP-36 (40–200 L), GD-16 (60 L), GD-17 (80 L), GD-18 (100–130 L), AP-8806 (300–600 L).
+  - **Kaldırılan ısıtıcı hacimleri:** BX-20 (25 W 20 L, 50 W 30 L), BX-22 (25–300 W), BX-28 500 W, BX-29 (200/300/500 W) ve SX-265 500 W. Bu ısıtıcılar artık motorun watt'a göre genel aralığıyla hesaplanıyor.
+  - **Eklenen güçler:** IPF-060 10 W, XP-33 Pro 10 W, AP-22000 8 W. AP-22000 için bir satıcının 12 W yazdığı açıklamada duruyor.
+- Hesap dışı kalanlar (`capacityDataNote`, 9 kayıt):
+  - IPF-020: sayfada teknik tablo yok.
+  - LT-300: seri tablosunda yalnız LT-400/500/600 var.
+  - XP-15 ve XP-17: 182 sayfada bulunamadı.
+  - AL-28 50 W ve 100 W, BX-22 500 W: üreticinin tablosunda bu güç seçenekleri yok.
+  - YM-03: sayfada yalnız ölçü var. Yardımcı yüzey emici olduğu için ana hesaba zaten girmiyordu.
+  - Dophin AP1302: üreticinin sitesinde yok; kabul edilen mağazada da debi yayımlanmıyor (Malawi İzmir sayfası kapanmış).
+- **Dophin CF-300:** 410 L/saat ve 6,7 W kaldırıldı (tek kaynak listede olmayan bir mağazaydı). Atakan Petshop ve Akvaryum Express'in yazdığı "40 litreye kadar" sınırı korundu.
+- Değeri aynı kalan, yalnız kaynağı üreticiye çekilen kayıtlar:
+  - XP-03/05/06/06L/07/08/09/11/11D/13/13D/606, XP-33/36 Ultra, XP-33D/36D, XP-36 Pro, XGD-15…19, LT-400/500, GD-16/18/19, GD-400/500/600.
+  - IPF-060/080/180/280/380, IPF-228/628, IPF-260…560, GLB-600/800/1000, CDA-200L…1000L.
+  - AP-01, AP-548/648, AP-960, AP-9801/9802/9804, AP-8801/8803/8804/8806, AP-10000/12000/15000/30000/40000, DB-21/31/51/81.
+  - AL-22, AL-28 300/500 W.
+- Sonuç:
+  - Jeneca ve Dophin'de hesaba giren bütün kayıtlar üretici sayfasına ya da kabul edilen yerel mağazaya dayanıyor.
+  - Kapasite verisi hazır kayıt: Jeneca 183 → 175, Dophin 69 → 68. Katalogda hesap dışı ekipman 23 → 32.
+  - Bütün katalogda tek kaynağı kurala uymayan, hesaba giren kayıt 180 kaldı: Aquawing 59, Netlea 14, RS Electrical 13, Nubios 13, Sobo 12, Xinyou 12, WaterBear 12, Eurostar 8, Ejet 8, Meç 8, Regent 6, Resun 5, Haqos 5, SunSun 3, XLPro 2.
+- Motor sonucuna etkisi ("uygun" sınırı, filtre tek başına):
+  - AE-1000: 170 → 80 L. AE-800: 80 → 70 L. AE-1300: 237,5 → 90 L (önce debiye göre).
+  - AE-800UV/1000UV/1300UV/1500UV/1800UV: debiye göre 187,5 / 212,5 / 237,5 / 325 / 375 L → üreticinin 70 / 80 / 90 / 110 / 140 L sınırı.
+  - XP-006 Ultra: 125 → 75 L. XP-007 Ultra: 200 → 125 L. LT-600: 150 → 125 L.
+  - XP-33: 200 → 250 L, XP-36: 200 → 300 L, IPF-010: 100 → 125 L, GD-16: 60 → 75 L, GD-17: 80 → 75 L, GD-18: 130 → 75 L. Bunların hepsi debiye göre (saatte 4 tur).
+  - Isıtıcılarda hacim kaldırılınca motorun genel aralığı (watt başına 0,67–2 L) kullanılıyor. Örnek: BX-22 100 W için 50–120 L yerine 67–200 L.
+  - Altın fikstürde Jeneca ya da Dophin cihazı yok; fikstür değişmedi.
+- Kanıt:
+  - Metin tablolu sayfalar: 411, 412, 413/655/656/657, 416, 452, 454, 456, 457, 458, 464, 471, 473, 481, 482, 483, 484, 518, 531, 729, 730.
+  - Görsel tablolu sayfalar: 459, 478, 638, 652, 653, 669, 670–673, 681–688, 700, 701, 703, 711, 714, 717, 718, 726, 731, 732, 733.
+  - Sayfa adresi `https://www.aleas.cn/product/<numara>.html`. Hangi görselin hangi modelin tablosunu taşıdığı Codex anlık görüntüsündeki `kanit/bulgular.md` dosyasında.
+- Regresyon: `scripts/test-catalog-flow.cjs`'teki eski Jeneca beklentileri (ör. AP-02 360 L/saat, AE-1000 170 L, YM-03 300 L/saat) üreticinin değerlerine çekildi. Düzeltilen 12 kayıt, 9 hesap dışı kayıt ve Dophin CF-300/AP1302 için yeni denetimler eklendi.
+- Ortam notu: `node_modules` içindeki 6 bağlantı silinmiş bir geçici denetim klasörünü gösterdiği için `tsc` çalışmıyordu. Bağlantılar projenin kendi paket deposundaki aynı sürümlere yeniden yöneltildi; depo dosyası değişmedi.
+- Sonraki paket: Aquawing (59 kayıt; çoğunun kaynağı listede olmayan Türk mağazaları).
