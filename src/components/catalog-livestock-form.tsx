@@ -1,7 +1,8 @@
 "use client";
 
-import { FormEvent, useState } from "react";
+import { FormEvent, useId, useState } from "react";
 import { Search, X } from "lucide-react";
+import { ModalDialog } from "@/components/modal-dialog";
 import { speciesById, speciesCatalog, speciesForCatalogExactSearch, speciesForCatalogSearch, speciesForCategoryAndWaterType, speciesGroup, speciesGroupLabels, speciesGroupsForCategoryAndWaterType, speciesWaterTypes } from "@/data/catalog-species";
 import { unresolvedSpeciesForSearch } from "@/data/catalog-species-unresolved";
 import type { SpeciesProfile } from "@/data/catalog-species";
@@ -69,10 +70,12 @@ export function CatalogLivestockForm({ aquarium, initialCategory, close, submit 
     profile.tankLengthDataNote ?? "",
     quantity < profile.minGroup ? `Sosyal grup için en az ${profile.minGroup} adet öneriliyor.` : "",
   ].filter(Boolean) : [];
+  const titleId = useId();
+  const descriptionId = useId();
 
-  return <div className="fixed inset-0 z-50 flex items-end justify-center bg-black/70 backdrop-blur-sm sm:items-center sm:p-5">
-    <form onSubmit={submit} className="max-h-[92vh] w-full max-w-xl overflow-y-auto rounded-t-2xl border border-white/[.08] bg-panel p-5 sm:rounded-2xl sm:p-7">
-      <div className="mb-6 flex justify-between"><div><p className="eyebrow text-aqua">{aquarium.name}</p><h2 className="mt-1 text-xl font-extrabold">Canlı seç</h2><p className="mt-1 text-[10px] text-[#647981]">Ana sınıf → canlı grubu → tür sırasıyla ilerle.</p></div><button type="button" onClick={close} className="grid size-9 place-items-center rounded-xl bg-white/[.04] text-[#71858d]"><X size={17} /></button></div>
+  return <ModalDialog close={close} labelledBy={titleId} describedBy={descriptionId}>
+    <form onSubmit={submit}>
+      <div className="mb-6 flex justify-between"><div><p className="eyebrow text-aqua">{aquarium.name}</p><h2 id={titleId} className="mt-1 text-xl font-extrabold">Canlı seç</h2><p id={descriptionId} className="mt-1 text-[10px] text-[#647981]">Ana sınıf → canlı grubu → tür sırasıyla ilerle.</p></div><button type="button" onClick={close} aria-label="Kapat" className="grid size-9 place-items-center rounded-xl bg-white/[.04] text-[#71858d]"><X size={17} /></button></div>
       <div className="grid gap-4 sm:grid-cols-2">
         <label className="text-xs font-bold text-[#91a3aa]">1. Ana sınıf<select value={category} onChange={(e) => changeCategory(e.target.value as Livestock["category"])} className={field}>{categories.map(([key, label]) => <option key={key} value={key}>{label}</option>)}</select></label>
         <label className="text-xs font-bold text-[#91a3aa]">2. Canlı grubu<select value={group} onChange={(e) => changeGroup(e.target.value)} className={field}>{groups.map((item) => <option key={item} value={item}>{speciesGroupLabels[item]}</option>)}</select></label>
@@ -86,5 +89,5 @@ export function CatalogLivestockForm({ aquarium, initialCategory, close, submit 
       </div>
       <div className="mt-7 flex justify-end gap-2"><button type="button" onClick={close} className="rounded-xl border border-white/[.08] px-5 py-3 text-xs font-bold text-[#91a3aa]">Vazgeç</button><button disabled={!hasSelectedProfile || Boolean(unresolvedMatch)} className="rounded-xl bg-aqua px-5 py-3 text-xs font-extrabold text-ink disabled:opacity-40">Canlıyı ekle</button></div>
     </form>
-  </div>;
+  </ModalDialog>;
 }
