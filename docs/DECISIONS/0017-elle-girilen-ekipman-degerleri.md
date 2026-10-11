@@ -1,7 +1,7 @@
 # 0017 — Elle girilen ekipman değerleri
 
 - Tarih: 2026-10-11
-- Durum: Ürün sahibi onayladı; Codex denetimi iki turda tamamlandı (2. tur 2026-10-11, temiz) — ürün sahibi (`buraksenfx`) özelliği 2026-10-11'de açıkça istedi ("bunu istiyorum") ve aynı gün ekran taslağını onayladı ("böyle olsun; kullanıcı ne yaptığını rahatça anlasın, bir de esnek olabilsin"). Commit ve PR planlandı; `main` birleştirmesi ve yayın ürün sahibinin onayını bekliyor.
+- Durum: Ürün sahibi onayladı; Codex denetimi iki turda tamamlandı (2. tur 2026-10-11, temiz) — ürün sahibi (`buraksenfx`) özelliği 2026-10-11'de açıkça istedi ("bunu istiyorum") ve aynı gün ekran taslağını onayladı ("böyle olsun; kullanıcı ne yaptığını rahatça anlasın, bir de esnek olabilsin"). `5888f1c` olarak kaydedildi ve PR #24 (`https://github.com/ckaracora/AquaMind/pull/24`) açıldı; `main` birleştirmesi ve yayın ürün sahibinin onayını bekliyor.
 
 ## Bağlam
 
