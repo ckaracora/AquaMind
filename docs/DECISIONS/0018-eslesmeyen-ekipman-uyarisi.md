@@ -1,7 +1,7 @@
 # 0018 — Eşleşmeyen ekipman uyarısı yalnızca hesaba giren türlerde
 
 - Tarih: 2026-10-11
-- Durum: Ürün sahibi onayladı; Codex denetimi temiz (2026-10-12) — ürün sahibi (`buraksenfx`) 2026-10-11'de öneriyi istedi ve aynı gün "evet" diyerek onayladı. Commit ve PR planlandı; `main` birleştirmesi ve yayın ürün sahibinin onayını bekliyor.
+- Durum: Ürün sahibi onayladı; Codex denetimi temiz (2026-10-12) — ürün sahibi (`buraksenfx`) 2026-10-11'de öneriyi istedi ve aynı gün "evet" diyerek onayladı. `136288b` (kod ve belgeler) ve `a6cdcd1` (altın fikstür) olarak kaydedildi, PR #25 (`https://github.com/ckaracora/AquaMind/pull/25`) açıldı; `main` birleştirmesi ve yayın ürün sahibinin onayını bekliyor.
 
 ## Bağlam
 
