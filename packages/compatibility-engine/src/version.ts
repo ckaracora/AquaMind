@@ -30,5 +30,9 @@
 //
 // 1.7.0: kaynağı açıkça "salyangoz yer" diyen balık salyangozla birlikteyse sarı uyarı
 // (bkz. docs/DECISIONS/0013-salyangoz-uyarisi.md).
-export const ENGINE_VERSION = "1.7.0";
-export const RULESET_VERSION = "1.7.0";
+//
+// 1.8.0: katalogda doğrulanmış kapasite verisi olmayan ekipmanda kullanıcının etiketten girdiği debi ya da güç
+// hesaba katılır; kural aynıdır, sonuç "elle girilen değer" olarak işaretlenir
+// (bkz. docs/DECISIONS/0017-elle-girilen-ekipman-degerleri.md).
+export const ENGINE_VERSION = "1.8.0";
+export const RULESET_VERSION = "1.8.0";
