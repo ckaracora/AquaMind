@@ -96,7 +96,9 @@ export interface KnowledgeResolver {
 
 export type AnalyzeAquarium = (aquarium: Aquarium, animals: Livestock[], equipment: Equipment[], latest?: WaterParameters) => HealthAnalysis;
 
-export interface HealthMetric { key:string; label:string; score:number; status:"good"|"warning"|"danger"; detail:string; }
+export interface HealthMetric { key:string; label:string; score:number; status:"good"|"warning"|"danger"; detail:string;
+  /** Sonuç, kullanıcının elle girdiği bir ekipman değerine dayanıyorsa işaretlenir (kural seti 1.8.0). */
+  userProvided?:true; }
 export interface HealthAnalysis { score:number; status:"good"|"warning"|"danger"; metrics:HealthMetric[]; warnings:Array<{level:"warning"|"danger";title:string;message:string}>; }
 const clamp=(n:number)=>Math.max(0,Math.min(100,Math.round(n)));
 // Kural seti 1.3.0 eşikleri (docs/DECISIONS/0009-filtre-yuk-ve-genel-durum.md).
@@ -125,6 +127,41 @@ const SWISS_MIN_DEPTH_RATIO=1;
 /** Tehlike seviyesindeki alan sorununda yüzme alanı ölçütünün üst sınırı (filtre tehlikesindeki puanla aynı). */
 const SEVERE_SPACE_SCORE=35;
 const status=(score:number):HealthMetric["status"]=>score>=75?"good":score>=50?"warning":"danger";
+
+// Kural seti 1.8.0 (docs/DECISIONS/0017-elle-girilen-ekipman-degerleri.md): katalogda doğrulanmış kapasite verisi olmayan
+// ekipmanda kullanıcının cihaz etiketinden girdiği değer kullanılır. Hesap kuralı aynıdır: filtre etiket debisiyle
+// (saatte 4 ve 2 çevrim), ısıtıcı 0,5–1,5 W/L bandıyla değerlendirilir.
+/** Elle girilebilen değer: filtre ve hava motorunda debi (L/saat), ısıtıcıda güç (W). */
+export type UserEquipmentValueKind="flow"|"power";
+/** Elle girilen debinin kabul edilen aralığı (L/saat). Dışındaki sayı büyük olasılıkla birim ya da yazım hatasıdır; hesaba katılmaz. */
+export const USER_FLOW_LIMITS_LPH:{filter:[number,number];air_pump:[number,number]}={filter:[20,20000],air_pump:[10,50000]};
+/** Elle girilen ısıtıcı gücünün kabul edilen aralığı (W). */
+export const USER_HEATER_POWER_LIMITS_W:[number,number]=[5,2000];
+/**
+ * Bir kayıtta kullanıcının hangi değeri elle girebileceğini söyler; giremiyorsa `undefined`.
+ * Katalogda doğrulanmış kapasite verisi olan, pasif, yardımcı ya da hava motoruyla çalışan cihazlarda elle giriş yoktur.
+ */
+export function userValueKindFor(category:Equipment["category"],profile?:EquipmentProfileInput):UserEquipmentValueKind|undefined{
+ if(profile?.passiveComponent)return undefined;
+ if(category==="filter")return profile&&(profile.auxiliaryFiltration||profile.requiresAirPump||profile.ratedFlowLph||profile.recommendedMaxL)?undefined:"flow";
+ if(category==="air_pump")return profile?.ratedFlowLph?undefined:"flow";
+ if(category==="heater")return profile&&(profile.powerW||profile.recommendedMinL||profile.recommendedMaxL||profile.integratedHeaterW)?undefined:"power";
+ return undefined;
+}
+/** Elle girilen değerin kabul edilen aralığı; bu kayıtta elle giriş yoksa `undefined`. */
+export function userValueLimitsFor(category:Equipment["category"],profile?:EquipmentProfileInput):{kind:UserEquipmentValueKind;min:number;max:number}|undefined{
+ const kind=userValueKindFor(category,profile);
+ if(!kind)return undefined;
+ const [min,max]=kind==="power"?USER_HEATER_POWER_LIMITS_W:USER_FLOW_LIMITS_LPH[category==="air_pump"?"air_pump":"filter"];
+ return {kind,min,max};
+}
+/** Kaydın hesaba katılacak elle girilmiş değeri; yoksa, aralık dışındaysa ya da bu kayıtta elle giriş yoksa `undefined`. */
+export function userValueFor(item:Equipment,profile?:EquipmentProfileInput):{kind:UserEquipmentValueKind;value:number}|undefined{
+ const limits=userValueLimitsFor(profile?.category??item.category,profile);
+ if(!limits)return undefined;
+ const value=limits.kind==="flow"?item.userRatedFlowLph:item.userPowerW;
+ return typeof value==="number"&&Number.isFinite(value)&&value>=limits.min&&value<=limits.max?{kind:limits.kind,value}:undefined;
+}
 
 export function createAnalyzer(resolver:KnowledgeResolver):AnalyzeAquarium{
  return function analyzeAquarium(aquarium,animals,equipment,latest){
@@ -178,7 +215,12 @@ export function createAnalyzer(resolver:KnowledgeResolver):AnalyzeAquarium{
  const criticalCompatibilityIssue=habitatIssues.length>0||temperatureConflict||phConflict||predationIssues.length>0||speciesOnlyIssues.length>0;
  const compatibilityFor=(penalty:number)=>criticalCompatibilityIssue?clamp(100-penalty):Math.max(50,clamp(100-penalty));
  const compatibilityScore=compatibilityFor(compatibilityPenalty+behaviorPenalty);
- const matchedEquipment=equipment.map(item=>resolver.profileForEquipment(item)).filter(profile=>profile!==undefined); const verifiedEquipment=matchedEquipment.filter(profile=>resolver.isVerifiedEquipmentProfile(profile));
+ // Elle girilen değer (1.8.0) katalog kaydının eksik alanını doldurur; katalogda olmayan cihaz için yalnız bu değeri taşıyan bir kayıt oluşur.
+ // Elle değer kullanılan kayıtlar ve girilen değerin türü: sonuç yalnızca o değere dayanan ölçütte işaretlenir.
+ const userProvidedEquipment=new Map<EquipmentProfileInput,UserEquipmentValueKind>();
+ const matchedEquipment=equipment.map(item=>{const profile=resolver.profileForEquipment(item);const user=userValueFor(item,profile);if(!user)return profile;const merged:EquipmentProfileInput={...(profile??{id:`user:${item.id}`,category:item.category,brand:item.brand??"",model:item.model??""}),...(user.kind==="flow"?{ratedFlowLph:user.value}:{powerW:user.value})};userProvidedEquipment.set(merged,user.kind);return merged;}).filter(profile=>profile!==undefined);
+ const usableEquipment=(profile:EquipmentProfileInput)=>userProvidedEquipment.has(profile)||resolver.isVerifiedEquipmentProfile(profile);
+ const verifiedEquipment=matchedEquipment.filter(usableEquipment);
  const filterEquipment=verifiedEquipment.filter(p=>p.category==="filter"); const auxiliaryFilters=filterEquipment.filter(p=>p.auxiliaryFiltration); const filters=filterEquipment.filter(p=>!p.passiveComponent); const primaryFilters=filters.filter(p=>!p.auxiliaryFiltration); const filtersWithFlow=primaryFilters.filter(p=>p.ratedFlowLph); const airDrivenFilters=primaryFilters.filter(p=>p.requiresAirPump); const airPumpsWithFlow=verifiedEquipment.filter(p=>p.category==="air_pump"&&p.ratedFlowLph); const airDrivenReady=!airDrivenFilters.length||airPumpsWithFlow.length>0; const ratedFlow=filtersWithFlow.reduce((s,p)=>s+(p.ratedFlowLph??0),0); const turnover=ratedFlow*.65/Math.max(1,aquarium.netVolumeLiters);
  const lowFlowShare=flowProfiles.length?flowProfiles.filter(x=>x.profile!.flow==="low").length/flowProfiles.length:0; const targetMax=lowFlowShare>.5?7:10;
  // Yeterlilik: her çalışan ana filtrenin karşılayabildiği hacim toplanır. Üretici hacim önerisi varsa o (tehlike sınırı 1,5 katı),
@@ -216,24 +258,29 @@ export function createAnalyzer(resolver:KnowledgeResolver):AnalyzeAquarium{
  const allWaterChecks=[...waterChecks,...waterQualityChecks]; const waterScore=allWaterChecks.length?clamp(allWaterChecks.filter(Boolean).length/allWaterChecks.length*100):65;
  const safetyEquipment=matchedEquipment.filter(p=>!p.passiveComponent&&(p.category==="filter"||p.category==="heater"||Boolean(p.integratedHeaterW)||(airDrivenFilters.length>0&&p.category==="air_pump")));
  const calculationReadyEquipment=safetyEquipment.filter(p=>{
-  if(!resolver.isVerifiedEquipmentProfile(p))return false;
+  if(!usableEquipment(p))return false;
   const filterReady=p.category!=="filter"||Boolean(p.ratedFlowLph)||(!p.requiresAirPump&&Boolean(p.recommendedMaxL))||(Boolean(p.requiresAirPump)&&airPumpsWithFlow.length>0);
   const airPumpReady=p.category!=="air_pump"||Boolean(p.ratedFlowLph);
   const heaterReady=!(p.category==="heater"||p.integratedHeaterW)||Boolean(p.recommendedMinL||p.recommendedMaxL||p.integratedHeaterW||(p.category==="heater"&&p.powerW));
   return filterReady&&heaterReady&&airPumpReady;
  });
  const safetyEquipmentInputCount=equipment.filter(item=>{const profile=resolver.profileForEquipment(item);return !profile?.passiveComponent&&(item.category==="filter"||item.category==="heater"||(airDrivenFilters.length>0&&item.category==="air_pump"));}).length;
- const missingCapacityEquipment=safetyEquipment.filter(profile=>!calculationReadyEquipment.some(ready=>ready.id===profile.id));
+ // Aynı katalog cihazı iki kez kayıtlıysa ve yalnız birine değer girildiyse diğeri eksik sayılmaya devam eder; bu yüzden kimlikle değil kayıtla karşılaştırılır.
+ const missingCapacityEquipment=safetyEquipment.filter(profile=>!calculationReadyEquipment.includes(profile));
  const totalDataCount=animals.length+safetyEquipmentInputCount; const verifiedDataCount=verifiedMatchedProfiles.length+calculationReadyEquipment.length; const confidenceScore=totalDataCount?clamp(verifiedDataCount/totalDataCount*100):50;
+ const filterUsesUserValue=sizedFilters.some(p=>userProvidedEquipment.get(p)==="flow")||(airDrivenFilters.length>0&&airPumpsWithFlow.some(p=>userProvidedEquipment.get(p)==="flow"));
+ const heaterUsesUserValue=heaters.some(h=>userProvidedEquipment.get(h)==="power");
+ const userValueReadyCount=calculationReadyEquipment.filter(p=>userProvidedEquipment.has(p)).length;
+ const userProvidedFlag=(used:boolean)=>used?{userProvided:true as const}:{};
  const metrics:HealthMetric[]=[
   {key:"load",label:"Biyolojik yük",score:loadScore,status:status(loadScore),detail:`Tahmini yük oranı %${Math.round(loadRatio*100)}`},
   {key:"space",label:"Yüzme alanı",score:spaceScore,status:status(spaceScore),detail:severeSpaceIssues.size?`${severeSpaceIssues.size} tür için akvaryum çok küçük`:spaceIssues.length?`${spaceIssues.length} tür için alan sınırda`:"Kayıtlı türler için uygun"},
   {key:"social",label:"Sosyal ihtiyaç",score:socialScore,status:status(socialScore),detail:groupIssues.length?`${groupIssues.length} türün grup sayısı düşük`:"Grup ihtiyaçları uygun"},
   {key:"compatibility",label:"Tür uyumu",score:compatibilityScore,status:status(compatibilityScore),detail:habitatIssues.length?"Akvaryum türüyle yaşam ortamı uyuşmuyor":speciesOnlyIssues.length?"Tür akvaryumu önerilen canlı var":predationIssues.length?"Küçük canlılar için avlanma riski var":temperatureConflict||phConflict?"Su değeri aralıkları kesişmiyor":smallFishPredationIssues.length?"Küçük balıklar avlanabilir":finNipIssues.length?"Yüzgeç ısırma riski var":conspecificIssues.length?"Aynı tür bireyleri kavga edebilir":shrimpEaters.length?"Karidesler yenebilir":snailEaters.length?"Salyangozlar yenebilir":flowConflict?"Akıntı ihtiyaçları farklı":communityCautionIssues.length?"Tank arkadaşı seçimi dikkat gerektiriyor":shrimpUnverified.length?"Karides uyumu doğrulanmadı":"Ortak yaşam aralıkları mevcut"},
-  {key:"filter",label:"Filtrasyon uygunluğu",score:filterScore,status:status(filterScore),detail:sizedByManufacturer?`Üretici önerisi en fazla ${filterOkL} L`:sizedByFlow?`Etiket debisiyle ${ratedTurnover.toFixed(1).replace(".",",")} çevrim/saat`:sizedFilters.length?`Üretici önerisi ve etiket debisine göre en fazla ${Math.round(filterOkL)} L`:airDrivenFilters.length?(airDrivenReady?"Hava motorlu sünger filtre bağlantısı hazır":"Sünger filtre için hava motoru gerekli"):primaryFilters.length?"Debi bilgisi doğrulanmayı bekliyor":auxiliaryFilters.length?"Yalnız yardımcı yüzey skimmeri kayıtlı; ana filtre gerekli":"Katalogdan filtre bulunamadı"},
-  {key:"heater",label:"Isıtıcı uygunluğu",score:heaterScore,status:status(heaterScore),detail:heaterDataReady?(heaterFit?(useEstimatedHeaterRange?`Toplam ${heaterPowerW} W için tahmini hacim uygun`:"Üretici hacim aralığı uygun"):(heaterTooSmall?"Isıtma gücü bu hacim için düşük":heaterTooLarge?"Isıtma gücü bu hacim için yüksek":"Hacim aralığı dışında")):heaters.length?"Watt veya hacim verisi doğrulanmayı bekliyor":"Katalogdan ısıtıcı bulunamadı"},
+  {key:"filter",label:"Filtrasyon uygunluğu",score:filterScore,status:status(filterScore),detail:sizedByManufacturer?`Üretici önerisi en fazla ${filterOkL} L`:sizedByFlow?`Etiket debisiyle ${ratedTurnover.toFixed(1).replace(".",",")} çevrim/saat`:sizedFilters.length?`Üretici önerisi ve etiket debisine göre en fazla ${Math.round(filterOkL)} L`:airDrivenFilters.length?(airDrivenReady?"Hava motorlu sünger filtre bağlantısı hazır":"Sünger filtre için hava motoru gerekli"):primaryFilters.length?"Debi bilgisi doğrulanmayı bekliyor":auxiliaryFilters.length?"Yalnız yardımcı yüzey skimmeri kayıtlı; ana filtre gerekli":"Katalogdan filtre bulunamadı",...userProvidedFlag(filterUsesUserValue)},
+  {key:"heater",label:"Isıtıcı uygunluğu",score:heaterScore,status:status(heaterScore),detail:heaterDataReady?(heaterFit?(useEstimatedHeaterRange?`Toplam ${heaterPowerW} W için tahmini hacim uygun`:"Üretici hacim aralığı uygun"):(heaterTooSmall?"Isıtma gücü bu hacim için düşük":heaterTooLarge?"Isıtma gücü bu hacim için yüksek":"Hacim aralığı dışında")):heaters.length?"Watt veya hacim verisi doğrulanmayı bekliyor":"Katalogdan ısıtıcı bulunamadı",...userProvidedFlag(heaterUsesUserValue)},
   {key:"water",label:"Su değeri uyumu",score:waterScore,status:status(waterScore),detail:latest?"Son ölçüme göre":"Ölçüm eklenmesi gerekli"},
-  {key:"confidence",label:"Veri güveni",score:confidenceScore,status:status(confidenceScore),detail:totalDataCount?`${verifiedDataCount}/${totalDataCount} güvenlik kaydı hesaplamaya hazır`:"Güvenlik hesabı için kayıt bulunamadı"},
+  {key:"confidence",label:"Veri güveni",score:confidenceScore,status:status(confidenceScore),detail:totalDataCount?`${verifiedDataCount}/${totalDataCount} güvenlik kaydı hesaplamaya hazır${userValueReadyCount?` · ${userValueReadyCount} kayıt senin girdiğin değerle`:""}`:"Güvenlik hesabı için kayıt bulunamadı"},
  ];
  const warnings:HealthAnalysis["warnings"]=[];
  const unmatchedAnimalCount=animals.length-matchedProfiles.length; const unmatchedEquipmentCount=equipment.length-matchedEquipment.length;

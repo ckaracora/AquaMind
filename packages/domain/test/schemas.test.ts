@@ -51,6 +51,9 @@ describe("alan şemaları", () => {
     expect(waterParametersSchema.safeParse({ id: "w", aquariumId: "a", measuredAt: "2026-09-01T10:00:00.000Z" }).success).toBe(true);
     expect(livestockSchema.safeParse({ id: "l", aquariumId: "a", commonName: "Neon tetra", category: "fish", quantity: 8, addedAt: "2026-09-01" }).success).toBe(true);
     expect(equipmentSchema.safeParse({ id: "e", aquariumId: "a", category: "filter", installedAt: "2026-09-01" }).success).toBe(true);
+    // Elle girilen ekipman değeri isteğe bağlıdır (docs/DECISIONS/0017-elle-girilen-ekipman-degerleri.md).
+    expect(equipmentSchema.parse({ id: "e", aquariumId: "a", category: "filter", installedAt: "2026-09-01", userRatedFlowLph: 600 }).userRatedFlowLph).toBe(600);
+    expect(equipmentSchema.parse({ id: "e", aquariumId: "a", category: "heater", installedAt: "2026-09-01", userPowerW: 100 }).userPowerW).toBe(100);
   });
 
   it("eksik veya yanlış tipli alanları reddeder", () => {
@@ -62,6 +65,8 @@ describe("alan şemaları", () => {
     expect(livestockSchema.safeParse({ ...livestock[0], quantity: "16" }).success).toBe(false);
     expect(maintenanceTaskSchema.safeParse({ ...maintenanceTasks[0], type: "vacuum" }).success).toBe(false);
     expect(equipmentSchema.safeParse({ ...equipment[0], category: "skimmer" }).success).toBe(false);
+    expect(equipmentSchema.safeParse({ ...equipment[0], userRatedFlowLph: "600" }).success).toBe(false);
+    expect(equipmentSchema.safeParse({ ...equipment[0], userPowerW: "100" }).success).toBe(false);
     expect(waterParametersSchema.safeParse({ ...waterReadings[0], ph: "6.8" }).success).toBe(false);
   });
 });

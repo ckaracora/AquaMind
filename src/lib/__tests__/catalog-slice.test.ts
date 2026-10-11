@@ -112,6 +112,33 @@ describe("gereken kayıtlarla analiz", () => {
     for (const item of equipment) expect(slice.profileForEquipment(item)?.id, `${item.brand} / ${item.model}`).toBe(profileForEquipment(item)?.id);
   }, 60_000);
 
+  // Elle girilen ekipman değeri (docs/DECISIONS/0017-elle-girilen-ekipman-degerleri.md): katalogda olmayan cihaz,
+  // katalogda adı olup değeri eksik cihaz ve doğrulanmış değeri olan cihaz için parça yüklemesi sonucu değiştirmez.
+  it("elle değer girilmiş ekipmanda tam katalogla aynı analizi verir", async () => {
+    const aquarium = mockAquariums[0];
+    const animals = mockLivestock.filter((item) => item.aquariumId === aquarium.id);
+    const device = (id: string, category: Equipment["category"], extra: Partial<Equipment>): Equipment => ({ id, aquariumId: aquarium.id, category, installedAt: "2026-01-01", ...extra });
+    const sets: Equipment[][] = [
+      [device("e1", "filter", { brand: "Listede Olmayan", model: "X-1", userRatedFlowLph: 800 }), device("e2", "heater", { brand: "Listede Olmayan", model: "H-1", userPowerW: 150 })],
+      [device("e1", "filter", { catalogId: "jeneca-lt-300", brand: "Jeneca", model: "LT-300", userRatedFlowLph: 800 }), device("e2", "heater", { brand: "Listede Olmayan", model: "H-1", userPowerW: 150 })],
+      [device("e1", "filter", { brand: "Jeneca", model: "LT-300", userRatedFlowLph: 800 })],
+      [device("e1", "filter", { catalogId: "jeneca-lt-600", brand: "Jeneca", model: "LT-600", userRatedFlowLph: 5000 })],
+    ];
+    for (const equipment of sets) {
+      const slice = await loadCatalogSlice(animals, equipment, fromBuilders);
+      const analysis = createHealthAnalyzer(slice)(aquarium, animals, equipment);
+      expect(analysis).toEqual(analyzeAquarium(aquarium, animals, equipment));
+      expect(dashboardStatus(slice, aquarium, animals, equipment)).toEqual(dashboardStatus(fullCatalogLookup, aquarium, animals, equipment));
+    }
+    const flagged = (equipment: Equipment[]) => analyzeAquarium(aquarium, animals, equipment).metrics.find((metric) => metric.key === "filter")?.userProvided;
+    expect(flagged(sets[0])).toBe(true);
+    expect(flagged(sets[1])).toBe(true);
+    expect(flagged(sets[2])).toBe(true);
+    // Üreticinin debisi doğrulanmış kayıtta girilen değer yok sayılır.
+    expect(flagged(sets[3])).toBeUndefined();
+    expect(analyzeAquarium(aquarium, animals, sets[3])).toEqual(analyzeAquarium(aquarium, animals, [{ ...sets[3][0], userRatedFlowLph: undefined }]));
+  });
+
   it("yüklenmemiş bir kayda bakılırsa sessizce 'bulunamadı' demez", async () => {
     const slice = await loadCatalogSlice([], [], fromBuilders);
     const absent = speciesCatalog.find((profile) => profile.id)!;

@@ -84,4 +84,12 @@ export interface Equipment {
   specifications?: string;
   notes?: string;
   catalogId?: string;
+  /**
+   * Kullanıcının cihaz etiketinden girdiği debi (L/saat); filtre ve hava motoru için.
+   * Yalnızca katalogda doğrulanmış kapasite verisi yoksa hesaba katılır
+   * (docs/DECISIONS/0017-elle-girilen-ekipman-degerleri.md).
+   */
+  userRatedFlowLph?: number;
+  /** Kullanıcının cihaz etiketinden girdiği güç (W); ısıtıcı için. Aynı kuralla kullanılır. */
+  userPowerW?: number;
 }

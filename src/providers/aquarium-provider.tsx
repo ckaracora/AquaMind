@@ -41,6 +41,8 @@ interface AquariumContextValue {
   removePlant: (id: string) => void;
   equipment: Equipment[];
   addEquipment: (item: Equipment) => void;
+  /** Var olan bir ekipman kaydını aynı kimlikle değiştirir (ör. elle girilen değeri eklemek için). */
+  updateEquipment: (item: Equipment) => void;
   removeEquipment: (id: string) => void;
   /** Yükleme ve silme sırasında oluşan kurtarma/karantina kayıtları (içerik taşımaz). */
   storageIssues: StorageIssue[];
@@ -327,6 +329,10 @@ export function AquariumProvider({ children }: { children: React.ReactNode }) {
         const flags = promoteOwner(item.aquariumId, demoRef.current);
         setEquipment(flags.equipment ? [item] : [item, ...equipment]);
         applyDemo({ ...flags, equipment: false });
+      },
+      updateEquipment: (item: Equipment) => {
+        if (!gate()) return;
+        setEquipment(equipment.map((entry) => (entry.id === item.id ? item : entry)));
       },
       removeEquipment: (id: string) => {
         if (!gate()) return;

@@ -49,6 +49,7 @@ Bu liste otomatik doğruluk garantisi değildir. Her bağlantı doğru marka, mo
 - Debi, güç, hacim, canlı boyu ve minimum akvaryum değeri tahmin edilmez.
 - Bir seri sayfasındaki değer farklı modele kopyalanmaz.
 - Pasif ekipmana bağımsız motor kapasitesi atanmaz.
+- Kullanıcının kendi cihazı için etiketten girdiği debi ya da güç katalog verisi değildir: yalnızca o kullanıcının kaydında durur, kataloğa yazılmaz ve başka bir kaydın kaynağı olarak kullanılmaz. Yalnızca katalogda doğrulanmış değeri olmayan kayıtta hesaba katılır ve sonuç bu şekilde işaretlenir (`docs/DECISIONS/0017-elle-girilen-ekipman-degerleri.md`).
 
 ## Görseller
 

@@ -83,6 +83,8 @@ describe("katalog modülleri", () => {
     const dataFree = [
       "src/lib/catalog-slice.ts", "src/lib/health-analysis-core.ts", "src/lib/use-catalog-lookup.ts", "src/lib/dashboard-status.ts", "src/lib/water-status.ts",
       "src/data/catalog-buckets.ts", "src/data/catalog-shared.ts", "src/app/page.tsx", "src/app/aquariums/[id]/health/page.tsx",
+      // Sağlık sayfası etiket değeri bekleyen cihazları bu modülle bulur (docs/DECISIONS/0017-elle-girilen-ekipman-degerleri.md).
+      "src/lib/user-equipment-value.ts",
     ];
     const dataModules = /from "(@\/data\/(catalog|catalog-species|catalog-equipment|catalog-species-expanded|catalog-equipment-[a-z]+|catalog-bucket-builders|species-behavior)|@\/lib\/health-analysis|\.\/(catalog|catalog-species|catalog-equipment|catalog-species-expanded|catalog-equipment-[a-z]+|catalog-bucket-builders|species-behavior))"/;
     const offenders = dataFree.flatMap((file) => readFileSync(file, "utf8").split("\n")

@@ -1,6 +1,6 @@
 # AquaMind veritabanı evrim planı
 
-Son güncelleme: 2026-09-02. **Durum: tasarım.** Bu belgede anlatılan hiçbir tablo, migration veya Supabase projesi henüz oluşturulmamıştır. Phase 1'in çalışma taslağıdır; uygulama sırasında `supabase/migrations/` altındaki dosyalar gerçek kaynak olur ve bu belge onlara göre güncellenir.
+Son güncelleme: 2026-10-11 (ekipman kaydına elle girilen değer sütunları eklendi; önceki güncelleme 2026-09-02). **Durum: tasarım.** Bu belgede anlatılan hiçbir tablo, migration veya Supabase projesi henüz oluşturulmamıştır. Phase 1'in çalışma taslağıdır; uygulama sırasında `supabase/migrations/` altındaki dosyalar gerçek kaynak olur ve bu belge onlara göre güncellenir.
 
 ## İlkeler
 
@@ -50,7 +50,7 @@ Hedef şema (hepsinde `created_at`, `updated_at` ve RLS):
 - `livestock(id, aquarium_id, species_id, quantity, gender, status active|removed|transferred|sold|died, added_at, ended_at, notes, added_by)`
 - `livestock_events(id, livestock_id, kind, quantity_delta, occurred_at, note, recorded_by)` — adet ve durum değişiklikleri, orijinal satır kaybolmadan
 - `plants(id, aquarium_id, name, scientific_name, quantity, position, status, added_at, ended_at)`
-- `equipment(id, aquarium_id, equipment_model_id, brand, model, category, installed_at, removed_at, status, notes)`
+- `equipment(id, aquarium_id, equipment_model_id, brand, model, category, installed_at, removed_at, status, notes, user_rated_flow_lph, user_power_w)` — son iki sütun isteğe bağlıdır: kullanıcının cihaz etiketinden girdiği debi (L/saat) ve güç (W). Bugünkü `Equipment.userRatedFlowLph` ve `Equipment.userPowerW` alanlarının karşılığıdır; katalog tablolarına (`equipment_models`) yazılmaz (`docs/DECISIONS/0017-elle-girilen-ekipman-degerleri.md`).
 - `measurements(id, aquarium_id, session_id, measured_at, parameter, value, unit, source manual|sensor|import, device_id, recorded_by)` — uzun biçim: parametre başına bir satır, `session_id` "tek test oturumu" anlamını korur
 - `maintenance_schedules(id, aquarium_id, type, title, interval_days, amount_percent, amount_liters, next_due_at, active)`
 - `maintenance_events(id, aquarium_id, schedule_id, type, title, performed_at, amount_percent, amount_liters, notes, performed_by)`

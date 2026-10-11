@@ -122,6 +122,8 @@ export const equipmentSchema = z.object({
   specifications: z.string().optional(),
   notes: z.string().optional(),
   catalogId: z.string().optional(),
+  userRatedFlowLph: z.number().optional(),
+  userPowerW: z.number().optional(),
 });
 
 // Tip ve şema eşdeğerlik denetimleri: her şemanın çıktısı ilgili tipe, tip de
