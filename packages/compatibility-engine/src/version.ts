@@ -34,5 +34,9 @@
 // 1.8.0: katalogda doğrulanmış kapasite verisi olmayan ekipmanda kullanıcının etiketten girdiği debi ya da güç
 // hesaba katılır; kural aynıdır, sonuç "elle girilen değer" olarak işaretlenir
 // (bkz. docs/DECISIONS/0017-elle-girilen-ekipman-degerleri.md).
-export const ENGINE_VERSION = "1.8.0";
-export const RULESET_VERSION = "1.8.0";
+//
+// 1.9.0: "Katalogla eşleşmeyen ekipman kaydı var" uyarısı yalnızca güvenlik hesabına giren türlerde çıkar
+// (filtre, ısıtıcı; hava motoruyla çalışan filtre varsa hava motoru). Aydınlatma, CO₂ gibi hesaba girmeyen cihaz
+// listede olmasa da uyarı üretmez; puan değişmez (bkz. docs/DECISIONS/0018-eslesmeyen-ekipman-uyarisi.md).
+export const ENGINE_VERSION = "1.9.0";
+export const RULESET_VERSION = "1.9.0";
