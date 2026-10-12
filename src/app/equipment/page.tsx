@@ -2,9 +2,9 @@
 import { FormEvent, useEffect, useId, useMemo, useState } from "react";
 import { ChevronDown, Filter, LampDesk, PencilLine, Plus, Search, SlidersHorizontal, Trash2, UserRound, Waves, Wind, X, Zap } from "lucide-react";
 import { AppShell } from "@/components/app-shell";
+import { ModalDialog } from "@/components/modal-dialog";
 import { PageHeader } from "@/components/page-header";
 import { equipmentBrandsForCategory, equipmentById, equipmentForBrandInCategory, equipmentForCategory, hasStandaloneCapacityData, profileForEquipment } from "@/data/catalog-equipment";
-import { useDialogFocus } from "@/lib/dialog-focus";
 import { parseUserValue, userValueField, userValueHint, userValueText, withUserValue, type FlowUnit, type UserValueField } from "@/lib/user-equipment-value";
 import { useAquariums } from "@/providers/aquarium-provider";
 import type { Aquarium, Equipment } from "@/types/aquarium";
@@ -48,7 +48,7 @@ function UserValueInput({ valueField, category, volumeL, raw, unit, error, setRa
   error?: string;
   setRaw: (value: string) => void;
   setUnit: (unit: FlowUnit) => void;
-  /** Pencere açılınca odak bu alana gelsin (bkz. src/lib/dialog-focus.ts). */
+  /** Pencere açılınca odak bu alana gelsin (bkz. src/lib/dialog-focus.ts). Yalnız tek alanlı değer penceresinde kullanılır. */
   initialFocus?: boolean;
 }) {
   const parsed = parseUserValue(raw, valueField, unit);
@@ -75,7 +75,6 @@ function UserValueDialog({ aquarium, item, close, save }: { aquarium: Aquarium; 
   const [raw, setRaw] = useState(current === undefined ? "" : String(current).replace(".", ","));
   const [unit, setUnit] = useState<FlowUnit>("lph");
   const [error, setError] = useState<string>();
-  const dialog = useDialogFocus<HTMLDivElement>(close);
   const titleId = useId();
   const descriptionId = useId();
   if (!valueField) return null;
@@ -86,11 +85,11 @@ function UserValueDialog({ aquarium, item, close, save }: { aquarium: Aquarium; 
     if (parsed.error) { setError(parsed.error); return; }
     save(withUserValue(item, activeField, parsed.value));
   }
-  return <div className="fixed inset-0 z-50 flex items-end justify-center bg-black/70 backdrop-blur-sm sm:items-center sm:p-5"><div ref={dialog} role="dialog" aria-modal="true" aria-labelledby={titleId} aria-describedby={descriptionId} tabIndex={-1} className="max-h-[92vh] w-full max-w-md overflow-y-auto rounded-t-2xl border border-white/[.08] bg-panel p-5 outline-none sm:rounded-2xl sm:p-7"><form onSubmit={submit} noValidate>
+  return <ModalDialog close={close} labelledBy={titleId} describedBy={descriptionId} width="max-w-md"><form onSubmit={submit} noValidate>
     <div className="mb-6 flex justify-between"><div><p className="eyebrow text-aqua">{aquarium.name}</p><h2 id={titleId} className="mt-1 text-xl font-extrabold">{item.brand || "Markasız"} {item.model}</h2><p id={descriptionId} className="mt-1 text-[10px] text-[#647981]">Cihazın üzerindeki değeri gir. Alanı boş bırakıp kaydedersen değer silinir.</p></div><button type="button" onClick={close} aria-label="Kapat" className="grid size-9 shrink-0 place-items-center rounded-xl bg-white/[.04] text-[#71858d]"><X size={17}/></button></div>
     <UserValueInput initialFocus valueField={activeField} category={item.category} volumeL={aquarium.netVolumeLiters} raw={raw} unit={unit} error={error} setRaw={value => { setRaw(value); setError(undefined); }} setUnit={next => { setUnit(next); setError(undefined); }}/>
     <div className="mt-7 flex justify-end gap-2"><button type="button" onClick={close} className="rounded-xl border border-white/[.08] px-5 py-3 text-xs font-bold text-[#91a3aa]">Vazgeç</button><button className="rounded-xl bg-aqua px-5 py-3 text-xs font-extrabold text-ink">Kaydet</button></div>
-  </form></div></div>;
+  </form></ModalDialog>;
 }
 
 function EquipmentForm({ aquarium, initialCategory, close, add }: {
@@ -139,8 +138,10 @@ function EquipmentForm({ aquarium, initialCategory, close, add }: {
   const capacityReady = hasStandaloneCapacityData(profile);
   const turnover = profile?.category === "filter" && profile.ratedFlowLph ? profile.ratedFlowLph * .65 / aquarium.netVolumeLiters : undefined;
   const mismatch = profile && ((profile.recommendedMinL && aquarium.netVolumeLiters < profile.recommendedMinL) || (profile.recommendedMaxL && aquarium.netVolumeLiters > profile.recommendedMaxL));
-  return <div className="fixed inset-0 z-50 flex items-end justify-center bg-black/70 backdrop-blur-sm sm:items-center sm:p-5"><form onSubmit={submit} className="max-h-[92vh] w-full max-w-xl overflow-y-auto rounded-t-2xl border border-white/[.08] bg-panel p-5 sm:rounded-2xl sm:p-7">
-    <div className="mb-6 flex justify-between"><div><p className="eyebrow text-aqua">{aquarium.name}</p><h2 className="mt-1 text-xl font-extrabold">Ekipman ekle</h2><p className="mt-1 text-[10px] text-[#647981]">{manual ? "Listede olmayan cihazını marka ve modeliyle kaydet." : "Kategori → marka → model sırasıyla ilerle."}</p></div><button type="button" onClick={close} aria-label="Kapat" className="grid size-9 place-items-center rounded-xl bg-white/[.04] text-[#71858d]"><X size={17}/></button></div>
+  const titleId = useId();
+  const descriptionId = useId();
+  return <ModalDialog close={close} labelledBy={titleId} describedBy={descriptionId}><form onSubmit={submit}>
+    <div className="mb-6 flex justify-between"><div><p className="eyebrow text-aqua">{aquarium.name}</p><h2 id={titleId} className="mt-1 text-xl font-extrabold">Ekipman ekle</h2><p id={descriptionId} className="mt-1 text-[10px] text-[#647981]">{manual ? "Listede olmayan cihazını marka ve modeliyle kaydet." : "Kategori → marka → model sırasıyla ilerle."}</p></div><button type="button" onClick={close} aria-label="Kapat" className="grid size-9 place-items-center rounded-xl bg-white/[.04] text-[#71858d]"><X size={17}/></button></div>
     <div className="grid gap-4 sm:grid-cols-2">
       <label className={`text-xs font-bold text-[#91a3aa] ${manual ? "sm:col-span-2" : ""}`}>1. Ekipman türü<select value={selectedCategory} onChange={e => changeCategory(e.target.value as Equipment["category"])} className={field}>{categories.map(([key, label]) => <option key={key} value={key}>{label}</option>)}</select></label>
       {manual ? <>
@@ -161,5 +162,5 @@ function EquipmentForm({ aquarium, initialCategory, close, add }: {
       <label className="text-xs font-bold text-[#91a3aa] sm:col-span-2">Notlar<textarea name="notes" rows={3} className={field}/></label>
     </div>
     <div className="mt-7 flex justify-end gap-2"><button type="button" onClick={close} className="rounded-xl border border-white/[.08] px-5 py-3 text-xs font-bold text-[#91a3aa]">Vazgeç</button><button disabled={!manual && !profile} className="rounded-xl bg-aqua px-5 py-3 text-xs font-extrabold text-ink disabled:opacity-40">Ekipmanı ekle</button></div>
-  </form></div>;
+  </form></ModalDialog>;
 }

@@ -264,7 +264,9 @@ export function createAnalyzer(resolver:KnowledgeResolver):AnalyzeAquarium{
   const heaterReady=!(p.category==="heater"||p.integratedHeaterW)||Boolean(p.recommendedMinL||p.recommendedMaxL||p.integratedHeaterW||(p.category==="heater"&&p.powerW));
   return filterReady&&heaterReady&&airPumpReady;
  });
- const safetyEquipmentInputCount=equipment.filter(item=>{const profile=resolver.profileForEquipment(item);return !profile?.passiveComponent&&(item.category==="filter"||item.category==="heater"||(airDrivenFilters.length>0&&item.category==="air_pump"));}).length;
+ // Güvenlik hesabına giren ekipman türleri: filtre, ısıtıcı ve (hava motoruyla çalışan filtre varsa) hava motoru.
+ const entersSafetyCalculation=(category:Equipment["category"])=>category==="filter"||category==="heater"||(airDrivenFilters.length>0&&category==="air_pump");
+ const safetyEquipmentInputCount=equipment.filter(item=>{const profile=resolver.profileForEquipment(item);return !profile?.passiveComponent&&entersSafetyCalculation(item.category);}).length;
  // Aynı katalog cihazı iki kez kayıtlıysa ve yalnız birine değer girildiyse diğeri eksik sayılmaya devam eder; bu yüzden kimlikle değil kayıtla karşılaştırılır.
  const missingCapacityEquipment=safetyEquipment.filter(profile=>!calculationReadyEquipment.includes(profile));
  const totalDataCount=animals.length+safetyEquipmentInputCount; const verifiedDataCount=verifiedMatchedProfiles.length+calculationReadyEquipment.length; const confidenceScore=totalDataCount?clamp(verifiedDataCount/totalDataCount*100):50;
@@ -283,7 +285,9 @@ export function createAnalyzer(resolver:KnowledgeResolver):AnalyzeAquarium{
   {key:"confidence",label:"Veri güveni",score:confidenceScore,status:status(confidenceScore),detail:totalDataCount?`${verifiedDataCount}/${totalDataCount} güvenlik kaydı hesaplamaya hazır${userValueReadyCount?` · ${userValueReadyCount} kayıt senin girdiğin değerle`:""}`:"Güvenlik hesabı için kayıt bulunamadı"},
  ];
  const warnings:HealthAnalysis["warnings"]=[];
- const unmatchedAnimalCount=animals.length-matchedProfiles.length; const unmatchedEquipmentCount=equipment.length-matchedEquipment.length;
+ // 1.9.0 (docs/DECISIONS/0018-eslesmeyen-ekipman-uyarisi.md): yalnızca güvenlik hesabına giren türdeki eşleşmeyen kayıt uyarı üretir;
+ // aydınlatma, CO₂, UV, dozaj pompası gibi hesaba hiç girmeyen cihaz listede olmasa da uyarı üretmez.
+ const unmatchedAnimalCount=animals.length-matchedProfiles.length; const unmatchedEquipmentCount=equipment.filter(item=>entersSafetyCalculation(item.category)&&!resolver.profileForEquipment(item)&&!userValueFor(item)).length;
  const unverifiedAnimalCount=matchedProfiles.length-verifiedMatchedProfiles.length; const unverifiedEquipmentCount=matchedEquipment.length-verifiedEquipment.length;
  const missingCapacityCount=missingCapacityEquipment.length;
  if(unmatchedAnimalCount)warnings.push({level:"warning",title:"Katalogla eşleşmeyen canlı kaydı var",message:`${unmatchedAnimalCount} canlı kaydı tanınmadığı için biyolojik yük ve uyumluluk hesabına dahil edilmedi.`});

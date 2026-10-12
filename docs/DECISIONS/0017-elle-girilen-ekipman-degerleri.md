@@ -1,7 +1,7 @@
 # 0017 — Elle girilen ekipman değerleri
 
 - Tarih: 2026-10-11
-- Durum: Ürün sahibi onayladı; Codex denetimi iki turda tamamlandı (2. tur 2026-10-11, temiz) — ürün sahibi (`buraksenfx`) özelliği 2026-10-11'de açıkça istedi ("bunu istiyorum") ve aynı gün ekran taslağını onayladı ("böyle olsun; kullanıcı ne yaptığını rahatça anlasın, bir de esnek olabilsin"). `5888f1c` olarak kaydedildi ve PR #24 (`https://github.com/ckaracora/AquaMind/pull/24`) açıldı; `main` birleştirmesi ve yayın ürün sahibinin onayını bekliyor.
+- Durum: Kabul edildi; Codex denetimi iki turda tamamlandı (2. tur 2026-10-11, temiz) — ürün sahibi (`buraksenfx`) özelliği 2026-10-11'de açıkça istedi ("bunu istiyorum") ve aynı gün ekran taslağını onayladı ("böyle olsun; kullanıcı ne yaptığını rahatça anlasın, bir de esnek olabilsin"). `5888f1c` olarak kaydedildi; PR #24 (`https://github.com/ckaracora/AquaMind/pull/24`) 2026-10-11'de (UTC) merge commit yöntemiyle `main` dalına birleştirildi (`ca40a02`) ve canlıda.
 
 ## Bağlam
 
@@ -54,7 +54,7 @@ Sonuç: bu cihazların sahibi sağlık analizinde filtre ya da ısıtıcı sonuc
 ## Bilinen sınırlar
 
 - Değeri kullanıcı girer; doğruluğu denetlenemez. Sonuç bu yüzden açıkça işaretlenir.
-- Listede olmayan ve hesaba hiç girmeyen cihaz türleri (aydınlatma, CO₂ ve benzeri) elle yazılarak kaydedilebilir, ama motorun mevcut "Katalogla eşleşmeyen ekipman kaydı var" uyarısı bunlar için de çıkar; bu uyarı kuralı bu kararla değiştirilmedi (örnek akvaryumdaki ISTA CO₂ seti bugün de aynı uyarıyı veriyor). Değiştirilmesi ayrı bir ürün sahibi onayı ister.
+- Listede olmayan ve hesaba hiç girmeyen cihaz türleri (aydınlatma, CO₂ ve benzeri) elle yazılarak kaydedilebilir, ama motorun mevcut "Katalogla eşleşmeyen ekipman kaydı var" uyarısı bunlar için de çıkar; bu uyarı kuralı bu kararla değiştirilmedi (örnek akvaryumdaki ISTA CO₂ seti bugün de aynı uyarıyı veriyor). Değiştirilmesi ayrı bir ürün sahibi onayı ister. Ürün sahibi 2026-10-11'de onayladı; kural 1.9.0 ile değişti (bkz. `0018-eslesmeyen-ekipman-uyarisi.md`).
 - Elle girilen debiyle "güçlü akış" uyarısı da doğrulanmış kayıttaki gibi hesaplanır.
 
 ## Geri alma
