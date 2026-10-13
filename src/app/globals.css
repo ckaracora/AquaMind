@@ -17,10 +17,20 @@ body {
 }
 button, a { -webkit-tap-highlight-color: transparent; }
 button { font: inherit; }
+/* iPhone, yazısı 16 pikselden küçük bir alana dokunulunca sayfayı kendiliğinden yakınlaştırır. Dokunmatik cihazlarda ve dar ekranda
+   alan yazısı en az 16 piksel tutulur; daha büyük yazılı alanlara (text-lg ve üstü) dokunulmaz. */
+@media (pointer: coarse), (max-width: 639px) {
+  input:not(.text-lg):not(.text-xl):not(.text-2xl):not(.text-3xl),
+  select:not(.text-lg):not(.text-xl):not(.text-2xl):not(.text-3xl),
+  textarea:not(.text-lg):not(.text-xl):not(.text-2xl):not(.text-3xl) { font-size: 16px !important; }
+}
 ::-webkit-scrollbar { width: 8px; }
 ::-webkit-scrollbar-thumb { background: #243941; border-radius: 99px; }
 
 @layer components {
   .surface { @apply rounded-2xl border border-white/[.07] bg-[#0d1b23]/90 shadow-glow; }
   .eyebrow { @apply text-[11px] font-bold uppercase tracking-[.16em] text-[#68808a]; }
+  /* Açılan pencerenin en büyük yüksekliği. Telefonda adres çubuğu görünürken `vh` ekranın görünen kısmından büyüktür ve alttaki
+     düğmeler tarayıcı çubuğunun altında kalır; `dvh` görünen kısmı ölçer. `dvh` tanımayan tarayıcı ilk satırı kullanır. */
+  .sheet-height { max-height: 92vh; max-height: 92dvh; }
 }
