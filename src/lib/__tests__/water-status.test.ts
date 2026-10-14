@@ -2,7 +2,7 @@ import { describe, expect, it } from "vitest";
 import type { HealthAnalysis } from "@aquamind/compatibility-engine";
 import { speciesById, speciesForLivestock } from "@/data/catalog";
 import type { Livestock } from "@/types/aquarium";
-import { commonSpeciesRanges, healthSummary, nitrateStatus, rangeStatus, tdsStatus } from "@/lib/water-status";
+import { commonSpeciesRanges, healthSummary, latestReading, nitrateStatus, parameterStatuses, pendingStatus, rangeStatus, tdsStatus, unavailableStatus } from "@/lib/water-status";
 
 const animal = (id: string): Livestock => {
   const profile = speciesById(id)!;
@@ -56,5 +56,41 @@ describe("healthSummary", () => {
     expect(healthSummary(analysis("danger"), true).tone).toBe("danger");
     expect(healthSummary(analysis("warning"), true).tone).toBe("warning");
     expect(healthSummary(analysis("good"), true).text).not.toMatch(/her şey yolunda/);
+  });
+});
+
+describe("parameterStatuses ve latestReading", () => {
+  it("su değeri kartlarını son ölçüme ve türlere göre etiketler (ana sayfa, akvaryum ve su sayfaları aynı kuralı kullanır)", () => {
+    const neon = speciesById("neon-tetra")!;
+    const statuses = parameterStatuses([animal("neon-tetra")], speciesForLivestock, reading({ temperature: neon.temperature[1] + 5, ph: neon.ph[0], nitrate: 10, specificGravity: 1.024 }), "freshwater");
+    expect(statuses.temperature).toEqual({ label: "Aralık dışında", tone: "danger" });
+    expect(statuses.ph).toEqual({ label: "Uygun", tone: "good" });
+    expect(statuses.nitrate).toEqual({ label: "Uygun", tone: "good" });
+    expect(statuses.tds).toEqual({ label: "Ölçüm yok", tone: "neutral" });
+    expect(statuses.specificGravity).toEqual({ label: "Bilgi amaçlı", tone: "neutral" });
+  });
+
+  it("ölçüm yokken hiçbir kart olumlu etiket taşımaz", () => {
+    const statuses = parameterStatuses([animal("neon-tetra")], speciesForLivestock, undefined, "freshwater");
+    expect(Object.values(statuses).map((status) => status.label)).toEqual(["Ölçüm yok", "Ölçüm yok", "Ölçüm yok", "Ölçüm yok", "Ölçüm yok"]);
+  });
+
+  it("tür aralıkları henüz yokken sıcaklık ve pH bekleme ya da hata etiketi alır; katalog gerektirmeyen etiketler yine hesaplanır", () => {
+    const latest = reading({ temperature: 25, ph: 7, nitrate: 10, tds: 180 });
+    const loading = parameterStatuses([animal("neon-tetra")], undefined, latest, "freshwater");
+    expect([loading.temperature, loading.ph]).toEqual([pendingStatus, pendingStatus]);
+    expect([loading.nitrate.label, loading.tds.label]).toEqual(["Uygun", "Bilgi amaçlı"]);
+    const failed = parameterStatuses([animal("neon-tetra")], undefined, latest, "freshwater", unavailableStatus);
+    expect([failed.temperature, failed.ph]).toEqual([{ label: "Yüklenemedi", tone: "warning" }, { label: "Yüklenemedi", tone: "warning" }]);
+    // Ölçülmemiş değer için katalog beklenmez.
+    expect(parameterStatuses([animal("neon-tetra")], undefined, reading({}), "freshwater", unavailableStatus).temperature.label).toBe("Ölçüm yok");
+  });
+
+  it("en son ölçümü kayıt sırasına değil ölçüm tarihine göre seçer", () => {
+    const older = { id: "eski", measuredAt: "2026-09-01T08:00:00.000Z" };
+    const newer = { id: "yeni", measuredAt: "2026-09-20T08:00:00.000Z" };
+    expect(latestReading([older, newer])?.id).toBe("yeni");
+    expect(latestReading([newer, older])?.id).toBe("yeni");
+    expect(latestReading([])).toBeUndefined();
   });
 });

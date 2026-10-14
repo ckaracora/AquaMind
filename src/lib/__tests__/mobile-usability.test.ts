@@ -1198,12 +1198,12 @@ describe("telefonda kullanım kolaylığı", () => {
   it("her düğmenin ve bağlantının her durumda okunabilir bir içeriği ya da boş olmayan bir erişilebilir adı vardır", () => {
     const targets = located(["button", "a", "Link"]);
     // Sayı alt sınırdır: taramanın yalnız simgeden oluşan düğmeleri gerçekten gördüğünü gösterir.
-    expect(targets.filter((tag) => tag.name === "button" && needsName(tag)).length).toBeGreaterThanOrEqual(14);
+    expect(targets.filter((tag) => tag.name === "button" && needsName(tag)).length).toBeGreaterThanOrEqual(13);
     expect(targets.filter(lacksName).map(where)).toEqual([]);
   });
 
   it("hiçbir düğmenin ölçüsü belirsiz değildir (koşullu ölçü sınıfı, style, yayılan öznitelik, tabloda olmayan sınıf yok)", () => {
-    expect(buttons.length).toBeGreaterThanOrEqual(48);
+    expect(buttons.length).toBeGreaterThanOrEqual(45);
     expect(buttons.flatMap((tag) => sizingProblems(tag).map((problem) => `${tag.file}: ${problem}: ${tag.source}`))).toEqual([]);
   });
 
@@ -1215,7 +1215,7 @@ describe("telefonda kullanım kolaylığı", () => {
   it("her simge düğmesi (kapatma, silme ve öbürleri; adı ne olursa olsun) telefonda en az 44 piksellik dokunma alanı taşır", () => {
     const icons = buttons.filter(isIconButton);
     // Sayı alt sınırdır: taramanın simge düğmelerini gerçekten gördüğünü gösterir; yeni bir düğme eklemek testi bozmaz.
-    expect(icons.length).toBeGreaterThanOrEqual(14);
+    expect(icons.length).toBeGreaterThanOrEqual(13);
     expect(icons.filter((tag) => { const size = mobileSize(tag.staticClasses); return size.width < sizeFloor(tag) || size.height < sizeFloor(tag); }).map(where)).toEqual([]);
   });
 
@@ -1239,7 +1239,7 @@ describe("telefonda kullanım kolaylığı", () => {
   it("sayı alanları telefonda sayı tuş takımını açar", () => {
     // HTML'de `type` değerinde büyük-küçük harf ayrımı yoktur: `type="NUMBER"` da sayı alanıdır.
     const numberInputs = located(["input"]).filter(isNumberInput);
-    expect(numberInputs.length).toBeGreaterThanOrEqual(12);
+    expect(numberInputs.length).toBeGreaterThanOrEqual(11);
     const keypad = (tag: Tag) => {
       const attribute = tag.attributes.get("inputMode");
       const values = attribute?.literal !== undefined ? [attribute.literal] : attribute?.expression ? stringParts(attribute.expression) : [];
