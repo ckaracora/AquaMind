@@ -98,6 +98,8 @@ interface Tag {
   /** `className` yok, dizgi ya da şablon dizgisi; başka bir ifadeyse (değişken, koşul, çağrı) `false`. */
   classNameReadable: boolean;
   hasSpread: boolean;
+  /** Öğe bir `form` öğesinin içinde (türü verilmemiş düğme orada formu gönderir). */
+  insideForm: boolean;
   /** Açılış etiketi ve çocuklar; okunabilir içerik ve ad bunlardan değerlendirilir (bkz. `contentState`, `readableState`). */
   opening: ts.JsxOpeningLikeElement;
   children: readonly ts.JsxChild[];
@@ -381,6 +383,13 @@ const labelTexts = (tag: Tag): string[] => attributesOf(tag.opening, "aria-label
   if (ts.isStringLiteral(initializer)) return [jsxStringValue(initializer)];
   return ts.isJsxExpression(initializer) && initializer.expression ? stringParts(initializer.expression) : [];
 }).map(normalizeLabel);
+/**
+ * Düğme bir şey yapıyor mu? Tıklama işleyicisi (`onClick`) vardır ya da bir forma bağlıdır (formun içindedir ya da `form`
+ * özniteliği taşır) ve türü "button" değildir (formu gönderir ya da sıfırlar). Türü "button" olan düğme forma bağlı olsa da
+ * işleyicisiz hiçbir şey yapmaz. Üst öğede dinlenen tıklama görülmez; böyle bir düğmeye işleyici açıkça yazılır.
+ */
+const doesSomething = (tag: Tag) => tag.attributes.has("onClick") || ((tag.insideForm || tag.attributes.has("form")) && tag.attributes.get("type")?.literal?.toLowerCase() !== "button");
+
 /** Sayı alanı: `type` değeri düz dizgiyle "number" (HTML'de bu değerde büyük-küçük harf ayrımı yoktur). */
 const isNumberInput = (tag: Tag) => tag.attributes.get("type")?.literal?.toLowerCase() === "number";
 
@@ -466,8 +475,8 @@ function jsxTags(text: string, file = "sample.tsx"): Tag[] {
   const tree = ts.createSourceFile(file, text, ts.ScriptTarget.Latest, true, ts.ScriptKind.TSX);
   const resolver = resolverOf(tree);
   const tags: Tag[] = [];
-  const describeTag = (opening: ts.JsxOpeningElement | ts.JsxSelfClosingElement, children: readonly ts.JsxChild[]): Tag => {
-    const tag: Tag = { name: opening.tagName.getText(tree), attributes: new Map(), staticClasses: [], dynamicClasses: [], gluedClasses: [], opaqueClasses: [], classNameReadable: true, hasSpread: false, opening, children, source: opening.getText(tree).slice(0, 90) };
+  const describeTag = (opening: ts.JsxOpeningElement | ts.JsxSelfClosingElement, children: readonly ts.JsxChild[], insideForm: boolean): Tag => {
+    const tag: Tag = { name: opening.tagName.getText(tree), attributes: new Map(), staticClasses: [], dynamicClasses: [], gluedClasses: [], opaqueClasses: [], classNameReadable: true, hasSpread: false, insideForm, opening, children, source: opening.getText(tree).slice(0, 90) };
     for (const property of opening.attributes.properties) {
       if (!ts.isJsxAttribute(property)) { tag.hasSpread = true; continue; }
       // Tireli adlarda (`aria-…`, `data-…`) büyük-küçük harf ayrımı yoktur ve TypeScript bunları denetlemez; küçük harfle saklanır.
@@ -501,12 +510,13 @@ function jsxTags(text: string, file = "sample.tsx"): Tag[] {
     }
     return tag;
   };
-  const visit = (node: ts.Node) => {
-    if (ts.isJsxElement(node)) tags.push(describeTag(node.openingElement, node.children));
-    else if (ts.isJsxSelfClosingElement(node)) tags.push(describeTag(node, []));
-    ts.forEachChild(node, visit);
+  const visit = (node: ts.Node, insideForm: boolean) => {
+    if (ts.isJsxElement(node)) tags.push(describeTag(node.openingElement, node.children, insideForm));
+    else if (ts.isJsxSelfClosingElement(node)) tags.push(describeTag(node, [], insideForm));
+    const inside = insideForm || (ts.isJsxElement(node) && node.openingElement.tagName.getText(tree) === "form");
+    ts.forEachChild(node, (child) => visit(child, inside));
   };
-  visit(tree);
+  visit(tree, false);
   return tags;
 }
 
@@ -632,10 +642,6 @@ function mobileSize(classes: readonly string[]): MobileSize {
  */
 const SIZE_EXCEPTIONS: readonly { file: string; label: string; classes: readonly string[]; least: number; reason: string }[] = [
   { file: "src/components/mobile-nav.tsx", label: "menüyü kapat", classes: ["inset-0"], least: 0, reason: "yan menünün arka planı: ekranı kaplar, ölçüsü sınıftan değil konumdan gelir" },
-  { file: "src/app/page.tsx", label: "ara", classes: [], least: 36, reason: "üst çubuktaki özelliği olmayan düğme; ürün kararı bekliyor" },
-  { file: "src/app/page.tsx", label: "bildirimler", classes: [], least: 36, reason: "üst çubuktaki özelliği olmayan düğme; ürün kararı bekliyor" },
-  { file: "src/components/page-header.tsx", label: "ara", classes: [], least: 36, reason: "üst çubuktaki özelliği olmayan düğme; ürün kararı bekliyor" },
-  { file: "src/components/page-header.tsx", label: "bildirimler", classes: [], least: 36, reason: "üst çubuktaki özelliği olmayan düğme; ürün kararı bekliyor" },
 ];
 const exceptionFor = (tag: Tag & { file: string }) => SIZE_EXCEPTIONS.find((exception) => exception.file === tag.file && labelTexts(tag).includes(exception.label) && exception.classes.every((name) => tag.staticClasses.includes(name)));
 /** Düğmenin telefonda taşıması gereken en küçük ölçü: 44 piksel, bilinen istisnada o istisnanın sınırı. */
@@ -1014,15 +1020,33 @@ describe("telefondaki ölçü hesabı", () => {
     expect(lacksName(firstTag("<button><Trash2 size={14} aria-label=\"Sil\"/></button>"))).toBe(false);
   });
 
+  it("bir şey yapmayan düğmeyi tanır: işleyicisi yok ve formu göndermiyor", () => {
+    const works = (code: string) => doesSomething(jsxTags(`const view = ${code};`).filter((tag) => tag.name === "button")[0]);
+    expect(works("<button onClick={save}>Kaydet</button>")).toBe(true);
+    expect(works("<form onSubmit={save}><div><button>Kaydet</button></div></form>")).toBe(true);
+    expect(works("<form onSubmit={save}><button type=\"submit\">Kaydet</button></form>")).toBe(true);
+    expect(works("<button type=\"submit\" form=\"measurement\">Kaydet</button>")).toBe(true);
+    expect(works("<button form=\"measurement\">Kaydet</button>")).toBe(true);
+    expect(works("<button type=\"button\" form=\"measurement\" onClick={close}>Vazgeç</button>")).toBe(true);
+    // Forma bağlı olmak yetmez: türü "button" olan düğme formu göndermez.
+    expect(works("<button type=\"button\" form=\"measurement\">Vazgeç</button>")).toBe(false);
+    expect(works("<button>Yeni kayıt</button>")).toBe(false);
+    expect(works("<button aria-label=\"Ara\" className=\"grid size-11\"><Search size={18}/></button>")).toBe(false);
+    expect(works("<button type=\"submit\">Kaydet</button>")).toBe(false);
+    expect(works("<form onSubmit={save}><button type=\"button\">Vazgeç</button></form>")).toBe(false);
+    expect(works("<form onSubmit={save}><button type=\"BUTTON\">Vazgeç</button></form>")).toBe(false);
+    expect(works("<div><form onSubmit={save}/><button>Kaydet</button></div>")).toBe(false);
+  });
+
   it("bilinen istisnaları dosya, ad ve sınıfla tanır; öbür her düğmenin alt sınırı 44 pikseldir", () => {
     const button = (file: string, jsx: string) => ({ file, ...firstTag(jsx) });
-    expect(sizeFloor(button("src/app/page.tsx", "<button aria-label=\"Ara\" className=\"grid size-9\"/>"))).toBe(36);
-    expect(sizeFloor(button("src/components/page-header.tsx", "<button aria-label=\"Bildirimler\" className=\"grid size-9\"/>"))).toBe(36);
     expect(sizeFloor(button("src/components/mobile-nav.tsx", "<button aria-label=\"Menüyü kapat\" className=\"absolute inset-0\"/>"))).toBe(0);
+    expect(sizeFloor(button("src/components/mobile-nav.tsx", "<button aria-label=\"MENÜYÜ KAPAT&#8203;\" className=\"fixed inset-0\"/>"))).toBe(0);
     // Aynı ad başka dosyada, aynı dosyada başka ad ya da sınıfı tutmayan düğme istisna değildir.
     expect(sizeFloor(button("src/components/mobile-nav.tsx", "<button aria-label=\"Menüyü kapat\" className=\"grid size-11\"/>"))).toBe(44);
     expect(sizeFloor(button("src/app/plants/page.tsx", "<button aria-label=\"Ara\" className=\"grid size-9\"/>"))).toBe(44);
     expect(sizeFloor(button("src/app/page.tsx", "<button aria-label=\"Sil\" className=\"grid size-9\"/>"))).toBe(44);
+    expect(sizeFloor(button("src/app/page.tsx", "<button aria-label=\"Ara\" className=\"grid size-9\"/>"))).toBe(44);
     expect(sizeFloor(button("src/app/page.tsx", "<button className=\"grid size-9\"/>"))).toBe(44);
   });
 
@@ -1179,8 +1203,13 @@ describe("telefonda kullanım kolaylığı", () => {
   });
 
   it("hiçbir düğmenin ölçüsü belirsiz değildir (koşullu ölçü sınıfı, style, yayılan öznitelik, tabloda olmayan sınıf yok)", () => {
-    expect(buttons.length).toBeGreaterThanOrEqual(55);
+    expect(buttons.length).toBeGreaterThanOrEqual(48);
     expect(buttons.flatMap((tag) => sizingProblems(tag).map((problem) => `${tag.file}: ${problem}: ${tag.source}`))).toEqual([]);
+  });
+
+  it("her düğme bir şey yapar, her bağlantının bir adresi vardır (tıklanınca hiçbir şey olmayan öğe kalmaz)", () => {
+    expect(buttons.filter((tag) => !doesSomething(tag)).map(where)).toEqual([]);
+    expect(located(["a", "Link"]).filter((tag) => !tag.attributes.has("href")).map(where)).toEqual([]);
   });
 
   it("her simge düğmesi (kapatma, silme ve öbürleri; adı ne olursa olsun) telefonda en az 44 piksellik dokunma alanı taşır", () => {
@@ -1196,7 +1225,7 @@ describe("telefonda kullanım kolaylığı", () => {
 
   it("ölçü kurallarının her istisnası en çok bir düğmeyle eşleşir", () => {
     for (const exception of SIZE_EXCEPTIONS) expect(buttons.filter((tag) => exceptionFor(tag) === exception).map(where).length, `${exception.file}: ${exception.label}`).toBeLessThanOrEqual(1);
-    // Bugünkü istisnalar: yan menünün arka planı ve üst çubuktaki dört düğme. Sayı artarsa bu liste gerekçesiyle güncellenir.
+    // Bugünkü tek istisna yan menünün arka planı. Sayı artarsa bu liste gerekçesiyle güncellenir.
     expect(buttons.filter((tag) => exceptionFor(tag) !== undefined).length).toBeLessThanOrEqual(SIZE_EXCEPTIONS.length);
   });
 

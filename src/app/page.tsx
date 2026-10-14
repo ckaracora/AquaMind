@@ -1,6 +1,6 @@
 "use client";
 
-import { Activity, Bell, CalendarDays, ChevronRight, CircleGauge, Droplets, FlaskConical, Plus, Search, Thermometer, Waves } from "lucide-react";
+import { Activity, CalendarDays, ChevronRight, CircleGauge, Droplets, FlaskConical, Plus, Thermometer, Waves } from "lucide-react";
 import { useEffect, useMemo, useState } from "react";
 import { MobileNav } from "@/components/mobile-nav";
 import { ParameterCard } from "@/components/parameter-card";
@@ -29,7 +29,7 @@ export default function Dashboard() {
   const animals = useMemo(() => livestock.filter((item) => item.aquariumId === aquariumId), [livestock, aquariumId]);
   const devices = useMemo(() => equipment.filter((item) => item.aquariumId === aquariumId), [equipment, aquariumId]);
   const { lookup, failed: statusLoadFailed } = useCatalogLookup(animals, devices, Boolean(aquarium));
-  if (!aquarium) return <div className="min-h-screen"><Sidebar/><main className="pb-28 lg:ml-[248px]"><div className="grid min-h-screen place-items-center px-5 text-center"><div><Waves size={45} className="mx-auto mb-5 text-aqua"/><h1 className="text-2xl font-extrabold">AquaMind’e hoş geldin</h1><p className="mt-2 text-sm text-[#71858d]">Dashboard’u kullanmaya başlamak için ilk akvaryumunu oluştur.</p><a href="/aquariums/new" className="mt-6 inline-flex items-center gap-2 rounded-xl bg-aqua px-5 py-3 text-xs font-extrabold text-ink"><Plus size={16}/>Akvaryum oluştur</a></div></div></main><MobileNav/></div>;
+  if (!aquarium) return <div className="min-h-screen"><Sidebar/><main className="pb-28 lg:ml-[248px]"><div className="grid min-h-screen place-items-center px-5 text-center"><div><Waves size={45} className="mx-auto mb-5 text-aqua"/><h1 className="text-2xl font-extrabold">AquaMind’e hoş geldin</h1><p className="mt-2 text-sm text-[#71858d]">Dashboard’u kullanmaya başlamak için ilk akvaryumunu oluştur.</p><a href="/aquariums/new" className="mt-6 inline-flex min-h-11 items-center gap-2 rounded-xl bg-aqua px-5 py-3 text-xs font-extrabold text-ink sm:min-h-0"><Plus size={16}/>Akvaryum oluştur</a></div></div></main><MobileNav/></div>;
   const aquariumReadings = waterReadings.filter((item) => item.aquariumId === aquarium.id);
   // Sağlık sayfasıyla aynı kural: en son ölçüm tarihe göre seçilir.
   const latest = [...aquariumReadings].sort((a, b) => +new Date(b.measuredAt) - +new Date(a.measuredAt))[0];
@@ -46,12 +46,11 @@ export default function Dashboard() {
       <header className="flex h-[74px] items-center justify-between border-b border-white/[.05] px-5 sm:px-8 lg:px-10">
         <div className="flex items-center gap-3 lg:hidden"><span className="grid size-9 place-items-center rounded-xl bg-aqua text-ink"><Waves size={20}/></span><span className="font-extrabold">AquaMind</span></div>
         <div className="hidden items-center gap-2 text-xs text-[#647981] lg:flex"><span>Panel</span><ChevronRight size={13}/><span className="text-[#aab9be]">Genel Bakış</span></div>
-        <div className="flex items-center gap-2"><button aria-label="Ara" className="grid size-9 place-items-center rounded-xl text-[#82969e] hover:bg-white/5"><Search size={18}/></button><button aria-label="Bildirimler" className="relative grid size-9 place-items-center rounded-xl text-[#82969e] hover:bg-white/5"><Bell size={18}/><span className="absolute right-2 top-2 size-1.5 rounded-full bg-amber-400"/></button><button className="hidden rounded-xl bg-aqua px-4 py-2.5 text-xs font-extrabold text-ink sm:flex sm:items-center sm:gap-2"><Plus size={16}/>Yeni kayıt</button></div>
       </header>
       <div className="mx-auto max-w-[1440px] px-5 py-7 sm:px-8 lg:px-10 lg:py-10">
         <section className="mb-8 flex flex-col justify-between gap-4 sm:flex-row sm:items-end">
-          <div><p className="eyebrow mb-2 text-aqua">{new Intl.DateTimeFormat("tr-TR",{day:"numeric",month:"long",weekday:"long"}).format(new Date())}</p><h1 className="text-2xl font-extrabold tracking-tight sm:text-3xl">{greeting ?? "Merhaba."}</h1><p className={`mt-2 text-sm ${summaryTones[summary.tone]}`}>{summary.text} <a href={`/aquariums/${aquarium.id}/health`} className="font-bold text-aqua hover:underline">Sağlık analizini aç</a></p></div>
-          <label className="surface flex w-full items-center justify-between gap-4 px-4 py-3 text-left sm:w-auto"><div><p className="text-[10px] font-bold uppercase tracking-wider text-[#647981]">Aktif akvaryum</p><select value={aquarium.id} onChange={e=>setSelectedId(e.target.value)} className="mt-1 min-w-40 bg-transparent text-sm font-bold outline-none">{aquariums.map(item=><option key={item.id} value={item.id}>{item.name}</option>)}</select></div><ChevronRight size={16} className="text-aqua"/></label>
+          <div><p className="eyebrow mb-2 text-aqua">{new Intl.DateTimeFormat("tr-TR",{day:"numeric",month:"long",weekday:"long"}).format(new Date())}</p><h1 className="text-2xl font-extrabold tracking-tight sm:text-3xl">{greeting ?? "Merhaba."}</h1><p className={`mt-2 text-sm ${summaryTones[summary.tone]}`}>{summary.text} <a href={`/aquariums/${aquarium.id}/health`} className="-my-3.5 inline-block py-3.5 font-bold text-aqua hover:underline">Sağlık analizini aç</a></p></div>
+          <label className="surface flex w-full items-center justify-between gap-4 px-4 py-3 text-left sm:w-auto"><div><p className="text-[10px] font-bold uppercase tracking-wider text-[#647981]">Aktif akvaryum</p><select value={aquarium.id} onChange={e=>setSelectedId(e.target.value)} className="-mb-2.5 -mt-1.5 min-h-11 min-w-40 bg-transparent text-sm font-bold outline-none">{aquariums.map(item=><option key={item.id} value={item.id}>{item.name}</option>)}</select></div><ChevronRight size={16} className="text-aqua"/></label>
         </section>
 
         <section className="mb-5 grid grid-cols-2 gap-3 xl:grid-cols-4">
@@ -63,7 +62,7 @@ export default function Dashboard() {
 
         <div className="grid gap-5 xl:grid-cols-[1.45fr_.9fr]">
           <section className="surface overflow-hidden">
-            <div className="flex items-center justify-between border-b border-white/[.06] p-5 sm:p-6"><div><p className="eyebrow">Akvaryumum</p><h2 className="mt-1 text-lg font-extrabold">{aquarium.name}</h2></div><button className="text-xs font-bold text-aqua">Detayları gör</button></div>
+            <div className="flex items-center justify-between border-b border-white/[.06] p-5 sm:p-6"><div><p className="eyebrow">Akvaryumum</p><h2 className="mt-1 text-lg font-extrabold">{aquarium.name}</h2></div><a href={`/aquariums/${aquarium.id}`} className="-my-3.5 inline-flex min-h-11 shrink-0 items-center text-xs font-bold text-aqua">Detayları gör</a></div>
             <div className="grid sm:grid-cols-[1.1fr_1fr]">
               <div className="relative min-h-[210px] overflow-hidden bg-gradient-to-br from-[#123441] via-[#0d5960] to-[#09232c] p-6">
                 <div className="absolute -bottom-16 -right-8 size-52 rounded-full bg-aqua/10 blur-2xl"/><div className="absolute left-8 top-14 h-24 w-3 rounded-full bg-emerald-300/30 blur-sm"/><div className="absolute left-16 top-24 h-20 w-2 -rotate-12 rounded-full bg-emerald-400/30"/>
@@ -79,7 +78,7 @@ export default function Dashboard() {
           <section className="surface p-5 sm:p-6">
             <div className="mb-5 flex items-center justify-between"><div><p className="eyebrow">Plan</p><h2 className="mt-1 text-lg font-extrabold">Yaklaşan bakımlar</h2></div><a href={`/maintenance?aquarium=${aquarium.id}`} aria-label="Bakım ekle" className="grid size-11 place-items-center rounded-xl bg-white/[.05] text-aqua sm:size-9"><Plus size={17}/></a></div>
             <div className="space-y-2">{upcomingTasks.map((task, index) => <div key={task.id} className="flex items-center gap-3 rounded-xl border border-white/[.05] bg-white/[.018] p-3.5"><span className={`grid size-10 shrink-0 place-items-center rounded-xl ${index === 0 ? 'bg-aqua/10 text-aqua' : 'bg-white/[.04] text-[#71858d]'}`}>{index === 0 ? <Droplets size={18}/> : <CalendarDays size={18}/>}</span><div className="min-w-0 flex-1"><p className="truncate text-xs font-bold">{task.title}</p><p className="mt-1 text-[10px] text-[#647981]">{formatDay(task.dueAt)}</p></div><span className="text-[10px] font-bold text-[#71858d]">{formatDay(task.dueAt)}</span></div>)}</div>
-            <a href={`/maintenance?aquarium=${aquarium.id}`} className="mt-4 block w-full rounded-xl border border-white/[.06] py-3 text-center text-xs font-bold text-[#82969e] hover:text-white">Tüm bakım planı</a>
+            <a href={`/maintenance?aquarium=${aquarium.id}`} className="mt-4 flex min-h-11 w-full items-center justify-center rounded-xl border border-white/[.06] py-3 text-xs font-bold text-[#82969e] hover:text-white sm:min-h-0">Tüm bakım planı</a>
           </section>
         </div>
 
