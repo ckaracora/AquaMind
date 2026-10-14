@@ -2,26 +2,34 @@
 
 import { useParams } from "next/navigation";
 import { Activity, ArrowLeft, CalendarDays, ChevronRight, Droplets, Fish, Leaf, Pencil, Plus, Ruler, SlidersHorizontal, Thermometer } from "lucide-react";
+import { useMemo } from "react";
 import { AppShell } from "@/components/app-shell";
 import { PageHeader } from "@/components/page-header";
 import { calculateGrossVolume } from "@/lib/aquarium-storage";
+import { useCatalogLookup } from "@/lib/use-catalog-lookup";
+import { latestReading, parameterStatuses, pendingStatus, unavailableStatus, type ParameterStatus, type StatusTone } from "@/lib/water-status";
 import { useAquariums } from "@/providers/aquarium-provider";
 
 const formatDate = (date: string) => new Intl.DateTimeFormat("tr-TR", { day: "numeric", month: "short", year: "numeric" }).format(new Date(date));
+const statusText: Record<StatusTone, string> = { good: "text-emerald-400", warning: "text-amber-300", danger: "text-red-300", neutral: "text-[#82969e]" };
+const shown = (value: number | undefined, unit = "") => value === undefined ? "—" : `${value}${unit}`;
 const tabs = [["Genel Bakış", ""], ["Sağlık Analizi", "health"], ["Su Değerleri", "/water"], ["Bakım", "/maintenance"], ["Canlılar", "/livestock"], ["Bitkiler", "/plants"], ["Ekipmanlar", "/equipment"]] as const;
 
 export default function AquariumDetailPage() {
   const { id } = useParams<{ id: string }>();
   const { aquariums, hydrated, waterReadings, maintenanceTasks, livestock, plants, equipment } = useAquariums();
   const aquarium = aquariums.find((item) => item.id === id);
+  const animals = useMemo(() => livestock.filter((item) => item.aquariumId === id), [livestock, id]);
+  // Su değeri kartlarının etiketleri ana sayfayla aynı kuraldan gelir; yalnızca bu akvaryumdaki türlerin katalog kayıtları yüklenir
+  // (docs/DECISIONS/0016-gereken-katalog-kayitlarinin-yuklenmesi.md).
+  const { lookup, failed, retry } = useCatalogLookup(animals, [], Boolean(aquarium));
 
   if (!hydrated) return <AppShell><PageHeader title="Akvaryum Detayı"/><div className="grid min-h-[60vh] place-items-center text-sm text-[#71858d]">Akvaryum yükleniyor…</div></AppShell>;
   if (!aquarium) return <AppShell><PageHeader title="Akvaryum Detayı"/><div className="mx-auto max-w-xl px-5 py-24 text-center"><h1 className="text-2xl font-extrabold">Akvaryum bulunamadı</h1><p className="mt-3 text-sm text-[#71858d]">Bu kayıt silinmiş veya artık mevcut değil.</p><a href="/aquariums" className="mt-6 inline-flex min-h-11 items-center rounded-xl bg-aqua px-5 py-3 text-xs font-extrabold text-ink">Akvaryumlarıma dön</a></div></AppShell>;
 
-  const readings = waterReadings.filter((item) => item.aquariumId === id);
-  const latest = readings[0];
+  const latest = latestReading(waterReadings.filter((item) => item.aquariumId === id));
+  const statuses = parameterStatuses(animals, lookup?.speciesForLivestock, latest, aquarium.type, failed ? unavailableStatus : pendingStatus);
   const tasks = maintenanceTasks.filter((item) => item.aquariumId === id);
-  const animals = livestock.filter((item) => item.aquariumId === id);
   const aquariumPlants = plants.filter((item) => item.aquariumId === id);
   const aquariumEquipment = equipment.filter((item) => item.aquariumId === id);
   const grossVolume = calculateGrossVolume(aquarium.lengthCm, aquarium.widthCm, aquarium.heightCm);
@@ -39,9 +47,10 @@ export default function AquariumDetailPage() {
     <div className="grid gap-5 xl:grid-cols-[1.4fr_.85fr]">
       <div className="space-y-5">
         <section className="surface p-5 sm:p-6"><div className="mb-5 flex items-center justify-between"><div><p className="eyebrow">Anlık durum</p><h2 className="mt-1 text-lg font-extrabold">Son su değerleri</h2></div><a href={`/water?aquarium=${id}`} className="-my-3.5 flex min-h-11 items-center gap-1 text-[10px] font-bold text-aqua">Tümünü gör<ChevronRight size={13}/></a></div>
-          {latest ? <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">{[
-            [Thermometer, "Sıcaklık", `${latest.temperature}°C`, "İdeal"], [Activity, "pH", `${latest.ph}`, "Dengeli"], [Droplets, "TDS", `${latest.tds} ppm`, "Normal"], [Activity, "NO₃", `${latest.nitrate} ppm`, "Güvenli"],
-          ].map(([Icon, label, value, status]) => { const ParameterIcon = Icon as typeof Thermometer; return <div key={String(label)} className="rounded-xl border border-white/[.06] bg-white/[.02] p-4"><div className="mb-5 flex justify-between"><span className="grid size-8 place-items-center rounded-lg bg-aqua/10 text-aqua"><ParameterIcon size={16}/></span><span className="text-[10px] sm:text-[8px] font-extrabold uppercase text-emerald-400">{String(status)}</span></div><p className="text-[10px] font-bold text-[#647981]">{String(label)}</p><p className="mt-1 text-lg font-extrabold">{String(value)}</p></div>})}</div> : <EmptyLine text="Henüz su ölçümü eklenmemiş."/>}
+          {latest ? <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">{([
+            { icon: Thermometer, label: "Sıcaklık", value: shown(latest.temperature, "°C"), status: statuses.temperature }, { icon: Activity, label: "pH", value: shown(latest.ph), status: statuses.ph }, { icon: Droplets, label: "TDS", value: shown(latest.tds, " ppm"), status: statuses.tds }, { icon: Activity, label: "NO₃", value: shown(latest.nitrate, " ppm"), status: statuses.nitrate },
+          ] satisfies Array<{ icon: typeof Thermometer; label: string; value: string; status: ParameterStatus }>).map(({ icon: ParameterIcon, label, value, status }) => <div key={label} className="rounded-xl border border-white/[.06] bg-white/[.02] p-4"><div className="mb-5 flex justify-between"><span className="grid size-8 place-items-center rounded-lg bg-aqua/10 text-aqua"><ParameterIcon size={16}/></span><span className={`text-[10px] sm:text-[8px] font-extrabold uppercase ${statusText[status.tone]}`}>{status.label}</span></div><p className="text-[10px] font-bold text-[#647981]">{label}</p><p className="mt-1 text-lg font-extrabold">{value}</p></div>)}</div> : <EmptyLine text="Henüz su ölçümü eklenmemiş."/>}
+          {latest && failed && <p role="status" className="mt-3 text-[11px] text-amber-300">Türlerin sıcaklık ve pH aralıkları yüklenemedi. <button type="button" onClick={retry} className="-my-3.5 inline-flex min-h-11 min-w-11 items-center font-bold underline underline-offset-2">Yeniden dene</button></p>}
         </section>
 
         <section className="surface p-5 sm:p-6"><div className="mb-5 flex items-center justify-between"><div><p className="eyebrow">Envanter</p><h2 className="mt-1 text-lg font-extrabold">Akvaryum yaşamı</h2></div><a href={`/livestock?aquarium=${id}`} aria-label="Canlı ekle" className="grid size-11 place-items-center rounded-xl bg-aqua/10 text-aqua sm:size-9"><Plus size={16}/></a></div><div className="grid gap-3 sm:grid-cols-3"><InventoryCard icon={Fish} label="Canlılar" value={`${animals.reduce((sum, item) => sum + item.quantity, 0)} canlı`} sub={`${animals.length} tür`} color="text-cyan-300" bg="bg-cyan-300/10"/><InventoryCard icon={Leaf} label="Bitkiler" value={`${aquariumPlants.length} tür`} sub={`${aquariumPlants.reduce((sum, item) => sum + item.quantity, 0)} kayıt`} color="text-emerald-400" bg="bg-emerald-400/10"/><InventoryCard icon={SlidersHorizontal} label="Ekipmanlar" value={`${aquariumEquipment.length} ekipman`} sub="Tümü aktif" color="text-amber-300" bg="bg-amber-300/10"/></div></section>

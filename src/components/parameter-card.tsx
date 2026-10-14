@@ -4,7 +4,7 @@ import type { StatusTone } from "@/lib/water-status";
 interface ParameterCardProps { icon: LucideIcon; label: string; value: string; status: string; statusTone?: StatusTone; tone?: "aqua" | "green" | "amber"; }
 
 const tones = { aqua: "bg-aqua/10 text-aqua", green: "bg-emerald-400/10 text-emerald-400", amber: "bg-amber-400/10 text-amber-300" };
-const statusTones: Record<StatusTone, string> = { good: "bg-emerald-400/10 text-emerald-400", warning: "bg-amber-400/10 text-amber-300", danger: "bg-red-400/10 text-red-300", neutral: "bg-white/[.05] text-[#82969e]" };
+export const statusTones: Record<StatusTone, string> = { good: "bg-emerald-400/10 text-emerald-400", warning: "bg-amber-400/10 text-amber-300", danger: "bg-red-400/10 text-red-300", neutral: "bg-white/[.05] text-[#82969e]" };
 
 export function ParameterCard({ icon: Icon, label, value, status, statusTone = "neutral", tone = "aqua" }: ParameterCardProps) {
   return <div className="surface min-w-[148px] flex-1 p-4 sm:p-5">

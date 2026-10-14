@@ -1,5 +1,5 @@
-// Ana sayfadaki su değeri kartları ve özet cümlesi. Etiketler sabit yazılmaz; son ölçüm,
-// akvaryumdaki türlerin katalog aralıkları ve uyumluluk motorunun sonucundan hesaplanır.
+// Su değeri kartları (ana sayfa, akvaryum sayfası, su değerleri sayfası) ve ana sayfanın özet cümlesi. Etiketler sabit yazılmaz;
+// son ölçüm, akvaryumdaki türlerin katalog aralıkları ve uyumluluk motorunun sonucundan hesaplanır.
 import { assessWaterQuality, type HealthAnalysis } from "@aquamind/compatibility-engine";
 import { isVerifiedSpeciesProfile } from "@/data/catalog-shared";
 import type { SpeciesProfile } from "@/data/catalog-species";
@@ -36,9 +36,43 @@ export function nitrateStatus(latest: WaterParameters | undefined, type: Aquariu
   return { label: "Uygun", tone: "good" };
 }
 
-/** TDS için katalogda tür aralığı olmadığından değer yalnızca bilgi amaçlı gösterilir. */
-export function tdsStatus(value: number | undefined): ParameterStatus {
+/** Katalogda tür aralığı olmayan değerler (TDS, özgül ağırlık) yalnızca bilgi amaçlı gösterilir. */
+export function informationalStatus(value: number | undefined): ParameterStatus {
   return value === undefined ? { label: "Ölçüm yok", tone: "neutral" } : { label: "Bilgi amaçlı", tone: "neutral" };
+}
+
+/** TDS için katalogda tür aralığı olmadığından değer yalnızca bilgi amaçlı gösterilir. */
+export const tdsStatus = informationalStatus;
+
+/** Katalog kayıtları yüklenirken gösterilen etiket. */
+export const pendingStatus: ParameterStatus = { label: "…", tone: "neutral" };
+
+/** Türlerin katalog kayıtları yüklenemediğinde sıcaklık ve pH için gösterilen etiket (sayfa ayrıca yeniden deneme sunar). */
+export const unavailableStatus: ParameterStatus = { label: "Yüklenemedi", tone: "warning" };
+
+export interface ParameterStatuses { temperature: ParameterStatus; ph: ParameterStatus; nitrate: ParameterStatus; tds: ParameterStatus; specificGravity: ParameterStatus; }
+
+/**
+ * Su değeri kartlarının etiketleri. Sıcaklık ve pH akvaryumdaki doğrulanmış türlerin ortak aralığıyla, nitrat motorun su kalitesi
+ * kuralıyla karşılaştırılır; TDS ve özgül ağırlık yalnızca bilgi amaçlıdır. Her sayfa aynı kuralı buradan alır.
+ * Türlerin katalog kayıtları henüz yoksa (`speciesFor` verilmemiş) ölçülmüş sıcaklık ve pH `unknownRange` etiketini alır (yüklenirken
+ * `pendingStatus`, yüklenemediyse `unavailableStatus`); katalog gerektirmeyen etiketler yine hesaplanır.
+ */
+export function parameterStatuses(animals: Livestock[], speciesFor: ((item: Livestock) => SpeciesProfile | undefined) | undefined, latest: WaterParameters | undefined, type: AquariumType, unknownRange: ParameterStatus = pendingStatus): ParameterStatuses {
+  const ranges = speciesFor ? commonSpeciesRanges(animals, speciesFor) : undefined;
+  const range = (value: number | undefined, key: "temperature" | "ph") => (value === undefined || ranges ? rangeStatus(value, ranges?.[key]) : unknownRange);
+  return {
+    temperature: range(latest?.temperature, "temperature"),
+    ph: range(latest?.ph, "ph"),
+    nitrate: nitrateStatus(latest, type),
+    tds: informationalStatus(latest?.tds),
+    specificGravity: informationalStatus(latest?.specificGravity),
+  };
+}
+
+/** En son ölçüm, kayıt sırasına değil ölçüm tarihine göre seçilir (ana sayfa, sağlık sayfası ve akvaryum sayfası aynı kuralı kullanır). */
+export function latestReading<T extends Pick<WaterParameters, "measuredAt">>(readings: T[]): T | undefined {
+  return [...readings].sort((a, b) => +new Date(b.measuredAt) - +new Date(a.measuredAt))[0];
 }
 
 export function healthSummary(analysis: HealthAnalysis, hasData: boolean): { text: string; tone: StatusTone } {

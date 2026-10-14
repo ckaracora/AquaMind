@@ -7,12 +7,11 @@ import { ParameterCard } from "@/components/parameter-card";
 import { Sidebar } from "@/components/sidebar";
 import { greetingForHour } from "@/lib/greeting";
 import { dashboardStatus } from "@/lib/dashboard-status";
-import type { ParameterStatus } from "@/lib/water-status";
+import { latestReading, pendingStatus } from "@/lib/water-status";
 import { useCatalogLookup } from "@/lib/use-catalog-lookup";
 import { useAquariums } from "@/providers/aquarium-provider";
 
 const summaryTones = { good: "text-[#71858d]", neutral: "text-[#71858d]", warning: "text-amber-300", danger: "text-red-300" } as const;
-const pendingStatus: ParameterStatus = { label: "…", tone: "neutral" };
 
 const formatDay = (date: string) => new Intl.DateTimeFormat("tr-TR", { day: "numeric", month: "short" }).format(new Date(date));
 
@@ -32,7 +31,7 @@ export default function Dashboard() {
   if (!aquarium) return <div className="min-h-screen"><Sidebar/><main className="pb-28 lg:ml-[248px]"><div className="grid min-h-screen place-items-center px-5 text-center"><div><Waves size={45} className="mx-auto mb-5 text-aqua"/><h1 className="text-2xl font-extrabold">AquaMind’e hoş geldin</h1><p className="mt-2 text-sm text-[#71858d]">Dashboard’u kullanmaya başlamak için ilk akvaryumunu oluştur.</p><a href="/aquariums/new" className="mt-6 inline-flex min-h-11 items-center gap-2 rounded-xl bg-aqua px-5 py-3 text-xs font-extrabold text-ink sm:min-h-0"><Plus size={16}/>Akvaryum oluştur</a></div></div></main><MobileNav/></div>;
   const aquariumReadings = waterReadings.filter((item) => item.aquariumId === aquarium.id);
   // Sağlık sayfasıyla aynı kural: en son ölçüm tarihe göre seçilir.
-  const latest = [...aquariumReadings].sort((a, b) => +new Date(b.measuredAt) - +new Date(a.measuredAt))[0];
+  const latest = latestReading(aquariumReadings);
   const status = lookup ? dashboardStatus(lookup, aquarium, animals, devices, latest) : undefined;
   const summary = status?.summary ?? { text: statusLoadFailed ? "Durum yüklenemedi; sayfayı yenileyin." : "Durum hesaplanıyor…", tone: "neutral" as const };
   const temperatureStatus = status?.temperature ?? pendingStatus;
