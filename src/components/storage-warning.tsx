@@ -40,7 +40,7 @@ export function StorageWarning() {
               </p>
               <p className="mt-1">
                 Sayfayı yenilerseniz bu değişiklikler kaybolur. Depolama alanı dolu olabilir. Kaybetmemek için{" "}
-                <a href="/settings" className="font-bold text-amber-300 underline">
+                <a href="/settings" className="-my-3.5 inline-block py-3.5 font-bold text-amber-300 underline">
                   Ayarlar → Verileri dışa aktar
                 </a>{" "}
                 ile yedek alın.
