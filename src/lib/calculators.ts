@@ -1,9 +1,10 @@
+// Kum türleri ve yaklaşık yoğunlukları; adları ve kısa açıklamaları dil dosyasındadır (`t.calculators.substrates[id]`).
 export const substrateTypes = [
-  {id:"silica",name:"Silis kum",densityKgPerL:1.55,note:"İnce ve doğal görünümlü"},
-  {id:"basalt",name:"Bazalt kum",densityKgPerL:1.7,note:"Koyu renkli ve ağır"},
-  {id:"aquasoil",name:"Aquasoil",densityKgPerL:.85,note:"Bitkili akvaryum toprağı"},
-  {id:"coral",name:"Mercan kırığı",densityKgPerL:1.25,note:"Sertliği yükseltebilir"},
-  {id:"gravel",name:"Doğal çakıl",densityKgPerL:1.6,note:"Orta ve iri taneli"},
+  {id:"silica",densityKgPerL:1.55},
+  {id:"basalt",densityKgPerL:1.7},
+  {id:"aquasoil",densityKgPerL:.85},
+  {id:"coral",densityKgPerL:1.25},
+  {id:"gravel",densityKgPerL:1.6},
 ] as const;
 
 const nonNegative = (value: number) => Number.isFinite(value) ? Math.max(0,value) : 0;
