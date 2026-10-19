@@ -5290,6 +5290,55 @@ for (const [id, expected] of Object.entries(sourcedSpeciesBatch2Traits)) {
 }
 assert.deepEqual(["mascara-barb","chinese-algae-eater"].map((id) => speciesCatalog.find((item) => item.id === id)?.flow), ["medium","medium"], "Mascara barb ve Çin yosun yiyicisi kaynağın orta su hareketini taşımalı");
 assert.equal(speciesCatalog.find((item) => item.id === "panda-loach")?.speciesOnly, undefined, "Panda Loach kaynağa göre diğer türlerle tutulabilmeli");
+// 2026-10-19 tür kaynak yenilemesi 3 (docs/CATALOG_LOG.md): Seriously Fish sayfası olmayan 14 tür, kabul edilen uzman kaynaklardan
+// (Fishkeeper, ScotCat). İki kaynakta sıcaklık ve pH ortak aralık. Sıra: boy, hacim, uzunluk, en az grup, sıcaklık, pH.
+const sourcedSpeciesBatch3 = {
+  "colombian-zebra-pleco-l129":[12,96,80,1,[25,29],[6.5,7.2]],
+  "royal-pleco-l190":[50,500,152,1,[23,29],[6.5,7.5]],
+  "mega-clown-pleco-l340":[10,80,80,1,[25,29],[6,7.2]],
+  "vampire-pleco-l240":[30,375,150,1,[26,29],[6,7]],
+  "brokenline-royal-pleco-l191":[50,600,180,1,[24,29],[6.5,7.5]],
+  "black-spotted-flyer-pleco-l244":[13,255,122,1,[25,29],[6,7]],
+  "blue-spotted-bristlenose-l059a":[18.5,80,100,1,[25,28],[6,7]],
+  "anthrax-flyer-pleco-l235":[20,255,122,1,[25,29],[6,7.2]],
+  "lujans-pleco-l127":[16,100,100,1,[23,27],[6.5,7.2]],
+  "peckoltia-l103":[12,112,80,1,[25,29],[6,7.5]],
+  "royal-farlowella":[26,120,120,1,[26,29],[6.5,7.2]],
+  "green-laser-cory-cw009":[7.5,100,80,5,[22,26],[6.5,7]],
+  "highfin-spotted-cory-cw027":[6,100,80,6,[22,26],[6,7.2]],
+  "spotted-congo-puffer":[10,110,80,1,[22,26],[6.5,7.5]]
+};
+const undescribedBatch3 = new Set(["mega-clown-pleco-l340","vampire-pleco-l240","brokenline-royal-pleco-l191","peckoltia-l103","green-laser-cory-cw009","highfin-spotted-cory-cw027"]);
+for (const [id, expected] of Object.entries(sourcedSpeciesBatch3)) {
+  const profile = speciesCatalog.find((item) => item.id === id);
+  assert.deepEqual([profile?.adultSizeCm,profile?.minVolumeL,profile?.minTankLengthCm,profile?.minGroup,profile?.temperature,profile?.ph], expected, `${id} kabul edilen uzman kaynağın bakım eşiklerini taşımalı`);
+  assert.match(profile?.sourceUrl ?? "", /^https:\/\/www\.(fishkeeper\.co\.uk|scotcat\.com)\//, `${id} Fishkeeper ya da ScotCat tür sayfasına bağlanmalı`);
+  assert.equal(profile?.verifiedAt, "2026-10-19", `${id} kaynak okuma tarihini taşımalı`);
+  // Tanımlanmamış (sp.) türlerin FishBase tür sayfası yok.
+  if (!undescribedBatch3.has(id)) assert((profile?.additionalSourceUrls ?? []).some((url) => url.includes("fishbase.se")), `${id} bilimsel kimlik için FishBase bağlantısını korumalı`);
+}
+// Sıra: bilimsel ad, akıntı, avcı, tür akvaryumu.
+const sourcedSpeciesBatch3Traits = {
+  "colombian-zebra-pleco-l129":["Hypancistrus debilittera","high",false,false],
+  "royal-pleco-l190":["Panaque nigrolineatus","high",false,false],
+  "mega-clown-pleco-l340":["Hypancistrus sp. L340","high",false,false],
+  "vampire-pleco-l240":["Leporacanthicus sp. L240","high",false,false],
+  "brokenline-royal-pleco-l191":["Panaque sp. L191","high",false,false],
+  "black-spotted-flyer-pleco-l244":["Pseudolithoxus dumus","high",false,false],
+  "blue-spotted-bristlenose-l059a":["Ancistrus hoplogenys","high",false,false],
+  "anthrax-flyer-pleco-l235":["Pseudolithoxus anthrax","high",false,false],
+  "lujans-pleco-l127":["Peckoltia lujani","high",false,false],
+  "peckoltia-l103":["Peckoltia sp. L103",undefined,false,false],
+  "royal-farlowella":["Sturisomatichthys panamensis","high",false,false],
+  "green-laser-cory-cw009":["Corydoras sp. CW009","medium",false,false],
+  "highfin-spotted-cory-cw027":["Hoplisoma sp. CW027","medium",false,false],
+  "spotted-congo-puffer":["Tetraodon schoutedeni","medium",true,false]
+};
+for (const [id, expected] of Object.entries(sourcedSpeciesBatch3Traits)) {
+  const profile = speciesCatalog.find((item) => item.id === id);
+  assert.deepEqual([profile?.scientificName,profile?.flow,profile?.predatory === true,profile?.speciesOnly === true], expected, `${id} bilimsel kimlik, akıntı, avcılık ve tür akvaryumu işaretlerini korumalı`);
+}
+assert.equal(speciesForCatalogExactSearch("Sturisomatichthys panamense", "fish", "freshwater")?.id, "royal-farlowella", "Royal Farlowella eski bilimsel ad yazımıyla da bulunmalı");
 // Satış adı tek bir bilimsel türe denk gelmeyen kayıtlar satılan balığa göre tanımlanır; birden fazla aday varsa en koruyucu kaynaklı değerler kullanılır (docs/DECISIONS/0014).
 const identityRecords = [
   ["ancistrus", "Ancistrus sp. '3'", 15, 54, 60, 1, [21,26], [5.5,7.5], "seriouslyfish.com/species/ancistrus-cf-cirrhosus", "Ancistrus cirrhosus"],
@@ -5393,21 +5442,10 @@ for (const waterType of ["freshwater", "saltwater", "brackish"]) {
 }
 for (const [id, scientificName, volume, length, group, temperature, ph] of [
   ["blue-phantom-pleco-l128", "Hemiancistrus sp. L128", 162, 120, 1, [27,30], [6,7.5]],
-  ["colombian-zebra-pleco-l129", "Hypancistrus debilittera", 96, 80, 4, [27,31], [6,7.5]],
   ["orinoco-angel-pleco-l201", "Hypancistrus sp. L201", 115, 80, 1, [25,29], [5.8,7]],
-  ["royal-pleco-l190", "Panaque nigrolineatus", 500, 180, 1, [22,26], [6,8]],
-  ["mega-clown-pleco-l340", "Hypancistrus sp. L340", 80, 80, 1, [26,30], [5.5,7.5]],
-  ["vampire-pleco-l240", "Leporacanthicus sp. L240", 375, 150, 1, [25,28], [5.5,7.5]],
   ["butterfly-pleco-l052", "Dekeyseria picta", 150, 80, 1, [25,29], [5.8,7]],
   ["cucuta-bristlenose-l149", "Ancistrus sp. L149", 76, 60, 1, [23,28], [6.5,7.8]],
-  ["brokenline-royal-pleco-l191", "Panaque sp. L191", 600, 200, 1, [24,29], [6,8]],
-  ["black-spotted-flyer-pleco-l244", "Pseudolithoxus dumus", 200, 100, 1, [24,30], [6,7]],
-  ["blue-spotted-bristlenose-l059a", "Ancistrus hoplogenys", 80, 100, 1, [26,30], [5.5,7.5]],
-  ["anthrax-flyer-pleco-l235", "Pseudolithoxus anthrax", 240, 120, 1, [25,29], [6,7.2]],
-  ["lujans-pleco-l127", "Peckoltia lujani", 100, 100, 1, [25,29], [5.5,7.5]],
   ["orange-venezuela-cory", "Osteogaster venezuelanus", 80, 80, 6, [19,25], [6,7]],
-  ["green-laser-cory-cw009", "Corydoras sp. CW009", 100, 80, 6, [24,28], [6,7.5]],
-  ["highfin-spotted-cory-cw027", "Hoplisoma sp. CW027", 100, 80, 6, [23,28], [5.8,7]],
   ["hujeta-gar", "Ctenolucius hujeta", 342, 150, 5, [22,25], [5.5,7.5]],
 ]) {
   const profile = speciesCatalog.find((item) => item.id === id);
@@ -5476,7 +5514,6 @@ assert(l069Unresolved?.reason.includes("Ancistrini sp.") && l069Unresolved.reaso
 assert.equal(speciesForCatalogSearch("L146", "fish", "freshwater")?.id, "bola-pleco-l146", "Kesin L146 araması doğrulanmış Bola vatoz profilini bulmalı");
 assert.equal(speciesForCatalogSearch("Peckoltichthys ucayalensis", "fish", "freshwater")?.id, "ucayali-flathead-pleco", "Kesin Peckoltichthys ucayalensis araması doğru profili bulmalı");
 for (const [id, scientificName, volume, length, temperature, ph, sourcePath] of [
-  ["peckoltia-l103", "Peckoltia sp. L103", 112, 80, [25,29], [5.5,7.5], "art=191"],
   ["manacapuru-bristlenose-l148", "Ancistrus sp. L148", 120, 100, [25,29], [5,7], "art=233"],
 ]) {
   const profile = speciesCatalog.find((item) => item.id === id);
@@ -6748,7 +6785,6 @@ assert.equal(speciesCatalog.filter((item) => speciesGroup(item) === "crayfish").
 for (const [id,group,volume,length,count,temperature,ph,flow] of [
   ["smudge-spot-cory","bottom",100,60,8,[21,27],[6.8,7.2],"medium"],
   ["black-venezuela-cory","bottom",60,60,6,[22,26],[6,7.5],"medium"],
-  ["royal-farlowella","bottom",120,120,2,[24,30],[6,7.5],"high"],
   ["least-dwarf-crayfish","crayfish",20,30,1,[20,26],[6.5,8],"low"],
 ]) {
   const profile=speciesCatalog.find((item)=>item.id===id);
