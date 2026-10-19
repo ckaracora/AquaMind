@@ -384,6 +384,14 @@ const labelTexts = (tag: Tag): string[] => attributesOf(tag.opening, "aria-label
   return ts.isJsxExpression(initializer) && initializer.expression ? stringParts(initializer.expression) : [];
 }).map(normalizeLabel);
 /**
+ * Adı dil dosyasından gelen düğmenin anahtarı: `aria-label={t.navigation.closeMenu}` için "t.navigation.closeMenu"
+ * (docs/DECISIONS/0021-dil-altyapisi.md). `labelTexts` gibi yalnızca bilinen istisnaları tanımak için kullanılır.
+ */
+const messageKeys = (tag: Tag): string[] => attributesOf(tag.opening, "aria-label").flatMap((attribute) => {
+  const expression = attribute.initializer && ts.isJsxExpression(attribute.initializer) ? attribute.initializer.expression : undefined;
+  return expression && ts.isPropertyAccessExpression(expression) && /^t\./.test(expression.getText()) ? [expression.getText()] : [];
+});
+/**
  * Düğme bir şey yapıyor mu? Tıklama işleyicisi (`onClick`) vardır ya da bir forma bağlıdır (formun içindedir ya da `form`
  * özniteliği taşır) ve türü "button" değildir (formu gönderir ya da sıfırlar). Türü "button" olan düğme forma bağlı olsa da
  * işleyicisiz hiçbir şey yapmaz. Üst öğede dinlenen tıklama görülmez; böyle bir düğmeye işleyici açıkça yazılır.
@@ -641,9 +649,9 @@ function mobileSize(classes: readonly string[]): MobileSize {
  * eşleşebilir ve o düğmenin alt sınırı `least` olur. Yeni bir istisna ancak buraya gerekçesiyle yazılarak eklenir.
  */
 const SIZE_EXCEPTIONS: readonly { file: string; label: string; classes: readonly string[]; least: number; reason: string }[] = [
-  { file: "src/components/mobile-nav.tsx", label: "menüyü kapat", classes: ["inset-0"], least: 0, reason: "yan menünün arka planı: ekranı kaplar, ölçüsü sınıftan değil konumdan gelir" },
+  { file: "src/components/mobile-nav.tsx", label: "t.navigation.closeMenu", classes: ["inset-0"], least: 0, reason: "yan menünün arka planı: ekranı kaplar, ölçüsü sınıftan değil konumdan gelir" },
 ];
-const exceptionFor = (tag: Tag & { file: string }) => SIZE_EXCEPTIONS.find((exception) => exception.file === tag.file && labelTexts(tag).includes(exception.label) && exception.classes.every((name) => tag.staticClasses.includes(name)));
+const exceptionFor = (tag: Tag & { file: string }) => SIZE_EXCEPTIONS.find((exception) => exception.file === tag.file && [...labelTexts(tag), ...messageKeys(tag)].includes(exception.label) && exception.classes.every((name) => tag.staticClasses.includes(name)));
 /** Düğmenin telefonda taşıması gereken en küçük ölçü: 44 piksel, bilinen istisnada o istisnanın sınırı. */
 const sizeFloor = (tag: Tag & { file: string }) => exceptionFor(tag)?.least ?? TOUCH_TARGET_PX;
 
@@ -690,7 +698,7 @@ describe("etiket ayrıştırıcısı", () => {
     const parsed = buttons.filter(({ file }) => file === "src/components/mobile-nav.tsx");
     expect(parsed.length).toBeGreaterThanOrEqual(3);
     const backdrop = parsed.find((tag) => tag.staticClasses.includes("inset-0"));
-    const close = parsed.find((tag) => labelTexts(tag).includes("menüyü kapat") && !tag.staticClasses.includes("inset-0"));
+    const close = parsed.find((tag) => messageKeys(tag).includes("t.navigation.closeMenu") && !tag.staticClasses.includes("inset-0"));
     const opener = parsed.find((tag) => tag.attributes.get("aria-controls")?.literal === "mobile-side-menu");
     expect(backdrop?.attributes.get("tabIndex")?.expression?.getText()).toBe("-1");
     expect(close && contentState(close)).toBe("never");
@@ -1040,10 +1048,13 @@ describe("telefondaki ölçü hesabı", () => {
 
   it("bilinen istisnaları dosya, ad ve sınıfla tanır; öbür her düğmenin alt sınırı 44 pikseldir", () => {
     const button = (file: string, jsx: string) => ({ file, ...firstTag(jsx) });
-    expect(sizeFloor(button("src/components/mobile-nav.tsx", "<button aria-label=\"Menüyü kapat\" className=\"absolute inset-0\"/>"))).toBe(0);
-    expect(sizeFloor(button("src/components/mobile-nav.tsx", "<button aria-label=\"MENÜYÜ KAPAT&#8203;\" className=\"fixed inset-0\"/>"))).toBe(0);
-    // Aynı ad başka dosyada, aynı dosyada başka ad ya da sınıfı tutmayan düğme istisna değildir.
-    expect(sizeFloor(button("src/components/mobile-nav.tsx", "<button aria-label=\"Menüyü kapat\" className=\"grid size-11\"/>"))).toBe(44);
+    expect(sizeFloor(button("src/components/mobile-nav.tsx", "<button aria-label={t.navigation.closeMenu} className=\"absolute inset-0\"/>"))).toBe(0);
+    expect(sizeFloor(button("src/components/mobile-nav.tsx", "<button aria-label={t.navigation.closeMenu} className=\"fixed inset-0\"/>"))).toBe(0);
+    // Aynı ad başka dosyada, aynı dosyada başka ad ya da sınıfı tutmayan düğme istisna değildir; adın Türkçe yazımı da istisna değildir.
+    expect(sizeFloor(button("src/components/mobile-nav.tsx", "<button aria-label={t.navigation.closeMenu} className=\"grid size-11\"/>"))).toBe(44);
+    expect(sizeFloor(button("src/components/mobile-nav.tsx", "<button aria-label=\"Menüyü kapat\" className=\"absolute inset-0\"/>"))).toBe(44);
+    expect(sizeFloor(button("src/components/mobile-nav.tsx", "<button aria-label={t.navigation.mainMenu} className=\"absolute inset-0\"/>"))).toBe(44);
+    expect(sizeFloor(button("src/app/page.tsx", "<button aria-label={t.navigation.closeMenu} className=\"absolute inset-0\"/>"))).toBe(44);
     expect(sizeFloor(button("src/app/plants/page.tsx", "<button aria-label=\"Ara\" className=\"grid size-9\"/>"))).toBe(44);
     expect(sizeFloor(button("src/app/page.tsx", "<button aria-label=\"Sil\" className=\"grid size-9\"/>"))).toBe(44);
     expect(sizeFloor(button("src/app/page.tsx", "<button aria-label=\"Ara\" className=\"grid size-9\"/>"))).toBe(44);

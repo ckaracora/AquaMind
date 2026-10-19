@@ -1,24 +1,24 @@
 export type NavigationKey = "overview"|"aquariums"|"water"|"maintenance"|"livestock"|"plants"|"equipment"|"products"|"calculators"|"aquamatch"|"settings";
 
+// Bağlantının ekrandaki adı dil dosyasındadır: `messages.navigation.items[key]` (@aquamind/localization).
 export interface NavigationItem {
   key: NavigationKey;
-  label: string;
   href: string;
   comingSoon?: boolean;
 }
 
 export const primaryNavigationItems: NavigationItem[] = [
-  {key:"overview",label:"Genel Bakış",href:"/"},
-  {key:"aquariums",label:"Akvaryumlarım",href:"/aquariums"},
-  {key:"water",label:"Su Değerleri",href:"/water"},
-  {key:"maintenance",label:"Bakım Günlüğü",href:"/maintenance"},
-  {key:"livestock",label:"Canlılar",href:"/livestock"},
-  {key:"plants",label:"Bitkiler",href:"/plants"},
-  {key:"equipment",label:"Ekipmanlar",href:"/equipment"},
-  {key:"products",label:"Ürün Kataloğu",href:"/products"},
-  {key:"calculators",label:"Hesaplayıcılar",href:"/calculators"},
-  {key:"aquamatch",label:"AquaMatch",href:"/aquamatch",comingSoon:true},
+  {key:"overview",href:"/"},
+  {key:"aquariums",href:"/aquariums"},
+  {key:"water",href:"/water"},
+  {key:"maintenance",href:"/maintenance"},
+  {key:"livestock",href:"/livestock"},
+  {key:"plants",href:"/plants"},
+  {key:"equipment",href:"/equipment"},
+  {key:"products",href:"/products"},
+  {key:"calculators",href:"/calculators"},
+  {key:"aquamatch",href:"/aquamatch",comingSoon:true},
 ];
 
-export const settingsNavigationItem: NavigationItem = {key:"settings",label:"Ayarlar",href:"/settings"};
+export const settingsNavigationItem: NavigationItem = {key:"settings",href:"/settings"};
 export const allNavigationItems: NavigationItem[] = [...primaryNavigationItems,settingsNavigationItem];

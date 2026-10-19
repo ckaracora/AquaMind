@@ -19,6 +19,7 @@
   "dependencies": {
     "@aquamind/compatibility-engine": "workspace:*",
     "@aquamind/domain": "workspace:*",
+    "@aquamind/localization": "workspace:*",
     "@fontsource-variable/manrope": "^5.2.6",
     "lucide-react": "^0.468.0",
     "next": "^15.1.3",
