@@ -1,7 +1,7 @@
 # 0021 — Dil altyapısı
 
 - Tarih: 2026-10-19
-- Durum: Kabul edildi (teknik karar, Claude; ürün sahibinin 2026-10-19 "dile uygun yapıya geçelim, çeviri kesin yapılacak, farklı dillere de" kararına dayanır, `docs/DECISIONS/0020-urun-hedefleri-ve-yol-haritasi.md`). 1. paket PR #32 (`671a719`), 2a PR #33 (`4fd4bbf`), 2b PR #34 (`1e19313`) ile birleştirildi. 2c `codex/i18n-2c` dalında; Codex 1. turda temiz; commit ve PR planlandı.
+- Durum: Kabul edildi (teknik karar, Claude; ürün sahibinin 2026-10-19 "dile uygun yapıya geçelim, çeviri kesin yapılacak, farklı dillere de" kararına dayanır, `docs/DECISIONS/0020-urun-hedefleri-ve-yol-haritasi.md`). 1. paket PR #32 (`671a719`), 2a PR #33 (`4fd4bbf`), 2b PR #34 (`1e19313`), 2c PR #35 (`7d1bde3`) ile birleştirildi. 2d `codex/i18n-2d` dalında; Codex 1. turda temiz; commit ve PR planlandı. 3. paket (motor çıktı biçimi) için `docs/COMPATIBILITY.md` gereği ayrı ürün sahibi onayı istendi (2026-10-20).
 
 ## Bağlam
 
@@ -53,3 +53,10 @@ Uygulamanın bütün metinleri koda Türkçe yazılmıştı: ekranlarda yaklaş�
 - **Kapsam:** su değerleri, bakım günlüğü, canlılar ve bitkiler sayfaları; ölçüm, bakım, canlı ekleme ve bitki ekleme pencereleri.
 - **Kayıtta Türkçe tutulan değerler:** bitki konumu kayda Türkçe adıyla yazılır ("Ön plan" ...). Kayıt biçimini değiştirmek var olan kullanıcı verisinin taşınmasını gerektirir; bu, hesaplar ve bulut aşamasında (Phase 1) kayıt biçimiyle birlikte ele alınacaktır. O zamana kadar bu Türkçe değerler sabit kimlik gibi kullanılır, ekranda dil dosyasındaki ad gösterilir; listede olmayan eski bir değer olduğu gibi yazılır. Bakım görevinin başlığı da kullanıcı içeriğidir; boş bırakılırsa tür adı o anki dilde kaydedilir.
 - **Ortak sözcükler:** birden çok ekranda aynı anlamla geçen sözcükler (`common`) bu pakette genişletildi; 2b'de sayfaya özgü tutulan aynı metinler ("Tarih", "… kayıt", "… silinsin mi?", tür aralıkları yüklenemedi uyarısı) ortak anahtara bağlandı.
+
+## 2d ayrıntıları
+
+- **Kapsam:** ekipman, ürün kataloğu, hesaplayıcılar ve ayarlar sayfaları; ekipman ekleme ve elle değer pencereleri. Bu paketle 2. paket tamamlanır: bütün sayfaların arayüz metinleri dil dosyasındadır, kodda yalnız birim ve kimyasal simgeleri kalır.
+- **Metin üreten yardımcı modüller:** elle girilen ekipman değerinin hata ve uyarı cümleleri (`src/lib/user-equipment-value.ts`) sayılar ve aralıklarla kurulur. Kural ve yuvarlama modülde kalır; cümle kalıpları dil dosyasındadır, sayı biçimi seçili dilden gelir (`UserValueTexts`). Böylece hesap tek yerde, metin her dilde doğru kalır.
+- **Kimlikli listeler:** hesaplayıcının kum türleri kodda yalnız kimlik ve yoğunlukla tutulur; adları ve açıklamaları dil dosyasındadır. Her kimliğin dil dosyasında karşılığı olduğu test edilir.
+- **Bilerek kalanlar:** ürün kategorileri ve ürün açıklamaları, ekipman açıklamaları ve kapasite notları katalog içeriğidir (4. paket). Sağlık analizi motorunun uyarı ve ölçüt metinleri 3. pakette kod ve değişkene geçer.

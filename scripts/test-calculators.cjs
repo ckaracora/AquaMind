@@ -10,6 +10,7 @@ require.extensions[".ts"] = (module,filename) => {
 };
 
 const {calculateAquariumVolume,calculateSubstrate,calculateWaterChange,substrateTypes}=require(path.resolve(__dirname,"../src/lib/calculators.ts"));
+const {tr}=require(path.resolve(__dirname,"../packages/localization/src/messages/tr.ts"));
 
 const assertClose=(actual,expected,message)=>assert(Math.abs(actual-expected)<1e-9,`${message}: ${actual} !== ${expected}`);
 
@@ -23,6 +24,8 @@ assert.equal(calculateSubstrate(100,45,4,7,1.7).liters,24.75,"Kum cinsi gereken 
 assertClose(calculateSubstrate(100,45,4,7,1.7).kilograms,42.075,"Kum cinsi yoğunluk üzerinden yaklaşık ağırlığı değiştirmeli");
 assert.deepEqual(calculateAquariumVolume(-100,45,50,150),{grossLiters:0,netLiters:0,baseAreaM2:0},"Geçersiz negatif ölçüler veya yüzde güvenli sonuç üretmeli");
 assert.equal(new Set(substrateTypes.map((item)=>item.id)).size,substrateTypes.length,"Kum türü kimlikleri yinelenmemeli");
-assert(substrateTypes.every((item)=>item.densityKgPerL>0&&item.name&&item.note),"Her kum türü yaklaşık yoğunluk ve açıklama taşımalı");
+// Kum türlerinin adı ve açıklaması dil dosyasındadır (docs/DECISIONS/0021-dil-altyapisi.md).
+assert(substrateTypes.every((item)=>item.densityKgPerL>0&&tr.calculators.substrates[item.id]?.name&&tr.calculators.substrates[item.id]?.note),"Her kum türü yaklaşık yoğunluk ve açıklama taşımalı");
+assert.deepEqual(Object.keys(tr.calculators.substrates).sort(),substrateTypes.map((item)=>item.id).sort(),"Dil dosyasında olmayan ya da fazla kum türü olmamalı");
 
 console.log(`Hesaplayıcılar: hacim, su değişimi ve ${substrateTypes.length} kum türü başarıyla doğrulandı.`);
