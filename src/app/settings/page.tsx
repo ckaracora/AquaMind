@@ -2,10 +2,10 @@
 
 import { useEffect, useMemo, useState } from "react";
 import { AlertTriangle, Bell, Check, Database, Download, Globe2, Moon, Ruler, ShieldCheck, Trash2, UserRound } from "lucide-react";
-import { DEFAULT_PREFERENCES, type Preferences } from "@aquamind/domain";
+import type { Preferences } from "@aquamind/domain";
 import { AppShell } from "@/components/app-shell";
 import { PageHeader } from "@/components/page-header";
-import { buildLocalExport, countOrphans, findOrphans, loadDeletedAquariums, loadPreferences, savePreferences } from "@/lib/aquarium-storage";
+import { buildLocalExport, countOrphans, findOrphans, loadDeletedAquariums } from "@/lib/aquarium-storage";
 import { useAquariums } from "@/providers/aquarium-provider";
 
 const input="mt-1.5 w-full rounded-xl border border-white/[.08] bg-[#09171e] px-3 py-3 text-sm outline-none focus:border-aqua/60";
@@ -13,11 +13,12 @@ const input="mt-1.5 w-full rounded-xl border border-white/[.08] bg-[#09171e] px-
 export default function SettingsPage(){
  // Yalnızca kalıcı kullanıcı verisi kullanılır; ekranda gösterilen demo kayıtlar
  // yedeğe ve yetim sayımına girmez.
- const {persistedSnapshot,storageIssues}=useAquariums();
- const [prefs,setPrefs]=useState<Preferences>(DEFAULT_PREFERENCES); const [saved,setSaved]=useState(false); const [saveFailed,setSaveFailed]=useState(false); const [deletedCount,setDeletedCount]=useState(0);
- // Bozuk tercih varsa karantinaya alınır ve bellekte varsayılanlar kullanılır;
- // anahtarın üstüne yazılmaz. Yazma yalnızca kullanıcı "Ayarları kaydet" derse olur.
- useEffect(()=>{setPrefs(loadPreferences());setDeletedCount(loadDeletedAquariums().length)},[]);
+ const {persistedSnapshot,storageIssues,preferences,updatePreferences}=useAquariums();
+ const [prefs,setPrefs]=useState<Preferences>(preferences); const [saved,setSaved]=useState(false); const [saveFailed,setSaveFailed]=useState(false); const [deletedCount,setDeletedCount]=useState(0);
+ // Tercihleri sağlayıcı yükler (bozuksa karantinaya alınır, bellekte varsayılanlar kullanılır, anahtarın üstüne yazılmaz).
+ // Form taslağı kayıtlı tercihle eşitlenir; yazma yalnızca kullanıcı "Ayarları kaydet" derse olur.
+ useEffect(()=>{setPrefs(preferences)},[preferences]);
+ useEffect(()=>{setDeletedCount(loadDeletedAquariums().length)},[]);
  const orphanCount=useMemo(()=>countOrphans(findOrphans(persistedSnapshot)),[persistedSnapshot]);
  const quarantined=storageIssues.filter(issue=>issue.quarantineKey);
  const quarantineFailed=storageIssues.some(issue=>issue.kind==="quarantine-failed");
@@ -25,7 +26,7 @@ export default function SettingsPage(){
  const hasRecoveryInfo=quarantined.length>0||quarantineFailed||deleteIncomplete||orphanCount>0||deletedCount>0;
  // Kaydetme başarısız olabilir (depolama dolu veya yarım kalmış bir silme işlemi
  // varken yazma engellidir). Bu durumda "Kaydedildi" GÖSTERİLMEZ.
- function save(){const ok=savePreferences(prefs);setSaved(ok);setSaveFailed(!ok);if(ok)setTimeout(()=>setSaved(false),1800)}
+ function save(){const ok=updatePreferences(prefs);setSaved(ok);setSaveFailed(!ok);if(ok)setTimeout(()=>setSaved(false),1800)}
  function exportData(){const data=buildLocalExport(persistedSnapshot,prefs);const blob=new Blob([JSON.stringify(data,null,2)],{type:"application/json"});const url=URL.createObjectURL(blob);const a=document.createElement("a");a.href=url;a.download=`aquamind-yedek-${new Date().toISOString().slice(0,10)}.json`;a.click();URL.revokeObjectURL(url)}
  function reset(){if(!confirm("Tüm yerel AquaMind verileri silinsin mi? Bu işlem geri alınamaz."))return;Object.keys(localStorage).filter(k=>k.startsWith("aquamind:")).forEach(k=>localStorage.removeItem(k));location.reload()}
  return <AppShell><PageHeader title="Ayarlar"/><div className="mx-auto max-w-[980px] px-5 py-8 sm:px-8 lg:px-10 lg:py-10"><div className="mb-8"><p className="eyebrow mb-2 text-aqua">Tercihler</p><h1 className="text-2xl font-extrabold sm:text-3xl">Ayarlar</h1><p className="mt-2 text-sm text-[#71858d]">AquaMind deneyimini ihtiyaçlarına göre düzenle.</p></div>

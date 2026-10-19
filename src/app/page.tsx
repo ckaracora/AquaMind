@@ -9,14 +9,18 @@ import { greetingForHour } from "@/lib/greeting";
 import { dashboardStatus } from "@/lib/dashboard-status";
 import { latestReading, pendingStatus } from "@/lib/water-status";
 import { useCatalogLookup } from "@/lib/use-catalog-lookup";
+import { useDisplayFormat } from "@/lib/use-display-format";
 import { useAquariums } from "@/providers/aquarium-provider";
 
 const summaryTones = { good: "text-[#71858d]", neutral: "text-[#71858d]", warning: "text-amber-300", danger: "text-red-300" } as const;
 
-const formatDay = (date: string) => new Intl.DateTimeFormat("tr-TR", { day: "numeric", month: "short" }).format(new Date(date));
-
 export default function Dashboard() {
   const { aquariums, waterReadings, maintenanceTasks, livestock, equipment } = useAquariums();
+  // Sıcaklık, hacim ve tarih ayarlardaki tercihe göre yazılır (docs/DECISIONS/0021-dil-altyapisi.md).
+  const fmt = useDisplayFormat();
+  const formatDay = (date: string) => fmt.date(date, { day: "numeric", month: "short" });
+  // Su ölçümleri dilin ondalık ayırıcısıyla yazılır ("7,2"); girilmemiş değer boş kalır.
+  const measured = (value?: number) => value === undefined ? "" : fmt.measurement(value);
   const [selectedId, setSelectedId] = useState("");
   // Sayfa önceden derlendiği için saat, derleme sunucusunda değil tarayıcıda okunur.
   const [greeting, setGreeting] = useState<string>();
@@ -48,15 +52,15 @@ export default function Dashboard() {
       </header>
       <div className="mx-auto max-w-[1440px] px-5 py-7 sm:px-8 lg:px-10 lg:py-10">
         <section className="mb-8 flex flex-col justify-between gap-4 sm:flex-row sm:items-end">
-          <div><p className="eyebrow mb-2 text-aqua">{new Intl.DateTimeFormat("tr-TR",{day:"numeric",month:"long",weekday:"long"}).format(new Date())}</p><h1 className="text-2xl font-extrabold tracking-tight sm:text-3xl">{greeting ?? "Merhaba."}</h1><p className={`mt-2 text-sm ${summaryTones[summary.tone]}`}>{summary.text} <a href={`/aquariums/${aquarium.id}/health`} className="-my-3.5 inline-block py-3.5 font-bold text-aqua hover:underline">Sağlık analizini aç</a></p></div>
+          <div><p className="eyebrow mb-2 text-aqua">{fmt.date(new Date(),{day:"numeric",month:"long",weekday:"long"})}</p><h1 className="text-2xl font-extrabold tracking-tight sm:text-3xl">{greeting ?? "Merhaba."}</h1><p className={`mt-2 text-sm ${summaryTones[summary.tone]}`}>{summary.text} <a href={`/aquariums/${aquarium.id}/health`} className="-my-3.5 inline-block py-3.5 font-bold text-aqua hover:underline">Sağlık analizini aç</a></p></div>
           <label className="surface flex w-full items-center justify-between gap-4 px-4 py-3 text-left sm:w-auto"><div><p className="text-[11px] sm:text-[10px] font-bold uppercase tracking-wider text-[#647981]">Aktif akvaryum</p><select value={aquarium.id} onChange={e=>setSelectedId(e.target.value)} className="-mb-2.5 -mt-1.5 min-h-11 min-w-40 bg-transparent text-sm font-bold outline-none">{aquariums.map(item=><option key={item.id} value={item.id}>{item.name}</option>)}</select></div><ChevronRight size={16} className="text-aqua"/></label>
         </section>
 
         <section className="mb-5 grid grid-cols-2 gap-3 xl:grid-cols-4">
-          <ParameterCard icon={Thermometer} label="Sıcaklık" value={latest?.temperature !== undefined ? `${latest.temperature}°C` : "—"} status={temperatureStatus.label} statusTone={temperatureStatus.tone} />
-          <ParameterCard icon={FlaskConical} label="pH değeri" value={latest?.ph !== undefined ? `${latest.ph}` : "—"} status={phStatus.label} statusTone={phStatus.tone} tone="green" />
-          <ParameterCard icon={CircleGauge} label="TDS" value={latest?.tds !== undefined ? `${latest.tds} ppm` : "—"} status={tds.label} statusTone={tds.tone} />
-          <ParameterCard icon={Activity} label="Nitrat (NO₃)" value={latest?.nitrate !== undefined ? `${latest.nitrate} ppm` : "—"} status={nitrate.label} statusTone={nitrate.tone} tone="green" />
+          <ParameterCard icon={Thermometer} label="Sıcaklık" value={latest?.temperature !== undefined ? fmt.temperature(latest.temperature) : "—"} status={temperatureStatus.label} statusTone={temperatureStatus.tone} />
+          <ParameterCard icon={FlaskConical} label="pH değeri" value={latest?.ph !== undefined ? fmt.measurement(latest.ph) : "—"} status={phStatus.label} statusTone={phStatus.tone} tone="green" />
+          <ParameterCard icon={CircleGauge} label="TDS" value={latest?.tds !== undefined ? `${fmt.measurement(latest.tds)} ppm` : "—"} status={tds.label} statusTone={tds.tone} />
+          <ParameterCard icon={Activity} label="Nitrat (NO₃)" value={latest?.nitrate !== undefined ? `${fmt.measurement(latest.nitrate)} ppm` : "—"} status={nitrate.label} statusTone={nitrate.tone} tone="green" />
         </section>
 
         <div className="grid grid-cols-1 gap-5 xl:grid-cols-[1.45fr_.9fr]">
@@ -66,7 +70,7 @@ export default function Dashboard() {
               <div className="relative min-h-[210px] overflow-hidden bg-gradient-to-br from-[#123441] via-[#0d5960] to-[#09232c] p-6">
                 <div className="absolute -bottom-16 -right-8 size-52 rounded-full bg-aqua/10 blur-2xl"/><div className="absolute left-8 top-14 h-24 w-3 rounded-full bg-emerald-300/30 blur-sm"/><div className="absolute left-16 top-24 h-20 w-2 -rotate-12 rounded-full bg-emerald-400/30"/>
                 <span className="relative rounded-full border border-white/10 bg-black/20 px-3 py-1.5 text-[11px] sm:text-[10px] font-bold backdrop-blur">TATLI SU · BİTKİLİ</span>
-                <div className="absolute bottom-6 left-6"><p className="text-3xl font-extrabold">{aquarium.netVolumeLiters}<span className="ml-1 text-base text-white/60">L</span></p><p className="mt-1 text-xs text-white/55">Net hacim</p></div>
+                <div className="absolute bottom-6 left-6"><p className="text-3xl font-extrabold">{fmt.volumeNumber(aquarium.netVolumeLiters)}<span className="ml-1 text-base text-white/60">{fmt.volumeSymbol}</span></p><p className="mt-1 text-xs text-white/55">Net hacim</p></div>
               </div>
               <div className="grid grid-cols-2 gap-px bg-white/[.05]">
                 {[['Kurulum','12 Mar 2024'],['Boyutlar','100 × 45 × 50'],['Canlılar','24 canlı'],['Bitkiler','8 tür']].map(([label,value]) => <div key={label} className="bg-panel p-5"><p className="text-[11px] sm:text-[10px] font-bold uppercase tracking-wider text-[#586e77]">{label}</p><p className="mt-2 text-sm font-bold">{value}</p></div>)}
@@ -83,7 +87,7 @@ export default function Dashboard() {
 
         <section className="surface mt-5 p-5 sm:p-6">
           <div className="mb-6 flex items-center justify-between"><div><p className="eyebrow">Son 3 ölçüm</p><h2 className="mt-1 text-lg font-extrabold">Su değerleri özeti</h2></div><a href={`/water?aquarium=${aquarium.id}`} className="inline-flex min-h-11 items-center rounded-lg bg-aqua/10 px-3 py-2 text-[11px] sm:text-[10px] font-extrabold text-aqua sm:min-h-0">Ölçüm ekle</a></div>
-          <div className="overflow-x-auto"><table className="w-full min-w-[620px] text-left"><thead><tr className="border-b border-white/[.06] text-[11px] sm:text-[10px] uppercase tracking-wider text-[#586e77]"><th className="pb-3 font-bold">Tarih</th><th className="pb-3 font-bold">Sıcaklık</th><th className="pb-3 font-bold">pH</th><th className="pb-3 font-bold">GH / KH</th><th className="pb-3 font-bold">TDS</th><th className="pb-3 font-bold">NO₃</th></tr></thead><tbody>{aquariumReadings.slice(0,3).map((row) => <tr key={row.id} className="border-b border-white/[.035] text-xs last:border-0"><td className="py-4 font-bold">{formatDay(row.measuredAt)}</td><td className="py-4 text-[#9aabb1]">{row.temperature}°C</td><td className="py-4 text-[#9aabb1]">{row.ph}</td><td className="py-4 text-[#9aabb1]">{row.gh} / {row.kh}</td><td className="py-4 text-[#9aabb1]">{row.tds}</td><td className="py-4"><span className="rounded-full bg-emerald-400/10 px-2 py-1 font-bold text-emerald-400">{row.nitrate} ppm</span></td></tr>)}</tbody></table></div>
+          <div className="overflow-x-auto"><table className="w-full min-w-[620px] text-left"><thead><tr className="border-b border-white/[.06] text-[11px] sm:text-[10px] uppercase tracking-wider text-[#586e77]"><th className="pb-3 font-bold">Tarih</th><th className="pb-3 font-bold">Sıcaklık</th><th className="pb-3 font-bold">pH</th><th className="pb-3 font-bold">GH / KH</th><th className="pb-3 font-bold">TDS</th><th className="pb-3 font-bold">NO₃</th></tr></thead><tbody>{aquariumReadings.slice(0,3).map((row) => <tr key={row.id} className="border-b border-white/[.035] text-xs last:border-0"><td className="py-4 font-bold">{formatDay(row.measuredAt)}</td><td className="py-4 text-[#9aabb1]">{row.temperature !== undefined ? fmt.temperature(row.temperature) : "—"}</td><td className="py-4 text-[#9aabb1]">{measured(row.ph)}</td><td className="py-4 text-[#9aabb1]">{measured(row.gh)} / {measured(row.kh)}</td><td className="py-4 text-[#9aabb1]">{measured(row.tds)}</td><td className="py-4"><span className="rounded-full bg-emerald-400/10 px-2 py-1 font-bold text-emerald-400">{measured(row.nitrate)} ppm</span></td></tr>)}</tbody></table></div>
         </section>
       </div>
     </main>

@@ -1,6 +1,7 @@
 "use client";
 
 import { createContext, useContext, useEffect, useMemo, useRef, useState } from "react";
+import { DEFAULT_PREFERENCES, type Preferences } from "@aquamind/domain";
 import { aquariums as seedAquariums, equipment as seedEquipment, livestock as seedLivestock, maintenanceTasks as seedMaintenanceTasks, plants as seedPlants, waterReadings as seedWaterReadings } from "@/data/mock-data";
 import {
   beginStorageSuspension,
@@ -11,9 +12,11 @@ import {
   getStorageIssues,
   hasPendingJournal,
   hydrateFromStorage,
+  loadPreferences,
   persistCollection,
   persistedOnly,
   recoverPendingJournal,
+  savePreferences,
   type AquariumDataSnapshot,
   type CollectionName,
   type DemoFlags,
@@ -54,6 +57,10 @@ interface AquariumContextValue {
   unsavedCollections: CollectionName[];
   /** Tamamlanmamış bir silme günlüğü yüzünden son işlem uygulanamadı. */
   writeBlocked: boolean;
+  /** Kayıtlı kullanıcı tercihleri (birimler, tarih biçimi); yüklenene kadar varsayılanlar. Ekranlar birim ve tarihi buna göre yazar. */
+  preferences: Preferences;
+  /** Tercihleri kaydeder; yalnızca kayıt başarılıysa ekranlar yeni tercihe geçer. Sonuç kaydın başarısıdır. */
+  updatePreferences: (preferences: Preferences) => boolean;
 }
 
 const INITIAL_DEMO: DemoFlags = {
@@ -78,6 +85,7 @@ export function AquariumProvider({ children }: { children: React.ReactNode }) {
   const [storageIssues, setStorageIssues] = useState<StorageIssue[]>([]);
   const [unsavedCollections, setUnsavedCollections] = useState<CollectionName[]>([]);
   const [writeBlocked, setWriteBlocked] = useState(false);
+  const [preferences, setPreferences] = useState<Preferences>(DEFAULT_PREFERENCES);
 
   // Demo takibi: bir koleksiyon depoda yoksa tohum veri YALNIZCA ekranda gösterilir.
   // Bu kayıtlar kalıcı depoya ve JSON yedeğinin ana koleksiyonlarına girmez.
@@ -144,6 +152,8 @@ export function AquariumProvider({ children }: { children: React.ReactNode }) {
     setPlants(snapshot.plants);
     setEquipment(snapshot.equipment);
     applyDemo(demoFlags);
+    // Tercihler yarım kalmış silme toparlandıktan sonra okunur; bozuksa karantinaya alınır ve sorun kurtarma özetine girer.
+    setPreferences(loadPreferences());
     setStorageIssues(getStorageIssues());
 
     pendingReleaseRef.current = true;
@@ -211,6 +221,13 @@ export function AquariumProvider({ children }: { children: React.ReactNode }) {
       persistedSnapshot,
       unsavedCollections,
       writeBlocked,
+      preferences,
+
+      updatePreferences: (next: Preferences) => {
+        const saved = savePreferences(next);
+        if (saved) setPreferences(next);
+        return saved;
+      },
 
       addAquarium: (aquarium: Aquarium) => {
         if (!gate()) return;
@@ -339,7 +356,7 @@ export function AquariumProvider({ children }: { children: React.ReactNode }) {
         setEquipment(equipment.filter((item) => item.id !== id));
       },
     };
-  }, [aquariums, hydrated, waterReadings, maintenanceTasks, livestock, plants, equipment, storageIssues, demo, persistedSnapshot, unsavedCollections, writeBlocked]);
+  }, [aquariums, hydrated, waterReadings, maintenanceTasks, livestock, plants, equipment, storageIssues, demo, persistedSnapshot, unsavedCollections, writeBlocked, preferences]);
 
   return <AquariumContext.Provider value={value}>{children}</AquariumContext.Provider>;
 }
