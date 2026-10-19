@@ -1,7 +1,7 @@
 # 0019 — Doğrulanamayan ekipman değerlerinin hesaptan çekilmesi
 
 - Tarih: 2026-10-16 (kabul edilen mağaza taraması 2026-10-17)
-- Durum: Kabul edildi (ürün sahibi kararı 2026-10-11); uygulama `codex/equipment-care-3` dalında, Codex denetimi bekliyor; commit ve PR planlandı.
+- Durum: Kabul edildi (ürün sahibi kararı 2026-10-11); uygulama `codex/equipment-care-3` dalında `e2dd8ac` ve `8f066cf` (altın fikstür) olarak kaydedildi, PR #30. Codex üç tur denetledi; 3. turun test düzeltmesi ürün sahibinin 2026-10-19 kararıyla "temiz" almadan gönderildi.
 
 ## Bağlam
 
@@ -36,7 +36,7 @@
 ## Sonuçlar
 
 - Bu cihazlardan birini kaydeden kullanıcı sağlık analizinde "Ekipman kapasite bilgisi eksik" uyarısını görür ve cihazın etiketindeki debiyi ya da gücü girerek sonucu geri alabilir.
-- Altın fikstürde 1.033 vakadan 4'ü değişir (3 filtre, 1 hava motoru vakası; hepsi hiçbir kabul edilen mağazada doğrulanamayan Aquawing kayıtları: AQ101F, AQ101FB, AQ102F, AQ160). Fikstür çalışma kopyasında yeniden üretildi; ayrı commit planlandı.
+- Altın fikstürde 1.033 vakadan 4'ü değişir (3 filtre, 1 hava motoru vakası; hepsi hiçbir kabul edilen mağazada doğrulanamayan Aquawing kayıtları: AQ101F, AQ101FB, AQ102F, AQ160). Fikstür ayrı commit'te (`8f066cf`) yeniden üretildi.
 - Bilinen sınırlar:
   - Çikletist Pet Shop taranamadı; değeri çekilen 86 kayıttan bazıları orada doğrulanabilir. Ürün sahibi sayfayı kendi tarayıcısında açarsa ayrı bir paketle bakılabilir.
   - Hava motorunun debisi bilinmediğinde motor, sünger filtre için "hava motoru gerekli … katalogdan uygun bir hava motoru ekleyin" uyarısını verir; kullanıcının listede değeri olmayan bir hava motoru varsa bu metin yanıltıcı olabilir. Metnin değişmesi motor değişikliğidir ve ayrı bir ürün kararı gerektirir.
