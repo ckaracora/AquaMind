@@ -20,6 +20,12 @@ Arama sonucu özeti, yapay zekâ cevabı, forum yorumu veya ilgisiz kategori say
 
 Bu liste otomatik doğruluk garantisi değildir. Her bağlantı doğru marka, model ve varyanta ait olmalıdır.
 
+## Ekipman değerleri için özel kural
+
+- Ürün sahibi kararı 2026-10-11 (`docs/DECISIONS/0019-dogrulanamayan-ekipman-degerleri.md`): sağlık hesabında kullanılan ekipman değeri (debi, güç, önerilen hacim, akvaryum uzunluğu) yalnızca yukarıdaki önceliğin ilk üç sırasından, yani üretici, Türkiye distribütörü ya da kabul edilen yerel mağaza sayfasından doğrulanabiliyorsa kullanılır. "Birbirini doğrulayan iki ikincil kaynak" (4. sıra) ekipman değeri için yeterli sayılmaz.
+- Doğrulanamayan kayıt adıyla listede kalır, değeri hesaptan çekilir ve kullanıcı cihazın etiket değerini kendisi girebilir (`docs/DECISIONS/0017-elle-girilen-ekipman-degerleri.md`). Küçük markalar için derin kaynak araştırması yapılmaz.
+- Kabul edilen yerel mağazada doğrulama alan alan yapılır: değer tam modelin kendi ürün sayfasında yazmalıdır (marka ya da liste sayfası yetmez), yalnızca kayıtta önceden olan alan geri gelir, mağazanın değeri eskisinden farklıysa mağazanınki kullanılır, kabul edilen mağazalar ya da aynı sayfanın başlığı ile açıklaması aynı alanı farklı yayımlıyorsa o alan kullanılmaz.
+
 ## Canlı verisi için özel kaynak kuralı
 
 - Yerel mağazalar yalnızca Türkiye'de kullanılan satış adını, varyeteyi ve güncel bulunabilirliği karşılaştırmak için kullanılabilir.

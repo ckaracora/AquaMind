@@ -34,6 +34,154 @@ const { equipmentBrandsForCategory, equipmentCatalog, equipmentForBrandInCategor
 const { unresolvedSpeciesForSearch, unresolvedSpeciesListings } = require(path.join(projectRoot, "src/data/catalog-species-unresolved.ts"));
 const { careCategoryLabels, careProductCatalog } = require(path.join(projectRoot, "src/data/care-product-catalog.ts"));
 const { catalogBrandCoverage } = require(path.join(projectRoot, "src/data/catalog-coverage.ts"));
+// Değeri kural dışı kaynaklarda yayımlanmış ekipman (docs/DECISIONS/0019-dogrulanamayan-ekipman-degerleri.md). Aşağıdaki kaynak
+// doğrulamalarında kaynağın yayımladığı değer belgelenmiş olarak kalır. Kayıt çekilenler listesindeyse beklenen değer `undefined` olur;
+// kabul edilen yerel mağazada doğrulandıysa mağazanın değeri (mağaza o alanı vermiyorsa `undefined`) beklenir. Kapasite değeri
+// çekilen kayıt kapasite notu taşır (hava motoruyla çalışan sünger filtre hariç).
+const { shopVerifiedAt, shopVerifiedEquipment, unverifiedAirFlowIds, unverifiedEquipmentIds } = require(path.join(projectRoot, "src/data/catalog-equipment-unverified.ts"));
+const { specificationsForEquipment } = require(path.join(projectRoot, "src/data/catalog-equipment.ts"));
+const withdrawnEquipmentIds = new Set(unverifiedEquipmentIds);
+const withdrawnAirFlowIds = new Set(unverifiedAirFlowIds);
+const shopVerified = (item) => (Object.hasOwn(shopVerifiedEquipment, item?.id ?? "") ? shopVerifiedEquipment[item.id] : undefined);
+const isWithdrawn = (item) => withdrawnEquipmentIds.has(item?.id) || withdrawnAirFlowIds.has(item?.id) || Boolean(shopVerified(item)?.note);
+const sourced = (item, field, value) => (shopVerified(item) ? shopVerified(item).values[field]
+  : withdrawnEquipmentIds.has(item?.id) || (field === "ratedFlowLph" && withdrawnAirFlowIds.has(item?.id)) ? undefined : value);
+const withdrawableFields = ["ratedFlowLph", "powerW", "recommendedMinL", "recommendedMaxL", "recommendedTankLengthCm", "integratedHeaterW", "integratedUvcW"];
+const acceptedShopHosts = ["akvaryumexpress.com", "atakanpetshop.com", "malawiizmir.com", "aquarubi.com", "bettamarketim.com.tr", "cikletistpetshop.com"];
+// Rakamla ya da yazıyla yazılmış kapasite değeri ("600 L/saat", "60 cm", "üç litre filtre hacimli").
+const numericValueText = /\d[\d.,]*\s*(?:L\/saat|L\/dakika|W\b|litre|L\b|cm\b|kPa|MPa)/;
+const writtenValueText = /(?:^|[\s(])(?:yarım|bir|iki|üç|dört|beş|altı|yedi|sekiz|dokuz|on|yirmi|otuz|kırk|elli|altmış|yetmiş|seksen|doksan|yüz|bin)(?:\s+(?:buçuk|yüz|bin))?\s+(?:litre|watt|santimetre|metre)/iu;
+assert.equal(withdrawnEquipmentIds.size + withdrawnAirFlowIds.size + Object.keys(shopVerifiedEquipment).length, 166, "0019 listeleri 86 + 4 + 76 kayıt içermeli");
+assert.equal(new Set([...withdrawnEquipmentIds, ...withdrawnAirFlowIds, ...Object.keys(shopVerifiedEquipment)]).size, 166, "0019'daki bir kayıt yalnız bir listede bulunmalı");
+assert.match("Üç litre filtre hacimli askı dış filtre", writtenValueText, "Yazıyla yazılmış kapasite yakalanmalı");
+assert.doesNotMatch("Üç aşamalı kompakt iç filtre · Dört çıkış", writtenValueText, "Yazıyla yazılmış özellik kapasite sayılmamalı");
+for (const id of [...withdrawnEquipmentIds, ...withdrawnAirFlowIds]) {
+  const item = equipmentCatalog.find((entry) => entry.id === id);
+  assert(item, `Değeri çekilen ekipman katalogda adıyla kalmalı: ${id}`);
+  assert(item.sourceUrl && item.verifiedAt, `${id} kaynak bağlantısını ve tarihini korumalı`);
+  assert.equal(hasStandaloneCapacityData(item) && !item.requiresAirPump, false, `${id} doğrulanamayan değerle bağımsız kapasite hesabına girmemeli`);
+  assert.equal(item.ratedFlowLph, undefined, `${id} doğrulanamayan debiyi taşımamalı`);
+  if (withdrawnEquipmentIds.has(id)) {
+    for (const field of withdrawableFields) assert.equal(item[field], undefined, `${id} doğrulanamayan ${field} değerini taşımamalı`);
+    assert.doesNotMatch(item.specifications, numericValueText, `${id} açıklamasında doğrulanamayan sayısal değer kalmamalı`);
+    assert.doesNotMatch(item.specifications, writtenValueText, `${id} açıklamasında yazıyla yazılmış doğrulanamayan değer kalmamalı`);
+  }
+  assert.match(item.specifications, /doğrulanamadı|yayımlanmamış/, `${id} açıklaması değerin neden olmadığını söylemeli`);
+  if (!item.requiresAirPump) assert.match(item.capacityDataNote ?? "", /Otomatik hesapta kullanılmaz|otomatik/i, `${id} kapasite notu taşımalı`);
+}
+// Kabul edilen yerel mağazada doğrulanan değerler (2026-10-17 taraması; docs/CATALOG_LOG.md). Uygulamanın tablosundan
+// (shopVerifiedEquipment) bağımsız beklentidir: iki yerden birinde yapılan yazım hatası (ör. 210 yerine 2100 L/saat) testi düşürür.
+const expectedShopValues = {
+  "aquawing-aq008": { ratedFlowLph: 180, powerW: 2.5 },
+  "aquawing-aq088": { ratedFlowLph: 880, powerW: 8 },
+  "aquawing-aq103f": { ratedFlowLph: 2000, powerW: 30 },
+  "aquawing-aq104f": { ratedFlowLph: 2800, powerW: 40 },
+  "aquawing-aq105f": { ratedFlowLph: 2800, powerW: 40 },
+  "aquawing-aq111f": { ratedFlowLph: 600, powerW: 5 },
+  "aquawing-aq1300f": { ratedFlowLph: 1500 },
+  "aquawing-aq1303": { ratedFlowLph: 1200, powerW: 20 },
+  "aquawing-aq201f": { ratedFlowLph: 300, powerW: 3 },
+  "aquawing-aq203f": { ratedFlowLph: 600, powerW: 12 },
+  "aquawing-aq204f": { ratedFlowLph: 800, powerW: 15 },
+  "aquawing-aq205f": { ratedFlowLph: 1200, powerW: 25 },
+  "aquawing-aq260": { ratedFlowLph: 360, powerW: 5 },
+  "aquawing-aq301hf": { ratedFlowLph: 300, powerW: 5 },
+  "aquawing-aq302hf": { ratedFlowLph: 300, powerW: 5 },
+  "aquawing-aq310f": { ratedFlowLph: 400, powerW: 4 },
+  "aquawing-aq311": { ratedFlowLph: 108, powerW: 2.5 },
+  "aquawing-aq312": { powerW: 3 },
+  "aquawing-aq388": { ratedFlowLph: 2500, powerW: 35 },
+  "aquawing-aq40f": { ratedFlowLph: 550, powerW: 12 },
+  "aquawing-aq501hf": { ratedFlowLph: 500, powerW: 8 },
+  "aquawing-aq510f": { ratedFlowLph: 400, powerW: 4 },
+  "aquawing-aq520f": { ratedFlowLph: 500, powerW: 6 },
+  "aquawing-aq601f": { ratedFlowLph: 880, powerW: 15 },
+  "aquawing-aq602f": { ratedFlowLph: 1000, powerW: 18 },
+  "aquawing-aq603f": { ratedFlowLph: 1200, powerW: 20 },
+  "aquawing-aq604f": { ratedFlowLph: 1200, powerW: 20 },
+  "aquawing-aq605f": { ratedFlowLph: 880, powerW: 15 },
+  "aquawing-aq60f": { ratedFlowLph: 880, powerW: 15 },
+  "aquawing-aq680": { ratedFlowLph: 880, powerW: 5 },
+  "aquawing-aq702f": { ratedFlowLph: 1500, powerW: 25 },
+  "aquawing-aq703f": { ratedFlowLph: 1800, powerW: 30 },
+  "aquawing-aq708": { ratedFlowLph: 210, powerW: 3, recommendedMaxL: 60 },
+  "aquawing-aq818": { ratedFlowLph: 180, powerW: 2.5 },
+  "aquawing-aq838": { ratedFlowLph: 420, powerW: 8 },
+  "aquawing-aq848": { ratedFlowLph: 480, powerW: 10 },
+  "aquawing-aq908": { ratedFlowLph: 480, powerW: 5 },
+  "aquawing-aq920fa": { ratedFlowLph: 1500, powerW: 30 },
+  "aquawing-aq920fc": { ratedFlowLph: 1500, powerW: 30 },
+  "aquawing-aq930": { ratedFlowLph: 270, powerW: 3.5 },
+  "ejet-906f": { ratedFlowLph: 1050, powerW: 15 },
+  "ejet-908f": { ratedFlowLph: 1400 },
+  "eurostar-ege-sp200": { ratedFlowLph: 200, powerW: 2 },
+  "eurostar-ege-sp300": { ratedFlowLph: 300, powerW: 2 },
+  "resun-lp20": { powerW: 17 },
+  "resun-lp200": { ratedFlowLph: 15000, powerW: 200 },
+  "resun-lp40": { ratedFlowLph: 3000, powerW: 35 },
+  "rs-062a": { ratedFlowLph: 300, powerW: 2 },
+  "rs-082a": { ratedFlowLph: 450, powerW: 6 },
+  "rs-188-top": { ratedFlowLph: 800, powerW: 12 },
+  "rs-388-top": { ratedFlowLph: 1750, powerW: 25 },
+  "rs-rs2002": { ratedFlowLph: 1500, powerW: 18 },
+  "rs-rs2004": { ratedFlowLph: 1750, powerW: 25 },
+  "sobo-aq-500f": { ratedFlowLph: 500, powerW: 6 },
+  "sobo-fg-1204": { ratedFlowLph: 880, powerW: 12 },
+  "sobo-sb-860a": { powerW: 5 },
+  "sobo-sf-550f": { ratedFlowLph: 500 },
+  "sobo-wp-303h": { ratedFlowLph: 280, powerW: 5, recommendedMinL: 10, recommendedMaxL: 50 },
+  "sobo-wp-607h": { ratedFlowLph: 600, powerW: 12 },
+  "sobo-wp-950f": { ratedFlowLph: 500, powerW: 6 },
+  "sunsun-604b": { ratedFlowLph: 800, powerW: 14 },
+  "waterbear-q418": { ratedFlowLph: 210, powerW: 2.5 },
+  "waterbear-q428": { ratedFlowLph: 540, powerW: 12 },
+  "waterbear-q448": { ratedFlowLph: 720, powerW: 8 },
+  "waterbear-q458": { ratedFlowLph: 960, powerW: 12 },
+  "waterbear-q708": { ratedFlowLph: 60 },
+  "waterbear-q718": { ratedFlowLph: 90 },
+  "waterbear-wb-1770": { ratedFlowLph: 500 },
+  "waterbear-wb-2770": { powerW: 12 },
+  "waterbear-wb-3770": { ratedFlowLph: 1200, powerW: 18 },
+  "waterbear-wb-4770": { ratedFlowLph: 1600, powerW: 25 },
+  "waterbear-wb-g800": { ratedFlowLph: 800, powerW: 10 },
+  "waterbear-wb-g810": { ratedFlowLph: 900 },
+  "xinyou-xy-2835": { recommendedMaxL: 40 },
+  "xlpro-230-mini": { ratedFlowLph: 210, powerW: 1.7 },
+  "xlpro-500at-mini": { ratedFlowLph: 450, recommendedMaxL: 100 },
+};
+// Açıklamada yazan değerler: "600 L/saat", "15.000 L/saat", "2 × 3,5 L/dakika" (çıkışlar toplanır), "2,5 W", "10–50 litre",
+// "60 litreye kadar". Açıklamada yazan her değer kayıttaki değere eşit olmalıdır (aynı debi iki birimle yazılabilir; biri bozulursa test düşer).
+const allEqual = (values, expected) => values.length > 0 && values.every((value) => value === expected);
+const trNumber = (text) => Number(text.replace(/\./g, "").replace(",", "."));
+const statedFlows = (text) => [
+  ...[...text.matchAll(/(\d[\d.]*)\s*L\/saat/g)].map((match) => trNumber(match[1])),
+  ...[...text.matchAll(/(?:(\d+)\s*×\s*)?(\d+(?:,\d+)?)\s*L\/dakika/g)].map((match) => Math.round(Number(match[1] ?? 1) * trNumber(match[2]) * 60)),
+];
+const statedPowers = (text) => [...text.matchAll(/(\d+(?:,\d+)?)\s*W\b/g)].map((match) => trNumber(match[1]));
+const statedVolumes = (text) => [...text.matchAll(/(?:(\d+)–)?(\d+)\s*(?:litreye kadar|litre)/g)].map((match) => [match[1] === undefined ? undefined : Number(match[1]), Number(match[2])]);
+assert.deepEqual(Object.keys(shopVerifiedEquipment).sort(), Object.keys(expectedShopValues).sort(), "Mağazada doğrulanan kayıtlar bağımsız beklenti tablosuyla aynı olmalı");
+for (const [id, verification] of Object.entries(shopVerifiedEquipment)) {
+  const item = equipmentCatalog.find((entry) => entry.id === id);
+  assert(item, `Mağazada doğrulanan ekipman katalogda bulunmalı: ${id}`);
+  assert(acceptedShopHosts.includes(new URL(item.sourceUrl).hostname.replace(/^www\./, "")), `${id} kaynağı kabul edilen yerel mağaza sayfası olmalı`);
+  assert.deepEqual([item.sourceUrl, item.verifiedAt, item.specifications], [verification.sourceUrl, shopVerifiedAt, verification.specifications], `${id} mağaza sayfasını, tarihini ve açıklamasını taşımalı`);
+  for (const field of withdrawableFields) assert.deepEqual(item[field], expectedShopValues[id]?.[field], `${id} ${field} alanında yalnız mağazada doğrulanan değeri taşımalı`);
+  assert(Object.keys(verification.values).length > 0, `${id} en az bir doğrulanmış değer taşımalı`);
+  if (item.ratedFlowLph !== undefined) assert(allEqual(statedFlows(item.specifications), item.ratedFlowLph), `${id} açıklamadaki debi kayıttaki ${item.ratedFlowLph} L/saat ile tutarlı olmalı`);
+  if (item.powerW !== undefined) assert(allEqual(statedPowers(item.specifications), item.powerW), `${id} açıklamadaki güç kayıttaki ${item.powerW} W ile tutarlı olmalı`);
+  if (item.recommendedMaxL !== undefined) assert(statedVolumes(item.specifications).length > 0 && statedVolumes(item.specifications).every(([min, max]) => max === item.recommendedMaxL && min === item.recommendedMinL), `${id} açıklamadaki hacim kayıttaki ${item.recommendedMinL ?? ""}–${item.recommendedMaxL} litre ile tutarlı olmalı`);
+  assert.doesNotMatch(item.specifications, writtenValueText, `${id} açıklamasında yazıyla yazılmış değer kalmamalı`);
+  assert.equal(Boolean(item.capacityDataNote), !hasStandaloneCapacityData(item), `${id} kapasite notunu yalnız doğrulanan değer kapasite hesabına yetmiyorsa taşımalı`);
+}
+assert.deepEqual(statedFlows("Çift çıkış · 2 × 4,5 L/dakika hava motoru · 540 L/saat · 12 W"), [540, 540], "Açıklamadaki debi okuması çok çıkışı toplamalı");
+assert.deepEqual([statedFlows("250 L/dakika (15.000 L/saat) · 200 W"), statedPowers("1,8 L/dakika · 2,5 W")], [[15000, 15000], [2.5]], "Açıklamadaki binlik ayırıcı ve ondalık virgül okunmalı");
+// Ekipman sayfasındaki kart katalogla eşleşen cihazda güncel katalog açıklamasını gösterir; kayda eklenirken kopyalanan eski açıklama
+// (ör. sonradan değeri çekilen AQ101F'nin "550 L/saat · 12 W" metni) güncel teknik bilgi gibi sunulmaz.
+const storedAq101f = { id: "e-eski", aquariumId: "a", category: "filter", brand: "Aquawing", model: "AQ101F", catalogId: "aquawing-aq101f", installedAt: "2026-01-01", specifications: "İç filtre · 550 L/saat · 12 W · barkod 8681475612879" };
+assert.equal(specificationsForEquipment(storedAq101f), equipmentCatalog.find((entry) => entry.id === "aquawing-aq101f").specifications, "Katalogla eşleşen cihazın kartı güncel katalog açıklamasını göstermeli");
+assert.doesNotMatch(specificationsForEquipment(storedAq101f), /550 L\/saat|12 W/, "Kart kayıttaki eski, doğrulanamayan değeri göstermemeli");
+assert.equal(specificationsForEquipment({ ...storedAq101f, catalogId: undefined }), equipmentCatalog.find((entry) => entry.id === "aquawing-aq101f").specifications, "Katalog kimliği olmayan ama marka ve modeli eşleşen cihaz da güncel açıklamayı göstermeli");
+assert.equal(specificationsForEquipment({ ...storedAq101f, catalogId: undefined, brand: "Ev yapımı", model: "Pipo filtre", specifications: "Kendi notum" }), "Kendi notum", "Katalogla eşleşmeyen cihazda kayıttaki metin kalmalı");
 const { allNavigationItems, primaryNavigationItems, settingsNavigationItem } = require(path.join(projectRoot, "src/data/navigation.ts"));
 const cikletistMainCategoryInventory = require(path.join(projectRoot, "scripts/fixtures/cikletist-main-category.cjs"));
 
@@ -2057,20 +2205,20 @@ for (const id of sunsunTurkeyExtraIds) {
   const item = sunsun.find((entry) => entry.id === id);
   assert(item, `SunSun Türkiye güncel ürün kaydı eksik: ${id}`);
   assert(item.sourceUrl.startsWith("https://"), `SunSun ${id} doğrulanabilir HTTPS kaynağına bağlanmalı`);
-  assert.equal(item.verifiedAt, ["sunsun-502", "sunsun-503"].includes(id) ? "2026-08-29" : "2026-08-27", `SunSun ${id} güncel doğrulama tarihini taşımalı`);
+  assert.equal(item.verifiedAt, shopVerified(item) ? shopVerifiedAt : ["sunsun-502", "sunsun-503"].includes(id) ? "2026-08-29" : "2026-08-27", `SunSun ${id} güncel doğrulama tarihini taşımalı`);
 }
 const sunsun604b = sunsun.find((item) => item.id === "sunsun-604b");
-assert.deepEqual([sunsun604b?.category, sunsun604b?.ratedFlowLph, sunsun604b?.powerW], ["filter", 800, 14], "SunSun 604B doğrulanmış 800 L/saat ve 14 W değerlerini taşımalı");
+assert.deepEqual([sunsun604b?.category, sunsun604b?.ratedFlowLph, sunsun604b?.powerW], ["filter", sourced(sunsun604b, "ratedFlowLph", 800), sourced(sunsun604b, "powerW", 14)], "SunSun 604B doğrulanmış 800 L/saat ve 14 W değerlerini taşımalı");
 const sunsunJp025f = sunsun.find((item) => item.id === "sunsun-jp025f");
 assert.deepEqual([sunsunJp025f?.ratedFlowLph, sunsunJp025f?.powerW, sunsunJp025f?.recommendedMinL, sunsunJp025f?.recommendedMaxL], [1600, 35, 120, 600], "SunSun JP-025F doğrulanmış debi, güç ve hacim aralığını taşımalı");
 const sunsunAco006 = sunsun.find((item) => item.id === "sunsun-aco006");
 assert.deepEqual([sunsunAco006?.category, sunsunAco006?.ratedFlowLph, sunsunAco006?.powerW], ["air_pump", 5100, 105], "SunSun ACO-006 birim dönüşümü doğrulanmış hava debisi ve güç değerini taşımalı");
 assert.deepEqual([sunsun.find((item) => item.id === "sunsun-pg180")?.ratedFlowLph, sunsun.find((item) => item.id === "sunsun-pg250")?.ratedFlowLph], [26000, 35000], "SunSun blower modellerinin m³/saat değerleri L/saat olarak doğru dönüştürülmeli");
 const sunsun502 = sunsun.find((entry) => entry.id === "sunsun-502");
-assert.deepEqual([sunsun502?.ratedFlowLph, sunsun502?.powerW, sunsun502?.recommendedMaxL], [320, undefined, 60], "SunSun 502 ortak doğrulanan debi ve hacmi taşımalı, çelişkili güç seçilmemeli");
+assert.deepEqual([sunsun502?.ratedFlowLph, sunsun502?.powerW, sunsun502?.recommendedMaxL], [sourced(sunsun502, "ratedFlowLph", 320), undefined, sourced(sunsun502, "recommendedMaxL", 60)], "SunSun 502 ortak doğrulanan debi ve hacmi taşımalı, çelişkili güç seçilmemeli");
 assert.equal(sunsun502?.additionalSourceUrls?.length, 2, "SunSun 502 çapraz doğrulama kaynaklarını taşımalı");
 const sunsun503 = sunsun.find((entry) => entry.id === "sunsun-503");
-assert.deepEqual([sunsun503?.ratedFlowLph, sunsun503?.powerW], [600, 6], "SunSun 503 güncel Türkiye ürününün doğrulanan debi ve güç değerlerini taşımalı");
+assert.deepEqual([sunsun503?.ratedFlowLph, sunsun503?.powerW], [sourced(sunsun503, "ratedFlowLph", 600), sourced(sunsun503, "powerW", 6)], "SunSun 503 güncel Türkiye ürününün doğrulanan debi ve güç değerlerini taşımalı");
 assert.equal(sunsun503?.additionalSourceUrls?.length, 2, "SunSun 503 çapraz doğrulama kaynaklarını taşımalı");
 for (const id of ["sunsun-jvp102a", "sunsun-jvp201"]) {
   assert.equal(sunsun.find((item) => item.id === id)?.category, "other", `SunSun ${id} dalga motoru filtrasyon hesabına karışmamalı`);
@@ -2251,10 +2399,10 @@ for (const [model, flow, power, barcode] of [
   ["AQ302HF", 300, 5, "8681475611049"],
 ]) {
   const item = equipmentCatalog.find((entry) => entry.brand === "Aquawing" && entry.model === model);
-  assert.deepEqual([item?.category, item?.ratedFlowLph, item?.powerW], ["filter", flow, power], `Aquawing ${model} doğrulanmış filtre verilerini taşımalı`);
+  assert.deepEqual([item?.category, item?.ratedFlowLph, item?.powerW], ["filter", sourced(item, "ratedFlowLph", flow), sourced(item, "powerW", power)], `Aquawing ${model} doğrulanmış filtre verilerini taşımalı`);
   assert.match(item?.specifications || "", new RegExp(barcode), `Aquawing ${model} doğrulanmış barkodu taşımalı`);
-  assert.equal(new URL(item?.sourceUrl).hostname, "eksenpet.com", `Aquawing ${model} doğrulanmış yerel kaynağa bağlanmalı`);
-  assert.equal(item?.verifiedAt, "2026-09-09", `Aquawing ${model} güncel doğrulama tarihini taşımalı`);
+  if (!shopVerified(item)) assert.equal(new URL(item?.sourceUrl).hostname, "eksenpet.com", `Aquawing ${model} doğrulanmış yerel kaynağa bağlanmalı`);
+  assert.equal(item?.verifiedAt, shopVerified(item) ? shopVerifiedAt : "2026-09-09", `Aquawing ${model} güncel doğrulama tarihini taşımalı`);
 }
 for (const model of ["AQ60F", "AQ101FB", "AQ102F", "AQ103F", "AQ104F", "AQ603F"]) {
   const item = equipmentCatalog.find((entry) => entry.brand === "Aquawing" && entry.model === model);
@@ -2288,10 +2436,10 @@ for (const [model, category, flow, power, barcode] of [
   ["WM1500", "other", 15000, 25, "8681475613517"],
 ]) {
   const item = equipmentCatalog.find((entry) => entry.brand === "Aquawing" && entry.model === model);
-  assert.deepEqual([item?.category, item?.ratedFlowLph, item?.powerW], [category, flow, power], `Aquawing ${model} doğrulanmış kategori, debi ve güç değerlerini taşımalı`);
+  assert.deepEqual([item?.category, item?.ratedFlowLph, item?.powerW], [category, sourced(item, "ratedFlowLph", flow), sourced(item, "powerW", power)], `Aquawing ${model} doğrulanmış kategori, debi ve güç değerlerini taşımalı`);
   assert.match(item?.specifications || "", new RegExp(barcode), `Aquawing ${model} doğrulanmış barkodu taşımalı`);
-  assert.equal(new URL(item?.sourceUrl).hostname, "eksenpet.com", `Aquawing ${model} güncel yerel kaynağa bağlanmalı`);
-  assert.equal(item?.verifiedAt, "2026-09-09", `Aquawing ${model} güncel doğrulama tarihini taşımalı`);
+  if (!shopVerified(item)) assert.equal(new URL(item?.sourceUrl).hostname, "eksenpet.com", `Aquawing ${model} güncel yerel kaynağa bağlanmalı`);
+  assert.equal(item?.verifiedAt, shopVerified(item) ? shopVerifiedAt : "2026-09-09", `Aquawing ${model} güncel doğrulama tarihini taşımalı`);
 }
 for (const [model, flow, power, barcode] of [
   ["AQ60F", 880, 15, "8681475622007"],
@@ -2302,22 +2450,22 @@ for (const [model, flow, power, barcode] of [
   ["AQ603F", 1200, 20, "8681475612770"],
 ]) {
   const item = equipmentCatalog.find((entry) => entry.brand === "Aquawing" && entry.model === model);
-  assert.deepEqual([item?.category, item?.ratedFlowLph, item?.powerW], ["filter", flow, power], `Aquawing ${model} doğrulanmış filtre verilerini taşımalı`);
+  assert.deepEqual([item?.category, item?.ratedFlowLph, item?.powerW], ["filter", sourced(item, "ratedFlowLph", flow), sourced(item, "powerW", power)], `Aquawing ${model} doğrulanmış filtre verilerini taşımalı`);
   assert.match(item?.specifications || "", new RegExp(barcode), `Aquawing ${model} doğrulanmış barkodu taşımalı`);
-  assert.equal(new URL(item?.sourceUrl).hostname, "eksenpet.com", `Aquawing ${model} doğrulanabilir yerel kaynağa bağlanmalı`);
-  assert.equal(item?.verifiedAt, "2026-09-09", `Aquawing ${model} güncel doğrulama tarihini taşımalı`);
+  if (!shopVerified(item)) assert.equal(new URL(item?.sourceUrl).hostname, "eksenpet.com", `Aquawing ${model} doğrulanabilir yerel kaynağa bağlanmalı`);
+  assert.equal(item?.verifiedAt, shopVerified(item) ? shopVerifiedAt : "2026-09-09", `Aquawing ${model} güncel doğrulama tarihini taşımalı`);
 }
 const aquawingAq680 = equipmentCatalog.find((entry) => entry.brand === "Aquawing" && entry.model === "AQ680");
-assert.deepEqual([aquawingAq680?.category, aquawingAq680?.ratedFlowLph, aquawingAq680?.powerW, aquawingAq680?.recommendedMaxL], ["filter", 880, 5, 80], "Aquawing AQ680 doğrulanmış yüzey emici filtre ve hacim verilerini taşımalı");
+assert.deepEqual([aquawingAq680?.category, aquawingAq680?.ratedFlowLph, aquawingAq680?.powerW, aquawingAq680?.recommendedMaxL], ["filter", sourced(aquawingAq680, "ratedFlowLph", 880), sourced(aquawingAq680, "powerW", 5), sourced(aquawingAq680, "recommendedMaxL", 80)], "Aquawing AQ680 doğrulanmış yüzey emici filtre ve hacim verilerini taşımalı");
 assert.match(aquawingAq680?.specifications || "", /8681475610967/, "Aquawing AQ680 doğrulanmış barkodu taşımalı");
 const aquawingAq708 = equipmentCatalog.find((entry) => entry.brand === "Aquawing" && entry.model === "AQ708");
 assert.equal(aquawingAq708?.category, "air_pump", "Aquawing AQ708 hava motoru kategorisinde bulunmalı");
-assert.equal(aquawingAq708?.powerW, 3, "Aquawing AQ708 doğrulanmış 3 W güç değerini taşımalı");
-assert.equal(aquawingAq708?.ratedFlowLph, 210, "Aquawing AQ708 doğrulanmış 3,5 L/dk hava debisini saatlik değere dönüştürmeli");
-assert.equal(aquawingAq708?.recommendedMaxL, 60, "Aquawing AQ708 yayımlanan üst akvaryum hacmini taşımalı");
-assert.equal(aquawingAq708?.capacityDataNote, undefined, "Aquawing AQ708 kaynaklı debi varken kapasite boşluğu göstermemeli");
+assert.equal(aquawingAq708?.powerW, sourced(aquawingAq708, "powerW", 3), "Aquawing AQ708 doğrulanmış 3 W güç değerini taşımalı");
+assert.equal(aquawingAq708?.ratedFlowLph, sourced(aquawingAq708, "ratedFlowLph", 210), "Aquawing AQ708 doğrulanmış 3,5 L/dk hava debisini saatlik değere dönüştürmeli");
+assert.equal(aquawingAq708?.recommendedMaxL, sourced(aquawingAq708, "recommendedMaxL", 60), "Aquawing AQ708 yayımlanan üst akvaryum hacmini taşımalı");
+assert.equal(Boolean(aquawingAq708?.capacityDataNote), isWithdrawn(aquawingAq708), "Aquawing AQ708 kaynaklı debi varken kapasite boşluğu göstermemeli");
 assert.match(aquawingAq708?.specifications || "", /8681475613111/, "Aquawing AQ708 doğrulanmış barkodu taşımalı");
-assert.equal(aquawingAq708?.verifiedAt, "2026-09-10", "Aquawing AQ708 güncel doğrulama tarihini taşımalı");
+assert.equal(aquawingAq708?.verifiedAt, shopVerified(aquawingAq708) ? shopVerifiedAt : "2026-09-10", "Aquawing AQ708 güncel doğrulama tarihini taşımalı");
 for (const [model, power, barcode] of [["AQ-A1000", 8, "8690000438709"], ["AQ-A2000", 12, "8690000438716"]]) {
   const item = equipmentCatalog.find((entry) => entry.brand === "Aquawing" && entry.model === model);
   assert.equal(item?.category, "air_pump", `Aquawing ${model} hava motoru kategorisinde bulunmalı`);
@@ -2337,9 +2485,9 @@ for (const [model, flow, power, barcode] of [
   ["AQ920FC", 1500, 30, "8681475612954"],
 ]) {
   const item = equipmentCatalog.find((entry) => entry.brand === "Aquawing" && entry.model === model);
-  assert.deepEqual([item?.category, item?.ratedFlowLph, item?.powerW], ["filter", flow, power], `Aquawing ${model} doğrulanmış filtre verilerini taşımalı`);
+  assert.deepEqual([item?.category, item?.ratedFlowLph, item?.powerW], ["filter", sourced(item, "ratedFlowLph", flow), sourced(item, "powerW", power)], `Aquawing ${model} doğrulanmış filtre verilerini taşımalı`);
   assert.match(item?.specifications || "", new RegExp(barcode), `Aquawing ${model} doğrulanmış barkodu taşımalı`);
-  assert.equal(new URL(item?.sourceUrl).hostname, "eksenpet.com", `Aquawing ${model} doğrudan ürün kaynağına bağlanmalı`);
+  if (!shopVerified(item)) assert.equal(new URL(item?.sourceUrl).hostname, "eksenpet.com", `Aquawing ${model} doğrudan ürün kaynağına bağlanmalı`);
 }
 for (const [model, flow, power, barcode] of [
   ["AQ2600", 3000, 45, "8681475613401"],
@@ -2373,10 +2521,10 @@ assert.equal(aquawingAq999a?.capacityDataNote, undefined, "Aquawing AQ999A kayna
 assert.equal(aquawingAq999a?.sourceUrl, "https://bettamarketim.com.tr/aquawing-dort-cikisli-hava-motoru-8w", "Aquawing AQ999A onaylı yerel kaynağa bağlanmalı");
 assert.equal(aquawingAq999a?.verifiedAt, "2026-09-10", "Aquawing AQ999A güncel doğrulama tarihini taşımalı");
 const aquawingAq311 = equipmentCatalog.find((entry) => entry.id === "aquawing-aq311");
-assert.deepEqual([aquawingAq311?.category, aquawingAq311?.powerW, aquawingAq311?.ratedFlowLph], ["air_pump", 2.5, 108], "Aquawing AQ311 doğrulanmış 1,8 L/dk hava debisini saatlik değere dönüştürmeli");
+assert.deepEqual([aquawingAq311?.category, aquawingAq311?.powerW, aquawingAq311?.ratedFlowLph], ["air_pump", sourced(aquawingAq311, "powerW", 2.5), sourced(aquawingAq311, "ratedFlowLph", 108)], "Aquawing AQ311 doğrulanmış 1,8 L/dk hava debisini saatlik değere dönüştürmeli");
 assert.match(aquawingAq311?.specifications || "", /8681475611063/, "Aquawing AQ311 doğrulanmış barkodu taşımalı");
-assert.equal(aquawingAq311?.capacityDataNote, undefined, "Aquawing AQ311 kaynaklı debi varken kapasite boşluğu göstermemeli");
-assert.equal(aquawingAq311?.verifiedAt, "2026-09-10", "Aquawing AQ311 güncel doğrulama tarihini taşımalı");
+assert.equal(Boolean(aquawingAq311?.capacityDataNote), isWithdrawn(aquawingAq311), "Aquawing AQ311 kaynaklı debi varken kapasite boşluğu göstermemeli");
+assert.equal(aquawingAq311?.verifiedAt, shopVerified(aquawingAq311) ? shopVerifiedAt : "2026-09-10", "Aquawing AQ311 güncel doğrulama tarihini taşımalı");
 for (const [model, barcode] of [["AQMBS1", "8681475628900"], ["AQMBM2", "8681475628917"], ["07708 Check Valve 20'li Paket", "8690000437665"]]) {
   const item = equipmentCatalog.find((entry) => entry.brand === "Aquawing" && entry.model === model);
   assert.equal(item?.category, "other", `Aquawing ${model} kapasite hesabına karışmamalı`);
@@ -2484,7 +2632,7 @@ const expectedRegentFlows = new Map([
 for (const [model, expectedFlow] of expectedRegentFlows) {
   const item = equipmentCatalog.find((entry) => entry.brand === "Regent" && entry.model === model);
   assert(item, `Regent ${model} katalogda bulunmalı`);
-  assert.equal(item.ratedFlowLph, expectedFlow, `Regent ${model} debisi model numarasından türetilmemeli`);
+  assert.equal(item.ratedFlowLph, sourced(item, "ratedFlowLph", expectedFlow), `Regent ${model} debisi model numarasından türetilmemeli`);
 }
 for (const model of ["6500", "7500", "8500", "9500"]) {
   const item = equipmentCatalog.find((entry) => entry.brand === "Regent" && entry.model === model);
@@ -2563,15 +2711,15 @@ for (const [model, power, maxL] of [["MINI-500", 6.9, 100], ["EX-1000", 22, 200]
   assert.deepEqual([item?.powerW, item?.recommendedMaxL], [power, maxL], `XLPro ${model} doğrulanmış güç ve hacim sınırını taşımalı`);
 }
 const xlproMini500At = equipmentCatalog.find((entry) => entry.brand === "XLPro" && entry.model === "MINI-500AT");
-assert.deepEqual([xlproMini500At?.ratedFlowLph, xlproMini500At?.recommendedMaxL], [450, 100], "XLPro MINI-500AT doğrulanmış debi ve 100 litre hacim sınırını taşımalı");
-assert.equal(xlproMini500At?.sourceUrl, "https://akvaryumbalikavm.com.tr/xlpro-500at-mini-dis-filtre-450l-s", "XLPro MINI-500AT doğrudan ürün kaynağına bağlanmalı");
+assert.deepEqual([xlproMini500At?.ratedFlowLph, xlproMini500At?.recommendedMaxL], [sourced(xlproMini500At, "ratedFlowLph", 450), sourced(xlproMini500At, "recommendedMaxL", 100)], "XLPro MINI-500AT doğrulanmış debi ve 100 litre hacim sınırını taşımalı");
+assert.equal(xlproMini500At?.sourceUrl, shopVerified(xlproMini500At)?.sourceUrl ?? "https://akvaryumbalikavm.com.tr/xlpro-500at-mini-dis-filtre-450l-s", "XLPro MINI-500AT doğrudan ürün kaynağına bağlanmalı");
 const currentXinyouModels = new Map([
   ["XY-168", 30], ["XY-2835", 40], ["XY-2836", 80], ["XY-2810", 100], ["XY-2901", 120],
   ["XY-2811", 220], ["XY-2902", 220], ["XY-2812", 250], ["XY-2813", 380],
 ]);
 for (const [model, maxL] of currentXinyouModels) {
   const item = equipmentCatalog.find((entry) => entry.brand === "Xinyou" && entry.model === model);
-  assert.deepEqual([item?.category, item?.recommendedMaxL, item?.requiresAirPump], ["filter", maxL, true], `Xinyou ${model} güncel marka sayfasındaki hacim sınırıyla hava motorlu filtre olarak bulunmalı`);
+  assert.deepEqual([item?.category, item?.recommendedMaxL, item?.requiresAirPump], ["filter", sourced(item, "recommendedMaxL", maxL), true], `Xinyou ${model} güncel marka sayfasındaki hacim sınırıyla hava motorlu filtre olarak bulunmalı`);
 }
 for (const [model, productCode, barcode, dimensions, spongeDimensions] of [
   ["Motorlu Pipo Filtre Medium", "452-SG-YU228C-1", "1452000189084", "17,5 × 23 cm", "5 × 12 cm"],
@@ -2593,8 +2741,8 @@ assert.deepEqual([eurostarHbl802?.ratedFlowLph, eurostarHbl802?.powerW, eurostar
 assert(eurostarHbl802?.sourceUrl.includes("atakanpetshop.com"), "Eurostar HBL802 yetkili satıcı ürün sayfasına bağlanmalı");
 for (const [model, flow, power, minL, maxL] of [["Ege SP300", 300, 2, 30, 60], ["Ege 400", 400, 4, 40, 100], ["Ege 500", 500, 6, 40, 100], ["Ege W550", 550, 10, undefined, undefined]]) {
   const item = equipmentCatalog.find((entry) => entry.brand === "Eurostar" && entry.model === model);
-  assert.deepEqual([item?.category, item?.ratedFlowLph, item?.powerW, item?.recommendedMinL, item?.recommendedMaxL], ["filter", flow, power, minL, maxL], `Eurostar ${model} doğrudan ürün sayfasındaki teknik değerleri taşımalı`);
-  assert(item?.sourceUrl.includes("akvaryem.com.tr/urun/"), `Eurostar ${model} doğrudan ürün sayfasına bağlanmalı`);
+  assert.deepEqual([item?.category, item?.ratedFlowLph, item?.powerW, item?.recommendedMinL, item?.recommendedMaxL], ["filter", sourced(item, "ratedFlowLph", flow), sourced(item, "powerW", power), sourced(item, "recommendedMinL", minL), sourced(item, "recommendedMaxL", maxL)], `Eurostar ${model} doğrudan ürün sayfasındaki teknik değerleri taşımalı`);
+  if (!shopVerified(item)) assert(item?.sourceUrl.includes("akvaryem.com.tr/urun/"), `Eurostar ${model} doğrudan ürün sayfasına bağlanmalı`);
 }
 assert.equal(equipmentCatalog.find((entry) => entry.brand === "Eurostar" && entry.model === "Ege SP300")?.adjustableFlow, true, "Eurostar Ege SP300 yayımlanmış su çıkışı ayarını taşımalı");
 assert.equal(equipmentCatalog.some((entry) => entry.id === "eurostar-n708"), false, "Satıcılar arasında farklı ürünlere atanan N708 kodu ayrı Eurostar filtre modeli gibi gösterilmemeli");
@@ -2657,8 +2805,8 @@ for (const model of ["Armatür Yedek Ayak","Pipe Holder Dış Filtre Boru Tutucu
 
 const ejet905 = equipmentCatalog.find((entry) => entry.brand === "Ejet" && entry.model === "905F");
 assert(ejet905, "Ejet 905F katalogda bulunmalı");
-assert.equal(ejet905.ratedFlowLph, 470, "Ejet 905F debisi 1000 L/saat olarak hatalı kaydedilmemeli");
-assert.equal(ejet905.powerW, 7, "Ejet 905F güç bilgisi doğrulanmış 7 W olmalı");
+assert.equal(ejet905.ratedFlowLph, sourced(ejet905, "ratedFlowLph", 470), "Ejet 905F debisi 1000 L/saat olarak hatalı kaydedilmemeli");
+assert.equal(ejet905.powerW, sourced(ejet905, "powerW", 7), "Ejet 905F güç bilgisi doğrulanmış 7 W olmalı");
 assert.equal(equipmentCatalog.filter((entry) => entry.brand === "Ejet").length, 13, "Ejet'in doğrulanan dış, iç, sünger ve hava motoru portföyü 13 model içermeli");
 const ejet101 = equipmentCatalog.find((entry) => entry.brand === "Ejet" && entry.model === "101");
 assert.deepEqual([ejet101?.category, ejet101?.requiresAirPump, ejet101?.ratedFlowLph], ["filter", true, undefined], "Ejet 101 pasif pipo filtre olarak kalmalı ve bağımsız pompa debisi uydurulmamalı");
@@ -2672,9 +2820,9 @@ assert(ejetJ103?.requiresAirPump, "Ejet J103 bağımsız motorlu filtre gibi de�
 assert(ejetJ103?.sourceUrl.endsWith("/e-jet-103-uretim-filtresi"), "Ejet J103 doğrudan ürün kaynağına bağlanmalı");
 for (const [model, flow, power] of [["906F", 1000, 16], ["907F", 1350, 25], ["908F", 1400, 29.3]]) {
   const item = equipmentCatalog.find((entry) => entry.brand === "Ejet" && entry.model === model);
-  assert.equal(item?.ratedFlowLph, flow, `Ejet ${model} çelişkili satıcı değerlerinde güvenli düşük debiyi kullanmalı`);
-  assert.equal(item?.powerW, power, `Ejet ${model} doğrulanmış güç değerini taşımalı`);
-  assert(item?.sourceUrl.includes(`/urun/e-jet-j${model.toLowerCase()}-`), `Ejet ${model} doğrudan ürün sayfasına bağlanmalı`);
+  assert.equal(item?.ratedFlowLph, sourced(item, "ratedFlowLph", flow), `Ejet ${model} çelişkili satıcı değerlerinde güvenli düşük debiyi kullanmalı`);
+  assert.equal(item?.powerW, sourced(item, "powerW", power), `Ejet ${model} doğrulanmış güç değerini taşımalı`);
+  if (!shopVerified(item)) assert(item?.sourceUrl.includes(`/urun/e-jet-j${model.toLowerCase()}-`), `Ejet ${model} doğrudan ürün sayfasına bağlanmalı`);
 }
 
 const ferplastEquipment = equipmentCatalog.filter((entry) => entry.brand === "Ferplast");
@@ -2777,18 +2925,18 @@ assert.deepEqual(equipmentCatalog.find((entry) => entry.brand === "Netlea" && en
 assert.deepEqual(equipmentCatalog.find((entry) => entry.brand === "Netlea" && entry.model === "NL-6105P-AT5-D0/4")?.recommendedTankLengthCm, [45, 80], "Netlea 6105P yayımlanmış 45–80 cm akvaryum aralığını taşımalı");
 for (const [model, flow] of [["No.1 DC Canister Filter", 980], ["No.2 DC Canister Filter", 1500], ["No.2V DC Canister Filter", 1500], ["2F-L Complete", 1100], ["No.2S Hang-on Back Filter", 600]]) {
   const item = equipmentCatalog.find((entry) => entry.brand === "Netlea" && entry.model === model);
-  assert.deepEqual([item?.category, item?.ratedFlowLph], ["filter", flow], `Netlea ${model} doğrulanmış debiyle filtre kategorisinde bulunmalı`);
+  assert.deepEqual([item?.category, item?.ratedFlowLph], ["filter", sourced(item, "ratedFlowLph", flow)], `Netlea ${model} doğrulanmış debiyle filtre kategorisinde bulunmalı`);
 }
 for (const model of ["No.1 DC Canister Filter", "No.2 DC Canister Filter", "No.2V DC Canister Filter"]) {
   assert.equal(equipmentCatalog.find((entry) => entry.brand === "Netlea" && entry.model === model)?.adjustableFlow, true, `Netlea ${model} ayarlanabilir debi bilgisini taşımalı`);
 }
 const netleaAquaticTime = equipmentCatalog.find((entry) => entry.brand === "Netlea" && entry.model === "Aquatic Time No.1 Variable Canister Filter");
-assert.deepEqual([netleaAquaticTime?.category, netleaAquaticTime?.ratedFlowLph, netleaAquaticTime?.powerW, netleaAquaticTime?.adjustableFlow], ["filter", 960, 14, true], "Netlea Aquatic Time No.1 yayımlanmış debi, güç ve ayar bilgisini taşımalı");
-assert.match(netleaAquaticTime?.specifications || "", /400–960 L\/saat.*4 L/, "Netlea Aquatic Time No.1 debi aralığı ve medya hacmini göstermeli");
+assert.deepEqual([netleaAquaticTime?.category, netleaAquaticTime?.ratedFlowLph, netleaAquaticTime?.powerW, netleaAquaticTime?.adjustableFlow], ["filter", sourced(netleaAquaticTime, "ratedFlowLph", 960), sourced(netleaAquaticTime, "powerW", 14), true], "Netlea Aquatic Time No.1 yayımlanmış debi, güç ve ayar bilgisini taşımalı");
+assert.match(netleaAquaticTime?.specifications || "", isWithdrawn(netleaAquaticTime) ? /debi doğrulanamadı/ : /400–960 L\/saat.*4 L/, "Netlea Aquatic Time No.1 debi aralığı ve medya hacmini göstermeli");
 const netleaNo2v = equipmentCatalog.find((entry) => entry.brand === "Netlea" && entry.model === "No.2V DC Canister Filter");
-assert.deepEqual([netleaNo2v?.powerW, netleaNo2v?.recommendedMinL, netleaNo2v?.recommendedMaxL, netleaNo2v?.recommendedTankLengthCm], [28, 60, 300, [60, 120]], "Netlea No.2V güç, hacim ve akvaryum uzunluğu verilerini taşımalı");
+assert.deepEqual([netleaNo2v?.powerW, netleaNo2v?.recommendedMinL, netleaNo2v?.recommendedMaxL, netleaNo2v?.recommendedTankLengthCm], [sourced(netleaNo2v, "powerW", 28), sourced(netleaNo2v, "recommendedMinL", 60), sourced(netleaNo2v, "recommendedMaxL", 300), sourced(netleaNo2v, "recommendedTankLengthCm", [60, 120])], "Netlea No.2V güç, hacim ve akvaryum uzunluğu verilerini taşımalı");
 const netleaNo2s = equipmentCatalog.find((entry) => entry.brand === "Netlea" && entry.model === "No.2S Hang-on Back Filter");
-assert.deepEqual([netleaNo2s?.powerW, netleaNo2s?.recommendedTankLengthCm, netleaNo2s?.adjustableFlow], [7, [25, 60], true], "Netlea No.2S güç, akvaryum uzunluğu ve debi ayarı verilerini taşımalı");
+assert.deepEqual([netleaNo2s?.powerW, netleaNo2s?.recommendedTankLengthCm, netleaNo2s?.adjustableFlow], [sourced(netleaNo2s, "powerW", 7), sourced(netleaNo2s, "recommendedTankLengthCm", [25, 60]), true], "Netlea No.2S güç, akvaryum uzunluğu ve debi ayarı verilerini taşımalı");
 for (const [model, flow, power] of [["S1500", 1500, 12], ["S3000", 3000, 20], ["S4000", 4000, 25], ["S5500", 5500, 35], ["C1500", 1500, 12]]) {
   const item = equipmentCatalog.find((entry) => entry.brand === "Netlea" && entry.model === model);
   assert.deepEqual([item?.category, item?.ratedFlowLph, item?.powerW, item?.adjustableFlow], ["other", flow, power, true], `Netlea ${model} doğrulanmış pompa verilerini taşımalı`);
@@ -2819,14 +2967,14 @@ for (const [model, category] of [["Aquatic Plant Soil", "substrate"], ["Aquatic 
 }
 for (const [model, flow, power] of [["No.1 SF Stainless Canister Filter", 1098, 15], ["No.2 SF Stainless Canister Filter", 1499, 28], ["No.3 SF Stainless Canister Filter", 2699, 35], ["No.4 SF Stainless Canister Filter", 3157, 40]]) {
   const item = netleaEquipment.find((entry) => entry.model === model);
-  assert.deepEqual([item?.category, item?.ratedFlowLph, item?.powerW, item?.adjustableFlow], ["filter", flow, power, true], `Netlea ${model} yayımlanmış filtre aralığı ve gücüyle bulunmalı`);
-  assert.match(item?.specifications || "", /US gal\/saat.*L\/saat/, `Netlea ${model} kaynak birimini ve litre dönüşümünü açıkça göstermeli`);
+  assert.deepEqual([item?.category, item?.ratedFlowLph, item?.powerW, item?.adjustableFlow], ["filter", sourced(item, "ratedFlowLph", flow), sourced(item, "powerW", power), true], `Netlea ${model} yayımlanmış filtre aralığı ve gücüyle bulunmalı`);
+  assert.match(item?.specifications || "", isWithdrawn(item) ? /debi doğrulanamadı/ : /US gal\/saat.*L\/saat/, `Netlea ${model} kaynak birimini ve litre dönüşümünü açıkça göstermeli`);
 }
 for (const [model, flow, power, pressure, battery] of [["No.2B Bluetooth Air Pump", 600, 6.5, "0,020 MPa", "17,75 Wh"], ["No.3B Bluetooth Air Pump", 720, 9.5, "0,024 MPa", "48,75 Wh"], ["No.4B Q2/4 Bluetooth Air Pump", 960, 9.5, "0,027 MPa", "73 Wh"], ["No.4B Q9/4 Bluetooth Air Pump", 840, 9.5, "0,022 MPa", "73 Wh"]]) {
   const item = netleaEquipment.find((entry) => entry.model === model);
-  assert.deepEqual([item?.category, item?.ratedFlowLph, item?.powerW, item?.adjustableFlow], ["air_pump", flow, power, true], `Netlea ${model} doğrulanmış hava debisi ve azami giriş gücüyle bulunmalı`);
-  assert(item?.specifications.includes(pressure) && item?.specifications.includes(battery), `Netlea ${model} basınç ve batarya bilgisini taşımalı`);
-  assert.equal(item?.capacityDataNote, undefined, `Netlea ${model} doğrulanmış teknik veriye rağmen kapasite hesabından dışlanmamalı`);
+  assert.deepEqual([item?.category, item?.ratedFlowLph, item?.powerW, item?.adjustableFlow], ["air_pump", sourced(item, "ratedFlowLph", flow), sourced(item, "powerW", power), true], `Netlea ${model} doğrulanmış hava debisi ve azami giriş gücüyle bulunmalı`);
+  assert(isWithdrawn(item) ? /hava debisi doğrulanamadı/.test(item?.specifications ?? "") : item?.specifications.includes(pressure) && item?.specifications.includes(battery), `Netlea ${model} basınç ve batarya bilgisini taşımalı`);
+  assert.equal(Boolean(item?.capacityDataNote), isWithdrawn(item), `Netlea ${model} doğrulanmış teknik veriye rağmen kapasite hesabından dışlanmamalı`);
   assert.equal(item?.verifiedAt, "2026-08-29", `Netlea ${model} güncel doğrulama tarihini taşımalı`);
 }
 const netleaFlowerPrefilter = netleaEquipment.find((entry) => entry.model === "Flower Cartridge Prefilter 16/22");
@@ -3026,7 +3174,7 @@ const waterbear = equipmentCatalog.filter((entry) => entry.brand === "WaterBear"
 assert.equal(waterbear.length, 34, "WaterBear'ın doğrulanan filtre, hava motoru, pompa ve bakım ekipmanı portföyü 34 model içermeli");
 for (const [model, flow, power] of [["Q418", 120, 4], ["Q428", 420, 6], ["Q448", 840, 10], ["Q458", 1200, 12]]) {
   const item = waterbear.find((entry) => entry.model === model);
-  assert.deepEqual([item?.ratedFlowLph, item?.powerW], [flow, power], `WaterBear ${model} güncel hava debisi ve güç bilgisini taşımalı`);
+  assert.deepEqual([item?.ratedFlowLph, item?.powerW], [sourced(item, "ratedFlowLph", flow), sourced(item, "powerW", power)], `WaterBear ${model} güncel hava debisi ve güç bilgisini taşımalı`);
 }
 for (const model of ["WB-1770", "WB-2770", "WB-3770", "WB-4770", "WB-G800", "WB-G810"]) {
   assert.equal(waterbear.find((entry) => entry.model === model)?.category, "filter", `WaterBear ${model} filtre kategorisinde olmalı`);
@@ -3080,7 +3228,7 @@ for (const [model, flow, power] of [["CJY-1000", 60, 1.7], ["CJY-1500", 90, 2.2]
 }
 for (const [model, flow, power] of [["WP-880F", 650, 15], ["WP-505C", 500, 5], ["FG-1202", 880, 12], ["WP-909C", 1600, 28], ["WP-308H", 580, 5.8], ["WP-1108F", 700, 8], ["WP-508H", 680, 6.8], ["WP-606H", 500, 10], ["WP-628H", 400, 6], ["WP-808C", 800, 15], ["WP-707C", 650, 12], ["SF-350F", 300, 5], ["WP-618H", 280, 5], ["WP-206H", 250, 3], ["WP-638H", 500, 6.8], ["WP-408H", 600, 6]]) {
   const item = equipmentCatalog.find((entry) => entry.brand === "Sobo" && entry.model === model);
-  assert.deepEqual([item?.category, item?.ratedFlowLph, item?.powerW], ["filter", flow, power], `Sobo ${model} doğrulanmış filtre debisi ve güç değerini taşımalı`);
+  assert.deepEqual([item?.category, item?.ratedFlowLph, item?.powerW], ["filter", sourced(item, "ratedFlowLph", flow), sourced(item, "powerW", power)], `Sobo ${model} doğrulanmış filtre debisi ve güç değerini taşımalı`);
   assert(item?.sourceUrl.includes("akvaryumexpress.com"), `Sobo ${model} güvenilir yerel ürün kaynağına bağlanmalı`);
 }
 const soboSf150f = equipmentCatalog.find((entry) => entry.brand === "Sobo" && entry.model === "SF-150F");
@@ -3095,7 +3243,7 @@ assert.equal(soboWp300f?.ratedFlowLph, undefined, "Sobo WP-300F debisi yayımlan
 assert.deepEqual([soboWp300f?.recommendedMinL, soboWp300f?.recommendedMaxL], [5, 10], "Sobo WP-300F yalnızca yayımlanan hacim aralığını kullanmalı");
 for (const [model, flow, power] of [["WP-3880F", 2500, 40], ["WP-1105F", 200, 5], ["WP-377F", 1500, 20], ["WP-3200F", 1200, 25]]) {
   const item = equipmentCatalog.find((entry) => entry.brand === "Sobo" && entry.model === model);
-  assert.deepEqual([item?.category, item?.ratedFlowLph, item?.powerW], ["filter", flow, power], `Sobo ${model} ikinci kaynak taramasındaki doğrulanmış değerleri taşımalı`);
+  assert.deepEqual([item?.category, item?.ratedFlowLph, item?.powerW], ["filter", sourced(item, "ratedFlowLph", flow), sourced(item, "powerW", power)], `Sobo ${model} ikinci kaynak taramasındaki doğrulanmış değerleri taşımalı`);
 }
 assert.equal(equipmentCatalog.find((entry) => entry.brand === "Sobo" && entry.model === "WP-1105F")?.recommendedMaxL, 40, "Sobo WP-1105F yayımlanmış 30–40 litre aralığını taşımalı");
 assert(equipmentCatalog.find((entry) => entry.brand === "Sobo" && entry.model === "WP-1105F")?.sourceUrl.includes("sobo-wp-1105f"), "Sobo WP-1105F ilgisiz Eheim görseline bağlanmamalı");
@@ -3264,11 +3412,11 @@ assert.equal(jenecaAs615b?.category, "other", "Jeneca AS615B dip süpürgesi fil
 assert(jenecaAs615b?.sourceUrl.includes("atakanpetshop.com"), "Jeneca AS615B yetkili yerel satıcı kaynağına bağlanmalı");
 for (const [model, flow, power] of [["WP-850F", 400, 4], ["WP-330F", 600, 12]]) {
   const item = equipmentCatalog.find((entry) => entry.brand === "Sobo" && entry.model === model);
-  assert.deepEqual([item?.category, item?.ratedFlowLph, item?.powerW], ["filter", flow, power], `Sobo ${model} doğrulanmış filtre kapasitesini taşımalı`);
+  assert.deepEqual([item?.category, item?.ratedFlowLph, item?.powerW], ["filter", sourced(item, "ratedFlowLph", flow), sourced(item, "powerW", power)], `Sobo ${model} doğrulanmış filtre kapasitesini taşımalı`);
 }
 const soboSb848 = equipmentCatalog.find((entry) => entry.brand === "Sobo" && entry.model === "SB-848");
-assert.deepEqual([soboSb848?.ratedFlowLph, soboSb848?.powerW, soboSb848?.adjustableFlow], [540, 12, true], "Sobo SB-848 toplam 2 × 4,5 L/dak doğrulanmış hava debisini taşımalı");
-assert.equal(soboSb848?.capacityDataNote, undefined, "Sobo SB-848 doğrulanmış debiye rağmen kapasite dışı bırakılmamalı");
+assert.deepEqual([soboSb848?.ratedFlowLph, soboSb848?.powerW, soboSb848?.adjustableFlow], [sourced(soboSb848, "ratedFlowLph", 540), sourced(soboSb848, "powerW", 12), true], "Sobo SB-848 toplam 2 × 4,5 L/dak doğrulanmış hava debisini taşımalı");
+assert.equal(Boolean(soboSb848?.capacityDataNote), isWithdrawn(soboSb848), "Sobo SB-848 doğrulanmış debiye rağmen kapasite dışı bırakılmamalı");
 const soboSb3330 = equipmentCatalog.find((entry) => entry.brand === "Sobo" && entry.model === "SB-3330 Pipo Filtre");
 assert.equal(soboSb3330?.requiresAirPump, true, "Sobo SB-3330 harici hava motoru gereksinimini taşımalı");
 assert(soboSb3330?.sourceUrl.includes("sobo-sb-3330"), "Sobo SB-3330 ilgisiz bitki ürününe bağlanmamalı");
@@ -3281,13 +3429,13 @@ assert.deepEqual([soboWp330f?.ratedFlowLph, soboWp330f?.powerW, soboWp330f?.reco
 assert(soboWp330f?.sourceUrl.includes("sobo.com.tr/sobo-akvaryum-selale-aparatli-ic-filtre-wp-330f"), "Sobo WP-330F genel mağaza sayfası yerine yetkili distribütör ürün sayfasına bağlanmalı");
 for (const [model, flow, power] of [["WP-303H", 280, 5], ["WP-607H", 600, 12], ["SF-550F", 500, 7]]) {
   const item = equipmentCatalog.find((entry) => entry.brand === "Sobo" && entry.model === model);
-  assert.deepEqual([item?.category, item?.ratedFlowLph, item?.powerW], ["filter", flow, power], `Sobo ${model} doğrulanmış debi ve güç değerlerini taşımalı`);
-  assert.equal(item?.capacityDataNote, undefined, `Sobo ${model} doğrulanmış teknik veriye rağmen kapasite dışı bırakılmamalı`);
+  assert.deepEqual([item?.category, item?.ratedFlowLph, item?.powerW], ["filter", sourced(item, "ratedFlowLph", flow), sourced(item, "powerW", power)], `Sobo ${model} doğrulanmış debi ve güç değerlerini taşımalı`);
+  assert.equal(Boolean(item?.capacityDataNote), isWithdrawn(item), `Sobo ${model} doğrulanmış teknik veriye rağmen kapasite dışı bırakılmamalı`);
 }
 for (const [model, flow, power] of [["WP-780F", 800, 10], ["FG-1204", 880, 12]]) {
   const item = equipmentCatalog.find((entry) => entry.brand === "Sobo" && entry.model === model);
-  assert.deepEqual([item?.category, item?.ratedFlowLph, item?.powerW], ["filter", flow, power], `Sobo ${model} doğrulanmış debi ve güç değerlerini taşımalı`);
-  assert.equal(item?.capacityDataNote, undefined, `Sobo ${model} doğrulanmış teknik veriye rağmen kapasite dışı bırakılmamalı`);
+  assert.deepEqual([item?.category, item?.ratedFlowLph, item?.powerW], ["filter", sourced(item, "ratedFlowLph", flow), sourced(item, "powerW", power)], `Sobo ${model} doğrulanmış debi ve güç değerlerini taşımalı`);
+  assert.equal(Boolean(item?.capacityDataNote), isWithdrawn(item), `Sobo ${model} doğrulanmış teknik veriye rağmen kapasite dışı bırakılmamalı`);
 }
 const soboAq7500 = equipmentCatalog.find((entry) => entry.brand === "Sobo" && entry.model === "AQ7500");
 assert.deepEqual([soboAq7500?.category, soboAq7500?.ratedFlowLph, soboAq7500?.powerW], ["other", 5000, 100], "Sobo AQ7500 sump pompası filtre çevrimine karışmadan teknik verileri taşımalı");
@@ -3748,8 +3896,8 @@ for (const [model, flow, power] of [["NW-450F", 450, 4], ["NW-600F", 600, 6], ["
   const item = equipmentCatalog.find((entry) => entry.brand === "Nubios" && entry.model === model);
   assert(item, `Nubios ${model} katalogda bulunmalı`);
   assert.equal(item.category, "filter", `Nubios ${model} filtre kategorisinde bulunmalı`);
-  assert.deepEqual([item.ratedFlowLph, item.powerW], [flow, power], `Nubios ${model} kutu üzerindeki model bazlı teknik değerleri taşımalı`);
-  assert.equal(item.capacityDataNote, undefined, `Nubios ${model} doğrulanmış debiye rağmen kapasite hesabından dışlanmamalı`);
+  assert.deepEqual([item.ratedFlowLph, item.powerW], [sourced(item, "ratedFlowLph", flow), sourced(item, "powerW", power)], `Nubios ${model} kutu üzerindeki model bazlı teknik değerleri taşımalı`);
+  assert.equal(Boolean(item.capacityDataNote), isWithdrawn(item), `Nubios ${model} doğrulanmış debiye rağmen kapasite hesabından dışlanmamalı`);
   assert(item.sourceUrl.includes(model.toLowerCase()), `Nubios ${model} doğrudan ürün sayfasına bağlanmalı`);
   assert.equal(item.verifiedAt, "2026-08-29", `Nubios ${model} güncel doğrulama tarihini taşımalı`);
 }
@@ -3766,8 +3914,8 @@ for (const [model, productCode] of [["YU-118C", "771-YU118C1"], ["YU-119C", "771
 assert.match(equipmentCatalog.find((entry) => entry.id === "nubios-yu118c")?.capacityDataNote || "", /XY-2900(?:'un 450 L\/saat)? verisi(?:ni yayımlayan hatalı satıcı metni reddedildi| kopyalanmadı)/, "Nubios YU-118C başka markanın teknik verisini devralmamalı");
 for (const [model, flow, power, maxL] of [["MY03", 300, 3, 50], ["MY05", 450, 5, 100], ["MY07", 600, 7, 150], ["MY10", 800, 10, 250]]) {
   const item = equipmentCatalog.find((entry) => entry.brand === "Nubios" && entry.model === model);
-  assert.deepEqual([item?.category, item?.ratedFlowLph, item?.powerW, item?.recommendedMaxL], ["filter", flow, power, maxL], `Nubios ${model} yayımlanmış model tablosundaki kapasiteyi taşımalı`);
-  assert.equal(item?.capacityDataNote, undefined, `Nubios ${model} doğrulanmış debiye rağmen kapasite hesabından dışlanmamalı`);
+  assert.deepEqual([item?.category, item?.ratedFlowLph, item?.powerW, item?.recommendedMaxL], ["filter", sourced(item, "ratedFlowLph", flow), sourced(item, "powerW", power), sourced(item, "recommendedMaxL", maxL)], `Nubios ${model} yayımlanmış model tablosundaki kapasiteyi taşımalı`);
+  assert.equal(Boolean(item?.capacityDataNote), isWithdrawn(item), `Nubios ${model} doğrulanmış debiye rağmen kapasite hesabından dışlanmamalı`);
 }
 assert.equal(equipmentCatalog.find((entry) => entry.id === "nubios-ch-729")?.ratedFlowLph, 520, "Nubios elektrikli dip süpürgesi doğrulanmış 520 L/saat pompa debisini taşımalı");
 const waterBearG220 = equipmentCatalog.find((entry) => entry.brand === "WaterBear" && entry.model === "WB-G220");
