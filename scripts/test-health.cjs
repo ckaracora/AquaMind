@@ -675,8 +675,8 @@ const metric = (analysis, key) => analysis.metrics.find(item => item.key === key
     [],
   );
   assert.equal(analysis.warnings.find((warning) => warning.title === "Çin ejderi: akvaryum çok küçük")?.level, "danger", "Çin Ejderi 1.135 litre altındaki akvaryuma önerilmemeli");
-  assert(warningTitles(analysis).includes("Çin ejderi: tank uzunluğu verisi sınırlı"), "Çin Ejderi için yayımlanmayan santimetre eşiği açıkça belirtilmeli");
-  assert(!warningTitles(analysis).includes("Akıntı ihtiyaçları farklı"), "Çin Ejderi için kaynaksız akıntı çatışması üretilmemeli");
+  assert(!warningTitles(analysis).includes("Çin ejderi: tank uzunluğu verisi sınırlı"), "Çin Ejderi için kaynaklı 2 m uzunluk eşiği kullanılmalı");
+  assert(warningTitles(analysis).includes("Akıntı ihtiyaçları farklı"), "Çin Ejderinin kaynaklı güçlü akıntı ihtiyacı düşük akıntı isteyen betayla çatışmalı");
   assert(warningTitles(analysis).includes("Çin ejderi: özel bakım gereksinimi"), "Çin Ejderi boy farkı, havuz ve koruma uyarısını göstermeli");
   assert.equal(metric(analysis, "compatibility").status, "danger");
 }
