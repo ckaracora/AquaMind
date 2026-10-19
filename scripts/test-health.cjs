@@ -977,7 +977,7 @@ const metric = (analysis, key) => analysis.metrics.find(item => item.key === key
     [],
   );
   assert.equal(analysis.warnings.find((warning) => warning.title === "Kırmızı karınlı piranha: akvaryum çok küçük")?.level, "danger", "Pygocentrus nattereri 1296 litre/240 cm altındaki akvaryuma önerilmemeli");
-  assert(warningTitles(analysis).includes("Kırmızı karınlı piranha: grup sayısı düşük"), "Pygocentrus nattereri altılı grubun altında sosyal uyarı üretmeli");
+  assert(!warningTitles(analysis).includes("Kırmızı karınlı piranha: grup sayısı düşük"), "Pygocentrus nattereri için Seriously Fish'in önerdiği beşli grup sosyal uyarı üretmemeli");
   assert(warningTitles(analysis).includes("Kırmızı karınlı piranha için tür akvaryumu önerilir"), "Pygocentrus nattereri tür akvaryumu güvenliğini göstermeli");
   assert(warningTitles(analysis).includes("Kırmızı karınlı piranha: özel bakım gereksinimi"), "Pygocentrus nattereri bakım güvenliği, yem, alan ve filtrasyon uyarılarını göstermeli");
 }
