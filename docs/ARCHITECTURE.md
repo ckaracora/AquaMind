@@ -18,7 +18,8 @@ Depo, kökünde çalışan Next.js 15 web uygulamasını barındıran bir pnpm �
 | `src/components/modal-dialog.tsx` | Ekranı kaplayan pencerelerin ortak kabuğu (`ModalDialog`): karartılmış arka plan, panel, `role="dialog"`, başlık ve açıklama bağlantısı, klavye odağı | Su ölçümü, bitki, bakım, canlı seçimi, ekipman ekleme ve değer düzenleme pencereleri kullanır. Yeni pencereler de bu bileşenle açılmalıdır; `src/lib/__tests__/dialog-focus.test.ts` kaynak dosyaları tarayarak bunu denetler |
 | `packages/domain` | `@aquamind/domain`: alan tipleri, Zod şemaları, tercihler, depo anahtarları ve günlük/arşiv şemaları, `LocalExportV1` | Şemalar uygulamada kullanılıyor: `src/lib/aquarium-storage.ts` yüklemeyi ve dışa aktarmayı bunlarla doğruluyor. Bu nedenle zod istemci paketine dahildir |
 | `packages/compatibility-engine` | `@aquamind/compatibility-engine`: deterministik uyumluluk/sağlık motoru, `createAnalyzer(resolver)` | Kataloğu içe aktarmaz; bilgiye `KnowledgeResolver` ile ulaşır |
-| `packages/localization` | `@aquamind/localization` (0021): dil dosyaları (`messages/tr.ts`, `Messages` tipi), desteklenen diller, dile göre sayı ve tarih biçimi, birim dönüşümü | Bağımlılıksız; web ve ileride telefon uygulaması kullanır. Sayfaların metinleri ve motor uyarıları sonraki paketlerde taşınır |
+| `packages/localization` | `@aquamind/localization` (0021): dil dosyaları (`messages/tr.ts`, `Messages` tipi), desteklenen diller, dile göre sayı ve tarih biçimi, birim dönüşümü, tercihe bağlı biçimleyici (`createDisplayFormat`) ve form girişinin metriğe çevrilmesi | Bağımlılıksız; web ve ileride telefon uygulaması kullanır. Sayfaların metinleri ve motor uyarıları sonraki paketlerde taşınır |
+| `src/lib/use-display-format.ts` | `useDisplayFormat()`: arayüz diline ve ayarlardaki birim/tarih tercihine bağlı biçimleyici | Tercihler `AquariumProvider` içinde (`preferences`, `updatePreferences`); kayıt metrik kalır |
 | `src/providers/i18n-provider.tsx` | Arayüz dili sağlayıcısı ve `useI18n()` | Kök yerleşimde; şimdilik yalnız Türkçe |
 | `scripts/` | CommonJS doğrulama betikleri (katalog akışı, sağlık senaryoları, hesaplayıcılar, katalog denetimi) | `pnpm verify` içinde kalır; hesaplayıcı betiği katalog entegrasyonuyla eklendi |
 | `vitest.config.mts` | Vitest yapılandırması; `packages/**/*.test.ts` | `@` takma adı `src/` hedefler |
@@ -105,7 +106,7 @@ PostgreSQL, Auth, Storage, Realtime ve Edge Functions tek sağlayıcıda. Yetkil
 | `packages/domain` | Var | Alan tipleri, doğrulama şemaları, dışa/içe aktarma biçimleri |
 | `packages/compatibility-engine` | Var | Deterministik puanlama; sürümlü kural seti |
 | `packages/knowledge` | Planlanan (Phase 1) | Kataloglar `src/data`'dan buraya taşınır ve sunucuda sürümlü veri olarak yayımlanır (0020) |
-| `packages/localization` | Var (0021, 1. paket) | Dil dosyaları, dile göre tarih/sayı biçimi ve birim dönüşümü; motor uyarı kodlarının metinleri sonraki paketlerde (0020, 0021) |
+| `packages/localization` | Var (0021, 1. paket ve 2a) | Dil dosyaları, dile göre tarih/sayı biçimi ve birim dönüşümü; motor uyarı kodlarının metinleri sonraki paketlerde (0020, 0021) |
 | `packages/ui`, `packages/ai` | Planlanan (Phase 2–3) | İhtiyaç doğduğunda, boş paket açılmaz |
 | `supabase/` | Planlanan (Phase 1) | Migration, fonksiyon ve politika dosyaları |
 
