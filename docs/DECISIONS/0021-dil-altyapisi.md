@@ -1,7 +1,7 @@
 # 0021 — Dil altyapısı
 
 - Tarih: 2026-10-19
-- Durum: Kabul edildi (teknik karar, Claude; ürün sahibinin 2026-10-19 "dile uygun yapıya geçelim, çeviri kesin yapılacak, farklı dillere de" kararına dayanır, `docs/DECISIONS/0020-urun-hedefleri-ve-yol-haritasi.md`). 1. paket PR #32 (`671a719`), 2a PR #33 (`4fd4bbf`) ile birleştirildi. 2b `codex/i18n-2b` dalında; Codex 2. turda temiz; commit ve PR planlandı.
+- Durum: Kabul edildi (teknik karar, Claude; ürün sahibinin 2026-10-19 "dile uygun yapıya geçelim, çeviri kesin yapılacak, farklı dillere de" kararına dayanır, `docs/DECISIONS/0020-urun-hedefleri-ve-yol-haritasi.md`). 1. paket PR #32 (`671a719`), 2a PR #33 (`4fd4bbf`), 2b PR #34 (`1e19313`) ile birleştirildi. 2c `codex/i18n-2c` dalında; Codex 1. turda temiz; commit ve PR planlandı.
 
 ## Bağlam
 
@@ -46,4 +46,10 @@ Uygulamanın bütün metinleri koda Türkçe yazılmıştı: ekranlarda yaklaş�
 - **Yardımcı modüller metin değil anahtar döndürür:** `src/lib/water-status.ts` (`ParameterStatus.key`, özet cümlesi `healthSummary(...).key`) ve `src/lib/greeting.ts`. Ekran metni seçili dilin dosyasından alır; böylece aynı kural her dilde çalışır ve testler metne değil anahtara bakar. Anahtarların Türkçe metni ayrı bir testle eskiden ekranda yazan metne bağlanır.
 - **Ortak sözcükler:** birden çok ekranda aynı anlamla geçen sözcükler (`common`: akvaryum tipleri, "Net hacim", "Kurulum", "Vazgeç", sayılı "… canlı", "… tür") tek yerde tutulur. Kimyasal ve ölçü simgeleri (pH, TDS, NO₃, ppm, cm) dilden bağımsız olduğu için koda yazılı kalır.
 - **Büyük harf:** büyük harfle görünen etiketler dil dosyasında olağan yazımla tutulur, büyük harf CSS ile verilir (`uppercase`); sayfanın dili Türkçe olduğu için "Brüt hacim" "BRÜT HACİM" olarak görünür.
-- **Doğrulama yöntemi:** yerel sunucu ile canlı sitenin aynı sayfalarındaki görünen metin, erişilebilir adlar, yer tutucular ve seçenekler satır satır karşılaştırılır; bilinçli düzeltmeler dışında fark olmamalıdır.
+- **Doğrulama yöntemi:** yerel sunucu ile canlı sitenin aynı sayfalarındaki görünen metin, erişilebilir adlar, yer tutucular ve seçenekler satır satır karşılaştırılır; bilinçli düzeltmeler dışında fark olmamalıdır. İki sekme aynı pencere boyutunda olmalıdır (telefon ve masaüstü düzeni farklı metin gösterir).
+
+## 2c ayrıntıları
+
+- **Kapsam:** su değerleri, bakım günlüğü, canlılar ve bitkiler sayfaları; ölçüm, bakım, canlı ekleme ve bitki ekleme pencereleri.
+- **Kayıtta Türkçe tutulan değerler:** bitki konumu kayda Türkçe adıyla yazılır ("Ön plan" ...). Kayıt biçimini değiştirmek var olan kullanıcı verisinin taşınmasını gerektirir; bu, hesaplar ve bulut aşamasında (Phase 1) kayıt biçimiyle birlikte ele alınacaktır. O zamana kadar bu Türkçe değerler sabit kimlik gibi kullanılır, ekranda dil dosyasındaki ad gösterilir; listede olmayan eski bir değer olduğu gibi yazılır. Bakım görevinin başlığı da kullanıcı içeriğidir; boş bırakılırsa tür adı o anki dilde kaydedilir.
+- **Ortak sözcükler:** birden çok ekranda aynı anlamla geçen sözcükler (`common`) bu pakette genişletildi; 2b'de sayfaya özgü tutulan aynı metinler ("Tarih", "… kayıt", "… silinsin mi?", tür aralıkları yüklenemedi uyarısı) ortak anahtara bağlandı.
