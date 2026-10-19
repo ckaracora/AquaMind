@@ -102,8 +102,9 @@ PostgreSQL, Auth, Storage, Realtime ve Edge Functions tek sağlayıcıda. Yetkil
 |---|---|---|
 | `packages/domain` | Var | Alan tipleri, doğrulama şemaları, dışa/içe aktarma biçimleri |
 | `packages/compatibility-engine` | Var | Deterministik puanlama; sürümlü kural seti |
-| `packages/knowledge` | Planlanan (Phase 2) | Kataloglar `src/data`'dan buraya taşınır; açık katalog dalları birleştikten sonra |
-| `packages/ui`, `packages/localization`, `packages/ai` | Planlanan (Phase 2–3) | İhtiyaç doğduğunda, boş paket açılmaz |
+| `packages/knowledge` | Planlanan (Phase 1) | Kataloglar `src/data`'dan buraya taşınır ve sunucuda sürümlü veri olarak yayımlanır (0020) |
+| `packages/localization` | Planlanan (Phase 0C) | Dil dosyaları, motor uyarı kodlarının metinleri, tarih/sayı biçimi ve birim dönüşümü (0020) |
+| `packages/ui`, `packages/ai` | Planlanan (Phase 2–3) | İhtiyaç doğduğunda, boş paket açılmaz |
 | `supabase/` | Planlanan (Phase 1) | Migration, fonksiyon ve politika dosyaları |
 
 ### Ortamlar
@@ -134,9 +135,10 @@ Web'de `localStorage` hesap öncesi dönemde birincil depo olarak kalır; hesapl
 |---|---|---|
 | 0A | Depo denetimi ve mimari plan | Tamamlandı (2026-09-01) |
 | 0B | Workspace, `packages/domain`, `packages/compatibility-engine`, Vitest, belgeler, yönetişim | Tamamlandı (2026-09-02); PR #5 ile `main` dalına squash merge edildi (`7e8d63b`), GitHub Actions `Doğrulama` ve Vercel üretim dağıtımı başarılı, Issue #4 kapandı |
-| 1 | Yerel Supabase, çekirdek şema ve RLS, politika testleri, kimlik doğrulama (e-posta, Google), yerel veri içe aktarımı, plan/olay ayrımı, kalıcı uyumluluk hesaplamaları, staging | Planlanan |
-| 2 | Expo uygulaması, web'in `apps/web` altına taşınması, `packages/knowledge`, çevrimdışı önbellek | Planlanan |
-| 3 | Sosyal, yapay zekâ geçidi, AquaMap, abonelikler, yönetici uygulaması | Planlanan |
+| 0C | Veri ve dil temeli (0020): dil altyapısı (`packages/localization`, motor uyarıları kod ve değişken olarak, katalog adları dile göre, birimler), 133 türün kaynağı, hastalık yönlendirme sayfası, bitki kataloğu, tuzlu su başlangıç paketi, kalan veri işleri | Planlanan (2026-10-19) |
+| 1 | Yerel Supabase, çekirdek şema ve RLS, politika testleri, kimlik doğrulama (e-posta, Google, Apple), yerel veri içe aktarımı, plan/olay ayrımı, kalıcı uyumluluk hesaplamaları, staging, katalogun sunucuya taşınması (`packages/knowledge`), bilgi geri bildirimi (artı/eksi, düzeltme önerisi) | Planlanan |
+| 2 | Tasarım sistemi ve taslaklar, sosyal ilk sürüm (profil, paylaşma, takip, yorum, şikâyet/engelleme), Expo uygulaması (iOS, Android), web'in `apps/web` altına taşınması, çevrimdışı önbellek, bildirimler, uygulama içi ödeme, ek diller; yayın öncesi yasal hazırlık | Planlanan |
+| 3 | Yapay zekâ geçidi, AquaMap, gelişmiş sosyal özellikler, yönetici uygulaması | Planlanan |
 
 ## Phase 0B'de bilinçli olarak yapılmayanlar
 
