@@ -1,6 +1,7 @@
 import { readdirSync, readFileSync, statSync } from "node:fs";
 import { join } from "node:path";
 import { describe, expect, it } from "vitest";
+import { messagesFor } from "@aquamind/localization";
 import { topDialogIndex, trappedFocusIndex } from "@/lib/dialog-focus";
 
 // Pencere içindeki klavye odağı (src/lib/dialog-focus.ts): Sekme tuşu odağı pencerenin dışına çıkarmamalı.
@@ -94,8 +95,10 @@ describe("açılan pencereler", () => {
       const dialogs = count(text, "<ModalDialog ");
       expect(count(text, "labelledBy={titleId}"), file).toBe(dialogs);
       expect(count(text, "<h2 id={titleId}"), file).toBe(dialogs);
-      expect(count(text, 'aria-label="Kapat"'), file).toBe(dialogs);
+      // Kapatma düğmesinin adı koda yazılı ("Kapat") ya da dil dosyasından (`t.common.close`) gelir (docs/DECISIONS/0021-dil-altyapisi.md).
+      expect(count(text, 'aria-label="Kapat"') + count(text, "aria-label={t.common.close}"), file).toBe(dialogs);
       expect(count(text, "describedBy={descriptionId}"), file).toBe(count(text, "<p id={descriptionId}"));
     }
+    expect(messagesFor("tr").common.close).toBe("Kapat");
   });
 });
