@@ -1,11 +1,11 @@
 // Ana sayfanın durum hesapları. Katalog verisi içermez: türler ve ekipman verilen `CatalogLookup` üzerinden gelir; ana sayfa
 // yalnızca seçili akvaryumun kayıtlarını yükler (src/lib/catalog-slice.ts, docs/DECISIONS/0016-gereken-katalog-kayitlarinin-yuklenmesi.md).
 import { createHealthAnalyzer, type CatalogLookup } from "@/lib/health-analysis-core";
-import { healthSummary, parameterStatuses, type ParameterStatus, type StatusTone } from "@/lib/water-status";
+import { healthSummary, parameterStatuses, type HealthSummaryKey, type ParameterStatus, type StatusTone } from "@/lib/water-status";
 import type { Aquarium, Equipment, Livestock, WaterParameters } from "@/types/aquarium";
 
 export interface DashboardStatus {
-  summary: { text: string; tone: StatusTone };
+  summary: { key: HealthSummaryKey; tone: StatusTone };
   temperature: ParameterStatus;
   ph: ParameterStatus;
   nitrate: ParameterStatus;

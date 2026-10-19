@@ -12,6 +12,7 @@ import { useCatalogLookup } from "@/lib/use-catalog-lookup";
 import { useDisplayFormat } from "@/lib/use-display-format";
 import { parameterStatuses, pendingStatus, unavailableStatus, type ParameterStatus } from "@/lib/water-status";
 import { useAquariums } from "@/providers/aquarium-provider";
+import { useI18n } from "@/providers/i18n-provider";
 import type { WaterParameters } from "@/types/aquarium";
 
 const inputClass = "mt-1.5 w-full rounded-xl border border-white/[.08] bg-[#09171e] px-3 py-3 text-sm outline-none focus:border-aqua/60";
@@ -73,7 +74,7 @@ function WaterContent() {
   </div>{showForm && <MeasurementForm aquariumName={aquariums.find((a) => a.id === aquariumId)?.name ?? ""} onClose={() => setShowForm(false)} onSubmit={submit}/>}</AppShell>;
 }
 
-function ValueCard({ icon: Icon, label, value, unit = "", status = pendingStatus }: { icon: typeof Droplets; label: string; value?: string; unit?: string; status?: ParameterStatus }) { return <div className="surface p-4 sm:p-5"><div className="mb-5 flex justify-between"><span className="grid size-9 place-items-center rounded-lg bg-aqua/10 text-aqua"><Icon size={18}/></span><span className={`rounded-full px-2 py-1 text-[11px] sm:text-[8px] font-extrabold uppercase ${statusTones[status.tone]}`}>{status.label}</span></div><p className="text-[11px] sm:text-[10px] font-bold text-[#647981]">{label}</p><p className="mt-1 text-xl font-extrabold">{value ?? "—"} <span className="text-[11px] sm:text-[10px] text-[#71858d]">{unit}</span></p></div>; }
+function ValueCard({ icon: Icon, label, value, unit = "", status = pendingStatus }: { icon: typeof Droplets; label: string; value?: string; unit?: string; status?: ParameterStatus }) { const { t } = useI18n(); return <div className="surface p-4 sm:p-5"><div className="mb-5 flex justify-between"><span className="grid size-9 place-items-center rounded-lg bg-aqua/10 text-aqua"><Icon size={18}/></span><span className={`rounded-full px-2 py-1 text-[11px] sm:text-[8px] font-extrabold uppercase ${statusTones[status.tone]}`}>{t.waterStatus[status.key]}</span></div><p className="text-[11px] sm:text-[10px] font-bold text-[#647981]">{label}</p><p className="mt-1 text-xl font-extrabold">{value ?? "—"} <span className="text-[11px] sm:text-[10px] text-[#71858d]">{unit}</span></p></div>; }
 
 function WaterChart({ readings }: { readings: WaterParameters[] }) {
   if (readings.length < 2) return <div className="grid h-52 place-items-center rounded-xl border border-dashed border-white/10 text-xs text-[#647981]">Grafik için en az iki ölçüm gerekli.</div>;
