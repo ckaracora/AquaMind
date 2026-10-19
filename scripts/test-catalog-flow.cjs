@@ -4525,12 +4525,12 @@ assert(ninjaWoodcat?.husbandryCaution?.includes("Tatia sp. aff. musaica") && nin
 const redBelliedPiranha = speciesCatalog.find((item) => item.id === "red-bellied-piranha");
 assert.deepEqual(
   [redBelliedPiranha?.scientificName,redBelliedPiranha?.adultSizeCm,redBelliedPiranha?.minVolumeL,redBelliedPiranha?.minTankLengthCm,redBelliedPiranha?.minGroup,redBelliedPiranha?.temperature,redBelliedPiranha?.ph,redBelliedPiranha?.flow],
-  ["Pygocentrus nattereri",50,1296,240,6,[23,27],[5.5,7.5],"medium"],
+  ["Pygocentrus nattereri",50,1296,240,1,[24,28],[5.5,7.5],"medium"],
   "Kırmızı Karınlı Pirana kaynaklı kimlik, koruyucu boy, erişkin tabanı, grup ve su eşiklerini taşımalı",
 );
 assert.deepEqual(redBelliedPiranha?.waterTypes,["freshwater"],"Kırmızı Karınlı Pirana yalnız tatlı su profili taşımalı");
 assert.equal(redBelliedPiranha?.predatory,true,"Kırmızı Karınlı Pirana avcı güvenliğini sağlık analizine taşımalı");
-assert.equal(redBelliedPiranha?.verifiedAt,"2026-10-02","Kırmızı Karınlı Pirana güncel doğrulama tarihini taşımalı");
+assert.equal(redBelliedPiranha?.verifiedAt,"2026-10-19","Kırmızı Karınlı Pirana güncel doğrulama tarihini taşımalı");
 assert(redBelliedPiranha?.additionalSourceUrls?.some((url) => url.includes("fishbase.se/summary/Pygocentrus_nattereri")) && redBelliedPiranha.additionalSourceUrls.some((url) => url.includes("b-aqua.com/pages/fiche.aspx?id=3026")),"Kırmızı Karınlı Pirana bilimsel ve bakım verisini bağımsız kaynaklarla çapraz doğrulamalı");
 assert(redBelliedPiranha?.husbandryCaution?.includes("240 × 90 × 60 cm") && redBelliedPiranha.husbandryCaution.includes("600 litre") && redBelliedPiranha.husbandryCaution.includes("Canlı yem"),"Kırmızı Karınlı Pirana alan kaynak farkını ve yem güvenliğini açıklamalı");
 const endlicheriBichir = speciesCatalog.find((item) => item.id === "endlicheri-bichir");
@@ -5182,8 +5182,114 @@ for (const [id, expected] of Object.entries(sourcedSpeciesBatch1)) {
   assert.equal(profile?.verifiedAt, "2026-10-19", `${id} kaynak okuma tarihini taşımalı`);
   assert((profile?.additionalSourceUrls ?? []).some((url) => url.includes("fishbase.se")), `${id} bilimsel kimlik için FishBase bağlantısını korumalı`);
 }
+// Eski döngülerden çıkarılan satırların sınadığı bilimsel kimlik ve akıntı ile avcılık ve tür akvaryumu işaretleri. Sıra: bilimsel ad, akıntı, avcı, tür akvaryumu.
+const sourcedSpeciesBatch1Traits = {
+  "angelfish":["Pterophyllum scalare","low",false,false],
+  "ramirezi":["Mikrogeophagus ramirezi","low",false,false],
+  "green-neon-tetra":["Paracheirodon simulans","low",false,false],
+  "silver-tip-tetra":["Hasemania nana","medium",false,false],
+  "apisto-hongsloi":["Apistogramma hongsloi","low",false,false],
+  "apisto-mendezi":["Apistogramma mendezi","low",false,false],
+  "altum-angelfish":["Pterophyllum altum","low",true,false],
+  "pantano-cichlid":["Cincelichthys pearsei","medium",false,true],
+  "johanni-cichlid":["Pseudotropheus johannii","medium",false,true],
+  "elongatus-mpanga":["Chindongo elongatus","medium",false,true],
+  "boesemani-rainbow":["Melanotaenia boesemani","medium",false,false],
+  "dwarf-neon-rainbow":["Melanotaenia praecox","medium",false,false],
+  "forktail-rainbow":["Pseudomugil furcatus","medium",false,false],
+  "turquoise-rainbowfish":["Melanotaenia lacustris","low",false,false],
+  "gertrudae-rainbowfish":["Pseudomugil gertrudae","medium",false,false],
+  "clown-killifish":["Epiplatys annulatus","low",false,false],
+  "lyretail-killifish":["Aphyosemion australe","low",false,false],
+  "gardneri-killifish":["Fundulopanchax gardneri","low",false,true],
+  "red-striped-killifish":["Aphyosemion striatum","low",false,false],
+  "golden-wonder-killifish":["Aplocheilus lineatus","medium",true,false],
+  "dwarf-chain-loach":["Ambastaia sidthimunki","medium",false,false],
+  "black-ghost-knifefish":["Apteronotus albifrons",undefined,true,false],
+  "zebra-danio":["Danio rerio","medium",false,false],
+  "empire-gudgeon":["Hypseleotris compressa","medium",true,false],
+  "pea-puffer":["Carinotetraodon travancoricus","low",true,true],
+  "amazon-puffer":["Colomesus asellus","medium",true,false],
+  "chinese-high-fin-sucker":["Myxocyprinus asiaticus","high",true,false]
+};
+for (const [id, expected] of Object.entries(sourcedSpeciesBatch1Traits)) {
+  const profile = speciesCatalog.find((item) => item.id === id);
+  assert.deepEqual([profile?.scientificName,profile?.flow,profile?.predatory === true,profile?.speciesOnly === true], expected, `${id} bilimsel kimlik, akıntı, avcılık ve tür akvaryumu işaretlerini korumalı`);
+}
 assert.equal(speciesCatalog.find((item) => item.id === "red-striped-killifish")?.speciesOnly, undefined, "Red-striped killifish kaynağa göre dikkatle seçilmiş tank arkadaşlarıyla tutulabilmeli");
 assert.equal(speciesCatalog.find((item) => item.id === "black-ghost-knifefish")?.tankLengthDataNote, undefined, "Black Ghost kaynaklı uzunluk taşırken uzunluk verisi sınırlı notu kalmamalı");
+// 2026-10-19 tür kaynak yenilemesi 2 (docs/CATALOG_LOG.md): aynı kurallarla 26 tür daha. Sıra: boy, hacim, uzunluk, en az grup, sıcaklık, pH.
+const sourcedSpeciesBatch2 = {
+  "mascara-barb":[12,243,120,8,[19,25],[6,7]],
+  "goldeneye-dwarf-cichlid":[7.6,52,80,1,[22,27],[5,7.5]],
+  "checkerboard-cichlid":[10.2,68,80,1,[27,30],[5,6.5]],
+  "green-terror":[30,304,150,1,[20,24],[6.5,8]],
+  "firemouth-cichlid":[15,108,120,2,[20,32],[6.5,8.5]],
+  "croaking-gourami":[7,54,60,2,[22,28],[5,7.5]],
+  "napo-cory":[5,41,45,6,[22,26],[6,7.4]],
+  "panda-loach":[6,54,60,4,[20,23.9],[6.5,7.5]],
+  "c125-red-aspidoras":[4.5,54,60,4,[20,25],[6,7.5]],
+  "red-tailed-black-shark":[15,243,120,1,[20,26],[6,8]],
+  "rainbow-shark":[15,243,120,1,[20,26],[6.5,8]],
+  "chinese-algae-eater":[28,304,150,1,[22,26],[6,8]],
+  "blue-panaque-l239":[15,72,80,1,[26,30],[5.5,7.5]],
+  "three-beacon-pleco-l091":[25,243,120,1,[24,27],[6,7.6]],
+  "orange-tiger-pleco-l243":[20,108,120,1,[25,29],[5.5,7.5]],
+  "red-fin-thresher-pleco-l116":[40,243,120,1,[25,28],[6.4,7.2]],
+  "three-ray-bristlenose-lda72":[12,68,75,1,[24,30],[6.6,7.6]],
+  "high-fin-green-phantom-l200a":[20,243,120,1,[26,30],[5.5,7.5]],
+  "bola-pleco-l146":[15,243,120,1,[22,29],[6,8]],
+  "rabauts-cory":[6.5,81,90,4,[20,27],[5.5,7.2]],
+  "white-spotted-doras":[16,108,120,1,[22,26],[5.5,7.5]],
+  "orinoco-wood-pleco-lda38":[30,243,120,1,[21,27],[6.5,8]],
+  "rainbow-snakehead":[20,108,120,2,[14,28],[6,8]],
+  "red-bellied-piranha":[50,1296,240,1,[24,28],[5.5,7.5]],
+  "congo-puffer":[15,68,75,1,[24,28],[6.8,7.5]],
+  "red-eyed-puffer":[6,54,60,1,[20,28],[5,7.5]]
+};
+for (const [id, expected] of Object.entries(sourcedSpeciesBatch2)) {
+  const profile = speciesCatalog.find((item) => item.id === id);
+  assert.deepEqual([profile?.adultSizeCm,profile?.minVolumeL,profile?.minTankLengthCm,profile?.minGroup,profile?.temperature,profile?.ph], expected, `${id} Seriously Fish bakım eşiklerini taşımalı`);
+  assert.match(profile?.sourceUrl ?? "", /^https:\/\/www\.seriouslyfish\.com\/species\//, `${id} Seriously Fish tür sayfasına bağlanmalı`);
+  assert.equal(profile?.verifiedAt, "2026-10-19", `${id} kaynak okuma tarihini taşımalı`);
+  // Bola vatozun katalog kimliği "cf. bachi" olduğu için FishBase tür sayfası bağlanmadı.
+  if (id !== "bola-pleco-l146") assert((profile?.additionalSourceUrls ?? []).some((url) => url.includes("fishbase.se")), `${id} bilimsel kimlik için FishBase bağlantısını korumalı`);
+}
+// Eski döngülerden çıkarılan satırların sınadığı bilimsel kimlik ve akıntı ile avcılık ve tür akvaryumu işaretleri. Sıra: bilimsel ad, akıntı, avcı, tür akvaryumu.
+const sourcedSpeciesBatch2Traits = {
+  "mascara-barb":["Dawkinsia assimilis","medium",false,false],
+  "goldeneye-dwarf-cichlid":["Nannacara anomala","low",false,false],
+  "checkerboard-cichlid":["Dicrossus filamentosus","low",false,false],
+  "green-terror":["Andinoacara rivulatus","low",false,false],
+  "firemouth-cichlid":["Thorichthys meeki","medium",false,false],
+  "croaking-gourami":["Trichopsis vittata","low",false,false],
+  "napo-cory":["Gastrodermus napoensis","medium",false,false],
+  "panda-loach":["Yaoshania pachychilus","high",false,false],
+  "c125-red-aspidoras":["Aspidoras raimundi","high",false,false],
+  "red-tailed-black-shark":["Epalzeorhynchos bicolor","medium",false,false],
+  "rainbow-shark":["Epalzeorhynchos frenatum","medium",false,false],
+  "chinese-algae-eater":["Gyrinocheilus aymonieri","medium",false,false],
+  "blue-panaque-l239":["Baryancistrus beggini","high",false,false],
+  "three-beacon-pleco-l091":["Leporacanthicus triactis","high",false,false],
+  "orange-tiger-pleco-l243":["Peckoltia wernekei","high",false,false],
+  "red-fin-thresher-pleco-l116":["Aphanotorulus emarginatus","high",false,false],
+  "three-ray-bristlenose-lda72":["Ancistrus triradiatus","medium",false,false],
+  "high-fin-green-phantom-l200a":["Baryancistrus demantoides","high",false,false],
+  "bola-pleco-l146":["Peckoltichthys cf. bachi",undefined,false,false],
+  "rabauts-cory":["Osteogaster rabauti","medium",false,false],
+  "white-spotted-doras":["Agamyxis pectinifrons","low",true,false],
+  "orinoco-wood-pleco-lda38":["Hypostomus plecostomoides","medium",false,false],
+  "rainbow-snakehead":["Channa bleheri","low",true,true],
+  "red-bellied-piranha":["Pygocentrus nattereri","medium",true,true],
+  "congo-puffer":["Tetraodon miurus","medium",true,true],
+  "red-eyed-puffer":["Carinotetraodon lorteti","low",true,true]
+};
+for (const [id, expected] of Object.entries(sourcedSpeciesBatch2Traits)) {
+  const profile = speciesCatalog.find((item) => item.id === id);
+  assert.deepEqual([profile?.scientificName,profile?.flow,profile?.predatory === true,profile?.speciesOnly === true], expected, `${id} bilimsel kimlik, akıntı, avcılık ve tür akvaryumu işaretlerini korumalı`);
+}
+assert.deepEqual(["mascara-barb","chinese-algae-eater"].map((id) => speciesCatalog.find((item) => item.id === id)?.flow), ["medium","medium"], "Mascara barb ve Çin yosun yiyicisi kaynağın orta su hareketini taşımalı");
+assert.equal(speciesCatalog.find((item) => item.id === "panda-loach")?.speciesOnly, undefined, "Panda Loach kaynağa göre diğer türlerle tutulabilmeli");
 // Satış adı tek bir bilimsel türe denk gelmeyen kayıtlar satılan balığa göre tanımlanır; birden fazla aday varsa en koruyucu kaynaklı değerler kullanılır (docs/DECISIONS/0014).
 const identityRecords = [
   ["ancistrus", "Ancistrus sp. '3'", 15, 54, 60, 1, [21,26], [5.5,7.5], "seriouslyfish.com/species/ancistrus-cf-cirrhosus", "Ancistrus cirrhosus"],
@@ -5289,28 +5395,19 @@ for (const [id, scientificName, volume, length, group, temperature, ph] of [
   ["blue-phantom-pleco-l128", "Hemiancistrus sp. L128", 162, 120, 1, [27,30], [6,7.5]],
   ["colombian-zebra-pleco-l129", "Hypancistrus debilittera", 96, 80, 4, [27,31], [6,7.5]],
   ["orinoco-angel-pleco-l201", "Hypancistrus sp. L201", 115, 80, 1, [25,29], [5.8,7]],
-  ["blue-panaque-l239", "Baryancistrus beggini", 100, 80, 1, [25,30], [5.5,7.5]],
   ["royal-pleco-l190", "Panaque nigrolineatus", 500, 180, 1, [22,26], [6,8]],
   ["mega-clown-pleco-l340", "Hypancistrus sp. L340", 80, 80, 1, [26,30], [5.5,7.5]],
-  ["three-beacon-pleco-l091", "Leporacanthicus triactis", 300, 120, 1, [25,29], [6,7.4]],
   ["vampire-pleco-l240", "Leporacanthicus sp. L240", 375, 150, 1, [25,28], [5.5,7.5]],
   ["butterfly-pleco-l052", "Dekeyseria picta", 150, 80, 1, [25,29], [5.8,7]],
-  ["orange-tiger-pleco-l243", "Peckoltia wernekei", 200, 150, 1, [26,30], [5.5,7.5]],
-  ["red-fin-thresher-pleco-l116", "Aphanotorulus emarginatus", 246, 150, 1, [25,28], [6.4,7.2]],
-  ["three-ray-bristlenose-lda72", "Ancistrus triradiatus", 75, 80, 1, [24,28], [6,7.5]],
   ["cucuta-bristlenose-l149", "Ancistrus sp. L149", 76, 60, 1, [23,28], [6.5,7.8]],
   ["brokenline-royal-pleco-l191", "Panaque sp. L191", 600, 200, 1, [24,29], [6,8]],
   ["black-spotted-flyer-pleco-l244", "Pseudolithoxus dumus", 200, 100, 1, [24,30], [6,7]],
-  ["high-fin-green-phantom-l200a", "Baryancistrus demantoides", 180, 120, 1, [25,30], [6,7.5]],
   ["blue-spotted-bristlenose-l059a", "Ancistrus hoplogenys", 80, 100, 1, [26,30], [5.5,7.5]],
   ["anthrax-flyer-pleco-l235", "Pseudolithoxus anthrax", 240, 120, 1, [25,29], [6,7.2]],
   ["lujans-pleco-l127", "Peckoltia lujani", 100, 100, 1, [25,29], [5.5,7.5]],
   ["orange-venezuela-cory", "Osteogaster venezuelanus", 80, 80, 6, [19,25], [6,7]],
   ["green-laser-cory-cw009", "Corydoras sp. CW009", 100, 80, 6, [24,28], [6,7.5]],
-  ["rabauts-cory", "Osteogaster rabauti", 80, 90, 6, [20,27], [5.5,7.2]],
   ["highfin-spotted-cory-cw027", "Hoplisoma sp. CW027", 100, 80, 6, [23,28], [5.8,7]],
-  ["white-spotted-doras", "Agamyxis pectinifrons", 130, 100, 1, [22,26], [6,7.5]],
-  ["orinoco-wood-pleco-lda38", "Hypostomus plecostomoides", 250, 150, 1, [24,29], [6,8]],
   ["hujeta-gar", "Ctenolucius hujeta", 342, 150, 5, [22,25], [5.5,7.5]],
 ]) {
   const profile = speciesCatalog.find((item) => item.id === id);
@@ -5358,7 +5455,6 @@ assert(speciesCatalog.find((item) => item.id === "orinoco-wood-pleco-lda38")?.hu
 assert.equal(speciesForLivestock({commonName:"L-069 Peckoltia Ucayalensis",category:"fish",quantity:1}), undefined, "L069 ile Peckoltia ucayalensis arasındaki kimlik çelişkisi çözülmeden mağaza adı profile bağlanmamalı");
 assert.equal(speciesForLivestock({commonName:"L-146 Albino Pleco",category:"fish",quantity:1}), undefined, "L146 ile albino satış adı arasındaki kimlik çelişkisi çözülmeden mağaza adı profile bağlanmamalı");
 for (const [id, scientificName, sourcePath, adultSizeCm, verifiedAt] of [
-  ["bola-pleco-l146", "Peckoltichthys cf. bachi", "art=236", 15, "2026-09-08"],
   ["ucayali-flathead-pleco", "Peckoltia bachi", "Peckoltia-ucayalensis", 14, "2026-09-20"],
 ]) {
   const profile = speciesCatalog.find((item) => item.id === id);
@@ -5529,7 +5625,6 @@ for (const [id, scientificName, size, volume, length, group, temperature, ph, so
   ["andrao-snakehead", "Channa andrao", 10, 72, 80, 1, [12,26], [6,7], "seriouslyfish.com"],
   ["assamese-snakehead", "Channa stewartii", 25, 300, 120, 1, [18,25], [6,7], "fishipedia.it"],
   ["ornate-snakehead", "Channa ornatipinnis", 30, 300, 120, 1, [18,25], [6,7], "fishipedia.es"],
-  ["rainbow-snakehead", "Channa bleheri", 20, 150, 100, 2, [15,28], [6,7.5], "aquarium-dietzenbach.de"],
   ["peacock-snakehead", "Channa pulchra", 25, 200, 100, 1, [20,25], [6,7], "practicalfishkeeping.co.uk"],
   ["emperor-snakehead", "Channa marulioides", 65, 1000, 200, 1, [20,25], [4,6], "fishi-pedia.com"],
   ["half-banded-spiny-eel", "Macrognathus circumcinctus", 20, 215, 90, 1, [24,27], [6,7.5], "tankbud.com"],
@@ -5871,7 +5966,6 @@ for (const [id, scientificName, size, volume, length, group, temperature, ph, ex
   ["green-fire-tetra", "Aphyocharax rathbuni", 7.1, 54, 60, 6, [20,26], [6.5,7.5], "2026-10-02"],
   ["red-neon-blue-eye", "Pseudomugil luminatus", 3, 60, 60, 10, [20,28], [6.5,8], "2026-10-02"],
   ["ninja-woodcat", "Tatia musaica", 7, 56, 60, 5, [25,26], [6,7.2], "2026-10-02"],
-  ["red-bellied-piranha", "Pygocentrus nattereri", 50, 1296, 240, 6, [23,27], [5.5,7.5], "2026-10-02"],
   ["endlicheri-bichir", "Polypterus endlicherii", 70, 2000, 300, 1, [26,28], [6.5,7.5], "2026-10-02"],
   ["monoculus-peacock-bass", "Cichla monoculus", 80, 1200, 200, 1, [25,31], [5.5,6.5], "2026-10-02"],
 ]) {
@@ -6652,12 +6746,7 @@ assert.equal(speciesCatalog.filter((item) => speciesGroup(item) === "bottom").le
 assert.equal(speciesCatalog.filter((item) => speciesGroup(item) === "goby").length, 12, "Goby kataloğu üç ayrı Lipstick Sicyopus türü ve yinelenmeyen iki Blue Neon adayı dahil 12 benzersiz profil içermeli");
 assert.equal(speciesCatalog.filter((item) => speciesGroup(item) === "crayfish").length, 4, "Kerevit kataloğu Cambarellus diminutus dahil dört tür içermeli");
 for (const [id,group,volume,length,count,temperature,ph,flow] of [
-  ["goldeneye-dwarf-cichlid","cichlid",80,80,2,[22,25],[6,7.2],"low"],
-  ["checkerboard-cichlid","cichlid",120,100,3,[24,30],[4.5,7],"low"],
-  ["napo-cory","bottom",60,60,6,[22,26],[6,7.4],"medium"],
   ["smudge-spot-cory","bottom",100,60,8,[21,27],[6.8,7.2],"medium"],
-  ["panda-loach","bottom",80,60,5,[20,23],[6.5,7.5],"high"],
-  ["c125-red-aspidoras","bottom",60,60,6,[20,26],[6,7.5],"high"],
   ["black-venezuela-cory","bottom",60,60,6,[22,26],[6,7.5],"medium"],
   ["royal-farlowella","bottom",120,120,2,[24,30],[6,7.5],"high"],
   ["least-dwarf-crayfish","crayfish",20,30,1,[20,26],[6.5,8],"low"],
@@ -6685,7 +6774,7 @@ assert.deepEqual(ropeFish?.waterTypes, ["freshwater", "brackish"], "Ropefish Fis
 assert.equal(ropeFish?.verifiedAt, "2026-09-10", "Ropefish güncel kaynak denetim tarihini taşımalı");
 assert(ropeFish?.husbandryCaution?.includes("37 cm") && ropeFish?.husbandryCaution?.includes("90 cm"), "Ropefish çelişen erişkin boy kaynaklarını kullanıcıya açıklamalı");
 assert(ropeFish?.husbandryCaution?.includes("ağırlıklı kapak") && ropeFish?.husbandryCaution?.includes("yüzey havasına"), "Ropefish kaçış ve hava soluma güvenlik uyarılarını taşımalı");
-assert.equal(speciesCatalog.find((item)=>item.id==="panda-loach")?.speciesOnly,true,"Panda Loach akarsu tipi özel kurulum uyarısı taşımalı");
+assert(speciesCatalog.find((item)=>item.id==="panda-loach")?.husbandryCaution?.includes("akarsu tipi"),"Panda Loach akarsu tipi özel kurulum uyarısı taşımalı");
 for (const [id, scientificName, minVolumeL, minTankLengthCm, minGroup, temperature, ph, flow] of [
   ["winemillers-eartheater", "Geophagus winemilleri", 648, 180, 6, [26, 30], [4, 7], "medium"],
   ["threadfin-acara", "Acarichthys heckelii", 250, 150, 1, [24, 30], [6, 8], "low"],
@@ -6793,7 +6882,7 @@ assert.equal(speciesCatalog.filter((item) => speciesGroup(item) === "labyrinth")
 for (const [id, minVolumeL, minGroup] of [
   ["moonlight-gourami", 150, 3],
   ["chocolate-gourami", 120, 6],
-  ["croaking-gourami", 75, 4],
+  ["croaking-gourami", 54, 2],
   ["betta-imbellis", 120, 4],
 ]) {
   const profile = speciesCatalog.find((item) => item.id === id);
@@ -6815,7 +6904,6 @@ assert.notEqual(speciesCatalog.find((item) => item.id === "five-banded-barb")?.s
 assert.equal(speciesCatalog.filter((item) => speciesGroup(item) === "barb").length, 13, "Barb kataloğu doğrulanmış Sekiz Bantlı, Melon ve Mascara dahil 13 tür içermeli");
 for (const [id,size,volume,length,group,temperature,ph] of [
   ["melon-barb",7.5,150,120,6,[22,26],[5.5,7]],
-  ["mascara-barb",12,200,120,8,[19,25],[6,7.5]],
 ]) {
   const profile=speciesCatalog.find((item)=>item.id===id);
   assert.deepEqual(
@@ -7557,8 +7645,8 @@ for (const species of [
 assert.equal(speciesCatalog.find((item) => item.id === "calvus-cichlid")?.predatory, true, "Calvus küçük canlılar için avlanma riski taşımalı");
 assert.equal(speciesCatalog.find((item) => item.id === "electric-blue-hap")?.predatory, true, "Electric Blue Ahli küçük balıkları avlama riski taşımalı");
 for (const [id, minVolumeL, minTankLengthCm, minGroup] of [
-  ["green-terror", 300, 150, 1],
-  ["firemouth-cichlid", 150, 100, 1],
+  ["green-terror", 304, 150, 1],
+  ["firemouth-cichlid", 108, 120, 2],
   ["redhead-tapajos", 280, 120, 6],
 ]) {
   const profile = speciesCatalog.find((item) => item.id === id);
@@ -7588,8 +7676,8 @@ for (const [id, minGroup, minTankLengthCm] of [
 }
 assert.equal(speciesCatalog.find((item) => item.id === "pictus-catfish")?.predatory, true, "Pictus küçük balıklar için avlanma riski taşımalı");
 for (const [id, minVolumeL, minTankLengthCm] of [
-  ["congo-puffer", 112, 80],
-  ["red-eyed-puffer", 80, 80],
+  ["congo-puffer", 68, 75],
+  ["red-eyed-puffer", 54, 60],
   ["spotted-congo-puffer", 110, 80],
   ["green-spotted-puffer", 120, 80],
 ]) {
