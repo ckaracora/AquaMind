@@ -5144,6 +5144,46 @@ assert.deepEqual([verifiedDiscus?.adultSizeCm,verifiedDiscus?.minVolumeL,verifie
 assert(verifiedDiscus.minVolumeL >= verifiedDiscus.minGroup * 50, "Diskus hacmi en az grubun her yetişkini için OATA'nın 50 litresini karşılamalı");
 assert(verifiedDiscus?.sourceUrl?.includes("ornamentalfish.org"), "Diskus yetişkin sürü hacmini veren OATA bakım kaynağına bağlanmalı");
 assert(["seriouslyfish.com","fishkeeper.co.uk","fishbase.se"].every((host) => verifiedDiscus?.additionalSourceUrls?.some((url) => url.includes(host))), "Diskusun uzunluk, su değerleri ve kimlik kaynakları korunmalı");
+// 2026-10-19 tür kaynak yenilemesi 1 (docs/CATALOG_LOG.md): değerler türlerin Seriously Fish sayfalarından; FishBase daha uzun bir en küçük
+// akvaryum verdiğinde o uzunluk, Seriously Fish'in yayımlamadığı ölçüde kayıttaki kaynaklı değer. Sıra: boy, hacim, uzunluk, en az grup, sıcaklık, pH.
+const sourcedSpeciesBatch1 = {
+  "angelfish":[15,200,100,2,[24,30],[6,7.4]],
+  "ramirezi":[7,54,60,2,[27,30],[4,7]],
+  "green-neon-tetra":[2.5,41,45,8,[24,27],[3,6.5]],
+  "silver-tip-tetra":[5,68,60,6,[23,28],[6,8]],
+  "apisto-hongsloi":[7,41,45,1,[23,29],[5.5,7]],
+  "apisto-mendezi":[5,41,45,2,[23,29],[4,6]],
+  "altum-angelfish":[18,450,150,4,[28,32],[4.8,6.2]],
+  "pantano-cichlid":[45,864,240,1,[24,30],[7.2,8.5]],
+  "johanni-cichlid":[12,154,90,4,[23,27],[7.6,8.8]],
+  "elongatus-mpanga":[13.5,137,120,5,[24,28],[7.6,8.8]],
+  "boesemani-rainbow":[11,108,120,6,[27,30],[7,8]],
+  "dwarf-neon-rainbow":[8,54,80,6,[23,28],[6.8,7.5]],
+  "forktail-rainbow":[6,54,60,8,[24,28],[7,8]],
+  "turquoise-rainbowfish":[12,108,120,6,[20,25],[7,9]],
+  "gertrudae-rainbowfish":[4,41,45,8,[21,28],[4.5,7.5]],
+  "clown-killifish":[3.5,41,45,8,[20,26],[4,7]],
+  "lyretail-killifish":[6,28,60,1,[21,32],[5.5,7]],
+  "gardneri-killifish":[8,40,60,2,[20,26],[6,7.5]],
+  "red-striped-killifish":[6,41,45,1,[20,26],[6.5,7.5]],
+  "golden-wonder-killifish":[10,68,80,1,[24,27],[6,7.5]],
+  "dwarf-chain-loach":[6,72,80,5,[20,30],[5.5,7.5]],
+  "black-ghost-knifefish":[50,648,180,1,[23,28],[6,8]],
+  "zebra-danio":[5,81,90,8,[18,25],[6,8]],
+  "empire-gudgeon":[12,72,80,2,[20,35],[5,9.1]],
+  "pea-puffer":[2.5,20,35,1,[22,28],[6.8,8]],
+  "amazon-puffer":[12.8,108,120,6,[20,26],[5.5,8]],
+  "chinese-high-fin-sucker":[90,1135,200,1,[15.5,21],[6,8]]
+};
+for (const [id, expected] of Object.entries(sourcedSpeciesBatch1)) {
+  const profile = speciesCatalog.find((item) => item.id === id);
+  assert.deepEqual([profile?.adultSizeCm,profile?.minVolumeL,profile?.minTankLengthCm,profile?.minGroup,profile?.temperature,profile?.ph], expected, `${id} Seriously Fish bakım eşiklerini taşımalı`);
+  assert.match(profile?.sourceUrl ?? "", /^https:\/\/www\.seriouslyfish\.com\/species\//, `${id} Seriously Fish tür sayfasına bağlanmalı`);
+  assert.equal(profile?.verifiedAt, "2026-10-19", `${id} kaynak okuma tarihini taşımalı`);
+  assert((profile?.additionalSourceUrls ?? []).some((url) => url.includes("fishbase.se")), `${id} bilimsel kimlik için FishBase bağlantısını korumalı`);
+}
+assert.equal(speciesCatalog.find((item) => item.id === "red-striped-killifish")?.speciesOnly, undefined, "Red-striped killifish kaynağa göre dikkatle seçilmiş tank arkadaşlarıyla tutulabilmeli");
+assert.equal(speciesCatalog.find((item) => item.id === "black-ghost-knifefish")?.tankLengthDataNote, undefined, "Black Ghost kaynaklı uzunluk taşırken uzunluk verisi sınırlı notu kalmamalı");
 // Satış adı tek bir bilimsel türe denk gelmeyen kayıtlar satılan balığa göre tanımlanır; birden fazla aday varsa en koruyucu kaynaklı değerler kullanılır (docs/DECISIONS/0014).
 const identityRecords = [
   ["ancistrus", "Ancistrus sp. '3'", 15, 54, 60, 1, [21,26], [5.5,7.5], "seriouslyfish.com/species/ancistrus-cf-cirrhosus", "Ancistrus cirrhosus"],
@@ -6053,12 +6093,12 @@ for (const [retailName, expectedId] of cikletistCurrentMonsterInventory) {
 const chineseHighFinSucker = speciesCatalog.find((item) => item.id === "chinese-high-fin-sucker");
 assert.deepEqual(
   [chineseHighFinSucker?.scientificName,chineseHighFinSucker?.adultSizeCm,chineseHighFinSucker?.minVolumeL,chineseHighFinSucker?.minTankLengthCm,chineseHighFinSucker?.minGroup,chineseHighFinSucker?.temperature,chineseHighFinSucker?.ph,chineseHighFinSucker?.flow],
-  ["Myxocyprinus asiaticus",68,1135,undefined,1,[15,26],[6,8],undefined],
+  ["Myxocyprinus asiaticus",90,1135,200,1,[15.5,21],[6,8],"high"],
   "Çin Ejderi yalnız kaynaklı kimlik, boy, yetişkin hacmi, sosyal yapı ve su eşiklerini taşımalı",
 );
-assert(chineseHighFinSucker?.tankLengthDataNote?.includes("uzunluk değeri tahmin edilmedi"), "Çin Ejderi yayımlanmayan santimetre eşiğini uydurmamalı");
+assert.equal(chineseHighFinSucker?.tankLengthDataNote, undefined, "Çin Ejderi Seriously Fish'in en az 2 m uzunluk eşiğini kullanmalı");
 assert(chineseHighFinSucker?.husbandryCaution?.includes("havuz"), "Çin Ejderi yetişkin bakımının havuz ölçeğini açıklamalı");
-assert.equal(chineseHighFinSucker?.verifiedAt, "2026-10-02", "Çin Ejderi güncel doğrulama tarihini taşımalı");
+assert.equal(chineseHighFinSucker?.verifiedAt, "2026-10-19", "Çin Ejderi güncel doğrulama tarihini taşımalı");
 assert((chineseHighFinSucker?.additionalSourceUrls?.length || 0) >= 3, "Çin Ejderi kimlik, bakım ve Türkiye satış adı kaynaklarını saklamalı");
 assert(chineseHighFinSucker?.husbandryCaution?.includes("80–90 cm") && chineseHighFinSucker?.husbandryCaution?.includes("Hassas"), "Çin Ejderi bakım boyu farkını ve koruma durumunu açıklamalı");
 const oscar = speciesCatalog.find((item) => item.id === "oscar");
@@ -6515,10 +6555,10 @@ assert.equal(speciesForCatalogExactSearch("Caridina serrata", "shrimp", "freshwa
 assert.equal(speciesForCatalogExactSearch("Tangerine Tiger Shrimp", "shrimp", "freshwater"), undefined, "Caridina serrata profili belirsiz Tangerine Tiger ticari adını üstlenmemeli");
 
 const greenNeon = speciesCatalog.find((item) => item.id === "green-neon-tetra");
-assert.equal(greenNeon?.minGroup, 10, "Green Neon tetra küçük bir grup yerine güvenli sürü sayısıyla önerilmeli");
+assert.equal(greenNeon?.minGroup, 8, "Green Neon tetra küçük bir grup yerine güvenli sürü sayısıyla önerilmeli");
 assert.equal(greenNeon?.flow, "low", "Green Neon tetra düşük akış gereksinimini taşımalı");
 const blackGhost = speciesCatalog.find((item) => item.id === "black-ghost-knifefish");
-assert.equal(blackGhost?.minVolumeL, 454, "Yetişkin Black Ghost bıçak balığı küçük akvaryuma önerilmemeli");
+assert.equal(blackGhost?.minVolumeL, 648, "Yetişkin Black Ghost bıçak balığı küçük akvaryuma önerilmemeli");
 assert.equal(blackGhost?.predatory, true, "Black Ghost küçük canlılar için avcı riski taşımalı");
 assert((blackGhost?.adultSizeCm || 0) >= 45, "Black Ghost yetişkin boyu yavru satış boyuyla karıştırılmamalı");
 for (const [id, minVolumeL, minTankLengthCm, minGroup] of [
@@ -6556,7 +6596,7 @@ assert.equal(marliersJulie?.minTankLengthCm, 120, "Marlier's Julie için doğrul
 assert.equal(marliersJulie?.speciesOnly, true, "Marlier's Julie özel Tanganyika kurulumu uyarısı taşımalı");
 const turquoiseRainbow = speciesCatalog.find((item) => item.id === "turquoise-rainbowfish");
 assert.equal(turquoiseRainbow?.minTankLengthCm, 120, "Turquoise gökkuşağı için dört fit yüzme alanı korunmalı");
-assert.equal(turquoiseRainbow?.flow, "high", "Hızlı yüzen Turquoise gökkuşağı yüksek akış ihtiyacını taşımalı");
+assert.equal(turquoiseRainbow?.flow, "low", "Turquoise gökkuşağı kaynağın en düşük tutulmasını istediği su hareketini taşımalı");
 assert(speciesCatalog.filter((item) => speciesGroup(item) === "rainbowfish").length >= 10, "Gökkuşağı balığı kataloğu yaygın küçük ve iri türleri kapsamalı");
 for (const [id, minGroup, flow] of [
   ["red-rainbowfish", 6, "medium"],
@@ -6583,7 +6623,7 @@ assert.equal(peacockGudgeon?.minGroup, 6, "Peacock Gudgeon gevşek sürü davran
 const empireGudgeon = speciesCatalog.find((item) => item.id === "empire-gudgeon");
 assert.equal(empireGudgeon?.predatory, true, "Empire Gudgeon küçük balıklar için avlanma riski taşımalı");
 const dwarfChainLoach = speciesCatalog.find((item) => item.id === "dwarf-chain-loach");
-assert.equal(dwarfChainLoach?.minGroup, 7, "Cüce zincir loach tek veya küçük grupla önerilmemeli");
+assert.equal(dwarfChainLoach?.minGroup, 5, "Cüce zincir loach tek veya küçük grupla önerilmemeli");
 const pepperedCory = speciesCatalog.find((item) => item.id === "peppered-cory");
 assert.equal(pepperedCory?.temperature[0], 15, "Benekli çöpçünün serin su toleransı korunmalı");
 const apistoCommbrae = speciesCatalog.find((item) => item.id === "apisto-commbrae");
@@ -6665,17 +6705,13 @@ for (const [id, scientificName, minVolumeL, minTankLengthCm, minGroup, temperatu
 assert(speciesCatalog.find((item) => item.id === "winemillers-eartheater")?.husbandryCaution?.includes("180 × 60 cm") && speciesCatalog.find((item) => item.id === "winemillers-eartheater")?.husbandryCaution?.includes("%50–70"), "Geophagus winemilleri kaynaklı taban ve bakım sıklığını açıklamalı");
 assert(speciesCatalog.find((item) => item.id === "threadfin-acara")?.husbandryCaution?.includes("150 × 45 cm") && speciesCatalog.find((item) => item.id === "threadfin-acara")?.husbandryCaution?.includes("ayırıcı"), "Acarichthys heckelii çift alanı ve saldırganlık güvenliğini açıklamalı");
 for (const [id, scientificName, minVolumeL, minTankLengthCm, minGroup] of [
-  ["altum-angelfish", "Pterophyllum altum", 450, 150, 4],
   ["blackbelt-cichlid", "Vieja maculicauda", 600, 180, 1],
-  ["pantano-cichlid", "Cincelichthys pearsei", 850, 244, 2],
   ["malawi-eyebiter", "Dimidiochromis compressiceps", 680, 183, 4],
   ["redfin-borleyi", "Copadichromis borleyi", 450, 120, 5],
   ["super-vc10-milomo", "Placidochromis milomo", 1000, 183, 4],
   ["teardrop-guianacara", "Guianacara dacrya", 240, 120, 2],
   ["owroewefi-guianacara", "Guianacara owroewefi", 250, 140, 4],
-  ["johanni-cichlid", "Pseudotropheus johannii", 400, 120, 5],
   ["silver-maskaheros", "Maskaheros argenteus", 700, 200, 1],
-  ["elongatus-mpanga", "Chindongo elongatus", 375, 120, 5],
   ["sulphur-head-hap", "Otopharynx lithobates", 350, 130, 4],
   ["livingstonii-cichlid", "Nimbochromis livingstonii", 680, 180, 4],
   ["silver-mono", "Monodactylus argenteus", 600, 180, 6],
@@ -7739,9 +7775,9 @@ assert.equal(redBelliedPacu?.verifiedAt, "2026-10-02", "Kırmızı karınlı pac
 assert.equal(redBelliedPacu?.speciesOnly, true, "Kırmızı karınlı pacu standart topluluk önerilerine girmemeli");
 assert(redBelliedPacu?.husbandryCaution?.includes("2.550 litre") && redBelliedPacu?.husbandryCaution?.includes("2.430 litre"), "Kırmızı karınlı pacu kaynak içi hacim farkını kullanıcıdan saklamamalı");
 const blackGhostKnifefish = speciesForLivestock({ commonName: "Black Ghost bıçak balığı", scientificName: "Apteronotus albifrons", category: "fish", quantity: 1 });
-assert.deepEqual([blackGhostKnifefish?.adultSizeCm, blackGhostKnifefish?.minVolumeL, blackGhostKnifefish?.minTankLengthCm, blackGhostKnifefish?.temperature, blackGhostKnifefish?.ph, blackGhostKnifefish?.flow], [50, 454, undefined, [23, 28], [6, 8], undefined], "Black Ghost bıçak balığı yalnız yayımlanmış erişkin, hacim ve su eşiklerini taşımalı");
-assert.equal(blackGhostKnifefish?.verifiedAt, "2026-09-10", "Black Ghost bıçak balığı güncel kaynak denetim tarihini taşımalı");
-assert(blackGhostKnifefish?.tankLengthDataNote?.includes("tahmin edilmedi"), "Black Ghost bıçak balığı için yayımlanmayan akvaryum cephesi uydurulmamalı");
+assert.deepEqual([blackGhostKnifefish?.adultSizeCm, blackGhostKnifefish?.minVolumeL, blackGhostKnifefish?.minTankLengthCm, blackGhostKnifefish?.temperature, blackGhostKnifefish?.ph, blackGhostKnifefish?.flow], [50, 648, 180, [23, 28], [6, 8], undefined], "Black Ghost bıçak balığı yalnız yayımlanmış erişkin, hacim, uzunluk ve su eşiklerini taşımalı");
+assert.equal(blackGhostKnifefish?.verifiedAt, "2026-10-19", "Black Ghost bıçak balığı güncel kaynak denetim tarihini taşımalı");
+assert(blackGhostKnifefish?.husbandryCaution?.includes("180 × 60 × 60 cm"), "Black Ghost bıçak balığı Seriously Fish'in yayımladığı erişkin akvaryum ölçüsünü açıklamalı");
 assert(blackGhostKnifefish?.additionalSourceUrls?.some((url) => url.includes("fishbase.se/summary/Apteronotus-albifrons")), "Black Ghost bıçak balığı bilimsel boy ve su kaynağına bağlanmalı");
 const unresolvedBlueAzulPeacockBass = unresolvedSpeciesForSearch("BLUE AZUL PEACOCK BASS", "fish", "freshwater");
 assert.equal(unresolvedBlueAzulPeacockBass?.group, "monster", "Blue Azul Peacock Bass Monster grubunda güvenlik kaydı olarak kalmalı");
