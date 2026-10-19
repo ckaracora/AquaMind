@@ -2,22 +2,14 @@
 
 import { AlertTriangle } from "lucide-react";
 import { useAquariums } from "@/providers/aquarium-provider";
-import type { CollectionName } from "@/lib/aquarium-storage";
+import { useI18n } from "@/providers/i18n-provider";
 
 // Kullanıcı değişikliği bu cihaza yazılamadığında sessiz kalınmaz: değişikliğin
-// geçici olduğu ve yedek alınabileceği açıkça söylenir (Issue #8).
-
-const LABELS: Record<CollectionName, string> = {
-  aquariums: "akvaryumlar",
-  waterReadings: "su ölçümleri",
-  maintenanceTasks: "bakım kayıtları",
-  livestock: "canlılar",
-  plants: "bitkiler",
-  equipment: "ekipmanlar",
-};
+// geçici olduğu ve yedek alınabileceği açıkça söylenir (Issue #8). Metinler dil dosyasında (storageWarning).
 
 export function StorageWarning() {
   const { unsavedCollections, writeBlocked } = useAquariums();
+  const { t } = useI18n();
   if (!writeBlocked && unsavedCollections.length === 0) return null;
 
   return (
@@ -28,22 +20,19 @@ export function StorageWarning() {
         </span>
         <div className="text-[11px] leading-relaxed text-amber-100/80">
           {writeBlocked && (
-            <p className="font-bold text-amber-300">
-              Tamamlanmamış bir silme işlemi sürüyor. Bu sırada yeni değişiklikler kaydedilemez ve denenen işlem uygulanmaz.
-              Sayfayı yenileyin; işlem otomatik tamamlanmaya çalışılacak.
-            </p>
+            <p className="font-bold text-amber-300">{t.storageWarning.deletePending}</p>
           )}
           {unsavedCollections.length > 0 && (
             <>
               <p className="font-bold text-amber-300">
-                Değişiklikleriniz bu cihazda saklanamadı ({unsavedCollections.map((name) => LABELS[name]).join(", ")}).
+                {t.storageWarning.unsaved(unsavedCollections.map((name) => t.storageWarning.collections[name]).join(", "))}
               </p>
               <p className="mt-1">
-                Sayfayı yenilerseniz bu değişiklikler kaybolur. Depolama alanı dolu olabilir. Kaybetmemek için{" "}
+                {t.storageWarning.unsavedHelpBefore}{" "}
                 <a href="/settings" className="-my-3.5 inline-block py-3.5 font-bold text-amber-300 underline">
-                  Ayarlar → Verileri dışa aktar
+                  {t.storageWarning.unsavedHelpLink}
                 </a>{" "}
-                ile yedek alın.
+                {t.storageWarning.unsavedHelpAfter}
               </p>
             </>
           )}

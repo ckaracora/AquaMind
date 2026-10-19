@@ -1,0 +1,15 @@
+{
+  "name": "@aquamind/localization",
+  "version": "0.1.0",
+  "private": true,
+  "description": "AquaMind dil dosyaları, dile göre tarih ve sayı biçimi, birim dönüşümü (web ve ileride telefon uygulaması ortak kullanır)",
+  "main": "./src/index.ts",
+  "types": "./src/index.ts",
+  "exports": {
+    ".": {
+      "types": "./src/index.ts",
+      "default": "./src/index.ts"
+    }
+  },
+  "sideEffects": false
+}
