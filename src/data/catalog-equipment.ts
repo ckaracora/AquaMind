@@ -2,6 +2,7 @@ import type { Equipment } from "@/types/aquarium";
 import { lightingCatalog } from "./catalog-equipment-lighting";
 import { specializedEquipmentCatalog } from "./catalog-equipment-specialized";
 import { hardwareEquipmentCatalog } from "./catalog-equipment-hardware";
+import { withdrawUnverifiedEquipmentValues } from "./catalog-equipment-unverified";
 import { assertUniqueIds, brandModelKey, isVerifiedEquipmentProfile, normalize } from "./catalog-shared";
 
 export interface EquipmentProfile {
@@ -509,6 +510,8 @@ const documentedCapacityGaps = new Set([
 for(const item of equipmentCatalog){
   if(documentedCapacityGaps.has(item.id)&&!item.capacityDataNote)item.capacityDataNote="Üretici ve incelenen güvenilir satıcı kaynaklarında kapasite/debi değeri yayımlanmamış; tahmini değer kullanılmıyor.";
 }
+// Değeri yalnızca kural dışı kaynaklarda yayımlanmış kayıtların değerleri hesaptan çekilir (docs/DECISIONS/0019-dogrulanamayan-ekipman-degerleri.md).
+const unknownUnverifiedIds = withdrawUnverifiedEquipmentValues(equipmentCatalog);
 
 const hasCapacityData = (profile:EquipmentProfile) => {
   if(profile.category==="heater")return Boolean(profile.powerW||profile.recommendedMinL||profile.recommendedMaxL);
@@ -521,6 +524,7 @@ function assertUniqueEquipmentModels(items:EquipmentProfile[]){const seen=new Se
 // Bütünlük denetimi geliştirmede, testlerde ve CI'da (`pnpm verify`) çalışır; üretim derlemesinde kullanıcının tarayıcısında çalışmaz (docs/DECISIONS/0015-katalog-modulleri-ve-sayfa-hizi.md).
 function assertEquipmentCatalogIntegrity(){
   assertUniqueIds("Ekipman",equipmentCatalog);assertUniqueEquipmentModels(equipmentCatalog);
+  if(unknownUnverifiedIds.length)throw new Error(`Değeri çekilecek ekipman katalogda yok: ${unknownUnverifiedIds.join(", ")}`);
   const unverifiedEquipmentIds:string[]=[];
   for(const item of equipmentCatalog){
     for(const value of [item.ratedFlowLph,item.powerW,item.recommendedMinL,item.recommendedMaxL,item.integratedHeaterW,item.integratedUvcW])if(value!==undefined&&value<=0)throw new Error(`Geçersiz ekipman sayısal değeri: ${item.id}`);
@@ -574,3 +578,6 @@ export const profileForEquipment = (item: Equipment) => {
   const brand = normalize(item.brand), model = normalize(item.model);
   return brand === undefined || model === undefined ? undefined : equipmentByBrandModelIndex().get(brandModelKey(brand, model));
 };
+// Kayda eklenirken kopyalanan açıklama sonradan değişmiş olabilir (ör. değeri hesaptan çekilen kayıt, 0019); katalogla eşleşen
+// cihazda güncel katalog açıklaması gösterilir, kayıttaki eski metin silinmez. Katalogla eşleşmeyen cihazda kayıttaki metin kalır.
+export const specificationsForEquipment = (item: Equipment) => profileForEquipment(item)?.specifications ?? item.specifications;
