@@ -30,12 +30,62 @@ Bu liste otomatik doğruluk garantisi değildir. Her bağlantı doğru marka, mo
 
 - Yerel mağazalar yalnızca Türkiye'de kullanılan satış adını, varyeteyi ve güncel bulunabilirliği karşılaştırmak için kullanılabilir.
 - Bilimsel kimlik için FishBase, Catalog of Fishes, GBIF veya hakemli taksonomi yayını tercih edilir.
-- Yetişkin boyu, minimum akvaryum, sıcaklık, pH, sosyal yapı ve özel bakım riskleri için kurumsal bakım rehberi veya yerleşik tür uzmanı veri tabanı kullanılmalıdır. Örnekler: Seriously Fish, Practical Fishkeeping, OATA, Fishipedia, Maidenhead Aquatics/Fishkeeper; kedi balıklarında ScotCat, Welsfans ve Corydoras World.
+- Yetişkin boyu, minimum akvaryum, sıcaklık, pH, sosyal yapı ve özel bakım riskleri için kurumsal bakım rehberi veya yerleşik tür uzmanı veri tabanı kullanılmalıdır. Örnekler: Seriously Fish, Practical Fishkeeping, OATA, Fishipedia, Maidenhead Aquatics/Fishkeeper; kedi balıklarında ScotCat, Welsfans ve Corydoras World; karides ve salyangozlarda aşağıdaki "Omurgasızlar" bölümü.
 - Yerel mağazanın bakım metni, bilimsel kimlik veya zorunlu bakım eşikleri için tek başına yeterli kanıt sayılmaz.
 - Ticari ad birden fazla türe uyuyorsa ya da mağaza adı ile uzman kaynak çelişiyorsa eşleme yapılmaz; kayıt çözülmemiş tutulur.
 - İstisna (`docs/DECISIONS/0014-coklu-tur-satis-adi-profilleri.md`, ürün sahibi onayı 2026-10-05): katalogda zaten bulunan ve kullanıcı kayıtlarının bağlı olduğu bir profilin satış adı birden fazla türü kapsıyorsa profil kaldırılmaz. Bilimsel ad adayları gösterir, değerler adaylar arasında kaynaklı ve en koruyucu olanlardır (en büyük boy, en büyük akvaryum), kimlik belirsizliği kullanıcıya açıklanır. Yeni mağaza başlıkları için yukarıdaki kural aynen geçerlidir.
 - Tek bir güvenilir sayfa tüm eşikleri yayımlamıyorsa ana bağlantı `sourceUrl`, kimlik/boy/özel bakım gibi bağımsız doğrulamalar `additionalSourceUrls` alanında HTTPS bağlantılarıyla saklanır.
 - Tatlı su adıyla satılan acı su veya deniz canlısı, salinite gereksinimi uygulamanın sağlık analizinde modellenmeden sıradan tatlı su profiline bağlanmaz.
+
+## Omurgasızlar (karides, salyangoz) için uzman kaynaklar
+
+Ürün sahibi 2026-10-20'de kabul edilecek kaynakların seçimini gözlem ve gerekçeleriyle Claude'a bıraktı (`PROJECT_STATUS.md` → "Ürün sahibinin 2026-10-20 kararları", madde 3). Seçim 2026-10-20'de sayfalar okunarak yapıldı.
+
+Gözlemler:
+
+- Seriously Fish'te omurgasız sayfası yok; balıklarda kullanılan ana kaynak burada kullanılamıyor. Taban katalogdaki dört omurgasız kaydının (Amano, kiraz karides, Crystal Red, tavşan salyangoz) bağlantısı bilimsel addan üretilmiş, var olmayan bir Seriously Fish adresidir.
+- Katalogdaki omurgasız kayıtlarının çoğu yerel mağazaya ya da tek yazarlı hobi ve satıcı sitelerine dayanıyor.
+- Kurumsal kaynakların hiçbiri tek başına bütün alanları vermiyor: Fishkeeper akvaryum ölçüsü ve sayısal grup yayımlamıyor; OATA bütün karides ve salyangozlar için tek bir genel kart yayımlıyor.
+
+Kabul edilen kaynaklar (öncelik sırasıyla):
+
+1. **Fishkeeper (Maidenhead Aquatics):** tür ya da form sayfası olan taksonlarda ana kaynaktır (sıcaklık, pH, sertlik, boy, sosyal yapı, tank arkadaşı). Balıklarda da kabul edilen kurumsal yayıncıdır; satılan formları (rili, yellow fire, crystal red) ayrı sayfalarla kapsar.
+2. **Practical Fishkeeping:** adlı yazarların makaleleri. Neocaridina için en küçük akvaryumu ve en az grup sayısını, Caridina ve Sulawesi türleri için su değerlerini verir. Tür grubuna özgü sayı veren tek kurumsal kaynaktır.
+3. **wirbellose.de (Almanca omurgasız veri tabanı):** yalnız ilk iki kaynağın kapsamadığı yerde kullanılır. İlk ikisinin kapsamadığı taksonlarda bütün alanlar için kullanılır (ör. *Caridina serrata*, *Planorbella duryi*, *Brotia*). İlk ikisinin kapsadığı taksonlarda yalnız onların vermediği alan için kullanılır; ör. Practical Fishkeeping'in su değerlerini verdiği *C. mariae* ve *C. dennerli*'de ya da Fishkeeper'ın kapsadığı *Tylomelania* ve nerit salyangozlarında akvaryum ölçüsü. Değerleri sıcaklık, pH ve akvaryum ölçüsüdür.
+   - Gerekçe: omurgasızlarda Seriously Fish'e en yakın kaynaktır; alanları sabittir ve uzun süredir yayındadır.
+   - Zayıf yanları: yazar ve tarih tür sayfasında değil, kategori listesinde yazar; kaynakça yoktur. Bazı alanlar bakıcının kendi suyunu anlatır ya da açıkça hatalıdır.
+   - Bu yüzden yalnız tür aralığı olarak yazılmış alanlar alınır; bakıcı anekdotu ve hatalı görünen alan kullanılmaz.
+4. **OATA (ticaret birliği, veteriner onaylı) "How to look after freshwater shrimp and snails" (Eylül 2022):** yalnız genel taban kurallar için kullanılır:
+   - küçük karides ve salyangoz grubu için en az 10 L, apple snail ve Amano için yaklaşık 20 L;
+   - karides en az 5'li grup;
+   - ağza sığabilecek ya da avcı balık yok;
+   - salyangozla puffer ya da loach yok;
+   - bakır yasak.
+
+   Türe özgü sıcaklık ve pH için kullanılmaz. Kart değerlerin bu grup için genel rehber olduğunu kendisi söyler; ayrıca cherry karidesi *C. cantonensis* altına koyan bir taksonomi hatası içerir.
+5. **Destek kaynakları:** kimlik, doğal ortam ya da çapraz doğrulama içindir; tek başına bakım değeri kaynağı sayılmaz.
+   - Hakemli yayınlar (von Rintelen & Cai 2009; Klotz & von Rintelen 2014; von Rintelen & Glaubrecht 2008): Sulawesi türlerinin kimliği ve göl değerleri.
+   - USGS NAS: *Melanoides* ve *Pomacea diffusa*.
+   - Aquarium Glaser (Frank Schäfer'in tarihli, zaman zaman kaynakçalı yazıları): ithalatçı olduğu için yalnız kabul edilen bir kaynağı doğrularken ya da onunla çelişirken kullanılır.
+   - applesnail.net: *Pomacea* kimliği.
+
+Kabul edilmeyenler:
+
+- Shrimp Science, aquariumbreeder.com, The Shrimp Farm: tek hobi yazarı; kaynakçasız ya da kendi içinde çelişkili; satıcı.
+- Dennerle: ürün satıcısı; *C. dennerli* için yayımladığı değerler hakemli saha verisiyle çelişiyor.
+- Planet Inverts: alan adı park edilmiş.
+- Chris Lukhaup: site kapalı.
+- Yerel mağazalar: kural gereği yalnız satış adı ve bulunabilirlik için.
+
+Değer kuralı (balıklardaki kuralın omurgasız karşılığı):
+
+- **Sıcaklık ve pH:** aralık veren kabul edilen kaynakların ortak aralığı (koruyucu; balıklardaki karar 0014 yöntemi). Fishkeeper'da form sayfası varsa formun sayfası, yoksa türün sayfası alınır. OATA'nın genel aralığı türe özgü olmadığı için hesaba katılmaz. Ortak aralığa giren kaynakların değerleri ve aradaki fark katalog günlüğüne yazılır.
+- **Boy:** katalog ile kaynağın büyüğü.
+- **Akvaryum:** hacim için türe ya da cinse özgü kaynak değeri; yoksa OATA tabanı; hiçbir zaman OATA tabanının altında değil. Uzunluk yayımlanmıyorsa kayıttaki değer korunur.
+- **Grup:** türe ya da cinse özgü kaynak sayısı; yoksa karideste OATA'nın 5'i; salyangozda kaynak grup demiyorsa 1.
+- **Nitelikler:** kaynakla doğrudan çelişen nitelikler (akıntı, avcılık, tür akvaryumu) düzeltilir.
+- **Eski kaynaklar:** ek kaynak olarak kalır.
+- **Okuma:** değerler sayfa açılarak okunur; arama özeti kaynak sayılmaz.
 
 ## Zorunlu kayıt alanları
 

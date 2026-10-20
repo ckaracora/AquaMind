@@ -2418,3 +2418,62 @@ Güncel alt adım: JBL filtre medyası, bakteri başlangıcı, sorun giderici/pH
 - Altın fikstür: motor değişmedi; 1.033 vakadan 11'i değişti (4 "sığar", 4 "dar", 3 tür çifti). Değişen tek ölçüt yük (8). Jonklaas vakalarında yalnız bakım notunun metni değişti. Dev danio vakalarına "özel bakım gereksinimi" notu eklendi. Durum geçişi yok. Fikstür yeniden üretildi; ayrı commit'te kaydedilecek (planlandı).
 - Codex 1. turu bir P3 buldu: Dev danio'nun bakım notu bütün değerlerin yeni türün sayfasından geldiğini söylüyordu, oysa boy kataloğun koruyucu 10 cm'sinde kaldı (kaynak 8 cm SL). Not ve test açıklaması düzeltildi. 2. tur temiz.
 - Yol haritasının 2. adımından balıklarda kalanlar: kimlik sorusu olan `cochus-blue-tetra` (Fishkeeper'ın Blue Tetra sayfası balığı *Knodus borki* olarak ele alıyor) ve hiçbir uzman kaynakta tür düzeyinde bulunamayan 13 tür (paket 1'den `apisto-erythrura`, `saulosi-cichlid`, `teardrop-guianacara`, `owroewefi-guianacara`, `malayan-river-sole`, `african-arowana`; paket 2'den `rubicundus-lipstick-goby`, `selheims-freshwater-sole`, `kners-yellow-flagtail`, `blood-parrot-cichlid`, L149, L148, `pink-lipped-moray`). Bunlar için başka bir kabul edilecek kaynak ya da uzman görüşü gerekiyor. Karides (40) ve salyangoz (16) için uzman kaynak listesi ürün sahibinin kararı.
+
+## 2026-10-20 Omurgasız kaynak yenilemesi 1: Neocaridina karidesleri ve Amano (Claude)
+
+- Ürün sahibi omurgasızlar için kabul edilecek kaynakların seçimini 2026-10-20'de Claude'a bıraktı. Seçim, gerekçeleri ve değer kuralı `docs/DATA_SOURCES.md` → "Omurgasızlar (karides, salyangoz) için uzman kaynaklar" bölümünde.
+- Bu paket 18 kayıt kapsıyor: *Neocaridina davidi* formları (kiraz karides ve 15 form), white pearl (*N. cf. zhangjiajiensis*) ve Amano (*Caridina multidentata*).
+- Okunan sayfalar (2026-10-20, UTC):
+  - Fishkeeper'ın kiraz, rili, yellow fire ve Amano sayfaları (değerler iki ayrı okumada aynı çıktı);
+  - Practical Fishkeeping'in iki yazısı: Ade Dunn'ın Neocaridina SSS'si (Temmuz 2009) ve Gabor Horvath'ın karides girişi;
+  - OATA'nın karides ve salyangoz kartı (HTML ve Eylül 2022 PDF'i);
+  - wirbellose.de'nin Amano sayfası.
+- Kurallar:
+  - Sıcaklık ve pH: aralık veren kabul edilen kaynakların ortak aralığı. Bu, koruyucu seçimdir; balık paketi 3'te ve karar 0014'te de aynı yöntem kullanıldı. Kaynaklar:
+    - Fishkeeper'ın form sayfası; form sayfası yoksa türün sayfası, yani kiraz karides sayfası (bilimsel ad alanı "Neocaridina davidi");
+    - Practical Fishkeeping'in iki yazısı: Dunn'a göre Neocaridina 18–28 °C, pH 6,5–8,0; Horvath'a göre *N. davidi* 18–26 °C, pH 6,5–8.
+  - White pearl'ün Fishkeeper sayfası yok. Horvath'ın değerleri *N. davidi* için; Dunn'ın yazısı ise white pearl'ü adıyla anıyor ve 18–28 °C, pH 6,5–8,0 veriyor.
+  - Amano için aralığı yalnız Fishkeeper veriyor. OATA'nın aralığı türe özgü değil; wirbellose.de de Fishkeeper'ın kapsadığı bir taksonda değer kaynağı olarak kullanılmıyor.
+  - Codex 1. turundan sonra düzeltildi: ilk taslak yalnız Fishkeeper'ın aralığını almıştı. Bu yüzden 15 °C ve pH 6,2'de su uyumu 100 çıkıyor, Practical Fishkeeping'in daha dar önerisi kullanıcıya görünmüyordu.
+  - Boy: katalog ile kaynağın büyüğü. Hiçbir kayıtta değişmedi.
+  - Hacim: Neocaridina'da Practical Fishkeeping'in en küçük akvaryumu, 15 L ("as small as 15 l … anything less is not really suitable"). Amano'da OATA'nın yaklaşık 20 L'si (OATA Amano'yu adıyla anıyor; wirbellose.de beş hayvan için 20 L). Uzunluk yayımlanmıyor, kayıttaki değer korundu.
+  - Grup: Neocaridina'da Practical Fishkeeping'in "at least six" ifadesi. Amano'da OATA'nın karidesler için en az beşli grubu; Fishkeeper "must be kept in groups" diyor ama sayı vermiyor.
+  - Akıntı, avcılık ve tür akvaryumu: kaynaklar bunlarla çelişmiyor, değişmedi. Bakım notları kaynaklarla uyumlu: bakır yasağı, yavruların filtreye çekilmemesi, renk formlarının birbiriyle çiftleşmesi. Notlar değişmedi.
+  - Kaynak alanları:
+    - `sourceUrl` Fishkeeper sayfası (white pearl'de Practical Fishkeeping); `verifiedAt` 2026-10-20.
+    - Practical Fishkeeping, OATA ve eski kaynaklar `additionalSourceUrls` içinde.
+    - Kiraz karides ve Amano'nun bilimsel addan üretilmiş, var olmayan Seriously Fish adresi kaldırıldı.
+    - Varsayılan kaynak haritasında *N. davidi* artık Fishkeeper'ın kiraz karides sayfası.
+- Kaynak farkları:
+  - Aynı tür için Fishkeeper'ın form sayfaları farklı sıcaklık veriyor: kiraz 12–28 °C, rili 18–25 °C, yellow fire 18–28 °C. Her form kendi sayfasını, sayfası olmayan formlar türün sayfasını aldı. Ortak aralıkla kiraz, sayfası olmayan formlar ve yellow fire 18–26 °C, rili formları 18–25 °C oldu.
+  - Fishkeeper'ın alt sınırı (12 °C) ve pH'ı (6,0) Practical Fishkeeping'inkinden geniş. Ortak aralık dar olanı aldı.
+  - İki kaynak üreme için daha dar aralık veriyor: Practical Fishkeeping (Dunn) en iyi 21–26 °C'de yaşayıp ürediğini yazıyor; Fishkeeper 21 °C altında ve fazla asidik suda üremediğini.
+  - OATA'nın kartı bütün karides ve salyangozlara tek bir aralık veriyor (17–27 °C, pH 6,5–8,0) ve kiraz karidesi *C. cantonensis* altına koyuyor; kural gereği türe özgü değer için kullanılmadı.
+- Kullanıcıya etkisi:
+  - Önceki değeri yerel mağazadan ya da hobi ve satıcı sitelerinden gelen 11 kayıtta önerilen akvaryum 20 L'den 15 L'ye indi.
+  - Neocaridina formlarının sıcaklık aralığı 18–26 °C oldu (rili formlarında 18–25 °C, white pearl'de 18–28 °C), pH hepsinde 6,5–8. Önceki değerlerin çoğu 18–28 °C ya da 20–26 °C idi.
+  - Amano'da akvaryum 25 L'den 20 L'ye indi, grup 4'ten 5'e çıktı, sıcaklık 15–28 °C oldu. Bu yüzden altum melekle sıcaklık çakışması uyarısı kalktı (altum 28–32 °C).
+- Altın fikstür: motor değişmedi. 1.033 vakadan 25'i değişti (12 "sığar", 12 "dar", 1 tür çifti); hepsi bu kayıtların değerlerinden geliyor. Değişen ölçütler: yük 24, tür uyumu 1. Durum geçişi yok.
+- Kalanlar: *Caridina* (cantonensis formları, mariae, serrata, dennerli, gracilirostris), Atyopsis, Atya, Palaemonetes ve salyangozlar sonraki paketlerde.
+- Değişiklik tablosu ("eski → yeni"; değişmeyen değer tek yazıldı):
+
+| Kimlik | Boy | Hacim (L) | Uzunluk (cm) | Grup | Sıcaklık | pH | Not |
+|---|---|---|---|---|---|---|---|
+| `cherry-shrimp` | 3 | 15 | 25 | 6 | 18–28 → 18–26 | 6,5–8 | Fishkeeper türün sayfası (form sayfası yok) 12–28 °C, pH 6,0–8,0 ∩ PFK Dunn 18–28 °C, pH 6,5–8,0 ∩ PFK Horvath (N. davidi) 18–26 °C, pH 6,5–8 |
+| `blue-dream-shrimp` | 3 | 15 | 25 | 6 | 18–28 → 18–26 | 6,5–8 | Fishkeeper türün sayfası (form sayfası yok) 12–28 °C, pH 6,0–8,0 ∩ PFK Dunn 18–28 °C, pH 6,5–8,0 ∩ PFK Horvath (N. davidi) 18–26 °C, pH 6,5–8 |
+| `orange-sakura-shrimp` | 3 | 15 | 25 | 6 | 18–28 → 18–26 | 6,5–8 | Fishkeeper türün sayfası (form sayfası yok) 12–28 °C, pH 6,0–8,0 ∩ PFK Dunn 18–28 °C, pH 6,5–8,0 ∩ PFK Horvath (N. davidi) 18–26 °C, pH 6,5–8 |
+| `green-jade-shrimp` | 3 | 15 | 25 | 6 | 18–28 → 18–26 | 6,5–8 | Fishkeeper türün sayfası (form sayfası yok) 12–28 °C, pH 6,0–8,0 ∩ PFK Dunn 18–28 °C, pH 6,5–8,0 ∩ PFK Horvath (N. davidi) 18–26 °C, pH 6,5–8 |
+| `bloody-mary-shrimp` | 3 | 15 | 25 | 6 | 18–28 → 18–26 | 6,5–8 | Fishkeeper türün sayfası (form sayfası yok) 12–28 °C, pH 6,0–8,0 ∩ PFK Dunn 18–28 °C, pH 6,5–8,0 ∩ PFK Horvath (N. davidi) 18–26 °C, pH 6,5–8 |
+| `black-rose-shrimp` | 3 | 20 → 15 | 30 | 6 | 20–26 → 18–26 | 6,5–7,8 → 6,5–8 | Fishkeeper türün sayfası (form sayfası yok) 12–28 °C, pH 6,0–8,0 ∩ PFK Dunn 18–28 °C, pH 6,5–8,0 ∩ PFK Horvath (N. davidi) 18–26 °C, pH 6,5–8 |
+| `blue-angel-shrimp` | 3 | 20 → 15 | 30 | 6 | 20–26 → 18–26 | 6,5–7,8 → 6,5–8 | Fishkeeper türün sayfası (form sayfası yok) 12–28 °C, pH 6,0–8,0 ∩ PFK Dunn 18–28 °C, pH 6,5–8,0 ∩ PFK Horvath (N. davidi) 18–26 °C, pH 6,5–8 |
+| `red-sakura-shrimp` | 3 | 20 → 15 | 30 | 6 | 20–26 → 18–26 | 6,5–7,8 → 6,5–8 | Fishkeeper türün sayfası (form sayfası yok) 12–28 °C, pH 6,0–8,0 ∩ PFK Dunn 18–28 °C, pH 6,5–8,0 ∩ PFK Horvath (N. davidi) 18–26 °C, pH 6,5–8 |
+| `blue-jelly-shrimp` | 3 | 20 → 15 | 30 | 6 | 20–26 → 18–26 | 6,5–7,8 → 6,5–8 | Fishkeeper türün sayfası (form sayfası yok) 12–28 °C, pH 6,0–8,0 ∩ PFK Dunn 18–28 °C, pH 6,5–8,0 ∩ PFK Horvath (N. davidi) 18–26 °C, pH 6,5–8 |
+| `green-jelly-shrimp` | 3 | 20 → 15 | 30 | 6 | 18–28 → 18–26 | 6,5–8 | Fishkeeper türün sayfası (form sayfası yok) 12–28 °C, pH 6,0–8,0 ∩ PFK Dunn 18–28 °C, pH 6,5–8,0 ∩ PFK Horvath (N. davidi) 18–26 °C, pH 6,5–8 |
+| `chocolate-shrimp` | 3 | 20 → 15 | 30 | 6 | 18–28 → 18–26 | 6,5–8 | Fishkeeper türün sayfası (form sayfası yok) 12–28 °C, pH 6,0–8,0 ∩ PFK Dunn 18–28 °C, pH 6,5–8,0 ∩ PFK Horvath (N. davidi) 18–26 °C, pH 6,5–8 |
+| `red-rili-shrimp` | 3 | 20 → 15 | 30 | 6 | 18–28 → 18–25 | 6,5–8 | Fishkeeper rili sayfası 18–25 °C, pH 6,0–8,0 ∩ PFK Dunn 18–28 °C ∩ PFK Horvath 18–26 °C, pH 6,5–8 |
+| `orange-rili-shrimp` | 3 | 20 → 15 | 30 | 6 | 18–28 → 18–25 | 6,5–8 | Fishkeeper rili sayfası 18–25 °C, pH 6,0–8,0 ∩ PFK Dunn 18–28 °C ∩ PFK Horvath 18–26 °C, pH 6,5–8 |
+| `carbon-rili-shrimp` | 3 | 20 → 15 | 30 | 6 | 18–28 → 18–25 | 6,5–8 | Fishkeeper rili sayfası 18–25 °C, pH 6,0–8,0 ∩ PFK Dunn 18–28 °C ∩ PFK Horvath 18–26 °C, pH 6,5–8 |
+| `blue-black-rili-shrimp` | 3 | 20 → 15 | 30 | 6 | 20–26 → 18–25 | 6,5–7,8 → 6,5–8 | Fishkeeper rili sayfası 18–25 °C, pH 6,0–8,0 ∩ PFK Dunn 18–28 °C ∩ PFK Horvath 18–26 °C, pH 6,5–8 |
+| `yellow-fire-shrimp` | 3 | 15 | 25 | 6 | 18–28 → 18–26 | 6,5–8 | Fishkeeper yellow fire sayfası 18–28 °C, pH 6,0–8,0 ∩ PFK Dunn 18–28 °C ∩ PFK Horvath 18–26 °C, pH 6,5–8 |
+| `white-pearl-shrimp` | 3 | 20 → 15 | 30 | 6 | 20–26 → 18–28 | 6,5–7,8 → 6,5–8 | Fishkeeper sayfası yok; PFK Dunn N. cf. zhangjiajiensis 'white'i adıyla anıyor: 18–28 °C, pH 6,5–8,0 (Horvath'ın değerleri N. davidi için) |
+| `amano-shrimp` | 5 | 25 → 20 | 30 | 4 → 5 | 18–27 → 15–28 | 6–7,8 → 6–8 | Fishkeeper 15–28 °C, pH 6–8, 5 cm, grupla tutulmalı (sayı yok); PFK Amano için sayı vermiyor; OATA yaklaşık 20 L ve en az beşli grup; wirbellose.de beş hayvan için 20 L |
