@@ -5353,6 +5353,28 @@ for (const [id, scientificName, size, volume, length, group, temperature, ph, so
   assert(profile?.aliases?.includes(formerName), `${id} eski bilimsel adla aranabilmeli`);
   assert(profile?.husbandryCaution, `${id} kimlik belirsizliğini kullanıcıya açıklamalı`);
 }
+// 2026-10-19 kimlik paketi 4 (docs/CATALOG_LOG.md, aynı 0014 kuralı): Seriously Fish'e göre ticari giant danio D. malabaricus, Black Venezuela
+// çöpçüsü O. aenea'nın siyah formu; Orange Venezuela çöpçüsünün kimliği iki aday (O. aenea / O. venezuelanus). Sıra: bilimsel ad, boy, hacim,
+// uzunluk, en az grup, sıcaklık, pH, akıntı, ana kaynak, eski bilimsel ad. Boy, önceki paketlerdeki gibi katalog ile kaynağın büyüğü
+// (Dev danio: Seriously Fish 8 cm SL, katalogdaki koruyucu 10 cm korunur).
+const identityRecords4 = [
+  ["giant-danio", "Devario malabaricus", 10, 243, 120, 8, [18,25], [6,8], "medium", "seriouslyfish.com/species/devario-malabaricus", "Devario aequipinnatus"],
+  ["black-venezuela-cory", "Osteogaster aenea 'black'", 7.5, 72, 80, 4, [21,27], [6,8], "medium", "seriouslyfish.com/species/osteogaster-aenea", "Osteogaster schultzei"],
+  ["orange-venezuela-cory", "Osteogaster aenea / O. venezuelanus", 7.5, 72, 80, 5, [21,27], [6,8], "medium", "seriouslyfish.com/species/osteogaster-aenea", "Osteogaster venezuelanus"],
+];
+for (const [id, scientificName, size, volume, length, group, temperature, ph, flow, source, formerName] of identityRecords4) {
+  const profile = speciesCatalog.find((item) => item.id === id);
+  assert.deepEqual([profile?.scientificName,profile?.adultSizeCm,profile?.minVolumeL,profile?.minTankLengthCm,profile?.minGroup,profile?.temperature,profile?.ph,profile?.flow], [scientificName,size,volume,length,group,temperature,ph,flow], `${id} satılan balığın kaynaklı kimliğini ve değerlerini taşımalı`);
+  assert(profile?.sourceUrl?.includes(source), `${id} ana bakım kaynağına bağlanmalı`);
+  assert.equal(profile?.verifiedAt, "2026-10-19", `${id} kimlik düzeltmesinin doğrulama tarihini taşımalı`);
+  assert(profile?.aliases?.includes(formerName), `${id} eski bilimsel adla aranabilmeli`);
+  assert.equal(speciesForCatalogExactSearch(formerName, "fish", "freshwater")?.id, id, `${id} eski bilimsel adla kesin aramada bulunmalı`);
+  assert(profile?.husbandryCaution?.includes("Seriously Fish"), `${id} kimlik kararının kaynağını kullanıcıya açıklamalı`);
+  assert.deepEqual([profile?.predatory === true, profile?.speciesOnly === true], [false, false], `${id} avcılık ve tür akvaryumu işareti taşımamalı`);
+}
+assert(speciesCatalog.find((item) => item.id === "orange-venezuela-cory")?.husbandryCaution?.includes("Fishkeeper 19–25 °C"), "Orange Venezuela çöpçüsü kaynaklar arasındaki su değeri farkını açıklamalı");
+assert(speciesCatalog.find((item) => item.id === "giant-danio")?.husbandryCaution?.includes("8 cm standart boy") && speciesCatalog.find((item) => item.id === "giant-danio")?.husbandryCaution?.includes("10 cm korunur"), "Dev danio kaynağın boyu ile korunan katalog boyunu kullanıcıya açıklamalı");
+assert.equal(speciesForCatalogExactSearch("Osteogaster aenea", "fish", "freshwater")?.id, "bronze-cory", "Güncel Osteogaster aenea adı siyah üretim formunu değil bronz çöpçüyü bulmalı");
 const commonPleco = speciesCatalog.find((item) => item.id === "common-pleco");
 assert(["art=108","art=552"].every((page) => commonPleco?.additionalSourceUrls?.some((url) => url.includes("suedamerikafans.de") && url.includes(page))), "Pleko uzunluğu iki aday tür için Welsfans kaynağına bağlanmalı");
 assert(["fishipedia.fr","scotcat.com"].every((host) => commonPleco?.additionalSourceUrls?.some((url) => url.includes(host))), "Pleko hacmi ve su aralığını belirleyen Fishipedia ve ScotCat kaynaklarına bağlanmalı");
@@ -5445,7 +5467,6 @@ for (const [id, scientificName, volume, length, group, temperature, ph] of [
   ["orinoco-angel-pleco-l201", "Hypancistrus sp. L201", 115, 80, 1, [25,29], [5.8,7]],
   ["butterfly-pleco-l052", "Dekeyseria picta", 150, 80, 1, [25,29], [5.8,7]],
   ["cucuta-bristlenose-l149", "Ancistrus sp. L149", 76, 60, 1, [23,28], [6.5,7.8]],
-  ["orange-venezuela-cory", "Osteogaster venezuelanus", 80, 80, 6, [19,25], [6,7]],
   ["hujeta-gar", "Ctenolucius hujeta", 342, 150, 5, [22,25], [5.5,7.5]],
 ]) {
   const profile = speciesCatalog.find((item) => item.id === id);
@@ -6784,7 +6805,6 @@ assert.equal(speciesCatalog.filter((item) => speciesGroup(item) === "goby").leng
 assert.equal(speciesCatalog.filter((item) => speciesGroup(item) === "crayfish").length, 4, "Kerevit kataloğu Cambarellus diminutus dahil dört tür içermeli");
 for (const [id,group,volume,length,count,temperature,ph,flow] of [
   ["smudge-spot-cory","bottom",100,60,8,[21,27],[6.8,7.2],"medium"],
-  ["black-venezuela-cory","bottom",60,60,6,[22,26],[6,7.5],"medium"],
   ["least-dwarf-crayfish","crayfish",20,30,1,[20,26],[6.5,8],"low"],
 ]) {
   const profile=speciesCatalog.find((item)=>item.id===id);
@@ -7983,6 +8003,7 @@ assert.equal(jonklaasLipstickGoby?.predatory, true, "Sicyopus jonklaasi küçük
 assert.equal(jonklaasLipstickGoby?.speciesOnly, true, "Sicyopus jonklaasi hassas ve korunan tür olarak genel topluluk balığı sayılmamalı");
 assert(jonklaasLipstickGoby?.husbandryCaution?.includes("Tehlikede") && jonklaasLipstickGoby.husbandryCaution.includes("yasal ve belgeli köken"), "Sicyopus jonklaasi koruma ve yasal köken uyarısını kullanıcıya göstermeli");
 assert.equal(jonklaasLipstickGoby?.verifiedAt, "2026-09-09", "Sicyopus jonklaasi güncel doğrulama tarihini taşımalı");
+assert(jonklaasLipstickGoby?.husbandryCaution?.includes("Sicyopus exallisquamulus") && jonklaasLipstickGoby.additionalSourceUrls?.some((url) => url.includes("seriouslyfish.com/species/sicyopus-exallisquamulus")), "Sicyopus jonklaasi adıyla satılan balığın kimlik riskini kaynağıyla açıklamalı");
 assert.equal(speciesForCatalogExactSearch("Sicyopus jonklaasi", "fish", "freshwater")?.id, "jonklaas-lipstick-goby", "Kesin Sicyopus jonklaasi araması doğru koruma uyarılı profili bulmalı");
 assert.equal(speciesForCatalogExactSearch("Red Lipstick Goby", "fish", "freshwater"), undefined, "Belirsiz Red Lipstick Goby adı üç bilimsel profilden birine otomatik bağlanmamalı");
 const unresolvedPandaGarraRufa = unresolvedSpeciesForSearch("PANDA GARRARUFA YOSUN YİYİCİ", "fish", "freshwater");
