@@ -5,6 +5,7 @@ import { DEFAULT_LOCALE, type Locale } from "./locales";
 import { trEngine, type EngineMessages } from "./messages/tr-engine";
 
 export type { EngineMessages, EngineTextParams } from "./messages/tr-engine";
+export { engineTextFormat, type EngineTextFormat } from "./engine-format";
 
 const catalogs: Record<Locale, EngineMessages> = { tr: trEngine };
 
