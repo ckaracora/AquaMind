@@ -4831,15 +4831,14 @@ assert(mysterySnail?.husbandryCaution?.includes("bakırsız") && mysterySnail.hu
 for (const id of ["blue-dream-shrimp", "yellow-fire-shrimp", "orange-sakura-shrimp", "green-jade-shrimp", "bloody-mary-shrimp", "red-rili-shrimp", "orange-rili-shrimp", "carbon-rili-shrimp", "green-jelly-shrimp", "chocolate-shrimp"]) {
   const item = speciesCatalog.find((entry) => entry.id === id);
   assert.equal(item?.scientificName, "Neocaridina davidi", `${id} renk varyetesi doğru biyolojik türü kullanmalı`);
-  assert.deepEqual(item?.temperature, [18, 28], `${id} Neocaridina bakım aralığını paylaşmalı`);
 }
 const cardinalSulawesi = speciesCatalog.find((item) => item.id === "cardinal-sulawesi-shrimp");
 assert.deepEqual(cardinalSulawesi?.temperature, [27, 29], "Cardinal Sulawesi karides serin Caridina koşullarına önerilmemeli");
 assert((cardinalSulawesi?.ph[0] || 0) >= 7.8, "Cardinal Sulawesi karides asidik Caridina koşullarına önerilmemeli");
 const whitePearl = speciesCatalog.find((item) => item.id === "white-pearl-shrimp");
 assert.equal(whitePearl?.scientificName, "Neocaridina cf. zhangjiajiensis", "White Pearl mağaza adı yanlış Neocaridina türüne bağlanmamalı");
-assert.deepEqual(whitePearl?.temperature, [20, 26], "White Pearl doğrulanan sıcaklık aralığını korumalı");
-assert.deepEqual(whitePearl?.ph, [6.5, 7.8], "White Pearl doğrulanan pH aralığını korumalı");
+assert.deepEqual(whitePearl?.temperature, [18, 28], "White Pearl Practical Fishkeeping'in Neocaridina sıcaklık aralığını taşımalı");
+assert.deepEqual(whitePearl?.ph, [6.5, 8], "White Pearl Practical Fishkeeping'in Neocaridina pH aralığını taşımalı");
 for (const id of [
   "taiwan-bee-red-shrimp",
   "taiwan-bee-yellow-kingkong",
@@ -5373,6 +5372,48 @@ for (const [id, scientificName, size, volume, length, group, temperature, ph, fl
   assert.deepEqual([profile?.predatory === true, profile?.speciesOnly === true], [false, false], `${id} avcılık ve tür akvaryumu işareti taşımamalı`);
 }
 assert(speciesCatalog.find((item) => item.id === "orange-venezuela-cory")?.husbandryCaution?.includes("Fishkeeper 19–25 °C"), "Orange Venezuela çöpçüsü kaynaklar arasındaki su değeri farkını açıklamalı");
+// 2026-10-20 omurgasız kaynak yenilemesi 1 (docs/CATALOG_LOG.md, docs/DATA_SOURCES.md → "Omurgasızlar"): Neocaridina karidesleri ve
+// Amano. Sıcaklık ve pH, aralık veren kabul edilen kaynakların ortak aralığı: Fishkeeper'ın form sayfası (yoksa türün sayfası) ve
+// Practical Fishkeeping'in iki yazısı (Dunn: Neocaridina 18–28 °C, pH 6,5–8,0; Horvath: N. davidi 18–26 °C, pH 6,5–8). Hacim ve grup
+// Practical Fishkeeping'den (Neocaridina en az 15 L, en az altılı), Amano'da OATA'dan (yaklaşık 20 L, en az beşli).
+// Sıra: bilimsel ad, boy, hacim, uzunluk, en az grup, sıcaklık, pH, akıntı, ana kaynak (tam adres).
+const fishkeeperShrimp = (slug) => `https://www.fishkeeper.co.uk/fish/freshwater/${slug}`;
+const pfkNeocaridinaFaq = "https://www.practicalfishkeeping.co.uk/features/frequently-asked-questions-on-neocaridina-shrimps/";
+const pfkShrimpIntroduction = "https://www.practicalfishkeeping.co.uk/features/an-introduction-to-shrimp/";
+const oataShrimpAndSnails = "https://ornamentalfish.org/what-we-do/advice-information/care-sheets/caresheets-tropical-freshwater-invertebrates/how-to-look-after-freshwater-shrimp-and-snails/";
+const invertebrateRecords1 = {
+  "cherry-shrimp": ["Neocaridina davidi", 3, 15, 25, 6, [18, 26], [6.5, 8], "low", fishkeeperShrimp("miscellaneous/cherry-shrimp")],
+  "blue-dream-shrimp": ["Neocaridina davidi", 3, 15, 25, 6, [18, 26], [6.5, 8], "low", fishkeeperShrimp("miscellaneous/cherry-shrimp")],
+  "orange-sakura-shrimp": ["Neocaridina davidi", 3, 15, 25, 6, [18, 26], [6.5, 8], "low", fishkeeperShrimp("miscellaneous/cherry-shrimp")],
+  "green-jade-shrimp": ["Neocaridina davidi", 3, 15, 25, 6, [18, 26], [6.5, 8], "low", fishkeeperShrimp("miscellaneous/cherry-shrimp")],
+  "bloody-mary-shrimp": ["Neocaridina davidi", 3, 15, 25, 6, [18, 26], [6.5, 8], "low", fishkeeperShrimp("miscellaneous/cherry-shrimp")],
+  "black-rose-shrimp": ["Neocaridina davidi", 3, 15, 30, 6, [18, 26], [6.5, 8], "low", fishkeeperShrimp("miscellaneous/cherry-shrimp")],
+  "blue-angel-shrimp": ["Neocaridina davidi", 3, 15, 30, 6, [18, 26], [6.5, 8], "low", fishkeeperShrimp("miscellaneous/cherry-shrimp")],
+  "red-sakura-shrimp": ["Neocaridina davidi", 3, 15, 30, 6, [18, 26], [6.5, 8], "low", fishkeeperShrimp("miscellaneous/cherry-shrimp")],
+  "blue-jelly-shrimp": ["Neocaridina davidi", 3, 15, 30, 6, [18, 26], [6.5, 8], "low", fishkeeperShrimp("miscellaneous/cherry-shrimp")],
+  "green-jelly-shrimp": ["Neocaridina davidi", 3, 15, 30, 6, [18, 26], [6.5, 8], "low", fishkeeperShrimp("miscellaneous/cherry-shrimp")],
+  "chocolate-shrimp": ["Neocaridina davidi", 3, 15, 30, 6, [18, 26], [6.5, 8], "low", fishkeeperShrimp("miscellaneous/cherry-shrimp")],
+  "red-rili-shrimp": ["Neocaridina davidi", 3, 15, 30, 6, [18, 25], [6.5, 8], "low", fishkeeperShrimp("crustaceans/rili-shrimp")],
+  "orange-rili-shrimp": ["Neocaridina davidi", 3, 15, 30, 6, [18, 25], [6.5, 8], "low", fishkeeperShrimp("crustaceans/rili-shrimp")],
+  "carbon-rili-shrimp": ["Neocaridina davidi", 3, 15, 30, 6, [18, 25], [6.5, 8], "low", fishkeeperShrimp("crustaceans/rili-shrimp")],
+  "blue-black-rili-shrimp": ["Neocaridina davidi", 3, 15, 30, 6, [18, 25], [6.5, 8], "low", fishkeeperShrimp("crustaceans/rili-shrimp")],
+  "yellow-fire-shrimp": ["Neocaridina davidi", 3, 15, 25, 6, [18, 26], [6.5, 8], "low", fishkeeperShrimp("miscellaneous/yellow-fire-shrimp")],
+  "white-pearl-shrimp": ["Neocaridina cf. zhangjiajiensis", 3, 15, 30, 6, [18, 28], [6.5, 8], "low", pfkNeocaridinaFaq],
+  "amano-shrimp": ["Caridina multidentata", 5, 20, 30, 5, [15, 28], [6, 8], "medium", fishkeeperShrimp("miscellaneous/amano-shrimp")],
+};
+for (const [id, [scientificName, size, volume, length, group, temperature, ph, flow, source]] of Object.entries(invertebrateRecords1)) {
+  const profile = speciesCatalog.find((item) => item.id === id);
+  assert.deepEqual([profile?.scientificName, profile?.adultSizeCm, profile?.minVolumeL, profile?.minTankLengthCm, profile?.minGroup, profile?.temperature, profile?.ph, profile?.flow], [scientificName, size, volume, length, group, temperature, ph, flow], `${id} kabul edilen omurgasız kaynaklarının bakım eşiklerini taşımalı`);
+  assert.equal(profile?.sourceUrl, source, `${id} ana bakım kaynağına bağlanmalı`);
+  assert.equal(profile?.verifiedAt, "2026-10-20", `${id} kaynak okuma tarihini taşımalı`);
+  const sources = [profile?.sourceUrl ?? "", ...(profile?.additionalSourceUrls ?? [])];
+  assert(sources.includes(oataShrimpAndSnails), `${id} OATA'nın karides ve salyangoz kartını kaynak olarak taşımalı`);
+  if (scientificName.startsWith("Neocaridina")) assert(sources.includes(pfkNeocaridinaFaq), `${id} hacim ve grup için Practical Fishkeeping'e bağlanmalı`);
+  // Horvath'ın N. davidi aralığı (18–26 °C) ortak aralığın üst sınırını belirliyor.
+  if (scientificName === "Neocaridina davidi") assert(sources.includes(pfkShrimpIntroduction), `${id} sıcaklık üst sınırı için Practical Fishkeeping'in karides girişine bağlanmalı`);
+  assert(!sources.some((url) => url.includes("seriouslyfish.com/species/")), `${id} Seriously Fish'te olmayan bir omurgasız sayfasına bağlanmamalı`);
+  assert.deepEqual([profile?.predatory === true, profile?.speciesOnly === true], [false, false], `${id} avcılık ve tür akvaryumu işareti taşımamalı`);
+}
 assert(speciesCatalog.find((item) => item.id === "giant-danio")?.husbandryCaution?.includes("8 cm standart boy") && speciesCatalog.find((item) => item.id === "giant-danio")?.husbandryCaution?.includes("10 cm korunur"), "Dev danio kaynağın boyu ile korunan katalog boyunu kullanıcıya açıklamalı");
 assert.equal(speciesForCatalogExactSearch("Osteogaster aenea", "fish", "freshwater")?.id, "bronze-cory", "Güncel Osteogaster aenea adı siyah üretim formunu değil bronz çöpçüyü bulmalı");
 const commonPleco = speciesCatalog.find((item) => item.id === "common-pleco");
@@ -6686,7 +6727,7 @@ assert(unresolvedSpeciesForSearch("Red Devil Vampire Crab", "other", "freshwater
 for (const id of ["red-rili-shrimp", "orange-rili-shrimp", "carbon-rili-shrimp", "green-jelly-shrimp", "chocolate-shrimp"]) {
   const profile = speciesCatalog.find((item) => item.id === id);
   assert.equal(profile?.scientificName, "Neocaridina davidi", `${id} satış rengi ayrı tür gibi tanımlanmamalı`);
-  assert.equal(profile?.verifiedAt, "2026-08-29", `${id} güncel doğrulama tarihi taşımalı`);
+  assert.equal(profile?.verifiedAt, "2026-10-20", `${id} omurgasız kaynak yenilemesinin doğrulama tarihini taşımalı`);
   assert(profile?.additionalSourceUrls?.some((url) => url.startsWith("https://www.cikletistpetshop.com/")), `${id} doğrulanan yerel satış kaynağını taşımalı`);
 }
 const unresolvedTangerineTiger = unresolvedSpeciesForSearch("Tangerine Tiger Shrimp", "shrimp", "freshwater");
