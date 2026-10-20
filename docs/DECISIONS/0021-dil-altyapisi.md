@@ -1,7 +1,7 @@
 # 0021 — Dil altyapısı
 
 - Tarih: 2026-10-19
-- Durum: Kabul edildi (teknik karar, Claude; ürün sahibinin 2026-10-19 "dile uygun yapıya geçelim, çeviri kesin yapılacak, farklı dillere de" kararına dayanır, `docs/DECISIONS/0020-urun-hedefleri-ve-yol-haritasi.md`). 1. paket PR #32 (`671a719`), 2a PR #33 (`4fd4bbf`), 2b PR #34 (`1e19313`), 2c PR #35 (`7d1bde3`) ile birleştirildi. 2d `codex/i18n-2d` dalında; Codex 1. turda temiz; commit ve PR planlandı. 3. paket (motor çıktı biçimi) için `docs/COMPATIBILITY.md` gereği ayrı ürün sahibi onayı istendi (2026-10-20).
+- Durum: Kabul edildi (teknik karar, Claude; ürün sahibinin 2026-10-19 "dile uygun yapıya geçelim, çeviri kesin yapılacak, farklı dillere de" kararına dayanır, `docs/DECISIONS/0020-urun-hedefleri-ve-yol-haritasi.md`). 1. paket PR #32 (`671a719`), 2a PR #33 (`4fd4bbf`), 2b PR #34 (`1e19313`), 2c PR #35 (`7d1bde3`), 2d PR #36 (`9722806`) ile birleştirildi. 3. paket (motor çıktı biçimi) için `docs/COMPATIBILITY.md` gereği ayrı ürün sahibi onayı istendi; ürün sahibi 2026-10-20'de onayladı.
 
 ## Bağlam
 

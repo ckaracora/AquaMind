@@ -1,6 +1,6 @@
 # Kaynağı yalnızca FishBase olan türler
 
-Son güncelleme: 2026-10-05. İlk liste 2026-10-03'te `main` `18fdfeb` kataloğuyla üretildi (45 tür); 42'si 2026-10-04'te kaynaklandı (`docs/CATALOG_LOG.md` → "2026-10-04 Kaynağı yalnızca FishBase olan 42 türün kaynak yenilemesi"). Kalan 3 türün kimliği 2026-10-05'te düzeltildi (`docs/CATALOG_LOG.md` → "2026-10-05 Kimliği belirsiz 3 türün kimlik ve kaynak düzeltmesi"); liste boş.
+Son güncelleme: 2026-10-20 (aşağıdaki "Uzman bakım kaynağında bulunamayan balıklar" bölümü). Önceki güncelleme: 2026-10-05. İlk liste 2026-10-03'te `main` `18fdfeb` kataloğuyla üretildi (45 tür); 42'si 2026-10-04'te kaynaklandı (`docs/CATALOG_LOG.md` → "2026-10-04 Kaynağı yalnızca FishBase olan 42 türün kaynak yenilemesi"). Kalan 3 türün kimliği 2026-10-05'te düzeltildi (`docs/CATALOG_LOG.md` → "2026-10-05 Kimliği belirsiz 3 türün kimlik ve kaynak düzeltmesi"); liste boş.
 
 ## Neden önemli
 
@@ -35,3 +35,30 @@ Kalan üç kaydın sorunu kaynak eksikliği değil kimlikti. Ürün sahibinin 20
 | `siamese-algae-eater` | Siamese algae eater | *Crossocheilus oblongus* | *Crossocheilus langei* / *C. atrilimes* | Seriously Fish |
 
 Değerler, çelişkiler ve kaynak cümleleri katalog günlüğündedir. Yeni bir tarama bu ölçüte uyan tür bulursa bu bölüme eklenmelidir.
+
+## Uzman bakım kaynağında bulunamayan balıklar (2026-10-20, geliştirilecek)
+
+Yol haritasının 2. adımında (`docs/DECISIONS/0020-urun-hedefleri-ve-yol-haritasi.md`) ne ana ne de ek kaynağında uzman bakım kaynağı olmayan 86 balığın 70'i 2026-10-19/20'de kaynaklandı ya da satılan balığa göre yeniden tanımlandı (PR #37–40; `docs/CATALOG_LOG.md` → "2026-10-19 Tür kaynak yenilemesi 1–3" ve "Kimlik paketi 4"). Kalan 16 balıkta kabul edilen uzman kaynaklarda (Seriously Fish, Fishkeeper, ScotCat; Practical Fishkeeping, OATA ve Fishipedia da tarandı) tür düzeyinde bakım sayfası bulunamadı ya da kimlik sorusu var.
+
+Ürün sahibinin 2026-10-20 kararı: değerler olduğu gibi kalır, liste geliştirilmek üzere tutulur. Kullanıcı ekranına ek not konmadı. Her üç ayda bir yapılan bilgi araştırmasında (0020) yeniden aranmalı; uzman görüşü (ör. Canberk) ya da yeni bir kabul edilen kaynak bulunursa işlenmeli.
+
+| Kimlik | Ad | Bilimsel ad | Durum |
+|---|---|---|---|
+| `cochus-blue-tetra` | Cochu'nun mavi tetrası | *Boehlkea fredcochui* | Kimlik sorusu: Seriously Fish'te sayfası yok; Fishkeeper'ın Blue Tetra sayfası balığı *Knodus borki* olarak ele alıyor ve *B. fredcochui* adıyla yanlış ithal edildiğini yazıyor |
+| `apisto-erythrura` | Kırmızı kuyruk cüce cichlid | *Apistogramma erythrura* | Seriously Fish'te sayfası yok |
+| `saulosi-cichlid` | Saulosi | *Chindongo saulosi* | Seriously Fish'te sayfası yok |
+| `teardrop-guianacara` | Dacrya Guianacara | *Guianacara dacrya* | Seriously Fish'te sayfası yok |
+| `owroewefi-guianacara` | Owroewefi Guianacara | *Guianacara owroewefi* | Seriously Fish'te sayfası yok; Fishkeeper yalnız cins düzeyinde |
+| `malayan-river-sole` | Malaya nehir dil balığı | *Brachirus panoides* | Uzman kaynakta sayfası yok |
+| `african-arowana` | Afrika arowanası | *Heterotis niloticus* | Seriously Fish'te sayfası yok |
+| `rubicundus-lipstick-goby` | Kızıl ruj gobisi | *Sicyopus rubicundus* | Seriously Fish ve Fishkeeper'da yok |
+| `selheims-freshwater-sole` | Selheim tatlı su dil balığı | *Brachirus selheimi* | Seriously Fish ve Fishkeeper'da yok |
+| `kners-yellow-flagtail` | Kner'in sarı kuyruklu prochilodusu | *Semaprochilodus kneri* | Seriously Fish ve Fishkeeper'da yok |
+| `blood-parrot-cichlid` | Blood Parrot ciklet | melez | İnsan eliyle üretilmiş melez; uzman kaynakta tür sayfası yok |
+| `cucuta-bristlenose-l149` | Cucuta Bristlenose L149 | *Ancistrus* sp. L149 | Seriously Fish, ScotCat ve Fishkeeper'da yok; Welsfans'a erişilemedi |
+| `manacapuru-bristlenose-l148` | Manacapuru benekli vatoz L148 | *Ancistrus* sp. L148 | Seriously Fish, ScotCat ve Fishkeeper'da yok; Welsfans'a erişilemedi |
+| `pink-lipped-moray` | Pembe dudaklı müren | *Echidna rhodochilus* | Uzman kaynakta sayfası yok; FishBase deniz, acı ve tatlı su diyor |
+| `jonklaas-lipstick-goby` | Jonklaas ruj gobisi | *Sicyopus jonklaasi* | Türün uzman bakım kaynağı yok; Seriously Fish'e göre bu adla satılanlar çoğunlukla *S. exallisquamulus* (ayrı profil). Bakım notuna kimlik uyarısı eklendi (Kimlik paketi 4) |
+| `red-tailed-snakehead` | Kırmızı kuyruklu yılanbaş | *Channa limbata* | Catalog of Fishes türü geçerli sayıyor; Seriously Fish ve FishBase *C. gachua*'nın eş anlamlısı sayıyor. Uzman bakım kaynağı tür adıyla yok; mevcut kaynak korundu |
+
+Ayrıca açık: karides (40) ve salyangoz (16) kayıtlarının da uzman bakım kaynağı yok. Ürün sahibi 2026-10-20'de kaynak seçimini Claude'a bıraktı; seçim gerekçeleriyle `docs/DATA_SOURCES.md`'ye yazılacak. Melek balığı ve Çin ejderinin en az grup sayısı için başka uzman kaynaklar aranıyor; açık bir sayı bulunamazsa değerler olduğu gibi kalır.
