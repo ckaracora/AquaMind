@@ -224,6 +224,6 @@ describe("elle girilen ekipman değeri: eski kayıtlar", () => {
   it("elle değeri olmayan kayıtlarda çıktı alanları ve sonuç değişmez", () => {
     const result = run(100, [item("filter", { catalogId: "verifiedFilter" }), item("heater", { catalogId: "verifiedHeater" })]);
     expect(result.metrics.some((entry) => "userProvided" in entry)).toBe(false);
-    expect(Object.keys(metric(result, "filter")).sort()).toEqual(["detail", "key", "label", "score", "status"]);
+    expect(Object.keys(metric(result, "filter")).sort()).toEqual(["detail", "detailCode", "detailParams", "key", "label", "score", "status"]);
   });
 });
