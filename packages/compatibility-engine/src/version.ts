@@ -38,5 +38,9 @@
 // 1.9.0: "Katalogla eşleşmeyen ekipman kaydı var" uyarısı yalnızca güvenlik hesabına giren türlerde çıkar
 // (filtre, ısıtıcı; hava motoruyla çalışan filtre varsa hava motoru). Aydınlatma, CO₂ gibi hesaba girmeyen cihaz
 // listede olmasa da uyarı üretmez; puan değişmez (bkz. docs/DECISIONS/0018-eslesmeyen-ekipman-uyarisi.md).
-export const ENGINE_VERSION = "1.9.0";
+//
+// 1.10.0: sonuç biçimi v2. Her uyarı `code` ve `params`, her ölçüt `detailCode` ve `detailParams` taşır; ekran metni dil
+// dosyasında bunlardan kurulur. Türkçe `title`, `message`, `label` ve `detail` alanları aynen üretilir; kurallar, puanlar ve
+// sıralama değişmez, bu yüzden kural seti sürümü aynı kalır (bkz. docs/DECISIONS/0021-dil-altyapisi.md, 3. paket).
+export const ENGINE_VERSION = "1.10.0";
 export const RULESET_VERSION = "1.9.0";

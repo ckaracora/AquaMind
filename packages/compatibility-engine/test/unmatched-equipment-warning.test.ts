@@ -49,7 +49,7 @@ describe("katalogla eşleşmeyen ekipman uyarısı (1.9.0)", () => {
 
   it("uyarıdaki sayı yalnızca hesaba giren türleri sayar", () => {
     const result = run([unlisted("filter"), unlisted("heater"), ...notCalculated.map((category) => unlisted(category))]);
-    expect(warning(result)).toEqual({ level: "warning", title: TITLE, message: "2 ekipmanın kapasitesi tanınmadığı için filtrasyon veya ısıtıcı hesabına dahil edilmedi." });
+    expect(warning(result)).toEqual({ level: "warning", title: TITLE, message: "2 ekipmanın kapasitesi tanınmadığı için filtrasyon veya ısıtıcı hesabına dahil edilmedi.", code: "unmatchedEquipment", params: { count: 2 } });
   });
 
   it("listede olmayan hava motoru yalnızca hava motoruyla çalışan filtre varken uyarı üretir", () => {

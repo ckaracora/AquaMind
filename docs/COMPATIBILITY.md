@@ -1,6 +1,6 @@
 # AquaMind uyumluluk motoru
 
-Son güncelleme: 2026-10-11 (kural seti 1.9.0, eşleşmeyen ekipman uyarısı yalnızca hesaba giren türlerde — `docs/DECISIONS/0018-eslesmeyen-ekipman-uyarisi.md`; altın fikstürde yalnızca örnek akvaryum vakası değişti; aynı gün kural seti 1.8.0, elle girilen ekipman değerleri — `docs/DECISIONS/0017-elle-girilen-ekipman-degerleri.md`; altın fikstür değişmedi); 2026-10-05 (motor değişmeden 42 türün kaynak yenilemesi ve kimliği belirsiz 3 türün düzeltmesiyle altın fikstür iki kez yeniden üretildi); 2026-10-03 (kural seti 1.7.0, salyangoz uyarısı; aynı gün 1.6.0 alan uyarısının şiddeti, 1.5.0 taban ısıtıcısı ve ikinci katalog entegrasyonu).
+Son güncelleme: 2026-10-20 (motor 1.10.0, sonuç biçimi v2: uyarı ve ölçüt kodları — `docs/DECISIONS/0021-dil-altyapisi.md` → "3. paket ayrıntıları"; kural seti 1.9.0 değişmedi; altın fikstür yalnızca yeni alanlarla yeniden üretildi); 2026-10-11 (kural seti 1.9.0, eşleşmeyen ekipman uyarısı yalnızca hesaba giren türlerde — `docs/DECISIONS/0018-eslesmeyen-ekipman-uyarisi.md`; altın fikstürde yalnızca örnek akvaryum vakası değişti; aynı gün kural seti 1.8.0, elle girilen ekipman değerleri — `docs/DECISIONS/0017-elle-girilen-ekipman-degerleri.md`; altın fikstür değişmedi); 2026-10-05 (motor değişmeden 42 türün kaynak yenilemesi ve kimliği belirsiz 3 türün düzeltmesiyle altın fikstür iki kez yeniden üretildi); 2026-10-03 (kural seti 1.7.0, salyangoz uyarısı; aynı gün 1.6.0 alan uyarısının şiddeti, 1.5.0 taban ısıtıcısı ve ikinci katalog entegrasyonu).
 
 ## Temel kural
 
@@ -16,6 +16,7 @@ Uyumluluk puanı, alt puanlar ve bulgular yalnızca `packages/compatibility-engi
 | Bilgi | `src/data/catalog.ts` | Canlı ve ekipman profilleri, doğrulanmışlık kuralı |
 | Davranış verisi | `src/data/species-behavior.ts` | Kaynaklı davranış kayıtları (1.4.0); uyarlayıcıdaki `withBehavior` bunları motorun isteğe bağlı `behavior` girişine bağlar |
 | Testler | `packages/compatibility-engine/test/` | Altın karşılaştırma, bağımsızlık, mevcut senaryo betiği |
+| Metinler | `packages/localization/src/messages/tr-engine.ts` (`@aquamind/localization/engine` girişi), `src/lib/engine-text.ts` | Uyarı ve ölçüt kodlarından ekran metni (1.10.0, 0021) |
 | Mevcut senaryolar | `scripts/test-health.cjs` | 113 senaryo; `pnpm verify` doğrudan, `pnpm test` alt süreç olarak çalıştırır |
 
 ## Sınır: `KnowledgeResolver`
@@ -33,18 +34,33 @@ interface KnowledgeResolver {
 
 `SpeciesProfileInput` ve `EquipmentProfileInput`, motorun bir profilden okuduğu alan alt kümesidir. Katalogdaki `SpeciesProfile` ve `EquipmentProfile` bunları yapısal olarak karşılar; uyarlayıcı derlenirken `tsc` bunu denetler. Katalog tipleri `src/data/catalog.ts` içinde kalır; kataloglar `packages/knowledge` altına taşındığında (Phase 2) çözümleyici oradan bağlanır, motor değişmez. Aynı arayüz ileride veritabanından beslenen bir çözümleyiciyle de kullanılabilir.
 
-## Sonuç biçimi (Phase 0B'de değişmedi)
+## Sonuç biçimi (v2, motor 1.10.0)
 
 ```ts
+type EngineParams = Record<string, string | number | boolean | string[]>;
+
 interface HealthAnalysis {
   score: number;                       // 0–100, sekiz metriğin eşit ağırlıklı ortalaması; kesin tehlikede en fazla 49, diğer tehlike uyarısında en fazla 74
   status: "good" | "warning" | "danger";
   metrics: HealthMetric[];             // load, space, social, compatibility, filter, heater, water, confidence
-  warnings: Array<{ level: "warning" | "danger"; title: string; message: string }>;
+  warnings: HealthWarning[];
+}
+
+interface HealthMetric {
+  key: string; label: string; score: number; status: "good" | "warning" | "danger"; detail: string;
+  detailCode: string;                  // ör. "ratedTurnover"
+  detailParams: EngineParams;          // ör. { turnover: 4.2 }
+  userProvided?: true;
+}
+
+interface HealthWarning {
+  level: "warning" | "danger"; title: string; message: string;
+  code: string;                        // ör. "filterFlowLow"
+  params: EngineParams;                // ör. { turnover: 3.2, min: 4 }
 }
 ```
 
-Sonuç nesnesine sürüm veya bulgu kodu alanı **eklenmedi**; bu, çıktı biçimini değiştirir ve altın karşılaştırmayı bozardı. Sürümler ayrı sabit olarak dışa aktarılır ve Phase 1'de kalıcı hesaplama kaydına (`compatibility_calculations`) eşlik eder. Uyarı başlık ve mesajları bugün Türkçe metin olarak motorun içinde üretilir; kararlı bulgu kodları ve yerelleştirme Phase 1'de, sonuç biçiminin sürümlenmesiyle birlikte ele alınır.
+1.10.0 (sonuç biçimi v2, 2026-10-20, `docs/DECISIONS/0021-dil-altyapisi.md` → "3. paket ayrıntıları"): her uyarı kararlı bir kod (`code`, 48 kod) ve değişkenler (`params`), her ölçüt açıklama kodu (`detailCode`, 38 kod) ve değişkenler (`detailParams`) taşır. Ekran metni seçili dilin dosyasında bu kod ve değişkenlerden kurulur (`@aquamind/localization/engine` → `engineMessagesFor(locale)`; metinler `packages/localization/src/messages/tr-engine.ts`, kuran modül `src/lib/engine-text.ts`); dil dosyasında karşılığı olmayan kodda motorun Türkçe metni gösterilir. Motor Türkçe `title`, `message`, `label` ve `detail` alanlarını aynen üretmeye devam eder; dil dosyasının kurduğu metnin bunlarla birebir aynı olduğu `src/lib/__tests__/engine-text.test.ts` ile kanıtlanır. Kurallar, puanlar, durumlar ve uyarıların sırası değişmedi; bu yüzden `RULESET_VERSION` 1.9.0'da kaldı. Sürümler sonuç nesnesine eklenmedi; ayrı sabit olarak dışa aktarılır ve Phase 1'de kalıcı hesaplama kaydına (`compatibility_calculations`) eşlik eder.
 
 1.8.0: `HealthMetric` yalnızca sonucu kullanıcının elle girdiği bir ekipman değerine dayandığında `userProvided: true` taşır (filtre ve ısıtıcı ölçütleri; filtre ölçütü elle girilen debiyle, ısıtıcı ölçütü elle girilen güçle işaretlenir, bu yüzden ısıtıcısı doğrulanmış ısıtıcılı filtrede yalnız debi girildiyse ısıtıcı ölçütü işaretlenmez). Elle değer yoksa alan hiç bulunmaz; bu yüzden mevcut çıktılar ve altın fikstür değişmedi.
 
@@ -76,7 +92,7 @@ Bu sabitler Phase 0B'de değiştirilmedi. 1.1.0'da katalog entegrasyonuyla yaşa
 
 ## Değişmezlik güvencesi
 
-- `test/fixtures/golden-v1.json`: ilk sürümü motor taşınmadan önce, `8d6a164` içeriğindeki orijinal `src/lib/health-analysis.ts` ile alınmış 604 vakalık çıktıydı. Motor 1.1.0 ile yeniden üretildi: 1020 vaka (417 türün her biri için kendi su türünde "sığar" ve "dar" senaryosu, 60 filtre, 30 ısıtıcı, 10 hava motoru, 84 tür çifti, tohum veri, boş akvaryum). Yeniden üretimden önce, pakete taşınan kuralların `codex/catalog-capacity-batch` dalındaki (`950a70f`) özgün motorla 1020 vakanın tamamında birebir aynı çıktıyı verdiği doğrulandı. Motor 1.2.0 (su kalitesi ve kesin tehlike) için ürün sahibi onayından sonra yeniden üretildi; vaka sayısı değişmedi. Motor 1.3.0 (filtre, yük, genel durum) için 2026-09-28 onayından sonra yeniden üretildi; 1014 vaka değişti ve farkların tamamı sınıflandırıldı (yük ölçütü, filtre ölçütü, filtre ve yük uyarıları, tehlike uyarısında 74 sınırı, hacim önerili debisiz filtrelerin veri güveni). Motor 1.4.0 (davranış uyarıları) için 2026-09-29 onayından sonra yeniden üretildi; 83 vaka değişti ve farkların tamamı sınıflandırıldı (tür uyumu ölçütü, davranış uyarıları, davranış tabanı). Motor 1.5.0 ve ikinci katalog entegrasyonu (`b1fb27d`) için 2026-10-03 onayından sonra yeniden üretildi: 1033 vaka (423 tür). Isıtıcı kuralı hiçbir vakayı değiştirmedi; farkların tamamı katalog kayıtlarındaki değişikliklerden geliyor ve sınıflandırıldı. Motor 1.6.0 (alan uyarısının şiddeti) için 2026-10-03 onayından sonra yeniden üretildi; 125 vaka değişti, hepsi sarı alan uyarısının kırmızıya dönmesi, yüzme alanı ölçütünün 35 ile sınırlanması ve genel puanın 74 sınırıyla açıklandı; hiçbir vakanın genel durumu değişmedi. Motor 1.7.0 (salyangoz uyarısı) altın fikstürü değiştirmedi: hiçbir vakada salyangoz yiyen balık ile salyangoz birlikte değil, fikstür yeniden üretilmedi. Motor değişmeden, kaynağı yalnızca FishBase olan 42 türün kaynak yenilemesi (PR #18, `b4444f7`) için 2026-10-05'te yeniden üretildi; 93 vaka değişti, hepsinin girdisi ya da tür kaydı değişmişti, açıklanamayan fark yok. İki vakanın genel durumu değişti: kakadu apistogramma çifti dikkat → iyi (kaynak grup sayısı vermiyor), cennet balığı ile Parkinson gökkuşağı balığı iyi → tehlike (kaynağa göre cennet balığı 10–22 °C). Aynı gün kimliği belirsiz 3 türün düzeltmesi (`docs/DECISIONS/0014-coklu-tur-satis-adi-profilleri.md`) için motor değişmeden yeniden üretildi; 7 vaka değişti, hepsinin girdisi ya da tür kaydı değişmişti, hiçbir vakanın genel durumu değişmedi. Motor 1.8.0 (elle girilen ekipman değerleri) altın fikstürü değiştirmedi. Motor 1.9.0 (eşleşmeyen ekipman uyarısı) için 2026-10-11 onayından sonra yeniden üretildi; yalnızca `seed:mock-data` vakası değişti: ISTA CO₂ seti için çıkan "Katalogla eşleşmeyen ekipman kaydı var" uyarısı kalktı, puan, durum, ölçütler ve diğer uyarılar aynı kaldı. Vakalar `test/fixtures/golden-cases.ts` ile deterministik üretilir.
+- `test/fixtures/golden-v1.json`: ilk sürümü motor taşınmadan önce, `8d6a164` içeriğindeki orijinal `src/lib/health-analysis.ts` ile alınmış 604 vakalık çıktıydı. Motor 1.1.0 ile yeniden üretildi: 1020 vaka (417 türün her biri için kendi su türünde "sığar" ve "dar" senaryosu, 60 filtre, 30 ısıtıcı, 10 hava motoru, 84 tür çifti, tohum veri, boş akvaryum). Yeniden üretimden önce, pakete taşınan kuralların `codex/catalog-capacity-batch` dalındaki (`950a70f`) özgün motorla 1020 vakanın tamamında birebir aynı çıktıyı verdiği doğrulandı. Motor 1.2.0 (su kalitesi ve kesin tehlike) için ürün sahibi onayından sonra yeniden üretildi; vaka sayısı değişmedi. Motor 1.3.0 (filtre, yük, genel durum) için 2026-09-28 onayından sonra yeniden üretildi; 1014 vaka değişti ve farkların tamamı sınıflandırıldı (yük ölçütü, filtre ölçütü, filtre ve yük uyarıları, tehlike uyarısında 74 sınırı, hacim önerili debisiz filtrelerin veri güveni). Motor 1.4.0 (davranış uyarıları) için 2026-09-29 onayından sonra yeniden üretildi; 83 vaka değişti ve farkların tamamı sınıflandırıldı (tür uyumu ölçütü, davranış uyarıları, davranış tabanı). Motor 1.5.0 ve ikinci katalog entegrasyonu (`b1fb27d`) için 2026-10-03 onayından sonra yeniden üretildi: 1033 vaka (423 tür). Isıtıcı kuralı hiçbir vakayı değiştirmedi; farkların tamamı katalog kayıtlarındaki değişikliklerden geliyor ve sınıflandırıldı. Motor 1.6.0 (alan uyarısının şiddeti) için 2026-10-03 onayından sonra yeniden üretildi; 125 vaka değişti, hepsi sarı alan uyarısının kırmızıya dönmesi, yüzme alanı ölçütünün 35 ile sınırlanması ve genel puanın 74 sınırıyla açıklandı; hiçbir vakanın genel durumu değişmedi. Motor 1.7.0 (salyangoz uyarısı) altın fikstürü değiştirmedi: hiçbir vakada salyangoz yiyen balık ile salyangoz birlikte değil, fikstür yeniden üretilmedi. Motor değişmeden, kaynağı yalnızca FishBase olan 42 türün kaynak yenilemesi (PR #18, `b4444f7`) için 2026-10-05'te yeniden üretildi; 93 vaka değişti, hepsinin girdisi ya da tür kaydı değişmişti, açıklanamayan fark yok. İki vakanın genel durumu değişti: kakadu apistogramma çifti dikkat → iyi (kaynak grup sayısı vermiyor), cennet balığı ile Parkinson gökkuşağı balığı iyi → tehlike (kaynağa göre cennet balığı 10–22 °C). Aynı gün kimliği belirsiz 3 türün düzeltmesi (`docs/DECISIONS/0014-coklu-tur-satis-adi-profilleri.md`) için motor değişmeden yeniden üretildi; 7 vaka değişti, hepsinin girdisi ya da tür kaydı değişmişti, hiçbir vakanın genel durumu değişmedi. Motor 1.8.0 (elle girilen ekipman değerleri) altın fikstürü değiştirmedi. Motor 1.9.0 (eşleşmeyen ekipman uyarısı) için 2026-10-11 onayından sonra yeniden üretildi; yalnızca `seed:mock-data` vakası değişti: ISTA CO₂ seti için çıkan "Katalogla eşleşmeyen ekipman kaydı var" uyarısı kalktı, puan, durum, ölçütler ve diğer uyarılar aynı kaldı. Motor 1.10.0 (sonuç biçimi v2) için 2026-10-20 onayından sonra yeniden üretildi; 1033 vakanın hepsine yalnızca yeni alanlar (`code`, `params`, `detailCode`, `detailParams`) eklendi: bu alanlar çıkarılınca fikstür önceki sürümle (`bfaa8e8`) birebir aynıdır. Vakalar `test/fixtures/golden-cases.ts` ile deterministik üretilir.
 - `test/golden.test.ts`: uyarlayıcının bugünkü çıktısını fikstürle `toStrictEqual` ile karşılaştırır. Fikstür yoksa test başarısız olur; sessizce yazılmaz.
 - `test/legacy-scripts.test.ts`: `scripts/test-health.cjs` betiğini alt süreç olarak çalıştırır; 113 senaryo tek kaynakta kalır, kopyalanmaz.
 - `test/isolation.test.ts`: motorun katalog modüllerini içe aktarmadığını ve stub çözümleyiciyle çalıştığını gösterir.
@@ -84,6 +100,7 @@ Bu sabitler Phase 0B'de değiştirilmedi. 1.1.0'da katalog entegrasyonuyla yaşa
 - `test/behavior.test.ts`: 1.4.0 davranış kurallarını, çelişkili kayıtları, tür uyumu tabanını ve davranış tabanını stub kayıtlarla sınar.
 - `test/user-equipment-values.test.ts`: 1.8.0 elle girilen ekipman değerlerini stub kayıtlarla sınar (hangi kayıtta girilebildiği, aralık sınırları, aynı değerli doğrulanmış kayıtla aynı puan ve açıklama, işaretin yalnız değeri elle girilen ölçütte bulunması, kalkan uyarılar, doğrulanmış değerin ezilememesi, aynı cihazın iki kaydı, elle değer olmayan çıktının değişmemesi).
 - `test/unmatched-equipment-warning.test.ts`: 1.9.0 eşleşmeyen ekipman uyarısını stub kayıtlarla sınar (hesaba girmeyen türlerin uyarı üretmemesi ve sonucu değiştirmemesi, filtre ve ısıtıcının uyarı üretmesi, sayının yalnız hesaba giren türleri sayması, hava motorunun yalnız hava motoruyla çalışan filtre varken sayılması, değeri elle girilen kaydın uyarı üretmemesi, veri güveni).
+- `src/lib/__tests__/engine-text.test.ts`: 1.10.0 sonuç biçimi v2. Dil dosyasının kod ve değişkenlerden kurduğu metni motorun Türkçe metniyle altın fikstürün 1033 vakasında ve fikstürde geçmeyen kodları tetikleyen 16 stub senaryoda karşılaştırır; motor kaynağındaki 48 uyarı ve 38 ölçüt kodunun dil dosyasında karşılığı olduğunu, dil dosyasında fazla kod olmadığını ve her kodun en az bir kez sınandığını denetler; dil paketinin ana girişinin motor metinlerini içe aktarmadığını da denetler (sayfa hızı).
 - `test/snail.test.ts`: 1.7.0 salyangoz uyarısını (metin, kaynağın notu, salyangoz yokluğu, çelişkili ve bilgisiz balık, ceza) stub kayıtlarla sınar.
 - `test/space.test.ts`: 1.6.0 alan uyarısı basamaklarını (kaynak altı sarı, kaynak ve İsviçre sınırı altı kırmızı, kaynağa uyan akvaryum, balık olmayan canlı, girilmemiş ölçü, ölçüt ve genel durum sınırı) stub kayıtlarla sınar.
 - `test/heater.test.ts`: 1.5.0 taban ısıtıcısı kuralını stub kayıtlarla sınar (yalnız taban kablosu, taban kablosu ve gerçek ısıtıcı).
@@ -111,10 +128,11 @@ AQUAMIND_GOLDEN_CAPTURE=1 pnpm exec vitest run packages/compatibility-engine/tes
 
 4. Etkilenen `scripts/test-health.cjs` senaryoları aynı değişiklikte güncellenir; test zayıflatılarak geçirilmez.
 5. Katalog verisi puanı geçirmek için değiştirilmez.
+6. Yeni bir uyarı ya da ölçüt açıklaması kod ve değişkenleriyle üretilir; metni dil dosyasına (`packages/localization/src/messages/tr-engine.ts`) yazılır. Motorun Türkçe metni ile dil dosyasının metni aynı olmalıdır; `src/lib/__tests__/engine-text.test.ts` karşılığı olmayan, kullanılmayan ya da hiç sınanmayan kodu yakalar.
 
 ## Planlanan (Phase 1 ve sonrası)
 
 - Kalıcı hesaplama kaydı: `compatibility_calculations(engine_version, ruleset_version, knowledge_version, input_snapshot, score, subscores, findings)`; "AquaMind neden %73 hesapladı?" sorusu bu kayıtla yanıtlanır.
-- Kararlı bulgu kodları ve yerelleştirilebilir mesajlar (sonuç biçimi v2, ayrı onayla).
+- Motor metinlerinde birim tercihi (galon) ve dile göre sayı biçimi (0021, 3b paketi; Türkçe ekranda görünür fark yaratır).
 - Bilgi anlık görüntüsü (`knowledge_releases`) üzerinden çözümleyici; motor testleri veritabanına ihtiyaç duymaz.
 - Yapay zekâ açıklaması: motor sonucu girdi, açıklama çıktı; puan asla yapay zekâdan gelmez.
