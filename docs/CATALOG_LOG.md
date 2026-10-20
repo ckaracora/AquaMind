@@ -2477,3 +2477,147 @@ Güncel alt adım: JBL filtre medyası, bakteri başlangıcı, sorun giderici/pH
 | `yellow-fire-shrimp` | 3 | 15 | 25 | 6 | 18–28 → 18–26 | 6,5–8 | Fishkeeper yellow fire sayfası 18–28 °C, pH 6,0–8,0 ∩ PFK Dunn 18–28 °C ∩ PFK Horvath 18–26 °C, pH 6,5–8 |
 | `white-pearl-shrimp` | 3 | 20 → 15 | 30 | 6 | 20–26 → 18–28 | 6,5–7,8 → 6,5–8 | Fishkeeper sayfası yok; PFK Dunn N. cf. zhangjiajiensis 'white'i adıyla anıyor: 18–28 °C, pH 6,5–8,0 (Horvath'ın değerleri N. davidi için) |
 | `amano-shrimp` | 5 | 25 → 20 | 30 | 4 → 5 | 18–27 → 15–28 | 6–7,8 → 6–8 | Fishkeeper 15–28 °C, pH 6–8, 5 cm, grupla tutulmalı (sayı yok); PFK Amano için sayı vermiyor; OATA yaklaşık 20 L ve en az beşli grup; wirbellose.de beş hayvan için 20 L |
+
+## 2026-10-20 Omurgasız kaynak yenilemesi 2: Caridina, Atyopsis, Atya ve Pinokyo karides (Claude)
+
+- Kurallar 1. paketle ve `docs/DATA_SOURCES.md` → "Omurgasızlar" bölümüyle aynı. Bu pakette kurala şunlar açıkça yazıldı:
+  - Sıcaklık ve pH'ta kaynakların tutma aralıkları kullanılır. "En iyi", "ideal" ya da üreme için verilen dar aralıklar, farklı cinsleri tek değerle anlatan satıcı ve ürün yazıları, okurun kendi akvaryumu ve birim hatası olan değerler kullanılmaz.
+  - Practical Fishkeeping sitenin kendi aramasıyla taranır; taranan yazılar aşağıda.
+  - Hiçbir kabul edilen kaynak hacim yayımlamıyorsa kayıttaki değer korunur; OATA'nın 10–20 L'lik tabanı iri türlerin değerini düşürmek için kullanılmaz.
+  - Aralık veren kaynak yoksa sıcaklık ve pH'ta da kayıttaki değer korunur. Kaynakların tekil değerleriyle tutarlı olduğu günlüğe yazılır.
+- 25 kayıt kaynaklandı: *Caridina cantonensis* formları (Crystal Red, Crystal Black ve 16 Taiwan Bee hattı), *C. mariae* (2), *C. serrata*, *C. dennerli*, *C. gracilirostris*, *Atyopsis moluccensis*, *Atya gabonensis*.
+- Practical Fishkeeping taraması (2026-10-20, UTC). Codex 1. turunda iki yazının (Farmer'ın nano akvaryum ve Gay'in Tayvan biyotopu yazıları) atlandığı görüldü; bu yüzden site bütünüyle tarandı:
+  - Yöntem: sitenin kendi araması, yani `/features/?Query=` ve `/fishkeeping-answers/?Query=`. Arama yalnız başlık ve özette eşleşir. Sorgular: shrimp, Caridina, cherry shrimp, crystal, Amano, bamboo, Atyopsis, Atya, Sulawesi, nerite, snail, Tylomelania, assassin, apple, Pomacea, ramshorn, Melanoides, invertebrates. Deniz ve konu dışı yazılar atlandı.
+  - Değer veren yazılar:
+    - Farmer, "How to set up a MicroHabitat nano aquarium": kiraz karides 16–28 °C, pH 6,5–7,5; Crystal Red pH 6,5–7,5 (sıcaklığı °F diye yazılmış, kullanılmadı).
+    - Gay, "How to set up a Taiwanese biotope aquarium": Amano 18–27 °C, pH 6–8, en az 30 cm; bumblebee salyangozu.
+    - Hill, "Amano shrimp: Spineless heroes": 18–27 °C, pH 6,0–7,5.
+    - Monks, "Fans of Flow: Keeping Bamboo Shrimp" (Şubat 2026): Atyopsis 23–29 °C, 60 × 30 × 30 cm; pH 6,5–7,5'i "ideal" diye veriyor.
+    - Dunn, Neocaridina SSS; Horvath'ın karides girişi ve "The jewels of Sulawesi".
+    - Lukhaup: "Snails from Sulawesi" ve "Freshwater shrimps: The next generation"; ikincisine göre King Kong ve benzeri hatlar 17–22 °C'de tutulur, üreme için 22–24 °C ve pH 6,4–6,9 gerekir.
+    - Clarke, "FAQ on freshwater shrimps".
+    - Klotz'un rednose yazısı.
+    - Monks'un yanıtları: bee pH 6,5–7,0; kiraz için grup ve yoğunluk.
+  - Kullanılmayanlar:
+    - Hill, "Mail order from Sharnbrook Shrimp": Crystal Red, tiger ve Neocaridina formlarını tek değerle anlatıyor.
+    - Clarke'ın Amano için "25 °C altında en iyi" ifadesi: en iyi aralık.
+    - Monks'un bambu karides pH'ı: "ideal" diye verilmiş. Fishkeeper'ınki aynı olduğundan sonucu değiştirmiyor.
+    - Lukhaup'un üreme değerleri, Dunn'ın ve Farmer'ın "en iyi/ideal" aralıkları, okurların kendi akvaryumları.
+  - Değer vermeyen 17 yazı da okundu; liste araştırma kaydında.
+- Okunan sayfalar (2026-10-20, UTC):
+  - Fishkeeper'ın Crystal Red, Black Crystal Bee, bambu ve dev yelpaze karides sayfaları, ayrıca karides ve salyangoz listeleri;
+  - Practical Fishkeeping'in karides girişi (Horvath), "The jewels of Sulawesi" (Horvath) ve rednose karides yazısı (Werner Klotz, Noel 2009 sayısı);
+  - wirbellose.de'nin *C. logemanni* (Crystal Red ve bee), *C. mariae*, *C. serrata* (Werner Klotz), *C. dennerli* (Tobias Langer), *C. gracilirostris* ve *Atyopsis* sayfaları.
+- Kayıt kayıt kararlar:
+  - *C. cantonensis* formları:
+    - Sıcaklık ve pH: tutma aralıklarının ortak aralığı 18–22 °C ve pH 6,5–6,8. Kaynaklar:
+      - Fishkeeper: 18–25 °C, pH 6,0–7,0;
+      - Horvath, bee, tiger ve melezleri için: 18–23 °C, pH 6–6,8. Bu ifade Pinto, Galaxy ve Fancy Tiger gibi bee × tiger hatlarını da kapsıyor;
+      - Lukhaup, King Kong ve benzeri Taiwan Bee hatlarının tutma aralığı: 17–22 °C. Yazı yalnız bu hatları anıyor; Fishkeeper ve Horvath aynı türün hatlarını (Crystal Red, Crystal Black, Pinto, Galaxy, Fancy Tiger) aynı değerlerle anlattığı için öteki hatlara koruyucu bir çıkarımla uygulandı;
+      - Monks, bee için: pH 6,5–7,0;
+      - Farmer, Crystal Red için: pH 6,5–7,5.
+    - Ana kaynak: Crystal Red'de Crystal Red sayfası, öteki hatlarda Black Crystal Bee sayfası. İki sayfa aynı değerleri veriyor.
+    - Hacim: ilk iki kaynak vermiyor. wirbellose.de Crystal Red için en az 12 L, bee için 10 L'nin yettiğini yazıyor; büyüğü, 12 L alındı.
+    - Grup: OATA'nın en az beşlisi. Fishkeeper "large colonies" diyor, sayı vermiyor.
+  - *C. mariae* (tiger ve blue tiger):
+    - Fishkeeper sayfası yok. Sıcaklık ve pH Horvath'tan (18–23 °C, pH 6–6,8).
+    - Boy: wirbellose.de'nin 35 mm'si, 3 → 3,5 cm.
+    - Hacim: hiçbir kaynak yayımlamıyor; kayıttaki 40 L korundu.
+    - Grup: OATA.
+  - *C. serrata*:
+    - Yalnız wirbellose.de'de var (sayfayı Werner Klotz hazırlamış): 20–25 °C, en az 12 L.
+    - pH yayımlanmıyor; kayıttaki 6–7 korundu.
+    - Grup: OATA'nın beşlisi; önceki 10, kabul edilmeyen bir kaynaktandı. Bakım notundaki "en az onlu grup için en az 20 litre" cümlesi ve uzunluk notu yeni kaynağa göre düzeltildi.
+    - Tür akvaryumu işareti ve melezleşme notu korundu.
+  - *C. dennerli*:
+    - Kaynaklar aralık vermiyor. PFK'ye göre göl yüzeyi 27 °C'nin üstünde, yazarın akvaryumu 27–28 °C ve pH 8,4; PFK'nin girişi pH 7,5 üstü diyor. wirbellose.de yaklaşık 29 °C ve pH 7,5'ten (8 ve üstü daha iyi) diyor.
+    - Kayıttaki 27–29 °C ve pH 7,8–8,5 bunlarla tutarlı; korundu.
+    - Hacim: PFK'nin "15 litres upwards" ifadesi, 40 → 15 L.
+    - Grup: PFK "larger groups" diyor ama sayı vermiyor; OATA'nın beşlisi alındı (10 → 5).
+  - *C. gracilirostris* (Pinokyo):
+    - PFK'ye göre acı su canlısı: yaklaşık 10 g/L tuz; tatlı su akvaryumunda birkaç haftadan fazla yaşamaz; larvalar tatlı suda gelişemez; en az 100 L.
+    - Kayıt tatlı su profilindeydi. Artık acı su (`waterTypes: ["brackish"]`); tatlı su akvaryumunda "akvaryum türü uyumsuz" uyarısı alır ve tatlı su aramasında önerilmez.
+    - Bakım notu eklendi. Tuzluluk aralığı kaynakta olmadığı için yazılmadı.
+    - Sıcaklık ve pH yayımlanmıyor; wirbellose.de'deki değerler bakıcının kendi suyu. Kayıttaki değer korundu.
+    - Hacim: 30 → 100 L. Grup: OATA.
+  - *Atyopsis* (bambu):
+    - Sıcaklık Fishkeeper ve PFK (Monks) 23–29 °C; pH Fishkeeper 6,5–7,5 (Monks'un aynı değeri "ideal" diye verilmiş, kullanılmadı). Fishkeeper 9 cm, grup halinde, yüksek akıntı; Monks ve Clarke 8 cm.
+    - Hacim: Monks'un 60 × 30 × 30 cm'si (54 L; önceki değer 80 L). Uzunluk 60 cm; Monks ve wirbellose.de de 60 cm.
+    - Grup: OATA, 3 → 5.
+  - *Atya gabonensis* (vampir):
+    - Fishkeeper 24–28 °C, pH 6,5–8,0, 14 cm, büyük gruplar halinde, güçlü akıntı. PFK (Monks, Clarke) 15 cm; katalogdaki 15 cm korundu.
+    - Hacim ve uzunluk yayımlanmıyor; korundu.
+    - Grup: OATA, 2 → 5.
+  - 1. paketin düzeltmesi (PFK taramasından sonra):
+    - *N. davidi* formlarının pH'ı 6,5–8'den 6,5–7,5'e indi (Farmer'ın kiraz karides kutusu); sıcaklık değişmedi.
+    - Amano 15–28 °C / pH 6–8'den 18–27 °C / pH 6–7,5'e geçti (Hill ve Gay). Altum melek (28–32 °C) ile sıcaklık çakışması yeniden çıkıyor.
+    - White pearl değişmedi; Farmer'ın kutusu kiraz karides için.
+    - Grup değişmedi: Monks'un kiraz karides yanıtları farklı sayı veriyor ("a dozen or more", "6-12 adults"); kural gereği Neocaridina'ya adanmış yazının, Dunn'ın SSS'sinin altılısı korundu.
+  - Hayalet karides (*Palaemonetes paludosus*): Fishkeeper, PFK ve wirbellose.de'de sayfası yok. Değişmedi; `docs/CATALOG_SOURCE_GAPS.md` listesine eklendi.
+  - Kaynak alanları:
+    - `sourceUrl` ana kaynak (Fishkeeper, yoksa PFK ya da wirbellose.de); `verifiedAt` 2026-10-20.
+    - PFK, wirbellose.de, OATA ve eski kaynaklar `additionalSourceUrls` içinde.
+    - Crystal Red'in var olmayan Seriously Fish adresi kaldırıldı.
+    - Varsayılan kaynak haritası *C. cantonensis*, *C. mariae*, *C. dennerli*, *Atyopsis* ve *Atya* için kabul edilen kaynağa çevrildi.
+    - Omurgasız yardımcısı (`i(...)`) su türünü de kabul ediyor.
+- Kullanıcıya etkisi:
+  - Crystal Red ve Taiwan Bee hatlarında önerilen akvaryum 20–30 L'den 12 L'ye, grup 6'dan 5'e indi; sıcaklık 18–22 °C, pH 6,5–6,8 oldu.
+  - Bu yüzden 23 °C ve üstünü isteyen balıklarla sıcaklık çakışması çıkabiliyor. Ör. Kırmızı Kamçı Kuyruk vatoz (24–28 °C) ile Red Wine karides ve L149 (23–28 °C) ile Crystal Black karides çiftleri artık "tehlike".
+  - Kiraz karides ve formlarının pH üst sınırı 7,5'e indi; Amano 18–27 °C ve pH 6–7,5.
+  - Bambu karides 54 L ile öneriliyor.
+  - Cardinal Sulawesi 15 L ve beşli grupla öneriliyor.
+  - Pinokyo karides tatlı su akvaryumunda uyarı alıyor.
+  - Bambu ve vampir karideste en az beşli grup isteniyor.
+- Altın fikstür: motor değişmedi. 1.033 vakadan 55'i değişti (25 "sığar", 25 "dar", 5 tür çifti); hepsi bu kayıtların değerlerinden geliyor. Değişen ölçütler: yük 52, tür uyumu 3.
+  - İki durum geçişi var, ikisi de sıcaklık çakışmasından:
+    - Kırmızı Kamçı Kuyruk vatoz + Red Wine karides "iyi" → "tehlike" (79 → 49);
+    - L149 + Crystal Black karides "iyi" → "tehlike" (76 → 49).
+  - Crystal Red + Celebes halfbeak (24–27 °C) ve altum melek + Amano çiftlerine sıcaklık çakışması eklendi; ikisinin durumu zaten tehlikeydi.
+  - Serpae tetra + *C. serrata* çiftinde yalnız yük değişti.
+  - Pinokyo vakalarına bakım notu uyarısı eklendi.
+- Değişiklik tablosu ("eski → yeni"; değişmeyen değer tek yazıldı):
+
+| Kimlik | Boy | Hacim (L) | Uzunluk (cm) | Grup | Sıcaklık | pH | Not |
+|---|---|---|---|---|---|---|---|
+| `caridina-crystal` | 3 | 20 → 12 | 30 | 6 → 5 | 20–24 → 18–22 | 5,5–6,8 → 6,5–6,8 | Fishkeeper 18–25 °C, pH 6,0–7,0 ∩ PFK: Horvath (bee, tiger ve melezleri) 18–23 °C, pH 6–6,8; Lukhaup (King Kong ve benzeri, tutma; öteki hatlara koruyucu çıkarım) 17–22 °C; Monks (bee) pH 6,5–7,0; Farmer (Crystal Red) pH 6,5–7,5 → 18–22 °C, pH 6,5–6,8; hacim wirbellose.de (Crystal Red 12 L, bee 10 L; büyüğü); grup OATA |
+| `crystal-black-shrimp` | 3 | 20 → 12 | 30 | 6 → 5 | 20–24 → 18–22 | 5,5–6,8 → 6,5–6,8 | Fishkeeper 18–25 °C, pH 6,0–7,0 ∩ PFK: Horvath (bee, tiger ve melezleri) 18–23 °C, pH 6–6,8; Lukhaup (King Kong ve benzeri, tutma; öteki hatlara koruyucu çıkarım) 17–22 °C; Monks (bee) pH 6,5–7,0; Farmer (Crystal Red) pH 6,5–7,5 → 18–22 °C, pH 6,5–6,8; hacim wirbellose.de (Crystal Red 12 L, bee 10 L; büyüğü); grup OATA |
+| `blue-bolt-shrimp` | 3 | 20 → 12 | 30 | 6 → 5 | 20–24 → 18–22 | 5,5–6,8 → 6,5–6,8 | Fishkeeper 18–25 °C, pH 6,0–7,0 ∩ PFK: Horvath (bee, tiger ve melezleri) 18–23 °C, pH 6–6,8; Lukhaup (King Kong ve benzeri, tutma; öteki hatlara koruyucu çıkarım) 17–22 °C; Monks (bee) pH 6,5–7,0; Farmer (Crystal Red) pH 6,5–7,5 → 18–22 °C, pH 6,5–6,8; hacim wirbellose.de (Crystal Red 12 L, bee 10 L; büyüğü); grup OATA |
+| `king-kong-shrimp` | 3 | 20 → 12 | 30 | 6 → 5 | 20–24 → 18–22 | 5,5–6,8 → 6,5–6,8 | Fishkeeper 18–25 °C, pH 6,0–7,0 ∩ PFK: Horvath (bee, tiger ve melezleri) 18–23 °C, pH 6–6,8; Lukhaup (King Kong ve benzeri, tutma; öteki hatlara koruyucu çıkarım) 17–22 °C; Monks (bee) pH 6,5–7,0; Farmer (Crystal Red) pH 6,5–7,5 → 18–22 °C, pH 6,5–6,8; hacim wirbellose.de (Crystal Red 12 L, bee 10 L; büyüğü); grup OATA |
+| `panda-shrimp` | 3 | 20 → 12 | 30 | 6 → 5 | 20–24 → 18–22 | 5,5–6,8 → 6,5–6,8 | Fishkeeper 18–25 °C, pH 6,0–7,0 ∩ PFK: Horvath (bee, tiger ve melezleri) 18–23 °C, pH 6–6,8; Lukhaup (King Kong ve benzeri, tutma; öteki hatlara koruyucu çıkarım) 17–22 °C; Monks (bee) pH 6,5–7,0; Farmer (Crystal Red) pH 6,5–7,5 → 18–22 °C, pH 6,5–6,8; hacim wirbellose.de (Crystal Red 12 L, bee 10 L; büyüğü); grup OATA |
+| `red-wine-shrimp` | 3 | 20 → 12 | 30 | 6 → 5 | 20–24 → 18–22 | 5,5–6,8 → 6,5–6,8 | Fishkeeper 18–25 °C, pH 6,0–7,0 ∩ PFK: Horvath (bee, tiger ve melezleri) 18–23 °C, pH 6–6,8; Lukhaup (King Kong ve benzeri, tutma; öteki hatlara koruyucu çıkarım) 17–22 °C; Monks (bee) pH 6,5–7,0; Farmer (Crystal Red) pH 6,5–7,5 → 18–22 °C, pH 6,5–6,8; hacim wirbellose.de (Crystal Red 12 L, bee 10 L; büyüğü); grup OATA |
+| `taiwan-bee-red-shrimp` | 3 | 30 → 12 | 30 | 6 → 5 | 19–22 → 18–22 | 5,5–6,5 → 6,5–6,8 | Fishkeeper 18–25 °C, pH 6,0–7,0 ∩ PFK: Horvath (bee, tiger ve melezleri) 18–23 °C, pH 6–6,8; Lukhaup (King Kong ve benzeri, tutma; öteki hatlara koruyucu çıkarım) 17–22 °C; Monks (bee) pH 6,5–7,0; Farmer (Crystal Red) pH 6,5–7,5 → 18–22 °C, pH 6,5–6,8; hacim wirbellose.de (Crystal Red 12 L, bee 10 L; büyüğü); grup OATA |
+| `taiwan-bee-yellow-kingkong` | 3 | 30 → 12 | 30 | 6 → 5 | 19–22 → 18–22 | 5,5–6,5 → 6,5–6,8 | Fishkeeper 18–25 °C, pH 6,0–7,0 ∩ PFK: Horvath (bee, tiger ve melezleri) 18–23 °C, pH 6–6,8; Lukhaup (King Kong ve benzeri, tutma; öteki hatlara koruyucu çıkarım) 17–22 °C; Monks (bee) pH 6,5–7,0; Farmer (Crystal Red) pH 6,5–7,5 → 18–22 °C, pH 6,5–6,8; hacim wirbellose.de (Crystal Red 12 L, bee 10 L; büyüğü); grup OATA |
+| `taiwan-bee-black-shrimp` | 3 | 30 → 12 | 30 | 6 → 5 | 19–22 → 18–22 | 5,5–6,5 → 6,5–6,8 | Fishkeeper 18–25 °C, pH 6,0–7,0 ∩ PFK: Horvath (bee, tiger ve melezleri) 18–23 °C, pH 6–6,8; Lukhaup (King Kong ve benzeri, tutma; öteki hatlara koruyucu çıkarım) 17–22 °C; Monks (bee) pH 6,5–7,0; Farmer (Crystal Red) pH 6,5–7,5 → 18–22 °C, pH 6,5–6,8; hacim wirbellose.de (Crystal Red 12 L, bee 10 L; büyüğü); grup OATA |
+| `blue-shadow-mosura-shrimp` | 3 | 30 → 12 | 30 | 6 → 5 | 19–22 → 18–22 | 5,5–6,5 → 6,5–6,8 | Fishkeeper 18–25 °C, pH 6,0–7,0 ∩ PFK: Horvath (bee, tiger ve melezleri) 18–23 °C, pH 6–6,8; Lukhaup (King Kong ve benzeri, tutma; öteki hatlara koruyucu çıkarım) 17–22 °C; Monks (bee) pH 6,5–7,0; Farmer (Crystal Red) pH 6,5–7,5 → 18–22 °C, pH 6,5–6,8; hacim wirbellose.de (Crystal Red 12 L, bee 10 L; büyüğü); grup OATA |
+| `snow-white-shrimp` | 3 | 30 → 12 | 30 | 6 → 5 | 19–22 → 18–22 | 5,5–6,5 → 6,5–6,8 | Fishkeeper 18–25 °C, pH 6,0–7,0 ∩ PFK: Horvath (bee, tiger ve melezleri) 18–23 °C, pH 6–6,8; Lukhaup (King Kong ve benzeri, tutma; öteki hatlara koruyucu çıkarım) 17–22 °C; Monks (bee) pH 6,5–7,0; Farmer (Crystal Red) pH 6,5–7,5 → 18–22 °C, pH 6,5–6,8; hacim wirbellose.de (Crystal Red 12 L, bee 10 L; büyüğü); grup OATA |
+| `red-pinto-shrimp` | 3 | 30 → 12 | 30 | 6 → 5 | 19–22 → 18–22 | 5,5–6,5 → 6,5–6,8 | Fishkeeper 18–25 °C, pH 6,0–7,0 ∩ PFK: Horvath (bee, tiger ve melezleri) 18–23 °C, pH 6–6,8; Lukhaup (King Kong ve benzeri, tutma; öteki hatlara koruyucu çıkarım) 17–22 °C; Monks (bee) pH 6,5–7,0; Farmer (Crystal Red) pH 6,5–7,5 → 18–22 °C, pH 6,5–6,8; hacim wirbellose.de (Crystal Red 12 L, bee 10 L; büyüğü); grup OATA |
+| `red-fancy-tiger-shrimp` | 3 | 30 → 12 | 30 | 6 → 5 | 19–22 → 18–22 | 5,5–6,5 → 6,5–6,8 | Fishkeeper 18–25 °C, pH 6,0–7,0 ∩ PFK: Horvath (bee, tiger ve melezleri) 18–23 °C, pH 6–6,8; Lukhaup (King Kong ve benzeri, tutma; öteki hatlara koruyucu çıkarım) 17–22 °C; Monks (bee) pH 6,5–7,0; Farmer (Crystal Red) pH 6,5–7,5 → 18–22 °C, pH 6,5–6,8; hacim wirbellose.de (Crystal Red 12 L, bee 10 L; büyüğü); grup OATA |
+| `red-galaxy-shrimp` | 3 | 30 → 12 | 30 | 6 → 5 | 19–22 → 18–22 | 5,5–6,5 → 6,5–6,8 | Fishkeeper 18–25 °C, pH 6,0–7,0 ∩ PFK: Horvath (bee, tiger ve melezleri) 18–23 °C, pH 6–6,8; Lukhaup (King Kong ve benzeri, tutma; öteki hatlara koruyucu çıkarım) 17–22 °C; Monks (bee) pH 6,5–7,0; Farmer (Crystal Red) pH 6,5–7,5 → 18–22 °C, pH 6,5–6,8; hacim wirbellose.de (Crystal Red 12 L, bee 10 L; büyüğü); grup OATA |
+| `prl-shrimp` | 3 | 30 → 12 | 30 | 6 → 5 | 19–22 → 18–22 | 5,5–6,5 → 6,5–6,8 | Fishkeeper 18–25 °C, pH 6,0–7,0 ∩ PFK: Horvath (bee, tiger ve melezleri) 18–23 °C, pH 6–6,8; Lukhaup (King Kong ve benzeri, tutma; öteki hatlara koruyucu çıkarım) 17–22 °C; Monks (bee) pH 6,5–7,0; Farmer (Crystal Red) pH 6,5–7,5 → 18–22 °C, pH 6,5–6,8; hacim wirbellose.de (Crystal Red 12 L, bee 10 L; büyüğü); grup OATA |
+| `black-galaxy-shrimp` | 3 | 30 → 12 | 30 | 6 → 5 | 19–22 → 18–22 | 5,5–6,5 → 6,5–6,8 | Fishkeeper 18–25 °C, pH 6,0–7,0 ∩ PFK: Horvath (bee, tiger ve melezleri) 18–23 °C, pH 6–6,8; Lukhaup (King Kong ve benzeri, tutma; öteki hatlara koruyucu çıkarım) 17–22 °C; Monks (bee) pH 6,5–7,0; Farmer (Crystal Red) pH 6,5–7,5 → 18–22 °C, pH 6,5–6,8; hacim wirbellose.de (Crystal Red 12 L, bee 10 L; büyüğü); grup OATA |
+| `black-pinto-shrimp` | 3 | 30 → 12 | 30 | 6 → 5 | 19–22 → 18–22 | 5,5–6,5 → 6,5–6,8 | Fishkeeper 18–25 °C, pH 6,0–7,0 ∩ PFK: Horvath (bee, tiger ve melezleri) 18–23 °C, pH 6–6,8; Lukhaup (King Kong ve benzeri, tutma; öteki hatlara koruyucu çıkarım) 17–22 °C; Monks (bee) pH 6,5–7,0; Farmer (Crystal Red) pH 6,5–7,5 → 18–22 °C, pH 6,5–6,8; hacim wirbellose.de (Crystal Red 12 L, bee 10 L; büyüğü); grup OATA |
+| `black-fancy-tiger-shrimp` | 3 | 30 → 12 | 30 | 6 → 5 | 19–22 → 18–22 | 5,5–6,5 → 6,5–6,8 | Fishkeeper 18–25 °C, pH 6,0–7,0 ∩ PFK: Horvath (bee, tiger ve melezleri) 18–23 °C, pH 6–6,8; Lukhaup (King Kong ve benzeri, tutma; öteki hatlara koruyucu çıkarım) 17–22 °C; Monks (bee) pH 6,5–7,0; Farmer (Crystal Red) pH 6,5–7,5 → 18–22 °C, pH 6,5–6,8; hacim wirbellose.de (Crystal Red 12 L, bee 10 L; büyüğü); grup OATA |
+| `tiger-shrimp` | 3 → 3,5 | 40 | 40 | 6 → 5 | 19–24 → 18–23 | 6,2–7,4 → 6–6,8 | Fishkeeper sayfası yok; PFK Horvath (bee, tiger ve melezleri) 18–23 °C, pH 6–6,8; boy wirbellose.de (♀ 35 mm); hacim yayımlanmıyor, kayıttaki değer korundu; grup OATA |
+| `blue-tiger-shrimp` | 3 → 3,5 | 40 | 40 | 6 → 5 | 19–24 → 18–23 | 6,2–7,4 → 6–6,8 | Fishkeeper sayfası yok; PFK Horvath (bee, tiger ve melezleri) 18–23 °C, pH 6–6,8; boy wirbellose.de (♀ 35 mm); hacim yayımlanmıyor, kayıttaki değer korundu; grup OATA |
+| `serrata-dwarf-shrimp` | 3 | 20 → 12 | undefined | 10 → 5 | 22–26 → 20–25 | 6–7 | Fishkeeper ve PFK sayfası yok; wirbellose.de (Werner Klotz) 20–25 °C, en az 12 L; pH yayımlanmıyor, kayıttaki değer korundu; grup OATA |
+| `cardinal-sulawesi-shrimp` | 2,5 | 40 → 15 | 40 | 10 → 5 | 27–29 | 7,8–8,5 | Aralık veren kaynak yok: PFK göl yüzeyi 27 °C üstü, yazarın akvaryumu 27–28 °C ve pH 8,4; PFK girişi pH 7,5 üstü; wirbellose.de yaklaşık 29 °C, pH 7,5'ten; kayıttaki 27–29 °C ve pH 7,8–8,5 bunlarla tutarlı, korundu; hacim PFK 15 L'den; grup OATA (PFK büyük grup der, sayı yok) |
+| `pinocchio-shrimp` | 4 | 30 → 100 | 40 | 6 → 5 | 20–27 | 6,5–7,5 | PFK (Werner Klotz): yaklaşık 10 g/L tuzlu acı su, en az 100 L, tatlı suda birkaç hafta yaşar; sıcaklık ve pH yayımlanmıyor (wirbellose.de'dekiler bakıcının kendi suyu), korundu; boy wirbellose.de ♀ 40 mm; grup OATA. Su türü: tatlı su → acı su. |
+| `bamboo-shrimp` | 9 | 80 → 54 | 60 | 3 → 5 | 23–28 → 23–29 | 6,5–7,8 → 6,5–7,5 | Fishkeeper ve PFK Monks 23–29 °C; pH Fishkeeper 6,5–7,5 (Monks'un aynı değeri "ideal", kullanılmadı); boy Fishkeeper 9 cm (Monks ve Clarke 8 cm); hacim Monks'un 60 × 30 × 30 cm'si (54 L), uzunluk 60 cm (wirbellose.de de 60 cm); grup OATA |
+| `vampire-shrimp` | 15 | 120 | 80 | 2 → 5 | 23–28 → 24–28 | 6,5–7,8 → 6,5–8 | Fishkeeper 24–28 °C, pH 6,5–8,0, 14 cm (katalogdaki 15 cm korundu; PFK Monks ve Clarke 15 cm); hacim ve uzunluk yayımlanmıyor, kayıttaki değer korundu; grup OATA |
+| `cherry-shrimp` | 3 | 15 | 25 | 6 | 18–26 | 6,5–8 → 6,5–7,5 | Paket 1 düzeltmesi (PFK taraması): pH üst sınırı Farmer'ın kiraz karides kutusundan (pH 6,5–7,5); sıcaklık değişmedi |
+| `blue-dream-shrimp` | 3 | 15 | 25 | 6 | 18–26 | 6,5–8 → 6,5–7,5 | Paket 1 düzeltmesi (PFK taraması): pH üst sınırı Farmer'ın kiraz karides kutusundan (pH 6,5–7,5); sıcaklık değişmedi |
+| `orange-sakura-shrimp` | 3 | 15 | 25 | 6 | 18–26 | 6,5–8 → 6,5–7,5 | Paket 1 düzeltmesi (PFK taraması): pH üst sınırı Farmer'ın kiraz karides kutusundan (pH 6,5–7,5); sıcaklık değişmedi |
+| `green-jade-shrimp` | 3 | 15 | 25 | 6 | 18–26 | 6,5–8 → 6,5–7,5 | Paket 1 düzeltmesi (PFK taraması): pH üst sınırı Farmer'ın kiraz karides kutusundan (pH 6,5–7,5); sıcaklık değişmedi |
+| `bloody-mary-shrimp` | 3 | 15 | 25 | 6 | 18–26 | 6,5–8 → 6,5–7,5 | Paket 1 düzeltmesi (PFK taraması): pH üst sınırı Farmer'ın kiraz karides kutusundan (pH 6,5–7,5); sıcaklık değişmedi |
+| `black-rose-shrimp` | 3 | 15 | 30 | 6 | 18–26 | 6,5–8 → 6,5–7,5 | Paket 1 düzeltmesi (PFK taraması): pH üst sınırı Farmer'ın kiraz karides kutusundan (pH 6,5–7,5); sıcaklık değişmedi |
+| `blue-angel-shrimp` | 3 | 15 | 30 | 6 | 18–26 | 6,5–8 → 6,5–7,5 | Paket 1 düzeltmesi (PFK taraması): pH üst sınırı Farmer'ın kiraz karides kutusundan (pH 6,5–7,5); sıcaklık değişmedi |
+| `red-sakura-shrimp` | 3 | 15 | 30 | 6 | 18–26 | 6,5–8 → 6,5–7,5 | Paket 1 düzeltmesi (PFK taraması): pH üst sınırı Farmer'ın kiraz karides kutusundan (pH 6,5–7,5); sıcaklık değişmedi |
+| `blue-jelly-shrimp` | 3 | 15 | 30 | 6 | 18–26 | 6,5–8 → 6,5–7,5 | Paket 1 düzeltmesi (PFK taraması): pH üst sınırı Farmer'ın kiraz karides kutusundan (pH 6,5–7,5); sıcaklık değişmedi |
+| `green-jelly-shrimp` | 3 | 15 | 30 | 6 | 18–26 | 6,5–8 → 6,5–7,5 | Paket 1 düzeltmesi (PFK taraması): pH üst sınırı Farmer'ın kiraz karides kutusundan (pH 6,5–7,5); sıcaklık değişmedi |
+| `chocolate-shrimp` | 3 | 15 | 30 | 6 | 18–26 | 6,5–8 → 6,5–7,5 | Paket 1 düzeltmesi (PFK taraması): pH üst sınırı Farmer'ın kiraz karides kutusundan (pH 6,5–7,5); sıcaklık değişmedi |
+| `red-rili-shrimp` | 3 | 15 | 30 | 6 | 18–25 | 6,5–8 → 6,5–7,5 | Paket 1 düzeltmesi (PFK taraması): pH üst sınırı Farmer'ın kiraz karides kutusundan (pH 6,5–7,5); sıcaklık değişmedi |
+| `orange-rili-shrimp` | 3 | 15 | 30 | 6 | 18–25 | 6,5–8 → 6,5–7,5 | Paket 1 düzeltmesi (PFK taraması): pH üst sınırı Farmer'ın kiraz karides kutusundan (pH 6,5–7,5); sıcaklık değişmedi |
+| `carbon-rili-shrimp` | 3 | 15 | 30 | 6 | 18–25 | 6,5–8 → 6,5–7,5 | Paket 1 düzeltmesi (PFK taraması): pH üst sınırı Farmer'ın kiraz karides kutusundan (pH 6,5–7,5); sıcaklık değişmedi |
+| `blue-black-rili-shrimp` | 3 | 15 | 30 | 6 | 18–25 | 6,5–8 → 6,5–7,5 | Paket 1 düzeltmesi (PFK taraması): pH üst sınırı Farmer'ın kiraz karides kutusundan (pH 6,5–7,5); sıcaklık değişmedi |
+| `yellow-fire-shrimp` | 3 | 15 | 25 | 6 | 18–26 | 6,5–8 → 6,5–7,5 | Paket 1 düzeltmesi (PFK taraması): pH üst sınırı Farmer'ın kiraz karides kutusundan (pH 6,5–7,5); sıcaklık değişmedi |
+| `amano-shrimp` | 5 | 20 | 30 | 5 | 15–28 → 18–27 | 6–8 → 6–7,5 | Paket 1 düzeltmesi (PFK taraması): Fishkeeper 15–28 °C, pH 6–8 ∩ Hill (tutma) 18–27 °C, pH 6,0–7,5 ∩ Gay 18–27 °C, pH 6–8; Clarke'ın "25 °C altında en iyi" ifadesi en iyi aralık olduğu için kullanılmadı |
