@@ -4855,12 +4855,12 @@ for (const id of [
 ]) {
   const profile = speciesCatalog.find((item) => item.id === id);
   assert(profile, `${id} doğrulanan Caridina kataloğunda bulunmalı`);
-  assert.deepEqual(profile.temperature, [19, 22], `${id} hassas Taiwan Bee sıcaklık aralığını korumalı`);
-  assert.deepEqual(profile.ph, [5.5, 6.5], `${id} aktif toprak ve asidik su gereksinimini korumalı`);
-  assert.equal(profile.minGroup, 6, `${id} tek birey olarak önerilmemeli`);
+  assert.deepEqual(profile.temperature, [18, 22], `${id} Fishkeeper ile Practical Fishkeeping'in ortak Taiwan Bee sıcaklık aralığını taşımalı`);
+  assert.deepEqual(profile.ph, [6.5, 6.8], `${id} yumuşak ve asidik su gereksinimini taşımalı`);
+  assert.equal(profile.minGroup, 5, `${id} tek birey olarak önerilmemeli`);
   assert(profile.husbandryCaution?.includes("GH/TDS"), `${id} aktif toprak ve mineral kararlılığı uyarısı taşımalı`);
-  assert.equal(profile.verifiedAt, "2026-08-27", `${id} güncel doğrulama tarihi taşımalı`);
-  assert(/^https:\/\/aquarubi\.com\//.test(profile.sourceUrl || ""), `${id} doğrulanabilir yerel ikinci kaynak taşımalı`);
+  assert.equal(profile.verifiedAt, "2026-10-20", `${id} omurgasız kaynak yenilemesinin doğrulama tarihini taşımalı`);
+  assert((profile.additionalSourceUrls ?? []).some((url) => /^https:\/\/aquarubi\.com\//.test(url)), `${id} eski yerel satış kaynağını ek kaynak olarak korumalı`);
 }
 for (const retailName of [
   "Taiwan Bee Red Extreme",
@@ -5373,33 +5373,35 @@ for (const [id, scientificName, size, volume, length, group, temperature, ph, fl
 }
 assert(speciesCatalog.find((item) => item.id === "orange-venezuela-cory")?.husbandryCaution?.includes("Fishkeeper 19–25 °C"), "Orange Venezuela çöpçüsü kaynaklar arasındaki su değeri farkını açıklamalı");
 // 2026-10-20 omurgasız kaynak yenilemesi 1 (docs/CATALOG_LOG.md, docs/DATA_SOURCES.md → "Omurgasızlar"): Neocaridina karidesleri ve
-// Amano. Sıcaklık ve pH, aralık veren kabul edilen kaynakların ortak aralığı: Fishkeeper'ın form sayfası (yoksa türün sayfası) ve
-// Practical Fishkeeping'in iki yazısı (Dunn: Neocaridina 18–28 °C, pH 6,5–8,0; Horvath: N. davidi 18–26 °C, pH 6,5–8). Hacim ve grup
+// Amano. Sıcaklık ve pH, aralık veren kabul edilen kaynakların tutma aralıklarının ortak aralığı: Fishkeeper'ın form sayfası (yoksa türün
+// sayfası) ve Practical Fishkeeping'in yazıları (Dunn: Neocaridina 18–28 °C, pH 6,5–8,0; Horvath: N. davidi 18–26 °C, pH 6,5–8; Farmer:
+// kiraz karides 16–28 °C, pH 6,5–7,5; Amano'da Hill ve Gay 18–27 °C, Hill pH 6,0–7,5). Hacim ve grup
 // Practical Fishkeeping'den (Neocaridina en az 15 L, en az altılı), Amano'da OATA'dan (yaklaşık 20 L, en az beşli).
 // Sıra: bilimsel ad, boy, hacim, uzunluk, en az grup, sıcaklık, pH, akıntı, ana kaynak (tam adres).
 const fishkeeperShrimp = (slug) => `https://www.fishkeeper.co.uk/fish/freshwater/${slug}`;
 const pfkNeocaridinaFaq = "https://www.practicalfishkeeping.co.uk/features/frequently-asked-questions-on-neocaridina-shrimps/";
+const pfkFeature = (slug) => `https://www.practicalfishkeeping.co.uk/features/${slug}/`;
 const pfkShrimpIntroduction = "https://www.practicalfishkeeping.co.uk/features/an-introduction-to-shrimp/";
 const oataShrimpAndSnails = "https://ornamentalfish.org/what-we-do/advice-information/care-sheets/caresheets-tropical-freshwater-invertebrates/how-to-look-after-freshwater-shrimp-and-snails/";
 const invertebrateRecords1 = {
-  "cherry-shrimp": ["Neocaridina davidi", 3, 15, 25, 6, [18, 26], [6.5, 8], "low", fishkeeperShrimp("miscellaneous/cherry-shrimp")],
-  "blue-dream-shrimp": ["Neocaridina davidi", 3, 15, 25, 6, [18, 26], [6.5, 8], "low", fishkeeperShrimp("miscellaneous/cherry-shrimp")],
-  "orange-sakura-shrimp": ["Neocaridina davidi", 3, 15, 25, 6, [18, 26], [6.5, 8], "low", fishkeeperShrimp("miscellaneous/cherry-shrimp")],
-  "green-jade-shrimp": ["Neocaridina davidi", 3, 15, 25, 6, [18, 26], [6.5, 8], "low", fishkeeperShrimp("miscellaneous/cherry-shrimp")],
-  "bloody-mary-shrimp": ["Neocaridina davidi", 3, 15, 25, 6, [18, 26], [6.5, 8], "low", fishkeeperShrimp("miscellaneous/cherry-shrimp")],
-  "black-rose-shrimp": ["Neocaridina davidi", 3, 15, 30, 6, [18, 26], [6.5, 8], "low", fishkeeperShrimp("miscellaneous/cherry-shrimp")],
-  "blue-angel-shrimp": ["Neocaridina davidi", 3, 15, 30, 6, [18, 26], [6.5, 8], "low", fishkeeperShrimp("miscellaneous/cherry-shrimp")],
-  "red-sakura-shrimp": ["Neocaridina davidi", 3, 15, 30, 6, [18, 26], [6.5, 8], "low", fishkeeperShrimp("miscellaneous/cherry-shrimp")],
-  "blue-jelly-shrimp": ["Neocaridina davidi", 3, 15, 30, 6, [18, 26], [6.5, 8], "low", fishkeeperShrimp("miscellaneous/cherry-shrimp")],
-  "green-jelly-shrimp": ["Neocaridina davidi", 3, 15, 30, 6, [18, 26], [6.5, 8], "low", fishkeeperShrimp("miscellaneous/cherry-shrimp")],
-  "chocolate-shrimp": ["Neocaridina davidi", 3, 15, 30, 6, [18, 26], [6.5, 8], "low", fishkeeperShrimp("miscellaneous/cherry-shrimp")],
-  "red-rili-shrimp": ["Neocaridina davidi", 3, 15, 30, 6, [18, 25], [6.5, 8], "low", fishkeeperShrimp("crustaceans/rili-shrimp")],
-  "orange-rili-shrimp": ["Neocaridina davidi", 3, 15, 30, 6, [18, 25], [6.5, 8], "low", fishkeeperShrimp("crustaceans/rili-shrimp")],
-  "carbon-rili-shrimp": ["Neocaridina davidi", 3, 15, 30, 6, [18, 25], [6.5, 8], "low", fishkeeperShrimp("crustaceans/rili-shrimp")],
-  "blue-black-rili-shrimp": ["Neocaridina davidi", 3, 15, 30, 6, [18, 25], [6.5, 8], "low", fishkeeperShrimp("crustaceans/rili-shrimp")],
-  "yellow-fire-shrimp": ["Neocaridina davidi", 3, 15, 25, 6, [18, 26], [6.5, 8], "low", fishkeeperShrimp("miscellaneous/yellow-fire-shrimp")],
+  "cherry-shrimp": ["Neocaridina davidi", 3, 15, 25, 6, [18, 26], [6.5, 7.5], "low", fishkeeperShrimp("miscellaneous/cherry-shrimp")],
+  "blue-dream-shrimp": ["Neocaridina davidi", 3, 15, 25, 6, [18, 26], [6.5, 7.5], "low", fishkeeperShrimp("miscellaneous/cherry-shrimp")],
+  "orange-sakura-shrimp": ["Neocaridina davidi", 3, 15, 25, 6, [18, 26], [6.5, 7.5], "low", fishkeeperShrimp("miscellaneous/cherry-shrimp")],
+  "green-jade-shrimp": ["Neocaridina davidi", 3, 15, 25, 6, [18, 26], [6.5, 7.5], "low", fishkeeperShrimp("miscellaneous/cherry-shrimp")],
+  "bloody-mary-shrimp": ["Neocaridina davidi", 3, 15, 25, 6, [18, 26], [6.5, 7.5], "low", fishkeeperShrimp("miscellaneous/cherry-shrimp")],
+  "black-rose-shrimp": ["Neocaridina davidi", 3, 15, 30, 6, [18, 26], [6.5, 7.5], "low", fishkeeperShrimp("miscellaneous/cherry-shrimp")],
+  "blue-angel-shrimp": ["Neocaridina davidi", 3, 15, 30, 6, [18, 26], [6.5, 7.5], "low", fishkeeperShrimp("miscellaneous/cherry-shrimp")],
+  "red-sakura-shrimp": ["Neocaridina davidi", 3, 15, 30, 6, [18, 26], [6.5, 7.5], "low", fishkeeperShrimp("miscellaneous/cherry-shrimp")],
+  "blue-jelly-shrimp": ["Neocaridina davidi", 3, 15, 30, 6, [18, 26], [6.5, 7.5], "low", fishkeeperShrimp("miscellaneous/cherry-shrimp")],
+  "green-jelly-shrimp": ["Neocaridina davidi", 3, 15, 30, 6, [18, 26], [6.5, 7.5], "low", fishkeeperShrimp("miscellaneous/cherry-shrimp")],
+  "chocolate-shrimp": ["Neocaridina davidi", 3, 15, 30, 6, [18, 26], [6.5, 7.5], "low", fishkeeperShrimp("miscellaneous/cherry-shrimp")],
+  "red-rili-shrimp": ["Neocaridina davidi", 3, 15, 30, 6, [18, 25], [6.5, 7.5], "low", fishkeeperShrimp("crustaceans/rili-shrimp")],
+  "orange-rili-shrimp": ["Neocaridina davidi", 3, 15, 30, 6, [18, 25], [6.5, 7.5], "low", fishkeeperShrimp("crustaceans/rili-shrimp")],
+  "carbon-rili-shrimp": ["Neocaridina davidi", 3, 15, 30, 6, [18, 25], [6.5, 7.5], "low", fishkeeperShrimp("crustaceans/rili-shrimp")],
+  "blue-black-rili-shrimp": ["Neocaridina davidi", 3, 15, 30, 6, [18, 25], [6.5, 7.5], "low", fishkeeperShrimp("crustaceans/rili-shrimp")],
+  "yellow-fire-shrimp": ["Neocaridina davidi", 3, 15, 25, 6, [18, 26], [6.5, 7.5], "low", fishkeeperShrimp("miscellaneous/yellow-fire-shrimp")],
   "white-pearl-shrimp": ["Neocaridina cf. zhangjiajiensis", 3, 15, 30, 6, [18, 28], [6.5, 8], "low", pfkNeocaridinaFaq],
-  "amano-shrimp": ["Caridina multidentata", 5, 20, 30, 5, [15, 28], [6, 8], "medium", fishkeeperShrimp("miscellaneous/amano-shrimp")],
+  "amano-shrimp": ["Caridina multidentata", 5, 20, 30, 5, [18, 27], [6, 7.5], "medium", fishkeeperShrimp("miscellaneous/amano-shrimp")],
 };
 for (const [id, [scientificName, size, volume, length, group, temperature, ph, flow, source]] of Object.entries(invertebrateRecords1)) {
   const profile = speciesCatalog.find((item) => item.id === id);
@@ -5409,11 +5411,56 @@ for (const [id, [scientificName, size, volume, length, group, temperature, ph, f
   const sources = [profile?.sourceUrl ?? "", ...(profile?.additionalSourceUrls ?? [])];
   assert(sources.includes(oataShrimpAndSnails), `${id} OATA'nın karides ve salyangoz kartını kaynak olarak taşımalı`);
   if (scientificName.startsWith("Neocaridina")) assert(sources.includes(pfkNeocaridinaFaq), `${id} hacim ve grup için Practical Fishkeeping'e bağlanmalı`);
-  // Horvath'ın N. davidi aralığı (18–26 °C) ortak aralığın üst sınırını belirliyor.
+  // Horvath'ın N. davidi aralığı (18–26 °C) sıcaklığın, Farmer'ın kiraz karides kutusu (pH 6,5–7,5) pH'ın üst sınırını belirliyor.
   if (scientificName === "Neocaridina davidi") assert(sources.includes(pfkShrimpIntroduction), `${id} sıcaklık üst sınırı için Practical Fishkeeping'in karides girişine bağlanmalı`);
+  if (scientificName === "Neocaridina davidi") assert(sources.includes(pfkFeature("how-to-set-up-a-microhabitat-nano-aquarium")), `${id} pH üst sınırı için Farmer'ın yazısına bağlanmalı`);
+  if (id === "amano-shrimp") assert(["amano-shrimp-spineless-heroes", "how-to-set-up-a-taiwanese-biotope-aquarium"].every((slug) => sources.includes(pfkFeature(slug))), "Amano sıcaklık ve pH aralığı için Hill ve Gay'in yazılarına bağlanmalı");
   assert(!sources.some((url) => url.includes("seriouslyfish.com/species/")), `${id} Seriously Fish'te olmayan bir omurgasız sayfasına bağlanmamalı`);
   assert.deepEqual([profile?.predatory === true, profile?.speciesOnly === true], [false, false], `${id} avcılık ve tür akvaryumu işareti taşımamalı`);
 }
+// 2026-10-20 omurgasız kaynak yenilemesi 2 (docs/CATALOG_LOG.md, docs/DATA_SOURCES.md → "Omurgasızlar"): Caridina, Atyopsis, Atya ve
+// Pinokyo karides. Sıcaklık ve pH aralık veren kabul edilen kaynakların tutma aralıklarının ortak aralığı (bee hatlarında Fishkeeper,
+// Horvath, Lukhaup 17–22 °C, Monks pH 6,5–7,0 ve Farmer pH 6,5–7,5); aralık veren kaynak yoksa kayıttaki değer korunur. Hacim türe
+// özgü kaynaktan (Practical Fishkeeping, ör. bambuda Monks'un 60 × 30 × 30 cm'si, yoksa wirbellose.de); yayımlanmıyorsa kayıttaki değer;
+// grup OATA'nın en az beşlisi.
+// Sıra: bilimsel ad, boy, hacim, uzunluk, en az grup, sıcaklık, pH, akıntı, su türleri, ana kaynak (tam adres).
+const fishkeeperPage = (slug) => `https://www.fishkeeper.co.uk/fish/freshwater/miscellaneous/${slug}`;
+const beeLine = ["Caridina cantonensis", 3, 12, 30, 5, [18, 22], [6.5, 6.8], "low", undefined, fishkeeperPage("black-crystal-bee-shrimp")];
+const invertebrateRecords2 = {
+  "caridina-crystal": ["Caridina cantonensis", 3, 12, 30, 5, [18, 22], [6.5, 6.8], "low", undefined, fishkeeperPage("crystal-red-shrimp")],
+  ...Object.fromEntries(["crystal-black-shrimp", "blue-bolt-shrimp", "king-kong-shrimp", "panda-shrimp", "red-wine-shrimp", "taiwan-bee-red-shrimp", "taiwan-bee-yellow-kingkong",
+    "taiwan-bee-black-shrimp", "blue-shadow-mosura-shrimp", "snow-white-shrimp", "red-pinto-shrimp", "red-fancy-tiger-shrimp", "red-galaxy-shrimp", "prl-shrimp",
+    "black-galaxy-shrimp", "black-pinto-shrimp", "black-fancy-tiger-shrimp"].map((id) => [id, beeLine])),
+  "tiger-shrimp": ["Caridina mariae", 3.5, 40, 40, 5, [18, 23], [6, 6.8], "low", undefined, pfkFeature("an-introduction-to-shrimp")],
+  "blue-tiger-shrimp": ["Caridina mariae", 3.5, 40, 40, 5, [18, 23], [6, 6.8], "low", undefined, pfkFeature("an-introduction-to-shrimp")],
+  "serrata-dwarf-shrimp": ["Caridina serrata", 3, 12, undefined, 5, [20, 25], [6, 7], "low", undefined, "https://www.wirbellose.de/artendatenbank/caridina-serrata-tuepfel-tuepfel-zwerggarnele/"],
+  "cardinal-sulawesi-shrimp": ["Caridina dennerli", 2.5, 15, 40, 5, [27, 29], [7.8, 8.5], "medium", undefined, pfkFeature("the-jewels-of-sulawesi")],
+  "pinocchio-shrimp": ["Caridina gracilirostris", 4, 100, 40, 5, [20, 27], [6.5, 7.5], "medium", ["brackish"], pfkFeature("how-do-i-keep-rednose-shrimp")],
+  "bamboo-shrimp": ["Atyopsis moluccensis", 9, 54, 60, 5, [23, 29], [6.5, 7.5], "high", undefined, fishkeeperPage("bamboo-shrimp-")],
+  "vampire-shrimp": ["Atya gabonensis", 15, 120, 80, 5, [24, 28], [6.5, 8], "high", undefined, fishkeeperPage("giant-fan-shrimp")],
+};
+for (const [id, [scientificName, size, volume, length, group, temperature, ph, flow, waterTypes, source]] of Object.entries(invertebrateRecords2)) {
+  const profile = speciesCatalog.find((item) => item.id === id);
+  assert.deepEqual([profile?.scientificName, profile?.adultSizeCm, profile?.minVolumeL, profile?.minTankLengthCm, profile?.minGroup, profile?.temperature, profile?.ph, profile?.flow, profile?.waterTypes], [scientificName, size, volume, length, group, temperature, ph, flow, waterTypes], `${id} kabul edilen omurgasız kaynaklarının bakım eşiklerini taşımalı`);
+  assert.equal(profile?.sourceUrl, source, `${id} ana bakım kaynağına bağlanmalı`);
+  assert.equal(profile?.verifiedAt, "2026-10-20", `${id} kaynak okuma tarihini taşımalı`);
+  const sources = [profile?.sourceUrl ?? "", ...(profile?.additionalSourceUrls ?? [])];
+  assert(sources.includes(oataShrimpAndSnails), `${id} OATA'nın karides ve salyangoz kartını kaynak olarak taşımalı`);
+  // Bee ve tiger hatlarının aralığını Practical Fishkeeping belirliyor: Horvath (ikisi), bee hatlarında ayrıca Lukhaup (17–22 °C), Monks (pH 6,5–7,0)
+  // ve Farmer (Crystal Red pH 6,5–7,5).
+  if (["Caridina cantonensis", "Caridina mariae"].includes(scientificName)) assert(sources.includes(pfkShrimpIntroduction), `${id} sıcaklık aralığı için Practical Fishkeeping'in karides girişine bağlanmalı`);
+  if (scientificName === "Caridina cantonensis") assert(sources.includes(pfkFeature("freshwater-shrimps-the-next-generation")) && sources.includes("https://www.practicalfishkeeping.co.uk/fishkeeping-answers/will-my-shrimp-hybridise/"), `${id} Lukhaup ve Monks'un yazılarına bağlanmalı`);
+  if (scientificName === "Caridina cantonensis") assert(sources.includes(pfkFeature("how-to-set-up-a-microhabitat-nano-aquarium")), `${id} pH alt sınırı için Farmer'ın yazısına bağlanmalı`);
+  if (id === "bamboo-shrimp") assert(sources.includes(pfkFeature("fans-of-flow-keeping-bamboo-shrimp")), "Bambu karides akvaryum ölçüsü için Monks'un yazısına bağlanmalı");
+  assert(!sources.some((url) => url.includes("seriouslyfish.com/species/")), `${id} Seriously Fish'te olmayan bir omurgasız sayfasına bağlanmamalı`);
+  assert.deepEqual([profile?.predatory === true], [false], `${id} avcılık işareti taşımamalı`);
+}
+// Pinokyo karides acı su canlısıdır; tatlı su akvaryumunda uyarı alır ve bunun nedenini kullanıcıya açıklar.
+const pinocchio = speciesCatalog.find((item) => item.id === "pinocchio-shrimp");
+assert(pinocchio?.husbandryCaution?.includes("acı su") && pinocchio.husbandryCaution.includes("100 litre"), "Pinokyo karides acı su ve akvaryum gereksinimini açıklamalı");
+assert.equal(speciesForCatalogExactSearch("Pinokyo karides", "shrimp", "freshwater"), undefined, "Pinokyo karides tatlı su aramasında önerilmemeli");
+assert.equal(speciesForCatalogExactSearch("Pinokyo karides", "shrimp", "brackish")?.id, "pinocchio-shrimp", "Pinokyo karides acı su aramasında bulunmalı");
+assert.equal(speciesCatalog.find((item) => item.id === "serrata-dwarf-shrimp")?.speciesOnly, true, "Caridina serrata tür akvaryumu işaretini korumalı");
 assert(speciesCatalog.find((item) => item.id === "giant-danio")?.husbandryCaution?.includes("8 cm standart boy") && speciesCatalog.find((item) => item.id === "giant-danio")?.husbandryCaution?.includes("10 cm korunur"), "Dev danio kaynağın boyu ile korunan katalog boyunu kullanıcıya açıklamalı");
 assert.equal(speciesForCatalogExactSearch("Osteogaster aenea", "fish", "freshwater")?.id, "bronze-cory", "Güncel Osteogaster aenea adı siyah üretim formunu değil bronz çöpçüyü bulmalı");
 const commonPleco = speciesCatalog.find((item) => item.id === "common-pleco");
@@ -6739,8 +6786,8 @@ assert.equal(unresolvedTangerineTiger?.additionalSourceUrls.length, 4, "Tangerin
 assert.equal(speciesForCatalogExactSearch("Tangerine Tiger Shrimp", "shrimp", "freshwater"), undefined, "Bilimsel türü doğrulanmayan Tangerine Tiger güvenli profile otomatik bağlanmamalı");
 assert.equal(unresolvedSpeciesForSearch("Tangerine Tiger Shrimp", "shrimp", "saltwater"), undefined, "Tangerine Tiger güvenlik kaydı deniz akvaryumunda görünmemeli");
 const serrataDwarfShrimp = speciesCatalog.find((item) => item.id === "serrata-dwarf-shrimp");
-assert.deepEqual([serrataDwarfShrimp?.scientificName, serrataDwarfShrimp?.adultSizeCm, serrataDwarfShrimp?.minVolumeL, serrataDwarfShrimp?.minTankLengthCm, serrataDwarfShrimp?.minGroup], ["Caridina serrata", 3, 20, undefined, 10], "Caridina serrata kaynaklı kimlik, boy, hacim ve grup eşiklerini taşımalı");
-assert.deepEqual([serrataDwarfShrimp?.temperature, serrataDwarfShrimp?.ph, serrataDwarfShrimp?.flow], [[22, 26], [6, 7], "low"], "Caridina serrata kaynaklı su gereksinimlerini taşımalı");
+assert.deepEqual([serrataDwarfShrimp?.scientificName, serrataDwarfShrimp?.adultSizeCm, serrataDwarfShrimp?.minVolumeL, serrataDwarfShrimp?.minTankLengthCm, serrataDwarfShrimp?.minGroup], ["Caridina serrata", 3, 12, undefined, 5], "Caridina serrata kaynaklı kimlik, boy, hacim ve grup eşiklerini taşımalı");
+assert.deepEqual([serrataDwarfShrimp?.temperature, serrataDwarfShrimp?.ph, serrataDwarfShrimp?.flow], [[20, 25], [6, 7], "low"], "Caridina serrata kaynaklı su gereksinimlerini taşımalı");
 assert.equal(serrataDwarfShrimp?.speciesOnly, true, "Caridina serrata bilimsel kimliği doğrulanmış ayrı koloni profili olmalı");
 assert(serrataDwarfShrimp?.husbandryCaution?.includes("Tangerine Tiger") && serrataDwarfShrimp.husbandryCaution.includes("Pinto/Mischling"), "Caridina serrata ticari hat adlarıyla otomatik eşlenmeme uyarısını taşımalı");
 assert(serrataDwarfShrimp?.tankLengthDataNote?.includes("tahmin edilmedi"), "Caridina serrata yayımlanmayan akvaryum uzunluğunu tahmin etmemeli");

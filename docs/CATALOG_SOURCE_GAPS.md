@@ -61,4 +61,12 @@ Yol haritasının 2. adımında (`docs/DECISIONS/0020-urun-hedefleri-ve-yol-hari
 | `jonklaas-lipstick-goby` | Jonklaas ruj gobisi | *Sicyopus jonklaasi* | Türün uzman bakım kaynağı yok; Seriously Fish'e göre bu adla satılanlar çoğunlukla *S. exallisquamulus* (ayrı profil). Bakım notuna kimlik uyarısı eklendi (Kimlik paketi 4) |
 | `red-tailed-snakehead` | Kırmızı kuyruklu yılanbaş | *Channa limbata* | Catalog of Fishes türü geçerli sayıyor; Seriously Fish ve FishBase *C. gachua*'nın eş anlamlısı sayıyor. Uzman bakım kaynağı tür adıyla yok; mevcut kaynak korundu |
 
-Ayrıca açık: karides (40) ve salyangoz (16) kayıtlarının da uzman bakım kaynağı yok. Ürün sahibi 2026-10-20'de kaynak seçimini Claude'a bıraktı; seçim gerekçeleriyle `docs/DATA_SOURCES.md`'ye yazılacak. Melek balığı ve Çin ejderinin en az grup sayısı için başka uzman kaynaklar aranıyor; açık bir sayı bulunamazsa değerler olduğu gibi kalır.
+Melek balığı ve Çin ejderinin en az grup sayısı için başka uzman kaynaklar aranıyor; açık bir sayı bulunamazsa değerler olduğu gibi kalır.
+
+## Uzman bakım kaynağında bulunamayan omurgasızlar (2026-10-20, geliştirilecek)
+
+Karides ve salyangoz için kabul edilen kaynaklar ürün sahibinin 2026-10-20 kararıyla seçildi (`docs/DATA_SOURCES.md` → "Omurgasızlar"). Karidesler iki pakette kaynaklandı (`docs/CATALOG_LOG.md` → "2026-10-20 Omurgasız kaynak yenilemesi 1" ve "2"). Kabul edilen hiçbir kaynakta bulunamayanlar değerleriyle kalır ve aynı balık listesindeki gibi geliştirilmek üzere tutulur; salyangozlar sonraki pakette.
+
+| Kimlik | Ad | Bilimsel ad | Durum |
+|---|---|---|---|
+| `ghost-shrimp` | Hayalet karides | *Palaemonetes paludosus* | Fishkeeper, Practical Fishkeeping ve wirbellose.de'de sayfası yok (wirbellose.de'de yalnız *P. ivonicus* ve *P. antennarius*); kayıt eski kaynağıyla kaldı |

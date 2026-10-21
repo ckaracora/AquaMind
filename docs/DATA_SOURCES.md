@@ -50,8 +50,8 @@ Gözlemler:
 Kabul edilen kaynaklar (öncelik sırasıyla):
 
 1. **Fishkeeper (Maidenhead Aquatics):** tür ya da form sayfası olan taksonlarda ana kaynaktır (sıcaklık, pH, sertlik, boy, sosyal yapı, tank arkadaşı). Balıklarda da kabul edilen kurumsal yayıncıdır; satılan formları (rili, yellow fire, crystal red) ayrı sayfalarla kapsar.
-2. **Practical Fishkeeping:** adlı yazarların makaleleri. Neocaridina için en küçük akvaryumu ve en az grup sayısını, Caridina ve Sulawesi türleri için su değerlerini verir. Tür grubuna özgü sayı veren tek kurumsal kaynaktır.
-3. **wirbellose.de (Almanca omurgasız veri tabanı):** yalnız ilk iki kaynağın kapsamadığı yerde kullanılır. İlk ikisinin kapsamadığı taksonlarda bütün alanlar için kullanılır (ör. *Caridina serrata*, *Planorbella duryi*, *Brotia*). İlk ikisinin kapsadığı taksonlarda yalnız onların vermediği alan için kullanılır; ör. Practical Fishkeeping'in su değerlerini verdiği *C. mariae* ve *C. dennerli*'de ya da Fishkeeper'ın kapsadığı *Tylomelania* ve nerit salyangozlarında akvaryum ölçüsü. Değerleri sıcaklık, pH ve akvaryum ölçüsüdür.
+2. **Practical Fishkeeping:** adlı yazarların makaleleri ve okur sorularına verdikleri yanıtlar; kurulum ve biyotop yazılarındaki tür kutuları da buna dahildir. Neocaridina için en küçük akvaryumu ve en az grup sayısını, Caridina ve Sulawesi türleri için su değerlerini verir. Tür grubuna özgü sayı veren tek kurumsal kaynaktır. Site, kendi aramasıyla (başlık ve özet) taranır; taranan ve değer veren yazılar katalog günlüğünde listelenir, tarama üç ayda bir yinelenir.
+3. **wirbellose.de (Almanca omurgasız veri tabanı):** yalnız ilk iki kaynağın kapsamadığı yerde kullanılır. İlk ikisinin kapsamadığı taksonlarda bütün alanlar için kullanılır (ör. *Caridina serrata*, *Planorbella duryi*, *Brotia*). İlk ikisinin kapsadığı taksonlarda yalnız onların vermediği alan için kullanılır: ör. Practical Fishkeeping'in su değerlerini verdiği *C. dennerli*'de ve Fishkeeper'ın kapsadığı *Tylomelania* ile nerit salyangozlarında akvaryum ölçüsü, *C. mariae*'de boy (wirbellose.de'nin *C. mariae* sayfası akvaryum ölçüsü vermiyor). Değerleri sıcaklık, pH ve akvaryum ölçüsüdür.
    - Gerekçe: omurgasızlarda Seriously Fish'e en yakın kaynaktır; alanları sabittir ve uzun süredir yayındadır.
    - Zayıf yanları: yazar ve tarih tür sayfasında değil, kategori listesinde yazar; kaynakça yoktur. Bazı alanlar bakıcının kendi suyunu anlatır ya da açıkça hatalıdır.
    - Bu yüzden yalnız tür aralığı olarak yazılmış alanlar alınır; bakıcı anekdotu ve hatalı görünen alan kullanılmaz.
@@ -79,10 +79,11 @@ Kabul edilmeyenler:
 
 Değer kuralı (balıklardaki kuralın omurgasız karşılığı):
 
-- **Sıcaklık ve pH:** aralık veren kabul edilen kaynakların ortak aralığı (koruyucu; balıklardaki karar 0014 yöntemi). Fishkeeper'da form sayfası varsa formun sayfası, yoksa türün sayfası alınır. OATA'nın genel aralığı türe özgü olmadığı için hesaba katılmaz. Ortak aralığa giren kaynakların değerleri ve aradaki fark katalog günlüğüne yazılır.
+- **Sıcaklık ve pH:** aralık veren kabul edilen kaynakların tutma (dayanma) aralıklarının ortak aralığı (koruyucu; balıklardaki karar 0014 yöntemi). Şunlar kullanılmaz, günlüğe not edilir: "en iyi", "ideal" ya da üreme için verilen dar aralıklar; farklı cinsleri tek değerle anlatan satıcı ve ürün yazıları; okurun kendi akvaryumunun değerleri; birim hatası olan değerler (ör. °C yerine °F yazılmış). Fishkeeper'da form sayfası varsa formun sayfası, yoksa türün sayfası alınır. OATA'nın genel aralığı türe özgü olmadığı için hesaba katılmaz. Ortak aralığa giren kaynakların değerleri ve aradaki fark katalog günlüğüne yazılır. Aralık veren kabul edilen kaynak yoksa kayıttaki değer korunur ve kaynakların verdiği tekil değerlerle (ör. "yaklaşık 29 °C", "pH 7,5'ten") tutarlı olduğu günlüğe yazılır; bakıcının kendi suyunu anlatan değer kullanılmaz.
 - **Boy:** katalog ile kaynağın büyüğü.
-- **Akvaryum:** hacim için türe ya da cinse özgü kaynak değeri; yoksa OATA tabanı; hiçbir zaman OATA tabanının altında değil. Uzunluk yayımlanmıyorsa kayıttaki değer korunur.
-- **Grup:** türe ya da cinse özgü kaynak sayısı; yoksa karideste OATA'nın 5'i; salyangozda kaynak grup demiyorsa 1.
+- **Akvaryum:** hacim için türe ya da cinse özgü kaynak değeri. Hiçbir kabul edilen kaynak yayımlamıyorsa kayıttaki değer korunur; hiçbir durumda OATA tabanının altında değil (OATA'nın 10–20 L'lik tabanı küçük karides ve salyangozlar içindir, iri türlerin değerini düşürmek için kullanılmaz). Uzunluk yayımlanmıyorsa kayıttaki değer korunur.
+- **Su türü:** kaynak acı ya da deniz suyu gerektiriyorsa kayıt o su türüne bağlanır ("Canlı verisi için özel kaynak kuralı"); tuzluluk aralığı kaynakta yoksa yazılmaz.
+- **Grup:** türe ya da cinse özgü kaynak sayısı; kaynaklar farklı sayı veriyorsa türe ya da cinse adanmış yazının sayısı; yoksa karideste OATA'nın 5'i; salyangozda kaynak grup demiyorsa 1.
 - **Nitelikler:** kaynakla doğrudan çelişen nitelikler (akıntı, avcılık, tür akvaryumu) düzeltilir.
 - **Eski kaynaklar:** ek kaynak olarak kalır.
 - **Okuma:** değerler sayfa açılarak okunur; arama özeti kaynak sayılmaz.
