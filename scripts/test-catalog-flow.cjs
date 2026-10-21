@@ -4822,7 +4822,7 @@ for (const category of livestockCategories) {
 assert.equal(speciesCatalog.filter((item) => speciesGroup(item) === "shrimp").length, 44, "Karides kataloğu doğrulanmış Caridina serrata dahil yaygın tür ve renk varyeteleriyle 44 biyolojik bakım profili içermeli");
 assert.equal(speciesCatalog.filter((item) => speciesGroup(item) === "snail").length, 19, "Salyangoz kataloğu yinelenen Pomacea diffusa kaydı olmadan 19 benzersiz bakım profili içermeli");
 const mysterySnail = speciesCatalog.find((item) => item.id === "apple-snail");
-assert.deepEqual([mysterySnail?.scientificName,mysterySnail?.adultSizeCm,mysterySnail?.minVolumeL,mysterySnail?.minTankLengthCm,mysterySnail?.temperature,mysterySnail?.ph], ["Pomacea diffusa",6,40,undefined,[20,28],[7.2,7.8]], "Pomacea diffusa tek kaynaklı Mystery salyangoz profilinde güvenli eşikleri taşımalı");
+assert.deepEqual([mysterySnail?.scientificName,mysterySnail?.adultSizeCm,mysterySnail?.minVolumeL,mysterySnail?.minTankLengthCm,mysterySnail?.temperature,mysterySnail?.ph], ["Pomacea diffusa",8,40,60,[22,28],[7.2,8]], "Pomacea diffusa Mystery salyangoz profili kabul edilen kaynakların eşiklerini taşımalı");
 assert.equal(speciesCatalog.filter((item) => item.scientificName === "Pomacea diffusa").length, 1, "Pomacea diffusa çelişen iki ayrı bakım profili olarak çoğaltılmamalı");
 assert.equal(speciesForCatalogExactSearch("Mystery Snail", "snail", "freshwater")?.id, "apple-snail", "Kesin Mystery Snail ortak adı Pomacea diffusa profilini bulmalı");
 assert.equal(speciesForCatalogExactSearch("Elma salyangozu", "snail", "freshwater"), undefined, "Genel Elma salyangozu adı bilimsel kimlik olmadan Pomacea diffusa profiline dönüşmemeli");
@@ -4939,7 +4939,9 @@ for (const [retailName, expectedId] of cikletistSnailInventory) {
 }
 for (const id of ["ramshorn-snail", "poso-orange-rabbit-snail", "assassin-snail", "horned-nerite", "nerite-snail"]) {
   const profile = speciesCatalog.find((item) => item.id === id);
-  assert.equal(profile?.verifiedAt, "2026-08-29", `${id} güncel Cikletist karşılaştırma tarihi taşımalı`);
+  // Omurgasız kaynak yenilemesi 3'te (2026-10-21) kaynaklanan kayıtlar yeni okuma tarihini taşır; ramshorn kabul edilen kaynakta bakım
+  // değeri bulunamadığı için değişmedi. Cikletist adresi ek kaynak olarak kalır.
+  assert.equal(profile?.verifiedAt, id === "ramshorn-snail" ? "2026-08-29" : "2026-10-21", `${id} güncel karşılaştırma tarihini taşımalı`);
   assert(profile?.additionalSourceUrls?.some((url) => url.startsWith("https://www.cikletistpetshop.com/")), `${id} tam yerel satış kaynağını taşımalı`);
 }
 assert.equal(speciesCatalog.find((item) => item.id === "yellow-spotted-rabbit-snail")?.scientificName, "Tylomelania towutica", "Yellow Poso Spotted Rabbit doğrulanan bilimsel kimliği korumalı");
@@ -5376,7 +5378,8 @@ assert(speciesCatalog.find((item) => item.id === "orange-venezuela-cory")?.husba
 // Amano. Sıcaklık ve pH, aralık veren kabul edilen kaynakların tutma aralıklarının ortak aralığı: Fishkeeper'ın form sayfası (yoksa türün
 // sayfası) ve Practical Fishkeeping'in yazıları (Dunn: Neocaridina 18–28 °C, pH 6,5–8,0; Horvath: N. davidi 18–26 °C, pH 6,5–8; Farmer:
 // kiraz karides 16–28 °C, pH 6,5–7,5; Amano'da Hill ve Gay 18–27 °C, Hill pH 6,0–7,5). Hacim ve grup
-// Practical Fishkeeping'den (Neocaridina en az 15 L, en az altılı), Amano'da OATA'dan (yaklaşık 20 L, en az beşli).
+// Practical Fishkeeping'den (Neocaridina en az 15 L, en az altılı), Amano'da OATA'dan (yaklaşık 20 L, en az beşli). N. davidi'nin boyu
+// katalog ile kaynağın büyüğü: Starr-Marshall'ın kiraz karides kutusu "Maximum size: 4cm" (2026-10-21 düzeltmesi).
 // Sıra: bilimsel ad, boy, hacim, uzunluk, en az grup, sıcaklık, pH, akıntı, ana kaynak (tam adres).
 const fishkeeperShrimp = (slug) => `https://www.fishkeeper.co.uk/fish/freshwater/${slug}`;
 const pfkNeocaridinaFaq = "https://www.practicalfishkeeping.co.uk/features/frequently-asked-questions-on-neocaridina-shrimps/";
@@ -5384,22 +5387,22 @@ const pfkFeature = (slug) => `https://www.practicalfishkeeping.co.uk/features/${
 const pfkShrimpIntroduction = "https://www.practicalfishkeeping.co.uk/features/an-introduction-to-shrimp/";
 const oataShrimpAndSnails = "https://ornamentalfish.org/what-we-do/advice-information/care-sheets/caresheets-tropical-freshwater-invertebrates/how-to-look-after-freshwater-shrimp-and-snails/";
 const invertebrateRecords1 = {
-  "cherry-shrimp": ["Neocaridina davidi", 3, 15, 25, 6, [18, 26], [6.5, 7.5], "low", fishkeeperShrimp("miscellaneous/cherry-shrimp")],
-  "blue-dream-shrimp": ["Neocaridina davidi", 3, 15, 25, 6, [18, 26], [6.5, 7.5], "low", fishkeeperShrimp("miscellaneous/cherry-shrimp")],
-  "orange-sakura-shrimp": ["Neocaridina davidi", 3, 15, 25, 6, [18, 26], [6.5, 7.5], "low", fishkeeperShrimp("miscellaneous/cherry-shrimp")],
-  "green-jade-shrimp": ["Neocaridina davidi", 3, 15, 25, 6, [18, 26], [6.5, 7.5], "low", fishkeeperShrimp("miscellaneous/cherry-shrimp")],
-  "bloody-mary-shrimp": ["Neocaridina davidi", 3, 15, 25, 6, [18, 26], [6.5, 7.5], "low", fishkeeperShrimp("miscellaneous/cherry-shrimp")],
-  "black-rose-shrimp": ["Neocaridina davidi", 3, 15, 30, 6, [18, 26], [6.5, 7.5], "low", fishkeeperShrimp("miscellaneous/cherry-shrimp")],
-  "blue-angel-shrimp": ["Neocaridina davidi", 3, 15, 30, 6, [18, 26], [6.5, 7.5], "low", fishkeeperShrimp("miscellaneous/cherry-shrimp")],
-  "red-sakura-shrimp": ["Neocaridina davidi", 3, 15, 30, 6, [18, 26], [6.5, 7.5], "low", fishkeeperShrimp("miscellaneous/cherry-shrimp")],
-  "blue-jelly-shrimp": ["Neocaridina davidi", 3, 15, 30, 6, [18, 26], [6.5, 7.5], "low", fishkeeperShrimp("miscellaneous/cherry-shrimp")],
-  "green-jelly-shrimp": ["Neocaridina davidi", 3, 15, 30, 6, [18, 26], [6.5, 7.5], "low", fishkeeperShrimp("miscellaneous/cherry-shrimp")],
-  "chocolate-shrimp": ["Neocaridina davidi", 3, 15, 30, 6, [18, 26], [6.5, 7.5], "low", fishkeeperShrimp("miscellaneous/cherry-shrimp")],
-  "red-rili-shrimp": ["Neocaridina davidi", 3, 15, 30, 6, [18, 25], [6.5, 7.5], "low", fishkeeperShrimp("crustaceans/rili-shrimp")],
-  "orange-rili-shrimp": ["Neocaridina davidi", 3, 15, 30, 6, [18, 25], [6.5, 7.5], "low", fishkeeperShrimp("crustaceans/rili-shrimp")],
-  "carbon-rili-shrimp": ["Neocaridina davidi", 3, 15, 30, 6, [18, 25], [6.5, 7.5], "low", fishkeeperShrimp("crustaceans/rili-shrimp")],
-  "blue-black-rili-shrimp": ["Neocaridina davidi", 3, 15, 30, 6, [18, 25], [6.5, 7.5], "low", fishkeeperShrimp("crustaceans/rili-shrimp")],
-  "yellow-fire-shrimp": ["Neocaridina davidi", 3, 15, 25, 6, [18, 26], [6.5, 7.5], "low", fishkeeperShrimp("miscellaneous/yellow-fire-shrimp")],
+  "cherry-shrimp": ["Neocaridina davidi", 4, 15, 25, 6, [18, 26], [6.5, 7.5], "low", fishkeeperShrimp("miscellaneous/cherry-shrimp")],
+  "blue-dream-shrimp": ["Neocaridina davidi", 4, 15, 25, 6, [18, 26], [6.5, 7.5], "low", fishkeeperShrimp("miscellaneous/cherry-shrimp")],
+  "orange-sakura-shrimp": ["Neocaridina davidi", 4, 15, 25, 6, [18, 26], [6.5, 7.5], "low", fishkeeperShrimp("miscellaneous/cherry-shrimp")],
+  "green-jade-shrimp": ["Neocaridina davidi", 4, 15, 25, 6, [18, 26], [6.5, 7.5], "low", fishkeeperShrimp("miscellaneous/cherry-shrimp")],
+  "bloody-mary-shrimp": ["Neocaridina davidi", 4, 15, 25, 6, [18, 26], [6.5, 7.5], "low", fishkeeperShrimp("miscellaneous/cherry-shrimp")],
+  "black-rose-shrimp": ["Neocaridina davidi", 4, 15, 30, 6, [18, 26], [6.5, 7.5], "low", fishkeeperShrimp("miscellaneous/cherry-shrimp")],
+  "blue-angel-shrimp": ["Neocaridina davidi", 4, 15, 30, 6, [18, 26], [6.5, 7.5], "low", fishkeeperShrimp("miscellaneous/cherry-shrimp")],
+  "red-sakura-shrimp": ["Neocaridina davidi", 4, 15, 30, 6, [18, 26], [6.5, 7.5], "low", fishkeeperShrimp("miscellaneous/cherry-shrimp")],
+  "blue-jelly-shrimp": ["Neocaridina davidi", 4, 15, 30, 6, [18, 26], [6.5, 7.5], "low", fishkeeperShrimp("miscellaneous/cherry-shrimp")],
+  "green-jelly-shrimp": ["Neocaridina davidi", 4, 15, 30, 6, [18, 26], [6.5, 7.5], "low", fishkeeperShrimp("miscellaneous/cherry-shrimp")],
+  "chocolate-shrimp": ["Neocaridina davidi", 4, 15, 30, 6, [18, 26], [6.5, 7.5], "low", fishkeeperShrimp("miscellaneous/cherry-shrimp")],
+  "red-rili-shrimp": ["Neocaridina davidi", 4, 15, 30, 6, [18, 25], [6.5, 7.5], "low", fishkeeperShrimp("crustaceans/rili-shrimp")],
+  "orange-rili-shrimp": ["Neocaridina davidi", 4, 15, 30, 6, [18, 25], [6.5, 7.5], "low", fishkeeperShrimp("crustaceans/rili-shrimp")],
+  "carbon-rili-shrimp": ["Neocaridina davidi", 4, 15, 30, 6, [18, 25], [6.5, 7.5], "low", fishkeeperShrimp("crustaceans/rili-shrimp")],
+  "blue-black-rili-shrimp": ["Neocaridina davidi", 4, 15, 30, 6, [18, 25], [6.5, 7.5], "low", fishkeeperShrimp("crustaceans/rili-shrimp")],
+  "yellow-fire-shrimp": ["Neocaridina davidi", 4, 15, 25, 6, [18, 26], [6.5, 7.5], "low", fishkeeperShrimp("miscellaneous/yellow-fire-shrimp")],
   "white-pearl-shrimp": ["Neocaridina cf. zhangjiajiensis", 3, 15, 30, 6, [18, 28], [6.5, 8], "low", pfkNeocaridinaFaq],
   "amano-shrimp": ["Caridina multidentata", 5, 20, 30, 5, [18, 27], [6, 7.5], "medium", fishkeeperShrimp("miscellaneous/amano-shrimp")],
 };
@@ -5407,10 +5410,11 @@ for (const [id, [scientificName, size, volume, length, group, temperature, ph, f
   const profile = speciesCatalog.find((item) => item.id === id);
   assert.deepEqual([profile?.scientificName, profile?.adultSizeCm, profile?.minVolumeL, profile?.minTankLengthCm, profile?.minGroup, profile?.temperature, profile?.ph, profile?.flow], [scientificName, size, volume, length, group, temperature, ph, flow], `${id} kabul edilen omurgasız kaynaklarının bakım eşiklerini taşımalı`);
   assert.equal(profile?.sourceUrl, source, `${id} ana bakım kaynağına bağlanmalı`);
-  assert.equal(profile?.verifiedAt, "2026-10-20", `${id} kaynak okuma tarihini taşımalı`);
+  assert.equal(profile?.verifiedAt, scientificName === "Neocaridina davidi" ? "2026-10-21" : "2026-10-20", `${id} kaynak okuma tarihini taşımalı`);
   const sources = [profile?.sourceUrl ?? "", ...(profile?.additionalSourceUrls ?? [])];
   assert(sources.includes(oataShrimpAndSnails), `${id} OATA'nın karides ve salyangoz kartını kaynak olarak taşımalı`);
   if (scientificName.startsWith("Neocaridina")) assert(sources.includes(pfkNeocaridinaFaq), `${id} hacim ve grup için Practical Fishkeeping'e bağlanmalı`);
+  if (scientificName === "Neocaridina davidi") assert(sources.includes("https://www.practicalfishkeeping.co.uk/features/articles/how-to-re-create-a-famous-landmark-in-your-aquarium"), `${id} boy için Starr-Marshall'ın yazısına bağlanmalı`);
   // Horvath'ın N. davidi aralığı (18–26 °C) sıcaklığın, Farmer'ın kiraz karides kutusu (pH 6,5–7,5) pH'ın üst sınırını belirliyor.
   if (scientificName === "Neocaridina davidi") assert(sources.includes(pfkShrimpIntroduction), `${id} sıcaklık üst sınırı için Practical Fishkeeping'in karides girişine bağlanmalı`);
   if (scientificName === "Neocaridina davidi") assert(sources.includes(pfkFeature("how-to-set-up-a-microhabitat-nano-aquarium")), `${id} pH üst sınırı için Farmer'ın yazısına bağlanmalı`);
@@ -5460,6 +5464,72 @@ const pinocchio = speciesCatalog.find((item) => item.id === "pinocchio-shrimp");
 assert(pinocchio?.husbandryCaution?.includes("acı su") && pinocchio.husbandryCaution.includes("100 litre"), "Pinokyo karides acı su ve akvaryum gereksinimini açıklamalı");
 assert.equal(speciesForCatalogExactSearch("Pinokyo karides", "shrimp", "freshwater"), undefined, "Pinokyo karides tatlı su aramasında önerilmemeli");
 assert.equal(speciesForCatalogExactSearch("Pinokyo karides", "shrimp", "brackish")?.id, "pinocchio-shrimp", "Pinokyo karides acı su aramasında bulunmalı");
+// Omurgasız kaynak yenilemesi 3 (2026-10-21): salyangozlar. Sıcaklık ve pH, aralık veren kabul edilen kaynakların tutma aralıklarının ortak
+// aralığı: Fishkeeper; Tylomelania'da ayrıca Lukhaup (27–30 °C); Fishkeeper'ın yalnız cins sayfası olan Pomacea diffusa'da ayrıca türe özgü
+// wirbellose.de kaydı (22–30 °C). Öteki alanlarda wirbellose.de yalnız Fishkeeper ve Practical Fishkeeping'in vermediği yerde kullanılır: Tylomelania hacmi (iri türler en az 45 L), Clithon corona hacmi (20 L), katil salyangoz hacmi (60 L), Pomacea diffusa akvaryum
+// uzunluğu (60 cm); ilk ikisinin kapsamadığı Melanoides'te bütün alanlar (5 L, OATA'nın 10 L'lik tabanına yükseltildi). Tylomelania uzunluğu
+// Lukhaup'tan (11 cm'lik türe 80 cm). Boy katalog ile kaynağın büyüğü. Grup 1: Fishkeeper ve wirbellose.de'nin sayıları üreme ve cinsiyet içindir.
+const wirbelloseEntry = (slug) => `https://www.wirbellose.de/artendatenbank/${slug}/`;
+const pfkSulawesiSnails = "https://www.practicalfishkeeping.co.uk/features/snails-from-sulawesi/";
+const tylomelaniaSources = [pfkSulawesiSnails, wirbelloseEntry("tylomelania-sp")];
+const invertebrateRecords3 = {
+  "rabbit-snail": ["Tylomelania sp.", 12, 45, 80, 1, [27, 30], [7.5, 8.5], "medium", fishkeeperPage("sulawesi-snail"), tylomelaniaSources],
+  "yellow-spotted-rabbit-snail": ["Tylomelania towutica", 12, 45, 80, 1, [27, 30], [7.5, 8.5], "medium", fishkeeperPage("sulawesi-snail"), [...tylomelaniaSources, "https://aquarubi.com/yellow-poso-spotted-rabbit-salyangoz-4-5cm"]],
+  "poso-orange-rabbit-snail": ["Tylomelania sp. Poso Orange", 12, 45, 80, 1, [27, 30], [7.5, 8.5], "medium", fishkeeperPage("sulawesi-snail"), [...tylomelaniaSources, "https://aquarubi.com/poso-orange-rabbit-snail-4-5-cm", "https://www.cikletistpetshop.com/portakal-poso-tavsan-salyangoz-384"]],
+  "poso-yellow-rabbit-snail": ["Tylomelania sp. Poso Yellow", 12, 45, 80, 1, [27, 30], [7.5, 8.5], "medium", fishkeeperPage("sulawesi-snail"), [...tylomelaniaSources, "https://aquarubi.com/poso-yellow-rabbit-snail-4-5-cm"]],
+  "nerite-snail": ["Neritina natalensis", 3, 20, 25, 1, [22, 26], [7.2, 8.2], "medium", fishkeeperPage("zebra-snail"), ["https://www.cikletistpetshop.com/nerite-salyangozyosun-yiyici-1924"]],
+  "horned-nerite": ["Clithon corona", 2, 20, 25, 1, [22, 27], [7.2, 8.2], "medium", fishkeeperPage("bumblebee-horn-snail-"), [wirbelloseEntry("clithon-corona-geweihschnecke-sun-snail"), "https://www.cikletistpetshop.com/nerite-salyangoz-yesil-boynuzlu-yosun-yiyici-1412"]],
+  "assassin-snail": ["Anentome helena", 3, 60, 30, 1, [22, 27], [7.2, 8], "medium", fishkeeperPage("assassin-snail-snail-eating-snail-"), ["https://www.practicalfishkeeping.co.uk/features/natural-born-killers/", "https://www.practicalfishkeeping.co.uk/fishkeeping-answers/how-do-i-deal-with-aquarium-snails/", wirbelloseEntry("clea-helena-raubschnecke-suesswasser-raubschnecke"), "https://www.fishkeeping.co.uk/modules/caresheets/caresheet.php?caresheetID=199", "https://www.cikletistpetshop.com/katil-salyangoz-helena-1410"]],
+  "apple-snail": ["Pomacea diffusa", 8, 40, 60, 1, [22, 28], [7.2, 8], undefined, fishkeeperPage("apple-snail"), [wirbelloseEntry("pomacea-diffusa-spitze-apfelschnecke"), "https://www.business.qld.gov.au/industries/farms-fishing-forestry/agriculture/biosecurity/animals/invasive/other/apple-snail", "https://www.aquasnailbio.com/", "https://jojoaquatics.com/knowledge-base/apple-snail-care-guide/"]],
+  "malaysian-trumpet-snail": ["Melanoides tuberculata", 3, 10, 25, 1, [18, 32], [5.8, 8.6], "low", wirbelloseEntry("melanoides-tuberculatus-malaiische-turmdeckelschnecke-tds"), ["https://www.practicalfishkeeping.co.uk/features/natural-born-killers/", "https://tankandtendril.com/invertebrates/malaysian-trumpet-snail/"]],
+};
+for (const [id, [scientificName, size, volume, length, group, temperature, ph, flow, source, extraSources]] of Object.entries(invertebrateRecords3)) {
+  const profile = speciesCatalog.find((item) => item.id === id);
+  assert.deepEqual([profile?.scientificName, profile?.adultSizeCm, profile?.minVolumeL, profile?.minTankLengthCm, profile?.minGroup, profile?.temperature, profile?.ph, profile?.flow, profile?.waterTypes ?? ["freshwater"]], [scientificName, size, volume, length, group, temperature, ph, flow, ["freshwater"]], `${id} kabul edilen omurgasız kaynakların değerlerini taşımalı`);
+  assert.equal(profile?.sourceUrl, source, `${id} ana bakım kaynağına bağlanmalı`);
+  assert.equal(profile?.verifiedAt, "2026-10-21", `${id} kaynak okuma tarihini taşımalı`);
+  const sources = [profile?.sourceUrl ?? "", ...(profile?.additionalSourceUrls ?? [])];
+  assert(sources.includes(oataShrimpAndSnails), `${id} OATA'nın karides ve salyangoz kartını kaynak olarak taşımalı`);
+  for (const url of extraSources) assert(sources.includes(url), `${id} kaynağını ya da eski kaynağını taşımalı: ${url}`);
+  assert(!sources.some((url) => url.includes("seriouslyfish.com/species/")), `${id} Seriously Fish'te olmayan bir omurgasız sayfasına bağlanmamalı`);
+  assert.deepEqual([profile?.predatory === true, profile?.speciesOnly === true], [false, false], `${id} avcılık ya da tür akvaryumu işareti taşımamalı`);
+  // Fishkeeper ve Lukhaup Tylomelania için yumuşak ve yüksek pH'lı su yazıyor; eski notun "sert" ifadesi kaynakla çelişiyordu.
+  if (profile?.husbandryCaution && scientificName.startsWith("Tylomelania")) assert(profile.husbandryCaution.includes("yumuşak") && !profile.husbandryCaution.includes("sert"), `${id} Tylomelania'nın yumuşak su gereksinimini taşımalı`);
+}
+assert(["yellow-spotted-rabbit-snail", "poso-orange-rabbit-snail", "poso-yellow-rabbit-snail"].every((id) => speciesCatalog.find((item) => item.id === id)?.husbandryCaution?.includes("yumuşak")), "Tavşan salyangozu kayıtları kaynaklı bakım notunu taşımalı");
+const assassinSnail = speciesCatalog.find((item) => item.id === "assassin-snail");
+assert(assassinSnail?.communityCaution?.includes("salyangozları") && assassinSnail.communityCaution.includes("karides yavrusu") && assassinSnail.communityCaution.includes("Balık yumurtasını") && assassinSnail.communityCaution.includes("hareketsiz balık yavrusunu"), "Katil salyangoz salyangoz avlama, balık yumurtası, hareketsiz balık yavrusu ve karides yavrusu riskini açıklamalı");
+assert.equal(mysterySnail?.tankLengthDataNote, undefined, "Mystery salyangoz kaynaklı akvaryum uzunluğu varken eksik uzunluk notu taşımamalı");
+assert(mysterySnail?.husbandryCaution?.includes("bitki yiyebileceğini") && mysterySnail.husbandryCaution.includes("sağlam bitkiyi"), "Mystery salyangoz cins sayfasının bitki uyarısını ve türe özgü kaydın açıklamasını birlikte taşımalı");
+// Brotia pagodula: değerleri kabul edilen kaynakta yok (değişmedi); wirbellose.de'ye göre süzerek beslenir ve yalnız tür akvaryumunda tutulmalıdır.
+const pagodaSnail = speciesCatalog.find((item) => item.id === "pagoda-snail");
+assert.deepEqual([pagodaSnail?.adultSizeCm, pagodaSnail?.minVolumeL, pagodaSnail?.minTankLengthCm, pagodaSnail?.minGroup, pagodaSnail?.temperature, pagodaSnail?.ph, pagodaSnail?.speciesOnly, pagodaSnail?.verifiedAt], [6, 45, 45, 1, [22, 28], [7, 8], true, "2026-10-21"], "Pagoda salyangoz kayıttaki değerleri ve kaynaklı tür akvaryumu işaretini taşımalı");
+assert.equal(pagodaSnail?.sourceUrl, "https://www.aquariumglaser.de/fischarchiv/brotia-pagodula/", "Pagoda salyangoz eski kaynağına bağlı kalmalı");
+assert(pagodaSnail?.husbandryCaution?.includes("tür akvaryumunda") && pagodaSnail.additionalSourceUrls?.includes(wirbelloseEntry("brotia-pagodula-stachelige-turmdeckelschnecke")) && pagodaSnail.additionalSourceUrls.includes(pfkSulawesiSnails), "Pagoda salyangoz tür akvaryumu gerekçesini ve kaynaklarını taşımalı");
+// Kabul edilen kaynakta bulunamayan salyangozlar değişmedi (docs/CATALOG_SOURCE_GAPS.md).
+for (const [id, values] of Object.entries({
+  "ramshorn-snail": [2.5, 20, 25, 1, [18, 28], [6.5, 8]],
+  "sun-nerite-snail": [2, 20, 25, 1, [22, 28], [7, 8.5]],
+  "turbo-snail": [4, 25, 30, 1, [22, 28], [7, 8.5]],
+  "tiger-nerite-snail": [2, 20, 25, 1, [22, 28], [7, 8.5]],
+  "mini-tiger-nerite-snail": [2, 20, 25, 1, [22, 28], [7, 8.5]],
+  "mini-nerite-snail": [2, 20, 25, 1, [22, 28], [7, 8.5]],
+  "batik-nerite-snail": [3, 20, 25, 1, [22, 28], [7, 8.5]],
+  "batman-nerite-snail": [3, 20, 25, 1, [22, 28], [7, 8.5]],
+})) {
+  const profile = speciesCatalog.find((item) => item.id === id);
+  assert.deepEqual([profile?.adultSizeCm, profile?.minVolumeL, profile?.minTankLengthCm, profile?.minGroup, profile?.temperature, profile?.ph], values, `${id} kabul edilen kaynakta bulunamadığı için kayıttaki değerleri korumalı`);
+  assert.notEqual(profile?.verifiedAt, "2026-10-21", `${id} kaynaklanmadığı halde yeni okuma tarihi taşımamalı`);
+}
+// Black Devil (Faunus ater): yalnız boy kaynaklı (Practical Fishkeeping, Lukhaup ve Hummel: 8–9 cm → büyüğü); öteki değerler kabul edilen
+// kaynakta yok ve korunur. Kaynağa göre tatlı suda da yaşar; kayıt tatlı su kalır.
+const blackDevilSnail = speciesCatalog.find((item) => item.id === "black-devil-snail");
+assert.deepEqual([blackDevilSnail?.adultSizeCm, blackDevilSnail?.minVolumeL, blackDevilSnail?.minTankLengthCm, blackDevilSnail?.minGroup, blackDevilSnail?.temperature, blackDevilSnail?.ph, blackDevilSnail?.waterTypes ?? ["freshwater"], blackDevilSnail?.verifiedAt], [9, 40, 45, 3, [22, 28], [6.5, 8.5], ["freshwater"], "2026-10-21"], "Black Devil salyangoz kaynaklı boyu ve kayıttaki öteki değerleri taşımalı");
+assert(blackDevilSnail?.sourceUrl === "https://www.garnelen-guemmer.de/blog/wirbellose/teufelsdornschnecke" && blackDevilSnail.additionalSourceUrls?.includes("https://www.practicalfishkeeping.co.uk/features/treasures-of-pirate-island/") && blackDevilSnail.additionalSourceUrls.includes(oataShrimpAndSnails), "Black Devil salyangoz eski kaynağını, boy kaynağını ve OATA kartını taşımalı");
+// Melek balığı: en az grup 2 korunur (OATA "groups or a pair at minimum"); açık sayı veren kaynaklar ek kaynak olarak bağlıdır (karar 4, 2026-10-20).
+const angelfishProfile = speciesCatalog.find((item) => item.id === "angelfish");
+assert.equal(angelfishProfile?.minGroup, 2, "Melek balığı OATA'nın en az çift kuralını korumalı");
+assert(["https://ornamentalfish.org/what-we-do/advice-information/care-sheets/caresheets-tropical-freshwater-fish/how-to-look-after-american-cichlids/", "https://www.fishkeeper.co.uk/fish/freshwater/cichlids/angel-fish-", "https://www.practicalfishkeeping.co.uk/fishkeeping-answers/how-do-i-move-from-community-to-angels/"].every((url) => angelfishProfile?.additionalSourceUrls?.includes(url)), "Melek balığı grup sayısı veren kaynaklara bağlanmalı");
 assert.equal(speciesCatalog.find((item) => item.id === "serrata-dwarf-shrimp")?.speciesOnly, true, "Caridina serrata tür akvaryumu işaretini korumalı");
 assert(speciesCatalog.find((item) => item.id === "giant-danio")?.husbandryCaution?.includes("8 cm standart boy") && speciesCatalog.find((item) => item.id === "giant-danio")?.husbandryCaution?.includes("10 cm korunur"), "Dev danio kaynağın boyu ile korunan katalog boyunu kullanıcıya açıklamalı");
 assert.equal(speciesForCatalogExactSearch("Osteogaster aenea", "fish", "freshwater")?.id, "bronze-cory", "Güncel Osteogaster aenea adı siyah üretim formunu değil bronz çöpçüyü bulmalı");
@@ -6774,7 +6844,7 @@ assert(unresolvedSpeciesForSearch("Red Devil Vampire Crab", "other", "freshwater
 for (const id of ["red-rili-shrimp", "orange-rili-shrimp", "carbon-rili-shrimp", "green-jelly-shrimp", "chocolate-shrimp"]) {
   const profile = speciesCatalog.find((item) => item.id === id);
   assert.equal(profile?.scientificName, "Neocaridina davidi", `${id} satış rengi ayrı tür gibi tanımlanmamalı`);
-  assert.equal(profile?.verifiedAt, "2026-10-20", `${id} omurgasız kaynak yenilemesinin doğrulama tarihini taşımalı`);
+  assert.equal(profile?.verifiedAt, "2026-10-21", `${id} omurgasız kaynak yenilemesinin (boy düzeltmesi, 2026-10-21) doğrulama tarihini taşımalı`);
   assert(profile?.additionalSourceUrls?.some((url) => url.startsWith("https://www.cikletistpetshop.com/")), `${id} doğrulanan yerel satış kaynağını taşımalı`);
 }
 const unresolvedTangerineTiger = unresolvedSpeciesForSearch("Tangerine Tiger Shrimp", "shrimp", "freshwater");

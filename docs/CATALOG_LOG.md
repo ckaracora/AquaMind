@@ -2621,3 +2621,113 @@ Güncel alt adım: JBL filtre medyası, bakteri başlangıcı, sorun giderici/pH
 | `blue-black-rili-shrimp` | 3 | 15 | 30 | 6 | 18–25 | 6,5–8 → 6,5–7,5 | Paket 1 düzeltmesi (PFK taraması): pH üst sınırı Farmer'ın kiraz karides kutusundan (pH 6,5–7,5); sıcaklık değişmedi |
 | `yellow-fire-shrimp` | 3 | 15 | 25 | 6 | 18–26 | 6,5–8 → 6,5–7,5 | Paket 1 düzeltmesi (PFK taraması): pH üst sınırı Farmer'ın kiraz karides kutusundan (pH 6,5–7,5); sıcaklık değişmedi |
 | `amano-shrimp` | 5 | 20 | 30 | 5 | 15–28 → 18–27 | 6–8 → 6–7,5 | Paket 1 düzeltmesi (PFK taraması): Fishkeeper 15–28 °C, pH 6–8 ∩ Hill (tutma) 18–27 °C, pH 6,0–7,5 ∩ Gay 18–27 °C, pH 6–8; Clarke'ın "25 °C altında en iyi" ifadesi en iyi aralık olduğu için kullanılmadı |
+
+## 2026-10-21 Omurgasız kaynak yenilemesi 3: salyangozlar (Claude)
+
+- Kurallar `docs/DATA_SOURCES.md` → "Omurgasızlar" bölümünde. Bu pakette kurala şunlar açıkça yazıldı:
+  - Fishkeeper'ın cins sayfası (*Tylomelania* spp., *Pomacea* sp.) o cinsin kayıtlarını kapsar. Tür yalnız cins sayfasıyla kapsanıyor ve wirbellose.de'de türe özgü kayıt varsa, sıcaklık ve pH'ta türe özgü kaydın aralığı da ortak aralığa girer (koruyucu); öteki alanlarda wirbellose.de yalnız Fishkeeper'ın vermediği yerde kullanılır.
+  - Boy: kaynak yalnız cins aralığı veriyorsa aralığın üstü; kaynak doğadaki ve akvaryumdaki boyu ayrı yazıyorsa akvaryumdaki.
+  - Su türü: yalnız hafif acı suya dayanabilen canlı tatlı su kaydı kalır, dayanıklılık günlüğe yazılır.
+  - Grup: üreme ya da iki cinsiyetin bulunması için verilen sayılar en az grup sayılmaz.
+- 19 salyangoz kaydından 11'i kaynaklandı ya da kaynağa göre düzeltildi:
+  - *Tylomelania* (4): tavşan salyangozu, Yellow Poso Spotted Rabbit (*T. towutica*), Poso Orange, Poso Yellow;
+  - zebra nerit (*Neritina natalensis*), boynuzlu nerit (*Clithon corona*; yalnız kaynak ve tarih);
+  - katil salyangoz (*Anentome helena*), Mystery salyangoz (*Pomacea diffusa*), Malezya borazan salyangozu (*Melanoides tuberculata*);
+  - pagoda salyangoz (*Brotia pagodula*; yalnız tür akvaryumu işareti ve bakım notu), Black Devil (*Faunus ater*; yalnız boy).
+- 8 kayıt değişmedi: ramshorn, sun nerit ve tür kimliği olmayan altı nerit satış adı. Bunlar ile pagoda ve Black Devil'in kaynaksız kalan değerleri `docs/CATALOG_SOURCE_GAPS.md` listesinde.
+- 1. paketin ikinci düzeltmesi: kiraz karides ve 15 renk formunun boyu 3 → 4 cm (aşağıda).
+- Okunan sayfalar (2026-10-21, UTC; okuma görevleriyle, hepsi HTTP 200):
+  - Fishkeeper: elma, katil, Sulawesi, zebra nerit ve bumblebee horn salyangozu sayfaları; salyangoz süzgeci ("Showing 9 Results") ve Oddballs listesinin beş sayfası (114 öğe). Fishkeeper'daki dokuz salyangoz sayfasının hepsi listelendi.
+  - Practical Fishkeeping:
+    - Lukhaup, "Snails from Sulawesi" (Mart 2009 sayısı);
+    - Neale Monks'un yanıtları: "Will these snails starve without algae?", "How do I reduce my snail population?";
+    - Nathan Hill, "How do I deal with aquarium snails?"; Bob Mehen, "What will eat my snails?";
+    - Jeremy Gay, "Problem solver: Snails"; Matt Ford, "Should I worry about the snails in my substrate?".
+    - Site araması: Faunus, Brotia, pagoda, Clithon, Neritina, Anentome, trumpet, Planorbella, ramshorn, Pomacea, nerite, "rabbit snail", "apple snail", snail. Arama yalnız başlıkta eşleşiyor ve eski arşiv yolundaki yazıları çıkarmıyor.
+    - Codex 2. turunda gösterilen "Treasures of Pirate Island" yazısından sonra site, alan adıyla sınırlı genel web aramasıyla da tarandı (salyangoz türleri ve karides paketlerinin türleri). Okunan ek yazılar:
+      - Lukhaup ve Hummel, "Treasures of Pirate Island": *Faunus ater* 8–9 cm.
+      - Neale Monks, "Natural born killers": katil salyangoz 1,5 cm, çok yumuşak sudan kaçın; Malezya borazan salyangozu 3 cm, sert ya da acı suyu tercih eder.
+      - James Starr-Marshall, "How to re-create a famous landmark in your aquarium": kiraz karides kutusu 18–28 °C, "Maximum size: 4cm".
+      - Neale Monks'un yanıtları "Are there any shrimps my fish won't eat?" (Atya ve Atyopsis için sayı yok) ve "Can I safely add some shrimp?" (kiraz karides için "a dozen or more").
+      - Değer vermeyenler: Matt Clarke, "Frequently asked questions on aquarium pests"; "10 ways to beat algae"; Nathan Hill, "Don't make these fishkeeping mistakes!"; "The aquarium hobby's tricks and treats"; "Keeping Turbo and friends" (deniz); "Your tanks: Sean Evans" (okurun akvaryumları).
+  - wirbellose.de: salyangoz kategorisinin yedi sayfası (76 kayıt) ve *Clea helena*, *Pomacea diffusa*, *Tylomelania* sp., *T.* sp. "Yellow", *Melanoides tuberculatus*, *Planorbella duryi*, *Neritina turrita*, *N. natalensis*, *Clithon corona* ve *Brotia pagodula* kayıtları.
+- Kayıt kayıt kararlar:
+  - *Tylomelania* (4 kayıt):
+    - Sıcaklık ve pH: Fishkeeper (27–30 °C, pH 7,5–8,5) ile Lukhaup'un (27–30 °C) ortak aralığı, 27–30 °C ve pH 7,5–8,5. Lukhaup'un pH 7,5 (Poso) ile 8,5 (Matano) arası değerleri göllerin suyu; Fishkeeper'ınkiyle aynı.
+    - Boy: kaynaklar yalnız cins aralığı veriyor (2–12 cm); aralığın üstü, 12 cm alındı. *T. towutica*'da da türe özgü boy yok.
+    - Uzunluk: Lukhaup'a göre türlerin çoğu 60 ya da 80 cm'lik akvaryumda iyi yaşar, 11 cm'ye büyüyen tür 80 cm'lik akvaryuma aittir; 12 cm'lik kayıt için 80 cm.
+    - Hacim: Fishkeeper ve Lukhaup litre vermiyor; wirbellose.de iri türler için en az 45 L diyor (önceki değer 60 L).
+    - Grup: hiçbir kaynak sayı vermiyor; Lukhaup kalabalık olmayan akvaryumu öneriyor. 1.
+    - Bakım notu: eski notun "sert su" ifadesi Fishkeeper ve Lukhaup'un "yumuşak su, yüksek pH" ifadesiyle çeliştiği için düzeltildi; ek yem ve kalabalık olmayan akvaryum eklendi. Poso formlarındaki kimlik uyarısı korundu.
+    - Ana kaynak Fishkeeper'ın Sulawesi salyangozu sayfası; aquarubi ve Cikletist ek kaynak olarak kaldı. Taban kayıttaki tavşan salyangozu artık var olmayan Seriously Fish adresine düşmüyor.
+  - Zebra nerit (*Neritina natalensis*):
+    - Fishkeeper 22–26 °C, pH 7,2–8,2, 2,5 cm (katalogdaki 3 cm korundu).
+    - Fishkeeper'a göre hafif acı suya (özgül ağırlık 1,005–1,010) dayanır; kayıt tatlı su kaldı (kural yukarıda).
+    - Hacim: Fishkeeper vermiyor; wirbellose.de'nin *N. natalensis* sayfası yalnız taksonomi notu (muhtemelen *N. gagates*'in eş adı; akvaryumdaki zebra neritler *N. turrita*). Kimlik çözülmediği için *N. turrita*'nın değerleri alınmadı; kayıttaki 20 L korundu. Monks'un "20 l per snail" ifadesi okurun akvaryumu için yaklaşık yoğunluk; en küçük akvaryum olarak kullanılmadı.
+  - Boynuzlu nerit (*Clithon corona*): Fishkeeper 22–27 °C, pH 7,2–8,2, 2 cm; wirbellose.de hacmi (en az 20 L, kapaklı) kayıttakiyle aynı. wirbellose.de'nin 25–30 °C'si ve 90 mm'lik boy alanı (hatalı görünüyor) kullanılmadı.
+  - Katil salyangoz (*Anentome helena*):
+    - Fishkeeper 22–27 °C, pH 7,2–8,0 (önceki 6,8–8), 2 cm; katalogdaki 3 cm korundu (Practical Fishkeeping'de Hill 3 cm).
+    - Akıntı: Fishkeeper "preferably with decent current" diyor; düşük → orta.
+    - Hacim: Fishkeeper ve Practical Fishkeeping vermiyor; wirbellose.de en az 60 L (önceki 25 L).
+    - Grup: Fishkeeper "a large group should help to ensure you have both sexes", wirbellose.de "zur Zucht" en az dört; ikisi de üreme için. 1.
+    - Practical Fishkeeping'de Monks ("Natural born killers"): 1,5 cm, çok yumuşak sudan kaçının, neritlere ve iri salyangozlara genelde dokunmaz, bitkiye zarar vermez, balık yumurtası ve hareketsiz yavruyu alabilir. "50 l'ye 10–12 katil salyangoz" zararlı salyangoz kontrolü için yoğunluk; en küçük akvaryum olarak kullanılmadı.
+    - Tank arkadaşı notu eklendi: küçük salyangozları avlar; Fishkeeper ve Monks iri salyangozlara ve neritlere genelde dokunmadığını yazar, wirbellose.de başka salyangozlarla tutulamayacağını yazar; balık yumurtası ve hareketsiz yavruyu alabilir; Hill'e göre karides yavrusu yiyebilir.
+  - Mystery salyangoz (*Pomacea diffusa*):
+    - Sıcaklık ve pH: Fishkeeper'ın *Pomacea* sp. cins sayfası (15–28 °C, pH 7,2–8,0) ile wirbellose.de'nin türe özgü kaydının (22–30 °C, pH 5,5–8,5) ortak aralığı, 22–28 °C ve pH 7,2–8,0 (önceki 20–28 °C, pH 7,2–7,8).
+    - Boy: Fishkeeper 8 cm, wirbellose.de 50 mm; büyüğü, 8 cm.
+    - Uzunluk: wirbellose.de 60 cm (önceki: yok; eksik uzunluk notu kaldırıldı). Hacim: kabul edilen kaynakta yok; kayıttaki 40 L korundu (OATA tabanı yaklaşık 20 L).
+    - Grup: Fishkeeper iki cinsiyet için "a number of individuals", wirbellose.de üreme için başta 4–6 hayvan diyor. 1.
+    - Bitki notu eklendi ve iki kaynağı da yazıyor: Fishkeeper'ın cins sayfası bitki yiyebileceğini, wirbellose.de'nin türe özgü kaydı çenesinin sağlam bitkiyi kesemeyecek kadar zayıf olduğunu ve ölü bitki artıklarını yediğini yazıyor.
+    - Ana kaynak Fishkeeper; Queensland biyogüvenlik sayfası ve eski kaynaklar ek kaynak olarak kaldı.
+  - Malezya borazan salyangozu (*Melanoides tuberculata*):
+    - Fishkeeper'da sayfası yok. Practical Fishkeeping'de Monks ("Natural born killers") 3 cm (genelde daha küçük) diyor; sert ya da acı suyu tercih ettiğini, yumuşak suya dayandığını yazıyor, sayı vermiyor. Sıcaklık, pH ve hacim wirbellose.de'den: 18–32 °C, pH 5,8–8,6 (önceki 20–28 °C, pH 7–8,3).
+    - Hacim: wirbellose.de en az 5 L; OATA tabanı 10 L (önceki 20 L).
+    - Boy: wirbellose.de doğada 6,5 cm, akvaryumda nadiren 3 cm'nin üstünde diyor; akvaryumdaki boy kayıttakiyle aynı (3 cm).
+    - Monks ve wirbellose.de'ye göre acı suya da dayanır; kayıt tatlı su kaldı.
+  - Pagoda salyangoz (*Brotia pagodula*): sıcaklık, pH ve akvaryum değerleri kabul edilen kaynakta yok; eski katalog değerleri korundu (Aquarium Glaser bu sayıları birebir doğrulamıyor). wirbellose.de'ye göre besininin büyük kısmını süzerek alır, karışık akvaryumda açlıktan ölebilir ve yalnız tür akvaryumunda tutulmalıdır; tür akvaryumu işareti ve bakım notu eklendi. Lukhaup ithal edilen *Brotia* türlerinin çoğunun akvaryumda iyi yaşamadığını yazıyor.
+  - Black Devil (*Faunus ater*): Fishkeeper ve wirbellose.de'de yok (Fishkeeper'daki Lava snail *Faunus* sp. "magma" başka tür). Practical Fishkeeping'de Lukhaup ve Hummel 8–9 cm diyor; büyüğü, 9 cm (önceki 8). Yazıya göre ırmak ağızlarında yaşar; tatlı suda ve acı suda, hatta deniz koşullarında bildirilmiş, larvaları deniz suyunda gelişir. Acı su gerektirmediği için kayıt tatlı su kaldı. Sıcaklık, pH, akvaryum ve grup kabul edilen kaynakta yok; eski kaynaktan korundu.
+  - 1. paketin ikinci düzeltmesi: Starr-Marshall'ın kiraz karides kutusu (*Neocaridina heteropoda*, yani *N. davidi*) "Maximum size: 4cm" diyor. Boy kuralı gereği kiraz karides ve 15 renk formunun boyu 3 → 4 cm; Starr-Marshall ek kaynak olarak eklendi, `verifiedAt` 2026-10-21. Sıcaklık değişmedi: yazının 18–28 °C'si ortak aralığı (18–26 °C, rili formlarında 18–25 °C) daraltmıyor. White pearl başka tür; değişmedi. Monks'un kiraz karides için "a dozen or more" önerisi, 2. paketteki gibi, Dunn'ın Neocaridina SSS'sindeki altılının yerine geçmedi.
+  - Değişmeyenler:
+    - Ramshorn (*Planorbella duryi*): Fishkeeper ve Practical Fishkeeping'de sayfası yok; wirbellose.de yalnız boy veriyor (15 mm), katalogdaki 2,5 cm korundu.
+    - Sun nerit (*Clithon donovani*): üç kaynakta da yok.
+    - Altı nerit satış adı (Neritidae sp.): tür kimliği yok. Fishkeeper'a göre zebra nerit "Tiger Snail" adıyla da satılıyor; bu bir kimlik ipucu, 68 satış adı işinde ürün sahibiyle ele alınacak.
+  - Kaynak alanları: `sourceUrl` Fishkeeper (Melanoides'te wirbellose.de); Practical Fishkeeping, wirbellose.de, OATA ve eski kaynaklar `additionalSourceUrls` içinde; `verifiedAt` 2026-10-21. Varsayılan kaynak haritasında *Anentome helena* Fishkeeper'a, *Melanoides tuberculata* wirbellose.de'ye çevrildi; eski adresler ek kaynak olarak kaldı.
+- Melek balığı ve Çin ejderi (ürün sahibinin 2026-10-20 kararı, 4. madde: "biraz daha araştır, açık sayı bulunamazsa olduğu gibi kalsın"):
+  - Melek balığı: OATA'nın Amerika ciklitleri kartı "groups or a pair at minimum" diyor. Fishkeeper "go for a minimum of four individuals" diyor; bu öneri grup halinde tutulan gençlerin birbirini taciz etmemesi için. Practical Fishkeeping'de Neale Monks tek birey, çift ya da altı ve üstü grup öneriyor. En az çift, OATA'nın açık sayısı; grup 2 korundu, üç kaynak ek kaynak olarak eklendi.
+  - Çin ejderi: Seriously Fish "needs to be in a group" diyor ama sayı vermiyor; Fishipedia'da da sayı yok. Grup 1 korundu.
+- Kullanıcıya etkisi:
+  - Tavşan salyangozları 27–30 °C ve pH 7,5–8,5 istiyor; en az 80 cm uzunluk ve 45 L ile öneriliyor. 27 °C altını isteyen balıklarla sıcaklık çakışması daha sık çıkabilir.
+  - Katil salyangoz en az 60 L ile öneriliyor; tank arkadaşı notu salyangoz avlamasını ve karides yavrusu riskini anlatıyor.
+  - Malezya borazan salyangozu 10 L ile öneriliyor, sıcaklık ve pH aralığı genişledi.
+  - Mystery salyangoz 22–28 °C, en az 60 cm uzunlukla öneriliyor; bitki notu var.
+  - Zebra nerit 22–26 °C ve pH 7,2–8,2 istiyor.
+  - Pagoda salyangoz başka türlerle aynı akvaryumda tür akvaryumu uyarısı alıyor.
+  - Black Devil 9 cm, kiraz karides ve renk formları 4 cm boyla hesaplanıyor; biyolojik yük tahmini biraz arttı.
+- Altın fikstür: motor değişmedi. 1.033 vakadan 55'i değişti (25 "sığar", 25 "dar", 5 tür çifti); hepsi bu kayıtlardan geliyor. Değişen ölçütler: yük 51, tür uyumu 1.
+  - Bir durum geçişi var: pagoda salyangoz + panda garra "iyi" → "tehlike" (81 → 49). Sebep tür akvaryumu işareti.
+  - Mystery salyangozda eksik uzunluk notu uyarısı kalktı; pagoda vakalarına bakım notu uyarısı eklendi.
+  - Platy + Poso Orange çiftinde yalnız bakım notunun metni değişti.
+  - Kiraz karides ve renk formlarının (32 vaka), Black Devil'in (2 vaka) ve kiraz karidesli üç çiftin (cherry barb + kiraz karides, green fire tetra + green jade, X-ray tetra + yellow fire) vakalarında yalnız yük değişti.
+- Değişiklik tablosu ("eski → yeni"; değişmeyen değer tek yazıldı; "yok" uzunluk değeri olmadığını gösterir):
+
+| Kimlik | Boy | Hacim (L) | Uzunluk (cm) | Grup | Sıcaklık | pH | Not |
+|---|---|---|---|---|---|---|---|
+| `rabbit-snail` | 10 → 12 | 60 → 45 | 50 → 80 | 1 | 24–30 → 27–30 | 7–8,5 → 7,5–8,5 | Fishkeeper (*Tylomelania* spp.) 27–30 °C, pH 7,5–8,5, 2–12 cm ∩ PFK Lukhaup 27–30 °C; boy cins aralığının üstü; uzunluk Lukhaup (11 cm'lik türe 80 cm); hacim wirbellose.de (iri türler en az 45 L); grup sayısı yok; ana kaynak Fishkeeper (var olmayan Seriously Fish varsayılanı devre dışı) |
+| `yellow-spotted-rabbit-snail` | 10 → 12 | 60 → 45 | 50 → 80 | 1 | 24–30 → 27–30 | 7–8,5 → 7,5–8,5 | Fishkeeper (*Tylomelania* spp.) 27–30 °C, pH 7,5–8,5, 2–12 cm ∩ PFK Lukhaup 27–30 °C; boy cins aralığının üstü; uzunluk Lukhaup (11 cm'lik türe 80 cm); hacim wirbellose.de (iri türler en az 45 L); grup sayısı yok; ana kaynak aquarubi → Fishkeeper; bakım notundaki "sert su" kaynaklarla çeliştiği için düzeltildi |
+| `poso-orange-rabbit-snail` | 10 → 12 | 60 → 45 | 50 → 80 | 1 | 24–30 → 27–30 | 7–8,5 → 7,5–8,5 | Fishkeeper (*Tylomelania* spp.) 27–30 °C, pH 7,5–8,5, 2–12 cm ∩ PFK Lukhaup 27–30 °C; boy cins aralığının üstü; uzunluk Lukhaup (11 cm'lik türe 80 cm); hacim wirbellose.de (iri türler en az 45 L); grup sayısı yok; ana kaynak aquarubi → Fishkeeper; bakım notundaki "sert su" kaynaklarla çeliştiği için düzeltildi |
+| `poso-yellow-rabbit-snail` | 10 → 12 | 60 → 45 | 50 → 80 | 1 | 24–30 → 27–30 | 7–8,5 → 7,5–8,5 | Fishkeeper (*Tylomelania* spp.) 27–30 °C, pH 7,5–8,5, 2–12 cm ∩ PFK Lukhaup 27–30 °C; boy cins aralığının üstü; uzunluk Lukhaup (11 cm'lik türe 80 cm); hacim wirbellose.de (iri türler en az 45 L); grup sayısı yok; ana kaynak aquarubi → Fishkeeper; bakım notundaki "sert su" kaynaklarla çeliştiği için düzeltildi |
+| `nerite-snail` | 3 | 20 | 25 | 1 | 20–28 → 22–26 | 7–8,5 → 7,2–8,2 | Fishkeeper (zebra nerit) 22–26 °C, pH 7,2–8,2, 2,5 cm (katalogdaki 3 cm korundu); hacim kabul edilen kaynakta yok (wirbellose.de'nin *N. natalensis* sayfası boş), kayıttaki 20 L korundu; hafif acı suya dayanır, kayıt tatlı su kaldı |
+| `horned-nerite` | 2 | 20 | 25 | 1 | 22–27 | 7,2–8,2 | Fishkeeper 22–27 °C, pH 7,2–8,2, 2 cm ve wirbellose.de hacmi (20 L, kapaklı) kayıttakiyle aynı; yalnız kaynaklar ve tarih |
+| `assassin-snail` | 3 | 25 → 60 | 30 | 1 | 22–27 | 6,8–8 → 7,2–8 | Fishkeeper 22–27 °C, pH 7,2–8,0, 2 cm (katalogdaki 3 cm korundu; PFK Hill 3 cm, Monks 1,5 cm); "decent current" → akıntı düşük → orta; hacim wirbellose.de en az 60 L; Fishkeeper ve wirbellose.de'nin sayıları cinsiyet ve üreme için → grup 1; tank arkadaşı notu eklendi |
+| `apple-snail` | 6 → 8 | 40 | yok → 60 | 1 | 20–28 → 22–28 | 7,2–7,8 → 7,2–8 | Fishkeeper (*Pomacea* sp., cins sayfası) 15–28 °C, pH 7,2–8,0, 8 cm ∩ wirbellose.de (*P. diffusa*) 22–30 °C, pH 5,5–8,5 → 22–28 °C, pH 7,2–8,0; boy büyüğü (8 cm); uzunluk wirbellose.de 60 cm (eksik uzunluk notu kaldırıldı); hacim kabul edilen kaynakta yok, kayıttaki 40 L korundu; bitki notu iki kaynağı da yazıyor |
+| `malaysian-trumpet-snail` | 3 | 20 → 10 | 25 | 1 | 20–28 → 18–32 | 7–8,3 → 5,8–8,6 | Fishkeeper'da yok; PFK Monks 3 cm, sert ya da acı suyu tercih eder (sayı yok); wirbellose.de 18–32 °C, pH 5,8–8,6, en az 5 L → OATA tabanı 10 L; boy kayıttakiyle aynı (wirbellose.de: akvaryumda nadiren 3 cm üstü); acı suya dayanır, kayıt tatlı su kaldı |
+| `pagoda-snail` | 6 | 45 | 45 | 1 | 22–28 | 7–8 | Değerler kabul edilen kaynakta yok, korundu; wirbellose.de: süzerek beslenir, karışık akvaryumda açlıktan ölebilir, yalnız tür akvaryumu → tür akvaryumu işareti ve bakım notu; PFK Lukhaup: ithal *Brotia* türlerinin çoğu akvaryumda iyi yaşamaz |
+| `ramshorn-snail` | 2,5 | 20 | 25 | 1 | 18–28 | 6,5–8 | Fishkeeper ve PFK'de sayfa yok; wirbellose.de yalnız boy veriyor (15 mm, katalogdakinden küçük) → değişmedi |
+| `sun-nerite-snail` | 2 | 20 | 25 | 1 | 22–28 | 7–8,5 | *Clithon donovani* Fishkeeper, PFK ve wirbellose.de'de yok → değişmedi |
+| `black-devil-snail` | 8 → 9 | 40 | 45 | 3 | 22–28 | 6,5–8,5 | Fishkeeper ve wirbellose.de'de yok (Fishkeeper'daki Lava snail *Faunus* sp. "magma" başka tür); PFK Lukhaup ve Hummel 8–9 cm → boy büyüğü; öteki değerler kabul edilen kaynakta yok, korundu; tatlı ve acı suda yaşar, kayıt tatlı su kaldı |
+| `turbo-snail` | 4 | 25 | 30 | 1 | 22–28 | 7–8,5 | Satış adı, tür kimliği yok; kabul edilen kaynağa bağlanamaz, değişmedi |
+| `tiger-nerite-snail` | 2 | 20 | 25 | 1 | 22–28 | 7–8,5 | Satış adı, tür kimliği yok; kabul edilen kaynağa bağlanamaz, değişmedi |
+| `mini-tiger-nerite-snail` | 2 | 20 | 25 | 1 | 22–28 | 7–8,5 | Satış adı, tür kimliği yok; kabul edilen kaynağa bağlanamaz, değişmedi |
+| `mini-nerite-snail` | 2 | 20 | 25 | 1 | 22–28 | 7–8,5 | Satış adı, tür kimliği yok; kabul edilen kaynağa bağlanamaz, değişmedi |
+| `batik-nerite-snail` | 3 | 20 | 25 | 1 | 22–28 | 7–8,5 | Satış adı, tür kimliği yok; kabul edilen kaynağa bağlanamaz, değişmedi |
+| `batman-nerite-snail` | 3 | 20 | 25 | 1 | 22–28 | 7–8,5 | Satış adı, tür kimliği yok; kabul edilen kaynağa bağlanamaz, değişmedi |

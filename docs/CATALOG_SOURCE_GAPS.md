@@ -61,12 +61,20 @@ Yol haritasının 2. adımında (`docs/DECISIONS/0020-urun-hedefleri-ve-yol-hari
 | `jonklaas-lipstick-goby` | Jonklaas ruj gobisi | *Sicyopus jonklaasi* | Türün uzman bakım kaynağı yok; Seriously Fish'e göre bu adla satılanlar çoğunlukla *S. exallisquamulus* (ayrı profil). Bakım notuna kimlik uyarısı eklendi (Kimlik paketi 4) |
 | `red-tailed-snakehead` | Kırmızı kuyruklu yılanbaş | *Channa limbata* | Catalog of Fishes türü geçerli sayıyor; Seriously Fish ve FishBase *C. gachua*'nın eş anlamlısı sayıyor. Uzman bakım kaynağı tür adıyla yok; mevcut kaynak korundu |
 
-Melek balığı ve Çin ejderinin en az grup sayısı için başka uzman kaynaklar aranıyor; açık bir sayı bulunamazsa değerler olduğu gibi kalır.
+Melek balığı ve Çin ejderinin en az grup sayısı ürün sahibinin 2026-10-20 kararıyla (4. madde) araştırıldı; ayrıntı `docs/CATALOG_LOG.md` → "2026-10-21 Omurgasız kaynak yenilemesi 3":
+
+- Melek balığı: grup 2 korundu. OATA'nın Amerika ciklitleri kartı "groups or a pair at minimum" diyor. Fishkeeper, grup halinde tutulacaksa gençlerin birbirini taciz etmemesi için en az dört birey öneriyor. Practical Fishkeeping'de Neale Monks tek birey, çift ya da altı ve üstü grup öneriyor. En az çift, OATA'nın açık sayısı; üç kaynak ek kaynak olarak eklendi.
+- Çin ejderi: grup 1 korundu. Seriously Fish "needs to be in a group" diyor ama sayı vermiyor; Fishipedia'da da sayı yok.
 
 ## Uzman bakım kaynağında bulunamayan omurgasızlar (2026-10-20, geliştirilecek)
 
-Karides ve salyangoz için kabul edilen kaynaklar ürün sahibinin 2026-10-20 kararıyla seçildi (`docs/DATA_SOURCES.md` → "Omurgasızlar"). Karidesler iki pakette kaynaklandı (`docs/CATALOG_LOG.md` → "2026-10-20 Omurgasız kaynak yenilemesi 1" ve "2"). Kabul edilen hiçbir kaynakta bulunamayanlar değerleriyle kalır ve aynı balık listesindeki gibi geliştirilmek üzere tutulur; salyangozlar sonraki pakette.
+Karides ve salyangoz için kabul edilen kaynaklar ürün sahibinin 2026-10-20 kararıyla seçildi (`docs/DATA_SOURCES.md` → "Omurgasızlar"). Karidesler iki pakette, salyangozlar üçüncü pakette kaynaklandı (`docs/CATALOG_LOG.md` → "2026-10-20 Omurgasız kaynak yenilemesi 1" ve "2", "2026-10-21 Omurgasız kaynak yenilemesi 3"). Kabul edilen hiçbir kaynakta bulunamayanlar değerleriyle kalır ve aynı balık listesindeki gibi geliştirilmek üzere tutulur.
 
 | Kimlik | Ad | Bilimsel ad | Durum |
 |---|---|---|---|
 | `ghost-shrimp` | Hayalet karides | *Palaemonetes paludosus* | Fishkeeper, Practical Fishkeeping ve wirbellose.de'de sayfası yok (wirbellose.de'de yalnız *P. ivonicus* ve *P. antennarius*); kayıt eski kaynağıyla kaldı |
+| `ramshorn-snail` | Ramshorn salyangoz | *Planorbella duryi* | Fishkeeper ve Practical Fishkeeping'de sayfası yok (Fishkeeper'daki "Colombian Giant Ramshorn" başka cins, *Marisa*); wirbellose.de yalnız boy veriyor (15 mm, katalogdaki 2,5 cm korundu); kayıt eski kaynağıyla kaldı |
+| `sun-nerite-snail` | Sun Nerite salyangoz | *Clithon donovani* | Fishkeeper, Practical Fishkeeping ve wirbellose.de'de yok; kayıt eski kaynağıyla kaldı |
+| `black-devil-snail` | Black Devil salyangoz | *Faunus ater* | Fishkeeper ve wirbellose.de'de yok (Fishkeeper'daki Lava snail *Faunus* sp. "magma" başka tür); Practical Fishkeeping yalnız boy veriyor (Lukhaup ve Hummel, 8–9 cm; katalogda 9 cm). Sıcaklık, pH, akvaryum ve grup eski kaynaktan kaldı |
+| `pagoda-snail` | Pagoda salyangoz | *Brotia pagodula* | Sıcaklık, pH ve akvaryum değerleri kabul edilen kaynakta yok, eski katalogdaki değerler kaldı (Aquarium Glaser bu sayıları birebir doğrulamıyor); wirbellose.de'ye göre yalnız tür akvaryumu (işaret ve bakım notu eklendi) |
+| `turbo-snail`, `tiger-nerite-snail`, `mini-tiger-nerite-snail`, `mini-nerite-snail`, `batik-nerite-snail`, `batman-nerite-snail` | Nerit satış adları | Neritidae sp. | Tür kimliği yok; kural gereği satış adı türe bağlanmaz (68 satış adı işi, ürün sahibiyle). İpuçları: Fishkeeper zebra neritin (*Neritina natalensis*) "Tiger Snail" adıyla da satıldığını yazıyor; wirbellose.de'de "Batik-Schnecke" adıyla iki tür var (*Neritina variegata*, *Neritodryas* cf. *dubia*) |
