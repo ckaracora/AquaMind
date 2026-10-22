@@ -21,6 +21,7 @@ export const tr = {
       equipment: "Ekipmanlar",
       products: "Ürün Kataloğu",
       calculators: "Hesaplayıcılar",
+      diseases: "Hastalık ve Tedavi",
       aquamatch: "AquaMatch",
       settings: "Ayarlar",
     },
@@ -239,6 +240,8 @@ export const tr = {
     awaitingReading: "Ölçüm bekleniyor",
     outOf100: "100 üzerinden",
     userProvided: "Senin girdiğin değere dayanıyor",
+    diseaseGuide: "Hastalık belirtisi mi görüyorsun?",
+    diseaseGuideDetail: "Güvenilir kaynaklar, ilk adımlar ve veteriner bulma",
   },
   water: {
     loading: "Su değerleri yükleniyor…",

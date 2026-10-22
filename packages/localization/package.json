@@ -13,6 +13,10 @@
     "./engine": {
       "types": "./src/engine.ts",
       "default": "./src/engine.ts"
+    },
+    "./diseases": {
+      "types": "./src/diseases.ts",
+      "default": "./src/diseases.ts"
     }
   },
   "sideEffects": false
