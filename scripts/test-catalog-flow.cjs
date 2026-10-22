@@ -185,12 +185,12 @@ assert.equal(specificationsForEquipment({ ...storedAq101f, catalogId: undefined,
 const { allNavigationItems, primaryNavigationItems, settingsNavigationItem } = require(path.join(projectRoot, "src/data/navigation.ts"));
 const cikletistMainCategoryInventory = require(path.join(projectRoot, "scripts/fixtures/cikletist-main-category.cjs"));
 
-assert.deepEqual(primaryNavigationItems.map((item) => item.href), ["/", "/aquariums", "/water", "/maintenance", "/livestock", "/plants", "/equipment", "/products", "/calculators", "/aquamatch"], "Masaüstü ve mobil menü tüm ana uygulama başlıklarını ortak sırayla taşımalı");
+assert.deepEqual(primaryNavigationItems.map((item) => item.href), ["/", "/aquariums", "/water", "/maintenance", "/livestock", "/plants", "/equipment", "/products", "/calculators", "/diseases", "/aquamatch"], "Masaüstü ve mobil menü tüm ana uygulama başlıklarını ortak sırayla taşımalı (hastalık ve tedavi sayfası, karar 0022)");
 assert.deepEqual(primaryNavigationItems.find((item) => item.key === "aquamatch"), {key:"aquamatch",href:"/aquamatch",comingSoon:true}, "AquaMatch yalnız Yakında durumundaki pasif menü seçeneği olarak kalmalı");
 assert.deepEqual(settingsNavigationItem, {key:"settings",href:"/settings"}, "Ayarlar bağlantısı ortak menü kaynağında korunmalı");
 // Menü adları dil dosyasından gelir (docs/DECISIONS/0021-dil-altyapisi.md); Türkçe adlar değişmedi.
 const { messagesFor } = require(path.join(projectRoot, "packages/localization/src/index.ts"));
-assert.deepEqual(allNavigationItems.map((item) => messagesFor("tr").navigation.items[item.key]), ["Genel Bakış", "Akvaryumlarım", "Su Değerleri", "Bakım Günlüğü", "Canlılar", "Bitkiler", "Ekipmanlar", "Ürün Kataloğu", "Hesaplayıcılar", "AquaMatch", "Ayarlar"], "Menü adları Türkçe dil dosyasından aynı metinlerle gelmeli");
+assert.deepEqual(allNavigationItems.map((item) => messagesFor("tr").navigation.items[item.key]), ["Genel Bakış", "Akvaryumlarım", "Su Değerleri", "Bakım Günlüğü", "Canlılar", "Bitkiler", "Ekipmanlar", "Ürün Kataloğu", "Hesaplayıcılar", "Hastalık ve Tedavi", "AquaMatch", "Ayarlar"], "Menü adları Türkçe dil dosyasından aynı metinlerle gelmeli");
 assert.equal(new Set(allNavigationItems.map((item) => item.href)).size, allNavigationItems.length, "Ortak navigasyonda yinelenen bağlantı bulunmamalı");
 
 assert.equal(catalogBrandCoverage.length, 49, "Kullanıcının zorunlu marka listesi 49 başlıkla korunmalı");

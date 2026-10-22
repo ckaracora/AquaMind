@@ -88,6 +88,27 @@ Değer kuralı (balıklardaki kuralın omurgasız karşılığı):
 - **Eski kaynaklar:** ek kaynak olarak kalır.
 - **Okuma:** değerler sayfa açılarak okunur; arama özeti kaynak sayılmaz.
 
+## Hastalık ve tedavi yönlendirme kaynakları
+
+Hastalık ve tedavi sayfası (`docs/DECISIONS/0022-hastalik-ve-tedavi-sayfasi.md`) teşhis koymaz ve ilaç önermez; yalnız aşağıdaki kaynaklara yönlendirir. Adresler `src/data/disease-guide.ts` içindedir; her sayfa 2026-10-22'de (UTC) açılarak okundu.
+
+Kabul edilenler:
+
+- **OATA (İngiltere süs balığı ticaret birliği):** bakım kartları veteriner onaylıdır. Hastalık belirtileri lepistes ve moli kartından, bakır uyarısı karides ve salyangoz kartından alınır (karides ve salyangozlar bakıra çok duyarlıdır, düşük düzeyde bile ölürler; akvaryuma eklenen her ilacın omurgasızlar için güvenli olduğundan emin olunmalıdır). Sayfa metni kaynağın ifadesini yumuşatmaz. "Find a fish vet" sayfası veteriner için Fish Veterinary Society'ye yönlendirir.
+- **Florida Üniversitesi (UF/IFAS, EDIS yayınları; adresler ask.ifas.ufl.edu'ya taşındı):** FA031 (amonyak her zaman sıfır olmalı; balığın görünüşü ya da davranışı değişince hemen ölçülmeli), FA124 (yeni canlı ve bitki önce ayrı tutulur; hasta canlı için veterinere danışılır) ve balık sağlığı yönetimi konu sayfası.
+- **Practical Fishkeeping:** Neale Monks'un yanıtı; bakır ve formalin içeren ilaçlar karidesler için öldürücüdür.
+- **Türk Veteriner Hekimleri Birliği:** il veteriner hekimleri odalarının listesi. Herkese açık veteriner arama aracı yok; liste hangi hekimin balık baktığını göstermez.
+- **Veteriner fakülteleri:** yalnız sayfası açılarak doğrulanan su ürünleri hastalıkları bölümleri. 2026-10-22'de doğrulanan: Erciyes Üniversitesi Veteriner Fakültesi, Sucul Hayvan Hastalıkları (Su Ürünleri ve Hastalıkları) Anabilim Dalı. Sayfa süs balığından söz etmez.
+- **Fish Veterinary Society (İngiliz Veteriner Hekimler Birliği'nin uzmanlık şubesi):** İngiltere ve İrlanda'da süs balığı tedavi eden veteriner listesi.
+
+Kullanılmayanlar:
+
+- American Association of Fish Veterinarians (fishvets.org): sayfa açılamadı (HTTP 403).
+- UF/IFAS FA165 (bakırın akvaryumda kullanımı): doz hesabı anlatır; sayfa tedavi önermediği için kullanılmaz.
+- Doğrulanamayan fakülte sayfaları (İstanbul Üniversitesi-Cerrahpaşa: güvenlik doğrulaması; Fırat, Ondokuz Mayıs, Selçuk, Bursa Uludağ: bağlantı kurulamadı). Ankara Üniversitesi Veteriner Fakültesi'nde su ürünleri hastalıkları anabilim dalı yok; akuatik deney hayvanları araştırma merkezi bir hizmet birimi değildir.
+
+Kaynaklar üç ayda bir, katalogla birlikte yeniden açılır (karar 0020).
+
 ## Zorunlu kayıt alanları
 
 - Benzersiz kimlik

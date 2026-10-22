@@ -1,13 +1,13 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { Box, Calculator, CalendarCheck, Droplets, Fish, Gauge, HeartHandshake, Leaf, Menu, PackageSearch, Plus, Settings, SlidersHorizontal, Waves, X } from "lucide-react";
+import { Box, Calculator, CalendarCheck, Droplets, Fish, Gauge, HeartHandshake, Leaf, Menu, PackageSearch, Plus, Settings, SlidersHorizontal, Stethoscope, Waves, X } from "lucide-react";
 import { usePathname } from "next/navigation";
 import { allNavigationItems, type NavigationKey } from "@/data/navigation";
 import { useDialogFocus } from "@/lib/dialog-focus";
 import { useI18n } from "@/providers/i18n-provider";
 
-const navIcons: Record<NavigationKey,typeof Gauge> = {overview:Gauge,aquariums:Box,water:Droplets,maintenance:CalendarCheck,livestock:Fish,plants:Leaf,equipment:SlidersHorizontal,products:PackageSearch,calculators:Calculator,aquamatch:HeartHandshake,settings:Settings};
+const navIcons: Record<NavigationKey,typeof Gauge> = {overview:Gauge,aquariums:Box,water:Droplets,maintenance:CalendarCheck,livestock:Fish,plants:Leaf,equipment:SlidersHorizontal,products:PackageSearch,calculators:Calculator,diseases:Stethoscope,aquamatch:HeartHandshake,settings:Settings};
 
 // Yan menü ayrı bir bileşendir: klavye odağı (src/lib/dialog-focus.ts) menü açılınca kurulur, kapanınca kalkar.
 function MobileMenu({pathname,close}:{pathname:string;close:()=>void}) {
@@ -30,7 +30,7 @@ export function MobileNav() {
   const [open,setOpen]=useState(false);
   const { t } = useI18n();
   const tone = (active: boolean) => active ? "text-aqua" : "text-[#71858d]";
-  const secondaryActive=["/water","/livestock","/plants","/equipment","/products","/calculators","/settings"].some(p=>pathname.startsWith(p));
+  const secondaryActive=["/water","/livestock","/plants","/equipment","/products","/calculators","/diseases","/settings"].some(p=>pathname.startsWith(p));
   useEffect(()=>setOpen(false),[pathname]);
   // Menü yalnız dar ekranda görünür (lg:hidden). Ekran genişleyince kapatılır; yoksa gizli kalıp sayfa kaydırmasını kilitli bırakır.
   useEffect(()=>{const wide=window.matchMedia("(min-width: 1024px)");const closeIfWide=()=>{if(wide.matches)setOpen(false)};wide.addEventListener("change",closeIfWide);return()=>wide.removeEventListener("change",closeIfWide)},[]);

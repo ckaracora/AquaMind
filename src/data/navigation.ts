@@ -1,4 +1,4 @@
-export type NavigationKey = "overview"|"aquariums"|"water"|"maintenance"|"livestock"|"plants"|"equipment"|"products"|"calculators"|"aquamatch"|"settings";
+export type NavigationKey = "overview"|"aquariums"|"water"|"maintenance"|"livestock"|"plants"|"equipment"|"products"|"calculators"|"diseases"|"aquamatch"|"settings";
 
 // Bağlantının ekrandaki adı dil dosyasındadır: `messages.navigation.items[key]` (@aquamind/localization).
 export interface NavigationItem {
@@ -17,6 +17,7 @@ export const primaryNavigationItems: NavigationItem[] = [
   {key:"equipment",href:"/equipment"},
   {key:"products",href:"/products"},
   {key:"calculators",href:"/calculators"},
+  {key:"diseases",href:"/diseases"},
   {key:"aquamatch",href:"/aquamatch",comingSoon:true},
 ];
 
