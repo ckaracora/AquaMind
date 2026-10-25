@@ -2731,3 +2731,137 @@ Güncel alt adım: JBL filtre medyası, bakteri başlangıcı, sorun giderici/pH
 | `mini-nerite-snail` | 2 | 20 | 25 | 1 | 22–28 | 7–8,5 | Satış adı, tür kimliği yok; kabul edilen kaynağa bağlanamaz, değişmedi |
 | `batik-nerite-snail` | 3 | 20 | 25 | 1 | 22–28 | 7–8,5 | Satış adı, tür kimliği yok; kabul edilen kaynağa bağlanamaz, değişmedi |
 | `batman-nerite-snail` | 3 | 20 | 25 | 1 | 22–28 | 7–8,5 | Satış adı, tür kimliği yok; kabul edilen kaynağa bağlanamaz, değişmedi |
+
+## 2026-10-25 Bitki kataloğu 1: Fishkeeper'da sayfası olan ve Türkiye'de satılan 54 bitki (Claude)
+
+- Karar `docs/DECISIONS/0023-bitki-katalogu.md` (ürün sahibi 2026-10-25'te onayladı); kaynaklar ve değer kuralı `docs/DATA_SOURCES.md` → "Bitkiler". Katalog `src/data/catalog-plants.ts`.
+- Okunan sayfalar (2026-10-25, UTC; hepsi HTTP 200):
+  - Fishkeeper: bitki bilgi bankasının üç liste sayfası ve 71 bitki sayfası (tablo ve açıklama).
+  - Tropica: bitki listesi ve 288 ürün sayfası (172 ayrı ad). 16 sayfa ilk denemede zaman aşımına uğradı; yeniden denendi, hepsi açıldı.
+  - Aquarubi: bitki kategorisinin tamamı (558 ürün; sayfa kaydırılarak). Akvaryum Express: canlı bitki kategorisi (7 ürün). Eşleşen 156 ürünün sayfası açılıp ürün adı okundu (iki sayfa iki kez açıldı); 153'ü kataloğa bağlandı (Aquarubi 151, Akvaryum Express 2).
+  - UF/IFAS bitki dizini: satılan bitkilerin bilimsel adıyla adres denendi; 11 sayfa var.
+  - EUR-Lex: AB istilacı yabancı türler listesinin konsolide metni (2025-08-07). legislation.gov.uk: İngiltere'nin 2014 satış yasağı (SI 2014/538).
+- Eşleşme:
+  - Fishkeeper'ın 71 bitkisinden 54'ü kabul edilen mağazalarda satılıyor; hepsi eklendi.
+  - *Echinodorus* 'Ozelot' ilk iki sürümde eklenmemişti; mağazada yalnız 'Ozelot Red' ve 'Ozelot Narrow Mini' vardı. Codex 2. turda Flowgrow'un 'Ozelot' kaydının kaynak olarak echinodorus.net'in "Echinodorus Ozelot rot" sayfasını gösterdiği belirtildi. O sayfa da Fishkeeper ve Tropica gibi *E. schlueteri* 'Leopard' × *E.* × *barthii* melezini anlatıyor. 'Ozelot Red' bu kayda bağlandı. 'Ozelot Narrow Mini'yi mağaza "klasik Ozelot'un daha dar yapraklı ve kompakt formu" diye anlatıyor; bağlanmadı.
+  - *Alternanthera reineckii* var. *rosaefolia* ilk eşleşmede yalnız Tropica'nın 'Rosanervig' formuyla eşleşmiş ve eklenmemişti. Codex 1. turda Flowgrow'un eş adları gösterildi ('Rosa', 'Pink'; ticari ad "Alternanthera rosaefolia"). Bitki, Aquarubi'deki Tropica 'Pink' ürünüyle eklendi; Tropica'nın 'Pink' sayfası da aynı bitki sayıldı (sayfa da Fishkeeper gibi 25–50 cm diyor). 'Rosanervig' ayrı bir kültür formu ("culture form"); bağlanmadı.
+  - Satılmayan 17 bitki: *Alternanthera cardinalis*, *A. reineckii* var. *lilacina*, *Echinodorus bleheri*, *Anubias afzelii*, *Cryptocoryne moehlmannii*, *Juncus repens*, *Dracaena sanderiana*, *Shinnersia rivularis*, *Spathiphyllum wallisii*, *Cabomba piauhyensis*, *Heteranthera zosterifolia*, *Staurogyne* 'Porto Velho', *Vallisneria spiralis*, *Crinum thaianum*, *Nymphaea lotus*, *Vallisneria americana* var. *biwaensis*, *Dracaena* "variegatus".
+- Ad ve form kararları:
+  - Eski ve yanlış adlar kaynağın kendi yazdığına göre bağlandı:
+    - Fishkeeper: *Cryptocoryne lutea* → *C. walkeri* ("formerly known as C. lutea"); *C. nevillii* → *C. × willisii* (Tropica da aynısını yazıyor); *Elodea densa* → *Egeria densa*; *Vesicularia dubyana* → *Taxiphyllum barbieri*; *Bacopa amplexicaulis* → *B. caroliniana*; *Eusteralis stellata* → *Pogostemon stellatus*.
+    - Tropica: *Cladophora aegagropila* → *Aegagropila linnaei*; *Echinodorus tenellus* → *Helanthium tenellum* ("Previously named Echinodorus tenellus 'Green'").
+    - Fishkeeper'ın yazım hataları düzeltildi: "Ammania" → *Ammannia*, "Chladoflora" → *Cladophora*.
+  - Tropica'nın "Cryptocoryne crispatula" sayfası var. *balansae*'yi anlatıyor. Bu yüzden Tropica'nın "Cryptocoryne Crispatula in vitro" ürünü var. *balansae* kaydına bağlandı. Varyete yazmayan Stoffels ürünü bağlanmadı.
+  - *Vallisneria* "gigantea": Fishkeeper *V. americana* var. *gigantea* (eş adı *V. gigantea*), Tropica "Vallisneria sp. Gigantea", mağaza "Vallisneria Australis Gigantea" diyor. Üçü de aynı ticari bitkiyi "gigantea" adıyla anlatıyor; birlikte bağlandı.
+  - Bağlanmayan satış adları:
+    - form yazmayan ya da başka formdaki *C. wendtii* ürünleri ('Tropica', 'Mi Oya', 'Fancy Pink'; Fishkeeper'da yalnız 'Brown' ve 'Green' var). 'Green Gecko' ilk sürümde 'Green' kaydına bağlanmıştı; Flowgrow onu ayrı bir seçilmiş form ("Auslese") olarak tanımlıyor, Codex 1. turdan sonra çıkarıldı;
+    - *Ceratopteris cornuta*, Tropica'nın *Bacopa* 'Compact' ürünü, "Bacopa carolina 'Yellow Flame'";
+    - top biçiminde olmayan marimo ürünleri (ağaç figürü, bambu, taş ve halı); sayfaları okunmadı, yalnız top biçimindeki dört ürün bağlandı.
+  - Flowgrow'un eş adları (Codex 2. tur): 'Bonsai' ve 'Petite' aynı formun iki adı; 'Bonsai' ürünleri ilk sürümde var. *nana* kaydına bağlanmıştı, 'Petite' kaydına taşındı. *C. axelrodii* Rataj, *C. undulata*'nın eş adı; Aquarubi'nin "Cryptocoryne Axelrodi" ürün sayfası da öyle yazıyor. İlk sürümde ayrı tür sayılmıştı; iki ürün *C. undulata* kaydına bağlandı.
+  - Form adlarıyla satılan bitkiler türün kaydına eş ad olarak bağlandı; değerleri türün sayfasından. Örnekler: *Anubias nana* 'Golden', 'Pinto', 'Pangolino'; *Microsorum* 'Trident', 'Narrow', 'Needle Leaf'; *Rotala macrandra* 'Mini' formları. Fishkeeper'da ayrı kaydı olan formlar kendi kaydına bağlandı ('Petite', 'Windeløv', *C. wendtii* 'Green' ve 'Brown', *Lysimachia* 'Aurea').
+- Tropica'da kullanılmayan sayfalar:
+  - Açıklaması başka bitkiyi anlatan iki ürün sayfası: "Anubias barteri nana" (101CLP; *Pogostemon deccanensis*'i anlatıyor) ve "Cryptocoryne x willisii" (107CLP; bir gövdeli bitkiyi anlatıyor). Değerleri aynı bitkinin öteki sayfalarıyla aynı; yalnız kaynak gösterilmedi.
+  - "Rotala macrandra": sayfa 'Japan' formunu anlatıyor; tür kaydına karışmadı. Kayıt yalnız Fishkeeper'a dayanıyor.
+  - Türün kaydına kültür formunun sayfası karışmadı: *C. beckettii* 'Petchii' (Flowgrow: triploid form), *C. undulata* 'Broad Leaf' (Tropica: triploid varyete), *Helanthium tenellum* 'Green' (Tropica: kültür formu), *Bacopa monnieri* 'Compact'. Bu kayıtlarda ışık yalnız Fishkeeper'dan, CO₂ boş.
+  - Tropica'nın 'Bogor Moss' adı ilk sürümde kültür formu sayılmıştı. Flowgrow'a göre *T. barbieri* hobiye 1969'da "Bogor moss" adıyla girdi; Tropica'nın 003YLS sayfası da türü anlatıyor. Codex 1. turdan sonra sayfa *T. barbieri* kaydında kullanıldı: büyüme yavaş–orta, CO₂ düşük, boy 10 cm.
+- Açıklamada açıkça yazılan daha büyük boylar (Codex 3. tur; bütün açıklamalardaki cm geçen cümleler okundu):
+  - *Aponogeton boivinianus* 60 → 80 cm (Tropica: yapraklar "up to 80 cm long"); *A. ulvaceus* 50 → 60 cm (Tropica: "30-60 cm long" yapraklar);
+  - *Vallisneria* var. *gigantea* 100 → 150 cm (Tropica: yapraklar "(50-150 cm, 2 cm wide)");
+  - *Helanthium tenellum* 10 → 12 cm (Fishkeeper: "longer leaves of up to 12cm" az ışıkta);
+  - *Echinodorus* 'Ozelot' 40 → 50 cm (Tropica: "20-50 cm tall"); *Micranthemum umbrosum* 15 → 25 cm (Tropica: "stems becoming 10-25 cm long"); *Pogostemon stellatus* 30 → 60 cm (Tropica: "Stems from 20-60 cm").
+  - Sayılmayanlar: kalınlık (*T. barbieri* "3-10 cm thick"), en, rizom uzunluğu, saksı ölçüsü. Öteki açıklama değerleri tablodaki boydan büyük değil.
+- Tropica'nın ürün sayfaları farklı yazdığında en yüksek ihtiyaç alındı. *Lilaeopsis brasiliensis*'te iki sayfa orta, biri düşük ışık ve CO₂ diyor; orta alındı. Kaynak olarak değeri veren sayfa gösterildi.
+- İstilacı tür listeleri:
+  - UF/IFAS dizininde sayfası olan 11 bitkiden ikisi ABD federal zararlı ot listesinde: *Hygrophila polysperma* (ayrıca Florida'nın yasaklı su bitkileri listesinde) ve *Limnophila sessiliflora* (ayrıca Florida'nın zararlı ot listesinde). İkisi "us-federal-noxious-weed" olarak işaretlendi.
+  - *Egeria densa*'nın sayfası "birçok yerde istilacı" diyor ama sayfanın başlığında liste durumu yok; işaretlenmedi.
+  - Öteki dokuz sayfa Florida'ya özgü ya da yabancı ama listesiz.
+  - Satılan 54 bitkinin hiçbiri AB listesinde ya da İngiltere'nin 2014 satış yasağında değil.
+- Yerleşimi Fishkeeper 31 kayıtta yazıyor; 23 kayıtta boş. "Centrepiece" (*Aponogeton* türleri) yerleşim sayılmadı.
+- Fishkeeper'ın *Anubias heterophylla* sayfası bilgi bankasının dışında (`/fish/Anubias-Heterophylla`): pH ve büyüme hızı yok, sıcaklık birimsiz ("22-30"); °C olarak okundu.
+- Değerler (Fishkeeper ve Tropica tablolarının yazdığı ve kataloğa giren; açıklamadan gelen boylar yukarıda):
+
+| Bilimsel ad | Fishkeeper (sıcaklık · pH · ışık · büyüme · boy) | Tropica (ışık · CO₂ · büyüme · iki ayda boy) | Katalog |
+|---|---|---|---|
+| *Bolbitis heudelotii* | 22-28 °C · 5.0-7.0 · Very low-medium · Slow · 15-40cm | Medium · Medium · Slow · 15 - 30+ | 22–28 °C · pH 5–7 · ışık orta · CO₂ orta · büyüme yavaş · 40 cm |
+| *Alternanthera reineckii var. rosaefolia* | 17-28 °C · 5.0-8.0 · Medium-very high · Medium · 25-50cm | Medium · Medium · Medium · 20 - 30+ | 17–28 °C · pH 5–8 · ışık orta–yüksek · CO₂ orta · büyüme orta · 50 cm |
+| *Ammannia gracilis* | 15-28 °C · 6.5–8.5 · High · Fast · 30-60cm+ | yok | 15–28 °C · pH 6,5–8,5 · ışık yüksek · büyüme hızlı · 60 cm |
+| *Anubias barteri var. barteri* | 18-28 °C · 5.0-8.0 · Very low-high · Very slow · 25-45cm | Low · Low · Slow · 20 - 30+ | 18–28 °C · pH 5–8 · ışık düşük–yüksek · CO₂ düşük · büyüme çok yavaş–yavaş · 45 cm |
+| *Anubias barteri var. nana 'Petite'* | 20-30 °C · 6.0-8.5 · Very low to high · Very slow · 3-5cm | Low · Low · Slow · 3 - 5+ | 20–30 °C · pH 6–8,5 · ışık düşük–yüksek · CO₂ düşük · büyüme çok yavaş–yavaş · 5 cm |
+| *Anubias barteri var. nana* | 18-28 °C · 5.0-8.5 · Very low to high · Very slow · 5-15cm | Low · Low · Slow · 5 - 15+; — · — · — · 5 - 15+ | 18–28 °C · pH 5–8,5 · ışık düşük–yüksek · CO₂ düşük · büyüme çok yavaş–yavaş · 15 cm |
+| *Anubias barteri 'Coffeefolia'* | 18-28 °C · 5.0-8.0 · Very low-high · Very slow · 25-45cm | Low · Low · Slow · 15 - 30+ | 18–28 °C · pH 5–8 · ışık düşük–yüksek · CO₂ düşük · büyüme çok yavaş–yavaş · 45 cm |
+| *Anubias congensis* | 15-28 °C · 6.5-8.5 · Very low-high · Very slow · 30-35cm+ | yok | 15–28 °C · pH 6,5–8,5 · ışık düşük–yüksek · büyüme çok yavaş · 35 cm |
+| *Anubias heterophylla* | 22-30 · — · Moderate Light · — · up to 80cm | yok | 22–30 °C · ışık orta · 80 cm |
+| *Aponogeton boivinianus* | 16-26 °C · 6.0-8.0 · Medium-very high · Fast · 30-60cm+ | Medium · Low · — · 20 - 30+ | 16–26 °C · pH 6–8 · ışık orta–yüksek · CO₂ düşük · büyüme hızlı · 80 cm |
+| *Aponogeton longiplumulosus* | 18-26 °C · 5.5-8.0 · Medium-very high · Medium · 35-60cm | Low · Low · Medium · 20 - 30+ | 18–26 °C · pH 5,5–8 · ışık orta–yüksek · CO₂ düşük · büyüme orta · 60 cm |
+| *Aponogeton ulvaceus* | 20-27 °C · 5.5-8.0 · Medium-very high · Fast · 30-50cm | Medium · Low · — · 20 - 30+ | 20–27 °C · pH 5,5–8 · ışık orta–yüksek · CO₂ düşük · büyüme hızlı · 60 cm |
+| *Limnophila sessiliflora* | 22-28 °C · 5.5-8.0 · Medium-very high · Fast · 15-40cm | Low · Low · — · 15 - 30+ | 22–28 °C · pH 5,5–8 · ışık orta–yüksek · CO₂ düşük · büyüme hızlı · 40 cm |
+| *Cryptocoryne beckettii* | 24-28 °C · 5.5-8.0 · Low-high · Medium · 15-20cm | yok | 24–28 °C · pH 5,5–8 · ışık düşük–yüksek · büyüme orta · 20 cm |
+| *Bacopa caroliniana* | 15-28 °C · 5.0-8.0 · Medium-high · Slow · 10-30cm | Low · Low · Slow · 10 - 30+; Low · Low · Slow · 20 - 30+ | 15–28 °C · pH 5–8 · ışık orta–yüksek · CO₂ düşük · büyüme yavaş · 30 cm |
+| *Cryptocoryne wendtii 'Brown'* | 20-30 °C · 5.5-9.0 · Low-high · Medium · 15-25cm | yok | 20–30 °C · pH 5,5–9 · ışık düşük–yüksek · büyüme orta · 25 cm |
+| *Aegagropila linnaei* | 5-28 °C · 6.0-8.5 · Medium-high · Very slow · 3-10cm | Low · Low · Slow · 3 - 10+; — · — · — · 3 - 10+ | 5–28 °C · pH 6–8,5 · ışık orta–yüksek · CO₂ düşük · büyüme çok yavaş–yavaş · 10 cm |
+| *Egeria densa* | 10-26 °C · 5.0-9.0 · Medium-very high · Very fast · 40-100cm | Low · Low · — · 20 - 30+ | 10–26 °C · pH 5–9 · ışık orta–yüksek · CO₂ düşük · büyüme çok hızlı · 100 cm |
+| *Lysimachia nummularia* | 15-22 °C · 6.0-8.0 · High-very high · Fast · 40cm | yok | 15–22 °C · pH 6–8 · ışık yüksek · büyüme hızlı · 40 cm |
+| *Cryptocoryne bullosa* | 22-30 °C · 5.5-8.0 · Low · Medium · 30cm+ | yok | 22–30 °C · pH 5,5–8 · ışık düşük · büyüme orta · 30 cm |
+| *Cryptocoryne crispatula var. balansae* | 20-28 °C · 5.0-9.0 · Low-very high · Medium · Up to 60cm | Low · Low · Medium · 20 - 30+; — · — · Medium · 20 - 30+ | 20–28 °C · pH 5–9 · ışık düşük–yüksek · CO₂ düşük · büyüme orta · 60 cm |
+| *Cryptocoryne undulata* | 22-28 °C · 5.5-7.5 · Low-high · Slow · 10-20cm | yok | 22–28 °C · pH 5,5–7,5 · ışık düşük–yüksek · büyüme yavaş · 20 cm |
+| *Cryptocoryne × willisii* | 20-28 °C · 6.0-8.0 · Low - high · Slow · 15cm | Low · Low · Slow · 10 - 20+ | 20–28 °C · pH 6–8 · ışık düşük–yüksek · CO₂ düşük · büyüme yavaş · 20 cm |
+| *Cyperus helferi* | 20-30 °C · 5.0-7.5 · High-very high · Slow · 40cm+ | Medium · Medium · Slow · 20 - 30+ | 20–30 °C · pH 5–7,5 · ışık yüksek · CO₂ orta · büyüme yavaş · 40 cm |
+| *Cabomba aquatica* | 18-26 °C · 6.0-7.0 · High-very high · Fast · 30-80cm | Medium · Low · — · 20 - 30+ | 18–26 °C · pH 6–7 · ışık yüksek · CO₂ düşük · büyüme hızlı · 80 cm |
+| *Riccia fluitans* | 10-28 °C · 5.0-8.0 · Low-very high · Medium · 0.5-1cm+ | Medium · Medium · Medium · 3 - 5+ | 10–28 °C · pH 5–8 · ışık orta–yüksek · CO₂ orta · büyüme orta · 5 cm |
+| *Salvinia natans* | 12-30 °C · 5.5-9.0 · High-very high · Medium · 1-3cm | yok | 12–30 °C · pH 5,5–9 · ışık yüksek · büyüme orta · 3 cm |
+| *Rotala macrandra* | 22-28 °C · 5.0-7.0 · High-very high · Fast · 25-55cm | yok | 22–28 °C · pH 5–7 · ışık yüksek · büyüme hızlı · 55 cm |
+| *Vallisneria americana var. gigantea* | 18-30 °C · 6.5-8.5 · High · Fast · 50-100cm+ | Low · Low · — · 20 - 30+ | 18–30 °C · pH 6,5–8,5 · ışık yüksek · CO₂ düşük · büyüme hızlı · 150 cm |
+| *Lysimachia nummularia 'Aurea'* | 15-22 °C · 6.0-8.0 · High-very high · Fast · 40cm | yok | 15–22 °C · pH 6–8 · ışık yüksek · büyüme hızlı · 40 cm |
+| *Cryptocoryne wendtii 'Green'* | 20-30 °C · 5.5-9.0 · Very low-high · Medium · 10-15cm | Low · Low · Medium · 10 - 30+ | 20–30 °C · pH 5,5–9 · ışık düşük–yüksek · CO₂ düşük · büyüme orta · 30 cm |
+| *Hygrophila polysperma* | 18-30 °C · 5.0-9.0 · Low-very high · Very fast · 25-40cm | Low · Low · — · 20 - 30+; — · — · — · - | 18–30 °C · pH 5–9 · ışık düşük–yüksek · CO₂ düşük · büyüme çok hızlı · 40 cm |
+| *Cardamine lyrata* | 15-24 °C · 6.0-8.0 · Medium-very high · Fast · 20-50cm | Low · Medium · — · 20 - 30+ | 15–24 °C · pH 6–8 · ışık orta–yüksek · CO₂ orta · büyüme hızlı · 50 cm |
+| *Microsorum pteropus* | 18-30 °C · 5.0-8.0 · Very low-high · Slow · 15-30cm | Low · Low · Slow · 15 - 30+ | 18–30 °C · pH 5–8 · ışık düşük–yüksek · CO₂ düşük · büyüme yavaş · 30 cm |
+| *Taxiphyllum barbieri* | 15-28 °C · 5.0-9.0 · Very low-very high · Slow · — | Low · Low · Medium · 3 - 10+ | 15–28 °C · pH 5–9 · ışık düşük–yüksek · CO₂ düşük · büyüme yavaş–orta · 10 cm |
+| *Microsorum pteropus 'Windeløv'* | 18-30 °C · 5.0-8.0 · Very low-high · Slow · 10-20cm | Low · Low · Slow · 10 - 20+ | 18–30 °C · pH 5–8 · ışık düşük–yüksek · CO₂ düşük · büyüme yavaş · 20 cm |
+| *Aponogeton madagascariensis* | 15-24 °C · 5.0-7.2 · Medium · Medium · 25-50cm | Medium · Low · Medium · 20 - 30+ | 15–24 °C · pH 5–7,2 · ışık orta · CO₂ düşük · büyüme orta · 50 cm |
+| *Lilaeopsis brasiliensis* | 15-26 °C · 6.0-8.0 · High-very high · Slow · 4-7cm | Low · Low · Slow · 3 - 5+; Medium · Medium · Slow · 3 - 5+ | 15–26 °C · pH 6–8 · ışık yüksek · CO₂ orta · büyüme yavaş · 7 cm |
+| *Helanthium tenellum* | 20-30 °C · 5.5-8.0 · Medium-very high · Medium · 5-10cm | yok | 20–30 °C · pH 5,5–8 · ışık orta–yüksek · büyüme orta · 12 cm |
+| *Crinum calamistratum* | 20-28 °C · 5.5-8.0 · Medium-very high · Slow · 40-120cm | Low · Low · Slow · 20 - 30+ | 20–28 °C · pH 5,5–8 · ışık orta–yüksek · CO₂ düşük · büyüme yavaş · 120 cm |
+| *Barclaya longifolia* | 23-30 °C · 5.0-7.5 · Medium-very high · Medium · 30-80cm | yok | 23–30 °C · pH 5–7,5 · ışık orta–yüksek · büyüme orta · 80 cm |
+| *Echinodorus 'Ozelot'* | 15-30 °C · 6.0-9.0 · Low-very high · Fast · 20-40cm | Low · Low · Medium · 20 - 30+ | 15–30 °C · pH 6–9 · ışık düşük–yüksek · CO₂ düşük · büyüme orta–hızlı · 50 cm |
+| *Limnophila aromatica* | 22-28 °C · 5.0-7.0 · High-very high · Slow · 25-50cm | yok | 22–28 °C · pH 5–7 · ışık yüksek · büyüme yavaş · 50 cm |
+| *Ceratophyllum demersum* | 10-28 °C · 6.0-9.0 · Very low-very high · Very fast · 80cm+ | Low · Low · — · 5 - 30+ | 10–28 °C · pH 6–9 · ışık düşük–yüksek · CO₂ düşük · büyüme çok hızlı · 80 cm |
+| *Aponogeton crispus* | 20-28 °C · 5.5-8.0 · Medium-very high · Fast · 25-50cm | yok | 20–28 °C · pH 5,5–8 · ışık orta–yüksek · büyüme hızlı · 50 cm |
+| *Micranthemum umbrosum* | 20-26 °C · 5.5-8.0 · High-very high · Fast · 10-15cm+ | Medium · Medium · — · 10 - 15+ | 20–26 °C · pH 5,5–8 · ışık yüksek · CO₂ orta · büyüme hızlı · 25 cm |
+| *Glossostigma elatinoides* | 15-26 °C · 5.0-7.5 · High-very high · Fast · 2-3cm+ | High · High · — · 3 - 5+ | 15–26 °C · pH 5–7,5 · ışık yüksek · CO₂ yüksek · büyüme hızlı · 5 cm |
+| *Mayaca fluviatilis* | 22-28 °C · 5.5-7.2 · Medium · Fast · 20-30cm | Medium · Medium · — · 15 - 30+ | 22–28 °C · pH 5,5–7,2 · ışık orta · CO₂ orta · büyüme hızlı · 30 cm |
+| *Eleocharis vivipara* | 20-25 °C · 6.0-7.5 · High-very high · Medium · 20cm+ | yok | 20–25 °C · pH 6–7,5 · ışık yüksek · büyüme orta · 20 cm |
+| *Cryptocoryne walkeri* | 20-28 °C · 5.5-8.0 · Low-high · Slow · 15cm | yok | 20–28 °C · pH 5,5–8 · ışık düşük–yüksek · büyüme yavaş · 15 cm |
+| *Bacopa monnieri* | 15-28 °C · 6.0-8.0 · Medium-very high · Slow · 25-50cm | yok | 15–28 °C · pH 6–8 · ışık orta–yüksek · büyüme yavaş · 50 cm |
+| *Ceratopteris thalictroides* | 20-28 °C · 5.0-9.0 · High-very high · Very fast · 15-30cm | Medium · Low · — · 15 - 30+ | 20–28 °C · pH 5–9 · ışık yüksek · CO₂ düşük · büyüme çok hızlı · 30 cm |
+| *Pogostemon stellatus* | 22-28 °C · 5.0-7.0 · High-very high · Medium · 15-25cm | High · High · Medium · 15 - 30+ | 22–28 °C · pH 5–7 · ışık yüksek · CO₂ yüksek · büyüme orta · 60 cm |
+| *Hottonia palustris* | 10-20 °C · 5.5-7.5 · High-very high · Medium · 20-30cm | Low · Low · Medium · 10 - 20+ | 10–20 °C · pH 5,5–7,5 · ışık yüksek · CO₂ düşük · büyüme orta · 30 cm |
+
+- Testler: `src/lib/__tests__/plant-catalog.test.ts`.
+  - Kayıt sayısı; kaynak, mağaza ve tarih bağlantıları; bütünlük denetiminin bozuk kaydı yakalaması; değer kuralının sonuçları.
+  - Kopyalama hatalı ve başka formu anlatan Tropica sayfalarının kullanılmaması; istilacı işaretleri; eş ad eşleşmeleri; eklenmeyen formlar.
+  - Kataloğun hiçbir sayfaya girmemesi.
+- Motor, kayıt biçimi ve altın fikstür değişmedi; hiçbir sayfanın boyutu değişmedi.
+- Codex 1. tur (2026-10-25, "bulgu var"):
+  - Üç P2, kataloğa yanlış giren eşleşme: 'Green Gecko' ürünü 'Green' kaydına bağlanmıştı; *A. reineckii* var. *rosaefolia* Tropica 'Pink' adıyla satıldığı hâlde eklenmemişti; Tropica'nın 'Bogor Moss' sayfası *T. barbieri* için kullanılmamıştı. Üçü de Flowgrow sayfaları açılarak doğrulandı ve düzeltildi (yukarıda).
+  - Bir P3, yalnız test güvencesi: testler yalnız seçili kayıtları sabitliyordu; geçerli biçimdeki bir değer, eş ad ya da mağaza adresi değişikliği kaçıyordu. Düzeltildi: `src/lib/__tests__/plant-catalog.expected.json` (aynı betiğin ürettiği kayıtlar) katalogla alan alan karşılaştırılıyor. Codex'in yedi bozması (Ammannia'nın sıcaklığı, boyu ve mağaza adresi, Crinum'un ışık alt ucu, A. boivinianus'un CO₂'si, Limnophila'nın yerleşimi, A. congensis'in eş adı) ve üç ek bozma (rosaefolia'nın Tropica kaynağı, 'Green Gecko'nun geri eklenmesi, istilacı işaretin silinmesi) yakalanıyor.
+  - Codex ayrıca betiğin ham veriden kayıt satırlarını birebir ürettiğini, 11 kaydın kaynak sayfalarında sayısal fark olmadığını, istilacı etiketlerinde eksik ya da fazla olmadığını doğruladı.
+  - Görüş işlendi: boy kesin bir biyolojik üst sınır değil; kaynakların yazdığı aralıkların üst değeri ("+" işaretli) ve Tropica'nın iki aylık değeri (kurala yazıldı). *Vallisneria*'nın ana adı Fishkeeper'daki gibi kaldı; Flowgrow ad kaynağı değil, eş ad kaynağı.
+- Codex 2. tur (2026-10-25, "bulgu var"):
+  - İki P2, kataloğa yanlış giren eşleşme: 'Bonsai' ürünleri var. *nana* kaydındaydı (Flowgrow: 'Petite' ile aynı form); *C. axelrodii* ayrı tür sayılmıştı (Flowgrow: *C. undulata*'nın eş adı). Düzeltildi (yukarıda).
+  - Bir P3, aşırı uç durum: kimlik tekliği denetimi işlevin dışında, koşulsuz çalışıyordu; işleve verilen dizideki yinelenen kimliği yakalamıyordu. Düzeltildi: kimlik denetimi öteki denetimlerle birlikte işlevin içinde (tür kataloğundaki gibi); test yinelenen kimliği deniyor.
+  - Görüş işlendi: *Echinodorus* 'Ozelot' dışlaması yeniden ele alındı; 'Ozelot Red' aynı melez olduğu için eklendi (yukarıda).
+  - Görüş: beklenen kayıtlar dosyası bağımsız bir kaynak doğrulaması değildir; katalogla birlikte değiştirilirse yalnız bağımsız sabitler yakalar. Dosya elle yapılan değişikliği yakalamak içindir; değerler kaynaktan betikle üretilir.
+  - Codex ayrıca 1. turun düzeltmelerini, 10 bozmanın yakalandığını, betiğin 53 kaydı birebir ürettiğini ve 12 kaydın kaynak sayfalarında fark olmadığını doğruladı.
+- Codex 3. tur (2026-10-25, "bulgu var"):
+  - Bir P2, kataloğa yanlış giren değer: boy yalnız tablolardan okunuyordu; açıklamada açıkça yazılan daha büyük boylar alınmıyordu. Düzeltildi: bütün açıklamalardaki boy cümleleri okundu, yedi kaydın boyu büyüdü (yukarıda); kural `docs/DATA_SOURCES.md`'ye yazıldı. Betik her değerin geçtiği metni kaynakta birebir arıyor.
+  - Bir P3, aşırı uç durum: bütünlük denetimi sonlu olmayan boy ve aralık değerini (NaN, sonsuz) kabul ediyordu. Düzeltildi; test deniyor.
+  - Görüş işlendi: okunan ürün sayfası sayısı 158 değil 156 (iki sayfa iki kez açılmıştı).
+  - Codex ayrıca 'Ozelot Red' kanıtını yeterli buldu; 1. ve 2. turun düzeltmelerini, 10 bozmanın yakalandığını ve 12 kaydın kaynak tablolarında fark olmadığını doğruladı.
+- Codex 4. tur (2026-10-25): temiz. Betik 54 kaydı, beklenen kayıtları ve bu tabloyu birebir üretiyor; 13 kaydın 26 kaynak sayfası kanıtla eşleşiyor.
+- Sonraki paketler:
+  - yalnız Tropica'da sayfası olan satılan bitkiler;
+  - resmî listedeki satılan bitkiler (*Pistia stratiotes*, *Azolla filiculoides*);
+  - su bitkisi olup olmadığı Practical Fishkeeping'le kontrol edilecek bitkiler (*Ophiopogon*, *Fittonia*, *Selaginella*, *Homalomena*);
+  - Practical Fishkeeping'in tür kutuları;
+  - bitki sayfasında katalogdan seçme (önce taslak).
