@@ -1,11 +1,11 @@
 "use client";
 
-import { Box, Calculator, CalendarCheck, Droplets, Fish, Gauge, HeartHandshake, Leaf, PackageSearch, Settings, SlidersHorizontal, UserRound, Waves } from "lucide-react";
+import { Box, Calculator, CalendarCheck, Droplets, Fish, Gauge, HeartHandshake, Leaf, PackageSearch, Settings, SlidersHorizontal, Stethoscope, UserRound, Waves } from "lucide-react";
 import { usePathname } from "next/navigation";
 import { primaryNavigationItems, settingsNavigationItem, type NavigationKey } from "@/data/navigation";
 import { useI18n } from "@/providers/i18n-provider";
 
-const navIcons: Record<NavigationKey,typeof Gauge> = {overview:Gauge,aquariums:Box,water:Droplets,maintenance:CalendarCheck,livestock:Fish,plants:Leaf,equipment:SlidersHorizontal,products:PackageSearch,calculators:Calculator,aquamatch:HeartHandshake,settings:Settings};
+const navIcons: Record<NavigationKey,typeof Gauge> = {overview:Gauge,aquariums:Box,water:Droplets,maintenance:CalendarCheck,livestock:Fish,plants:Leaf,equipment:SlidersHorizontal,products:PackageSearch,calculators:Calculator,diseases:Stethoscope,aquamatch:HeartHandshake,settings:Settings};
 
 export function Sidebar() {
   const pathname = usePathname();
