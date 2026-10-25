@@ -88,6 +88,40 @@ Değer kuralı (balıklardaki kuralın omurgasız karşılığı):
 - **Eski kaynaklar:** ek kaynak olarak kalır.
 - **Okuma:** değerler sayfa açılarak okunur; arama özeti kaynak sayılmaz.
 
+## Bitkiler
+
+Ürün sahibi kaynak listesini 2026-10-25'te onayladı (`docs/DECISIONS/0023-bitki-katalogu.md`). Sayfalar 2026-10-25'te (UTC) açılarak okundu; değerler betikle işlendi.
+
+Kabul edilen kaynaklar:
+
+1. **Fishkeeper (Maidenhead Aquatics) bitki bilgi bankası:** ana kaynaktır (71 bitki). Sıcaklık aralığı, pH, ışık, büyüme hızı ve boyu verir; açıklama yerleşimi (ön, orta, arka plan, kök ya da taş üzeri, yüzen) yazar. Birkaç yazım hatası ve eski ad içerir (ör. "Elodea densa", "Chladoflora aegagropila"); adlar Fishkeeper'ın kendi eş ad satırı ve açıklamasıyla, gerekirse Tropica ile eşlenir.
+2. **Tropica (bitki yetiştiricisi):** ışık ve CO₂ ihtiyacını tanımlı bir ölçekle verir (düşük, orta, yüksek; orta CO₂ 6–14 mg/L, yüksek yaklaşık 15–25 mg/L), ayrıca büyüme hızını ve iki ayda ulaşılan boyu. Sıcaklık ve pH vermez. Her ürün biçimi (saksı, doku kültürü, kök üzeri) ayrı sayfadır; aynı bitkinin sayfaları birlikte okunur. Boş alanlar ve başka bir bitkiyi anlatan açıklamalar (kopyalama hatası) vardır; açıklaması başka bitkiyi anlatan sayfa kullanılmaz.
+3. **Practical Fishkeeping:** destekleyici kaynaktır. Tür kutuları sıcaklık ve pH aralığı verdiğinde ortak aralığa girer; "akvaryumda kaçınılacak bitkiler" yazısı su bitkisi olmayan bitkiler içindir. İlk pakette taranmadı; sonraki paketlerde taranır.
+4. **Flowgrow:** yalnız eş ad ve yanlış satış adı eşleştirmesi içindir; değer kaynağı değildir (sahibi bir satıcı; bazı değerler bütün bitkilerde aynı).
+
+Kabul edilmeyenler: Dennerle (bitki veri tabanı yok), Aquasabi (satıcı; verisi Flowgrow'dan kopya). Yerel mağazalar canlılarda olduğu gibi yalnız satış adı ve bulunabilirlik içindir.
+
+İstilacı ve yasak bitkiler için resmî listeler (değer vermez, yalnız etiket içindir):
+
+- AB'nin istilacı yabancı türler listesi (Uygulama Yönetmeliği (AB) 2016/1141 ve değişiklikleri; EUR-Lex konsolide metni, 2025-08-07).
+- İngiltere'nin satış yasağı (Wildlife and Countryside Act 1981 (Prohibition on Sale etc. of Invasive Non-native Plants) (England) Order 2014; yedi bitki).
+- Florida Üniversitesi'nin (UF/IFAS) su ve istilacı bitkiler dizini: sayfanın başlığındaki liste durumu (ör. "Federal Noxious Weed List", ABD federal zararlı ot listesi). Etiket yalnız resmî listeye girmiş durumdan konur; sayfanın düz metnindeki "birçok yerde istilacı" gibi cümleler etiket sayılmaz (ör. *Egeria densa*).
+- Türkiye'de resmî bir liste bulunamadı. Metin, bitkinin Türkiye'de yasak olduğu anlamına gelmeyecek biçimde yazılır.
+
+Değer kuralı (balık ve omurgasızlardaki kuralın bitki karşılığı):
+
+- **Sıcaklık ve pH:** aralık veren kabul edilen kaynakların ortak aralığı. İlk pakette tek aralık veren kaynak Fishkeeper'dır. Fishkeeper'ın A. heterophylla sayfası sıcaklığı birimsiz yazıyor ("22-30"); °C olarak okundu.
+- **Işık:** Tropica'nın üç düzeyli ölçeği kullanılır. Fishkeeper'ın düzeyleri bu ölçeğe çevrilir: çok düşük ve düşük "düşük", orta ve "moderate" "orta", yüksek ve çok yüksek "yüksek". Kayıtta aralık tutulur: alt uç, Fishkeeper aralığının alt ucu ile Tropica'nın ihtiyacından yüksek olanıdır ("en yüksek ihtiyaç"); üst uç en az bu kadardır.
+- **CO₂:** Tropica'nın ihtiyacı. Aynı bitkinin ürün sayfaları farklı yazıyorsa en yüksek ihtiyaç alınır. Tropica'da aynı bitkinin sayfası yoksa alan boş kalır. Fishkeeper'ın "CO₂ eklenmesi önerilir" gibi düzey vermeyen cümleleri değer sayılmaz.
+- **Büyüme hızı:** kaynakların verdiği düzeylerin aralığı (Fishkeeper beş, Tropica üç düzey; Tropica'nın "High" düzeyi "hızlı" sayılır).
+- **Boy:** kaynakların yazdığı en büyük boy. Tablolardaki boyun yanında açıklamada açıkça yazılan boy da sayılır: bitkinin boyu, gövde uzunluğu ya da rozetli, soğanlı ve stolonlu bitkilerde yaprak uzunluğu (bu bitkilerde boyu yapraklar belirler; Fishkeeper da *Crinum*'da boyu yaprak uzunluğuyla yazıyor). Kalınlık, en ve rizom uzunluğu sayılmaz. Fishkeeper boyu cm ve inç olarak yazar; yalnız cm okunur. Tropica'nın tablosundaki boy iki ayda ulaşılan boydur. Bu kesin bir üst sınır değildir: kaynaklar "+" işaretiyle bitkinin daha da uzayabileceğini yazar.
+- **Yerleşim:** yalnız kaynak açıkça yazıyorsa (ör. "foreground plant", "attached to bogwood or rock"); boya göre tahmin edilmez. "Centrepiece" gibi bir düzleme denk gelmeyen ifadeler yerleşim sayılmaz.
+- **Ad ve form:** bir kayıt kaynağın sayfasındaki bitkidir (tür, varyete ya da kültür formu). Tropica'nın sayfası yalnız aynı bitkiyse kullanılır; tür kaydına kültür formunun sayfası, kültür formu kaydına türün sayfası karışmaz. Tropica'nın ürün adı ile açıklaması farklı düzeyde ad veriyorsa açıklama esas alınır (ör. "Cryptocoryne crispatula" sayfası var. *balansae*'yi anlatıyor). Tırnak içindeki ad Flowgrow'a göre aynı bitkinin eş adı ya da ticari adıysa sayfa ve satış adı aynı bitkinindir: 'Pink' *A. reineckii* var. *rosaefolia*, 'Bogor Moss' *Taxiphyllum barbieri*, 'Bonsai' *Anubias* 'Petite', *C. axelrodii* *C. undulata*. Flowgrow'un seçilmiş form ("Auslese") dediği ad ayrı bir formdur (ör. *C. wendtii* 'Green Gecko'). Flowgrow'un bir kayıtta kaynak gösterdiği uzman sayfası da ad eşleştirmesi için okunabilir (ör. echinodorus.net'in "Ozelot rot" sayfası: 'Ozelot Red' = 'Ozelot'). Mağazada form adıyla satılan bitki türün kaydına bağlanır ve satış adı eş ad olarak yazılır, yalnız şu iki durumda bağlanmaz:
+  - kaynakta o formun ayrı bir kaydı varsa form o kayda bağlanır (ör. 'Windeløv');
+  - kaynağın kaydı bir formsa başka bir formun satış adı ona bağlanmaz (ör. *C. wendtii* 'Green' kaydına 'Green Gecko', *Echinodorus* 'Ozelot' kaydına 'Ozelot Narrow Mini').
+- **Satış kanıtı:** her kayıtta bitkinin kabul edilen mağazada satıldığını gösteren ürün sayfaları saklanır (`shopUrls`). Ürün adı sayfası açılarak okunur.
+- **Okuma:** değerler sayfa açılarak okunur; arama özeti kaynak sayılmaz. Kaynaklar üç ayda bir, katalogla birlikte yeniden açılır (karar 0020).
+
 ## Hastalık ve tedavi yönlendirme kaynakları
 
 Hastalık ve tedavi sayfası (`docs/DECISIONS/0022-hastalik-ve-tedavi-sayfasi.md`) teşhis koymaz ve ilaç önermez; yalnız aşağıdaki kaynaklara yönlendirir. Adresler `src/data/disease-guide.ts` içindedir; her sayfa 2026-10-22'de (UTC) açılarak okundu.
