@@ -206,8 +206,6 @@
   "aliases": [
    "Anubias nana",
    "Anubias nana 'Golden'",
-   "Anubias nana 'Golden Coin'",
-   "Anubias nana 'Pinto'",
    "Anubias nana 'Pangolino'",
    "Anubias nana 'Marble White'"
   ],
@@ -241,9 +239,6 @@
   ],
   "shopUrls": [
    "https://aquarubi.com/anubias-barteri-var-nana-golden",
-   "https://aquarubi.com/anubias-barteri-var-nana-golden-coin",
-   "https://aquarubi.com/anubias-nana-pinto-saksi",
-   "https://aquarubi.com/anubias-nana-pinto-mini-vitro",
    "https://aquarubi.com/stoffels-anubias-barteri-var-nana-on-tree",
    "https://aquarubi.com/stoffels-anubias-barteri-var-nana-golden-yellow-heart",
    "https://aquarubi.com/stoffels-anubias-barteri-var-nana-pangolino",
@@ -468,6 +463,11 @@
    {
     "list": "us-federal-noxious-weed",
     "sourceUrl": "https://plant-directory.ifas.ufl.edu/plant-directory/limnophila-sessiliflora/"
+   },
+   {
+    "list": "fisc-invasive",
+    "category": 2,
+    "sourceUrl": "https://plant-directory.ifas.ufl.edu/plant-directory/limnophila-sessiliflora/"
    }
   ],
   "sourceUrl": "https://www.fishkeeper.co.uk/fish/plant/aquarium-plants/limnophila-sessiliflora-",
@@ -477,35 +477,6 @@
   "shopUrls": [
    "https://aquarubi.com/limnophila-sessiliflora-saksi",
    "https://aquarubi.com/tropica-limnophila-sessiliflora"
-  ],
-  "verifiedAt": "2026-10-25"
- },
- {
-  "id": "cryptocoryne-beckettii",
-  "scientificName": "Cryptocoryne beckettii",
-  "aliases": [
-   "Cryptocoryne beckettii 'Petchii'"
-  ],
-  "light": [
-   "low",
-   "high"
-  ],
-  "growth": [
-   "medium",
-   "medium"
-  ],
-  "heightCm": 20,
-  "temperature": [
-   24,
-   28
-  ],
-  "ph": [
-   5.5,
-   8
-  ],
-  "sourceUrl": "https://www.fishkeeper.co.uk/fish/plant/aquarium-plants/cryptocoryne-beckettii-",
-  "shopUrls": [
-   "https://aquarubi.com/tropica-cryptocoryne-beckettii-petchii"
   ],
   "verifiedAt": "2026-10-25"
  },
@@ -754,7 +725,6 @@
   "scientificName": "Cryptocoryne undulata",
   "aliases": [
    "Cryptocoryne undulata 'Red'",
-   "Cryptocoryne undulata 'Broad Leaves'",
    "Cryptocoryne axelrodi (Undulata)",
    "Cryptocoryne axelrodii",
    "Cryptocoryne axelrodi"
@@ -779,8 +749,6 @@
   "sourceUrl": "https://www.fishkeeper.co.uk/fish/plant/aquarium-plants/cryptocoryne-axelrodii-var-undulata-",
   "shopUrls": [
    "https://aquarubi.com/cryptocoryne-undulatus-red",
-   "https://aquarubi.com/tropica-cryptocoryne-undulata-broad-leaf-vitro",
-   "https://aquarubi.com/tropica-cryptocoryne-undulata-broad-leaves",
    "https://aquarubi.com/cryptocoryne-axelrodi-undulata-in-vitro",
    "https://aquarubi.com/cryptocoryne-axelrodi",
    "https://aquarubi.com/cryptocoryne-axelrodi-in-vitro"
@@ -989,7 +957,6 @@
    "https://aquarubi.com/rotala-macrandra-mini-type-4-ozel-tur-canli-bitki",
    "https://aquarubi.com/rotala-macrandra-mini-pink",
    "https://aquarubi.com/rotala-macrandra-variegated",
-   "https://aquarubi.com/tropica-rotala-macrandra-vitro",
    "https://aquarubi.com/rotala-macrandra-pearl",
    "https://aquarubi.com/rotala-macrandra-mini-butterfly"
   ],
@@ -1097,8 +1064,7 @@
   "id": "hygrophila-polysperma",
   "scientificName": "Hygrophila polysperma",
   "aliases": [
-   "Hygrophila polysperma (Zeytin)",
-   "Hygrophila polysperma 'Rosanervig'"
+   "Hygrophila polysperma (Zeytin)"
   ],
   "light": [
    "low",
@@ -1125,6 +1091,11 @@
    {
     "list": "us-federal-noxious-weed",
     "sourceUrl": "https://plant-directory.ifas.ufl.edu/plant-directory/hygrophila-polysperma/"
+   },
+   {
+    "list": "fisc-invasive",
+    "category": 1,
+    "sourceUrl": "https://plant-directory.ifas.ufl.edu/plant-directory/hygrophila-polysperma/"
    }
   ],
   "sourceUrl": "https://www.fishkeeper.co.uk/fish/plant/aquarium-plants/hygrophila-polysperma-",
@@ -1133,8 +1104,7 @@
   ],
   "shopUrls": [
    "https://aquarubi.com/hygrophila-polysperma-zeytin",
-   "https://aquarubi.com/tropica-hygrophila-polysperma",
-   "https://aquarubi.com/tropica-hygrophila-polysperma-rosanervig"
+   "https://aquarubi.com/tropica-hygrophila-polysperma"
   ],
   "verifiedAt": "2026-10-25"
  },
@@ -1177,8 +1147,8 @@
   "aliases": [
    "Microsorium pteropus",
    "Java fern",
-   "Microsorum pteropus 'Trident'",
-   "Microsorum pteropus 'Narrow'",
+   "Microsorum pteropus 'Narrow Mini'",
+   "Microsorum pteropus 'Trident Mini'",
    "Microsorum pteropus 'Needle Leaf'",
    "Microsorum pteropus 'Philippine'",
    "Microsorum pteropus 'Black Forest'",
@@ -1213,7 +1183,6 @@
   "shopUrls": [
    "https://aquarubi.com/microsorium-pteropus-on-nano-wood",
    "https://aquarubi.com/microsorium-pteropus-sp-narrow-mini-saksi",
-   "https://aquarubi.com/microsorium-pteropus-trident-saksi",
    "https://aquarubi.com/microsorium-pteropus-java-fern-bag",
    "https://aquarubi.com/microsorium-pteropus-black-forest-hardy",
    "https://aquarubi.com/microsorium-pteropus-lion-fish",
@@ -1223,12 +1192,7 @@
    "https://aquarubi.com/microsorium-pteropus-trident-mini-on-wood",
    "https://aquarubi.com/microsorium-pteropus-on-driftwood-m-15cm",
    "https://aquarubi.com/stoffels-microsorum-pteropus-on-wood-midi",
-   "https://aquarubi.com/stoffels-microsorum-pteropus-trident",
    "https://aquarubi.com/stoffels-microsorum-pteropus",
-   "https://aquarubi.com/tropica-microsorium-pteropus-narrow-bankwood",
-   "https://aquarubi.com/tropica-microsorium-pteropus-narrow-saksi",
-   "https://aquarubi.com/tropica-microsorium-pteropus-narrow-on-wood",
-   "https://aquarubi.com/tropica-microsorium-pteropus-trident-on-wood",
    "https://aquarubi.com/tropica-microsorium-pteropus-on-drift-wood-m"
   ],
   "verifiedAt": "2026-10-25"
@@ -1385,41 +1349,6 @@
   "shopUrls": [
    "https://aquarubi.com/lilaeopsis-brasiliensis",
    "https://aquarubi.com/tropica-lilaeopsis-brasiliensis"
-  ],
-  "verifiedAt": "2026-10-25"
- },
- {
-  "id": "helanthium-tenellum",
-  "scientificName": "Helanthium tenellum",
-  "aliases": [
-   "Echinodorus tenellus",
-   "Helanthium tenellum 'Green'"
-  ],
-  "light": [
-   "medium",
-   "high"
-  ],
-  "growth": [
-   "medium",
-   "medium"
-  ],
-  "heightCm": 12,
-  "temperature": [
-   20,
-   30
-  ],
-  "ph": [
-   5.5,
-   8
-  ],
-  "placements": [
-   "foreground"
-  ],
-  "sourceUrl": "https://www.fishkeeper.co.uk/fish/plant/aquarium-plants/echinodorus-tenellus-",
-  "shopUrls": [
-   "https://aquarubi.com/stoffels-helanthium-tenellum-green-in-vitro",
-   "https://aquarubi.com/tropica-helanthium-tenellum-green",
-   "https://aquarubi.com/helanthium-tenellum-green"
   ],
   "verifiedAt": "2026-10-25"
  },
@@ -1897,6 +1826,2132 @@
   ],
   "shopUrls": [
    "https://aquarubi.com/tropica-hottonia-palustris"
+  ],
+  "verifiedAt": "2026-10-25"
+ },
+ {
+  "id": "ammannia-crassicaulis",
+  "scientificName": "Ammannia crassicaulis",
+  "aliases": [
+   "Nesaea crassicaulis"
+  ],
+  "light": [
+   "medium",
+   "medium"
+  ],
+  "co2": "medium",
+  "growth": [
+   "medium",
+   "medium"
+  ],
+  "heightCm": 50,
+  "sourceUrl": "https://tropica.com/en/plants/plantdetails/Ammanniacrassicaulis(033B)/4449",
+  "shopUrls": [
+   "https://aquarubi.com/nesaea-crassicaulis"
+  ],
+  "verifiedAt": "2026-10-25"
+ },
+ {
+  "id": "alternanthera-reineckii-mini",
+  "scientificName": "Alternanthera reineckii 'Mini'",
+  "light": [
+   "medium",
+   "medium"
+  ],
+  "co2": "medium",
+  "growth": [
+   "medium",
+   "medium"
+  ],
+  "heightCm": 10,
+  "placements": [
+   "foreground"
+  ],
+  "sourceUrl": "https://tropica.com/en/plants/plantdetails/Alternantherareineckii'Mini'(023CTC)/4439",
+  "shopUrls": [
+   "https://aquarubi.com/alternanthera-reineckii-mini",
+   "https://aquarubi.com/alternanthera-reineckii-mini-vitro-apc",
+   "https://aquarubi.com/stoffels-alternanthera-reineckii-mini-in-vitro",
+   "https://aquarubi.com/tropica-alternanthera-reineckii-mini-in-vitro"
+  ],
+  "verifiedAt": "2026-10-25"
+ },
+ {
+  "id": "alternanthera-reineckii-rosanervig",
+  "scientificName": "Alternanthera reineckii 'Rosanervig'",
+  "light": [
+   "medium",
+   "medium"
+  ],
+  "co2": "medium",
+  "growth": [
+   "medium",
+   "medium"
+  ],
+  "heightCm": 20,
+  "placements": [
+   "midground"
+  ],
+  "sourceUrl": "https://tropica.com/en/plants/plantdetails/Alternantherareineckii'Rosanervig'(023D)/4440",
+  "shopUrls": [
+   "https://aquarubi.com/tropica-alternanthera-reineckii-rosanervig"
+  ],
+  "verifiedAt": "2026-10-25"
+ },
+ {
+  "id": "anubias-barteri-coin-leaf",
+  "scientificName": "Anubias barteri 'Coin Leaf'",
+  "aliases": [
+   "Anubias barteri var. nana 'Round Leaf'",
+   "Anubias barteri 'Round Leaf'",
+   "Anubias barteri 'Gold Coin'",
+   "Anubias nana 'Golden Coin'"
+  ],
+  "light": [
+   "low",
+   "high"
+  ],
+  "co2": "low",
+  "growth": [
+   "slow",
+   "slow"
+  ],
+  "heightCm": 15,
+  "temperature": [
+   18,
+   28
+  ],
+  "ph": [
+   5,
+   8.5
+  ],
+  "placements": [
+   "onRock",
+   "onRoot"
+  ],
+  "sourceUrl": "https://tropica.com/en/plants/plantdetails/Anubiasbarteri%E2%80%99CoinLeaf%E2%80%99(101F)/29447",
+  "additionalSourceUrls": [
+   "https://www.fishkeeper.co.uk/fish/plant/aquarium-plants/anubias-barteri-var-nana"
+  ],
+  "shopUrls": [
+   "https://aquarubi.com/anubias-barteri-var-nana-golden-coin"
+  ],
+  "verifiedAt": "2026-10-25"
+ },
+ {
+  "id": "anubias-barteri-mini-coin",
+  "scientificName": "Anubias barteri 'Mini Coin'",
+  "aliases": [
+   "Anubias 'Mini Coin'"
+  ],
+  "light": [
+   "low",
+   "low"
+  ],
+  "co2": "low",
+  "growth": [
+   "slow",
+   "slow"
+  ],
+  "heightCm": 10,
+  "placements": [
+   "onRock",
+   "onRoot"
+  ],
+  "sourceUrl": "https://tropica.com/en/plants/plantdetails/Anubiasbarteri'MiniCoin'(101BTC)/28816",
+  "shopUrls": [
+   "https://aquarubi.com/tropica-anubias-barteri-mini-coin",
+   "https://aquarubi.com/anubias-mini-coin"
+  ],
+  "verifiedAt": "2026-10-25"
+ },
+ {
+  "id": "anubias-barteri-var-caladiifolia",
+  "scientificName": "Anubias barteri var. caladiifolia",
+  "light": [
+   "low",
+   "low"
+  ],
+  "co2": "low",
+  "growth": [
+   "slow",
+   "slow"
+  ],
+  "heightCm": 15,
+  "sourceUrl": "https://tropica.com/en/plants/plantdetails/Anubiasbartericaladiifolia(101U)/4556",
+  "additionalSourceUrls": [
+   "https://tropica.com/en/plants/plantdetails/Anubiasbarterivar.caladiifolia(101UXL)/4557"
+  ],
+  "shopUrls": [
+   "https://aquarubi.com/tropica-anubias-barteri-caladiifolia"
+  ],
+  "verifiedAt": "2026-10-25"
+ },
+ {
+  "id": "anubias-gracilis",
+  "scientificName": "Anubias gracilis",
+  "light": [
+   "low",
+   "low"
+  ],
+  "co2": "low",
+  "growth": [
+   "slow",
+   "slow"
+  ],
+  "heightCm": 20,
+  "placements": [
+   "onRock",
+   "onRoot"
+  ],
+  "sourceUrl": "https://tropica.com/en/plants/plantdetails/Anubiasgracilis(101D)/17819",
+  "shopUrls": [
+   "https://aquarubi.com/tropica-anubias-gracilis"
+  ],
+  "verifiedAt": "2026-10-25"
+ },
+ {
+  "id": "anubias-barteri-var-glabra",
+  "scientificName": "Anubias barteri var. glabra",
+  "aliases": [
+   "Anubias lanceolata",
+   "Anubias minima",
+   "Anubias barteri var. glabra 'Variegata'",
+   "Anubias barteri var. glabra 'Dragon Claw'"
+  ],
+  "light": [
+   "low",
+   "low"
+  ],
+  "co2": "low",
+  "growth": [
+   "slow",
+   "slow"
+  ],
+  "heightCm": 20,
+  "sourceUrl": "https://tropica.com/en/plants/plantdetails/Anubiasbarterivar.glabra(101C)/4552",
+  "shopUrls": [
+   "https://aquarubi.com/anubias-barteri-var-glabra-lanceolata",
+   "https://aquarubi.com/anubias-barteri-var-glabra-minima",
+   "https://aquarubi.com/anubias-minima",
+   "https://aquarubi.com/stoffels-anubias-barteri-var-glabra-variegata",
+   "https://aquarubi.com/anubias-barteri-var-glabra-dragon-claw-mini-in-vitro",
+   "https://aquarubi.com/tropica-anubias-barteri-var-angustifolia"
+  ],
+  "verifiedAt": "2026-10-25"
+ },
+ {
+  "id": "anubias-barteri-var-nana-pinto",
+  "scientificName": "Anubias barteri var. nana 'Pinto'",
+  "aliases": [
+   "Anubias nana 'Pinto'"
+  ],
+  "light": [
+   "medium",
+   "high"
+  ],
+  "co2": "low",
+  "growth": [
+   "slow",
+   "slow"
+  ],
+  "heightCm": 5,
+  "temperature": [
+   18,
+   28
+  ],
+  "ph": [
+   5,
+   8.5
+  ],
+  "placements": [
+   "onRock",
+   "onRoot"
+  ],
+  "sourceUrl": "https://tropica.com/en/plants/plantdetails/Anubiasbarterivar.nana%E2%80%99Pinto%E2%80%99(101E)/29446",
+  "additionalSourceUrls": [
+   "https://www.fishkeeper.co.uk/fish/plant/aquarium-plants/anubias-barteri-var-nana"
+  ],
+  "shopUrls": [
+   "https://aquarubi.com/anubias-nana-pinto-saksi",
+   "https://aquarubi.com/anubias-nana-pinto-mini-vitro"
+  ],
+  "verifiedAt": "2026-10-25"
+ },
+ {
+  "id": "bacopa-australis",
+  "scientificName": "Bacopa australis",
+  "light": [
+   "medium",
+   "medium"
+  ],
+  "co2": "medium",
+  "heightCm": 30,
+  "sourceUrl": "https://tropica.com/en/plants/plantdetails/Bacopaaustralis(043A)/4466",
+  "shopUrls": [
+   "https://aquarubi.com/tropica-bacopa-australis"
+  ],
+  "verifiedAt": "2026-10-25"
+ },
+ {
+  "id": "bacopa-monnieri-compact",
+  "scientificName": "Bacopa monnieri 'Compact'",
+  "light": [
+   "low",
+   "high"
+  ],
+  "co2": "low",
+  "growth": [
+   "slow",
+   "slow"
+  ],
+  "heightCm": 10,
+  "temperature": [
+   15,
+   28
+  ],
+  "ph": [
+   6,
+   8
+  ],
+  "placements": [
+   "midground",
+   "foreground"
+  ],
+  "sourceUrl": "https://tropica.com/en/plants/plantdetails/Bacopamonnieri'Compact'(044A)/4467",
+  "additionalSourceUrls": [
+   "https://www.fishkeeper.co.uk/fish/plant/aquarium-plants/bacopa-monnieri"
+  ],
+  "shopUrls": [
+   "https://aquarubi.com/tropica-bacopa-compact"
+  ],
+  "verifiedAt": "2026-10-25"
+ },
+ {
+  "id": "bacopa-salzmannii-purple",
+  "scientificName": "Bacopa salzmannii 'Purple'",
+  "aliases": [
+   "Bacopa salzmanii 'Purple'"
+  ],
+  "light": [
+   "medium",
+   "medium"
+  ],
+  "co2": "medium",
+  "growth": [
+   "medium",
+   "medium"
+  ],
+  "heightCm": 30,
+  "placements": [
+   "midground",
+   "background"
+  ],
+  "sourceUrl": "https://tropica.com/en/plants/plantdetails/Bacopasalzmannii'Purple'(043B)/30171",
+  "shopUrls": [
+   "https://aquarubi.com/bacopa-salzmannii-purple",
+   "https://aquarubi.com/bacopa-salzmannii-purple-vitro",
+   "https://aquarubi.com/stoffels-bacopa-salzmanii-purple"
+  ],
+  "verifiedAt": "2026-10-25"
+ },
+ {
+  "id": "blyxa-japonica",
+  "scientificName": "Blyxa japonica",
+  "light": [
+   "medium",
+   "medium"
+  ],
+  "co2": "medium",
+  "growth": [
+   "medium",
+   "medium"
+  ],
+  "heightCm": 20,
+  "sourceUrl": "https://tropica.com/en/plants/plantdetails/Blyxajaponica(057TC)/22542",
+  "shopUrls": [
+   "https://aquarubi.com/tropica-blyxa-japonica-in-vitro"
+  ],
+  "verifiedAt": "2026-10-25"
+ },
+ {
+  "id": "bucephalandra-diabolica-kedagang",
+  "scientificName": "Bucephalandra diabolica 'Kedagang'",
+  "aliases": [
+   "Bucephalandra 'Kedagang'"
+  ],
+  "light": [
+   "low",
+   "low"
+  ],
+  "co2": "low",
+  "growth": [
+   "slow",
+   "slow"
+  ],
+  "heightCm": 20,
+  "sourceUrl": "https://tropica.com/en/plants/plantdetails/Bucephalandradiabolica'Kedagang'(139B)/22543",
+  "additionalSourceUrls": [
+   "https://tropica.com/en/plants/plantdetails/Bucephalandradiabolica'Kedagang'(139BTC)/22544"
+  ],
+  "shopUrls": [
+   "https://aquarubi.com/bucephalandra-kedagang",
+   "https://aquarubi.com/stoffels-bucephalandra-kedagang-in-vitro",
+   "https://aquarubi.com/stoffels-bucephalandra-sp-kedagang-on-driftwood"
+  ],
+  "verifiedAt": "2026-10-25"
+ },
+ {
+  "id": "bucephalandra-pygmaea-bukit-kelam",
+  "scientificName": "Bucephalandra pygmaea 'Bukit Kelam'",
+  "aliases": [
+   "Bucephalandra 'Wavy Green'",
+   "Bucephalandra 'Green Wavy'"
+  ],
+  "light": [
+   "low",
+   "low"
+  ],
+  "co2": "low",
+  "growth": [
+   "slow",
+   "slow"
+  ],
+  "heightCm": 10,
+  "sourceUrl": "https://tropica.com/en/plants/plantdetails/Bucephalandrapygmaea'BukitKelam'(139CLP)/31143",
+  "shopUrls": [
+   "https://aquarubi.com/tropica-bucephalandra-wavy-green-on-lava-stone",
+   "https://aquarubi.com/bucephalandra-green-wavy-saksi",
+   "https://aquarubi.com/bucephalandra-green-wavy-on-nano-wood",
+   "https://aquarubi.com/bucephalandra-green-wavy-in-cup"
+  ],
+  "verifiedAt": "2026-10-25"
+ },
+ {
+  "id": "cryptocoryne-beckettii-petchii",
+  "scientificName": "Cryptocoryne beckettii 'Petchii'",
+  "light": [
+   "low",
+   "high"
+  ],
+  "co2": "low",
+  "growth": [
+   "medium",
+   "medium"
+  ],
+  "heightCm": 15,
+  "temperature": [
+   24,
+   28
+  ],
+  "ph": [
+   5.5,
+   8
+  ],
+  "sourceUrl": "https://tropica.com/en/plants/plantdetails/Cryptocorynebeckettii'Petchii'(108A)/4560",
+  "additionalSourceUrls": [
+   "https://www.fishkeeper.co.uk/fish/plant/aquarium-plants/cryptocoryne-beckettii-"
+  ],
+  "shopUrls": [
+   "https://aquarubi.com/tropica-cryptocoryne-beckettii-petchii"
+  ],
+  "verifiedAt": "2026-10-25"
+ },
+ {
+  "id": "cryptocoryne-nurii-rose-maiden",
+  "scientificName": "Cryptocoryne nurii 'Rose Maiden'",
+  "aliases": [
+   "Cryptocoryne nurii 'Rosen Maiden'"
+  ],
+  "growth": [
+   "medium",
+   "medium"
+  ],
+  "heightCm": 20,
+  "sourceUrl": "https://tropica.com/en/plants/plantdetails/Cryptocorynenurii(126TC)/29518",
+  "shopUrls": [
+   "https://aquarubi.com/cryptocoryne-nurii-rosen-maiden",
+   "https://aquarubi.com/cryptocoryne-nurii-t-c-mini-cup"
+  ],
+  "verifiedAt": "2026-10-25"
+ },
+ {
+  "id": "cryptocoryne-parva",
+  "scientificName": "Cryptocoryne parva",
+  "light": [
+   "medium",
+   "medium"
+  ],
+  "co2": "low",
+  "growth": [
+   "slow",
+   "slow"
+  ],
+  "heightCm": 10,
+  "placements": [
+   "foreground"
+  ],
+  "sourceUrl": "https://tropica.com/en/plants/plantdetails/Cryptocoryneparva(106)/4558",
+  "shopUrls": [
+   "https://aquarubi.com/cryptocoryne-parva-saksi",
+   "https://aquarubi.com/cryptocoryne-parva-in-vitro",
+   "https://aquarubi.com/tropica-cryptocoryne-parva",
+   "https://aquarubi.com/cryptocoryne-parva-mini-vitro"
+  ],
+  "verifiedAt": "2026-10-25"
+ },
+ {
+  "id": "cryptocoryne-undulata-broad-leaf",
+  "scientificName": "Cryptocoryne undulata 'Broad Leaf'",
+  "aliases": [
+   "Cryptocoryne undulata 'Broad Leaves'"
+  ],
+  "light": [
+   "low",
+   "high"
+  ],
+  "growth": [
+   "medium",
+   "medium"
+  ],
+  "heightCm": 30,
+  "temperature": [
+   22,
+   28
+  ],
+  "ph": [
+   5.5,
+   7.5
+  ],
+  "sourceUrl": "https://tropica.com/en/plants/plantdetails/Cryptocoryneundulata'BroadLeaf'(110A)/4566",
+  "additionalSourceUrls": [
+   "https://www.fishkeeper.co.uk/fish/plant/aquarium-plants/cryptocoryne-axelrodii-var-undulata-"
+  ],
+  "shopUrls": [
+   "https://aquarubi.com/tropica-cryptocoryne-undulata-broad-leaves"
+  ],
+  "verifiedAt": "2026-10-25"
+ },
+ {
+  "id": "cryptocoryne-wendtii-mi-oya",
+  "scientificName": "Cryptocoryne wendtii 'Mi Oya'",
+  "light": [
+   "low",
+   "low"
+  ],
+  "co2": "low",
+  "growth": [
+   "slow",
+   "slow"
+  ],
+  "heightCm": 35,
+  "sourceUrl": "https://tropica.com/en/plants/plantdetails/Cryptocorynewendtii'MiOya'(109DTC)/19540",
+  "shopUrls": [
+   "https://aquarubi.com/cryptocoryne-wendtii-mi-oya"
+  ],
+  "verifiedAt": "2026-10-25"
+ },
+ {
+  "id": "cryptocoryne-wendtii-tropica",
+  "scientificName": "Cryptocoryne wendtii 'Tropica'",
+  "light": [
+   "low",
+   "low"
+  ],
+  "co2": "low",
+  "growth": [
+   "medium",
+   "medium"
+  ],
+  "heightCm": 20,
+  "sourceUrl": "https://tropica.com/en/plants/plantdetails/Cryptocorynewendtii'Tropica'(109E)/4564",
+  "shopUrls": [
+   "https://aquarubi.com/stoffels-cryptocoryne-wendtii-tropica",
+   "https://aquarubi.com/tropica-cryptocoryne-wendtii"
+  ],
+  "verifiedAt": "2026-10-25"
+ },
+ {
+  "id": "echinodorus-red-diamond",
+  "scientificName": "Echinodorus 'Red Diamond'",
+  "light": [
+   "medium",
+   "medium"
+  ],
+  "co2": "medium",
+  "growth": [
+   "medium",
+   "medium"
+  ],
+  "heightCm": 25,
+  "sourceUrl": "https://tropica.com/en/plants/plantdetails/Echinodorus'RedDiamond'(074D)/4525",
+  "shopUrls": [
+   "https://aquarubi.com/echinodorus-red-diamond"
+  ],
+  "verifiedAt": "2026-10-25"
+ },
+ {
+  "id": "echinodorus-reni",
+  "scientificName": "Echinodorus 'Reni'",
+  "light": [
+   "low",
+   "low"
+  ],
+  "co2": "low",
+  "growth": [
+   "medium",
+   "medium"
+  ],
+  "heightCm": 40,
+  "sourceUrl": "https://tropica.com/en/plants/plantdetails/Echinodorus'Reni'(072D)/4518",
+  "shopUrls": [
+   "https://aquarubi.com/echinodorus-reni",
+   "https://aquarubi.com/echinodorus-reni-saksi-apc",
+   "https://aquarubi.com/echinodorus-reni-tissue-culture-scientific-name-echinodorus-reni-common-name-reni-sword-plant-the-echinodorus-reni-is-a-striking-sword-plant-variety-that-adds-a-splash-of-colo",
+   "https://aquarubi.com/tropica-echinodorus-reni"
+  ],
+  "verifiedAt": "2026-10-25"
+ },
+ {
+  "id": "echinodorus-rose",
+  "scientificName": "Echinodorus 'Rosé'",
+  "aliases": [
+   "Echinodorus 'Rose'"
+  ],
+  "light": [
+   "low",
+   "low"
+  ],
+  "co2": "low",
+  "growth": [
+   "medium",
+   "medium"
+  ],
+  "heightCm": 40,
+  "sourceUrl": "https://tropica.com/en/plants/plantdetails/Echinodorus'Ros%C3%A9'(072B)/4516",
+  "shopUrls": [
+   "https://aquarubi.com/echinodorus-rose"
+  ],
+  "verifiedAt": "2026-10-25"
+ },
+ {
+  "id": "eleocharis-acicularis",
+  "scientificName": "Eleocharis acicularis",
+  "aliases": [
+   "Eleocharis acicularis 'Mini'"
+  ],
+  "light": [
+   "low",
+   "low"
+  ],
+  "co2": "low",
+  "growth": [
+   "medium",
+   "medium"
+  ],
+  "heightCm": 15,
+  "sourceUrl": "https://tropica.com/en/plants/plantdetails/Eleocharisacicularis(133TC)/28401",
+  "shopUrls": [
+   "https://aquarubi.com/eleocharis-acicularis-mini",
+   "https://aquarubi.com/stoffels-eleocharis-acicularis-saksi"
+  ],
+  "verifiedAt": "2026-10-25"
+ },
+ {
+  "id": "eleocharis-montevidensis",
+  "scientificName": "Eleocharis montevidensis",
+  "light": [
+   "low",
+   "low"
+  ],
+  "co2": "low",
+  "growth": [
+   "medium",
+   "medium"
+  ],
+  "heightCm": 40,
+  "placements": [
+   "background"
+  ],
+  "sourceUrl": "https://tropica.com/en/plants/plantdetails/Eleocharismontevidensis(132D)/4573",
+  "shopUrls": [
+   "https://aquarubi.com/tropica-eleocharis-sp-montevidensis"
+  ],
+  "verifiedAt": "2026-10-25"
+ },
+ {
+  "id": "eleocharis-parvula",
+  "scientificName": "Eleocharis parvula",
+  "aliases": [
+   "Eleocharis parvula 'Mini'"
+  ],
+  "light": [
+   "low",
+   "low"
+  ],
+  "co2": "low",
+  "heightCm": 10,
+  "placements": [
+   "foreground"
+  ],
+  "sourceUrl": "https://tropica.com/en/plants/plantdetails/Eleocharisparvula(132C)/4572",
+  "shopUrls": [
+   "https://aquarubi.com/eleocharis-parvula-mini",
+   "https://aquarubi.com/eleocharis-parvula-mini-t-c-cup",
+   "https://aquarubi.com/eleocharis-parvulus-mini-in-vitro",
+   "https://aquarubi.com/stoffels-eleocharis-parvula-in-vitro",
+   "https://aquarubi.com/tropica-eleocharis-parvula"
+  ],
+  "verifiedAt": "2026-10-25"
+ },
+ {
+  "id": "eleocharis-pusilla-mini",
+  "scientificName": "Eleocharis pusilla 'Mini'",
+  "light": [
+   "medium",
+   "medium"
+  ],
+  "co2": "medium",
+  "growth": [
+   "slow",
+   "slow"
+  ],
+  "heightCm": 5,
+  "sourceUrl": "https://tropica.com/en/plants/plantdetails/Eleocharispusilla'Mini'(132BTC)/4571",
+  "shopUrls": [
+   "https://aquarubi.com/tropica-eleocharis-pusilla-mini-in-vitro"
+  ],
+  "verifiedAt": "2026-10-25"
+ },
+ {
+  "id": "eriocaulon-cinereum",
+  "scientificName": "Eriocaulon cinereum",
+  "light": [
+   "high",
+   "high"
+  ],
+  "co2": "high",
+  "growth": [
+   "slow",
+   "slow"
+  ],
+  "heightCm": 10,
+  "sourceUrl": "https://tropica.com/en/plants/plantdetails/Eriocauloncinereum(091TC)/19547",
+  "shopUrls": [
+   "https://aquarubi.com/eriocaulon-cinereum",
+   "https://aquarubi.com/eriocaulon-cinereum-in-vitro",
+   "https://aquarubi.com/tropica-eriocaulon-cinereum"
+  ],
+  "verifiedAt": "2026-10-25"
+ },
+ {
+  "id": "eriocaulon-vietnam",
+  "scientificName": "Eriocaulon sp. 'Vietnam'",
+  "light": [
+   "medium",
+   "medium"
+  ],
+  "co2": "medium",
+  "growth": [
+   "medium",
+   "medium"
+  ],
+  "heightCm": 20,
+  "sourceUrl": "https://tropica.com/en/plants/plantdetails/Eriocaulonsp.'Vietnam'(091A)/29740",
+  "shopUrls": [
+   "https://aquarubi.com/eriocaulon-vietnam"
+  ],
+  "verifiedAt": "2026-10-25"
+ },
+ {
+  "id": "fissidens-fontanus",
+  "scientificName": "Fissidens fontanus",
+  "light": [
+   "medium",
+   "medium"
+  ],
+  "co2": "medium",
+  "heightCm": 5,
+  "placements": [
+   "onRoot",
+   "onRock"
+  ],
+  "sourceUrl": "https://tropica.com/en/plants/plantdetails/Fissidensfontanus(002F)/4390",
+  "shopUrls": [
+   "https://aquarubi.com/fissidens-fontanus-moss"
+  ],
+  "verifiedAt": "2026-10-25"
+ },
+ {
+  "id": "gratiola-viscidula",
+  "scientificName": "Gratiola viscidula",
+  "light": [
+   "medium",
+   "medium"
+  ],
+  "co2": "medium",
+  "growth": [
+   "slow",
+   "slow"
+  ],
+  "heightCm": 10,
+  "placements": [
+   "foreground",
+   "midground"
+  ],
+  "sourceUrl": "https://tropica.com/en/plants/plantdetails/Gratiolaviscidula(042TC)/18390",
+  "shopUrls": [
+   "https://aquarubi.com/tropica-gratiola-viscidula"
+  ],
+  "verifiedAt": "2026-10-25"
+ },
+ {
+  "id": "helanthium-bolivianum-quadricostatus",
+  "scientificName": "Helanthium bolivianum 'Quadricostatus'",
+  "aliases": [
+   "Echinodorus 'Quadricostatus'",
+   "Echinodorus magdalenensis"
+  ],
+  "light": [
+   "low",
+   "low"
+  ],
+  "co2": "low",
+  "heightCm": 15,
+  "sourceUrl": "https://tropica.com/en/plants/plantdetails/Helanthiumbolivianum'Quadricostatus'(068)/4511",
+  "shopUrls": [
+   "https://aquarubi.com/helanthium-bolivianum-quadricostatus",
+   "https://aquarubi.com/tropica-helanthium-quadricostatus",
+   "https://aquarubi.com/tropica-helanthium-quadricostatus-vitro",
+   "https://aquarubi.com/echinodorus-madalengensis",
+   "https://www.akvaryumexpress.com/echinodorus-magdalenensis-canli-bitki"
+  ],
+  "verifiedAt": "2026-10-25"
+ },
+ {
+  "id": "helanthium-tenellum-green",
+  "scientificName": "Helanthium tenellum 'Green'",
+  "aliases": [
+   "Echinodorus tenellus 'Green'"
+  ],
+  "light": [
+   "low",
+   "high"
+  ],
+  "co2": "low",
+  "growth": [
+   "slow",
+   "slow"
+  ],
+  "heightCm": 15,
+  "temperature": [
+   20,
+   30
+  ],
+  "ph": [
+   5.5,
+   8
+  ],
+  "placements": [
+   "foreground"
+  ],
+  "sourceUrl": "https://tropica.com/en/plants/plantdetails/Helanthiumtenellum'Green'(067ATC)/4757",
+  "additionalSourceUrls": [
+   "https://www.fishkeeper.co.uk/fish/plant/aquarium-plants/echinodorus-tenellus-"
+  ],
+  "shopUrls": [
+   "https://aquarubi.com/stoffels-helanthium-tenellum-green-in-vitro",
+   "https://aquarubi.com/tropica-helanthium-tenellum-green",
+   "https://aquarubi.com/helanthium-tenellum-green"
+  ],
+  "verifiedAt": "2026-10-25"
+ },
+ {
+  "id": "hydrocotyle-tripartita-japan",
+  "scientificName": "Hydrocotyle tripartita 'Japan'",
+  "aliases": [
+   "Hydrocotyle sp. 'Japan'"
+  ],
+  "light": [
+   "medium",
+   "medium"
+  ],
+  "co2": "low",
+  "heightCm": 10,
+  "sourceUrl": "https://tropica.com/en/plants/plantdetails/Hydrocotyletripartita(039B)/4458",
+  "shopUrls": [
+   "https://aquarubi.com/tropica-hydrocotyle-tripartita",
+   "https://aquarubi.com/tropica-hydrocotyle-tripartita-in-vitro",
+   "https://aquarubi.com/hydrocotyle-tripartita"
+  ],
+  "verifiedAt": "2026-10-25"
+ },
+ {
+  "id": "hygrophila-corymbosa",
+  "scientificName": "Hygrophila corymbosa",
+  "aliases": [
+   "Hygrophila corymbosa (Limon)"
+  ],
+  "light": [
+   "low",
+   "low"
+  ],
+  "co2": "low",
+  "heightCm": 30,
+  "sourceUrl": "https://tropica.com/en/plants/plantdetails/Hygrophilacorymbosa(053BDT)/4490",
+  "shopUrls": [
+   "https://aquarubi.com/hygrophila-corymbosa-limon"
+  ],
+  "verifiedAt": "2026-10-25"
+ },
+ {
+  "id": "hygrophila-corymbosa-stricta",
+  "scientificName": "Hygrophila corymbosa 'Stricta'",
+  "light": [
+   "low",
+   "low"
+  ],
+  "co2": "low",
+  "heightCm": 40,
+  "placements": [
+   "background"
+  ],
+  "sourceUrl": "https://tropica.com/en/plants/plantdetails/Hygrophilacorymbosa'Stricta'(053A)/4491",
+  "shopUrls": [
+   "https://aquarubi.com/tropica-hygrophila-siamensis"
+  ],
+  "verifiedAt": "2026-10-25"
+ },
+ {
+  "id": "hygrophila-corymbosa-compact",
+  "scientificName": "Hygrophila corymbosa 'Compact'",
+  "aliases": [
+   "Hygrophila corymbosa 'Compact' (Cüce Limon)"
+  ],
+  "light": [
+   "low",
+   "low"
+  ],
+  "co2": "low",
+  "growth": [
+   "medium",
+   "medium"
+  ],
+  "heightCm": 15,
+  "sourceUrl": "https://tropica.com/en/plants/plantdetails/Hygrophilacorymbosa'Compact'(052D)/18774",
+  "shopUrls": [
+   "https://aquarubi.com/hygrophila-corymbosa-compact-cuce-limon"
+  ],
+  "verifiedAt": "2026-10-25"
+ },
+ {
+  "id": "hygrophila-difformis",
+  "scientificName": "Hygrophila difformis",
+  "aliases": [
+   "Hygrophila difformis (Çınar)",
+   "Hygrophila difformis 'Variegated'"
+  ],
+  "light": [
+   "low",
+   "low"
+  ],
+  "co2": "low",
+  "growth": [
+   "fast",
+   "fast"
+  ],
+  "heightCm": 30,
+  "sourceUrl": "https://tropica.com/en/plants/plantdetails/Hygrophiladifformis(051BDT)/4485",
+  "shopUrls": [
+   "https://aquarubi.com/hygrophila-difformis-cinar",
+   "https://aquarubi.com/hygrophila-difformis-variegated"
+  ],
+  "verifiedAt": "2026-10-25"
+ },
+ {
+  "id": "hygrophila-lancea-araguaia",
+  "scientificName": "Hygrophila lancea 'Araguaia'",
+  "aliases": [
+   "Hygrophila 'Araguaia'"
+  ],
+  "light": [
+   "medium",
+   "medium"
+  ],
+  "co2": "medium",
+  "growth": [
+   "medium",
+   "medium"
+  ],
+  "heightCm": 20,
+  "sourceUrl": "https://tropica.com/en/plants/plantdetails/Hygrophilalancea'Araguaia'(051BTC)/4758",
+  "shopUrls": [
+   "https://aquarubi.com/tropica-hygrophila-lancea-araguaia",
+   "https://aquarubi.com/hygrophila-araguaia"
+  ],
+  "verifiedAt": "2026-10-25"
+ },
+ {
+  "id": "hygrophila-odora",
+  "scientificName": "Hygrophila odora",
+  "light": [
+   "medium",
+   "medium"
+  ],
+  "co2": "medium",
+  "growth": [
+   "medium",
+   "medium"
+  ],
+  "heightCm": 20,
+  "placements": [
+   "midground",
+   "background"
+  ],
+  "sourceUrl": "https://tropica.com/en/plants/plantdetails/Hygrophilaodora(051DTC)/30154",
+  "shopUrls": [
+   "https://aquarubi.com/hygrophila-odora"
+  ],
+  "verifiedAt": "2026-10-25"
+ },
+ {
+  "id": "hygrophila-pinnatifida",
+  "scientificName": "Hygrophila pinnatifida",
+  "light": [
+   "medium",
+   "medium"
+  ],
+  "co2": "medium",
+  "growth": [
+   "medium",
+   "medium"
+  ],
+  "heightCm": 40,
+  "placements": [
+   "onRoot",
+   "onRock"
+  ],
+  "sourceUrl": "https://tropica.com/en/plants/plantdetails/Hygrophilapinnatifida(051A)/4486",
+  "shopUrls": [
+   "https://aquarubi.com/hygrophila-pinnatifida",
+   "https://aquarubi.com/stoffels-hygrophila-pinnatifida",
+   "https://aquarubi.com/stoffels-hygrophila-pinnatifida-in-vitro",
+   "https://aquarubi.com/tropica-hygrophila-pinnatifida",
+   "https://aquarubi.com/tropica-hygrophila-pinnatifida-vitro"
+  ],
+  "verifiedAt": "2026-10-25"
+ },
+ {
+  "id": "hygrophila-polysperma-rosanervig",
+  "scientificName": "Hygrophila polysperma 'Rosanervig'",
+  "light": [
+   "low",
+   "high"
+  ],
+  "co2": "medium",
+  "growth": [
+   "medium",
+   "medium"
+  ],
+  "heightCm": 40,
+  "temperature": [
+   18,
+   30
+  ],
+  "ph": [
+   5,
+   9
+  ],
+  "placements": [
+   "background"
+  ],
+  "invasiveListings": [
+   {
+    "list": "us-federal-noxious-weed",
+    "sourceUrl": "https://plant-directory.ifas.ufl.edu/plant-directory/hygrophila-polysperma/"
+   },
+   {
+    "list": "fisc-invasive",
+    "category": 1,
+    "sourceUrl": "https://plant-directory.ifas.ufl.edu/plant-directory/hygrophila-polysperma/"
+   }
+  ],
+  "sourceUrl": "https://tropica.com/en/plants/plantdetails/Hygrophilapolysperma'Rosanervig'(050B)/4484",
+  "additionalSourceUrls": [
+   "https://www.fishkeeper.co.uk/fish/plant/aquarium-plants/hygrophila-polysperma-"
+  ],
+  "shopUrls": [
+   "https://aquarubi.com/tropica-hygrophila-polysperma-rosanervig"
+  ],
+  "verifiedAt": "2026-10-25"
+ },
+ {
+  "id": "lagenandra-meeboldii-red",
+  "scientificName": "Lagenandra meeboldii 'Red'",
+  "aliases": [
+   "Lagenandra meeboldi 'Red'"
+  ],
+  "light": [
+   "low",
+   "low"
+  ],
+  "co2": "low",
+  "growth": [
+   "slow",
+   "slow"
+  ],
+  "heightCm": 20,
+  "sourceUrl": "https://tropica.com/en/plants/plantdetails/Lagenandrameeboldii'Red'(103)/4759",
+  "shopUrls": [
+   "https://aquarubi.com/tropica-lagenandra-meeboldii-red",
+   "https://aquarubi.com/lagenandra-meeboldi-red-saksi"
+  ],
+  "verifiedAt": "2026-10-25"
+ },
+ {
+  "id": "leptodictyum-riparium",
+  "scientificName": "Leptodictyum riparium",
+  "aliases": [
+   "Stringy moss"
+  ],
+  "light": [
+   "low",
+   "low"
+  ],
+  "co2": "low",
+  "growth": [
+   "medium",
+   "medium"
+  ],
+  "heightCm": 10,
+  "placements": [
+   "onRock",
+   "onRoot"
+  ],
+  "sourceUrl": "https://tropica.com/en/plants/plantdetails/Leptodictyumriparium(003ETC)/28671",
+  "shopUrls": [
+   "https://aquarubi.com/stringy-moss-leptodictyum-riparium"
+  ],
+  "verifiedAt": "2026-10-25"
+ },
+ {
+  "id": "limnobium-laevigatum",
+  "scientificName": "Limnobium laevigatum",
+  "aliases": [
+   "Limnobium laevigatum (Frogbit)"
+  ],
+  "light": [
+   "low",
+   "low"
+  ],
+  "co2": "low",
+  "growth": [
+   "medium",
+   "medium"
+  ],
+  "heightCm": 5,
+  "placements": [
+   "floating"
+  ],
+  "sourceUrl": "https://tropica.com/en/plants/plantdetails/Limnobiumlaevigatum(063TC)/4761",
+  "shopUrls": [
+   "https://aquarubi.com/limnobium-laevigatum-frogbit"
+  ],
+  "verifiedAt": "2026-10-25"
+ },
+ {
+  "id": "limnophila-aquatica",
+  "scientificName": "Limnophila aquatica",
+  "light": [
+   "medium",
+   "medium"
+  ],
+  "co2": "low",
+  "heightCm": 50,
+  "sourceUrl": "https://tropica.com/en/plants/plantdetails/Limnophilaaquatica(046)/4471",
+  "shopUrls": [
+   "https://aquarubi.com/limnophila-aquatica"
+  ],
+  "verifiedAt": "2026-10-25"
+ },
+ {
+  "id": "limnophila-hippuridoides",
+  "scientificName": "Limnophila hippuridoides",
+  "light": [
+   "medium",
+   "medium"
+  ],
+  "co2": "low",
+  "growth": [
+   "medium",
+   "medium"
+  ],
+  "heightCm": 50,
+  "sourceUrl": "https://tropica.com/en/plants/plantdetails/Limnophilahippuridoides(047C)/4474",
+  "shopUrls": [
+   "https://aquarubi.com/limnophila-hippuridoides",
+   "https://aquarubi.com/limnophila-hippuridoides-t-c-cup"
+  ],
+  "verifiedAt": "2026-10-25"
+ },
+ {
+  "id": "lindernia-rotundifolia-variegated",
+  "scientificName": "Lindernia rotundifolia 'Variegated'",
+  "light": [
+   "low",
+   "low"
+  ],
+  "co2": "medium",
+  "heightCm": 30,
+  "placements": [
+   "background",
+   "midground"
+  ],
+  "sourceUrl": "https://tropica.com/en/plants/plantdetails/Linderniarotundifolia(045)/4468",
+  "shopUrls": [
+   "https://aquarubi.com/tropica-lindernia-rotundifolia",
+   "https://aquarubi.com/lindernia-rotundifolia-variegated"
+  ],
+  "verifiedAt": "2026-10-25"
+ },
+ {
+  "id": "littorella-uniflora",
+  "scientificName": "Littorella uniflora",
+  "aliases": [
+   "Litorella uniflora"
+  ],
+  "light": [
+   "low",
+   "low"
+  ],
+  "co2": "low",
+  "growth": [
+   "slow",
+   "slow"
+  ],
+  "heightCm": 5,
+  "sourceUrl": "https://tropica.com/en/plants/plantdetails/Littorellauniflora(081TC)/18269",
+  "shopUrls": [
+   "https://aquarubi.com/tropica-littorella-uniflora",
+   "https://aquarubi.com/litorella-uniflora"
+  ],
+  "verifiedAt": "2026-10-25"
+ },
+ {
+  "id": "lobelia-cardinalis",
+  "scientificName": "Lobelia cardinalis",
+  "light": [
+   "low",
+   "low"
+  ],
+  "co2": "low",
+  "growth": [
+   "medium",
+   "medium"
+  ],
+  "heightCm": 30,
+  "sourceUrl": "https://tropica.com/en/plants/plantdetails/Lobeliacardinalis(053C)/4494",
+  "shopUrls": [
+   "https://aquarubi.com/lobelia-cardinalis",
+   "https://aquarubi.com/lobelia-cardinalis-t-c-cup"
+  ],
+  "verifiedAt": "2026-10-25"
+ },
+ {
+  "id": "ludwigia-glandulosa",
+  "scientificName": "Ludwigia glandulosa",
+  "aliases": [
+   "Ludwigia glandulosa 'Peruensis'",
+   "Ludwigia perennis"
+  ],
+  "light": [
+   "medium",
+   "medium"
+  ],
+  "co2": "medium",
+  "growth": [
+   "medium",
+   "medium"
+  ],
+  "heightCm": 40,
+  "sourceUrl": "https://tropica.com/en/plants/plantdetails/Ludwigiaglandulosa(035A)/4452",
+  "shopUrls": [
+   "https://aquarubi.com/ludwigia-glandulosa-peruensis"
+  ],
+  "verifiedAt": "2026-10-25"
+ },
+ {
+  "id": "ludwigia-palustris-super-red",
+  "scientificName": "Ludwigia palustris 'Super Red'",
+  "light": [
+   "low",
+   "low"
+  ],
+  "co2": "low",
+  "growth": [
+   "medium",
+   "medium"
+  ],
+  "heightCm": 30,
+  "sourceUrl": "https://tropica.com/en/plants/plantdetails/Ludwigiapalustris'SuperRed'(035B)/4453",
+  "shopUrls": [
+   "https://aquarubi.com/ludwigia-palustris-super-red",
+   "https://aquarubi.com/ludwigia-palustris-super-red-in-vitro",
+   "https://aquarubi.com/stoffels-ludwigia-palustris-super-red",
+   "https://aquarubi.com/tropica-ludwigia-palustris-super-red"
+  ],
+  "verifiedAt": "2026-10-25"
+ },
+ {
+  "id": "ludwigia-repens-rubin",
+  "scientificName": "Ludwigia repens 'Rubin'",
+  "light": [
+   "medium",
+   "medium"
+  ],
+  "co2": "low",
+  "growth": [
+   "medium",
+   "medium"
+  ],
+  "heightCm": 50,
+  "sourceUrl": "https://tropica.com/en/plants/plantdetails/Ludwigiarepens'Rubin'(033D)/4450",
+  "shopUrls": [
+   "https://aquarubi.com/tropica-ludwigia-repens-rubin"
+  ],
+  "verifiedAt": "2026-10-25"
+ },
+ {
+  "id": "marsilea-hirsuta",
+  "scientificName": "Marsilea hirsuta",
+  "light": [
+   "low",
+   "low"
+  ],
+  "co2": "low",
+  "growth": [
+   "medium",
+   "medium"
+  ],
+  "heightCm": 20,
+  "sourceUrl": "https://tropica.com/en/plants/plantdetails/Marsileahirsuta(010TC)/4428",
+  "shopUrls": [
+   "https://aquarubi.com/stoffels-marsilea-hirsuta-in-vitro",
+   "https://aquarubi.com/tropica-marsilea-hirsuta"
+  ],
+  "verifiedAt": "2026-10-25"
+ },
+ {
+  "id": "marsilea-minuta",
+  "scientificName": "Marsilea minuta",
+  "light": [
+   "medium",
+   "medium"
+  ],
+  "co2": "low",
+  "growth": [
+   "medium",
+   "medium"
+  ],
+  "heightCm": 5,
+  "sourceUrl": "https://tropica.com/en/plants/plantdetails/Marsileaminuta(010BTC)/4762",
+  "shopUrls": [
+   "https://aquarubi.com/tropica-marsilea-minuta-in-vitro"
+  ],
+  "verifiedAt": "2026-10-25"
+ },
+ {
+  "id": "micranthemum-callitrichoides-cuba",
+  "scientificName": "Micranthemum callitrichoides 'Cuba'",
+  "aliases": [
+   "Hemianthus callitrichoides 'Cuba'",
+   "Hemianthus callitrichoides",
+   "Micranthemum callitrichoides"
+  ],
+  "light": [
+   "high",
+   "high"
+  ],
+  "co2": "high",
+  "growth": [
+   "medium",
+   "medium"
+  ],
+  "heightCm": 5,
+  "placements": [
+   "foreground"
+  ],
+  "sourceUrl": "https://tropica.com/en/plants/plantdetails/Micranthemumcallitrichoides'Cuba'(048BTC)/4478",
+  "additionalSourceUrls": [
+   "https://tropica.com/en/plants/plantdetails/Micranthemumcallitrichoides%C2%B4Cuba%C2%B4(048B)/4477"
+  ],
+  "shopUrls": [
+   "https://aquarubi.com/tropica-micranthemum-callitrichoides-cuba-saksi",
+   "https://aquarubi.com/tropica-micranthemum-callitrichoides-cuba-vitro",
+   "https://aquarubi.com/hemianthus-callitrichoides-cuba-saksi",
+   "https://aquarubi.com/hemianthus-callitrichoides-cuba-vitro-apc",
+   "https://aquarubi.com/stoffels-micranthemum-callitrichoides-in-vitro"
+  ],
+  "verifiedAt": "2026-10-25"
+ },
+ {
+  "id": "micranthemum-glomeratum",
+  "scientificName": "Micranthemum glomeratum",
+  "aliases": [
+   "Hemianthus micranthemoides",
+   "Micranthemum micranthemoides"
+  ],
+  "light": [
+   "medium",
+   "medium"
+  ],
+  "co2": "medium",
+  "growth": [
+   "medium",
+   "medium"
+  ],
+  "heightCm": 20,
+  "placements": [
+   "foreground"
+  ],
+  "sourceUrl": "https://tropica.com/en/plants/plantdetails/Micranthemumglomeratum(048A)/4476",
+  "shopUrls": [
+   "https://aquarubi.com/stoffels-micranthemum-glomeratum-in-vitro",
+   "https://aquarubi.com/micranthemum-micranthemoides-saksi-apc"
+  ],
+  "verifiedAt": "2026-10-25"
+ },
+ {
+  "id": "micranthemum-tweediei-monte-carlo",
+  "scientificName": "Micranthemum tweediei 'Monte Carlo'",
+  "aliases": [
+   "Micranthemum 'Monte Carlo'"
+  ],
+  "light": [
+   "medium",
+   "medium"
+  ],
+  "co2": "medium",
+  "growth": [
+   "medium",
+   "medium"
+  ],
+  "heightCm": 5,
+  "placements": [
+   "foreground"
+  ],
+  "sourceUrl": "https://tropica.com/en/plants/plantdetails/Micranthemumtweediei'MonteCarlo'(025TC)/4442",
+  "shopUrls": [
+   "https://aquarubi.com/tropica-micranthemum-tweediei-monte-carlo-in-vitro",
+   "https://aquarubi.com/stoffels-micranthemum-tweediei-in-vitro-monte-carlo",
+   "https://aquarubi.com/micranthemum-monte-carlo-porsiyon-super-price",
+   "https://aquarubi.com/micranthemum-monte-carlo-vitro"
+  ],
+  "verifiedAt": "2026-10-25"
+ },
+ {
+  "id": "microsorum-pteropus-narrow",
+  "scientificName": "Microsorum pteropus 'Narrow'",
+  "aliases": [
+   "Microsorum 'Narrow Leaf'"
+  ],
+  "light": [
+   "low",
+   "high"
+  ],
+  "co2": "low",
+  "growth": [
+   "slow",
+   "slow"
+  ],
+  "heightCm": 20,
+  "temperature": [
+   18,
+   30
+  ],
+  "ph": [
+   5,
+   8
+  ],
+  "placements": [
+   "onRoot",
+   "onRock"
+  ],
+  "sourceUrl": "https://tropica.com/en/plants/plantdetails/Microsorumpteropus'Narrow'(008A)/4414",
+  "additionalSourceUrls": [
+   "https://www.fishkeeper.co.uk/fish/plant/aquarium-plants/microsorum-pteropus"
+  ],
+  "shopUrls": [
+   "https://aquarubi.com/tropica-microsorium-pteropus-narrow-bankwood",
+   "https://aquarubi.com/tropica-microsorium-pteropus-narrow-saksi",
+   "https://aquarubi.com/tropica-microsorium-pteropus-narrow-on-wood",
+   "https://aquarubi.com/stoffels-microsorum-narrow-leaf"
+  ],
+  "verifiedAt": "2026-10-25"
+ },
+ {
+  "id": "microsorum-pteropus-trident",
+  "scientificName": "Microsorum pteropus 'Trident'",
+  "light": [
+   "low",
+   "high"
+  ],
+  "co2": "low",
+  "growth": [
+   "slow",
+   "slow"
+  ],
+  "heightCm": 20,
+  "temperature": [
+   18,
+   30
+  ],
+  "ph": [
+   5,
+   8
+  ],
+  "placements": [
+   "onRock",
+   "onRoot"
+  ],
+  "sourceUrl": "https://tropica.com/en/plants/plantdetails/Microsorumpteropus'Trident'(008G)/4424",
+  "additionalSourceUrls": [
+   "https://www.fishkeeper.co.uk/fish/plant/aquarium-plants/microsorum-pteropus"
+  ],
+  "shopUrls": [
+   "https://aquarubi.com/microsorium-pteropus-trident-saksi",
+   "https://aquarubi.com/stoffels-microsorum-pteropus-trident",
+   "https://aquarubi.com/tropica-microsorium-pteropus-trident-on-wood"
+  ],
+  "verifiedAt": "2026-10-25"
+ },
+ {
+  "id": "monosolenium-tenerum",
+  "scientificName": "Monosolenium tenerum",
+  "aliases": [
+   "Round pellia"
+  ],
+  "light": [
+   "low",
+   "low"
+  ],
+  "co2": "low",
+  "growth": [
+   "medium",
+   "medium"
+  ],
+  "heightCm": 5,
+  "placements": [
+   "onRock"
+  ],
+  "sourceUrl": "https://tropica.com/en/plants/plantdetails/Monosoleniumtenerum(002CTC)/18747",
+  "shopUrls": [
+   "https://aquarubi.com/round-pellia-moss-monosolenium-tenerum"
+  ],
+  "verifiedAt": "2026-10-25"
+ },
+ {
+  "id": "myriophyllum-mattogrossense",
+  "scientificName": "Myriophyllum mattogrossense",
+  "aliases": [
+   "Myriophyllum mattogrossense 'Green'"
+  ],
+  "light": [
+   "medium",
+   "medium"
+  ],
+  "co2": "medium",
+  "heightCm": 60,
+  "placements": [
+   "background"
+  ],
+  "sourceUrl": "https://tropica.com/en/plants/plantdetails/Myriophyllummattogrossense(037)/4454",
+  "shopUrls": [
+   "https://aquarubi.com/myriophyllum-mattogrossense-green",
+   "https://aquarubi.com/tropica-myriophyllum-mattogrossense"
+  ],
+  "verifiedAt": "2026-10-25"
+ },
+ {
+  "id": "myriophyllum-guyana",
+  "scientificName": "Myriophyllum sp. 'Guyana'",
+  "light": [
+   "medium",
+   "medium"
+  ],
+  "co2": "medium",
+  "growth": [
+   "medium",
+   "medium"
+  ],
+  "heightCm": 30,
+  "sourceUrl": "https://tropica.com/en/plants/plantdetails/Myriophyllumsp.'Guyana'(037ETC)/19549",
+  "shopUrls": [
+   "https://aquarubi.com/tropica-myriophyllum-guyana"
+  ],
+  "verifiedAt": "2026-10-25"
+ },
+ {
+  "id": "phyllanthus-fluitans",
+  "scientificName": "Phyllanthus fluitans",
+  "aliases": [
+   "Red root floater"
+  ],
+  "light": [
+   "low",
+   "low"
+  ],
+  "co2": "low",
+  "growth": [
+   "medium",
+   "medium"
+  ],
+  "heightCm": 5,
+  "placements": [
+   "floating"
+  ],
+  "sourceUrl": "https://tropica.com/en/plants/plantdetails/Phyllanthusfluitans(028TC)/22848",
+  "shopUrls": [
+   "https://aquarubi.com/phyllanthus-fluitans-red-root-floater-porsiyon",
+   "https://aquarubi.com/phyllanthus-fluitans-red-root-floater-cup"
+  ],
+  "verifiedAt": "2026-10-25"
+ },
+ {
+  "id": "pogostemon-deccanensis",
+  "scientificName": "Pogostemon deccanensis",
+  "aliases": [
+   "Pogostemon erectus"
+  ],
+  "light": [
+   "medium",
+   "medium"
+  ],
+  "co2": "medium",
+  "growth": [
+   "medium",
+   "medium"
+  ],
+  "heightCm": 40,
+  "placements": [
+   "background"
+  ],
+  "sourceUrl": "https://tropica.com/en/plants/plantdetails/Pogostemondeccanensis(053F)/4496",
+  "shopUrls": [
+   "https://aquarubi.com/tropica-pogostemon-deccanensis",
+   "https://aquarubi.com/tropica-pogostemon-deccanensis-in-vitro",
+   "https://aquarubi.com/pogostemon-erectus",
+   "https://aquarubi.com/pogostemon-erectus-in-vitro",
+   "https://aquarubi.com/pogostemon-erectus-vitro-mini-apc",
+   "https://aquarubi.com/stoffels-pogostemon-erectus",
+   "https://aquarubi.com/stoffels-pogostemon-erectus-in-vitro"
+  ],
+  "verifiedAt": "2026-10-25"
+ },
+ {
+  "id": "pogostemon-helferi",
+  "scientificName": "Pogostemon helferi",
+  "aliases": [
+   "Pogostemon helferi 'Red'",
+   "Downoi"
+  ],
+  "light": [
+   "medium",
+   "medium"
+  ],
+  "co2": "medium",
+  "growth": [
+   "medium",
+   "medium"
+  ],
+  "heightCm": 10,
+  "placements": [
+   "foreground"
+  ],
+  "sourceUrl": "https://tropica.com/en/plants/plantdetails/Pogostemonhelferi(053H)/4499",
+  "shopUrls": [
+   "https://aquarubi.com/pogostemon-helferi-1",
+   "https://aquarubi.com/pogostemon-helferi-red",
+   "https://aquarubi.com/pogostemon-helferi-on-lava-stone",
+   "https://aquarubi.com/pogostemon-helferi-vitro-apc",
+   "https://aquarubi.com/stoffels-pogostemon-helferi",
+   "https://aquarubi.com/stoffels-pogostemon-helferi-in-vitro",
+   "https://aquarubi.com/tropica-pogostemon-helferi-in-vitro",
+   "https://aquarubi.com/tropica-pogostemon-helferi-on-lava-stone"
+  ],
+  "verifiedAt": "2026-10-25"
+ },
+ {
+  "id": "proserpinaca-palustris-cuba",
+  "scientificName": "Proserpinaca palustris 'Cuba'",
+  "light": [
+   "high",
+   "high"
+  ],
+  "co2": "high",
+  "growth": [
+   "medium",
+   "medium"
+  ],
+  "heightCm": 40,
+  "sourceUrl": "https://tropica.com/en/plants/plantdetails/Proserpinacapalustris'Cuba'(037CTC)/4766",
+  "shopUrls": [
+   "https://aquarubi.com/proserpinaca-palustris-cuba",
+   "https://aquarubi.com/tropica-proserpinaca-palustris-cuba-in-vitro"
+  ],
+  "verifiedAt": "2026-10-25"
+ },
+ {
+  "id": "ranunculus-inundatus",
+  "scientificName": "Ranunculus inundatus",
+  "light": [
+   "medium",
+   "medium"
+  ],
+  "co2": "medium",
+  "growth": [
+   "medium",
+   "medium"
+  ],
+  "heightCm": 10,
+  "sourceUrl": "https://tropica.com/en/plants/plantdetails/Ranunculusinundatus(022CTC)/18225",
+  "shopUrls": [
+   "https://aquarubi.com/ranunculus-inundatus",
+   "https://aquarubi.com/tropica-ranunculus-inundatus-in-vitro"
+  ],
+  "verifiedAt": "2026-10-25"
+ },
+ {
+  "id": "riccardia-chamedryfolia",
+  "scientificName": "Riccardia chamedryfolia",
+  "aliases": [
+   "Mini pellia"
+  ],
+  "light": [
+   "high",
+   "high"
+  ],
+  "co2": "medium",
+  "growth": [
+   "slow",
+   "slow"
+  ],
+  "heightCm": 5,
+  "placements": [
+   "onRock",
+   "onRoot"
+  ],
+  "sourceUrl": "https://tropica.com/en/plants/plantdetails/Riccardiachamedryfolia(003DTC)/30334",
+  "shopUrls": [
+   "https://aquarubi.com/mini-pellia-moss-riccardia-chamedryfolia",
+   "https://aquarubi.com/mini-pellia-on-nano-wood-15-20cm-riccardia-chamedryfolia",
+   "https://aquarubi.com/mini-pellia-moss-on-lava-stone"
+  ],
+  "verifiedAt": "2026-10-25"
+ },
+ {
+  "id": "rotala-indica-bonsai",
+  "scientificName": "Rotala indica 'Bonsai'",
+  "aliases": [
+   "Rotala 'Bonsai'"
+  ],
+  "light": [
+   "medium",
+   "medium"
+  ],
+  "co2": "medium",
+  "growth": [
+   "slow",
+   "slow"
+  ],
+  "heightCm": 20,
+  "sourceUrl": "https://tropica.com/en/plants/plantdetails/Rotalaindica'Bonsai'(033ETC)/4451",
+  "shopUrls": [
+   "https://aquarubi.com/tropica-rotala-bonsai",
+   "https://aquarubi.com/rotala-bonsai"
+  ],
+  "verifiedAt": "2026-10-25"
+ },
+ {
+  "id": "rotala-macrandra-japan",
+  "scientificName": "Rotala macrandra 'Japan'",
+  "light": [
+   "high",
+   "high"
+  ],
+  "co2": "high",
+  "growth": [
+   "medium",
+   "medium"
+  ],
+  "heightCm": 30,
+  "temperature": [
+   22,
+   28
+  ],
+  "ph": [
+   5,
+   7
+  ],
+  "placements": [
+   "midground"
+  ],
+  "sourceUrl": "https://tropica.com/en/plants/plantdetails/Rotalamacrandra(032TC)/4445",
+  "additionalSourceUrls": [
+   "https://www.fishkeeper.co.uk/fish/plant/aquarium-plants/rotala-macrandra-"
+  ],
+  "shopUrls": [
+   "https://aquarubi.com/tropica-rotala-macrandra-vitro"
+  ],
+  "verifiedAt": "2026-10-25"
+ },
+ {
+  "id": "rotala-rotundifolia",
+  "scientificName": "Rotala rotundifolia",
+  "aliases": [
+   "Rotala rotundifolia 'Orange Juice'",
+   "Rotala rotundifolia 'Reddish Vietnam'",
+   "Rotala rotundifolia 'Colorata'"
+  ],
+  "light": [
+   "low",
+   "low"
+  ],
+  "co2": "low",
+  "growth": [
+   "medium",
+   "medium"
+  ],
+  "heightCm": 30,
+  "invasiveListings": [
+   {
+    "list": "fisc-invasive",
+    "category": 2,
+    "sourceUrl": "https://plant-directory.ifas.ufl.edu/plant-directory/rotala-rotundifolia/"
+   }
+  ],
+  "sourceUrl": "https://tropica.com/en/plants/plantdetails/Rotalarotundifolia(033)/4447",
+  "shopUrls": [
+   "https://aquarubi.com/tropica-rotala-rotundifolia",
+   "https://aquarubi.com/rotala-rotundifolia-orange-juice",
+   "https://aquarubi.com/rotala-rotundifolia-reddish-vietnam",
+   "https://aquarubi.com/rotala-rotundifolia-colorata-vitro"
+  ],
+  "verifiedAt": "2026-10-25"
+ },
+ {
+  "id": "rotala-rotundifolia-blood-red",
+  "scientificName": "Rotala rotundifolia 'Blood Red'",
+  "light": [
+   "medium",
+   "medium"
+  ],
+  "co2": "medium",
+  "growth": [
+   "medium",
+   "medium"
+  ],
+  "heightCm": 20,
+  "invasiveListings": [
+   {
+    "list": "fisc-invasive",
+    "category": 2,
+    "sourceUrl": "https://plant-directory.ifas.ufl.edu/plant-directory/rotala-rotundifolia/"
+   }
+  ],
+  "sourceUrl": "https://tropica.com/en/plants/plantdetails/Rotalarotundifolia'BloodRed'(032DTC)/30047",
+  "shopUrls": [
+   "https://aquarubi.com/tropica-rotala-rotundifolia-blood-red-in-vitro",
+   "https://aquarubi.com/rotala-blood-red-vitro-apc"
+  ],
+  "verifiedAt": "2026-10-25"
+ },
+ {
+  "id": "rotala-rotundifolia-hra",
+  "scientificName": "Rotala rotundifolia 'H'ra'",
+  "aliases": [
+   "Rotala 'H'ra'",
+   "Rotala 'Vietnam H'ra'"
+  ],
+  "light": [
+   "medium",
+   "medium"
+  ],
+  "co2": "medium",
+  "heightCm": 20,
+  "placements": [
+   "midground"
+  ],
+  "sourceUrl": "https://tropica.com/en/plants/plantdetails/Rotalarotundifolia'H'ra'(032CTC)/19550",
+  "shopUrls": [
+   "https://aquarubi.com/rotala-hra",
+   "https://aquarubi.com/rotala-hra-vitro",
+   "https://aquarubi.com/stoffels-rotala-rotundifolia-hra-in-vitro",
+   "https://aquarubi.com/tropica-rotala-vietnam-hra"
+  ],
+  "verifiedAt": "2026-10-25"
+ },
+ {
+  "id": "rotala-sp-green",
+  "scientificName": "Rotala sp. 'Green'",
+  "aliases": [
+   "Rotala rotundifolia 'Green'"
+  ],
+  "light": [
+   "medium",
+   "medium"
+  ],
+  "co2": "medium",
+  "heightCm": 50,
+  "sourceUrl": "https://tropica.com/en/plants/plantdetails/Rotalarotundifolia'Green'(033ATC)/22545",
+  "shopUrls": [
+   "https://aquarubi.com/tropica-rotala-rotundifolia-green-in-vitro"
+  ],
+  "verifiedAt": "2026-10-25"
+ },
+ {
+  "id": "rotala-wallichii",
+  "scientificName": "Rotala wallichii",
+  "light": [
+   "high",
+   "high"
+  ],
+  "co2": "high",
+  "growth": [
+   "medium",
+   "medium"
+  ],
+  "heightCm": 30,
+  "placements": [
+   "background",
+   "midground"
+  ],
+  "sourceUrl": "https://tropica.com/en/plants/plantdetails/Rotalawallichii(032ATC)/18748",
+  "shopUrls": [
+   "https://aquarubi.com/rotala-wallichii",
+   "https://aquarubi.com/tropica-rotala-wallichii"
+  ],
+  "verifiedAt": "2026-10-25"
+ },
+ {
+  "id": "sagittaria-subulata",
+  "scientificName": "Sagittaria subulata",
+  "aliases": [
+   "Sagittaria subulata 'Pusilla'"
+  ],
+  "light": [
+   "low",
+   "low"
+  ],
+  "co2": "medium",
+  "heightCm": 50,
+  "placements": [
+   "foreground"
+  ],
+  "sourceUrl": "https://tropica.com/en/plants/plantdetails/Sagittariasubulata(079)/4530",
+  "shopUrls": [
+   "https://aquarubi.com/sagittaria-subulata-pusilla",
+   "https://aquarubi.com/sagittaria-subulata-vitro",
+   "https://aquarubi.com/stoffels-sagittaria-subulata"
+  ],
+  "verifiedAt": "2026-10-25"
+ },
+ {
+  "id": "sagittaria-subulata-needle-leaf",
+  "scientificName": "Sagittaria subulata 'Needle Leaf'",
+  "aliases": [
+   "Sagittaria sp. 'Needle'"
+  ],
+  "heightCm": 30,
+  "placements": [
+   "background"
+  ],
+  "sourceUrl": "https://tropica.com/en/plants/plantdetails/Sagittariasubulata'NeedleLeaf'(144TC)/30440",
+  "shopUrls": [
+   "https://aquarubi.com/tropica-sagittaria-subulata-needle-leaf-in-vitro"
+  ],
+  "verifiedAt": "2026-10-25"
+ },
+ {
+  "id": "schismatoglottis-prietoi",
+  "scientificName": "Schismatoglottis prietoi",
+  "light": [
+   "low",
+   "low"
+  ],
+  "co2": "low",
+  "growth": [
+   "medium",
+   "medium"
+  ],
+  "heightCm": 8,
+  "sourceUrl": "https://tropica.com/en/plants/plantdetails/Schismatoglottisprietoi(102TC)/29519",
+  "shopUrls": [
+   "https://aquarubi.com/stoffels-schismatoglottis-prietoi",
+   "https://aquarubi.com/tropica-schismatoglottis-prietoi-in-vitro"
+  ],
+  "verifiedAt": "2026-10-25"
+ },
+ {
+  "id": "staurogyne-repens",
+  "scientificName": "Staurogyne repens",
+  "aliases": [
+   "Staurogyne repens 'Purple'"
+  ],
+  "light": [
+   "low",
+   "low"
+  ],
+  "co2": "low",
+  "growth": [
+   "medium",
+   "medium"
+  ],
+  "heightCm": 10,
+  "placements": [
+   "foreground"
+  ],
+  "sourceUrl": "https://tropica.com/en/plants/plantdetails/Staurogynerepens(049G)/4481",
+  "shopUrls": [
+   "https://aquarubi.com/staurogyne-repens",
+   "https://aquarubi.com/staurogyne-repens-in-vitro-apc",
+   "https://aquarubi.com/staurogyne-repens-purple-ozel-tur-canli-bitki",
+   "https://aquarubi.com/stoffels-staurogyne-repens",
+   "https://aquarubi.com/stoffels-staurogyne-repens-in-vitro",
+   "https://aquarubi.com/tropica-staurogyne-repens"
+  ],
+  "verifiedAt": "2026-10-25"
+ },
+ {
+  "id": "taxiphyllum-spiky-moss",
+  "scientificName": "Taxiphyllum sp. 'Spiky Moss'",
+  "aliases": [
+   "Spiky moss"
+  ],
+  "light": [
+   "low",
+   "low"
+  ],
+  "co2": "low",
+  "growth": [
+   "medium",
+   "medium"
+  ],
+  "heightCm": 10,
+  "sourceUrl": "https://tropica.com/en/plants/plantdetails/Taxiphyllumsp.'SpikyMoss'(003GPOR)/4402",
+  "shopUrls": [
+   "https://aquarubi.com/spiky-moss-taxiphyllum-sp",
+   "https://aquarubi.com/taxiphyllum-sp-spiky-moss-10x10cm",
+   "https://aquarubi.com/stoffels-taxiphyllum-sp-spiky-moss-in-vitro"
+  ],
+  "verifiedAt": "2026-10-25"
+ },
+ {
+  "id": "taxiphyllum-flame-moss",
+  "scientificName": "Taxiphyllum sp. 'Flame Moss'",
+  "aliases": [
+   "Flame moss"
+  ],
+  "light": [
+   "low",
+   "low"
+  ],
+  "co2": "low",
+  "growth": [
+   "slow",
+   "slow"
+  ],
+  "heightCm": 15,
+  "placements": [
+   "onRock",
+   "onRoot"
+  ],
+  "sourceUrl": "https://tropica.com/en/plants/plantdetails/Taxiphyllumsp.%E2%80%99FlameMoss%E2%80%99(003HTC)/4403",
+  "shopUrls": [
+   "https://aquarubi.com/flame-moss"
+  ],
+  "verifiedAt": "2026-10-25"
+ },
+ {
+  "id": "utricularia-graminifolia",
+  "scientificName": "Utricularia graminifolia",
+  "light": [
+   "medium",
+   "medium"
+  ],
+  "co2": "medium",
+  "growth": [
+   "medium",
+   "medium"
+  ],
+  "heightCm": 10,
+  "placements": [
+   "foreground"
+  ],
+  "sourceUrl": "https://tropica.com/en/plants/plantdetails/Utriculariagraminifolia(049BTC)/4480",
+  "shopUrls": [
+   "https://aquarubi.com/utricularia-graminifolia-t-c-small-cup",
+   "https://aquarubi.com/stoffels-utricularia-graminifolia-in-vitro",
+   "https://aquarubi.com/tropica-utricularia-graminifolia"
+  ],
+  "verifiedAt": "2026-10-25"
+ },
+ {
+  "id": "vesicularia-ferriei-weeping-moss",
+  "scientificName": "Vesicularia ferriei 'Weeping Moss'",
+  "aliases": [
+   "Weeping moss"
+  ],
+  "light": [
+   "medium",
+   "medium"
+  ],
+  "co2": "low",
+  "growth": [
+   "medium",
+   "medium"
+  ],
+  "heightCm": 5,
+  "placements": [
+   "onRoot"
+  ],
+  "sourceUrl": "https://tropica.com/en/plants/plantdetails/Vesiculariaferriei'WeepingMoss'(003BPOR)/4398",
+  "shopUrls": [
+   "https://aquarubi.com/vesicularia-ferriei-weeping-moss-10x10cm",
+   "https://aquarubi.com/vesicularia-ferriei-weeping-moss-on-stone",
+   "https://aquarubi.com/weeping-moss-vesicularia-ferriei",
+   "https://aquarubi.com/tropica-weeping-moss-vesicularia-ferriei",
+   "https://aquarubi.com/stoffels-vesicularia-ferrieri-weeping-moss-in-vitro"
+  ],
+  "verifiedAt": "2026-10-25"
+ },
+ {
+  "id": "vesicularia-montagnei-christmas-moss",
+  "scientificName": "Vesicularia montagnei 'Christmas Moss'",
+  "aliases": [
+   "Christmas moss"
+  ],
+  "light": [
+   "medium",
+   "medium"
+  ],
+  "co2": "low",
+  "growth": [
+   "medium",
+   "medium"
+  ],
+  "heightCm": 5,
+  "placements": [
+   "onRoot",
+   "onRock"
+  ],
+  "sourceUrl": "https://tropica.com/en/plants/plantdetails/Vesiculariamontagnei'ChristmasMoss'(003APOR)/4395",
+  "shopUrls": [
+   "https://aquarubi.com/tropica-vesicularia-montagnei-christmas-moss",
+   "https://aquarubi.com/tropica-vesicularia-montagnei-christmas-moss-on-wood",
+   "https://aquarubi.com/stoffels-vesicularia-montagnei-christmass-moss-in-vitro",
+   "https://aquarubi.com/vesicularia-christmas-moss-10x10cm",
+   "https://aquarubi.com/vesicularia-dubyana-christmas-moss"
   ],
   "verifiedAt": "2026-10-25"
  }
