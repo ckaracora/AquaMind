@@ -2865,3 +2865,178 @@ Güncel alt adım: JBL filtre medyası, bakteri başlangıcı, sorun giderici/pH
   - su bitkisi olup olmadığı Practical Fishkeeping'le kontrol edilecek bitkiler (*Ophiopogon*, *Fittonia*, *Selaginella*, *Homalomena*);
   - Practical Fishkeeping'in tür kutuları;
   - bitki sayfasında katalogdan seçme (önce taslak).
+
+## 2026-10-25 Bitki kataloğu 2: yalnız Tropica'da sayfası olan bitkiler ve formlar (Claude)
+
+- Karar `docs/DECISIONS/0023-bitki-katalogu.md`; kural `docs/DATA_SOURCES.md` → "Bitkiler". Bu pakette kurala şunlar yazıldı: form kayıtları (Tropica'da ayrı sayfası olan form kendi kaydını alır, sayfanın vermediği alanlar Fishkeeper'daki türün sayfasından gelir), Tropica'ya dayanan kayıtta ışığın üst ucu, FISC listesi, Tropica'nın yazdığı eski ve yanlış adlar.
+- Okunan sayfalar (2026-10-25, UTC; hepsi HTTP 200):
+  - Tropica: 1. paketteki 288 ürün sayfası (yeniden indirilmedi); aday bitkilerin bütün ürün sayfalarının tablosu ve açıklaması tek tek okundu.
+  - Aquarubi: aday bitkilerin adlarıyla ve desenlerle bulunan 210 yeni ürün sayfası (17'si Codex 1. turundan sonraki ikinci taramada, ikisi Codex 2. turundan sonra); Akvaryum Express ve Aquarubi'de iki ek ürün. Ürün adı ve açıklaması sayfa açılarak okundu.
+  - UF/IFAS bitki dizini: 62 bilimsel adla adres denendi, 9 sayfa var (*Rotala rotundifolia* "FISC Category 2 | Invasive"; ötekiler Florida'ya özgü ya da listesiz).
+  - Flowgrow (Codex 1. turundan sonra): *Anubias barteri* var. *glabra*, *Hemianthus callitrichoides* 'Cuba', *Myriophyllum mattogrossense* ve *M. tuberculatum* sayfaları; Codex 2. turundan sonra *Ammannia crassicaulis* sayfası; 3. turda *Hygrophila corymbosa* 'Stricta' ve 'Siamensis', *Hydrocotyle* sp. 'Japan' ve *Cryptocoryne wendtii* 'Tropica' sayfaları.
+  - 3. tur: Aquarubi'deki 357 ürün sayfası Tropica ürün numarası için yeniden açıldı.
+- Yeni kayıtlar: 86.
+  - Fishkeeper'daki bir türün Tropica'da ayrı sayfası olan formları (10): *Anubias barteri* var. *nana* 'Pinto' ve 'Coin Leaf' (Codex 3. turundan sonra; aşağıda), *Bacopa monnieri* 'Compact', *C. beckettii* 'Petchii', *C. undulata* 'Broad Leaf', *Helanthium tenellum* 'Green', *Hygrophila polysperma* 'Rosanervig', *Microsorum pteropus* 'Narrow' ve 'Trident', *Rotala macrandra* 'Japan'. Sıcaklık ve pH türün Fishkeeper sayfasından; ışığın üst ucu da oradan.
+  - Fishkeeper'da kaydı olmayan bitkiler ve formlar (76): değerler yalnız Tropica'dan; sıcaklık ve pH boş. Altısı Codex 1. turundan sonra eklendi: *Anubias barteri* var. *glabra*, *Bucephalandra diabolica* 'Kedagang', *B. pygmaea* 'Bukit Kelam', *Lindernia rotundifolia* 'Variegated', *Taxiphyllum* sp. 'Spiky Moss' ve 'Flame Moss' (ilk aday taraması tırnaklı form adlarını aramıyordu; ikinci tarama form adlarıyla yapıldı). *Ammannia crassicaulis* Codex 2. turundan sonra eklendi: Aquarubi'de eş adıyla ("Nesaea Crassicaulis") satılıyor ve aday taraması bu ürünü kaçırmıştı. *Hygrophila corymbosa* 'Stricta' 3. turda eklendi: Aquarubi'nin "Tropica Hygrophila 'Siamensis'" ürünü Tropica'nın ürün numarasına göre bu bitki (aşağıda).
+- 1. paketin kayıtlarındaki değişiklikler:
+  - Formların ürünleri tür kayıtlarından ayrıldı (16 ürün; ayrıca 'Broad Leaf' Vitro'nun bağı kaldırıldı, aşağıda): *Microsorum pteropus*'tan 'Trident' ve 'Narrow' ürünleri ('Trident Mini' ve 'Narrow Mini' türde kaldı), var. *nana*'dan 'Pinto' ve 'Golden Coin' (Codex 3. tur), *H. polysperma*'dan 'Rosanervig', *C. undulata*'dan 'Broad Leaves', *R. macrandra*'dan Tropica'nın ürünü.
+  - Bütün ürünleri forma giden *Cryptocoryne beckettii* ve *Helanthium tenellum* kataloğa girmiyor. Değerleri form kayıtlarına kaynak olarak kalıyor. Fishkeeper'da kaydı olan 52 bitki kaldı.
+  - *H. polysperma* ve *L. sessiliflora*'ya FISC işareti eklendi (sırasıyla 1. ve 2. kategori; UF/IFAS başlığı).
+  - 'Broad Leaf'in doku kültürü ürünü ("Tropica Cryptocoryne Undulata 'Broad Leaf' Vitro") hiçbir kayda bağlı değil. Tropica'nın bu ürün sayfası (110BTC) "This red version of Cryptocoryne undulata" diye başka bir formu anlatıyor.
+- Ad ve form kararları:
+  - Tropica'nın ürün adı formu yazmıyor ama açıklaması bir formu anlatıyor; kayıt o formdur: "Cryptocoryne nurii" ('Rose Maiden'), "Hydrocotyle tripartita" ('Japan'; "Hydrocotyle sp. 'Japan'"), "Rotala macrandra" ('Japan'), "Rotala rotundifolia 'Green'" ("Rotala sp. 'Green'"). Bu kayıtlara Tropica'nın kendi ürünü ve adında ya da açıklamasında formu yazan ürün bağlandı. 3. turda açıklaması formu yazan üç ürün eklendi: "Cryptocoryne Nurii T/C Mini Cup" ("“Rose Maiden” adı altında popüler oldu") ve "Hydrocotyle Tripartita" ("Hydrocotyle sp. ‘Japan’ ... tripartita’nın bir varyetesidir"), ikisi de Tropica'nın metninin çevirisi; APC'nin "Rotala Blood Red Vitro" ürünü türü ve formu yazıyor ("Rotala rotundifolia blood red", "tüm Rotala rotundifolia formlarının en yoğun kırmızı rengine sahiptir").
+  - Tropica'nın yazdığı eski ve yanlış adlar bağlandı:
+    - *Pogostemon erectus* → *P. deccanensis* ("Previously known as Pogostemon erectus"; beş ürün);
+    - "Echinodorus magdalenensis" → *Helanthium bolivianum* 'Quadricostatus' ("has been sold as Echinodorus bolivianus var. magdalenensis"; Aquarubi ve Akvaryum Express);
+    - *Micranthemum micranthemoides* → *M. glomeratum* ("Used to be called ... Micranthemum micranthemoides");
+    - *Ludwigia perennis* → *L. glandulosa* ("Used to be sold as Ludwigia perennis");
+    - "Vesicularia dubyana 'Christmas Moss'" → *V. montagnei* 'Christmas Moss' (Tropica: Christmas moss "distinguishes it from ordinary Vesicularia dubyana").
+  - Flowgrow (Codex 1. tur): var. *glabra*'nın eş adları *Anubias lanceolata* ve *A. minima* (Aquarubi'deki "Lanceolata", "Minima" ürünleri ve "Anubias Minima"); *Hemianthus callitrichoides* 'Cuba' Küba'dan getirilen *H. callitrichoides* ("imported from Cuba in 2004 by Tropica"), ayrı bir form değil; bu yüzden 'Cuba' yazmayan Stoffels ürünü de bağlandı.
+  - Flowgrow (Codex 2. tur): *Nesaea crassicaulis*, *Ammannia crassicaulis*'in eş adı ("known in the hobby as Nesaea crassicaulis"); Aquarubi'nin "Nesaea Crassicaulis" ürününün açıklaması da *Ammannia crassicaulis* diyor.
+  - Tropica'nın ürün numarası (Codex 2. tur): Aquarubi'nin "Tropica Anubias Barteri Var. Angustifolia" ürününün sayfası Tropica'nın 33-101C numarasını yazıyor. Tropica'nın 101C sayfası bugün var. *glabra* adıyla yayımlanıyor ve iki açıklama aynı ("used to be sold as Anubias afzelii, but the latter is actually a much larger species"). Ürün var. *glabra* kaydına bağlandı; Flowgrow'a göre var. *angustifolia* ayrı bir varyete olduğu için ad olarak eklenmedi.
+  - Tropica'nın ürün numarası (3. tur): Aquarubi'deki 357 ürün sayfasının hepsinde numara arandı; Tropica ürün numarası yalnız adı "Tropica" ile başlayan 89 üründe var. Düzeltmelerden sonra bağlı 87 ürünün numarası kaydın Tropica sayfasıyla uyuşuyor; ikisi bağlı değil: 'Broad Leaf' Vitro (aşağıda) ve karışık ürün "Hygrophila Pinnatifida and Moss". Düzeltilenler:
+    - "Tropica Cryptocoryne Wendtii" 33-109E, yani *C. wendtii* 'Tropica'; o kayda bağlandı.
+    - "Tropica Hygrophila 'Siamensis'" 33-053A, yani Tropica'nın *H. corymbosa* 'Stricta' sayfası. Açıklaması da 'Stricta'nınki ("Leaves are light green and dense", "stems from 15-40 cm"). Flowgrow 'Siamensis' ile 'Stricta'yı ayrı formlar sayıyor; ürün yeni 'Stricta' kaydına bağlandı, 'Siamensis' ad olarak eklenmedi. Böylece 'Siamensis 53B' adayı düştü: satılan bir ürünü yok.
+    - 'Broad Leaf' Vitro'nun numarası (33-110B-TC), kopyalama hatası yüzünden kullanılmayan 110BTC sayfası; ürün bağlanmadı.
+  - Flowgrow (Codex 3. tur): *Anubias barteri* 'Round Leaf' ("small, round, slightly heart-shaped leaf blades"), eş adları 'Coin Leaf' ve 'Gold Coin'. Aquarubi'nin "Anubias Barteri Var Nana Golden Coin" ürününün açıklaması bu metnin çevirisi ("Yuvarlak yapraklı ... “Altın Para” isimleriyle de satışı yapılmaktadır"). Tropica'nın 'Coin Leaf' sayfası ("a captivating cultivar of Anubias barteri") ayrı bir form kaydı oldu; 1. pakette var. *nana*'ya bağlanan ürün ve 'Golden Coin' satış adı oraya taşındı. Flowgrow bitkiyi *A. barteri* var. *nana* 'Round Leaf' diye yazıyor ("selected from cultivated Anubias barteri var. nana"); form kuralına göre sıcaklık, pH ve ışığın üst ucu Fishkeeper'daki var. *nana* sayfasından. ('Mini Coin' için Flowgrow'da sayfa yok; Tropica onu *A. barteri*'nin varyetesi diye anlattığı için Fishkeeper'daki bir türe bağlanmadı.)
+  - Tropica'nın 'Bukit Kelam' sayfaları bitkiyi 'Wavy Green' adıyla anlatıyor; Tropica'nın 'Wavy Green' ürünü ve "Bucephalandra Green Wavy" ürünleri (biri "pygmaea 'Green Wavy'" diyor) bağlandı.
+  - Tropica'nın "Lindernia rotundifolia" sayfası 'Variegated' formunu anlatıyor (form kuralı; Aquarubi'deki Tropica ürününün açıklaması da 'Variegated' diyor).
+  - Tropica'nın "Microsorum pteropus nano wood" sayfası 'Narrow' için "commonly known as Narrow Leaf Java Fern" diyor; Stoffels'in "Microsorum Narrow Leaf" ürünü 'Narrow' kaydına bağlandı.
+- Eklenmeyen satılan bitkiler (kaynakla kimliği kurulamadı):
+  - *Taxiphyllum alternans* 'Taiwan Moss': Tropica'nın sayfası "Mini Taiwan moss" diyor ve kimliğin belirlenmediğini yazıyor.
+  - *Bucephalandra* sp. 'Red': sayfa birden çok formu ("Red Bucephalandra varieties") anlatıyor.
+  - "Anubias barteri sp." ve "Microsorum sp.": karışık ürünlerin sayfaları.
+  - *Solenostoma tetragonum* 'Pearl Moss': Aquarubi'nin "Pearl Moss" ürünü *Plagiomnium affine*'i anlatıyor; "Tetragonum Moss" ürünü yalnız *S. tetragonum*'a "ait olabileceğini" yazıyor.
+- Bağlanmayan satış adları:
+  - Stoffels "Eleocharis Pusilla" (Tropica'nın kaydı 'Mini' formu);
+  - "Lagenandra Meeboldii Red Round" (başka form);
+  - "Rotala Blood Red 'Singapore'" (açıklaması APC'nin 'Blood Red' ürünüyle aynı metin, ama formun adını 'Singapore' diye veriyor; bu ad kaynaklarda yok);
+  - üç "Mini Christmass Moss" ürünü (başka form);
+  - "Rotala Indica Green";
+  - "Hygrophila Pinnatifida and Moss" (karışık ürün);
+  - kırmızı ve 'Golden' "Myriophyllum Mattogrossense" ürünleri (Flowgrow: kırmızı satış adı *M. tuberculatum*'a ait, gerçek *M. mattogrossense* "all green"; Codex 1. tur);
+  - 'Mini Round', 'Japan' ve 'Godzilla' adlı *Bucephalandra* 'Kedagang' ürünleri (başka formlar) ve formu yazmayan "Bucephalandra Pygmaea";
+  - "Lindernia Rotundifolia" (Tropica'nın olmayan ürün; form yazmıyor).
+- Açıklamada açıkça yazılan daha büyük boylar (kural 1. paketteki gibi; 25 kayıt): örnekler *Sagittaria subulata* 50 cm ("grows to a height of 50 cm"), *Rotala* sp. 'Green' 50 cm ("Stems becomes 40-50 cm long"), *Myriophyllum mattogrossense* 60 cm ("(30-60 cm long)"), *Echinodorus* 'Reni' 40 cm ("15-40 cm tall"), sürgünle yayılan *Schismatoglottis prietoi* 8 cm ("3-8 cm long, eliptic leaves"; Codex 2. tur). Betik her alıntıyı kaynak metinde birebir arıyor.
+- Tropica'ya dayanan 42 kayıtta yerleşim var: Tropica'nın açıkça yazdığı yerden, formlarda Tropica yazmıyorsa türün Fishkeeper açıklamasından. Örnekler: "ideal, undemanding foreground plant" (*S. subulata*), "suitable as a background plant" (*P. deccanensis*), "decorative floating plant" (*Limnobium laevigatum*), "attaches readily to roots and stones" ('Narrow').
+- İstilacı tür listeleri: *Rotala rotundifolia* FISC 2. kategori; Tropica 'Blood Red'i "the most intensely red-colored variation of Rotala rotundifolia" diye anlattığı için o da işaretli. 'H'ra' ("probably a variation") ve *Rotala* sp. 'Green' işaretli değil. 'Rosanervig' *H. polysperma*'nın işaretlerini taşıyor. AB listesinde ve İngiltere'nin 2014 yasağında yeni bitki yok.
+- Değerler (Tropica'nın yazdığı ve kataloğa giren; "Fishkeeper'daki tür" sütunu form kayıtlarını gösterir):
+
+| Bilimsel ad | Tropica (ışık · CO₂ · büyüme · iki ayda boy) | Fishkeeper'daki tür | Katalog |
+|---|---|---|---|
+| *Ammannia crassicaulis* | Medium · Medium · Medium · 20 - 30+ | — | ışık orta · CO₂ orta · büyüme orta · 50 cm |
+| *Alternanthera reineckii 'Mini'* | Medium · Medium · Medium · 5 - 10+ | — | ışık orta · CO₂ orta · büyüme orta · 10 cm |
+| *Alternanthera reineckii 'Rosanervig'* | Medium · Medium · Medium · 5 - 20+; — · — · — · - | — | ışık orta · CO₂ orta · büyüme orta · 20 cm |
+| *Anubias barteri 'Coin Leaf'* | Low · Low · Slow · 5 - 15+ | var | 18–28 °C · pH 5–8,5 · ışık düşük–yüksek · CO₂ düşük · büyüme yavaş · 15 cm |
+| *Anubias barteri 'Mini Coin'* | Low · Low · Slow · 3 - 10+ | — | ışık düşük · CO₂ düşük · büyüme yavaş · 10 cm |
+| *Anubias barteri var. caladiifolia* | Low · Low · Slow · 10 - 15+ | — | ışık düşük · CO₂ düşük · büyüme yavaş · 15 cm |
+| *Anubias gracilis* | Low · Low · Slow · 10 - 20+ | — | ışık düşük · CO₂ düşük · büyüme yavaş · 20 cm |
+| *Anubias barteri var. glabra* | Low · Low · Slow · 10 - 15+ | — | ışık düşük · CO₂ düşük · büyüme yavaş · 20 cm |
+| *Anubias barteri var. nana 'Pinto'* | Medium · Low · Slow · 0 - 5+ | var | 18–28 °C · pH 5–8,5 · ışık orta–yüksek · CO₂ düşük · büyüme yavaş · 5 cm |
+| *Bacopa australis* | Medium · Medium · — · 5 - 30+ | — | ışık orta · CO₂ orta · 30 cm |
+| *Bacopa monnieri 'Compact'* | Low · Low · — · 3 - 10+ | var | 15–28 °C · pH 6–8 · ışık düşük–yüksek · CO₂ düşük · büyüme yavaş · 10 cm |
+| *Bacopa salzmannii 'Purple'* | Medium · Medium · Medium · 0 - 30+ | — | ışık orta · CO₂ orta · büyüme orta · 30 cm |
+| *Blyxa japonica* | Medium · Medium · Medium · 10 - 20+ | — | ışık orta · CO₂ orta · büyüme orta · 20 cm |
+| *Bucephalandra diabolica 'Kedagang'* | Low · Low · Slow · 10 - 20+ | — | ışık düşük · CO₂ düşük · büyüme yavaş · 20 cm |
+| *Bucephalandra pygmaea 'Bukit Kelam'* | Low · Low · Slow · 5 - 10+; — · — · — · 5 - 10+ | — | ışık düşük · CO₂ düşük · büyüme yavaş · 10 cm |
+| *Cryptocoryne beckettii 'Petchii'* | Low · Low · Medium · 10 - 15+ | var | 24–28 °C · pH 5,5–8 · ışık düşük–yüksek · CO₂ düşük · büyüme orta · 15 cm |
+| *Cryptocoryne nurii 'Rose Maiden'* | — · — · Medium · 10 - 20+ | — | büyüme orta · 20 cm |
+| *Cryptocoryne parva* | Medium · Low · Slow · 5 - 10+ | — | ışık orta · CO₂ düşük · büyüme yavaş · 10 cm |
+| *Cryptocoryne undulata 'Broad Leaf'* | — · — · Medium · 15 - 30+ | var | 22–28 °C · pH 5,5–7,5 · ışık düşük–yüksek · büyüme orta · 30 cm |
+| *Cryptocoryne wendtii 'Mi Oya'* | Low · Low · Slow · 20 - 30+ | — | ışık düşük · CO₂ düşük · büyüme yavaş · 35 cm |
+| *Cryptocoryne wendtii 'Tropica'* | Low · Low · Medium · 10 - 20+; — · — · Medium · 10 - 20+ | — | ışık düşük · CO₂ düşük · büyüme orta · 20 cm |
+| *Echinodorus 'Red Diamond'* | Medium · Medium · Medium · 15 - 20+ | — | ışık orta · CO₂ orta · büyüme orta · 25 cm |
+| *Echinodorus 'Reni'* | Low · Low · Medium · 15 - 30+; — · — · — · - | — | ışık düşük · CO₂ düşük · büyüme orta · 40 cm |
+| *Echinodorus 'Rosé'* | Low · Low · Medium · 20 - 30+ | — | ışık düşük · CO₂ düşük · büyüme orta · 40 cm |
+| *Eleocharis acicularis* | Low · Low · Medium · 10 - 15+ | — | ışık düşük · CO₂ düşük · büyüme orta · 15 cm |
+| *Eleocharis montevidensis* | Low · Low · Medium · 20 - 30+ | — | ışık düşük · CO₂ düşük · büyüme orta · 40 cm |
+| *Eleocharis parvula* | Low · Low · — · 3 - 10+; — · — · — · 3 - 10+ | — | ışık düşük · CO₂ düşük · 10 cm |
+| *Eleocharis pusilla 'Mini'* | Medium · Medium · Slow · 3 - 5+ | — | ışık orta · CO₂ orta · büyüme yavaş · 5 cm |
+| *Eriocaulon cinereum* | High · High · Slow · 3 - 10+ | — | ışık yüksek · CO₂ yüksek · büyüme yavaş · 10 cm |
+| *Eriocaulon sp. 'Vietnam'* | Medium · Medium · Medium · 3 - 20+ | — | ışık orta · CO₂ orta · büyüme orta · 20 cm |
+| *Fissidens fontanus* | Medium · Medium · — · 3 - 5+ | — | ışık orta · CO₂ orta · 5 cm |
+| *Gratiola viscidula* | Medium · Medium · Slow · 3 - 10+ | — | ışık orta · CO₂ orta · büyüme yavaş · 10 cm |
+| *Helanthium bolivianum 'Quadricostatus'* | Low · Low · — · 10 - 15+ | — | ışık düşük · CO₂ düşük · 15 cm |
+| *Helanthium tenellum 'Green'* | Low · Low · Slow · 5 - 15+ | var | 20–30 °C · pH 5,5–8 · ışık düşük–yüksek · CO₂ düşük · büyüme yavaş · 15 cm |
+| *Hydrocotyle tripartita 'Japan'* | Medium · Low · — · 5 - 5+ | — | ışık orta · CO₂ düşük · 10 cm |
+| *Hygrophila corymbosa* | Low · Low · — · 20 - 30+ | — | ışık düşük · CO₂ düşük · 30 cm |
+| *Hygrophila corymbosa 'Stricta'* | Low · Low · — · 15 - 30+; — · — · — · - | — | ışık düşük · CO₂ düşük · 40 cm |
+| *Hygrophila corymbosa 'Compact'* | Low · Low · Medium · 10 - 15+ | — | ışık düşük · CO₂ düşük · büyüme orta · 15 cm |
+| *Hygrophila difformis* | Low · Low · High · 20 - 30+; Low · Low · — · 20 - 30+ | — | ışık düşük · CO₂ düşük · büyüme hızlı · 30 cm |
+| *Hygrophila lancea 'Araguaia'* | Medium · Medium · Medium · 10 - 20+ | — | ışık orta · CO₂ orta · büyüme orta · 20 cm |
+| *Hygrophila odora* | Medium · Medium · Medium · 10 - 20+ | — | ışık orta · CO₂ orta · büyüme orta · 20 cm |
+| *Hygrophila pinnatifida* | Medium · Medium · Medium · 15 - 30+ | — | ışık orta · CO₂ orta · büyüme orta · 40 cm |
+| *Hygrophila polysperma 'Rosanervig'* | Low · Medium · Medium · 20 - 30+ | var | 18–30 °C · pH 5–9 · ışık düşük–yüksek · CO₂ orta · büyüme orta · 40 cm |
+| *Lagenandra meeboldii 'Red'* | Low · Low · Slow · 10 - 20+ | — | ışık düşük · CO₂ düşük · büyüme yavaş · 20 cm |
+| *Leptodictyum riparium* | Low · Low · Medium · 3 - 10+ | — | ışık düşük · CO₂ düşük · büyüme orta · 10 cm |
+| *Limnobium laevigatum* | Low · Low · Medium · 3 - 5+ | — | ışık düşük · CO₂ düşük · büyüme orta · 5 cm |
+| *Limnophila aquatica* | Medium · Low · — · 20 - 30+ | — | ışık orta · CO₂ düşük · 50 cm |
+| *Limnophila hippuridoides* | Medium · Low · Medium · 20 - 30+ | — | ışık orta · CO₂ düşük · büyüme orta · 50 cm |
+| *Lindernia rotundifolia 'Variegated'* | Low · Medium · — · 15 - 30+ | — | ışık düşük · CO₂ orta · 30 cm |
+| *Littorella uniflora* | Low · Low · Slow · 3 - 5+ | — | ışık düşük · CO₂ düşük · büyüme yavaş · 5 cm |
+| *Lobelia cardinalis* | Low · Low · Medium · 20 - 30+ | — | ışık düşük · CO₂ düşük · büyüme orta · 30 cm |
+| *Ludwigia glandulosa* | Medium · Medium · Medium · 15 - 30+ | — | ışık orta · CO₂ orta · büyüme orta · 40 cm |
+| *Ludwigia palustris 'Super Red'* | Low · Low · Medium · 10 - 30+ | — | ışık düşük · CO₂ düşük · büyüme orta · 30 cm |
+| *Ludwigia repens 'Rubin'* | Medium · Low · Medium · 20 - 30+ | — | ışık orta · CO₂ düşük · büyüme orta · 50 cm |
+| *Marsilea hirsuta* | Low · Low · Medium · 5 - 20+ | — | ışık düşük · CO₂ düşük · büyüme orta · 20 cm |
+| *Marsilea minuta* | Medium · Low · Medium · 3 - 5+ | — | ışık orta · CO₂ düşük · büyüme orta · 5 cm |
+| *Micranthemum callitrichoides 'Cuba'* | High · High · Medium · 3 - 5+ | — | ışık yüksek · CO₂ yüksek · büyüme orta · 5 cm |
+| *Micranthemum glomeratum* | Medium · Medium · Medium · 5 - 15+ | — | ışık orta · CO₂ orta · büyüme orta · 20 cm |
+| *Micranthemum tweediei 'Monte Carlo'* | Medium · Medium · Medium · 3 - 5+; Medium · Medium · — · 3 - 5+ | — | ışık orta · CO₂ orta · büyüme orta · 5 cm |
+| *Microsorum pteropus 'Narrow'* | Low · Low · Slow · 10 - 20+; — · — · — · 10 - 20+ | var | 18–30 °C · pH 5–8 · ışık düşük–yüksek · CO₂ düşük · büyüme yavaş · 20 cm |
+| *Microsorum pteropus 'Trident'* | Low · Low · Slow · 15 - 20+ | var | 18–30 °C · pH 5–8 · ışık düşük–yüksek · CO₂ düşük · büyüme yavaş · 20 cm |
+| *Monosolenium tenerum* | Low · Low · Medium · 3 - 5+ | — | ışık düşük · CO₂ düşük · büyüme orta · 5 cm |
+| *Myriophyllum mattogrossense* | Medium · Medium · — · 20 - 30+; — · — · — · - | — | ışık orta · CO₂ orta · 60 cm |
+| *Myriophyllum sp. 'Guyana'* | Medium · Medium · Medium · 10 - 30+ | — | ışık orta · CO₂ orta · büyüme orta · 30 cm |
+| *Phyllanthus fluitans* | Low · Low · Medium · 3 - 5+ | — | ışık düşük · CO₂ düşük · büyüme orta · 5 cm |
+| *Pogostemon deccanensis* | Medium · Medium · Medium · 15 - 30+ | — | ışık orta · CO₂ orta · büyüme orta · 40 cm |
+| *Pogostemon helferi* | Medium · Medium · Medium · 3 - 10+ | — | ışık orta · CO₂ orta · büyüme orta · 10 cm |
+| *Proserpinaca palustris 'Cuba'* | High · High · Medium · 10 - 30+ | — | ışık yüksek · CO₂ yüksek · büyüme orta · 40 cm |
+| *Ranunculus inundatus* | Medium · Medium · Medium · 5 - 5+ | — | ışık orta · CO₂ orta · büyüme orta · 10 cm |
+| *Riccardia chamedryfolia* | High · Medium · Slow · 3 - 5+ | — | ışık yüksek · CO₂ orta · büyüme yavaş · 5 cm |
+| *Rotala indica 'Bonsai'* | Medium · Medium · Slow · 5 - 20+ | — | ışık orta · CO₂ orta · büyüme yavaş · 20 cm |
+| *Rotala macrandra 'Japan'* | High · High · Medium · 20 - 30+ | var | 22–28 °C · pH 5–7 · ışık yüksek · CO₂ yüksek · büyüme orta · 30 cm |
+| *Rotala rotundifolia* | Low · Low · Medium · 15 - 30+; — · — · — · - | — | ışık düşük · CO₂ düşük · büyüme orta · 30 cm |
+| *Rotala rotundifolia 'Blood Red'* | Medium · Medium · Medium · 5 - 20+ | — | ışık orta · CO₂ orta · büyüme orta · 20 cm |
+| *Rotala rotundifolia 'H'ra'* | Medium · Medium · — · 3 - 20+ | — | ışık orta · CO₂ orta · 20 cm |
+| *Rotala sp. 'Green'* | Medium · Medium · — · 20 - 30+ | — | ışık orta · CO₂ orta · 50 cm |
+| *Rotala wallichii* | High · High · Medium · 10 - 30+ | — | ışık yüksek · CO₂ yüksek · büyüme orta · 30 cm |
+| *Sagittaria subulata* | Low · Medium · — · 5 - 30+ | — | ışık düşük · CO₂ orta · 50 cm |
+| *Sagittaria subulata 'Needle Leaf'* | — · — · — · 5 - | — | 30 cm |
+| *Schismatoglottis prietoi* | Low · Low · Medium · 3 - 5+ | — | ışık düşük · CO₂ düşük · büyüme orta · 8 cm |
+| *Staurogyne repens* | Low · Low · Medium · 3 - 10+ | — | ışık düşük · CO₂ düşük · büyüme orta · 10 cm |
+| *Taxiphyllum sp. 'Spiky Moss'* | Low · Low · Medium · 3 - 10+ | — | ışık düşük · CO₂ düşük · büyüme orta · 10 cm |
+| *Taxiphyllum sp. 'Flame Moss'* | Low · Low · Slow · 3 - 10+ | — | ışık düşük · CO₂ düşük · büyüme yavaş · 15 cm |
+| *Utricularia graminifolia* | Medium · Medium · Medium · 3 - 10+ | — | ışık orta · CO₂ orta · büyüme orta · 10 cm |
+| *Vesicularia ferriei 'Weeping Moss'* | Medium · Low · Medium · 3 - 5+ | — | ışık orta · CO₂ düşük · büyüme orta · 5 cm |
+| *Vesicularia montagnei 'Christmas Moss'* | Medium · Low · Medium · 3 - 5+ | — | ışık orta · CO₂ düşük · büyüme orta · 5 cm |
+
+- Testler: `src/lib/__tests__/plant-catalog.test.ts` (18 test) ve `plant-catalog.expected.json`. Yeni sınananlar:
+  - Tropica'ya dayanan kayıtların kaynak düzeni ve kayıt sayıları;
+  - form kayıtlarının değerleri ve türden gelen alanları;
+  - formların ürünlerinin tür kaydından ayrılması ve bütün ürünleri forma giden türlerin kataloğa girmemesi;
+  - FISC işaretleri (formlar dahil) ve 'Broad Leaf' doku kültürü ürününün bağlanmaması;
+  - Tropica'nın yazdığı eski adlar, açıklamadaki boylar ve yerleşimler.
+- Motor, kayıt biçimi ve altın fikstür değişmedi; hiçbir sayfa kataloğu içe aktarmıyor.
+- Codex 1. tur (2026-10-25, "bulgu var"):
+  - Dört P2, kataloğa yanlış giren ya da eksik kalan eşleşme: kırmızı *Myriophyllum* ürünü yanlış türe bağlıydı; *Lindernia* 'Variegated' form kuralına rağmen eklenmemişti; aday taraması tırnaklı form adlarını aramadığı için beş Tropica kaydı kaçmıştı (var. *glabra*, 'Kedagang', 'Bukit Kelam', 'Spiky Moss', 'Flame Moss'); 'Cuba' yazmayan HC ürünü gereksiz yere dışlanmıştı. Flowgrow ve Tropica sayfaları açılarak doğrulandı ve düzeltildi (yukarıda).
+  - Bir P3, sayı kaydı: taşınan ürün 16 değil 15 (bir ürünün bağı kaldırıldı); UF'nin ikinci taramasında 11 değil 9 sayfa. Düzeltildi.
+  - Görüş: bağımsız sabitler bütün form kayıtlarını kapsamıyor (beklenen kayıtlar dosyasıyla birlikte değiştirilirse 'Narrow'un sıcaklığı geçiyor); belgelenen sınır.
+  - Codex ayrıca betiğin kayıtları birebir ürettiğini, dokuz formun türden aldığı alanların doğru olduğunu ve 15 kaydın Tropica sayfasında uydurma değer olmadığını doğruladı.
+- Codex 2. tur (2026-10-25, "bulgu var"):
+  - Üç P2, eksik eşleşme ve boy: *Schismatoglottis prietoi*'nin açıklamadaki yaprak uzunluğu (3–8 cm; sürgünle yayılan bitki) boy hesabına katılmamıştı (5 → 8 cm); satılan *Ammannia crassicaulis* (Aquarubi'de "Nesaea Crassicaulis") aday taramasında kaçmıştı; Tropica'nın 33-101C numaralı ürünü var. *glabra* kaydına bağlanmamıştı. Tropica, Flowgrow ve Aquarubi sayfaları açılarak doğrulandı ve düzeltildi (yukarıda).
+  - Görüş: 'Narrow'un sıcaklığı ve ışığı ile 'Broad Leaf' ürününün türden ayrılması için bağımsız test sabitleri eklendi.
+  - Codex ayrıca kanıt dosyalarının özetlerini, betiğin kayıtları birebir ürettiğini, 18 yeni kaydın Tropica sayfasını ve FISC etiketlerini doğruladı. UF dizininde denenmemiş üç satılan bitkinin (*Echinodorus cordifolius*, *Ludwigia sedioides*, *Nymphoides aquatica*) sayfalarını açtı; hiçbirinde liste etiketi yok.
+- Codex 3. tur (2026-10-25): Codex'in kullanım sınırına takıldı ve sonuç yazmadı. Sınırdan önce şunları doğruladı: kanıt özetleri ve satır sonları; betiğin 136 kaydı, beklenen kayıtları ve iki günlük tablosunu birebir ürettiği; 84 Tropica kaydının kullandığı 87 Tropica sayfasının ham veriyle eşleştiği; 2. turun üç düzeltmesi. Son notu, dışlanan bazı ürünlerin açıklamasında form adının açıkça yazdığını söylüyordu.
+  - Claude bunu sistemli olarak denetledi: bağlanmamış 34 ürünün açıklaması tek tek okundu ve Aquarubi'deki ürün sayfalarında Tropica ürün numarası arandı (yukarıda). Sonuç: açıklaması formu yazan üç ürün bağlandı ('Rose Maiden', 'Japan', 'Blood Red'), ürün numarasıyla iki ürün bağlandı (*C. wendtii* 'Tropica' ve yeni *H. corymbosa* 'Stricta' kaydı). Ters yönde, bağlı ürünlerin açıklamasındaki tırnaklı adlar da tarandı; başka bir formu anlatan bağlı ürün çıkmadı.
+- Codex 3. tur yeniden (2026-10-26, "bulgu var"):
+  - Bir P2, eksik form kaydı: 1. pakette var. *nana*'ya bağlanan 'Golden Coin' ürünü Flowgrow'a göre 'Round Leaf' = 'Coin Leaf'; Tropica'da ayrı sayfası var. Doğrulandı; 'Coin Leaf' kaydı açıldı ve Flowgrow'un "selected from cultivated Anubias barteri var. nana" yazdığı için var. *nana*'nın Fishkeeper sayfasına bağlandı (yukarıda).
+  - Bir P3, belge: devir şablonunda eski sayı kalmıştı. Düzeltildi.
+  - Görüş: 'Stricta' ve 'Coin Leaf' için bağımsız test sabitleri eklendi.
+  - Codex ayrıca beş yeni ürün bağını, 357 sayfalık numara dökümünü (canlıda 053A, 109E, 101C ve 110B-TC ürünlerinin kendi numarası), bağlı 153 Aquarubi ürününün canlıda okunan açıklamasını, istilacı etiketlerini ve sayıları doğruladı.
+- Codex 4. tur (2026-10-26): temiz. Codex, 'Coin Leaf' düzeltmesini, kayıtların ham veriden birebir üretildiğini ve sayıları doğruladı; katalog ve beklenen kayıtlar dosyası birlikte değiştirildiğinde 15 bozmanın hepsi bağımsız sabitlerle yakalandı.
+- Sonraki işler:
+  - resmî listedeki satılan bitkiler (*Pistia stratiotes*, *Azolla filiculoides*);
+  - su bitkisi olmayan satılan bitkiler (*Ophiopogon japonicus*, Practical Fishkeeping'in listesinde);
+  - Practical Fishkeeping'in tür kutuları;
+  - bitki sayfasında katalogdan seçme (önce taslak).

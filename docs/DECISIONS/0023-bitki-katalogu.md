@@ -31,10 +31,14 @@ Claude altı kaynağın sayfalarını açarak inceledi ve ürün sahibine artı 
   - Satılmayan 17 bitki ilk pakete girmedi.
 - Uygulama sayfaları kataloğu henüz içe aktarmaz; hiçbir sayfa büyümez (`src/lib/__tests__/plant-catalog.test.ts` denetler). Bitki sayfasında katalogdan seçme ayrı bir pakettir; kodlamadan önce taslak ürün sahibine gösterilir. İstilacı tür ve ev bitkisi uyarılarının metni de o pakette yazılır.
 - Kullanıcının bitki kaydı (`Plant`) ve motor değişmez; altın fikstür değişmez. Bitkiye göre motor uyarıları (ör. "bu bitki yüksek ışık ister") ayrı bir onayla gelir.
-- İlk pakette resmî listede bulunan iki bitki var: *Hygrophila polysperma* ve *Limnophila sessiliflora* ABD federal zararlı ot listesinde (UF/IFAS). Satılan 54 bitkinin hiçbiri AB'nin listesinde ya da İngiltere'nin 2014 satış yasağında değil.
-- Satılan ama Fishkeeper'da olmayan bitkiler sonraki paketlere kaldı:
-  - yalnız Tropica'da sayfası olanlar;
+- İlk pakette resmî listede bulunan iki bitki var: *Hygrophila polysperma* ve *Limnophila sessiliflora* ABD federal zararlı ot listesinde (UF/IFAS). Satılan 54 bitkinin hiçbiri AB'nin listesinde ya da İngiltere'nin 2014 satış yasağında değil; 2. paketin bitkileri de değil.
+- 2. paket (2026-10-25): yalnız Tropica'da sayfası olan ve satılan 86 bitki ve form eklendi; katalog 138 kayıt.
+  - Tropica'da ayrı sayfası olan formlar ('Trident', 'Narrow', 'Pinto', 'Petchii', 'Broad Leaf' gibi) kendi kaydını aldı; 1. pakette tür kaydına bağlanan ürünleri oraya taşındı. Bu, balıklardaki "form sayfası varsa formun sayfası, yoksa türün sayfası" kuralıdır: formun sıcaklığı ve pH'ı Fishkeeper'daki türün sayfasından gelir.
+  - Bütün ürünleri forma giden iki tür (*C. beckettii*, *Helanthium tenellum*) kataloğa girmez.
+  - Tropica sıcaklık ve pH vermediği için Tropica'ya dayanan kayıtların çoğunda bu alanlar boş.
+  - UF/IFAS dizinindeki Florida İstilacı Türler Konseyi (FISC) listesi de etiket kaynağı sayıldı. Böylece *Rotala rotundifolia* ve 'Blood Red' formu işaretli; 1. paketteki iki bitki de bu listede.
+- Sonraki paketler:
   - resmî listedeki satılan bitkiler: Aquarubi'de *Pistia stratiotes* (AB listesi) ve *Azolla filiculoides* (İngiltere'nin satış yasağı) var;
-  - su bitkisi olup olmadığı kaynakla kontrol edilecek bitkiler: Aquarubi'de *Ophiopogon japonicus*, *Fittonia albivenis*, *Selaginella* ve *Homalomena* satılıyor. Bunlar için Practical Fishkeeping'in "akvaryumda kaçınılacak bitkiler" yazısı okunacak.
+  - su bitkisi olup olmadığı kaynakla kontrol edilecek bitkiler: Aquarubi'de *Ophiopogon japonicus*, *Fittonia albivenis*, *Selaginella* ve *Homalomena* satılıyor. Practical Fishkeeping'in "akvaryumda kaçınılacak 21 bitki" listesinde *Ophiopogon japonica* var; ötekiler için ayrı kaynak aranacak.
   - Practical Fishkeeping'in tür kutuları da bu paketlerde taranır.
 - Bitki adları: bilimsel ad dilden bağımsız anahtardır. İlk pakette yalnız eş adlar ve Türk mağazalarındaki satış adları var (ör. "Tilki kuyruğu"). İngilizce yaygın adlar İngilizce dil paketinde kaynaktan alınır. Fishkeeper'ın yaygın adlarından biri ("Fanwort") başka bir istilacı türün de adı olduğu için yanıltabilir.
