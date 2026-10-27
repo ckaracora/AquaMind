@@ -5,6 +5,7 @@ import { AppShell } from "@/components/app-shell";
 import { ModalDialog } from "@/components/modal-dialog";
 import { PageHeader } from "@/components/page-header";
 import { equipmentBrandsForCategory, equipmentById, equipmentForBrandInCategory, equipmentForCategory, hasStandaloneCapacityData, profileForEquipment, specificationsForEquipment } from "@/data/catalog-equipment";
+import { localIsoDate } from "@/lib/local-date";
 import { useDisplayFormat } from "@/lib/use-display-format";
 import { parseUserValue, userValueField, userValueHint, userValueText, withUserValue, type FlowUnit, type UserValueField, type UserValueTexts } from "@/lib/user-equipment-value";
 import { useAquariums } from "@/providers/aquarium-provider";
@@ -171,7 +172,7 @@ function EquipmentForm({ aquarium, initialCategory, close, add }: {
       {valueField && <UserValueInput valueField={valueField} category={profile?.category ?? selectedCategory} volumeL={aquarium.netVolumeLiters} raw={raw} unit={unit} error={error} setRaw={value => { setRaw(value); setError(undefined); }} setUnit={next => { setUnit(next); setError(undefined); }}/>}
       {manual && !profile && !valueField && <div className="rounded-xl border border-white/[.08] bg-white/[.025] p-4 text-[11px] sm:text-[10px] text-[#91a3aa] sm:col-span-2">{t.equipment.form.notCounted}</div>}
       {manual && !profile && valueField && <p className="text-[11px] sm:text-[10px] text-[#71858d] sm:col-span-2">{t.equipment.form.emptyValueNote}</p>}
-      <label className="text-xs font-bold text-[#91a3aa]">{t.common.setupDate}<input required name="installedAt" type="date" defaultValue={new Date().toISOString().slice(0, 10)} className={field}/></label>
+      <label className="text-xs font-bold text-[#91a3aa]">{t.common.setupDate}<input required name="installedAt" type="date" defaultValue={localIsoDate()} className={field}/></label>
       <label className="text-xs font-bold text-[#91a3aa] sm:col-span-2">{t.common.notes}<textarea name="notes" rows={3} className={field}/></label>
     </div>
     <div className="mt-7 flex justify-end gap-2"><button type="button" onClick={close} className="min-h-11 min-w-11 rounded-xl border border-white/[.08] px-5 py-3 text-xs font-bold text-[#91a3aa] sm:min-h-0 sm:min-w-0">{t.common.cancel}</button><button disabled={!manual && !profile} className="min-h-11 min-w-11 rounded-xl bg-aqua px-5 py-3 text-xs font-extrabold text-ink disabled:opacity-40 sm:min-h-0 sm:min-w-0">{t.equipment.form.submit}</button></div>
