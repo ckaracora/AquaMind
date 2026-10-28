@@ -72,6 +72,8 @@ export interface Plant {
   addedAt: string;
   notes?: string;
   imageUrl?: string;
+  /** Bitki kataloğundaki kayıt (src/data/catalog-plants.ts); elle eklenen ve eski kayıtlarda yok. */
+  catalogId?: string;
 }
 
 export interface Equipment {

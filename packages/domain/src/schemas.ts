@@ -110,6 +110,7 @@ export const plantSchema = z.object({
   addedAt: z.string(),
   notes: z.string().optional(),
   imageUrl: z.string().optional(),
+  catalogId: z.string().optional(),
 });
 
 export const equipmentSchema = z.object({

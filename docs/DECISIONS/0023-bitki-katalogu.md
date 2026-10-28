@@ -29,7 +29,7 @@ Claude altı kaynağın sayfalarını açarak inceledi ve ürün sahibine artı 
   - Satış adları Flowgrow'un eş ad ve ticari ad listeleriyle de eşlendi. Örnekler: *A. reineckii* var. *rosaefolia* Türkiye'de Tropica'nın 'Pink' adıyla, *Anubias* 'Petite' 'Bonsai' adıyla, *Cryptocoryne undulata* *C. axelrodii* adıyla satılıyor.
   - Başka bir formun satış adı Fishkeeper'ın form kaydına bağlanmadı (ör. *C. wendtii* 'Green Gecko', *Echinodorus* 'Ozelot Narrow Mini').
   - Satılmayan 17 bitki ilk pakete girmedi.
-- Uygulama sayfaları kataloğu henüz içe aktarmaz; hiçbir sayfa büyümez (`src/lib/__tests__/plant-catalog.test.ts` denetler). Bitki sayfasında katalogdan seçme ayrı bir pakettir; kodlamadan önce taslak ürün sahibine gösterilir. İstilacı tür ve ev bitkisi uyarılarının metni de o pakette yazılır.
+- Uygulama sayfaları kataloğu henüz içe aktarmaz; hiçbir sayfa büyümez (`src/lib/__tests__/plant-catalog.test.ts` denetler). Güncelleme: 2026-10-28'den beri bitki sayfası kataloğu ayrı parça olarak yükler (`docs/DECISIONS/0024-bitki-secme.md`). Bitki sayfasında katalogdan seçme ayrı bir pakettir; kodlamadan önce taslak ürün sahibine gösterilir. İstilacı tür ve ev bitkisi uyarılarının metni de o pakette yazılır.
 - Kullanıcının bitki kaydı (`Plant`) ve motor değişmez; altın fikstür değişmez. Bitkiye göre motor uyarıları (ör. "bu bitki yüksek ışık ister") ayrı bir onayla gelir.
 - İlk pakette resmî listede bulunan iki bitki var: *Hygrophila polysperma* ve *Limnophila sessiliflora* ABD federal zararlı ot listesinde (UF/IFAS). Satılan 54 bitkinin hiçbiri AB'nin listesinde ya da İngiltere'nin 2014 satış yasağında değil; 2. paketin bitkileri de değil.
 - 2. paket (2026-10-25): yalnız Tropica'da sayfası olan ve satılan 86 bitki ve form eklendi; katalog 138 kayıt.

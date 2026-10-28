@@ -1,8 +1,8 @@
 // Bitki kataloğu (yol haritasının 4. adımı, docs/DECISIONS/0023-bitki-katalogu.md): kabul edilen Türk mağazalarında satılan ve kaynağı olan
 // bitkiler. 1. paket Fishkeeper'ın bitki bilgi bankasındaki bitkiler, 2. paket yalnız Tropica'da sayfası olan bitkiler ve formlar. Değer
 // kuralı ve kaynaklar docs/DATA_SOURCES.md → "Bitkiler"; kayıt kayıt karşılaştırma docs/CATALOG_LOG.md → "Bitki kataloğu 1" ve
-// "Bitki kataloğu 2". Kaynakta olmayan alan boş kalır. Uygulama sayfaları bu modülü henüz içe aktarmaz; bitki sayfasında katalogdan
-// seçme ayrı pakette gelir.
+// "Bitki kataloğu 2". Kaynakta olmayan alan boş kalır. Bitki sayfası bu modülü yalnız src/lib/use-plant-catalog.ts ile ayrı parça olarak
+// yükler (docs/DECISIONS/0024-bitki-secme.md); öbür dosyalar buradan yalnız tür alır.
 import { assertUniqueIds, normalize } from "./catalog-shared";
 
 /** Tropica'nın üç düzeyli ölçeği. CO₂ için orta 6–14 mg/L, yüksek yaklaşık 15–25 mg/L. */
@@ -227,4 +227,46 @@ export function plantForName(value?: string) {
   if (!key) return undefined;
   plantNameIndex ??= new Map(rawPlantCatalog.flatMap((item) => [item.scientificName, ...(item.aliases ?? [])].map((name) => [normalize(name) ?? "", item] as const)));
   return plantNameIndex.get(key);
+}
+
+/**
+ * Kullanıcının bitki kaydının katalog kaydı: önce katalog kimliği; kimliği olmayan (eski ya da elle yazılan) kayıtta bilimsel ad.
+ * Bilimsel ad yazılı ama katalogda yoksa kayıt eşleşmez (ad daha genel bir satış adı olabilir); ad yalnız bilimsel ad boşsa denenir.
+ */
+export function plantForRecord(record: { catalogId?: string; scientificName?: string; name: string }) {
+  if (record.catalogId) return plantById(record.catalogId);
+  return record.scientificName?.trim() ? plantForName(record.scientificName) : plantForName(record.name);
+}
+
+// Arama anahtarı: harflerin işaretleri (Türkçe harfler, 'Windeløv'), tırnaklar ve noktalama gözetilmez ("tilki kuyrugu", "anubias nana golden").
+// Kesme işareti sözcüğü bölmez, silinir ('H'ra' → "hra"); öbür işaretler sözcük arasıdır.
+const searchKey = (value: string) => (normalize(value) ?? "").normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/ø/g, "o").replace(/['\u2018\u2019`\u00b4]/g, "").replace(/[^a-z0-9]+/g, " ").trim();
+let plantSearchIndex: { item: PlantProfile; names: { name: string; key: string }[] }[] | undefined;
+export interface PlantSearchResult { item: PlantProfile; /** Aramaya uyan ad (bilimsel ad ya da eş ad); kayda bitki adı olarak önerilir. */ matchedName: string }
+/**
+ * Bitki ekleme penceresinin araması: bilimsel ad ve eş adlar (satış adları dahil). Sözcüklerin hepsi aynı adda geçmelidir.
+ * Sıra: adın tamamı, adın başı, bir sözcüğün başı, adın içi; aynı sırada kısa ad önce ("Anubias nana", "Anubias coffeefolia"'dan önce), sonra bilimsel ada göre.
+ */
+export function searchPlants(value?: string): PlantSearchResult[] {
+  const query = searchKey(value ?? "");
+  if (!query) return [];
+  const words = query.split(" ");
+  plantSearchIndex ??= rawPlantCatalog.map((item) => ({ item, names: [item.scientificName, ...(item.aliases ?? [])].map((name) => ({ name, key: searchKey(name) })) }));
+  const rank = (key: string) => {
+    if (key === query) return 0;
+    if (key.startsWith(query)) return 1;
+    if (words.every((word) => ` ${key}`.includes(` ${word}`))) return 2;
+    return words.every((word) => key.includes(word)) ? 3 : undefined;
+  };
+  const results: (PlantSearchResult & { rank: number; length: number })[] = [];
+  for (const { item, names } of plantSearchIndex) {
+    let best: { name: string; rank: number; length: number } | undefined;
+    for (const { name, key } of names) {
+      const score = rank(key);
+      if (score !== undefined && (!best || score < best.rank || (score === best.rank && key.length < best.length))) best = { name, rank: score, length: key.length };
+    }
+    if (best) results.push({ item, matchedName: best.name, rank: best.rank, length: best.length });
+  }
+  results.sort((a, b) => a.rank - b.rank || a.length - b.length || a.item.scientificName.localeCompare(b.item.scientificName, "en"));
+  return results.map(({ item, matchedName }) => ({ item, matchedName }));
 }

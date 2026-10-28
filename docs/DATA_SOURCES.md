@@ -124,6 +124,7 @@ Değer kuralı (balık ve omurgasızlardaki kuralın bitki karşılığı):
 - **Tropica'nın ürün numarası:** mağazanın ürün sayfası Tropica'nın ürün numarasını yazıyorsa (ör. "33-101C") ürün o numaralı Tropica sayfasının bitkisidir. Mağazanın verdiği ad Flowgrow'a göre başka bir bitkiyse eş ad olarak yazılmaz (ör. "Var. Angustifolia" adıyla satılan 101C, Tropica'nın var. *glabra* sayfası; 'Siamensis' adıyla satılan 053A, 'Stricta'). Numaranın gösterdiği Tropica sayfası kopyalama hatası yüzünden kullanılmıyorsa ürün bağlanmaz.
 - **Satış kanıtı:** her kayıtta bitkinin kabul edilen mağazada satıldığını gösteren ürün sayfaları saklanır (`shopUrls`). Ürün adı sayfası açılarak okunur.
 - **Okuma:** değerler sayfa açılarak okunur; arama özeti kaynak sayılmaz. Kaynaklar üç ayda bir, katalogla birlikte yeniden açılır (karar 0020).
+- **Ekranda (karar 0024):** bitki sayfası kaydın değerlerini olduğu gibi gösterir; kaynakta olmayan değer "Kaynakta yok" yazar, tahmin edilmez. Kaynak bağlantıları kaydın kendi sayfalarıdır (Fishkeeper, Tropica, UF/IFAS). İstilacı tür uyarısı listenin adını ve kaynağını yazar ve "Türkiye'de yasak" anlamına gelmediğini söyler.
 
 ## Hastalık ve tedavi yönlendirme kaynakları
 

@@ -77,8 +77,9 @@ describe("ekranlardaki bugünün tarihi", () => {
     expect(sources.filter(({ text }) => text.includes("defaultValue={localIsoDate()}")).map(({ file }) => file).sort()).toEqual([
       "src/app/aquariums/new/page.tsx",
       "src/app/equipment/page.tsx",
-      "src/app/plants/page.tsx",
       "src/components/catalog-livestock-form.tsx",
+      // Bitki ekleme penceresi 2026-10-28'de bitki sayfasından ortak bileşene taşındı (docs/DECISIONS/0024-bitki-secme.md).
+      "src/components/plant-catalog.tsx",
     ]);
   });
 });
