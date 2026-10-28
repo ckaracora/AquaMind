@@ -89,7 +89,7 @@ describe("açılan pencereler", () => {
   it("ortak pencereyi kullanan her form başlığını pencereye bağlar ve kapatma düğmesine ad verir", () => {
     const users = sources.filter(({ text }) => text.includes("<ModalDialog "));
     expect(users.map(({ file }) => file).sort()).toEqual([
-      "src/app/equipment/page.tsx", "src/app/maintenance/page.tsx", "src/app/plants/page.tsx", "src/app/water/page.tsx", "src/components/catalog-livestock-form.tsx",
+      "src/app/equipment/page.tsx", "src/app/maintenance/page.tsx", "src/app/water/page.tsx", "src/components/catalog-livestock-form.tsx", "src/components/plant-catalog.tsx",
     ]);
     for (const { file, text } of users) {
       const dialogs = count(text, "<ModalDialog ");

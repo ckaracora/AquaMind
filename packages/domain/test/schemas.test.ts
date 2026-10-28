@@ -35,6 +35,13 @@ describe("alan şemaları", () => {
     expect(equipmentSchema.parse(equipment[0])).toEqual(equipment[0]);
   });
 
+  it("katalogdan seçilen bitkinin katalog kimliğini korur; kimliksiz eski kayıt da geçerli", () => {
+    const fromCatalog = { ...plants[0], catalogId: "anubias-barteri-var-nana" };
+    expect(plantSchema.parse(fromCatalog)).toEqual(fromCatalog);
+    expect(plantSchema.parse(plants[0]).catalogId).toBeUndefined();
+    expect(plantSchema.safeParse({ ...plants[0], catalogId: 42 }).success).toBe(false);
+  });
+
   it("yalnızca zorunlu alanları taşıyan kayıtları kabul eder", () => {
     expect(
       aquariumSchema.safeParse({

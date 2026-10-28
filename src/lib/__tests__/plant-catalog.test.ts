@@ -1,5 +1,6 @@
 import { readdirSync, readFileSync, statSync } from "node:fs";
 import { join } from "node:path";
+import ts from "typescript";
 import { describe, expect, it } from "vitest";
 import { assertPlantCatalogIntegrity, plantById, plantCatalog, plantForName, type PlantProfile } from "@/data/catalog-plants";
 
@@ -316,15 +317,66 @@ describe("adlar ve satış adları", () => {
 });
 
 describe("bitki kataloğu modülü", () => {
-  // Arayüz paketi gelene kadar hiçbir sayfa bitki kataloğunu indirmez.
+  // Bitki sayfasının ilk yüklemesi büyümez: kayıtlar yalnız `usePlantCatalog` kancasıyla ayrı bir parça olarak yüklenir
+  // (docs/DECISIONS/0024-bitki-secme.md). Tür içe aktarması (`import type`, `typeof import(...)`) derlemede silindiği için pakete kayıt taşımaz.
+  // Dosyalar TypeScript'in kendi ayrıştırıcısıyla okunur: tırnak türü ve yazım biçimi denetimi yanıltmaz.
   const sourceFiles = (dir: string): string[] => readdirSync(dir).flatMap((entry) => {
     const path = join(dir, entry);
     if (statSync(path).isDirectory()) return entry === "__tests__" ? [] : sourceFiles(path);
     return /\.(ts|tsx)$/.test(entry) ? [path] : [];
   });
-  it("uygulama kodu bitki kataloğunu içe aktarmaz", () => {
-    const offenders = ["src/app", "src/components", "src/lib", "src/providers", "src/data"].flatMap((dir) => sourceFiles(dir))
-      .filter((file) => !file.endsWith("catalog-plants.ts") && /catalog-plants/.test(readFileSync(file, "utf8")));
-    expect(offenders).toEqual([]);
+  const isCatalog = (node: ts.Node | undefined) => Boolean(node && ts.isStringLiteralLike(node) && /(^|\/)catalog-plants(\.ts)?$/.test(node.text));
+  // Dosyanın katalogla bağı: değer olarak içe aktarma (statik, yeniden dışa aktarma, require) ve ayrı parça yüklemesi (`import(...)`).
+  const catalogUses = (file: string, text: string) => {
+    const source = ts.createSourceFile(file, text, ts.ScriptTarget.Latest, true, file.endsWith(".tsx") ? ts.ScriptKind.TSX : ts.ScriptKind.TS);
+    const uses = { value: [] as string[], dynamic: 0, typeOnly: 0 };
+    const visit = (node: ts.Node) => {
+      if (ts.isImportDeclaration(node) && isCatalog(node.moduleSpecifier)) {
+        const clause = node.importClause;
+        const bindings = clause?.namedBindings;
+        const valueNames = !clause ? ["(yan etki)"] : clause.isTypeOnly ? [] : [
+          ...(clause.name ? [clause.name.text] : []),
+          ...(bindings && ts.isNamespaceImport(bindings) ? [`* as ${bindings.name.text}`] : []),
+          ...(bindings && ts.isNamedImports(bindings) ? bindings.elements.filter((element) => !element.isTypeOnly).map((element) => element.name.text) : []),
+        ];
+        if (valueNames.length) uses.value.push(`import ${valueNames.join(", ")}`); else uses.typeOnly++;
+      } else if (ts.isExportDeclaration(node) && isCatalog(node.moduleSpecifier)) {
+        if (node.isTypeOnly) uses.typeOnly++; else uses.value.push("export … from");
+      } else if (ts.isImportEqualsDeclaration(node) && ts.isExternalModuleReference(node.moduleReference) && isCatalog(node.moduleReference.expression)) {
+        uses.value.push("import = require");
+      } else if (ts.isCallExpression(node) && isCatalog(node.arguments[0])) {
+        if (node.expression.kind === ts.SyntaxKind.ImportKeyword) uses.dynamic++;
+        else if (ts.isIdentifier(node.expression) && node.expression.text === "require") uses.value.push("require");
+      } else if (ts.isImportTypeNode(node) && ts.isLiteralTypeNode(node.argument) && isCatalog(node.argument.literal)) {
+        uses.typeOnly++;
+      }
+      ts.forEachChild(node, visit);
+    };
+    visit(source);
+    return uses;
+  };
+  const appFiles = () => ["src/app", "src/components", "src/lib", "src/providers", "src/data"].flatMap((dir) => sourceFiles(dir))
+    .map((file) => ({ file: file.replaceAll("\\", "/"), text: readFileSync(file, "utf8") }))
+    .filter(({ file }) => !file.endsWith("src/data/catalog-plants.ts"));
+
+  it("uygulama kodu kataloğu yalnız kancadaki ayrı parça olarak yükler; öbür dosyalar ondan yalnız tür alır", () => {
+    const users = appFiles().map(({ file, text }) => ({ file, ...catalogUses(file, text) })).filter(({ value, dynamic, typeOnly }) => value.length || dynamic || typeOnly);
+    expect(users.map(({ file }) => file).sort()).toEqual(["src/components/plant-catalog.tsx", "src/lib/use-plant-catalog.ts"]);
+    expect(users.flatMap(({ file, value }) => value.map((use) => `${file}: ${use}`))).toEqual([]);
+    expect(users.filter(({ dynamic }) => dynamic).map(({ file }) => file)).toEqual(["src/lib/use-plant-catalog.ts"]);
+  });
+
+  it("denetim değer içe aktarmasını her yazımda tanır; tür içe aktarmasını ve ayrı parça yüklemesini ayırır", () => {
+    const uses = (text: string) => catalogUses("ornek.tsx", text);
+    expect(uses("import { plantCatalog } from '@/data/catalog-plants';").value).toEqual(["import plantCatalog"]);
+    expect(uses('import * as plants from "@/data/catalog-plants"').value).toEqual(["import * as plants"]);
+    expect(uses('import "./catalog-plants";').value).toEqual(["import (yan etki)"]);
+    expect(uses("import { type PlantProfile, plantById } from \"@/data/catalog-plants\";").value).toEqual(["import plantById"]);
+    expect(uses("export { plantById } from '../data/catalog-plants';").value).toEqual(["export … from"]);
+    expect(uses("const plants = require('@/data/catalog-plants');").value).toEqual(["require"]);
+    expect(uses("import type { PlantProfile } from '@/data/catalog-plants';\ntype M = typeof import('@/data/catalog-plants');")).toEqual({ value: [], dynamic: 0, typeOnly: 2 });
+    expect(uses("import { type PlantProfile } from '@/data/catalog-plants';").value).toEqual([]);
+    expect(uses("const load = () => import('@/data/catalog-plants');").dynamic).toBe(1);
+    expect(uses("import { plantCatalog } from '@/data/catalog-species';")).toEqual({ value: [], dynamic: 0, typeOnly: 0 });
   });
 });
