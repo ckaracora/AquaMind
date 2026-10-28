@@ -96,7 +96,7 @@ Kabul edilen kaynaklar:
 
 1. **Fishkeeper (Maidenhead Aquatics) bitki bilgi bankası:** ana kaynaktır (71 bitki). Sıcaklık aralığı, pH, ışık, büyüme hızı ve boyu verir; açıklama yerleşimi (ön, orta, arka plan, kök ya da taş üzeri, yüzen) yazar. Birkaç yazım hatası ve eski ad içerir (ör. "Elodea densa", "Chladoflora aegagropila"); adlar Fishkeeper'ın kendi eş ad satırı ve açıklamasıyla, gerekirse Tropica ile eşlenir.
 2. **Tropica (bitki yetiştiricisi):** ışık ve CO₂ ihtiyacını tanımlı bir ölçekle verir (düşük, orta, yüksek; orta CO₂ 6–14 mg/L, yüksek yaklaşık 15–25 mg/L), ayrıca büyüme hızını ve iki ayda ulaşılan boyu. Sıcaklık ve pH vermez. Her ürün biçimi (saksı, doku kültürü, kök üzeri) ayrı sayfadır; aynı bitkinin sayfaları birlikte okunur. Boş alanlar ve başka bir bitkiyi anlatan açıklamalar (kopyalama hatası) vardır; açıklaması başka bitkiyi anlatan sayfa kullanılmaz. Fishkeeper'da kaydı olmayan bitkilerde ve Tropica'da ayrı sayfası olan formlarda ana kaynaktır (2. paket).
-3. **Practical Fishkeeping:** destekleyici kaynaktır. Tür kutuları sıcaklık ve pH aralığı verdiğinde ortak aralığa girer; "akvaryumda kaçınılacak bitkiler" yazısı su bitkisi olmayan bitkiler içindir. İlk pakette taranmadı; sonraki paketlerde taranır.
+3. **Practical Fishkeeping:** destekleyici kaynaktır. Tür kutuları sıcaklık ve pH aralığı verdiğinde ortak aralığa girer; "akvaryumda kaçınılacak bitkiler" yazısı ("21 plants to avoid in the aquarium") su bitkisi olmayan bitkiler içindir: orada ev bitkisi olarak geçen ve Türk mağazasında satılan bitki "su bitkisi değil" etiketi alır (3. paket, *Ophiopogon japonicus*; yazı "Ophiopogon japonica" diye yazıyor). Tür kutuları ilk üç pakette taranmadı; sonraki paketlerde taranır.
 4. **Flowgrow:** yalnız eş ad ve yanlış satış adı eşleştirmesi içindir; değer kaynağı değildir (sahibi bir satıcı; bazı değerler bütün bitkilerde aynı).
 
 Kabul edilmeyenler: Dennerle (bitki veri tabanı yok), Aquasabi (satıcı; verisi Flowgrow'dan kopya). Yerel mağazalar canlılarda olduğu gibi yalnız satış adı ve bulunabilirlik içindir.
@@ -104,9 +104,11 @@ Kabul edilmeyenler: Dennerle (bitki veri tabanı yok), Aquasabi (satıcı; veris
 İstilacı ve yasak bitkiler için resmî listeler (değer vermez, yalnız etiket içindir):
 
 - AB'nin istilacı yabancı türler listesi (Uygulama Yönetmeliği (AB) 2016/1141 ve değişiklikleri; EUR-Lex konsolide metni, 2025-08-07).
-- İngiltere'nin satış yasağı (Wildlife and Countryside Act 1981 (Prohibition on Sale etc. of Invasive Non-native Plants) (England) Order 2014; yedi bitki).
+- İngiltere'nin satış yasağı (Wildlife and Countryside Act 1981 (Prohibition on Sale etc. of Invasive Non-native Plants) (England) Order 2014, madde 3; legislation.gov.uk'teki güncel metin). İlk metinde yedi bitki vardı; 2019'dan beri metinde *Azolla filiculoides*, *Ludwigia uruguayensis* ve *Crassula helmsii* kalıyor (öbürleri The Invasive Alien Species (Enforcement and Permitting) Order 2019 ile çıkarıldı). Etiket güncel metne göre konur.
 - Florida Üniversitesi'nin (UF/IFAS) su ve istilacı bitkiler dizini: sayfanın başlığındaki liste durumu. Kullanılanlar ABD federal zararlı ot listesi ("Federal Noxious Weed List") ve Florida İstilacı Türler Konseyi'nin istilacı listesidir ("FISC Category 1" ya da "2"). FISC bir yasa listesi değildir; istilacı türleri sınıflandıran kurumsal bir listedir. Etiket yalnız başlıktaki liste durumundan konur; sayfanın düz metnindeki "birçok yerde istilacı" gibi cümleler etiket sayılmaz (ör. *Egeria densa*). Formun etiketi türünkidir; kaynak formu türün bir formu diye yazmıyorsa ("probably a variation" gibi) etiket taşımaz.
 - Türkiye'de resmî bir liste bulunamadı. Metin, bitkinin Türkiye'de yasak olduğu anlamına gelmeyecek biçimde yazılır.
+
+Yalnız uyarı kaydı (3. paket, `docs/DECISIONS/0026-bitki-uyari-kayitlari.md`): Fishkeeper'da ve Tropica'da sayfası olmayan, ama yukarıdaki resmî listelerden birinde, UF/IFAS'ın başlığında ya da Practical Fishkeeping'in kaçınılacak bitkiler listesinde geçen ve kabul edilen Türk mağazasında satılan bitki, değer alanları olmadan kataloğa girer. Ana kaynağı etiketinin kaynağıdır. Satış adı yalnız mağazanın ürün başlığından alınır. Stok durumu ölçüt değildir. Hiçbir kaynakta etiketi olmayan bitki girmez.
 
 Değer kuralı (balık ve omurgasızlardaki kuralın bitki karşılığı):
 

@@ -10,7 +10,7 @@ export interface CoverageInput {
   /** Kaynak bağlantısı bilimsel addan otomatik üretilen canlı kayıtları (`generatedSourceSpeciesIds`, src/data/catalog-species.ts). */
   generatedSourceSpeciesIds: readonly string[];
   care: { id: string; category: string; sourceUrl: string; verifiedAt: string; volumeL?: number }[];
-  plants: { id: string; sourceUrl: string; verifiedAt: string; light?: unknown; co2?: unknown; growth?: unknown; heightCm?: number; temperature?: unknown; ph?: unknown; placements?: unknown[]; invasiveListings?: unknown[] }[];
+  plants: { id: string; sourceUrl: string; verifiedAt: string; light?: unknown; co2?: unknown; growth?: unknown; heightCm?: number; temperature?: unknown; ph?: unknown; placements?: unknown[]; invasiveListings?: unknown[]; notAquatic?: unknown; warningOnly?: boolean }[];
 }
 
 export interface CoverageRow { label: string; count: number; total: number }
@@ -87,6 +87,8 @@ export function dataCoverage(input: CoverageInput, measuredOn: string): Coverage
         row(plants, "Yerleşim", (item) => filled(item.placements)),
         row(plants, "Bütün değerler dolu", (item) => [item.light, item.co2, item.growth, item.heightCm, item.temperature, item.ph, item.placements].every(filled)),
         row(plants, "İstilacı tür etiketi", (item) => filled(item.invasiveListings)),
+        row(plants, "Su bitkisi değil etiketi", (item) => filled(item.notAquatic)),
+        row(plants, "Yalnız uyarı kaydı (değer kaynağı yok)", (item) => item.warningOnly === true),
         row(plants, `Son ${RECENT_DAYS} günde doğrulanmış`, isRecent),
       ] },
     ],

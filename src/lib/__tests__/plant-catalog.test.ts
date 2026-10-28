@@ -17,18 +17,31 @@ const ufUrl = (slug: string) => `https://plant-directory.ifas.ufl.edu/plant-dire
 const FISHKEEPER = /^https:\/\/www\.fishkeeper\.co\.uk\/fish\/plant\/aquarium-plants\/[a-z0-9-]+$/;
 const TROPICA = /^https:\/\/tropica\.com\/en\/plants\/plantdetails\//;
 const fromFishkeeper = (item: PlantProfile) => !TROPICA.test(item.sourceUrl);
+// 1. ve 2. paket (kaynaktan üretilen kayıtlar); 3. paketin yalnız uyarı kayıtları ayrı sınanır (karar 0026).
+const sourced = plantCatalog.filter((item) => !item.warningOnly);
 
 describe("bitki kataloğu bütünlüğü", () => {
   it("katalog, kaynaktan üretilen kayıtlarla alan alan aynı", () => {
     const expected = JSON.parse(readFileSync("src/lib/__tests__/plant-catalog.expected.json", "utf8")) as PlantProfile[];
-    expect(plantCatalog).toEqual(expected);
+    expect(sourced).toEqual(expected);
+  });
+
+  it("3. paket: üç yalnız uyarı kaydı; değer yok, etiket ve ana kaynak resmî listeden ya da Practical Fishkeeping'den, satış Türk mağazasında", () => {
+    expect(plantCatalog.filter((item) => item.warningOnly)).toEqual([
+      { id: "azolla-filiculoides", scientificName: "Azolla filiculoides", warningOnly: true, invasiveListings: [{ list: "england-sale-ban", sourceUrl: "https://www.legislation.gov.uk/uksi/2014/538/article/3" }], sourceUrl: "https://www.legislation.gov.uk/uksi/2014/538/article/3", shopUrls: ["https://aquarubi.com/azolla-filiculoides-porsiyon"], verifiedAt: "2026-10-28" },
+      { id: "ophiopogon-japonicus", scientificName: "Ophiopogon japonicus", warningOnly: true, notAquatic: { sourceUrl: "https://www.practicalfishkeeping.co.uk/features/21-plants-to-avoid-in-the-aquarium/" }, sourceUrl: "https://www.practicalfishkeeping.co.uk/features/21-plants-to-avoid-in-the-aquarium/", shopUrls: ["https://aquarubi.com/ophiopogon-japonicus"], verifiedAt: "2026-10-28" },
+      { id: "pistia-stratiotes", scientificName: "Pistia stratiotes", aliases: ["Su marulu"], warningOnly: true, invasiveListings: [{ list: "eu-union-list", sourceUrl: "https://eur-lex.europa.eu/legal-content/EN/TXT/HTML/?uri=CELEX:02016R1141-20250807" }, { list: "fisc-invasive", category: 1, sourceUrl: ufUrl("pistia-stratiotes") }], sourceUrl: "https://eur-lex.europa.eu/legal-content/EN/TXT/HTML/?uri=CELEX:02016R1141-20250807", shopUrls: ["https://aquarubi.com/pistia-stratiotes-su-marulu"], verifiedAt: "2026-10-28" },
+    ]);
+    // Satış adıyla da bulunur.
+    expect(plantForName("su marulu")?.id).toBe("pistia-stratiotes");
   });
 
   it("138 bitki: 52'si Fishkeeper'a, 86'sı Tropica'ya dayanıyor; her biri kabul edilen Türk mağazasına ve tarihe bağlı", () => {
-    expect(plantCatalog).toHaveLength(138);
-    expect(new Set(plantCatalog.map((item) => item.id)).size).toBe(138);
-    expect(plantCatalog.filter(fromFishkeeper)).toHaveLength(52);
-    for (const item of plantCatalog) {
+    expect(plantCatalog).toHaveLength(141);
+    expect(new Set(plantCatalog.map((item) => item.id)).size).toBe(141);
+    expect(sourced).toHaveLength(138);
+    expect(sourced.filter(fromFishkeeper)).toHaveLength(52);
+    for (const item of sourced) {
       if (fromFishkeeper(item)) {
         // Fishkeeper'ın bitki listesi A. heterophylla'yı bilgi bankası dışındaki bir sayfaya bağlıyor.
         if (item.id === "anubias-heterophylla") expect(item.sourceUrl).toBe("https://www.fishkeeper.co.uk/fish/Anubias-Heterophylla");
@@ -54,6 +67,15 @@ describe("bitki kataloğu bütünlüğü", () => {
     expect(() => assertPlantCatalogIntegrity(withChange("egeria-densa", (item) => { item.aliases = ["Anubias nana"]; }))).toThrow(/aynı ad/);
     expect(() => assertPlantCatalogIntegrity(withChange("egeria-densa", (item) => { item.verifiedAt = "25.10.2026"; }))).toThrow(/tarihi/);
     expect(() => assertPlantCatalogIntegrity([...copy(), copy()[0]])).toThrow(/yinelenen kimlik/);
+    // Yalnız uyarı kaydı: değer alanı, etiketsiz kayıt ya da etiketin kaynağı olmayan ana kaynak kabul edilmez; yeni listeler HTTPS olmalı.
+    expect(() => assertPlantCatalogIntegrity(withChange("pistia-stratiotes", (item) => { item.light = ["low", "low"]; }))).toThrow(/yalnız uyarı/);
+    expect(() => assertPlantCatalogIntegrity(withChange("ophiopogon-japonicus", (item) => { item.heightCm = 30; }))).toThrow(/yalnız uyarı/);
+    expect(() => assertPlantCatalogIntegrity(withChange("ophiopogon-japonicus", (item) => { delete item.notAquatic; }))).toThrow(/yalnız uyarı/);
+    expect(() => assertPlantCatalogIntegrity(withChange("azolla-filiculoides", (item) => { item.sourceUrl = "https://tropica.com/en/plants/plantdetails/x"; }))).toThrow(/yalnız uyarı/);
+    expect(() => assertPlantCatalogIntegrity(withChange("azolla-filiculoides", (item) => { item.warningOnly = false as unknown as true; }))).toThrow(/yalnız uyarı/);
+    expect(() => assertPlantCatalogIntegrity(withChange("azolla-filiculoides", (item) => { item.invasiveListings = [{ list: "england-sale-ban", sourceUrl: "http://www.legislation.gov.uk/x" }]; }))).toThrow(/HTTPS/);
+    expect(() => assertPlantCatalogIntegrity(withChange("ophiopogon-japonicus", (item) => { item.notAquatic = { sourceUrl: "http://www.practicalfishkeeping.co.uk/x" }; }))).toThrow(/HTTPS/);
+    expect(() => assertPlantCatalogIntegrity(withChange("azolla-filiculoides", (item) => { item.invasiveListings = [{ list: "turkey-ban" as "eu-union-list", sourceUrl: item.sourceUrl }]; }))).toThrow(/istilacı/);
     expect(() => assertPlantCatalogIntegrity(withChange("egeria-densa", (item) => { item.heightCm = Number.NaN; }))).toThrow(/aralığı/);
     expect(() => assertPlantCatalogIntegrity(withChange("egeria-densa", (item) => { item.heightCm = Number.POSITIVE_INFINITY; }))).toThrow(/aralığı/);
     expect(() => assertPlantCatalogIntegrity(withChange("egeria-densa", (item) => { item.temperature = [Number.NaN, 26]; }))).toThrow(/aralığı/);
@@ -132,11 +154,11 @@ describe("değer kuralı", () => {
     expect(heterophylla?.growth).toBeUndefined();
     expect(heterophylla?.co2).toBeUndefined();
     // Fishkeeper'a dayanan kayıtta CO₂ yalnız Tropica'da aynı bitkinin sayfası varsa yazılır (16 kayıtta yok).
-    const fk = plantCatalog.filter(fromFishkeeper);
+    const fk = sourced.filter(fromFishkeeper);
     expect(fk.filter((item) => !item.co2).map((item) => item.id)).toEqual(fk.filter((item) => !item.additionalSourceUrls?.some((url) => TROPICA.test(url))).map((item) => item.id));
     expect(fk.filter((item) => !item.co2)).toHaveLength(16);
     // Tropica sıcaklık ve pH vermez: Tropica'ya dayanan kayıtta yalnız Fishkeeper'daki türün formuysa (10 kayıt) yazılır.
-    const tropica = plantCatalog.filter((item) => !fromFishkeeper(item));
+    const tropica = sourced.filter((item) => !fromFishkeeper(item));
     expect(tropica.filter((item) => item.temperature || item.ph).map((item) => item.id)).toEqual(tropica.filter((item) => item.additionalSourceUrls?.some((url) => FISHKEEPER.test(url))).map((item) => item.id));
     expect(tropica.filter((item) => item.temperature)).toHaveLength(10);
     // Tropica sayfasının alanları boşsa değer yazılmaz ('Needle Leaf': yalnız açıklamadaki boy ve yerleşim).
@@ -221,6 +243,9 @@ describe("istilacı tür listeleri", () => {
       ["rotala-rotundifolia", [{ list: "fisc-invasive", category: 2, sourceUrl: ufUrl("rotala-rotundifolia") }]],
       // Tropica: 'Blood Red' "the most intensely red-colored variation of Rotala rotundifolia".
       ["rotala-rotundifolia-blood-red", [{ list: "fisc-invasive", category: 2, sourceUrl: ufUrl("rotala-rotundifolia") }]],
+      // 3. paket: resmî listeler (AB, İngiltere) ve UF/IFAS'ın başlığı (Pistia: "FISC Category 1"; Azolla Florida'nın yerli bitkisi).
+      ["azolla-filiculoides", [{ list: "england-sale-ban", sourceUrl: "https://www.legislation.gov.uk/uksi/2014/538/article/3" }]],
+      ["pistia-stratiotes", [{ list: "eu-union-list", sourceUrl: "https://eur-lex.europa.eu/legal-content/EN/TXT/HTML/?uri=CELEX:02016R1141-20250807" }, { list: "fisc-invasive", category: 1, sourceUrl: ufUrl("pistia-stratiotes") }]],
     ]);
     // 'H'ra' yalnız "probably a variation", 'Green' ayrı bir Rotala sp.: işaret taşımaz.
     expect(plantById("rotala-rotundifolia-hra")?.invasiveListings).toBeUndefined();

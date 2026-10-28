@@ -1,7 +1,8 @@
 // Bitki kataloğu (yol haritasının 4. adımı, docs/DECISIONS/0023-bitki-katalogu.md): kabul edilen Türk mağazalarında satılan ve kaynağı olan
-// bitkiler. 1. paket Fishkeeper'ın bitki bilgi bankasındaki bitkiler, 2. paket yalnız Tropica'da sayfası olan bitkiler ve formlar. Değer
-// kuralı ve kaynaklar docs/DATA_SOURCES.md → "Bitkiler"; kayıt kayıt karşılaştırma docs/CATALOG_LOG.md → "Bitki kataloğu 1" ve
-// "Bitki kataloğu 2". Kaynakta olmayan alan boş kalır. Bitki sayfası bu modülü yalnız src/lib/use-plant-catalog.ts ile ayrı parça olarak
+// bitkiler. 1. paket Fishkeeper'ın bitki bilgi bankasındaki bitkiler, 2. paket yalnız Tropica'da sayfası olan bitkiler ve formlar, 3. paket
+// değer kaynağı olmayan ama kaynaklı bir uyarısı olan bitkiler (yalnız uyarı kaydı, docs/DECISIONS/0026-bitki-uyari-kayitlari.md). Değer
+// kuralı ve kaynaklar docs/DATA_SOURCES.md → "Bitkiler"; kayıt kayıt karşılaştırma docs/CATALOG_LOG.md → "Bitki kataloğu 1", "2" ve
+// "3". Kaynakta olmayan alan boş kalır. Bitki sayfası bu modülü yalnız src/lib/use-plant-catalog.ts ile ayrı parça olarak
 // yükler (docs/DECISIONS/0024-bitki-secme.md); öbür dosyalar buradan yalnız tür alır.
 import { assertUniqueIds, normalize } from "./catalog-shared";
 
@@ -11,12 +12,19 @@ export type PlantGrowthRate = "very-slow" | "slow" | "medium" | "fast" | "very-f
 /** Bitki sayfasındaki konum anahtarları (`src/app/plants/page.tsx`). Yalnız kaynağın açıklaması yazıyorsa doldurulur. */
 export type PlantPlacement = "foreground" | "midground" | "background" | "onRoot" | "onRock" | "floating";
 /**
- * İstilacı tür listeleri (UF/IFAS bitki dizininin başlığındaki liste durumu).
- * `us-federal-noxious-weed`: ABD federal zararlı ot listesi; `fisc-invasive`: Florida İstilacı Türler Konseyi'nin (FISC) istilacı listesi, kategori 1 ya da 2.
+ * İstilacı tür listeleri.
+ * - UF/IFAS bitki dizininin başlığındaki liste durumu: `us-federal-noxious-weed` ABD federal zararlı ot listesi; `fisc-invasive` Florida
+ *   İstilacı Türler Konseyi'nin (FISC) istilacı listesi, kategori 1 ya da 2.
+ * - `eu-union-list`: AB'nin istilacı yabancı türler listesi (Uygulama Yönetmeliği (AB) 2016/1141, EUR-Lex konsolide metni).
+ * - `england-sale-ban`: İngiltere'nin satış yasağı (The Wildlife and Countryside Act 1981 (Prohibition on Sale etc. of Invasive Non-native
+ *   Plants) (England) Order 2014, madde 3; legislation.gov.uk'teki güncel metin).
+ * Hiçbiri Türkiye'de yasak anlamına gelmez; Türkiye'de resmî bir liste bulunamadı.
  */
 export type PlantInvasiveListing =
   | { list: "us-federal-noxious-weed"; sourceUrl: string }
-  | { list: "fisc-invasive"; category: 1 | 2; sourceUrl: string };
+  | { list: "fisc-invasive"; category: 1 | 2; sourceUrl: string }
+  | { list: "eu-union-list"; sourceUrl: string }
+  | { list: "england-sale-ban"; sourceUrl: string };
 
 export interface PlantProfile {
   id: string;
@@ -34,7 +42,14 @@ export interface PlantProfile {
   ph?: [number, number];
   placements?: PlantPlacement[];
   invasiveListings?: PlantInvasiveListing[];
-  /** Ana kaynak: Fishkeeper bitki sayfası; Fishkeeper'da kaydı yoksa Tropica ürün sayfası. */
+  /** Su bitkisi değil: Practical Fishkeeping'in "akvaryumda kaçınılacak bitkiler" yazısında ev bitkisi olarak geçiyor (su altında kısa süre dayanır). */
+  notAquatic?: { sourceUrl: string };
+  /**
+   * Yalnız uyarı kaydı (karar 0026): Fishkeeper'da ve Tropica'da sayfası yok; değerlerin hiçbiri yok, kayıt yalnız kaynaklı etiketi
+   * (istilacı tür listesi ya da "su bitkisi değil") için katalogda. Ana kaynak (`sourceUrl`) etiketin kaynağıdır.
+   */
+  warningOnly?: true;
+  /** Ana kaynak: Fishkeeper bitki sayfası; Fishkeeper'da kaydı yoksa Tropica ürün sayfası; yalnız uyarı kaydında etiketin kaynağı. */
   sourceUrl: string;
   /**
    * Öteki kaynaklar: aynı bitkinin Tropica ürün sayfaları. Tropica'ya dayanan form kayıtlarında türün Fishkeeper sayfası da buradadır
@@ -46,7 +61,7 @@ export interface PlantProfile {
   verifiedAt: string;
 }
 
-const rawPlantCatalog: PlantProfile[] = [
+const sourcedPlants: PlantProfile[] = [
   { id:"bolbitis-heudelotii", scientificName:"Bolbitis heudelotii", aliases:["Bolbitis heudelotii 'Baby Leaf'"], light:["medium","medium"], co2:"medium", growth:["slow","slow"], heightCm:40, temperature:[22,28], ph:[5,7], placements:["onRoot","onRock"], sourceUrl:"https://www.fishkeeper.co.uk/fish/plant/aquarium-plants/bolbitis-heudelotii-", additionalSourceUrls:["https://tropica.com/en/plants/plantdetails/Bolbitisheudelotii(006)/4406"], shopUrls:["https://aquarubi.com/bolbitis-heudelotii-saksi","https://aquarubi.com/bolbitis-heudelotii-baby-leaf","https://aquarubi.com/tropica-bolbitis-heudelotii-kutuk","https://aquarubi.com/stoffels-bolbitis-heudelotii","https://aquarubi.com/tropica-bolbitis-heudelotii-saksi"], verifiedAt:"2026-10-25" },
   { id:"alternanthera-reineckii-var-rosaefolia", scientificName:"Alternanthera reineckii var. rosaefolia", aliases:["Alternanthera reineckii 'Pink'","Alternanthera reineckii 'Rosa'","Alternanthera rosaefolia"], light:["medium","high"], co2:"medium", growth:["medium","medium"], heightCm:50, temperature:[17,28], ph:[5,8], sourceUrl:"https://www.fishkeeper.co.uk/fish/plant/aquarium-plants/alternanthera-reineckii-var-rosefolia", additionalSourceUrls:["https://tropica.com/en/plants/plantdetails/Alternantherareineckii'Pink'(023)/4436"], shopUrls:["https://aquarubi.com/tropica-alternanthera-reineckii-pink"], verifiedAt:"2026-10-25" },
   { id:"ammannia-gracilis", scientificName:"Ammannia gracilis", aliases:["Ammania gracilis"], light:["high","high"], growth:["fast","fast"], heightCm:60, temperature:[15,28], ph:[6.5,8.5], placements:["background"], sourceUrl:"https://www.fishkeeper.co.uk/fish/plant/aquarium-plants/ammania-gracilis", shopUrls:["https://aquarubi.com/ammannia-gracilis"], verifiedAt:"2026-10-25" },
@@ -187,9 +202,22 @@ const rawPlantCatalog: PlantProfile[] = [
   { id:"vesicularia-montagnei-christmas-moss", scientificName:"Vesicularia montagnei 'Christmas Moss'", aliases:["Christmas moss"], light:["medium","medium"], co2:"low", growth:["medium","medium"], heightCm:5, placements:["onRoot","onRock"], sourceUrl:"https://tropica.com/en/plants/plantdetails/Vesiculariamontagnei'ChristmasMoss'(003APOR)/4395", shopUrls:["https://aquarubi.com/tropica-vesicularia-montagnei-christmas-moss","https://aquarubi.com/tropica-vesicularia-montagnei-christmas-moss-on-wood","https://aquarubi.com/stoffels-vesicularia-montagnei-christmass-moss-in-vitro","https://aquarubi.com/vesicularia-christmas-moss-10x10cm","https://aquarubi.com/vesicularia-dubyana-christmas-moss"], verifiedAt:"2026-10-25" },
 ];
 
+// 3. paket: yalnız uyarı kayıtları (karar 0026). Üretim betiğinin dışında, elle yazılır; her alan docs/CATALOG_LOG.md → "Bitki kataloğu 3"te.
+// Fishkeeper'da ve Tropica'da sayfaları yok; değer alanı yok. Satış adı yalnız mağazanın ürün başlığından ("Pistia Stratiotes (Su Marulu)").
+const warningOnlyPlants: PlantProfile[] = [
+  { id:"azolla-filiculoides", scientificName:"Azolla filiculoides", warningOnly:true, invasiveListings:[{ list:"england-sale-ban", sourceUrl:"https://www.legislation.gov.uk/uksi/2014/538/article/3" }], sourceUrl:"https://www.legislation.gov.uk/uksi/2014/538/article/3", shopUrls:["https://aquarubi.com/azolla-filiculoides-porsiyon"], verifiedAt:"2026-10-28" },
+  { id:"ophiopogon-japonicus", scientificName:"Ophiopogon japonicus", warningOnly:true, notAquatic:{ sourceUrl:"https://www.practicalfishkeeping.co.uk/features/21-plants-to-avoid-in-the-aquarium/" }, sourceUrl:"https://www.practicalfishkeeping.co.uk/features/21-plants-to-avoid-in-the-aquarium/", shopUrls:["https://aquarubi.com/ophiopogon-japonicus"], verifiedAt:"2026-10-28" },
+  { id:"pistia-stratiotes", scientificName:"Pistia stratiotes", aliases:["Su marulu"], warningOnly:true, invasiveListings:[{ list:"eu-union-list", sourceUrl:"https://eur-lex.europa.eu/legal-content/EN/TXT/HTML/?uri=CELEX:02016R1141-20250807" }, { list:"fisc-invasive", category:1, sourceUrl:"https://plant-directory.ifas.ufl.edu/plant-directory/pistia-stratiotes/" }], sourceUrl:"https://eur-lex.europa.eu/legal-content/EN/TXT/HTML/?uri=CELEX:02016R1141-20250807", shopUrls:["https://aquarubi.com/pistia-stratiotes-su-marulu"], verifiedAt:"2026-10-28" },
+];
+
+const rawPlantCatalog: PlantProfile[] = [...sourcedPlants, ...warningOnlyPlants];
+
 const needLevels: PlantNeedLevel[] = ["low", "medium", "high"];
 const growthRates: PlantGrowthRate[] = ["very-slow", "slow", "medium", "fast", "very-fast"];
 const placements: PlantPlacement[] = ["foreground", "midground", "background", "onRoot", "onRock", "floating"];
+const listingKinds = ["us-federal-noxious-weed", "fisc-invasive", "eu-union-list", "england-sale-ban"];
+/** Yalnız uyarı kaydında bulunmaması gereken değer alanları. */
+const valueFields = ["light", "co2", "growth", "heightCm", "temperature", "ph", "placements", "additionalSourceUrls"] as const;
 const shopHosts = ["aquarubi.com", "www.akvaryumexpress.com"];
 const isHttps = (url: string) => url.startsWith("https://");
 const orderedLevels = <T,>(scale: T[], pair?: [T, T]) => !pair || (scale.includes(pair[0]) && scale.includes(pair[1]) && scale.indexOf(pair[0]) <= scale.indexOf(pair[1]));
@@ -203,8 +231,13 @@ export function assertPlantCatalogIntegrity(catalog: PlantProfile[] = rawPlantCa
     if (!orderedLevels(needLevels, item.light) || (item.co2 && !needLevels.includes(item.co2)) || !orderedLevels(growthRates, item.growth)) throw new Error(`Geçersiz bitki düzeyi: ${item.id}`);
     if (!orderedRange(item.temperature) || !orderedRange(item.ph) || (item.heightCm !== undefined && !(Number.isFinite(item.heightCm) && item.heightCm > 0))) throw new Error(`Geçersiz bitki aralığı: ${item.id}`);
     if (item.placements?.some((placement) => !placements.includes(placement))) throw new Error(`Geçersiz bitki konumu: ${item.id}`);
-    if (item.invasiveListings?.some((listing) => listing.list === "fisc-invasive" ? ![1, 2].includes(listing.category) : listing.list !== "us-federal-noxious-weed")) throw new Error(`Geçersiz istilacı tür listesi: ${item.id}`);
-    if (!isHttps(item.sourceUrl) || item.additionalSourceUrls?.some((url) => !isHttps(url)) || item.invasiveListings?.some((listing) => !isHttps(listing.sourceUrl))) throw new Error(`Bitki kaynağı HTTPS değil: ${item.id}`);
+    if (item.invasiveListings?.some((listing) => !listingKinds.includes(listing.list) || (listing.list === "fisc-invasive" && ![1, 2].includes(listing.category)))) throw new Error(`Geçersiz istilacı tür listesi: ${item.id}`);
+    if (!isHttps(item.sourceUrl) || item.additionalSourceUrls?.some((url) => !isHttps(url)) || item.invasiveListings?.some((listing) => !isHttps(listing.sourceUrl)) || (item.notAquatic && !isHttps(item.notAquatic.sourceUrl))) throw new Error(`Bitki kaynağı HTTPS değil: ${item.id}`);
+    // Yalnız uyarı kaydı: değer yok, en az bir kaynaklı etiket var ve ana kaynak etiketlerden birinin kaynağı (karar 0026).
+    if (item.warningOnly !== undefined) {
+      const labelUrls = [...(item.invasiveListings ?? []).map((listing) => listing.sourceUrl), ...(item.notAquatic ? [item.notAquatic.sourceUrl] : [])];
+      if (item.warningOnly !== true || valueFields.some((field) => item[field] !== undefined) || !labelUrls.length || !labelUrls.includes(item.sourceUrl)) throw new Error(`Geçersiz yalnız uyarı kaydı: ${item.id}`);
+    }
     if (!item.shopUrls.length || item.shopUrls.some((url) => !shopHosts.includes(new URL(url).host))) throw new Error(`Bitkinin kabul edilen mağaza sayfası yok: ${item.id}`);
     if (!/^\d{4}-\d{2}-\d{2}$/.test(item.verifiedAt)) throw new Error(`Geçersiz bitki doğrulama tarihi: ${item.id}`);
     for (const name of [item.scientificName, ...(item.aliases ?? [])]) {

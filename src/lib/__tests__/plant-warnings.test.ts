@@ -122,27 +122,34 @@ describe("bitki uyarılarının metinleri", () => {
     // Öbür akvaryumun CO₂ sistemi, bitkisi ve ölçümü sayılmaz; en son ölçüm (24 °C) aralıkta, eskisi (30 °C) dikkate alınmaz.
     const result = checkAquariumPlants(fakeCatalog, tank, plants, equipment, readings);
     expect(result.warnings.map((warning) => `${warning.plantId}:${warning.code}`)).toEqual(["p-carpet:plantCo2"]);
-    expect(result).toMatchObject({ unmatched: [], checked: 1 });
+    expect(result).toMatchObject({ unmatched: [], noValues: [], checked: 1 });
   });
 
   it("katalogla eşleşmeyen bitkiler ayrıca döner; değerlendirilen bitki sayısı yalnız eşleşenleri sayar", () => {
     const result = checkAquariumPlants(fakeCatalog, tank, [manual("m1", "Elle eklenen"), plant("carpet"), { ...manual("m2", "Başka akvaryum"), aquariumId: "b" }], [], []);
     expect(result.unmatched.map((item) => item.id)).toEqual(["m1"]);
     expect(result.checked).toBe(1);
-    expect(checkAquariumPlants(fakeCatalog, tank, [manual("m1", "Elle eklenen")], [], [])).toEqual({ warnings: [], unmatched: [manual("m1", "Elle eklenen")], checked: 0 });
+    expect(checkAquariumPlants(fakeCatalog, tank, [manual("m1", "Elle eklenen")], [], [])).toEqual({ warnings: [], unmatched: [manual("m1", "Elle eklenen")], noValues: [], checked: 0 });
+    // Yalnız uyarı kaydıyla eşleşen bitki (karar 0026) değerlendirilmez; değerleri kaynakta yok.
+    const warningOnly = { plantForRecord: (record: Plant) => (record.catalogId === "w" ? { id: "w", scientificName: "Pistia stratiotes", warningOnly: true } : record.catalogId ? profiles[record.catalogId] : undefined) } as unknown as PlantCatalogModule;
+    const pistia: Plant = { ...manual("p-w", "Su marulu"), catalogId: "w" };
+    expect(checkAquariumPlants(warningOnly, tank, [pistia, plant("carpet")], [], [])).toMatchObject({ unmatched: [], noValues: [pistia], checked: 1 });
   });
 
   it("sağlık analizindeki bölüm: hiçbir bitki eşleşmediyse yeşil 'uyarı yok' yerine 'hesaplanamadı' der ve adları yazar", () => {
     const retry = () => {};
-    const none = body({ result: { warnings: [], unmatched: [manual("m1", "Java yosunu"), manual("m2", "Java yosunu"), manual("m3", "Amazon kılıcı")], checked: 0 }, failed: false, retry });
+    const none = body({ result: { warnings: [], unmatched: [manual("m1", "Java yosunu"), manual("m2", "Java yosunu"), manual("m3", "Amazon kılıcı")], noValues: [], checked: 0 }, failed: false, retry });
     expect(none).toBe("Bitkiler katalogla eşleşmediği için uyarı hesaplanamadı: Java yosunu, Amazon kılıcı.");
     expect(none).not.toContain(tr.none);
     // Bir kısmı eşleştiyse yeşil sonuç yalnız eşleşenler içindir; eşleşmeyenler ayrıca yazılır.
-    expect(body({ result: { warnings: [], unmatched: [manual("m1", "Java yosunu")], checked: 2 }, failed: false, retry })).toBe("Katalogla eşleşen bitkiler için uyarı yok. Katalogla eşleşmeyen bitkiler için uyarı hesaplanmadı: Java yosunu.");
-    expect(body({ result: { warnings: [], unmatched: [], checked: 2 }, failed: false, retry })).toBe("Kayıtlı bitkiler için uyarı yok.");
+    expect(body({ result: { warnings: [], unmatched: [manual("m1", "Java yosunu")], noValues: [], checked: 2 }, failed: false, retry })).toBe("Değerlendirilen bitkiler için uyarı yok. Katalogla eşleşmeyen bitkiler için uyarı hesaplanmadı: Java yosunu.");
+    expect(body({ result: { warnings: [], unmatched: [], noValues: [], checked: 2 }, failed: false, retry })).toBe("Kayıtlı bitkiler için uyarı yok.");
+    // Değerleri kaynakta olmayan bitkiler (yalnız uyarı kaydı) ayrıca yazılır; yalnız onlar varsa yeşil sonuç yok.
+    expect(body({ result: { warnings: [], unmatched: [], noValues: [manual("w", "Su marulu")], checked: 1 }, failed: false, retry })).toBe("Değerlendirilen bitkiler için uyarı yok. Değerleri kaynakta olmayan bitkiler için uyarı hesaplanmadı: Su marulu. Bitki kartındaki uyarıya bakın.");
+    expect(body({ result: { warnings: [], unmatched: [manual("m1", "Java yosunu")], noValues: [manual("w", "Su marulu")], checked: 0 }, failed: false, retry })).toBe("Katalogla eşleşmeyen bitkiler için uyarı hesaplanmadı: Java yosunu. Değerleri kaynakta olmayan bitkiler için uyarı hesaplanmadı: Su marulu. Bitki kartındaki uyarıya bakın.");
     // Uyarı varken eşleşmeyenler listenin sonunda; adı boş kayıtta liste yazılmaz.
     const warnings = run(reading({ temperature: 30 }));
-    const listed = body({ result: { warnings, unmatched: [manual("m1", " ")], checked: 2 }, failed: false, retry });
+    const listed = body({ result: { warnings, unmatched: [manual("m1", " ")], noValues: [], checked: 2 }, failed: false, retry });
     expect(listed.startsWith("Hemianthus callitrichoides yüksek CO₂ ister")).toBe(true);
     expect(listed.endsWith("Katalogla eşleşmeyen bitkiler için uyarı hesaplanmadı.")).toBe(true);
     expect(listed).not.toContain(tr.none);

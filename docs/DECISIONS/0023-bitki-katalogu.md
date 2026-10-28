@@ -37,7 +37,7 @@ Claude altı kaynağın sayfalarını açarak inceledi ve ürün sahibine artı 
   - Bütün ürünleri forma giden iki tür (*C. beckettii*, *Helanthium tenellum*) kataloğa girmez.
   - Tropica sıcaklık ve pH vermediği için Tropica'ya dayanan kayıtların çoğunda bu alanlar boş.
   - UF/IFAS dizinindeki Florida İstilacı Türler Konseyi (FISC) listesi de etiket kaynağı sayıldı. Böylece *Rotala rotundifolia* ve 'Blood Red' formu işaretli; 1. paketteki iki bitki de bu listede.
-- Sonraki paketler:
+- Sonraki paketler (resmî listedeki satılan bitkiler ve *Ophiopogon* 2026-10-28'de yalnız uyarı kaydı olarak eklendi; `docs/DECISIONS/0026-bitki-uyari-kayitlari.md`):
   - resmî listedeki satılan bitkiler: Aquarubi'de *Pistia stratiotes* (AB listesi) ve *Azolla filiculoides* (İngiltere'nin satış yasağı) var;
   - su bitkisi olup olmadığı kaynakla kontrol edilecek bitkiler: Aquarubi'de *Ophiopogon japonicus*, *Fittonia albivenis*, *Selaginella* ve *Homalomena* satılıyor. Practical Fishkeeping'in "akvaryumda kaçınılacak 21 bitki" listesinde *Ophiopogon japonica* var; ötekiler için ayrı kaynak aranacak.
   - Practical Fishkeeping'in tür kutuları da bu paketlerde taranır.

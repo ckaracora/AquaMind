@@ -19,12 +19,14 @@ export const trPlantWarnings = {
   title: "Bitki uyarıları",
   note: "Bitki uyarıları sağlık puanını etkilemez.",
   none: "Kayıtlı bitkiler için uyarı yok.",
-  /** Bir kısmı katalogla eşleşmediyse yeşil sonuç yalnız eşleşenler içindir. */
-  noneForMatched: "Katalogla eşleşen bitkiler için uyarı yok.",
+  /** Bir kısmı değerlendirilemediyse (katalogla eşleşmedi ya da değerleri kaynakta yok) yeşil sonuç yalnız değerlendirilenler içindir. */
+  noneForMatched: "Değerlendirilen bitkiler için uyarı yok.",
   /** Katalogla eşleşmeyen bitkiler (adları virgülle; adı boş kayıtlarda liste boş olabilir): onlar için uyarı hesaplanmadı. */
   unmatched: (names: string) => `Katalogla eşleşmeyen bitkiler için uyarı hesaplanmadı${names ? `: ${names}` : ""}.`,
   /** Hiçbir bitki katalogla eşleşmedi: değerlendirme yapılamadı (yeşil "uyarı yok" gösterilmez). */
   noneChecked: (names: string) => `Bitkiler katalogla eşleşmediği için uyarı hesaplanamadı${names ? `: ${names}` : ""}.`,
+  /** Katalogda yalnız uyarı kaydı olan bitkiler (değerleri kaynakta yok; karar 0026): onlar için uyarı hesaplanmadı. */
+  noValues: (names: string) => `Değerleri kaynakta olmayan bitkiler için uyarı hesaplanmadı${names ? `: ${names}` : ""}. Bitki kartındaki uyarıya bakın.`,
   preparing: "Bitki bilgileri hazırlanıyor…",
   loadFailed: "Bitki bilgileri yüklenemedi; bitkilerin kısa bilgisi ve uyarıları gösterilemiyor. Bağlantını kontrol edip yeniden dene.",
   /** Uyarı metinleri, motorun `code` alanına göre. */

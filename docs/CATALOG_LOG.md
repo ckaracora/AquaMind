@@ -3040,3 +3040,20 @@ Güncel alt adım: JBL filtre medyası, bakteri başlangıcı, sorun giderici/pH
   - su bitkisi olmayan satılan bitkiler (*Ophiopogon japonicus*, Practical Fishkeeping'in listesinde);
   - Practical Fishkeeping'in tür kutuları;
   - bitki sayfasında katalogdan seçme (önce taslak).
+
+## 2026-10-28 Bitki kataloğu 3: yalnız uyarı kayıtları (Claude)
+
+- Karar `docs/DECISIONS/0026-bitki-uyari-kayitlari.md` (ürün sahibi 2026-10-28'de "Yalnız uyarı kaydı"nı seçti); kural `docs/DATA_SOURCES.md` → "Bitkiler" → "Yalnız uyarı kaydı".
+- Okunan sayfalar (2026-10-28, UTC):
+  - Aquarubi ürün sayfaları (HTTP 200): "Pistia Stratiotes (Su Marulu)" (`pistia-stratiotes-su-marulu`, tükendi), "Azolla Filiculoides (Porsiyon)" (`azolla-filiculoides-porsiyon`, açıklama "ender su üstü bitkisidir", tükendi), "Ophiopogon Japonicus" (`ophiopogon-japonicus`, açıklama "terraryum, paludaryumun kara bölümü ... kullanılan dayanıklı bir karasal bitkidir", stokta).
+  - EUR-Lex, Uygulama Yönetmeliği (AB) 2016/1141'in 07.08.2025 tarihli konsolide metni (yerleşik tarayıcıda; komut satırına boş yanıt veriyor): "▼M3 Pistia stratiotes L.".
+  - legislation.gov.uk, SI 2014/538 madde 3, güncel metin (HTTP 200): "Fern, Water — Azolla filiculoides" listede; 2019'dan beri metinde kalanlar *Azolla filiculoides*, *Ludwigia uruguayensis*, *Crassula helmsii*.
+  - UF/IFAS bitki dizini (HTTP 200): *Pistia stratiotes* başlığı "Florida Prohibited Aquatic Plants List", "FISC Category 1". *Azolla filiculoides* "Native to Florida" (listesiz; "formerly Azolla caroliniana"). *Ophiopogon japonicus* ve *Azolla caroliniana* adresleri 404.
+  - Practical Fishkeeping, "21 plants to avoid in the aquarium" (HTTP 200, dateModified 2025-06-26): "21 house plants to watch out for" listesinde "Ophiopogon japonica"; yazı ev bitkilerinin su altında kısa süre dayandığını söylüyor ("will last just a short a time underwater, as will the true house plant species").
+  - Fishkeeper'ın ve Tropica'nın bitki listelerinde (1. ve 2. paketin tam listeleri) *Pistia*, *Azolla*, *Ophiopogon*, *Fittonia* ve *Homalomena* yok; Tropica'daki tek *Selaginella* *S. uncinata* (Aquarubi *S. kraussiana* satıyor).
+- Yeni kayıtlar (3, hepsi `warningOnly`, değer alanı yok, doğrulama 2026-10-28):
+  - `azolla-filiculoides`: İngiltere'nin satış yasağı; ana kaynak legislation.gov.uk.
+  - `ophiopogon-japonicus`: "su bitkisi değil" (Practical Fishkeeping); ana kaynak Practical Fishkeeping'in yazısı.
+  - `pistia-stratiotes`: AB listesi ve FISC kategori 1; ana kaynak EUR-Lex; satış adı "Su marulu" (ürün başlığı).
+- Girmeyenler: *Fittonia albivenis*, *Selaginella kraussiana* 'Mini', *Homalomena* türleri (Aquarubi'de satılıyor; hiçbir kabul edilen kaynakta etiketi yok).
+- 1. ve 2. paketin kayıtları değişmedi.
