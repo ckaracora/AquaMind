@@ -42,5 +42,11 @@
 // 1.10.0: sonuç biçimi v2. Her uyarı `code` ve `params`, her ölçüt `detailCode` ve `detailParams` taşır; ekran metni dil
 // dosyasında bunlardan kurulur. Türkçe `title`, `message`, `label` ve `detail` alanları aynen üretilir; kurallar, puanlar ve
 // sıralama değişmez, bu yüzden kural seti sürümü aynı kalır (bkz. docs/DECISIONS/0021-dil-altyapisi.md, 3. paket).
-export const ENGINE_VERSION = "1.10.0";
+//
+// 1.11.0: bitki uyarıları, akvaryumun sağlık analizinden ayrı bir işlevde (`assessPlants`, src/plants.ts): yüksek CO₂ isteyen bitki ve
+// CO₂ ekipmanı yok, en az orta ışık isteyen bitki ve aydınlatma yok, son su ölçümü bitkinin kaynaktaki sıcaklık ya da pH aralığı dışında
+// (uyarı); bitkinin kaynaktaki boyu akvaryumun yüksekliğinden büyük (bilgi). Yeni sayısal eşik yok; `analyzeAquarium`ın puanı, uyarıları
+// ve çıktısı değişmez. Bitki kuralları puan cezası ve gömülü eşik içermez (yalnız kayıttaki değerler), bu yüzden kural seti sürümü
+// aynı kalır (bkz. docs/DECISIONS/0025-bitki-uyarilari.md).
+export const ENGINE_VERSION = "1.11.0";
 export const RULESET_VERSION = "1.9.0";

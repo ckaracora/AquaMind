@@ -9,6 +9,10 @@
     ".": {
       "types": "./src/index.ts",
       "default": "./src/index.ts"
+    },
+    "./plants": {
+      "types": "./src/plants.ts",
+      "default": "./src/plants.ts"
     }
   },
   "sideEffects": false,

@@ -31,9 +31,9 @@ const EXACT: Intl.NumberFormatOptions = { maximumSignificantDigits: 21 };
 /**
  * Değeri `digits` ondalıkla yazar. Sıfırdan büyük bir değer "0" görünüyorsa ya da karşılaştırılan değerden farklıyken onunla aynı
  * görünüyorsa ondalık sayısını artırır (en çok altı); bu da yetmezse tam yazımı kullanır. Böylece yuvarlama, uyarının söylediği farkı
- * (sınırın üstünde, sıfırdan büyük) gizlemez.
+ * (sınırın üstünde, sıfırdan büyük) gizlemez. Bitki uyarılarının biçimleyicisi de kullanır (`plant-warnings.ts`).
  */
-function distinct(write: (value: number, options: Intl.NumberFormatOptions) => string, value: number, digits: number, other?: number): string {
+export function distinct(write: (value: number, options: Intl.NumberFormatOptions) => string, value: number, digits: number, other?: number): string {
   for (let fraction = digits; fraction <= MAX_FRACTION_DIGITS; fraction++) {
     const options = { maximumFractionDigits: fraction };
     const text = write(value, options);

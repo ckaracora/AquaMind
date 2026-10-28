@@ -5,8 +5,8 @@
 import type { HealthMetric, HealthWarning } from "@aquamind/compatibility-engine";
 import type { EngineMessages, EngineTextFormat } from "@aquamind/localization/engine";
 
-/** Yalnız tablonun kendi anahtarları; `constructor` gibi nesne üyeleri kod sayılmaz. */
-function own<T>(table: Record<string, T>, key: string): T | undefined {
+/** Yalnız tablonun kendi anahtarları; `constructor` gibi nesne üyeleri kod sayılmaz. Bitki uyarılarının metinleri de kullanır. */
+export function own<T>(table: Record<string, T>, key: string): T | undefined {
   return Object.prototype.hasOwnProperty.call(table, key) ? table[key] : undefined;
 }
 
