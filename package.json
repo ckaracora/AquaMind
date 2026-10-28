@@ -13,6 +13,7 @@
     "test:catalog-flow": "node scripts/test-catalog-flow.cjs",
     "test:calculators": "node scripts/test-calculators.cjs",
     "audit:catalog": "node scripts/audit-catalog.cjs",
+    "data:coverage": "node scripts/data-coverage.cjs",
     "test": "vitest run",
     "verify": "tsc --noEmit && node scripts/test-catalog-flow.cjs && node scripts/test-health.cjs && node scripts/test-calculators.cjs && node scripts/audit-catalog.cjs && vitest run && next build"
   },

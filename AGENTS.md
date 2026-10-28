@@ -79,6 +79,7 @@ Bu komut TypeScript, katalog akışı, sağlık senaryoları, katalog denetimi v
 - Resmî kaynak bulunamazsa `docs/DATA_SOURCES.md` içindeki güvenilir ikincil kaynaklar kullanılabilir.
 - Her katalog kaydı doğrulanabilir HTTPS `sourceUrl` ve `YYYY-MM-DD` biçiminde `verifiedAt` taşımalıdır.
 - Kaynaklar çelişiyorsa kesin değer seçme; çelişkiyi not et veya alanı boş bırak.
+- Bir katalog değişince `docs/DATA_COVERAGE.md`'nin güncel tablosu `node scripts/data-coverage.cjs` çıktısıyla yenilenir; eski ölçüm "Geçmiş"e kısa satır olarak eklenir (`src/lib/__tests__/data-coverage.test.ts` denetler).
 - Kaynakta yayımlanmayan kapasite, debi, güç veya öneri değeri uydurulmaz.
 - Sağlık ve biyolojik yük sonuçları kesin tıbbi/veteriner hüküm değil, açıklanabilir hobi rehberliği olarak sunulur.
 
@@ -86,6 +87,7 @@ Bu komut TypeScript, katalog akışı, sağlık senaryoları, katalog denetimi v
 
 - Ürün amacı ve mimari: `docs/PROJECT.md`
 - Veri kaynakları: `docs/DATA_SOURCES.md`
+- Veri kapsamı (her bilginin yüzde kaçı dolu): `docs/DATA_COVERAGE.md`
 - Güncel devir noktası: `PROJECT_STATUS.md`
 - İnsan çalışma akışı: `CONTRIBUTING.md`
 - Görev ve devir şablonları: `docs/HANDOFF.md`

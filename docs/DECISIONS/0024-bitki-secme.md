@@ -34,7 +34,7 @@ Teknik kararlar (Claude):
 
 ## Sonuçlar
 
-- Bitki sayfasının ilk yüklemesi 150 kB'tan 153 kB'a çıktı: arayüz kodu ve metinler. Ana sayfa ve canlılar sayfası da 1'er kB büyüdü, çünkü dil dosyası ortak pakette. Katalog verisi ayrı parçadadır (yaklaşık 74 kB, sıkıştırılmış 11 kB).
+- Bitki sayfasının ilk yüklemesi 150 kB'tan 153 kB'a çıktı: arayüz kodu ve metinler. Öbür sayfaların çoğu da 1'er kB büyüdü (derlemenin yuvarlanmış ilk yükleme boyları: ana sayfa 161 → 162, akvaryum ayrıntısı 152 → 153, akvaryum düzenleme ve yeni akvaryum 148 → 149, sağlık analizi 167 → 168, hesaplayıcılar ve hastalık 149 → 150, canlılar 256 → 257, ekipman 299 → 300, su değerleri 153 → 154 kB; akvaryum listesi, bakım, ürün kataloğu ve ayarlar aynı kaldı), çünkü dil dosyası ortak pakette. Bu ayrıntı 2026-10-28'de yazıldı; ilk kayıt yalnız ana sayfa ve canlıları sayıyordu. Katalog verisi ayrı parçadadır (yaklaşık 74 kB, sıkıştırılmış 11 kB).
 - `src/lib/__tests__/plant-catalog.test.ts` uygulama kodunun kataloğu yalnız kancadaki ayrı parça olarak yüklediğini denetler; öbür dosyalar ondan yalnız tür alır.
 - Kullanıcının bitki kaydına isteğe bağlı `catalogId` alanı eklendi (`packages/domain`). Eski kayıtlar ve yedekler geçerli kalır; motor ve altın fikstür değişmedi. Motor bitkileri kullanmaz.
 - Bitkiye göre motor uyarıları (ör. "bu bitki yüksek ışık ister", sıcaklık uyumu) bu kararın dışındadır; ayrı onayla gelir.

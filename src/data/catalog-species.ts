@@ -68,12 +68,21 @@ const rawSpeciesCatalog: SpeciesProfile[] = [
 ];
 
 const sourceSlug=(value:string)=>value.toLowerCase().replace(/[^a-z0-9]+/g,"-").replace(/^-|-$/g,"");
-export const speciesCatalog: SpeciesProfile[] = rawSpeciesCatalog.map(profile=>{
+/**
+ * Kendi kaynağı (bağlantı ve tarih) olmayan kayda bilimsel addan otomatik bağlantı ekler: balığa FishBase ("sp." ve melez hariç), karides
+ * ve salyangoza Seriously Fish. Bu bağlantı değerlerin o sayfadan okunduğunu göstermez; bağlantı eklenen kaydın kimliği `generated`
+ * listesine yazılır ve veri kapsamı raporunda ayrı sayılır (docs/DATA_COVERAGE.md).
+ */
+export function withGeneratedSource(profile: SpeciesProfile, generated: string[]): SpeciesProfile {
   if(profile.sourceUrl&&profile.verifiedAt)return profile;
-  if(profile.category==="fish"&&!profile.scientificName.includes("sp.")&&!profile.scientificName.toLowerCase().includes("hybrid"))return {...profile,sourceUrl:`https://www.fishbase.se/summary/${profile.scientificName.replace(/\s+/g,"-")}.html`,verifiedAt:"2026-08-17"};
-  if(profile.category==="shrimp"||profile.category==="snail")return {...profile,sourceUrl:`https://www.seriouslyfish.com/species/${sourceSlug(profile.scientificName)}/`,verifiedAt:"2026-08-17"};
+  if(profile.category==="fish"&&!profile.scientificName.includes("sp.")&&!profile.scientificName.toLowerCase().includes("hybrid")){generated.push(profile.id);return {...profile,sourceUrl:`https://www.fishbase.se/summary/${profile.scientificName.replace(/\s+/g,"-")}.html`,verifiedAt:"2026-08-17"};}
+  if(profile.category==="shrimp"||profile.category==="snail"){generated.push(profile.id);return {...profile,sourceUrl:`https://www.seriouslyfish.com/species/${sourceSlug(profile.scientificName)}/`,verifiedAt:"2026-08-17"};}
   return profile;
-});
+}
+const generatedSourceIds: string[] = [];
+export const speciesCatalog: SpeciesProfile[] = rawSpeciesCatalog.map(profile=>withGeneratedSource(profile,generatedSourceIds));
+/** Kaynak bağlantısı bilimsel addan otomatik üretilen kayıtlar (veri kapsamı raporu için). */
+export const generatedSourceSpeciesIds: readonly string[] = generatedSourceIds;
 
 // Bütünlük denetimi geliştirmede, testlerde ve CI'da (`pnpm verify`) çalışır; üretim derlemesinde kullanıcının tarayıcısında çalışmaz (docs/DECISIONS/0015-katalog-modulleri-ve-sayfa-hizi.md).
 function assertSpeciesCatalogIntegrity(){
