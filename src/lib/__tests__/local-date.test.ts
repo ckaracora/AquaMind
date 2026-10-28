@@ -56,17 +56,24 @@ describe("localIsoDate", () => {
   });
 });
 
-// Formlar tarih alanının varsayılanını UTC gününden kurmasın diye kaynak dosyalar taranır (testler tarayıcı ortamında çalışmıyor).
-describe("formlardaki tarih alanları", () => {
+// Ekranlar bugünün tarihini UTC gününden kurmasın diye kaynak dosyalar taranır (testler tarayıcı ortamında çalışmıyor).
+describe("ekranlardaki bugünün tarihi", () => {
   const sourceFiles = (dir: string): string[] => readdirSync(dir).flatMap((entry) => {
     const path = join(dir, entry);
     if (statSync(path).isDirectory()) return entry === "__tests__" ? [] : sourceFiles(path);
     return /\.tsx$/.test(entry) ? [path.replaceAll("\\", "/")] : [];
   });
+  const sources = ["src/app", "src/components"].flatMap((dir) => sourceFiles(dir)).map((file) => ({ file, text: readFileSync(file, "utf8") }));
 
-  it("varsayılan tarihi `toISOString` ile değil `localIsoDate` ile kurar", () => {
-    const sources = ["src/app", "src/components"].flatMap((dir) => sourceFiles(dir)).map((file) => ({ file, text: readFileSync(file, "utf8") }));
-    expect(sources.filter(({ text }) => /defaultValue=\{[^}]*toISOString\(\)\.slice\(0,\s*10\)/.test(text)).map(({ file }) => file)).toEqual([]);
+  it("hiçbir sayfa ya da bileşen UTC gününü (`toISOString().slice(0, 10)`) kullanmaz", () => {
+    expect(sources.filter(({ text }) => /toISOString\(\)\.slice\(0,\s*10\)/.test(text)).map(({ file }) => file)).toEqual([]);
+  });
+
+  it("yedek dosyasının adı yerel günü taşır", () => {
+    expect(readFileSync("src/app/settings/page.tsx", "utf8")).toContain("exportFileName(localIsoDate())");
+  });
+
+  it("formlar varsayılan tarihi `localIsoDate` ile kurar", () => {
     expect(sources.filter(({ text }) => text.includes("defaultValue={localIsoDate()}")).map(({ file }) => file).sort()).toEqual([
       "src/app/aquariums/new/page.tsx",
       "src/app/equipment/page.tsx",

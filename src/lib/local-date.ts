@@ -1,4 +1,4 @@
-// Tarih alanlarının varsayılan değeri: cihazın kendi saat dilimindeki takvim günü (`YYYY-MM-DD`, kayıt biçimi aynı).
+// Bugünün tarihi, cihazın kendi saat dilimindeki takvim günü (`YYYY-MM-DD`, kayıt biçimi aynı): tarih alanlarının varsayılanı ve yedek dosyasının adı.
 // `toISOString().slice(0, 10)` UTC gününü verir; Türkiye'de (UTC+3) 00:00–03:00 arasında dünü gösterir.
 // Ekranlar bu günü yine yerel takvim günü olarak okur (`@aquamind/localization` → `formatCalendarDate`).
 export function localIsoDate(date: Date = new Date()): string {
