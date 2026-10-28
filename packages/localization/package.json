@@ -17,6 +17,10 @@
     "./diseases": {
       "types": "./src/diseases.ts",
       "default": "./src/diseases.ts"
+    },
+    "./plant-warnings": {
+      "types": "./src/plant-warnings.ts",
+      "default": "./src/plant-warnings.ts"
     }
   },
   "sideEffects": false

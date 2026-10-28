@@ -12,6 +12,7 @@ import type { Aquarium, AquariumType, Equipment, Livestock, WaterParameters } fr
 
 export { ENGINE_VERSION, RULESET_VERSION } from "./version";
 export * from "./water-quality";
+export * from "./plants";
 import { assessWaterQuality } from "./water-quality";
 
 /** Motorun bir canlı profilinden okuduğu alanlar. Katalogdaki SpeciesProfile bunu yapısal olarak karşılar. */
