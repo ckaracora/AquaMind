@@ -12,17 +12,21 @@ export function plantWarningText(messages: PlantWarningMessages, format: PlantWa
   return entry ? { title: entry.title(warning.params, format), message: entry.message(warning.params, format) } : { title: warning.title, message: warning.message };
 }
 
-/** Bir akvaryumun bitki denetimi: uyarılar, katalogla eşleşmediği için değerlendirilmeyen bitkiler ve değerlendirilen bitki sayısı. */
+/**
+ * Bir akvaryumun bitki denetimi: uyarılar, değerlendirilemeyen bitkiler ve değerlendirilen bitki sayısı. Değerlendirilemeyenler iki türlü:
+ * katalogla eşleşmeyen (`unmatched`) ve katalogda yalnız uyarı kaydı olan, yani değerleri kaynakta olmayan (`noValues`, karar 0026).
+ */
 export interface AquariumPlantCheck {
   warnings: PlantWarning[];
   unmatched: Plant[];
+  noValues: Plant[];
   checked: number;
 }
 
 /**
  * Bir akvaryumun bitki uyarıları: yalnız o akvaryumun bitkileri, ekipmanı ve en son su ölçümü kullanılır. Bitki katalogla
- * `plantForRecord` ile eşleşir (katalog kimliği, yoksa bilimsel ad, o da yoksa ad). Eşleşmeyen bitkide uyarı hesaplanmaz; bitki
- * `unmatched` listesinde döner, böylece ekran "uyarı yok" ile "değerlendirilmedi"yi ayırır.
+ * `plantForRecord` ile eşleşir (katalog kimliği, yoksa bilimsel ad, o da yoksa ad). Eşleşmeyen bitkide ve yalnız uyarı kaydıyla eşleşen
+ * bitkide uyarı hesaplanmaz; bitki `unmatched` ya da `noValues` listesinde döner, böylece ekran "uyarı yok" ile "değerlendirilmedi"yi ayırır.
  */
 export function checkAquariumPlants(catalog: PlantCatalogModule, aquarium: Aquarium, plants: Plant[], equipment: Equipment[], readings: WaterParameters[]): AquariumPlantCheck {
   const inTank = <T extends { aquariumId: string }>(items: T[]) => items.filter((item) => item.aquariumId === aquarium.id);
@@ -30,7 +34,9 @@ export function checkAquariumPlants(catalog: PlantCatalogModule, aquarium: Aquar
   const latest = inTank(readings).sort((a, b) => +new Date(b.measuredAt) - +new Date(a.measuredAt))[0];
   const entries = inTank(plants).map((plant) => ({ plant, profile: catalog.plantForRecord(plant) }));
   const unmatched = entries.filter((entry) => !entry.profile).map((entry) => entry.plant);
-  return { warnings: assessPlants(aquarium, entries, inTank(equipment), latest), unmatched, checked: entries.length - unmatched.length };
+  const noValues = entries.filter((entry) => entry.profile?.warningOnly).map((entry) => entry.plant);
+  const evaluated = entries.filter((entry) => entry.profile && !entry.profile.warningOnly);
+  return { warnings: assessPlants(aquarium, evaluated, inTank(equipment), latest), unmatched, noValues, checked: evaluated.length };
 }
 
 /** Sağlık analizindeki sıra: önce sarı uyarılar, sonra bilgi notları; her grupta motorun sırası korunur. */

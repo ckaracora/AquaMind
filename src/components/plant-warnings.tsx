@@ -59,15 +59,17 @@ export function PlantCatalogFailed({ retry, boxed }: { retry: () => void; boxed?
 }
 
 /**
- * Sağlık analizindeki bölümün içeriği. `result` yoksa katalog yükleniyor ya da yüklenemedi (`failed`). Katalogla eşleşmeyen bitki için
- * uyarı hesaplanmaz; bu bitkiler adlarıyla yazılır. Hiçbir bitki eşleşmediyse yeşil "uyarı yok" gösterilmez (değerlendirilmedi demektir).
+ * Sağlık analizindeki bölümün içeriği. `result` yoksa katalog yükleniyor ya da yüklenemedi (`failed`). Katalogla eşleşmeyen bitki ve
+ * değerleri kaynakta olmayan (yalnız uyarı kaydı) bitki için uyarı hesaplanmaz; bu bitkiler adlarıyla yazılır. Hiçbir bitki
+ * değerlendirilemediyse yeşil "uyarı yok" gösterilmez.
  */
 export function PlantWarningsBody({ result, failed, retry }: { result?: AquariumPlantCheck; failed: boolean; retry: () => void }) {
   const { messages, text } = usePlantWarningTexts();
   if (!result) return failed ? <PlantCatalogFailed retry={retry} /> : <p className="p-5 text-[13px] text-[#71858d] sm:text-xs">{messages.preparing}</p>;
   const warnings = warningsFirst(result.warnings);
-  const names = [...new Set(result.unmatched.map((plant) => plant.name.trim()).filter(Boolean))].join(", ");
+  const namesOf = (plants: Plant[]) => [...new Set(plants.map((plant) => plant.name.trim()).filter(Boolean))].join(", ");
   const checked = result.checked > 0;
+  const skipped = result.unmatched.length + result.noValues.length > 0;
   return (
     <div className="divide-y divide-white/[.05]">
       {warnings.map((warning) => {
@@ -85,13 +87,19 @@ export function PlantWarningsBody({ result, failed, retry }: { result?: Aquarium
       {!warnings.length && checked && (
         <div className="flex items-center gap-4 p-5">
           <span className="grid size-10 shrink-0 place-items-center rounded-xl bg-emerald-400/10 text-emerald-400"><CheckCircle2 size={19} /></span>
-          <p className="min-w-0 text-[13px] text-[#91a3aa] sm:text-xs">{result.unmatched.length ? messages.noneForMatched : messages.none}</p>
+          <p className="min-w-0 text-[13px] text-[#91a3aa] sm:text-xs">{skipped ? messages.noneForMatched : messages.none}</p>
         </div>
       )}
       {result.unmatched.length > 0 && (
         <div className="flex items-center gap-4 p-5">
           <span className="grid size-10 shrink-0 place-items-center rounded-xl bg-white/[.04] text-[#91a3aa]"><Info size={19} /></span>
-          <p className="min-w-0 text-[13px] leading-relaxed text-[#91a3aa] sm:text-xs">{checked ? messages.unmatched(names) : messages.noneChecked(names)}</p>
+          <p className="min-w-0 text-[13px] leading-relaxed text-[#91a3aa] sm:text-xs">{checked || result.noValues.length ? messages.unmatched(namesOf(result.unmatched)) : messages.noneChecked(namesOf(result.unmatched))}</p>
+        </div>
+      )}
+      {result.noValues.length > 0 && (
+        <div className="flex items-center gap-4 p-5">
+          <span className="grid size-10 shrink-0 place-items-center rounded-xl bg-white/[.04] text-[#91a3aa]"><Info size={19} /></span>
+          <p className="min-w-0 text-[13px] leading-relaxed text-[#91a3aa] sm:text-xs">{messages.noValues(namesOf(result.noValues))}</p>
         </div>
       )}
     </div>

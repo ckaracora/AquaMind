@@ -414,12 +414,26 @@ export const tr = {
       sources: "Kaynak",
       invasive: {
         title: "Doğaya bırakmayın.",
-        federal: "ABD'de federal zararlı ot listesinde",
-        fisc: "Florida İstilacı Türler Konseyi'nin listesinde",
+        /** Listelerin adı, kayıttaki `list` değerine göre (kaynaklar "Kaynak" satırında bağlantılı). */
+        lists: {
+          "us-federal-noxious-weed": "ABD'de federal zararlı ot listesinde",
+          "fisc-invasive": "Florida İstilacı Türler Konseyi'nin listesinde",
+          "eu-union-list": "Avrupa Birliği'nin istilacı yabancı türler listesinde",
+          "england-sale-ban": "İngiltere'de satışı yasak bitkiler arasında",
+        },
         and: " ve ",
-        text: (lists: string) => `Bu bitki ${lists} (UF/IFAS). Bu, Türkiye'de yasak olduğu anlamına gelmez.`,
+        /** UF/IFAS'ın başlığından gelen listelerin (ABD federal, FISC) ardından yazılan kaynak. */
+        ufSource: " (UF/IFAS)",
+        text: (lists: string) => `Bu bitki ${lists}. Bu, Türkiye'de yasak olduğu anlamına gelmez.`,
         short: "Doğaya bırakmayın (istilacı tür listesinde)",
       },
+      /** Su bitkisi olmayan bitki (karar 0026; Practical Fishkeeping). */
+      notAquatic: {
+        title: "Su bitkisi değil.",
+        text: "Practical Fishkeeping bu bitkiyi akvaryumda kaçınılacak ev bitkileri arasında sayıyor: su altında kısa süre dayanır.",
+        short: "Su bitkisi değil (ev bitkisi)",
+      },
+      warningOnly: "Bu bitkinin Fishkeeper'da ve Tropica'da sayfası yok; ışık, CO₂, sıcaklık gibi değerleri kaynakta yok. Katalogda yalnız uyarısı için var.",
     },
   },
   equipment: {

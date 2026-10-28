@@ -17,7 +17,7 @@ vi.mock("@/lib/use-display-format", async () => {
   const { createDisplayFormat: format } = await import("@aquamind/localization");
   return { useDisplayFormat: () => format("tr", store.preferences) };
 });
-const { PlantCardCatalog, PlantFacts, PlantForm, PlantInvasiveNotice, PlantSearchResults, PlantSelectedFields, PlantShortFacts, PlantSources, plantFromForm, plantRecord, suggestedPositions } = await import("@/components/plant-catalog");
+const { PlantCardCatalog, PlantFacts, PlantForm, PlantInvasiveNotice, PlantNotAquaticNotice, PlantSearchResults, PlantSelectedFields, PlantShortFacts, PlantSources, PlantWarningOnlyNote, plantFromForm, plantRecord, suggestedPositions } = await import("@/components/plant-catalog");
 const decode = (html: string) => html.replace(/&#x27;/g, "'").replace(/&quot;/g, "\"").replace(/&amp;/g, "&");
 const text = (html: string) => decode(html.replace(/<[^>]+>/g, " ")).replace(/\s+/g, " ").trim();
 const item = (id: string) => plantById(id)!;
@@ -130,6 +130,46 @@ describe("bitkinin bilgileri", () => {
     expect(text(renderToStaticMarkup(createElement(PlantInvasiveNotice, { item: item("rotala-rotundifolia"), short: true })))).toBe("Doğaya bırakmayın (istilacı tür listesinde)");
     expect(renderToStaticMarkup(createElement(PlantInvasiveNotice, { item: item("staurogyne-repens") }))).toBe("");
     expect(renderToStaticMarkup(createElement(PlantInvasiveNotice, { item: item("staurogyne-repens"), short: true }))).toBe("");
+    // 3. paket: resmî listeler adlarıyla, UF/IFAS listesi kaynağıyla; sıra sabit.
+    expect(text(renderToStaticMarkup(createElement(PlantInvasiveNotice, { item: item("pistia-stratiotes") })))).toBe(
+      "Doğaya bırakmayın. Bu bitki Florida İstilacı Türler Konseyi'nin listesinde (UF/IFAS) ve Avrupa Birliği'nin istilacı yabancı türler listesinde. Bu, Türkiye'de yasak olduğu anlamına gelmez.");
+    expect(text(renderToStaticMarkup(createElement(PlantInvasiveNotice, { item: item("azolla-filiculoides") })))).toBe(
+      "Doğaya bırakmayın. Bu bitki İngiltere'de satışı yasak bitkiler arasında. Bu, Türkiye'de yasak olduğu anlamına gelmez.");
+    expect(text(renderToStaticMarkup(createElement(PlantInvasiveNotice, { item: { ...item("pistia-stratiotes"), invasiveListings: [...item("hygrophila-polysperma").invasiveListings!, ...item("pistia-stratiotes").invasiveListings!, ...item("azolla-filiculoides").invasiveListings!] } })))).toBe(
+      "Doğaya bırakmayın. Bu bitki ABD'de federal zararlı ot listesinde ve Florida İstilacı Türler Konseyi'nin listesinde (UF/IFAS), Avrupa Birliği'nin istilacı yabancı türler listesinde ve İngiltere'de satışı yasak bitkiler arasında. Bu, Türkiye'de yasak olduğu anlamına gelmez.");
+    // Sıra kayıttaki sıradan bağımsızdır: etiketler ters sırayla verilse de metin aynı.
+    const all = [...item("hygrophila-polysperma").invasiveListings!, ...item("pistia-stratiotes").invasiveListings!, ...item("azolla-filiculoides").invasiveListings!];
+    const forward = text(renderToStaticMarkup(createElement(PlantInvasiveNotice, { item: { ...item("pistia-stratiotes"), invasiveListings: all } })));
+    expect(text(renderToStaticMarkup(createElement(PlantInvasiveNotice, { item: { ...item("pistia-stratiotes"), invasiveListings: [...all].reverse() } })))).toBe(forward);
+    expect(text(renderToStaticMarkup(createElement(PlantInvasiveNotice, { item: { ...item("pistia-stratiotes"), invasiveListings: [...item("pistia-stratiotes").invasiveListings!].reverse() } })))).toBe(
+      "Doğaya bırakmayın. Bu bitki Florida İstilacı Türler Konseyi'nin listesinde (UF/IFAS) ve Avrupa Birliği'nin istilacı yabancı türler listesinde. Bu, Türkiye'de yasak olduğu anlamına gelmez.");
+  });
+
+  it("yalnız uyarı kaydı: su bitkisi değil uyarısı, değerlerin neden olmadığını söyleyen not, kaynaklar ve kartta kısa uyarılar (karar 0026)", () => {
+    const ophiopogon = item("ophiopogon-japonicus");
+    expect(text(render(createElement(PlantNotAquaticNotice, { item: ophiopogon })))).toBe(
+      "Su bitkisi değil. Practical Fishkeeping bu bitkiyi akvaryumda kaçınılacak ev bitkileri arasında sayıyor: su altında kısa süre dayanır.");
+    expect(text(render(createElement(PlantNotAquaticNotice, { item: ophiopogon, short: true })))).toBe("Su bitkisi değil (ev bitkisi)");
+    expect(render(createElement(PlantNotAquaticNotice, { item: item("pistia-stratiotes") }))).toBe("");
+    expect(text(render(createElement(PlantWarningOnlyNote, { item: ophiopogon })))).toBe(t.plants.catalog.warningOnly);
+    expect(render(createElement(PlantWarningOnlyNote, { item: item("staurogyne-repens") }))).toBe("");
+    expect(text(render(createElement(PlantSources, { item: ophiopogon })))).toBe("Kaynak: Practical Fishkeeping");
+    expect(text(render(createElement(PlantSources, { item: item("pistia-stratiotes") })))).toBe("Kaynak: EUR-Lex · UF/IFAS");
+    expect(text(render(createElement(PlantSources, { item: item("azolla-filiculoides") })))).toBe("Kaynak: legislation.gov.uk");
+    // "Su bitkisi değil" etiketinin kaynağı, ana kaynaktan farklıysa da kaynak satırında bağlantılıdır.
+    const pfk = ophiopogon.notAquatic!.sourceUrl;
+    const mixed = render(createElement(PlantSources, { item: { ...item("staurogyne-repens"), notAquatic: { sourceUrl: pfk } } }));
+    expect(text(mixed)).toBe("Kaynak: Tropica · Practical Fishkeeping");
+    expect(mixed).toContain(`href="${pfk}"`);
+    // Seçilince: not, değerler "Kaynakta yok", uyarı ve kaynak; kartta kısa bilgi ve kısa uyarı.
+    const selected = text(render(createElement(PlantSelectedFields, { selected: { item: ophiopogon, matchedName: "Ophiopogon japonicus" }, change: () => {} })));
+    expect(selected).toContain(t.plants.catalog.warningOnly);
+    expect(selected).toContain("Işık Kaynakta yok");
+    expect(selected).toContain("Su bitkisi değil.");
+    const card = text(render(createElement(PlantCardCatalog, { item: ophiopogon })));
+    expect(card).toContain("Su bitkisi değil (ev bitkisi)");
+    expect(card).not.toContain("Doğaya bırakmayın");
+    expect(text(render(createElement(PlantCardCatalog, { item: item("pistia-stratiotes") })))).toContain("Doğaya bırakmayın (istilacı tür listesinde)");
   });
 
   it("kaynaklar kaydın sayfalarına bağlanır; aynı kaynak bir kez yazılır", () => {

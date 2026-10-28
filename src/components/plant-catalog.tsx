@@ -3,7 +3,7 @@
 import { FormEvent, useId, useState } from "react";
 import { AlertTriangle, ChevronDown, ImagePlus, Leaf, Search, X } from "lucide-react";
 import { ModalDialog } from "@/components/modal-dialog";
-import type { PlantProfile, PlantSearchResult } from "@/data/catalog-plants";
+import type { PlantInvasiveListing, PlantProfile, PlantSearchResult } from "@/data/catalog-plants";
 import { localIsoDate } from "@/lib/local-date";
 import type { usePlantCatalog } from "@/lib/use-plant-catalog";
 import { useDisplayFormat } from "@/lib/use-display-format";
@@ -20,7 +20,10 @@ const positionValue = new Map<string, string>(plantPositions.map(([value, key]) 
 const field = "mt-1.5 w-full rounded-xl border border-white/[.08] bg-[#09171e] px-3 py-3 text-sm outline-none focus:border-aqua/60";
 const visibleResults = 8;
 // Kaynak adları (özel ad; çevrilmez). Kayıttaki adreslerin sunucusuna göre.
-const sourceNames: Record<string, string> = { "www.fishkeeper.co.uk": "Fishkeeper", "tropica.com": "Tropica", "plant-directory.ifas.ufl.edu": "UF/IFAS" };
+const sourceNames: Record<string, string> = {
+  "www.fishkeeper.co.uk": "Fishkeeper", "tropica.com": "Tropica", "plant-directory.ifas.ufl.edu": "UF/IFAS", "eur-lex.europa.eu": "EUR-Lex",
+  "www.legislation.gov.uk": "legislation.gov.uk", "www.practicalfishkeeping.co.uk": "Practical Fishkeeping",
+};
 
 /** Kaynağın önerdiği yerleşimler, kayıttaki konum değeriyle (ilki pencerede seçili gelir). */
 export const suggestedPositions = (item: PlantProfile) => (item.placements ?? []).map((key) => positionValue.get(key)).filter((value): value is string => Boolean(value));
@@ -101,14 +104,36 @@ export function PlantInvasiveNotice({ item, short = false }: { item: PlantProfil
   const listings = item.invasiveListings ?? [];
   if (!listings.length) return null;
   if (short) return <p className="flex items-center gap-1.5 text-[11px] sm:text-[10px] font-bold text-amber-300"><AlertTriangle size={13} className="shrink-0"/>{c.short}</p>;
-  const lists = [listings.some((listing) => listing.list === "us-federal-noxious-weed") && c.federal, listings.some((listing) => listing.list === "fisc-invasive") && c.fisc].filter((text): text is string => Boolean(text));
-  return <div className="flex gap-3 rounded-xl border border-amber-300/20 bg-amber-300/[.06] p-4"><AlertTriangle size={17} className="mt-0.5 shrink-0 text-amber-300"/><div><p className="text-xs font-extrabold text-amber-200">{c.title}</p><p className="mt-1 text-[11px] sm:text-[10px] leading-relaxed text-amber-100/80">{c.text(lists.join(c.and))}</p></div></div>;
+  // Listeler sabit sırayla, her biri bir kez yazılır (kayıttaki sıradan bağımsız). UF/IFAS'ın başlığından gelen iki liste birlikte ve kaynağıyla
+  // ("… (UF/IFAS)"); resmî listelerin adı kaynağını zaten söyler.
+  const has = (kind: PlantInvasiveListing["list"]) => listings.some((listing) => listing.list === kind);
+  const join = (parts: string[]) => (parts.length > 1 ? `${parts.slice(0, -1).join(", ")}${c.and}${parts[parts.length - 1]}` : parts[0]);
+  const uf = (["us-federal-noxious-weed", "fisc-invasive"] as const).filter(has).map((kind) => c.lists[kind]);
+  const official = (["eu-union-list", "england-sale-ban"] as const).filter(has).map((kind) => c.lists[kind]);
+  const joined = join([...(uf.length ? [`${join(uf)}${c.ufSource}`] : []), ...official]);
+  return <div className="flex gap-3 rounded-xl border border-amber-300/20 bg-amber-300/[.06] p-4"><AlertTriangle size={17} className="mt-0.5 shrink-0 text-amber-300"/><div><p className="text-xs font-extrabold text-amber-200">{c.title}</p><p className="mt-1 text-[11px] sm:text-[10px] leading-relaxed text-amber-100/80">{c.text(joined)}</p></div></div>;
 }
 
-/** Kaydın kaynakları (Fishkeeper, Tropica, UF/IFAS); her kaynağın ilk sayfasına bağlanır. */
+/** Su bitkisi olmayan bitkinin uyarısı (Practical Fishkeeping'in "akvaryumda kaçınılacak bitkiler" yazısı). `short` kartta tek satır yazar. */
+export function PlantNotAquaticNotice({ item, short = false }: { item: PlantProfile; short?: boolean }) {
+  const { t } = useI18n();
+  const c = t.plants.catalog.notAquatic;
+  if (!item.notAquatic) return null;
+  if (short) return <p className="flex items-center gap-1.5 text-[11px] sm:text-[10px] font-bold text-amber-300"><AlertTriangle size={13} className="shrink-0"/>{c.short}</p>;
+  return <div className="flex gap-3 rounded-xl border border-amber-300/20 bg-amber-300/[.06] p-4"><AlertTriangle size={17} className="mt-0.5 shrink-0 text-amber-300"/><div><p className="text-xs font-extrabold text-amber-200">{c.title}</p><p className="mt-1 text-[11px] sm:text-[10px] leading-relaxed text-amber-100/80">{c.text}</p></div></div>;
+}
+
+/** Yalnız uyarı kaydının notu: değerlerin neden "Kaynakta yok" olduğunu söyler (karar 0026). */
+export function PlantWarningOnlyNote({ item }: { item: PlantProfile }) {
+  const { t } = useI18n();
+  if (!item.warningOnly) return null;
+  return <p className="rounded-xl bg-white/[.03] p-3 text-[11px] sm:text-[10px] leading-relaxed text-[#91a3aa]">{t.plants.catalog.warningOnly}</p>;
+}
+
+/** Kaydın kaynakları (Fishkeeper, Tropica, UF/IFAS, resmî listeler, Practical Fishkeeping); her kaynağın ilk sayfasına bağlanır. */
 export function PlantSources({ item }: { item: PlantProfile }) {
   const { t } = useI18n();
-  const urls = [item.sourceUrl, ...(item.additionalSourceUrls ?? []), ...(item.invasiveListings ?? []).map((listing) => listing.sourceUrl)];
+  const urls = [item.sourceUrl, ...(item.additionalSourceUrls ?? []), ...(item.invasiveListings ?? []).map((listing) => listing.sourceUrl), ...(item.notAquatic ? [item.notAquatic.sourceUrl] : [])];
   const links = new Map<string, string>();
   for (const url of urls) {
     const name = sourceNames[new URL(url).host] ?? new URL(url).host;
@@ -126,13 +151,13 @@ export function PlantSearchResults({ results, select }: { results: PlantSearchRe
   return <div><p className="mb-2 text-[11px] sm:text-[10px] font-bold text-[#647981]" aria-live="polite">{c.resultCount(fmt.number(results.length))}</p><ul className="grid gap-2">{results.slice(0, visibleResults).map((result) => <li key={result.item.id}><button type="button" onClick={() => select(result)} className="min-h-11 min-w-11 w-full rounded-xl border border-white/[.06] bg-white/[.025] p-3 text-left hover:border-aqua/40 sm:min-h-0 sm:min-w-0"><span className="block text-sm font-extrabold italic">{result.item.scientificName}</span>{result.item.aliases?.length ? <span className="mt-0.5 block text-[11px] sm:text-[10px] text-[#71858d]">{result.item.aliases.slice(0, 3).join(" · ")}</span> : null}<span className="mt-2 block"><PlantShortFacts item={result.item}/></span></button></li>)}</ul>{results.length > visibleResults && <p className="mt-2 text-[11px] sm:text-[10px] text-[#647981]">{c.moreResults(fmt.number(results.length - visibleResults))}</p>}</div>;
 }
 
-/** Bitki listesindeki kartın katalog bilgisi: kısa bilgi, istilacı türde kısa uyarı ve açılan ayrıntı. */
+/** Bitki listesindeki kartın katalog bilgisi: kısa bilgi, istilacı türde ve su bitkisi olmayanda kısa uyarı, açılan ayrıntı. */
 export function PlantCardCatalog({ item }: { item: PlantProfile }) {
   const { t } = useI18n();
   const [open, setOpen] = useState(false);
   const detailsId = useId();
   const c = t.plants.catalog;
-  return <div className="mt-3 grid gap-2"><PlantShortFacts item={item}/><PlantInvasiveNotice item={item} short/><button type="button" onClick={() => setOpen((value) => !value)} aria-expanded={open} aria-controls={detailsId} className="flex min-h-11 min-w-11 items-center gap-1 self-start rounded-xl text-[11px] sm:text-[10px] font-bold text-aqua sm:min-h-0 sm:min-w-0">{open ? c.hideDetails : c.showDetails}<ChevronDown size={13} className={open ? "rotate-180" : ""}/></button>{open && <div id={detailsId} className="grid gap-2"><PlantFacts item={item}/><PlantSources item={item}/></div>}</div>;
+  return <div className="mt-3 grid gap-2"><PlantShortFacts item={item}/><PlantInvasiveNotice item={item} short/><PlantNotAquaticNotice item={item} short/><button type="button" onClick={() => setOpen((value) => !value)} aria-expanded={open} aria-controls={detailsId} className="flex min-h-11 min-w-11 items-center gap-1 self-start rounded-xl text-[11px] sm:text-[10px] font-bold text-aqua sm:min-h-0 sm:min-w-0">{open ? c.hideDetails : c.showDetails}<ChevronDown size={13} className={open ? "rotate-180" : ""}/></button>{open && <div id={detailsId} className="grid gap-2"><PlantWarningOnlyNote item={item}/><PlantFacts item={item}/><PlantSources item={item}/></div>}</div>;
 }
 
 /** Adet, konum, tarih ve not alanları. Katalogdan seçilen bitkide konum kaynağın önerisiyle gelir; kaynak yerleşim yazmıyorsa "Seçilmedi". */
@@ -148,14 +173,16 @@ function PlantEntryFields({ suggested, fromCatalog }: { suggested: string[]; fro
   </>;
 }
 
-/** Katalogdan seçilen bitki: bilgi kartı, istilacı uyarısı, kaynaklar ve kayıt alanları (ad aramaya uyan adla gelir). */
+/** Katalogdan seçilen bitki: bilgi kartı, uyarılar (istilacı tür, su bitkisi değil), kaynaklar ve kayıt alanları (ad aramaya uyan adla gelir). */
 export function PlantSelectedFields({ selected, change }: { selected: PlantSearchResult; change: () => void }) {
   const { t } = useI18n();
   const c = t.plants.catalog;
   return <div className="grid gap-4">
     <div className="flex items-start justify-between gap-3"><div><p className="text-base font-extrabold italic">{selected.item.scientificName}</p>{selected.item.aliases?.length ? <p className="mt-0.5 text-[11px] sm:text-[10px] text-[#71858d]">{selected.item.aliases.slice(0, 3).join(" · ")}</p> : null}</div><button type="button" onClick={change} className="min-h-11 min-w-11 shrink-0 rounded-xl border border-white/[.08] px-3 text-[11px] sm:text-[10px] font-bold text-[#91a3aa] sm:min-h-0 sm:min-w-0 sm:py-2">{c.changePlant}</button></div>
+    <PlantWarningOnlyNote item={selected.item}/>
     <PlantFacts item={selected.item}/>
     <PlantInvasiveNotice item={selected.item}/>
+    <PlantNotAquaticNotice item={selected.item}/>
     <PlantSources item={selected.item}/>
     <div className="grid gap-4 sm:grid-cols-2">
       <label className="text-xs font-bold text-[#91a3aa] sm:col-span-2">{t.plants.form.name}<input required name="name" defaultValue={selected.matchedName} className={field}/></label>
