@@ -6,6 +6,7 @@ import type { Preferences } from "@aquamind/domain";
 import { AppShell } from "@/components/app-shell";
 import { PageHeader } from "@/components/page-header";
 import { buildLocalExport, countOrphans, findOrphans, loadDeletedAquariums } from "@/lib/aquarium-storage";
+import { localIsoDate } from "@/lib/local-date";
 import { useAquariums } from "@/providers/aquarium-provider";
 import { useI18n } from "@/providers/i18n-provider";
 
@@ -29,7 +30,7 @@ export default function SettingsPage(){
  // Kaydetme başarısız olabilir (depolama dolu veya yarım kalmış bir silme işlemi
  // varken yazma engellidir). Bu durumda "Kaydedildi" GÖSTERİLMEZ.
  function save(){const ok=updatePreferences(prefs);setSaved(ok);setSaveFailed(!ok);if(ok)setTimeout(()=>setSaved(false),1800)}
- function exportData(){const data=buildLocalExport(persistedSnapshot,prefs);const blob=new Blob([JSON.stringify(data,null,2)],{type:"application/json"});const url=URL.createObjectURL(blob);const a=document.createElement("a");a.href=url;a.download=t.settings.data.exportFileName(new Date().toISOString().slice(0,10));a.click();URL.revokeObjectURL(url)}
+ function exportData(){const data=buildLocalExport(persistedSnapshot,prefs);const blob=new Blob([JSON.stringify(data,null,2)],{type:"application/json"});const url=URL.createObjectURL(blob);const a=document.createElement("a");a.href=url;a.download=t.settings.data.exportFileName(localIsoDate());a.click();URL.revokeObjectURL(url)}
  function reset(){if(!confirm(t.settings.data.confirmReset))return;Object.keys(localStorage).filter(k=>k.startsWith("aquamind:")).forEach(k=>localStorage.removeItem(k));location.reload()}
  return <AppShell><PageHeader title={t.navigation.items.settings}/><div className="mx-auto max-w-[980px] px-5 py-8 sm:px-8 lg:px-10 lg:py-10"><div className="mb-8"><p className="eyebrow mb-2 text-aqua">{t.settings.eyebrow}</p><h1 className="text-2xl font-extrabold sm:text-3xl">{t.navigation.items.settings}</h1><p className="mt-2 text-sm text-[#71858d]">{t.settings.description}</p></div>
   <div className="space-y-5"><Section icon={UserRound} title={t.settings.profile.title} description={t.settings.profile.description}><div className="grid gap-4 sm:grid-cols-2"><label className="text-xs font-bold text-[#91a3aa]">{t.settings.profile.name}<input placeholder={t.settings.profile.namePlaceholder} className={input}/></label><label className="text-xs font-bold text-[#91a3aa]">{t.settings.profile.email}<input type="email" placeholder={t.settings.profile.emailPlaceholder} className={input}/></label></div><p className="mt-3 text-[11px] text-[#586e77] sm:text-[9px]">{t.settings.profile.note}</p></Section>

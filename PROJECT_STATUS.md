@@ -1141,7 +1141,7 @@ Son güncelleme: 2026-10-28
 - Durum (2026-10-03): bütün bulgular kapandı. (4) su türü kontrolü PR #11 ile, (1), (2) ve (3) PR #12 ile, filtre ve biyolojik yük yanlış alarmları PR #13 ile (motor 1.3.0), davranış uyarıları PR #14 ile (motor 1.4.0; denetim senaryoları 11/0/0/0), alan uyarısının şiddeti PR #16 ile (motor 1.6.0) canlıda; bekleyen `it.todo` yok
 - Düzeltme kuralı: katalog değerleri hafızadan değil, kaydedilen kaynaklarla düzeltilir; eşik ve davranış kararları güvenilir kaynaklarla (üretici, Seriously Fish, Practical Fishkeeping, Fishkeeper, OATA) netleştirilir; Canberk bu kararları 2026-09-28'de kaynaklara bıraktı
 
-## Tarih alanlarının varsayılanı yerel gün (`claude/youthful-lovelace-85ca73`)
+## Tarih alanlarının varsayılanı yerel gün (`codex/local-date-default`, PR #50, tamamlandı)
 
 - Dal: `codex/local-date-default` (yerel çalışma dalı `claude/youthful-lovelace-85ca73`), `b9eec55` (PR #49 birleştirmesi) üstünde. Ürün sahibinin 2026-10-28 isteği: Türkiye saatiyle 00:20'de eklenen bitki "2026-10-27" tarihiyle kaydedildi.
 - Sorun: formlardaki tarih alanlarının varsayılanı `new Date().toISOString().slice(0, 10)`, yani UTC günüydü. Türkiye'de (UTC+3) 00:00–03:00 arasında alan bir gün önceyi gösteriyordu.
@@ -1151,7 +1151,7 @@ Son güncelleme: 2026-10-28
   - Test: `src/lib/__tests__/local-date.test.ts` (6 test). Saat dilimi (`TZ`) ve saat sahte: İstanbul'da 00:20'de yeni gün; 23:59:59 ve 00:00 sınırı; New York'ta akşam saati; yıl ve ay dönümü; ekranın aynı günü yazması. Kaynak taraması: hiçbir form varsayılan tarihi `toISOString().slice(0, 10)` ile kurmuyor.
   - Motor, kayıt biçimi ve altın fikstür değişmedi.
 - Bilerek değiştirilmeyenler:
-  - Ayarlar sayfasındaki `toISOString().slice(0,10)` bir tarih alanı değil, yedek dosyasının adı (`aquamind-yedek-YYYY-MM-DD.json`). Aynı saatlerde dosya adı da UTC gününü taşır.
+  - Ayarlar sayfasındaki `toISOString().slice(0,10)` bir tarih alanı değil, yedek dosyasının adı (`aquamind-yedek-YYYY-MM-DD.json`). Aynı saatlerde dosya adı da UTC gününü taşıyordu; ürün sahibinin 2026-10-28 kararıyla sonraki pakette düzeltildi (aşağıda).
   - Su ölçümü ve bakım formlarındaki tarih-saat alanları zaten yerel saati kullanıyor (saat dilimi farkı çıkarılıyor).
   - Akvaryum düzenleme sayfası kayıttaki tarihi gösteriyor.
 - Eski kayıtlar: değişmez. 00:00–03:00 arasında varsayılan tarihle eklenmiş kayıtlar bir gün önceki tarihle kalır; hangisinin böyle eklendiği kayıttan anlaşılamaz.
@@ -1161,6 +1161,19 @@ Son güncelleme: 2026-10-28
 - Tarayıcıda denendi (geliştirme sunucusu, 2026-10-28 00:40–00:42 yerel saat, saat dilimi Europe/Warsaw; UTC günü hâlâ 27 Ekim): dört formun tarih alanı 2026-10-28 gösterdi; konsolda hata yok. Form gönderilmedi.
 - Kontroller: yeni testler; iki bozma denemesi (işlev UTC gününe çevrilince beş zaman testi, bir form eski ifadeye döndürülünce tarama testi kırıldı); `corepack pnpm verify` 2026-10-28'de yerelde başarılı, commit edilmeden önce: tip denetimi, katalog akışı (1893 bakım ürünü), 113 sağlık senaryosu, hesaplayıcılar, katalog denetimi, 31 test dosyasında 396 Vitest testi, üretim derlemesi (ana sayfa 161 kB, sağlık analizi 167 kB, canlılar 256 kB, ekipman 299 kB, bitkiler 150 kB ilk yükleme; değişmedi).
 - Codex 1. tur (2026-10-28): temiz. P1–P3 bulgu yok; yedi dosyanın SHA-256 değeri anlık görüntüyle eşleşti. Codex `tsc`'yi geçirdi; Vitest kendi kum havuzunda `spawn EPERM` ile başlamadı, testleri okuyarak ve bellekte yedi tarih/saat denetimiyle (Windows, Node 24) doğruladı. Statik ön işlenen yeni akvaryum sayfasında React 19.2.8'in hidrasyonda `defaultValue`'yu tarayıcının gününe çektiğini kaynaktan doğruladı. Görüş (bulgu değil): kaynak taraması dar; değişkene taşınmış ya da `split("T")[0]` ile yazılmış yeni bir varsayılanı yakalamaz.
+- Birleştirme: `c99a141` olarak kaydedildi. PR #50 (`https://github.com/ckaracora/AquaMind/pull/50`) 2026-10-27 23:54 UTC'de (Türkiye saatiyle 28 Ekim 02:54) ürün sahibinin 2026-10-19 yetkisiyle Claude tarafından `main` dalına birleştirildi (`4eee229`). PR'da `Doğrulama` (çalıştırma `40605110918`) ve Vercel önizlemesi, `main` üzerinde `Doğrulama` (çalıştırma `40605289533`) ve Vercel üretim dağıtımı (`7373383661`) başarılı. Canlı sitede 00:55–00:56'da (Europe/Warsaw; UTC günü hâlâ 27 Ekim) yeni akvaryum ve bitki formu 2026-10-28 gösterdi; form gönderilmedi.
+
+## Yedek dosyasının adı yerel gün (`codex/backup-file-local-date`)
+
+- Dal: `codex/backup-file-local-date` (yerel çalışma dalı `claude/youthful-lovelace-85ca73`), `4eee229` (PR #50 birleştirmesi) üstünde. Ürün sahibi 2026-10-28'de "yedek dosyasının adındaki tarih de düzeltilsin" dedi.
+- Ne değişti:
+  - Ayarlardaki "Verileri dışa aktar" düğmesinin indirdiği dosyanın adı (`aquamind-yedek-YYYY-MM-DD.json`) `localIsoDate()` ile kuruluyor. Önceden UTC günüydü; Türkiye'de 00:00–03:00 arasında alınan yedeğin adında dünün tarihi yazıyordu.
+  - Yedeğin içeriği değişmedi (`exportedAt` yine tam UTC zaman damgası).
+  - `src/lib/__tests__/local-date.test.ts` (8 test): tarama sayfalarda ve bileşenlerde `toISOString().slice(0, 10)` ifadesine artık hiç izin vermiyor; yedek dosyasının adı ayrıca denetleniyor.
+  - Motor, kayıt biçimi ve altın fikstür değişmedi.
+- Tarayıcıda denendi (geliştirme sunucusu, 2026-10-28 01:20 yerel saat): düğme `aquamind-yedek-2026-10-28.json` adını üretti (indirme durduruldu, dosya inmedi); konsolda hata yok. Bu saatte UTC günü de 28 olduğu için fark tarayıcıda görülemedi; gece yarısı davranışını testler sınıyor.
+- Kontroller: bozma denemesi (ayarlar eski ifadeye döndürülünce iki test kırıldı); `corepack pnpm verify` 2026-10-28'de yerelde başarılı, commit edilmeden önce: tip denetimi, katalog akışı (1893 bakım ürünü), 113 sağlık senaryosu, hesaplayıcılar, katalog denetimi, 31 test dosyasında 398 Vitest testi, üretim derlemesi (ayarlar 149 kB ilk yükleme, değişmedi; sayfanın kendi payı 4,14 → 4,24 kB).
+- Codex 1. tur (2026-10-28): temiz. P1–P3 bulgu yok; dört dosyanın SHA-256 değeri anlık görüntüyle eşleşti. Codex `tsc`'yi geçirdi, dışa aktarma adını bellekte sekiz tarih/saat senaryosunda denedi, PR #50'nin kayıtlarını `gh` ile doğruladı; Vitest kendi kum havuzunda `spawn EPERM` ile başlamadı. Görüş (bulgu değil): yedek dosyası adı denetimi metin tabanlı; düğmenin ürettiği `download` değerini sınayan bir davranış testi güvenceyi artırır.
 - Sonraki adım: commit, PR, denetimler yeşilse birleştirme ve canlı doğrulama (planlandı).
 
 ## Sıradaki tek iş
