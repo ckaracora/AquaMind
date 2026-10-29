@@ -48,5 +48,9 @@
 // (uyarı); bitkinin kaynaktaki boyu akvaryumun yüksekliğinden büyük (bilgi). Yeni sayısal eşik yok; `analyzeAquarium`ın puanı, uyarıları
 // ve çıktısı değişmez. Bitki kuralları puan cezası ve gömülü eşik içermez (yalnız kayıttaki değerler), bu yüzden kural seti sürümü
 // aynı kalır (bkz. docs/DECISIONS/0025-bitki-uyarilari.md).
-export const ENGINE_VERSION = "1.11.0";
+//
+// 1.12.0: bitki uyarılarına katalogdaki kaynaklı etiketler girer: "su bitkisi değil" ve istilacı tür listesi (sarı uyarı). Değerleri kaynakta
+// olmayan yalnız uyarı kayıtlarında da çıkar. Sağlık puanı, `analyzeAquarium` ve kural seti değişmez
+// (bkz. docs/DECISIONS/0028-bitki-etiketleri-saglik-analizinde.md).
+export const ENGINE_VERSION = "1.12.0";
 export const RULESET_VERSION = "1.9.0";
