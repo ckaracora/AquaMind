@@ -21,7 +21,7 @@ Katalogların her bilgisinin yüzde kaçının dolu olduğu ve kaynağının tü
 ## Güncel durum
 
 <!-- kapsam:başla -->
-Ölçüm tarihi: 2026-10-28
+Ölçüm tarihi: 2026-10-29
 
 ### Canlılar (423 kayıt)
 
@@ -62,10 +62,10 @@ Katalogların her bilgisinin yüzde kaçının dolu olduğu ve kaynağının tü
 | CO₂ | 119/141 | %84,4 |
 | Büyüme hızı | 123/141 | %87,2 |
 | Boy | 138/141 | %97,9 |
-| Sıcaklık | 62/141 | %44 |
-| pH | 61/141 | %43,3 |
+| Sıcaklık | 75/141 | %53,2 |
+| pH | 72/141 | %51,1 |
 | Yerleşim | 72/141 | %51,1 |
-| Bütün değerler dolu | 30/141 | %21,3 |
+| Bütün değerler dolu | 36/141 | %25,5 |
 | İstilacı tür etiketi | 7/141 | %5 |
 | Su bitkisi değil etiketi | 1/141 | %0,7 |
 | Yalnız uyarı kaydı (değer kaynağı yok) | 3/141 | %2,1 |
@@ -74,5 +74,6 @@ Katalogların her bilgisinin yüzde kaçının dolu olduğu ve kaynağının tü
 
 ## Geçmiş
 
+- 2026-10-29 (bitki kataloğu 4): Practical Fishkeeping'in tür kutuları 22 bitki kaydına girdi; 13 kayıt sıcaklığı, 11 kayıt pH'ı ilk kez aldı, 4 kayıtta aralık daraldı. Sıcaklık %44 → %53,2, pH %43,3 → %51,1, bütün değerler dolu %21,3 → %25,5.
 - 2026-10-28 (bitki kataloğu 3): bitkiler 141 kayıt; üç yalnız uyarı kaydı eklendi (*Azolla filiculoides*, *Ophiopogon japonicus*, *Pistia stratiotes*), değerleri olmadığı için değer satırlarının oranı biraz düştü (sıcaklık %44, pH %43,3, bütün değerler dolu %21,3); istilacı tür etiketi 7, su bitkisi değil etiketi 1.
 - 2026-10-28 (ilk ölçüm): canlılar 423 kaydın hepsinde kendi kaynak sayfası; ekipman 3541 kayıt, hesap değeri %90,8; bakım ürünleri 1893 kayıt; bitkiler 138 kayıt, bütün değerler dolu %21,7 (sıcaklık %44,9, pH %44,2).

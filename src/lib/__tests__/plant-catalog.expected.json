@@ -870,12 +870,12 @@
   ],
   "heightCm": 5,
   "temperature": [
-   10,
+   15,
    28
   ],
   "ph": [
-   5,
-   8
+   6,
+   7
   ],
   "placements": [
    "floating",
@@ -884,12 +884,13 @@
   ],
   "sourceUrl": "https://www.fishkeeper.co.uk/fish/plant/aquarium-plants/riccia-fluitans",
   "additionalSourceUrls": [
-   "https://tropica.com/en/plants/plantdetails/Ricciafluitans(001TC)/4386"
+   "https://tropica.com/en/plants/plantdetails/Ricciafluitans(001TC)/4386",
+   "https://www.practicalfishkeeping.co.uk/features/five-of-the-best-aquarium-mosses/"
   ],
   "shopUrls": [
    "https://aquarubi.com/riccia-fluitans-t-c-small-cup"
   ],
-  "verifiedAt": "2026-10-25"
+  "verifiedAt": "2026-10-29"
  },
  {
   "id": "salvinia-natans",
@@ -1046,19 +1047,20 @@
   ],
   "ph": [
    5.5,
-   9
+   8
   ],
   "placements": [
    "foreground"
   ],
   "sourceUrl": "https://www.fishkeeper.co.uk/fish/plant/aquarium-plants/cryptocoryne-wendtii-green-",
   "additionalSourceUrls": [
-   "https://tropica.com/en/plants/plantdetails/Cryptocorynewendtii'Green'(109)/4562"
+   "https://tropica.com/en/plants/plantdetails/Cryptocorynewendtii'Green'(109)/4562",
+   "https://www.practicalfishkeeping.co.uk/features/how-to-set-up-a-microhabitat-nano-aquarium/"
   ],
   "shopUrls": [
    "https://aquarubi.com/cryptocoryne-wendtii-green-saksi"
   ],
-  "verifiedAt": "2026-10-25"
+  "verifiedAt": "2026-10-29"
  },
  {
   "id": "hygrophila-polysperma",
@@ -1178,7 +1180,8 @@
   ],
   "sourceUrl": "https://www.fishkeeper.co.uk/fish/plant/aquarium-plants/microsorum-pteropus",
   "additionalSourceUrls": [
-   "https://tropica.com/en/plants/plantdetails/Microsorumpteropus(008)/4408"
+   "https://tropica.com/en/plants/plantdetails/Microsorumpteropus(008)/4408",
+   "https://www.practicalfishkeeping.co.uk/features/how-to-set-up-a-simple-a-but-stunning-a-planted-tank/"
   ],
   "shopUrls": [
    "https://aquarubi.com/microsorium-pteropus-on-nano-wood",
@@ -1195,7 +1198,7 @@
    "https://aquarubi.com/stoffels-microsorum-pteropus",
    "https://aquarubi.com/tropica-microsorium-pteropus-on-drift-wood-m"
   ],
-  "verifiedAt": "2026-10-25"
+  "verifiedAt": "2026-10-29"
  },
  {
   "id": "taxiphyllum-barbieri",
@@ -1220,8 +1223,8 @@
    28
   ],
   "ph": [
-   5,
-   9
+   6,
+   8
   ],
   "placements": [
    "onRoot",
@@ -1229,14 +1232,15 @@
   ],
   "sourceUrl": "https://www.fishkeeper.co.uk/fish/plant/aquarium-plants/taxiphyllum-barbieri",
   "additionalSourceUrls": [
-   "https://tropica.com/en/plants/plantdetails/Taxiphyllumbarbieri'BogorMoss'(003POR)/4391"
+   "https://tropica.com/en/plants/plantdetails/Taxiphyllumbarbieri'BogorMoss'(003POR)/4391",
+   "https://www.practicalfishkeeping.co.uk/features/five-of-the-best-aquarium-mosses/"
   ],
   "shopUrls": [
    "https://aquarubi.com/vesicularia-dubyana-java-moss",
    "https://aquarubi.com/tropica-taxiphyllum-barbieri-bogor-moss",
    "https://www.akvaryumexpress.com/java-moss-15gr-canli-bitki"
   ],
-  "verifiedAt": "2026-10-25"
+  "verifiedAt": "2026-10-29"
  },
  {
   "id": "microsorum-pteropus-windelov",
@@ -1269,7 +1273,8 @@
   ],
   "sourceUrl": "https://www.fishkeeper.co.uk/fish/plant/aquarium-plants/microsorum-pteropus-windelv-",
   "additionalSourceUrls": [
-   "https://tropica.com/en/plants/plantdetails/Microsorumpteropus'Windel%C3%B8v'(008B)/4418"
+   "https://tropica.com/en/plants/plantdetails/Microsorumpteropus'Windel%C3%B8v'(008B)/4418",
+   "https://www.practicalfishkeeping.co.uk/features/how-to-set-up-a-simple-a-but-stunning-a-planted-tank/"
   ],
   "shopUrls": [
    "https://aquarubi.com/microsorium-pteropus-windelow-bag",
@@ -1280,7 +1285,7 @@
    "https://aquarubi.com/tropica-microsorium-pteropus-windelow-xl-on-wood",
    "https://aquarubi.com/tropica-microsorium-pteropus-windelow-on-wood"
   ],
-  "verifiedAt": "2026-10-25"
+  "verifiedAt": "2026-10-29"
  },
  {
   "id": "aponogeton-madagascariensis",
@@ -1344,13 +1349,14 @@
   ],
   "sourceUrl": "https://www.fishkeeper.co.uk/fish/plant/aquarium-plants/lilaeopsis-brasiliensis-",
   "additionalSourceUrls": [
-   "https://tropica.com/en/plants/plantdetails/Lilaeopsisbrasiliensis(040)/4459"
+   "https://tropica.com/en/plants/plantdetails/Lilaeopsisbrasiliensis(040)/4459",
+   "https://www.practicalfishkeeping.co.uk/fishkeeping-answers/are-there-any-easier-carpeting-plants/"
   ],
   "shopUrls": [
    "https://aquarubi.com/lilaeopsis-brasiliensis",
    "https://aquarubi.com/tropica-lilaeopsis-brasiliensis"
   ],
-  "verifiedAt": "2026-10-25"
+  "verifiedAt": "2026-10-29"
  },
  {
   "id": "crinum-calamistratum",
@@ -2288,17 +2294,28 @@
    "slow"
   ],
   "heightCm": 10,
+  "temperature": [
+   20,
+   29
+  ],
+  "ph": [
+   5.5,
+   8
+  ],
   "placements": [
    "foreground"
   ],
   "sourceUrl": "https://tropica.com/en/plants/plantdetails/Cryptocoryneparva(106)/4558",
+  "additionalSourceUrls": [
+   "https://www.practicalfishkeeping.co.uk/features/how-to-grow-cryptocoryne-parva/"
+  ],
   "shopUrls": [
    "https://aquarubi.com/cryptocoryne-parva-saksi",
    "https://aquarubi.com/cryptocoryne-parva-in-vitro",
    "https://aquarubi.com/tropica-cryptocoryne-parva",
    "https://aquarubi.com/cryptocoryne-parva-mini-vitro"
   ],
-  "verifiedAt": "2026-10-25"
+  "verifiedAt": "2026-10-29"
  },
  {
   "id": "cryptocoryne-undulata-broad-leaf",
@@ -2491,10 +2508,17 @@
   ],
   "co2": "low",
   "heightCm": 10,
+  "temperature": [
+   18,
+   27
+  ],
   "placements": [
    "foreground"
   ],
   "sourceUrl": "https://tropica.com/en/plants/plantdetails/Eleocharisparvula(132C)/4572",
+  "additionalSourceUrls": [
+   "https://www.practicalfishkeeping.co.uk/fishkeeping-answers/are-there-any-easier-carpeting-plants/"
+  ],
   "shopUrls": [
    "https://aquarubi.com/eleocharis-parvula-mini",
    "https://aquarubi.com/eleocharis-parvula-mini-t-c-cup",
@@ -2502,7 +2526,7 @@
    "https://aquarubi.com/stoffels-eleocharis-parvula-in-vitro",
    "https://aquarubi.com/tropica-eleocharis-parvula"
   ],
-  "verifiedAt": "2026-10-25"
+  "verifiedAt": "2026-10-29"
  },
  {
   "id": "eleocharis-pusilla-mini",
@@ -2572,15 +2596,26 @@
   ],
   "co2": "medium",
   "heightCm": 5,
+  "temperature": [
+   22,
+   28
+  ],
+  "ph": [
+   5,
+   7.5
+  ],
   "placements": [
    "onRoot",
    "onRock"
   ],
   "sourceUrl": "https://tropica.com/en/plants/plantdetails/Fissidensfontanus(002F)/4390",
+  "additionalSourceUrls": [
+   "https://www.practicalfishkeeping.co.uk/features/five-of-the-best-aquarium-mosses/"
+  ],
   "shopUrls": [
    "https://aquarubi.com/fissidens-fontanus-moss"
   ],
-  "verifiedAt": "2026-10-25"
+  "verifiedAt": "2026-10-29"
  },
  {
   "id": "gratiola-viscidula",
@@ -2646,7 +2681,7 @@
   "heightCm": 15,
   "temperature": [
    20,
-   30
+   28
   ],
   "ph": [
    5.5,
@@ -2657,14 +2692,15 @@
   ],
   "sourceUrl": "https://tropica.com/en/plants/plantdetails/Helanthiumtenellum'Green'(067ATC)/4757",
   "additionalSourceUrls": [
-   "https://www.fishkeeper.co.uk/fish/plant/aquarium-plants/echinodorus-tenellus-"
+   "https://www.fishkeeper.co.uk/fish/plant/aquarium-plants/echinodorus-tenellus-",
+   "https://www.practicalfishkeeping.co.uk/fishkeeping-answers/are-there-any-easier-carpeting-plants/"
   ],
   "shopUrls": [
    "https://aquarubi.com/stoffels-helanthium-tenellum-green-in-vitro",
    "https://aquarubi.com/tropica-helanthium-tenellum-green",
    "https://aquarubi.com/helanthium-tenellum-green"
   ],
-  "verifiedAt": "2026-10-25"
+  "verifiedAt": "2026-10-29"
  },
  {
   "id": "hydrocotyle-tripartita-japan",
@@ -3074,11 +3110,22 @@
    "medium"
   ],
   "heightCm": 40,
+  "temperature": [
+   22,
+   28
+  ],
+  "ph": [
+   5.5,
+   7
+  ],
   "sourceUrl": "https://tropica.com/en/plants/plantdetails/Ludwigiaglandulosa(035A)/4452",
+  "additionalSourceUrls": [
+   "https://www.practicalfishkeeping.co.uk/features/the-lovely-ludwigia-a-staple-stem-plant-for-every-planted-aquarium/"
+  ],
   "shopUrls": [
    "https://aquarubi.com/ludwigia-glandulosa-peruensis"
   ],
-  "verifiedAt": "2026-10-25"
+  "verifiedAt": "2026-10-29"
  },
  {
   "id": "ludwigia-palustris-super-red",
@@ -3093,14 +3140,25 @@
    "medium"
   ],
   "heightCm": 30,
+  "temperature": [
+   18,
+   28
+  ],
+  "ph": [
+   5.5,
+   7.5
+  ],
   "sourceUrl": "https://tropica.com/en/plants/plantdetails/Ludwigiapalustris'SuperRed'(035B)/4453",
+  "additionalSourceUrls": [
+   "https://www.practicalfishkeeping.co.uk/features/the-lovely-ludwigia-a-staple-stem-plant-for-every-planted-aquarium/"
+  ],
   "shopUrls": [
    "https://aquarubi.com/ludwigia-palustris-super-red",
    "https://aquarubi.com/ludwigia-palustris-super-red-in-vitro",
    "https://aquarubi.com/stoffels-ludwigia-palustris-super-red",
    "https://aquarubi.com/tropica-ludwigia-palustris-super-red"
   ],
-  "verifiedAt": "2026-10-25"
+  "verifiedAt": "2026-10-29"
  },
  {
   "id": "ludwigia-repens-rubin",
@@ -3115,11 +3173,22 @@
    "medium"
   ],
   "heightCm": 50,
+  "temperature": [
+   20,
+   28
+  ],
+  "ph": [
+   6,
+   7.5
+  ],
   "sourceUrl": "https://tropica.com/en/plants/plantdetails/Ludwigiarepens'Rubin'(033D)/4450",
+  "additionalSourceUrls": [
+   "https://www.practicalfishkeeping.co.uk/features/the-lovely-ludwigia-a-staple-stem-plant-for-every-planted-aquarium/"
+  ],
   "shopUrls": [
    "https://aquarubi.com/tropica-ludwigia-repens-rubin"
   ],
-  "verifiedAt": "2026-10-25"
+  "verifiedAt": "2026-10-29"
  },
  {
   "id": "marsilea-hirsuta",
@@ -3134,12 +3203,19 @@
    "medium"
   ],
   "heightCm": 20,
+  "temperature": [
+   18,
+   28
+  ],
   "sourceUrl": "https://tropica.com/en/plants/plantdetails/Marsileahirsuta(010TC)/4428",
+  "additionalSourceUrls": [
+   "https://www.practicalfishkeeping.co.uk/fishkeeping-answers/are-there-any-easier-carpeting-plants/"
+  ],
   "shopUrls": [
    "https://aquarubi.com/stoffels-marsilea-hirsuta-in-vitro",
    "https://aquarubi.com/tropica-marsilea-hirsuta"
   ],
-  "verifiedAt": "2026-10-25"
+  "verifiedAt": "2026-10-29"
  },
  {
   "id": "marsilea-minuta",
@@ -3178,12 +3254,21 @@
    "medium"
   ],
   "heightCm": 5,
+  "temperature": [
+   18,
+   28
+  ],
+  "ph": [
+   5,
+   7.5
+  ],
   "placements": [
    "foreground"
   ],
   "sourceUrl": "https://tropica.com/en/plants/plantdetails/Micranthemumcallitrichoides'Cuba'(048BTC)/4478",
   "additionalSourceUrls": [
-   "https://tropica.com/en/plants/plantdetails/Micranthemumcallitrichoides%C2%B4Cuba%C2%B4(048B)/4477"
+   "https://tropica.com/en/plants/plantdetails/Micranthemumcallitrichoides%C2%B4Cuba%C2%B4(048B)/4477",
+   "https://www.practicalfishkeeping.co.uk/features/how-to-grow-hemianthus-callitrichoides-cuba/"
   ],
   "shopUrls": [
    "https://aquarubi.com/tropica-micranthemum-callitrichoides-cuba-saksi",
@@ -3192,7 +3277,7 @@
    "https://aquarubi.com/hemianthus-callitrichoides-cuba-vitro-apc",
    "https://aquarubi.com/stoffels-micranthemum-callitrichoides-in-vitro"
   ],
-  "verifiedAt": "2026-10-25"
+  "verifiedAt": "2026-10-29"
  },
  {
   "id": "micranthemum-glomeratum",
@@ -3279,7 +3364,8 @@
   ],
   "sourceUrl": "https://tropica.com/en/plants/plantdetails/Microsorumpteropus'Narrow'(008A)/4414",
   "additionalSourceUrls": [
-   "https://www.fishkeeper.co.uk/fish/plant/aquarium-plants/microsorum-pteropus"
+   "https://www.fishkeeper.co.uk/fish/plant/aquarium-plants/microsorum-pteropus",
+   "https://www.practicalfishkeeping.co.uk/features/how-to-set-up-a-simple-a-but-stunning-a-planted-tank/"
   ],
   "shopUrls": [
    "https://aquarubi.com/tropica-microsorium-pteropus-narrow-bankwood",
@@ -3287,7 +3373,7 @@
    "https://aquarubi.com/tropica-microsorium-pteropus-narrow-on-wood",
    "https://aquarubi.com/stoffels-microsorum-narrow-leaf"
   ],
-  "verifiedAt": "2026-10-25"
+  "verifiedAt": "2026-10-29"
  },
  {
   "id": "microsorum-pteropus-trident",
@@ -3316,14 +3402,15 @@
   ],
   "sourceUrl": "https://tropica.com/en/plants/plantdetails/Microsorumpteropus'Trident'(008G)/4424",
   "additionalSourceUrls": [
-   "https://www.fishkeeper.co.uk/fish/plant/aquarium-plants/microsorum-pteropus"
+   "https://www.fishkeeper.co.uk/fish/plant/aquarium-plants/microsorum-pteropus",
+   "https://www.practicalfishkeeping.co.uk/features/how-to-set-up-a-simple-a-but-stunning-a-planted-tank/"
   ],
   "shopUrls": [
    "https://aquarubi.com/microsorium-pteropus-trident-saksi",
    "https://aquarubi.com/stoffels-microsorum-pteropus-trident",
    "https://aquarubi.com/tropica-microsorium-pteropus-trident-on-wood"
   ],
-  "verifiedAt": "2026-10-25"
+  "verifiedAt": "2026-10-29"
  },
  {
   "id": "monosolenium-tenerum",
@@ -3341,14 +3428,25 @@
    "medium"
   ],
   "heightCm": 5,
+  "temperature": [
+   5,
+   30
+  ],
+  "ph": [
+   5.5,
+   8
+  ],
   "placements": [
    "onRock"
   ],
   "sourceUrl": "https://tropica.com/en/plants/plantdetails/Monosoleniumtenerum(002CTC)/18747",
+  "additionalSourceUrls": [
+   "https://www.practicalfishkeeping.co.uk/features/five-of-the-best-aquarium-mosses/"
+  ],
   "shopUrls": [
    "https://aquarubi.com/round-pellia-moss-monosolenium-tenerum"
   ],
-  "verifiedAt": "2026-10-25"
+  "verifiedAt": "2026-10-29"
  },
  {
   "id": "myriophyllum-mattogrossense",
@@ -3465,10 +3563,21 @@
    "medium"
   ],
   "heightCm": 10,
+  "temperature": [
+   20,
+   30
+  ],
+  "ph": [
+   6,
+   7.5
+  ],
   "placements": [
    "foreground"
   ],
   "sourceUrl": "https://tropica.com/en/plants/plantdetails/Pogostemonhelferi(053H)/4499",
+  "additionalSourceUrls": [
+   "https://www.practicalfishkeeping.co.uk/features/how-to-set-up-a-microhabitat-nano-aquarium/"
+  ],
   "shopUrls": [
    "https://aquarubi.com/pogostemon-helferi-1",
    "https://aquarubi.com/pogostemon-helferi-red",
@@ -3479,7 +3588,7 @@
    "https://aquarubi.com/tropica-pogostemon-helferi-in-vitro",
    "https://aquarubi.com/tropica-pogostemon-helferi-on-lava-stone"
   ],
-  "verifiedAt": "2026-10-25"
+  "verifiedAt": "2026-10-29"
  },
  {
   "id": "proserpinaca-palustris-cuba",
@@ -3703,11 +3812,22 @@
   ],
   "co2": "medium",
   "heightCm": 50,
+  "temperature": [
+   18,
+   30
+  ],
+  "ph": [
+   5,
+   8
+  ],
   "sourceUrl": "https://tropica.com/en/plants/plantdetails/Rotalarotundifolia'Green'(033ATC)/22545",
+  "additionalSourceUrls": [
+   "https://www.practicalfishkeeping.co.uk/features/how-to-grow-green-rotala/"
+  ],
   "shopUrls": [
    "https://aquarubi.com/tropica-rotala-rotundifolia-green-in-vitro"
   ],
-  "verifiedAt": "2026-10-25"
+  "verifiedAt": "2026-10-29"
  },
  {
   "id": "rotala-wallichii",
@@ -3808,10 +3928,21 @@
    "medium"
   ],
   "heightCm": 10,
+  "temperature": [
+   20,
+   28
+  ],
+  "ph": [
+   6,
+   8
+  ],
   "placements": [
    "foreground"
   ],
   "sourceUrl": "https://tropica.com/en/plants/plantdetails/Staurogynerepens(049G)/4481",
+  "additionalSourceUrls": [
+   "https://www.practicalfishkeeping.co.uk/features/how-to-set-up-a-microhabitat-nano-aquarium/"
+  ],
   "shopUrls": [
    "https://aquarubi.com/staurogyne-repens",
    "https://aquarubi.com/staurogyne-repens-in-vitro-apc",
@@ -3820,7 +3951,7 @@
    "https://aquarubi.com/stoffels-staurogyne-repens-in-vitro",
    "https://aquarubi.com/tropica-staurogyne-repens"
   ],
-  "verifiedAt": "2026-10-25"
+  "verifiedAt": "2026-10-29"
  },
  {
   "id": "taxiphyllum-spiky-moss",
@@ -3941,11 +4072,22 @@
    "medium"
   ],
   "heightCm": 5,
+  "temperature": [
+   20,
+   28
+  ],
+  "ph": [
+   5.5,
+   8
+  ],
   "placements": [
    "onRoot",
    "onRock"
   ],
   "sourceUrl": "https://tropica.com/en/plants/plantdetails/Vesiculariamontagnei'ChristmasMoss'(003APOR)/4395",
+  "additionalSourceUrls": [
+   "https://www.practicalfishkeeping.co.uk/features/five-of-the-best-aquarium-mosses/"
+  ],
   "shopUrls": [
    "https://aquarubi.com/tropica-vesicularia-montagnei-christmas-moss",
    "https://aquarubi.com/tropica-vesicularia-montagnei-christmas-moss-on-wood",
@@ -3953,6 +4095,6 @@
    "https://aquarubi.com/vesicularia-christmas-moss-10x10cm",
    "https://aquarubi.com/vesicularia-dubyana-christmas-moss"
   ],
-  "verifiedAt": "2026-10-25"
+  "verifiedAt": "2026-10-29"
  }
 ]
