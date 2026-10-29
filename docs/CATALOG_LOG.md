@@ -3057,3 +3057,40 @@ Güncel alt adım: JBL filtre medyası, bakteri başlangıcı, sorun giderici/pH
   - `pistia-stratiotes`: AB listesi ve FISC kategori 1; ana kaynak EUR-Lex; satış adı "Su marulu" (ürün başlığı).
 - Girmeyenler: *Fittonia albivenis*, *Selaginella kraussiana* 'Mini', *Homalomena* türleri (Aquarubi'de satılıyor; hiçbir kabul edilen kaynakta etiketi yok).
 - 1. ve 2. paketin kayıtları değişmedi.
+
+## 2026-10-29 Bitki kataloğu 4: Practical Fishkeeping'in tür kutuları (Claude)
+
+- Kural `docs/DATA_SOURCES.md` → "Bitkiler" (Practical Fishkeeping 0023'te onaylanan destekleyici kaynak: tür kutuları sıcaklık ve pH aralığı verdiğinde ortak aralığa girer). Bu pakette kurala, neyin tür kutusu sayıldığı ve Tropica'ya dayanan kayıtta sıcaklık ile pH'ın nereden geldiği yazıldı.
+- Tarama (2026-10-29, UTC; bütün sayfalar HTTP 200):
+  - Sitenin kendi araması, `/features/?Query=` ve `/fishkeeping-answers/?Query=`, bütün sonuç sayfaları. Arama yalnız başlık ve özette eşleşir.
+  - 1. tur (80 sorgu): plant, plants, planted, aquascape, aquascaping, moss, fern, carpet, floating, stem, bulb, sword, hornwort, duckweed, lily, lotus, crypt, java, weed; katalogdaki cins adları; Elodea, Nymphaea, Hemianthus, Monte Carlo, marimo. 127 yazı.
+  - 2. tur (36 sorgu, kurulum yazılarındaki kutular için): grow, how to grow, nano, iwagumi, shrimpscape, staples, biotope, Dutch, jungle, paludarium, riparium, easy, beginner, best, foreground, background, midground, CO2, fertiliser, fertilizer, substrate, lighting, algae, green, red, tropica, Staurogyne, Amazon, Monte, Cuba, Christmas, Flame, Weeping, Bolbitis, Hygro, Ammannia. 489 yeni yazı.
+  - 3. tur: ilk turda eksik kalan cinsler (*Schismatoglottis*, *Monosolenium*, *Riccardia*, *Leptodictyum*, *Gratiola*) ve Pellia, liverwort; sonuç yok.
+  - Alan adıyla sınırlı genel web araması: 38 adres; hepsi yukarıdaki yazıların içinde.
+  - Açılan 616 yazının metninde sıcaklık ve pH satırları, katalogdaki bitki adlarıyla birlikte tarandı; değer veren her kutu sayfada okundu.
+- Değer veren kutular (8 yazı):
+
+| Yazı | Bitki (kutudaki ad) | Kutu |
+|---|---|---|
+| [How to grow: Cryptocoryne parva](https://www.practicalfishkeeping.co.uk/features/how-to-grow-cryptocoryne-parva/) (güncelleme 2025-02-07) | *Cryptocoryne parva* | "Temperature: 20-29°C", "pH: 5.5 to 8" |
+| [How to grow: Green rotala](https://www.practicalfishkeeping.co.uk/features/how-to-grow-green-rotala/) (George Farmer) | *Rotala* sp. 'Green' | "Temperature: 18-30C, pH 5-8" |
+| [How to grow Hemianthus callitrichoides 'Cuba'](https://www.practicalfishkeeping.co.uk/features/how-to-grow-hemianthus-callitrichoides-cuba/) (George Farmer) | *Hemianthus callitrichoides* 'Cuba' | "Temperature: 18-28°C", "pH: 5 to 7.5" |
+| [The Lovely Ludwigia](https://www.practicalfishkeeping.co.uk/features/the-lovely-ludwigia-a-staple-stem-plant-for-every-planted-aquarium/) (2026-07-07) | *Ludwigia palustris* 'Super Red'; *L. repens* 'Rubin'; *L. glandulosa* | 18–28 °C, pH 5,5–7,5; 20–28 °C, pH 6,0–7,5; 22–28 °C, pH 5,5–7,0 ("Quick facts") |
+| [Five of the best aquarium mosses](https://www.practicalfishkeeping.co.uk/features/five-of-the-best-aquarium-mosses/) (güncelleme 2020-07-30) | *Fissidens fontanus*; *Taxiphyllum barbieri*; *Vesicularia montagnei* 'Christmas'; *Monosolenium tenerum*; *Riccia fluitans* | 22–28 °C, pH 5–7,5; 14–30 °C, pH 6–8; 20–28 °C, pH 5,5–8,0; 5–30 °C, pH 5,5–8,0; 15–30 °C, pH 6–7,0 |
+| [How to set up a simple — but stunning — planted tank](https://www.practicalfishkeeping.co.uk/features/how-to-set-up-a-simple-a-but-stunning-a-planted-tank/) | *Microsorum pteropus* (Java fern) | "Water conditions: 18-30°C/64-86°F and not fussy about water chemistry" (pH sayısı yok) |
+| [Are there any easier carpeting plants?](https://www.practicalfishkeeping.co.uk/fishkeeping-answers/are-there-any-easier-carpeting-plants/) (George Farmer'ın yanıtı, 2025-08) | *Marsilea hirsuta*; *Helanthium tenellum* 'Green'; *Eleocharis parvula*; *Lilaeopsis brasiliensis* | yalnız sıcaklık: 18–28, 20–28, 18–27, 4–26 °C |
+| [How to set up a MicroHabitat nano aquarium](https://www.practicalfishkeeping.co.uk/features/how-to-set-up-a-microhabitat-nano-aquarium/) (George Farmer, "Plant profiles") | *Cryptocoryne wendtii* 'green'; *Staurogyne repens*; *Pogostemon helferi* | 20–30 °C, pH 5,5–8; 20–28 °C, pH 6–8; 20–30 °C, pH 6–7,5 |
+
+- Sayılmayanlar:
+  - "All you need to know about bulb plants" (bir satıcının yanıtları): *Aponogeton* ve *Nymphaea* için cins geneli aralıklar ("generally the Aponogeton listed here will survive in water with a pH of 6.5-7.5"). *Barclaya longifolia* için "22-32°C ... pH acid to neutral" bir kutu değil; Fishkeeper'ın 23–30 °C aralığını da daraltmıyor.
+  - Kutusu olan ama katalogda kaydı olmayan bitkiler: *Ludwigia arcuata*, *L. palustris* 'Green', *L. inclinata* 'Cuba'.
+  - Yalnız ışık, CO₂, boy ve yerleşim veren kutular (ör. "5 easy and beautiful stem plants", "Aquascaping staples"): Practical Fishkeeping'den yalnız sıcaklık ve pH alınır.
+  - Kurulum yazılarında yazarın kendi akvaryumunun değerleri (ör. Afrika biyotopu pH 7,0 ve 25–26 °C, Amano tarzı ve Dutch tarzı akvaryum 25 °C), doğal yaşam alanının değerleri (Rio Negro, Inlé Gölü, Amazon'daki lagün) ve okur akvaryumları ("Your tanks").
+  - Aynı yazıdaki balık ve karides kutuları.
+  - Arama özetleri: genel aramanın özeti *Pogostemon helferi* için "16-28°C (ideally 22-26°C), pH 6.5-7.5" diyordu. Sayfada bu değer aynı yazıdaki kiraz karidesin kutusu; bitkinin kutusu 20–30 °C ve pH 6–7,5.
+- Kayıtlardaki değişiklikler (22 kayıt; yazı ek kaynak olarak eklendi, doğrulama 2026-10-29):
+  - İlk kez sıcaklık ve pH (Tropica'ya dayanan 11 kayıt, değer kutudan): *C. parva* 20–29 °C, pH 5,5–8; *Rotala* sp. 'Green' 18–30 °C, pH 5–8; *Micranthemum callitrichoides* 'Cuba' 18–28 °C, pH 5–7,5; *L. palustris* 'Super Red' 18–28 °C, pH 5,5–7,5; *L. repens* 'Rubin' 20–28 °C, pH 6–7,5; *L. glandulosa* 22–28 °C, pH 5,5–7; *Fissidens fontanus* 22–28 °C, pH 5–7,5; Christmas moss 20–28 °C, pH 5,5–8; *Monosolenium tenerum* 5–30 °C, pH 5,5–8; *Staurogyne repens* 20–28 °C, pH 6–8; *Pogostemon helferi* 20–30 °C, pH 6–7,5.
+  - İlk kez yalnız sıcaklık (pH kaynakta yok): *Marsilea hirsuta* 18–28 °C, *Eleocharis parvula* 18–27 °C.
+  - Ortak aralıkla daralan (Fishkeeper ∩ kutu): *Taxiphyllum barbieri* pH 5–9 → 6–8 (sıcaklık 15–28 °C kaldı); *Riccia fluitans* 10–28 → 15–28 °C, pH 5–8 → 6–7; *C. wendtii* 'Green' pH 5,5–9 → 5,5–8 (sıcaklık 20–30 °C kaldı); *Helanthium tenellum* 'Green' 20–30 → 20–28 °C (Fishkeeper'daki türün sayfası ∩ formun kutusu).
+  - Değişmeyen (kutu Fishkeeper'ın aralığıyla aynı ya da daha geniş): *Microsorum pteropus* ve formları 'Windeløv', 'Narrow', 'Trident' (18–30 °C; formların kutusu yok, türün kutusu girer); *Lilaeopsis brasiliensis* (15–26 °C).
+- Kullanıcıya etkisi: 13 bitkide sıcaklık, 11'inde pH artık görünüyor; bitki uyarıları (karar 0025) bu bitkilerde de son ölçümü aralıkla karşılaştırıyor. Dört bitkinin aralığı daraldı. Kapsam: sıcaklık %44 → %53,2, pH %43,3 → %51,1 (`docs/DATA_COVERAGE.md`).

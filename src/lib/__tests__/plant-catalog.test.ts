@@ -16,6 +16,8 @@ const withChange = (id: string, change: (item: PlantProfile) => void) => {
 const ufUrl = (slug: string) => `https://plant-directory.ifas.ufl.edu/plant-directory/${slug}/`;
 const FISHKEEPER = /^https:\/\/www\.fishkeeper\.co\.uk\/fish\/plant\/aquarium-plants\/[a-z0-9-]+$/;
 const TROPICA = /^https:\/\/tropica\.com\/en\/plants\/plantdetails\//;
+const PFK = /^https:\/\/www\.practicalfishkeeping\.co\.uk\/(features|fishkeeping-answers)\/[a-z0-9-]+\/$/;
+const hasPfk = (item: PlantProfile) => Boolean(item.additionalSourceUrls?.some((url) => PFK.test(url)));
 const fromFishkeeper = (item: PlantProfile) => !TROPICA.test(item.sourceUrl);
 // 1. ve 2. paket (kaynaktan üretilen kayıtlar); 3. paketin yalnız uyarı kayıtları ayrı sınanır (karar 0026).
 const sourced = plantCatalog.filter((item) => !item.warningOnly);
@@ -46,14 +48,15 @@ describe("bitki kataloğu bütünlüğü", () => {
         // Fishkeeper'ın bitki listesi A. heterophylla'yı bilgi bankası dışındaki bir sayfaya bağlıyor.
         if (item.id === "anubias-heterophylla") expect(item.sourceUrl).toBe("https://www.fishkeeper.co.uk/fish/Anubias-Heterophylla");
         else expect(item.sourceUrl, item.id).toMatch(FISHKEEPER);
-        for (const url of item.additionalSourceUrls ?? []) expect(url, item.id).toMatch(TROPICA);
+        for (const url of item.additionalSourceUrls ?? []) expect(TROPICA.test(url) || PFK.test(url), `${item.id}: ${url}`).toBe(true);
       } else {
-        // Tropica'ya dayanan kayıtta öteki kaynaklar Tropica sayfaları ya da (formlarda) türün Fishkeeper sayfasıdır.
-        for (const url of item.additionalSourceUrls ?? []) expect(TROPICA.test(url) || FISHKEEPER.test(url), `${item.id}: ${url}`).toBe(true);
+        // Tropica'ya dayanan kayıtta öteki kaynaklar Tropica sayfaları, (formlarda) türün Fishkeeper sayfası ve Practical Fishkeeping'in tür kutusudur.
+        for (const url of item.additionalSourceUrls ?? []) expect(TROPICA.test(url) || FISHKEEPER.test(url) || PFK.test(url), `${item.id}: ${url}`).toBe(true);
       }
       expect(item.shopUrls.length, item.id).toBeGreaterThan(0);
       for (const url of item.shopUrls) expect(["aquarubi.com", "www.akvaryumexpress.com"], `${item.id}: ${url}`).toContain(new URL(url).host);
-      expect(item.verifiedAt, item.id).toBe("2026-10-25");
+      // Practical Fishkeeping'in kutusu 4. pakette (2026-10-29) okundu.
+      expect(item.verifiedAt, item.id).toBe(hasPfk(item) ? "2026-10-29" : "2026-10-25");
     }
     expect(() => assertPlantCatalogIntegrity()).not.toThrow();
   });
@@ -157,10 +160,12 @@ describe("değer kuralı", () => {
     const fk = sourced.filter(fromFishkeeper);
     expect(fk.filter((item) => !item.co2).map((item) => item.id)).toEqual(fk.filter((item) => !item.additionalSourceUrls?.some((url) => TROPICA.test(url))).map((item) => item.id));
     expect(fk.filter((item) => !item.co2)).toHaveLength(16);
-    // Tropica sıcaklık ve pH vermez: Tropica'ya dayanan kayıtta yalnız Fishkeeper'daki türün formuysa (10 kayıt) yazılır.
+    // Tropica sıcaklık ve pH vermez: Tropica'ya dayanan kayıtta yalnız Fishkeeper'daki türün formuysa (10 kayıt) ya da Practical Fishkeeping'de
+    // kutusu varsa (4. paket, aşağıda) yazılır.
     const tropica = sourced.filter((item) => !fromFishkeeper(item));
-    expect(tropica.filter((item) => item.temperature || item.ph).map((item) => item.id)).toEqual(tropica.filter((item) => item.additionalSourceUrls?.some((url) => FISHKEEPER.test(url))).map((item) => item.id));
-    expect(tropica.filter((item) => item.temperature)).toHaveLength(10);
+    expect(tropica.filter((item) => item.temperature || item.ph).map((item) => item.id)).toEqual(tropica.filter((item) => item.additionalSourceUrls?.some((url) => FISHKEEPER.test(url)) || hasPfk(item)).map((item) => item.id));
+    expect(tropica.filter((item) => item.additionalSourceUrls?.some((url) => FISHKEEPER.test(url)))).toHaveLength(10);
+    expect(tropica.filter((item) => item.temperature)).toHaveLength(23);
     // Tropica sayfasının alanları boşsa değer yazılmaz ('Needle Leaf': yalnız açıklamadaki boy ve yerleşim).
     const needle = plantById("sagittaria-subulata-needle-leaf");
     expect(needle).toMatchObject({ heightCm: 30, placements: ["background"] });
@@ -188,9 +193,10 @@ describe("değer kuralı", () => {
 describe("form kayıtları (Tropica'da ayrı sayfası olan formlar)", () => {
   it("formun değerleri Tropica sayfasından; sayfanın vermediği alanlar Fishkeeper'daki türün sayfasından", () => {
     // 'Trident': Tropica ışık ve CO₂ düşük, boy 15–20 cm; sıcaklık ve pH Java fern'in Fishkeeper sayfasından; ışığın üst ucu da oradan.
+    // Java fern'in Practical Fishkeeping kutusu da (4. paket, 18–30 °C) forma girer.
     expect(plantById("microsorum-pteropus-trident")).toMatchObject({
       light: ["low", "high"], co2: "low", heightCm: 20, temperature: [18, 30], ph: [5, 8],
-      additionalSourceUrls: ["https://www.fishkeeper.co.uk/fish/plant/aquarium-plants/microsorum-pteropus"],
+      additionalSourceUrls: ["https://www.fishkeeper.co.uk/fish/plant/aquarium-plants/microsorum-pteropus", "https://www.practicalfishkeeping.co.uk/features/how-to-set-up-a-simple-a-but-stunning-a-planted-tank/"],
     });
     // 'Narrow': aynı tür sayfasından sıcaklık, pH ve ışığın üst ucu.
     expect(plantById("microsorum-pteropus-narrow")).toMatchObject({ light: ["low", "high"], co2: "low", heightCm: 20, temperature: [18, 30], ph: [5, 8] });
@@ -229,6 +235,69 @@ describe("form kayıtları (Tropica'da ayrı sayfası olan formlar)", () => {
     expect(shops("cryptocoryne-undulata-broad-leaf")).toEqual(["https://aquarubi.com/tropica-cryptocoryne-undulata-broad-leaves"]);
     expect(plantById("cryptocoryne-beckettii")).toBeUndefined();
     expect(plantById("helanthium-tenellum")).toBeUndefined();
+  });
+});
+
+// 4. paket: Practical Fishkeeping'in tür kutuları (docs/DATA_SOURCES.md → "Bitkiler"; docs/CATALOG_LOG.md → "Bitki kataloğu 4").
+// Kutunun yazdığı aralık ve kayıtta Fishkeeper'dan gelen aralık; kayıttaki değer ikisinin ortak aralığıdır, Fishkeeper'ın aralığı yoksa kutununki.
+// Formun kendi kutusu yoksa türün kutusu formuna da girer (Java fern'in formları).
+type Range = [number, number];
+const pfk = (path: string) => `https://www.practicalfishkeeping.co.uk/${path}/`;
+const ludwigia = pfk("features/the-lovely-ludwigia-a-staple-stem-plant-for-every-planted-aquarium");
+const mosses = pfk("features/five-of-the-best-aquarium-mosses");
+const carpets = pfk("fishkeeping-answers/are-there-any-easier-carpeting-plants");
+const nano = pfk("features/how-to-set-up-a-microhabitat-nano-aquarium");
+const javaFern: { temperature: Range; ph: Range } = { temperature: [18, 30], ph: [5, 8] };
+const pfkBoxes: { ids: string[]; url: string; temperature?: Range; ph?: Range; fishkeeper?: { temperature: Range; ph: Range } }[] = [
+  { ids: ["cryptocoryne-parva"], url: pfk("features/how-to-grow-cryptocoryne-parva"), temperature: [20, 29], ph: [5.5, 8] },
+  { ids: ["rotala-sp-green"], url: pfk("features/how-to-grow-green-rotala"), temperature: [18, 30], ph: [5, 8] },
+  { ids: ["micranthemum-callitrichoides-cuba"], url: pfk("features/how-to-grow-hemianthus-callitrichoides-cuba"), temperature: [18, 28], ph: [5, 7.5] },
+  { ids: ["ludwigia-palustris-super-red"], url: ludwigia, temperature: [18, 28], ph: [5.5, 7.5] },
+  { ids: ["ludwigia-repens-rubin"], url: ludwigia, temperature: [20, 28], ph: [6, 7.5] },
+  { ids: ["ludwigia-glandulosa"], url: ludwigia, temperature: [22, 28], ph: [5.5, 7] },
+  { ids: ["fissidens-fontanus"], url: mosses, temperature: [22, 28], ph: [5, 7.5] },
+  { ids: ["taxiphyllum-barbieri"], url: mosses, temperature: [14, 30], ph: [6, 8], fishkeeper: { temperature: [15, 28], ph: [5, 9] } },
+  { ids: ["vesicularia-montagnei-christmas-moss"], url: mosses, temperature: [20, 28], ph: [5.5, 8] },
+  { ids: ["monosolenium-tenerum"], url: mosses, temperature: [5, 30], ph: [5.5, 8] },
+  { ids: ["riccia-fluitans"], url: mosses, temperature: [15, 30], ph: [6, 7], fishkeeper: { temperature: [10, 28], ph: [5, 8] } },
+  { ids: ["microsorum-pteropus", "microsorum-pteropus-windelov", "microsorum-pteropus-narrow", "microsorum-pteropus-trident"], url: pfk("features/how-to-set-up-a-simple-a-but-stunning-a-planted-tank"), temperature: [18, 30], fishkeeper: javaFern },
+  { ids: ["marsilea-hirsuta"], url: carpets, temperature: [18, 28] },
+  { ids: ["helanthium-tenellum-green"], url: carpets, temperature: [20, 28], fishkeeper: { temperature: [20, 30], ph: [5.5, 8] } },
+  { ids: ["eleocharis-parvula"], url: carpets, temperature: [18, 27] },
+  { ids: ["lilaeopsis-brasiliensis"], url: carpets, temperature: [4, 26], fishkeeper: { temperature: [15, 26], ph: [6, 8] } },
+  { ids: ["cryptocoryne-wendtii-green"], url: nano, temperature: [20, 30], ph: [5.5, 8], fishkeeper: { temperature: [20, 30], ph: [5.5, 9] } },
+  { ids: ["staurogyne-repens"], url: nano, temperature: [20, 28], ph: [6, 8] },
+  { ids: ["pogostemon-helferi"], url: nano, temperature: [20, 30], ph: [6, 7.5] },
+];
+const common = (a: Range, b: Range): Range => [Math.max(a[0], b[0]), Math.min(a[1], b[1])];
+
+describe("Practical Fishkeeping'in tür kutuları (4. paket)", () => {
+  it("kutunun sıcaklık ve pH aralığı Fishkeeper'ınkiyle ortak aralığa girer; Fishkeeper'ın aralığı yoksa kutununki alınır", () => {
+    for (const box of pfkBoxes) {
+      expect(box.url).toMatch(PFK);
+      for (const id of box.ids) {
+        const item = plantById(id)!;
+        expect(item.additionalSourceUrls, id).toContain(box.url);
+        for (const field of ["temperature", "ph"] as const) {
+          const own = box[field];
+          const fishkeeper = box.fishkeeper?.[field];
+          expect(item[field], `${id} ${field}`).toEqual(own && fishkeeper ? common(own, fishkeeper) : own ?? fishkeeper);
+        }
+      }
+    }
+    // Daralanlar: Java moss pH 5–9 → 6–8; Riccia 10–28 → 15–28 °C ve pH 5–8 → 6–7; 'Green' crypt pH 5,5–9 → 5,5–8; H. tenellum 'Green' 20–30 → 20–28 °C.
+    expect(plantById("taxiphyllum-barbieri")).toMatchObject({ temperature: [15, 28], ph: [6, 8] });
+    expect(plantById("riccia-fluitans")).toMatchObject({ temperature: [15, 28], ph: [6, 7] });
+    expect(plantById("cryptocoryne-wendtii-green")?.ph).toEqual([5.5, 8]);
+    expect(plantById("helanthium-tenellum-green")?.temperature).toEqual([20, 28]);
+    // Kutu yalnız sıcaklık veriyorsa ve Fishkeeper'ın aralığı yoksa pH boş kalır.
+    expect([plantById("marsilea-hirsuta")?.ph, plantById("eleocharis-parvula")?.ph]).toEqual([undefined, undefined]);
+  });
+
+  it("yalnız kutusu olan kayıtlar Practical Fishkeeping'i kaynak gösterir", () => {
+    const withPfk = sourced.filter(hasPfk).map((item) => item.id).sort();
+    expect(withPfk).toEqual(pfkBoxes.flatMap((box) => box.ids).sort());
+    expect(withPfk).toHaveLength(22);
   });
 });
 
