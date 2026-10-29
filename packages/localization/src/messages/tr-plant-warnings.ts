@@ -12,6 +12,22 @@ const num = (p: PlantWarningParams, key: string) => p[key] as number;
 const str = (p: PlantWarningParams, key: string) => p[key] as string;
 const high = (p: PlantWarningParams) => str(p, "direction") === "high";
 const levelNames: Record<string, string> = { low: "düşük", medium: "orta", high: "yüksek" };
+// İstilacı tür listelerinin adları bitki kartındaki uyarıyla aynı (`tr.ts` → `plants.catalog.invasive.lists`; testle eşit tutulur). Motor
+// listeleri sabit sırayla `lists` değişkeninde virgülle verir; UF/IFAS'ın başlığından gelenler birlikte ve kaynağıyla yazılır.
+const invasiveListNames: Record<string, string> = {
+  "us-federal-noxious-weed": "ABD'de federal zararlı ot listesinde",
+  "fisc-invasive": "Florida İstilacı Türler Konseyi'nin listesinde",
+  "eu-union-list": "Avrupa Birliği'nin istilacı yabancı türler listesinde",
+  "england-sale-ban": "İngiltere'de satışı yasak bitkiler arasında",
+};
+const ufLists = new Set(["us-federal-noxious-weed", "fisc-invasive"]);
+const join = (parts: string[]) => (parts.length > 1 ? `${parts.slice(0, -1).join(", ")} ve ${parts[parts.length - 1]}` : parts[0]);
+const invasiveLists = (p: PlantWarningParams) => {
+  const kinds = str(p, "lists").split(",").filter(Boolean);
+  const uf = kinds.filter((kind) => ufLists.has(kind)).map((kind) => invasiveListNames[kind] ?? kind);
+  const official = kinds.filter((kind) => !ufLists.has(kind)).map((kind) => invasiveListNames[kind] ?? kind);
+  return join([...(uf.length ? [`${join(uf)} (UF/IFAS)`] : []), ...official]);
+};
 
 export const trPlantWarnings = {
   /** Sağlık analizindeki bölüm. */
@@ -25,12 +41,23 @@ export const trPlantWarnings = {
   unmatched: (names: string) => `Katalogla eşleşmeyen bitkiler için uyarı hesaplanmadı${names ? `: ${names}` : ""}.`,
   /** Hiçbir bitki katalogla eşleşmedi: değerlendirme yapılamadı (yeşil "uyarı yok" gösterilmez). */
   noneChecked: (names: string) => `Bitkiler katalogla eşleşmediği için uyarı hesaplanamadı${names ? `: ${names}` : ""}.`,
-  /** Katalogda yalnız uyarı kaydı olan bitkiler (değerleri kaynakta yok; karar 0026): onlar için uyarı hesaplanmadı. */
-  noValues: (names: string) => `Değerleri kaynakta olmayan bitkiler için uyarı hesaplanmadı${names ? `: ${names}` : ""}. Bitki kartındaki uyarıya bakın.`,
+  /**
+   * Katalogda yalnız uyarı kaydı olan bitkiler (değerleri kaynakta yok; karar 0026): ışık, CO₂, sıcaklık, pH ve boy denetlenmedi. Etiketleri
+   * ("su bitkisi değil", istilacı tür) yukarıda uyarı olarak yazılır (karar 0028).
+   */
+  noValues: (names: string) => `Değerleri kaynakta olmayan bitkilerde ışık, CO₂, sıcaklık, pH ve boy denetlenemedi${names ? `: ${names}` : ""}.`,
   preparing: "Bitki bilgileri hazırlanıyor…",
   loadFailed: "Bitki bilgileri yüklenemedi; bitkilerin kısa bilgisi ve uyarıları gösterilemiyor. Bağlantını kontrol edip yeniden dene.",
   /** Uyarı metinleri, motorun `code` alanına göre. */
   warnings: {
+    plantNotAquatic: {
+      title: (p) => `${str(p, "name")} su bitkisi değil`,
+      message: () => "Practical Fishkeeping bu bitkiyi akvaryumda kaçınılacak ev bitkileri arasında sayıyor: su altında kısa süre dayanır.",
+    },
+    plantInvasive: {
+      title: (p) => `${str(p, "name")} istilacı tür listesinde`,
+      message: (p) => `Doğaya bırakmayın. Bu bitki ${invasiveLists(p)}. Bu, Türkiye'de yasak olduğu anlamına gelmez.`,
+    },
     plantCo2: {
       title: (p) => `${str(p, "name")} yüksek CO₂ ister`,
       // 15–25 mg/L Tropica'nın "yüksek" düzeyinin tanımıdır (src/data/catalog-plants.ts, docs/DATA_SOURCES.md); sabit metindir.

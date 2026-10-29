@@ -15,6 +15,7 @@ export function plantWarningText(messages: PlantWarningMessages, format: PlantWa
 /**
  * Bir akvaryumun bitki denetimi: uyarılar, değerlendirilemeyen bitkiler ve değerlendirilen bitki sayısı. Değerlendirilemeyenler iki türlü:
  * katalogla eşleşmeyen (`unmatched`) ve katalogda yalnız uyarı kaydı olan, yani değerleri kaynakta olmayan (`noValues`, karar 0026).
+ * Yalnız uyarı kaydının etiket uyarıları ("su bitkisi değil", istilacı tür; karar 0028) `warnings` içindedir; değer kuralları onda denetlenemez.
  */
 export interface AquariumPlantCheck {
   warnings: PlantWarning[];
@@ -25,8 +26,9 @@ export interface AquariumPlantCheck {
 
 /**
  * Bir akvaryumun bitki uyarıları: yalnız o akvaryumun bitkileri, ekipmanı ve en son su ölçümü kullanılır. Bitki katalogla
- * `plantForRecord` ile eşleşir (katalog kimliği, yoksa bilimsel ad, o da yoksa ad). Eşleşmeyen bitkide ve yalnız uyarı kaydıyla eşleşen
- * bitkide uyarı hesaplanmaz; bitki `unmatched` ya da `noValues` listesinde döner, böylece ekran "uyarı yok" ile "değerlendirilmedi"yi ayırır.
+ * `plantForRecord` ile eşleşir (katalog kimliği, yoksa bilimsel ad, o da yoksa ad). Eşleşmeyen bitkide uyarı hesaplanmaz; yalnız uyarı
+ * kaydıyla eşleşen bitkide yalnız etiketler uyarı verir (değerleri yok). Bu bitkiler `unmatched` ya da `noValues` listesinde döner, böylece
+ * ekran "uyarı yok" ile "değerlendirilmedi"yi ayırır; `checked` yalnız değerleri denetlenen bitkileri sayar.
  */
 export function checkAquariumPlants(catalog: PlantCatalogModule, aquarium: Aquarium, plants: Plant[], equipment: Equipment[], readings: WaterParameters[]): AquariumPlantCheck {
   const inTank = <T extends { aquariumId: string }>(items: T[]) => items.filter((item) => item.aquariumId === aquarium.id);
@@ -35,9 +37,13 @@ export function checkAquariumPlants(catalog: PlantCatalogModule, aquarium: Aquar
   const entries = inTank(plants).map((plant) => ({ plant, profile: catalog.plantForRecord(plant) }));
   const unmatched = entries.filter((entry) => !entry.profile).map((entry) => entry.plant);
   const noValues = entries.filter((entry) => entry.profile?.warningOnly).map((entry) => entry.plant);
-  const evaluated = entries.filter((entry) => entry.profile && !entry.profile.warningOnly);
-  return { warnings: assessPlants(aquarium, evaluated, inTank(equipment), latest), unmatched, noValues, checked: evaluated.length };
+  const matched = entries.filter((entry) => entry.profile);
+  return { warnings: assessPlants(aquarium, matched, inTank(equipment), latest), unmatched, noValues, checked: matched.length - noValues.length };
 }
+
+/** Kaydın etiketinden gelen uyarılar (karar 0028). Bitki kartı bunları katalogdaki uyarı olarak zaten gösterir; kart listesine girmez. */
+const labelCodes = new Set<PlantWarning["code"]>(["plantNotAquatic", "plantInvasive"]);
+export const isLabelWarning = (warning: PlantWarning) => labelCodes.has(warning.code);
 
 /** Sağlık analizindeki sıra: önce sarı uyarılar, sonra bilgi notları; her grupta motorun sırası korunur. */
 export function warningsFirst(warnings: PlantWarning[]): PlantWarning[] {

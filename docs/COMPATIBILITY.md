@@ -1,6 +1,6 @@
 # AquaMind uyumluluk motoru
 
-Son güncelleme: 2026-10-28 (motor 1.11.0, bitki uyarıları ayrı işlevde: `assessPlants`, sağlık puanını etkilemez — `docs/DECISIONS/0025-bitki-uyarilari.md`; kural seti 1.9.0 ve altın fikstür değişmedi); 2026-10-20 (motor 1.10.0, sonuç biçimi v2: uyarı ve ölçüt kodları — `docs/DECISIONS/0021-dil-altyapisi.md` → "3. paket ayrıntıları"; kural seti 1.9.0 değişmedi; altın fikstür yalnızca yeni alanlarla yeniden üretildi); 2026-10-11 (kural seti 1.9.0, eşleşmeyen ekipman uyarısı yalnızca hesaba giren türlerde — `docs/DECISIONS/0018-eslesmeyen-ekipman-uyarisi.md`; altın fikstürde yalnızca örnek akvaryum vakası değişti; aynı gün kural seti 1.8.0, elle girilen ekipman değerleri — `docs/DECISIONS/0017-elle-girilen-ekipman-degerleri.md`; altın fikstür değişmedi); 2026-10-05 (motor değişmeden 42 türün kaynak yenilemesi ve kimliği belirsiz 3 türün düzeltmesiyle altın fikstür iki kez yeniden üretildi); 2026-10-03 (kural seti 1.7.0, salyangoz uyarısı; aynı gün 1.6.0 alan uyarısının şiddeti, 1.5.0 taban ısıtıcısı ve ikinci katalog entegrasyonu).
+Son güncelleme: 2026-10-29 (motor 1.12.0, bitki uyarılarına katalogdaki etiketler girdi: "su bitkisi değil" ve istilacı tür listesi — `docs/DECISIONS/0028-bitki-etiketleri-saglik-analizinde.md`; kural seti 1.9.0 ve altın fikstür değişmedi); 2026-10-28 (motor 1.11.0, bitki uyarıları ayrı işlevde: `assessPlants`, sağlık puanını etkilemez — `docs/DECISIONS/0025-bitki-uyarilari.md`; kural seti 1.9.0 ve altın fikstür değişmedi); 2026-10-20 (motor 1.10.0, sonuç biçimi v2: uyarı ve ölçüt kodları — `docs/DECISIONS/0021-dil-altyapisi.md` → "3. paket ayrıntıları"; kural seti 1.9.0 değişmedi; altın fikstür yalnızca yeni alanlarla yeniden üretildi); 2026-10-11 (kural seti 1.9.0, eşleşmeyen ekipman uyarısı yalnızca hesaba giren türlerde — `docs/DECISIONS/0018-eslesmeyen-ekipman-uyarisi.md`; altın fikstürde yalnızca örnek akvaryum vakası değişti; aynı gün kural seti 1.8.0, elle girilen ekipman değerleri — `docs/DECISIONS/0017-elle-girilen-ekipman-degerleri.md`; altın fikstür değişmedi); 2026-10-05 (motor değişmeden 42 türün kaynak yenilemesi ve kimliği belirsiz 3 türün düzeltmesiyle altın fikstür iki kez yeniden üretildi); 2026-10-03 (kural seti 1.7.0, salyangoz uyarısı; aynı gün 1.6.0 alan uyarısının şiddeti, 1.5.0 taban ısıtıcısı ve ikinci katalog entegrasyonu).
 
 ## Temel kural
 
@@ -65,19 +65,21 @@ interface HealthWarning {
 
 1.8.0: `HealthMetric` yalnızca sonucu kullanıcının elle girdiği bir ekipman değerine dayandığında `userProvided: true` taşır (filtre ve ısıtıcı ölçütleri; filtre ölçütü elle girilen debiyle, ısıtıcı ölçütü elle girilen güçle işaretlenir, bu yüzden ısıtıcısı doğrulanmış ısıtıcılı filtrede yalnız debi girildiyse ısıtıcı ölçütü işaretlenmez). Elle değer yoksa alan hiç bulunmaz; bu yüzden mevcut çıktılar ve altın fikstür değişmedi.
 
-## Bitki uyarıları (motor 1.11.0)
+## Bitki uyarıları (motor 1.11.0 ve 1.12.0)
 
-`assessPlants` sağlık analizinden ayrı bir işlevdir; `analyzeAquarium`'un girişi, çıktısı, puanı ve uyarıları değişmez (ürün sahibinin kararı, `docs/DECISIONS/0025-bitki-uyarilari.md`). Katalogla eşleşen her bitki için, kaynakta yazan değerlerle:
+`assessPlants` sağlık analizinden ayrı bir işlevdir; `analyzeAquarium`'un girişi, çıktısı, puanı ve uyarıları değişmez (ürün sahibinin kararları, `docs/DECISIONS/0025-bitki-uyarilari.md` ve `0028-bitki-etiketleri-saglik-analizinde.md`). Katalogla eşleşen her bitki için, kaynakta yazan değerlerle ve etiketlerle (her bitkide önce etiketler):
 
 | Kod | Seviye | Koşul |
 |---|---|---|
+| `plantNotAquatic` | uyarı | Kayıtta "su bitkisi değil" etiketi var (Practical Fishkeeping; 1.12.0) |
+| `plantInvasive` | uyarı | Kayıt kaynaklı bir istilacı tür listesinde; `lists` listelerin türünü sabit sırayla verir (1.12.0) |
 | `plantCo2` | uyarı | Bitkinin CO₂ ihtiyacı (Tropica) yüksek; akvaryumda `co2` türünde ekipman yok |
 | `plantLight` | uyarı | Işık aralığının alt ucu orta ya da yüksek; akvaryumda `lighting` türünde ekipman yok |
 | `plantTemperature` | uyarı | Son ölçümün sıcaklığı bitkinin kaynaktaki aralığının dışında (sınırlar içeride) |
 | `plantPh` | uyarı | Son ölçümün pH'ı bitkinin kaynaktaki aralığının dışında (sınırlar içeride) |
 | `plantHeight` | bilgi | Bitkinin kaynaktaki boyu akvaryumun yüksekliğinden büyük |
 
-Aralığı kaynakta olmayan bitkide, ölçüm yokken ya da ölçümde değer yokken sıcaklık ve pH uyarısı çıkmaz. Her uyarı `plantId`, `level`, `code`, `params` ve Türkçe `title`, `message` taşır. Bitki kurallarında puan cezası ve gömülü eşik yoktur; bu yüzden `RULESET_VERSION` 1.9.0'da kaldı.
+Aralığı kaynakta olmayan bitkide, ölçüm yokken ya da ölçümde değer yokken sıcaklık ve pH uyarısı çıkmaz. Değerleri kaynakta olmayan yalnız uyarı kayıtlarında (karar 0026) yalnız etiketler uyarı verir. Her uyarı `plantId`, `level`, `code`, `params` ve Türkçe `title`, `message` taşır. Bitki kurallarında puan cezası ve gömülü eşik yoktur; bu yüzden `RULESET_VERSION` 1.9.0'da kaldı.
 
 ## Kural seti (mevcut sabitler)
 
@@ -116,7 +118,7 @@ Bu sabitler Phase 0B'de değiştirilmedi. 1.1.0'da katalog entegrasyonuyla yaşa
 - `test/user-equipment-values.test.ts`: 1.8.0 elle girilen ekipman değerlerini stub kayıtlarla sınar (hangi kayıtta girilebildiği, aralık sınırları, aynı değerli doğrulanmış kayıtla aynı puan ve açıklama, işaretin yalnız değeri elle girilen ölçütte bulunması, kalkan uyarılar, doğrulanmış değerin ezilememesi, aynı cihazın iki kaydı, elle değer olmayan çıktının değişmemesi).
 - `test/unmatched-equipment-warning.test.ts`: 1.9.0 eşleşmeyen ekipman uyarısını stub kayıtlarla sınar (hesaba girmeyen türlerin uyarı üretmemesi ve sonucu değiştirmemesi, filtre ve ısıtıcının uyarı üretmesi, sayının yalnız hesaba giren türleri sayması, hava motorunun yalnız hava motoruyla çalışan filtre varken sayılması, değeri elle girilen kaydın uyarı üretmemesi, veri güveni).
 - `src/lib/__tests__/engine-text.test.ts`: 1.10.0 sonuç biçimi v2. Dil dosyasının kod ve değişkenlerden kurduğu metni motorun Türkçe metniyle altın fikstürün 1033 vakasında ve fikstürde geçmeyen kodları ve dalları tetikleyen 30 stub senaryoda karşılaştırır. Sözcükler birebir aynı olmalı; dil dosyasının biçimlediği her sayı işaretlenir ve değeri hem motorun sayısıyla hem gerçek Türkçe biçimleyicinin yazdığı sayıyla aynı olmalıdır (3b). Ayrıca biçimleyiciden geçmeyen sayı (TypeScript tip bilgisiyle izin listesine göre bütün dallarda ve çalışma zamanında), değişkenlerin kendi türlerinin okuyucusuyla okunması, her kodda hangi değişkenin hangi türde ve sırayla yazıldığı (yöntem tablosu), yuvarlamanın farkı gizlememesi ve galon tercihi sınanır; motor kaynağındaki 48 uyarı ve 38 ölçüt kodunun dil dosyasında karşılığı olduğunu, dil dosyasında fazla kod olmadığını ve her kodun en az bir kez sınandığını denetler; dil paketinin ana girişinin motor metinlerini içe aktarmadığını da denetler (sayfa hızı).
-- `test/plants.test.ts`: 1.11.0 bitki uyarılarını stub kayıtlarla sınar (her kural, sınır değerler, aralığı ya da ölçümü olmayan bitki, eşleşmeyen bitki, kullanıcının verdiği ad, sıra, girişlerin değişmemesi, ayrı girişin yalnız tip içe aktarması).
+- `test/plants.test.ts`: 1.11.0 ve 1.12.0 bitki uyarılarını stub kayıtlarla sınar (her kural, sınır değerler, aralığı ya da ölçümü olmayan bitki, eşleşmeyen bitki, kullanıcının verdiği ad, sıra, iki etiketin uyarısı ve istilacı listelerin sırası, girişlerin değişmemesi, ayrı girişin yalnız tip içe aktarması).
 - `src/lib/__tests__/plant-warnings.test.ts`: bitki uyarılarının dil dosyasındaki metni motorun Türkçe metniyle aynı; °F yazımı, yuvarlamanın aşılan sınırı gizlememesi, sayıların biçimleyiciden geçmesi, yalnız o akvaryumun kayıtları ve en son ölçüm, ayrı girişler.
 - `test/snail.test.ts`: 1.7.0 salyangoz uyarısını (metin, kaynağın notu, salyangoz yokluğu, çelişkili ve bilgisiz balık, ceza) stub kayıtlarla sınar.
 - `test/space.test.ts`: 1.6.0 alan uyarısı basamaklarını (kaynak altı sarı, kaynak ve İsviçre sınırı altı kırmızı, kaynağa uyan akvaryum, balık olmayan canlı, girilmemiş ölçü, ölçüt ve genel durum sınırı) stub kayıtlarla sınar.
