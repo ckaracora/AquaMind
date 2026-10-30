@@ -648,7 +648,7 @@ for (const [specificGravity, expected] of [[1.018, "none"], [1.025, "warning"], 
     [],
   );
   assert.equal(analysis.warnings.find((warning) => warning.title === "Ocellaris peacock bass: akvaryum çok küçük")?.level, "danger", "Cichla ocellaris 5.000 litre ve 300 cm altındaki akvaryuma önerilmemeli");
-  assert(warningTitles(analysis).includes("Ocellaris peacock bass: grup sayısı düşük"), "Cichla ocellaris tek birey yerine doğrulanmış beşli grup gereksinimini göstermeli");
+  assert(!warningTitles(analysis).includes("Ocellaris peacock bass: grup sayısı düşük"), "Cichla ocellaris tek tutulabilir (Seriously Fish, Fishkeeper); tek birey grup uyarısı almamalı");
   assert(warningTitles(analysis).includes("Neon tetra için avlanma riski"), "Cichla ocellaris küçük balıklarla seçildiğinde avlanma uyarısı vermeli");
   assert(warningTitles(analysis).includes("Ocellaris peacock bass için tür akvaryumu önerilir"), "Cichla ocellaris topluluk akvaryumunda tehlike üretmeli");
   assert.equal(metric(analysis, "compatibility").status, "danger");
