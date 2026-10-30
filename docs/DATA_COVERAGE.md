@@ -21,19 +21,19 @@ Katalogların her bilgisinin yüzde kaçının dolu olduğu ve kaynağının tü
 ## Güncel durum
 
 <!-- kapsam:başla -->
-Ölçüm tarihi: 2026-10-29
+Ölçüm tarihi: 2026-10-30
 
-### Canlılar (423 kayıt)
+### Canlılar (443 kayıt)
 
 | Bilgi | Dolu | Oran |
 |---|---|---|
-| Kendi kaynak sayfası var (otomatik bağlantı değil) | 423/423 | %100 |
-| Yalnız otomatik kaynak bağlantısı | 0/423 | %0 |
-| En az tank uzunluğu | 401/423 | %94,8 |
-| Akıntı | 399/423 | %94,3 |
-| Davranış ya da bakım notu | 314/423 | %74,2 |
-| Eş ad ya da satış adı | 363/423 | %85,8 |
-| Son 92 günde doğrulanmış | 423/423 | %100 |
+| Kendi kaynak sayfası var (otomatik bağlantı değil) | 443/443 | %100 |
+| Yalnız otomatik kaynak bağlantısı | 0/443 | %0 |
+| En az tank uzunluğu | 399/443 | %90,1 |
+| Akıntı | 398/443 | %89,8 |
+| Davranış ya da bakım notu | 334/443 | %75,4 |
+| Eş ad ya da satış adı | 383/443 | %86,5 |
+| Son 92 günde doğrulanmış | 443/443 | %100 |
 
 ### Ekipman (3541 kayıt)
 
@@ -74,6 +74,7 @@ Katalogların her bilgisinin yüzde kaçının dolu olduğu ve kaynağının tü
 
 ## Geçmiş
 
+- 2026-10-30 (deniz kataloğu, karar 0031): canlılar 443 kayıt; 20 deniz başlangıç türü eklendi, 11 deniz kaydı kabul edilen kaynaklarla yenilendi. En az tank uzunluğu %94,8 → %90,1, akıntı %94,3 → %89,8: deniz kayıtlarının eski uzunluk ve akıntı değerleri kabul edilmeyen kaynaklardandı, kabul edilen kaynaklar çoğu türde bunları yazmıyor. Davranış ya da bakım notu %74,2 → %75,4.
 - 2026-10-29 (bitki kataloğu 4): Practical Fishkeeping'in tür kutuları 22 bitki kaydına girdi; 13 kayıt sıcaklığı, 11 kayıt pH'ı ilk kez aldı, 4 kayıtta aralık daraldı. Sıcaklık %44 → %53,2, pH %43,3 → %51,1, bütün değerler dolu %21,3 → %25,5.
 - 2026-10-28 (bitki kataloğu 3): bitkiler 141 kayıt; üç yalnız uyarı kaydı eklendi (*Azolla filiculoides*, *Ophiopogon japonicus*, *Pistia stratiotes*), değerleri olmadığı için değer satırlarının oranı biraz düştü (sıcaklık %44, pH %43,3, bütün değerler dolu %21,3); istilacı tür etiketi 7, su bitkisi değil etiketi 1.
 - 2026-10-28 (ilk ölçüm): canlılar 423 kaydın hepsinde kendi kaynak sayfası; ekipman 3541 kayıt, hesap değeri %90,8; bakım ürünleri 1893 kayıt; bitkiler 138 kayıt, bütün değerler dolu %21,7 (sıcaklık %44,9, pH %44,2).
