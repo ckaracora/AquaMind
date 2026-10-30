@@ -3224,7 +3224,7 @@ for (const model of ["SP-601E", "SP-602E", "SP-603E", "SP-604E", "SP-601F", "SP-
 }
 assert.equal(boyuEquipment("ACQ-009")?.sourceUrl, "https://www.boyuaquarium.com/En_Pr_d_gci_56_id_105.html", "Boyu ACQ-009 üreticinin ürün sayfasına bağlanmalı");
 assert.deepEqual(["WF-2015", "WF-2025"].map((model) => boyuEquipment(model)?.sourceUrl), Array(2).fill("https://www.boyuaquarium.com/En_Pr_d_gci_27_id_78.html"), "Boyu WF-2015/2025 üreticinin ürün sayfasına bağlanmalı");
-for (const [model, flow, power] of [["CJY-1000", 60, 1.7], ["CJY-1500", 90, 2.2], ["SES-20", 1200, 15], ["SES-30", 1800, 25], ["SES-60", 3600, 35]]) {
+for (const [model, flow, power] of [["CJY-1000", 60, 1.7], ["CJY-1500", 90, 2.2], ["SES-20", 1200, undefined], ["SES-30", 1800, 25], ["SES-60", 3600, 35]]) {
   const item = equipmentCatalog.find((entry) => entry.brand === "Boyu" && entry.model === model);
   assert.deepEqual([item?.category, item?.ratedFlowLph, item?.powerW], ["air_pump", flow, power], `Boyu ${model} doğrulanmış hava debisi ve güç değerini taşımalı`);
   assert(item?.sourceUrl.includes("akvaryumexpress.com"), `Boyu ${model} güvenilir yerel ürün kaynağına bağlanmalı`);
@@ -7699,7 +7699,7 @@ for (const model of ["LY202 Aktif Karbon 500 g", "Biyolojik Seramik 500 g", "Zeo
 
 const jingyeEquipment = equipmentCatalog.filter((item) => item.brand === "Jingye");
 assert.equal(jingyeEquipment.length, 43, "Jingye doğrulanan filtre, pompa, hava motoru ve bakım portföyü 43 ürün ailesi içermeli");
-for (const [model, flow, power] of [["LV-500DX",350,6],["LV-1000DX",750,10],["LV-2000DX",1500,25],["LV-2500DX",2500,35],["JY-910",500,6],["JY-915",800,12],["JY-920",1200,18],["JY-925",1600,25],["JY-825",2500,35],["JY-W155",250,3.8],["JY-W255",400,3.8],["JY-W355",500,3.8],["JY-6100F",500,6],["6972934051028 Şeffaf İç Filtre Siyah",500,6],["JY-6600F",1500,35],["JY-801F",880,15],["YE-12",210,3],["YE-22",480,5],["CD100",90,1.5],["CD300",120,3],["CD400",240,3.5]]) {
+for (const [model, flow, power] of [["LV-500DX",350,6],["LV-1000DX",750,10],["LV-2000DX",1500,25],["LV-2500DX",2500,35],["JY-910",500,6],["JY-915",800,12],["JY-920",1200,18],["JY-925",1600,25],["JY-825",2500,35],["JY-W155",250,3.8],["JY-W255",400,3.8],["JY-W355",500,3.8],["JY-6100F",500,6],["6972934051028 Şeffaf İç Filtre Siyah",500,6],["JY-6600F",1500,35],["JY-801F",880,15],["YE-12",210,3],["YE-22",undefined,5],["CD100",90,1.5],["CD300",undefined,3],["CD400",240,3.5]]) {
   const item = jingyeEquipment.find((entry) => entry.model === model);
   assert.equal(item?.ratedFlowLph, flow, `Jingye ${model} doğrulanmış güvenli debiyi taşımalı`);
   assert.equal(item?.powerW, power, `Jingye ${model} doğrulanmış güç değerini taşımalı`);
@@ -7726,7 +7726,7 @@ for (const model of ["5000F","5100F","5200F","611","820F","9100DX","911","921","
 for (const model of ["810F", "815F", "820F"]) {
   assert.equal(jingyeEquipment.find((item) => item.model === model)?.category, "filter", `Jingye ${model} tepe filtre kategorisinde bulunmalı`);
 }
-assert(jingyeEquipment.find((item) => item.model === "CD300")?.specifications.includes("güvenli hesap değeri"), "Jingye CD300 kaynak çelişkisi kullanıcıdan saklanmamalı");
+assert(jingyeEquipment.find((item) => item.model === "CD300")?.specifications.includes("hava debisi mağaza sayfasında çelişkili"), "Jingye CD300 kaynak çelişkisi kullanıcıdan saklanmamalı");
 
 assert.equal(tropicalCare.filter((item) => item.category === "food").length, 57, "Tropical'ın doğrulanan tatlı su yem serisi 57 ürün ailesi içermeli");
 assert.equal(tropicalCare.filter((item) => item.category === "fertilizer").length, 6, "Tropical'ın doğrulanan bitki bakım serisi 6 ürün içermeli");
@@ -8362,5 +8362,40 @@ for (const [prefix, powers, sourceUrl] of [["boyu-ht-6",[50,100,150,200,250,300]
 }
 const boyuDr50 = equipmentCatalog.find((entry) => entry.id === "boyu-dr-50");
 assert.deepEqual([boyuDr50?.powerW,boyuDr50?.sourceUrl,boyuDr50?.capacityDataNote], [50,"https://www.boyuaquarium.com/En_Pr_d_gci_57_id_163.html",undefined], "Boyu DR-50 seri sayfasındaki ürün resminin etiketindeki 50 W ile hesapta kalmalı");
+
+// Ekipman kaynak bağlantısı paketi 1 (2026-10-30): kabul edilen mağazada değer ürünün kendi sayfasında yazmalı; marka, kategori ya da
+// sayfalı liste sayfası yetmez (DATA_SOURCES, karar 0019). Liste sayfası: mağaza ana sayfası, tek parçalı ve rakamsız yol ya da "/sayfa/N".
+{
+  const shopHosts = ["akvaryumexpress.com", "atakanpetshop.com", "malawiizmir.com", "aquarubi.com", "bettamarketim.com.tr", "cikletistpetshop.com"];
+  // Adında model numarası olmayan ürün sayfaları (açılıp okundu).
+  const productPagesWithoutDigits = new Set(["https://atakanpetshop.com/resun-mini-filtre"]);
+  const listPageSourced = equipmentCatalog.filter((item) => {
+    if (!["filter", "heater", "air_pump"].includes(item.category) || withdrawnEquipmentIds.has(item.id)) return false;
+    if (item.ratedFlowLph === undefined && item.powerW === undefined && item.recommendedMaxL === undefined) return false;
+    if (productPagesWithoutDigits.has(item.sourceUrl)) return false;
+    const url = new URL(item.sourceUrl);
+    const segments = url.pathname.split("/").filter(Boolean);
+    return shopHosts.includes(url.hostname.replace(/^www\./, "")) && (segments.length === 0 || (segments.length === 1 && !/\d/.test(segments[0])) || segments.includes("sayfa"));
+  });
+  assert.deepEqual(listPageSourced.map((item) => item.id), [], "Hesaba giren ekipmanın kaynağı mağazanın marka ya da liste sayfası olmamalı");
+  const linkFix = (id) => equipmentCatalog.find((item) => item.id === id);
+  // Aynı sayfa gücü iki farklı değerle yazıyor: alan kullanılmaz, debi kalır.
+  // Boyu WF-2055: mağaza sayfası 720 L/saat ile "saatte 300 litre" arasında çelişiyor; üreticinin tablosu (öncelikli) 720 L/h ve 8.6 W.
+  assert.deepEqual([linkFix("boyu-wf-2055")?.ratedFlowLph, linkFix("boyu-wf-2055")?.powerW, linkFix("boyu-wf-2055")?.sourceUrl], [720, 8.6, "https://www.boyuaquarium.com/En_Pr_d_gci_27_id_82.html"], "Boyu WF-2055 üreticinin tablosundaki değerlerle üretici sayfasına bağlanmalı");
+  assert.deepEqual([linkFix("jingye-ye22")?.ratedFlowLph, linkFix("jingye-ye22")?.powerW], [undefined, 5], "Jingye YE-22 çelişkili hava debisini taşımamalı");
+  for (const [id, flow] of [["boyu-ses-20", 1200], ["waterbear-880f", 650], ["waterbear-1880f", 880], ["waterbear-2880f", 1800]]) {
+    assert.deepEqual([linkFix(id)?.ratedFlowLph, linkFix(id)?.powerW], [flow, undefined], `${id} çelişkili gücü taşımamalı, debisini korumalı`);
+    assert.match(linkFix(id)?.specifications ?? "", /güç mağaza sayfasında çelişkili/, `${id} açıklaması gücün neden olmadığını söylemeli`);
+  }
+  assert.equal(linkFix("waterbear-3880f")?.powerW, 40, "WaterBear 3880F'in sayfada tutarlı 40 W değeri kalmalı");
+  // Mağaza değeri eskisinden farklı: mağazanınki; sayfada olmayan güç kullanılmaz.
+  // Aynı mağaza sayfasının başlığı ile açıklaması debiyi farklı yazıyor (0019'dan önceki "düşük değer" yöntemi kaldırıldı); hacim tutarlı.
+  for (const [id, maxL] of [["ejet-3368", 250], ["ejet-3378", 400], ["ejet-3388", 450]]) {
+    assert.deepEqual([linkFix(id)?.ratedFlowLph, linkFix(id)?.recommendedMaxL], [undefined, maxL], `${id} çelişkili debiyi taşımamalı, sayfadaki hacmi korumalı`);
+  }
+  assert.deepEqual([linkFix("ejet-3358")?.ratedFlowLph, linkFix("jingye-cd300")?.ratedFlowLph, linkFix("jingye-cd300")?.powerW], [750, undefined, 3], "Ejet 3358 tutarlı debisini korumalı; Jingye CD300 çelişkili hava debisini taşımamalı");
+  assert.equal(equipmentCatalog.filter((item) => item.specifications.includes("güvenli hesap değeri") && !withdrawnEquipmentIds.has(item.id) && !shopVerified(item)).map((item) => item.id).join(), "ejet-3358", "Çelişkide düşük değeri seçen eski yöntem yalnız kabul edilen sayfası tutarlı Ejet 3358'de açıklama olarak kalmalı");
+  assert.deepEqual([linkFix("resun-mini")?.ratedFlowLph, linkFix("resun-mini")?.powerW, linkFix("resun-mini")?.sourceUrl], [200, undefined, "https://atakanpetshop.com/resun-mini-filtre"], "Resun Mini ürün sayfasındaki 200 L/saat değerini taşımalı");
+}
 
 console.log(`Katalog akışı: ${equipmentCategories.length} ekipman kategorisi, ${livestockCategories.length} canlı sınıfı ve ${careProductCatalog.length} bakım ürünü başarıyla doğrulandı.`);

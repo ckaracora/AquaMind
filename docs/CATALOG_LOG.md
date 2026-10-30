@@ -3166,7 +3166,7 @@ Güncel alt adım: JBL filtre medyası, bakteri başlangıcı, sorun giderici/pH
     - Eheim Thermocontrol 250 W: kılavuzdaki tablodan (3618: 400–600 L).
     - Oase HeatUp 150: ürün sayfasından (150 W, 150 L'ye kadar).
     - Tetra FilterJet 600: bu günlükte yazılı çelişkiyle (sayfa 600, kılavuz 550 L/saat; hesapta 550).
-    - Ejet 3388: değerler mağaza sayfasında. Başlık 2000, açıklama 1910 L/saat yazıyor; kayıt, karar 0019'dan önceki yöntemle düşük olanı kullanıyor. Güncel kural çelişen alanı kullanmıyor; aynı durumdaki Ejet kayıtları açık listede. Filtre kapasitesi üreticinin hacim değerinden (350–450 L) geldiği için hesap sonucunu değiştirmiyor.
+    - Ejet 3388: değerler mağaza sayfasında. Başlık 2000, açıklama 1910 L/saat yazıyor; kayıt, karar 0019'dan önceki yöntemle düşük olanı kullanıyor. Güncel kural çelişen alanı kullanmıyor; aynı durumdaki Ejet kayıtları açık listede. Filtre kapasitesi aynı sayfadaki hacim değerinden (350–450 L) geldiği için hesap sonucunu değiştirmiyor.
   - 1 kayıtta değer yanlış aktarılmıştı (düzeltildi): Sera X-Edge 300. Sera'nın tablosu hacmi stok yoğunluğuna göre veriyor: "several small fish / shrimps" 50 L, "two small fish / shrimps" 100 L. Kayıt bunu koşulsuz 50–100 L aralığına çevirmişti; motor üst sınırı kapasite saydığı için filtre olağan stokta iki kat büyük görünüyordu. Aynı tablo X-Edge 450 (80/200 L) ve 700 (100/300 L) için de geçerli. Üçünde kapasite olağan stokun değeri oldu (50, 80, 100 L); iki balıklı üst değer açıklamada koşuluyla yazıyor. Kaynakta olmayan en az hacim kaldırıldı.
   - 1 kaydın değeri kaynakta yazmıyor (hesaptan çekildi): Boyu HT-650. Kaynak Boyu'nun ısıtıcı listesiydi. HT serisinin ürün sayfası yalnız model adlarını ve boyları veriyor, gücü yazmıyor; değer model adından (HT-650 → 50 W) çıkarılmıştı. DR serisinin sayfası da güç tablosu vermiyor. Boyu'nun kılavuzları arasında ısıtıcı yok; kabul edilen yerel mağazalarda bu modeller bulunmadı. Karar 0019'a göre HT serisinin 6 ve DR serisinin 5 kaydı adıyla listede kalır, gücü hesaptan çekilir, kullanıcı etiket değerini kendisi girebilir. DR-50 hesapta kaldı: seri sayfasındaki ürün resminde cihazın etiketi "DR-50 220V 50Hz 50W" yazıyor; bu etiket öbür DR modellerinin gücünü göstermez. On iki kaydın kaynağı kendi seri sayfasına bağlandı.
   - 4 kayıt değer taşımıyor; kayıt ve kaynak doğru: Boyu SF-101, Aquawing AQ255, Boyu EFU-10000A, Jeneca BX-22 500 W (sayfada bu güç yok; notu kayıtta).
@@ -3199,3 +3199,37 @@ Güncel alt adım: JBL filtre medyası, bakteri başlangıcı, sorun giderici/pH
   - Kaynak bağlantılarının eskimesi daha yaygın: JBL'in adres değişikliği, kayan liste sayfaları, açılamayan siteler.
 - Altın fikstür: motor değişmedi; 1.077 vakadan 13'ü değişti, hiçbirinin genel durumu değişmedi. Puanı değişenler Endlicheri biçirin iki vakası ve beş Boyu DR ısıtıcısı vakası; ayrıntı `docs/COMPATIBILITY.md`'de.
 - Araştırma dosyaları (oturuma özel scratchpad `ornek/`): seçim betiği ve seçilen kayıtlar, indirilen sayfalar, Boyu'nun kırpılmış tabloları, uygulama ve tarama betikleri.
+
+## 2026-10-30 Ekipman kaynak bağlantısı paketi 1: liste sayfası kaynakları (Claude)
+
+- Örnek denetiminin bütün katalog taramasında hesaba giren ve değer taşıyan ekipmanın 54'ü bir mağazanın marka, kategori ya da sayfalı liste sayfasına bağlıydı (Atakan 32, Akvaryum Express 21, Aquarubi 1). Kural (`docs/DATA_SOURCES.md`, karar 0019): kabul edilen mağazada değer tam modelin kendi ürün sayfasında yazmalı; marka ya da liste sayfası yetmez.
+- Yöntem:
+  - Mağazaların marka ve kategori sayfalarındaki ürün bağlantıları toplandı. Akvaryum Express'in sayfalı listeleri sonuna kadar gezildi.
+  - Atakan'ın sayfaları ürünleri kaydırdıkça yüklüyor. Orada bulunamayan 9 model mağazanın kendi aramasıyla (tarayıcıda) bulundu.
+  - Her ürün sayfası açılıp başlığı ve açıklaması okundu (Atakan'da ürün açıklaması, Akvaryum Express'te "Açıklama" bölümü; benzer ürünler sayılmadı). Debi, güç ve hacim kayıtla alan alan karşılaştırıldı.
+  - Karar 0019'un alan kuralları uygulandı: değer ürün sayfasında yazmalı; mağazanın değeri eskisinden farklıysa mağazanınki kullanılır; aynı sayfa bir alanı iki farklı değerle yazıyorsa o alan kullanılmaz; kayda yeni alan eklenmez.
+- Sonuç:
+  - 54 kaydın hepsinin kaynağı ürünün kendi sayfasına bağlandı: 53'ü mağazanın ürün sayfası, Boyu WF-2055 üreticinin seri sayfası. `verifiedAt` 2026-10-30.
+  - 47 kaydın değerleri mağazanın ürün sayfasıyla aynı.
+  - Boyu WF-2055: Atakan'ın sayfası başlıkta 720 L/saat, açıklamada saatte 300 litre yazıyor. Üreticinin tablosu (öncelikli) 720 L/h ve 8,6 W; kaynak üretici sayfası oldu, değerler aynı.
+  - 6 kayıtta alan düzeltildi:
+    - Boyu SES-20: başlık 15 W, açıklamadaki teknik tablo "POWER: 25W". Güç kullanılmaz; debi (20 L/dakika) tutarlı. Boyu'nun kendi sitesi SES serisini yayımlamıyor.
+    - WaterBear 880F, 1880F ve 2880F: başlık ve teknik tablo 15/25/30 W, açıklamadaki ortak cümle "Güçlü 40W motoruyla". Güç kullanılmaz; debiler tutarlı. 3880F'te 40 W her yerde aynı, kaldı.
+    - Resun Mini: ürün sayfası saatte 200 litre ve 60 litrelik akvaryum yazıyor; gücü yazmıyor. Debi 400 → 200 L/saat (mağazanınki); güç kaldırıldı. Hacim kayıtta olmadığı için eklenmedi.
+    - Jingye YE-22: başlık 2 × 4 L/dakika, açıklama her çıkıştan 2 L/dakika. Hava debisi kaldırıldı, gücü (5 W) kaldı; kapasite notu nedeni açıklıyor.
+  - Değeri olmayan alanlar eklenmedi. Örneğin Jingye T640/T650'nin 15/18 W'ı, Dophin FB serisinin gücü, Sobo WP-300F'in 150 L/saat debisi ve birçok sayfadaki akvaryum hacmi.
+- Başlığı ile açıklaması çelişen eski kayıtlar (örnek denetiminin açık listesi):
+  - Ejet 3368, 3378 ve 3388: Atakan'ın ürün sayfası başlıkta 1650/1850/2000, açıklamada 1400/1750/1910 L/saat yazıyor. Kayıtlar karar 0019'dan önceki "düşük olanı al" yöntemiyle yazılmıştı. Debi kaldırıldı. Aynı sayfadaki tutarlı hacim (200–250, 300–400, 350–450 L) kaldı; filtre kapasitesi zaten bu hacimden hesaplanıyor.
+  - Ejet 3358: kabul edilen tek kaynak olan Atakan'ın sayfası tutarlı (750 L/saat). Çelişki kabul edilmeyen bir satıcının başlığıydı; açıklamadaki not kaldı, değer değişmedi.
+  - Jingye CD300 (aynı yöntemi kullanan son kayıt): başlık 2 × 1,5 L/dakika, açıklama toplam 2 L/dakika. Hava debisi kaldırıldı, gücü (3 W) kaldı; kapasite notu nedeni açıklıyor.
+- Düzeltme: örnek denetimi raporunda Ejet 3388 için "kapasite üreticinin hacim değerinden" yazılmıştı. Hacim üreticiden değil, Atakan'ın ürün sayfasından geliyor.
+- Test: hesaba giren ekipmanda mağazanın marka ya da liste sayfasına bağlı kayıt kalmamalı (ölçüt: mağaza ana sayfası, tek parçalı ve rakamsız yol ya da "/sayfa/N"; adında model numarası olmayan Resun Mini ürün sayfası istisna). Dört alan düzeltmesi, Ejet ve CD300 ayrıca sabitlendi.
+- Kullanıcıya etkisi:
+  - Ekipmanın kaynak bağlantısı artık ürünün kendi sayfasını açıyor.
+  - Resun Mini'nin debisi yarıya indi; filtre kapasitesi debiden hesaplandığı için bu filtre artık daha küçük akvaryuma yeter.
+  - Jingye CD300 ve YE-22'nin hava debisi "değer bekliyor" görünür. Hava motoruyla çalışan bir sünger filtrenin tek hava motoruysa filtre artık çalışan filtre sayılmaz: filtrasyon "tehlike"ye düşer, "Ekipman kapasite bilgisi eksik" ve "Sünger filtre için hava motoru gerekli" uyarıları çıkar (40 L, XY-2835 ve CD300 örneğinde 95 → 45). Kullanıcı etiketteki debiyi girince düzelir.
+  - Güç kaldırılan filtre ve hava motorlarında hesap değişmez, çünkü filtre ve hava motoru gücü hesapta kullanılmıyor.
+  - Ejet'lerin kapasitesi hacimden hesaplandığı için değişmedi. Debi yalnız önerilen hacmin altındaki akvaryumda "Filtre akışı güçlü olabilir" uyarısında kullanılıyordu; bu uyarı artık çıkmaz (100 L ve Ejet 3388 örneğinde filtrasyon 56 → 95).
+- Altın fikstür değişmedi (bu kayıtların hiçbiri fikstürde değil).
+- Codex'in 1. turu WF-2055 ve YE-22'deki çelişkiyi, CD300'ün sünger filtreye etkisinin anlatılmadığını, testin mağaza ana sayfasını kaçırdığını ve sayıların yanlış olduğunu buldu; hepsi düzeltildi.
+- Araştırma dosyaları (oturuma özel scratchpad `baglanti/`): toplama, eşleştirme, okuma ve uygulama betikleri, indirilen ürün sayfaları.
