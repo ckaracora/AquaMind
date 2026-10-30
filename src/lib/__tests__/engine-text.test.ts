@@ -114,6 +114,7 @@ const devices: Record<string, EquipmentProfileInput> = {
   rangeHeaterA: { id: "rangeHeaterA", category: "heater", brand: "Stub", model: "Aralıklı A", recommendedMinL: 50, recommendedMaxL: 100 },
   rangeHeaterB: { id: "rangeHeaterB", category: "heater", brand: "Stub", model: "Aralıklı B", recommendedMinL: 50, recommendedMaxL: 100 },
   bareHeater: { id: "bareHeater", category: "heater", brand: "Stub", model: "Verisiz" },
+  wattHeater: { id: "wattHeater", category: "heater", brand: "Stub", model: "Yalnız watt", powerW: 100 },
   strong: { id: "strong", category: "filter", brand: "Stub", model: "Güçlü", ratedFlowLph: 2000 },
   big: { id: "big", category: "filter", brand: "Stub", model: "Büyük", recommendedMaxL: 600 },
   sized2: { id: "sized2", category: "filter", brand: "Stub", model: "Önerili 2", recommendedMaxL: 60 },
@@ -143,6 +144,8 @@ const scenarios: Array<[string, HealthAnalysis]> = [
   ["karışık filtre, sınırın üstünde", analyze(tank({ netVolumeLiters: 300 }), [animal("plain")], [device("sized"), device("flowOnly")])],
   ["iki aralıklı ısıtıcı, watt yok", analyze(tank(), [animal("plain")], [device("rangeHeaterA"), device("rangeHeaterB")])],
   ["verisiz ısıtıcı", analyze(tank(), [animal("plain")], [device("bareHeater")])],
+  // Altın fikstürde yalnız watt değerli ısıtıcı kalmadı (Boyu DR ısıtıcılarının gücü 2026-10-30 örnek denetiminde hesaptan çekildi).
+  ["yalnız watt değerli ısıtıcı, uygun hacim", analyze(tank({ netVolumeLiters: 100 }), [animal("plain")], [device("wattHeater")])],
   ["tuzluluk aralık dışında", analyze(tank({ type: "saltwater" }), [animal("marine")], [], reading({ specificGravity: 1.01, temperature: 25, ph: 8.2 }))],
   ["geçersiz iki ölçüm", analyze(tank(), [animal("plain")], [], reading({ ammonia: -1, nitrate: Number.NaN }))],
   ["geçersiz tek ölçüm", analyze(tank(), [animal("plain")], [], reading({ nitrite: -1 }))],

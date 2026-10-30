@@ -3144,3 +3144,58 @@ Güncel alt adım: JBL filtre medyası, bakteri başlangıcı, sorun giderici/pH
 - Davranış kayıtları (`src/data/species-behavior.ts`): karides yer: orkide dottyback, sarı lapin, Banggai kardinal (iri bireyler), ocellaris (PFK: iri yetişkinler çok küçük süs karideslerini ara sıra); salyangoz yer: sarı lapin; kendi türüyle tek: iki renkli horozbina (eşleşmiş çift hariç), yosun horozbinası.
 - Nitelik düzeltmeleri: mavi kadife deniz salyangozunun tür akvaryumu işareti kalktı (Fishkeeper resif uyumu "Excellent, but requires an ongoing source of flatworms"; eski Türkçe adı eş ad olarak kaldı); mor antenli nudibranchın tür akvaryumu işareti kalktı (Meerwasser-Lexikon "Für Aquarienhaltung nicht geeignet" ve sünger beslenmesi yazıyor, birlikte tutmayı tehlikeli saymıyor); uzun dokunaçlı anemonun akıntısı kaldırıldı (kabul edilen kaynakta yok); palyaçoların ve maroon'un eski tank uzunlukları kaldırıldı (kabul edilen kaynakta yok; ocellaris'in 60 cm'si artık PFK'den); maroon'un grubu 2 → 1.
 - Kaldırılan ek kaynaklar (karar 0029'da kabul edilmeyen satıcılar ve hobi siteleri): Quality Marine, LiveAquaria, De Jong Marinelife, LiveStock USA, aquario.gr, WhiteCorals, ReefTrak, Aquarium Glaser (importstation), SaltCorner, ITIS. Çikletist bağlantıları satış adlarının kaynağı olarak kaldı.
+## 2026-10-30 Örnek denetim: 40 canlı ve 40 ekipman (Claude)
+
+- Yol haritasının veri işlerindeki sıra (2026-10-09): örnek denetim, satış adları, bakım ürünleri en sona. Amaç, kataloğun bütününde değerlerin kaynağıyla ne sıklıkla uyuştuğunu ölçmek ve bulunan hataları düzeltmek.
+- Seçim: sabit tohumla (20261030) rastgele, yeniden üretilebilir. Canlılardan 40 kayıt (deniz kayıtları hariç, çünkü 2026-10-30'da yenilendiler; havuz 412). Hesaba giren ekipmandan 40 kayıt (filtre, ısıtıcı, hava motoru; doğrulanmamışlar listesindekiler hariç; havuz 1.184).
+- Yöntem: her kaydın ana kaynağı, gerekiyorsa ek kaynakları açılıp okundu; değerler kayıtla karşılaştırıldı. Boyu'nun teknik tabloları resim içinde olduğu için resimler indirilip kırpılarak okundu. Açılmayan siteler zorlanmadı (sertifika hatası, Cloudflare insan doğrulaması). Codex'in 1. denetim turu, benim "uyumlu" saydığım iki ekipmanda sorun buldu (Sera X-Edge 300, Boyu HT-650) ve taramanın iki eksiğini gösterdi; 2. turu DR-50'nin gücünün ürün resmindeki etikette yazdığını gösterdi. Aşağıdaki sayılar düzeltilmiş hâlidir.
+- Canlı sonuçları (40):
+  - 35 kayıt kaynağıyla uyumlu. Bir kısmı doğrudan aynı, bir kısmı bu günlükte yazılı kuralların sonucu: ortak aralık, taban × genişlik × genişlik hacmi, büyük boy, Apistogramma'da korunan pH.
+  - 1 bilinen açık: `owroewefi-guianacara` (açık listede).
+  - 4 bulgu (ilk üçü bu pakette düzeltildi):
+    - `glowlight-danio`: kayıt Seriously Fish'e bağlıydı, ama değerler sayfanın bugünkü değerlerinden farklıydı (sayfa 2026'da yenilenmiş). Değişiklikler: 60 → 72 L, 60 → 80 cm, 20–25 → 16–26 °C, pH 6–7,5 → 6–8. Grup (8–10'lu, en az 8) ve boy (30 mm SL) aynı. FishBase özet sayfası ek kaynak oldu; FishBase akvaryum uzunluğu yazmıyor.
+    - `apisto-macmasteri`: ana kaynak FishBase'ti. 75 L ve pH 5–7 kabul edilen bir kaynağa dayanmıyordu; Fishkeeper 23–29 °C ve pH 5,5–6,5 yazıyor. Seriously Fish: bir çift için 45 × 30 cm (yaklaşık 41 L) yeterli, grup daha büyük akvaryum ister; 24–28 °C, pH 5,5–7,0; "best in a pair". FishBase: "minimum aquarium size 60 cm". Tür kaynak yenilemesinin yöntemiyle işlendi (FishBase daha uzun bir akvaryum yazıyorsa o): 75 → 41 L, uzunluk 60 cm (aynı), pH 5–7 → 5,5–7. Sıcaklık, boy (FishBase 7 cm TL) ve grup (2) aynı. Bakım notu yeni ölçüyle ve iki kaynağın farkıyla yazıldı. FishBase, Fishkeeper ve eski ek kaynaklar ek kaynak olarak kaldı.
+    - `endlicheri-bichir`: ana kaynak kabul listesinde olmayan bir Alman sitesiydi (einrichtungsbeispiele.de). Seriously Fish: 750 mm SL, 210 × 120 cm taban, 210 × 120 × 90 cm için yaklaşık 2.268 L, 22–27 °C, pH 6,0–8,0, sosyal yapı yayımlanmamış. Fishipedia: yalnız yaşar ("solitario"), klasik akvaryumda bakımı önerilmez. FishBase akvaryum uzunluğu yazmıyor. Değişiklikler: 70 → 75 cm, 2.000 → 2.268 L, 300 → 210 cm, 26–28 → 22–27 °C, pH 6,5–7,5 → 6–8. Grup (1) ve tür akvaryumu işareti aynı (Seriously Fish yalnız iri tank arkadaşlarını uygun görüyor). Bakım notu Seriously Fish ve Fishipedia'ya göre yeniden yazıldı; eski kaynak ek kaynak olarak kaldı.
+    - `electric-blue-crayfish`: ana kaynak bir mağazanın blog yazısı (aquariumcoop.com). Uzman kaynağı olmayan "diğer" kayıtlardan biri (kerevit, yengeç, kurbağa, aksolotl); o paketle kaynaklanacak, açık listeye yazıldı.
+- Ekipman sonuçları (40): değer taşıyan 34 kayıttan 26'sının kaynağı okunabildi. 24'ünün değeri doğru; 1'inde değer yanlış aktarılmış, 1'inin değeri kaynakta yazmıyor.
+  - 20 kayıt kaynağıyla aynı:
+    - 10'u sayfa metninden.
+    - Jeneca AP-8801: dakikada 2,1 L = 126 L/saat.
+    - Aquawing AQX1 ve RS-99 UV: mağazanın ürün sayfasından.
+    - Boyu DGN-120, EFU-10 ve SP-2300B: üreticinin resim tablolarından.
+    - Eheim Thermocontrol 250 W: kılavuzdaki tablodan (3618: 400–600 L).
+    - Oase HeatUp 150: ürün sayfasından (150 W, 150 L'ye kadar).
+    - Tetra FilterJet 600: bu günlükte yazılı çelişkiyle (sayfa 600, kılavuz 550 L/saat; hesapta 550).
+    - Ejet 3388: değerler mağaza sayfasında. Başlık 2000, açıklama 1910 L/saat yazıyor; kayıt, karar 0019'dan önceki yöntemle düşük olanı kullanıyor. Güncel kural çelişen alanı kullanmıyor; aynı durumdaki Ejet kayıtları açık listede. Filtre kapasitesi üreticinin hacim değerinden (350–450 L) geldiği için hesap sonucunu değiştirmiyor.
+  - 1 kayıtta değer yanlış aktarılmıştı (düzeltildi): Sera X-Edge 300. Sera'nın tablosu hacmi stok yoğunluğuna göre veriyor: "several small fish / shrimps" 50 L, "two small fish / shrimps" 100 L. Kayıt bunu koşulsuz 50–100 L aralığına çevirmişti; motor üst sınırı kapasite saydığı için filtre olağan stokta iki kat büyük görünüyordu. Aynı tablo X-Edge 450 (80/200 L) ve 700 (100/300 L) için de geçerli. Üçünde kapasite olağan stokun değeri oldu (50, 80, 100 L); iki balıklı üst değer açıklamada koşuluyla yazıyor. Kaynakta olmayan en az hacim kaldırıldı.
+  - 1 kaydın değeri kaynakta yazmıyor (hesaptan çekildi): Boyu HT-650. Kaynak Boyu'nun ısıtıcı listesiydi. HT serisinin ürün sayfası yalnız model adlarını ve boyları veriyor, gücü yazmıyor; değer model adından (HT-650 → 50 W) çıkarılmıştı. DR serisinin sayfası da güç tablosu vermiyor. Boyu'nun kılavuzları arasında ısıtıcı yok; kabul edilen yerel mağazalarda bu modeller bulunmadı. Karar 0019'a göre HT serisinin 6 ve DR serisinin 5 kaydı adıyla listede kalır, gücü hesaptan çekilir, kullanıcı etiket değerini kendisi girebilir. DR-50 hesapta kaldı: seri sayfasındaki ürün resminde cihazın etiketi "DR-50 220V 50Hz 50W" yazıyor; bu etiket öbür DR modellerinin gücünü göstermez. On iki kaydın kaynağı kendi seri sayfasına bağlandı.
+  - 4 kayıt değer taşımıyor; kayıt ve kaynak doğru: Boyu SF-101, Aquawing AQ255, Boyu EFU-10000A, Jeneca BX-22 500 W (sayfada bu güç yok; notu kayıtta).
+  - 4 kayıtta değer doğruydu, ama kaynak bir marka ya da liste sayfasıydı. Kurala göre değer ürünün kendi sayfasında yazmalı. Ürün sayfalarına bağlandılar:
+    - Boyu CJY-1000: Akvaryum Express'in Boyu sayfası kaymıştı, ürün artık 4. sayfada değil.
+    - Jingye 611: Atakan'ın marka sayfası.
+    - WaterBear SD-01: Atakan'ın kategori sayfası.
+    - Boyu GR-200: üreticinin ısıtıcı listesi.
+    - Aynı liste sayfasını paylaşan kayıtlar da düzeltildi: WaterBear SD-02 (200 L/saat ve 2 W ürün sayfasında); Boyu GR-100, GR-150, GR-250 ve GR-300 (GR tablosu beşini birden veriyor); Boyu TR-100A…300A (TR tablosu beşini birden veriyor).
+  - 8 kaydın değeri bugün yeniden doğrulanamadı; değerler değiştirilmedi:
+    - JBL PROTEMP b40 II: ana ve ek kaynak JBL'in ana sayfasına yönleniyor (JBL ürün adreslerini değiştirmiş).
+    - JBL ProSilent S200: ana kaynak olan kılavuz açılıyor, ama sayı vermiyor. Ek kaynaklardan biri JBL'in ana sayfasına yönleniyor, öbürünün sitesine güvenli bağlantı kurulamıyor.
+    - Haqos 2 kayıt: sertifika başka adrese ait.
+    - Resun 2 kayıt: kendinden imzalı sertifika.
+    - Fluval 2 kayıt: Cloudflare insan doğrulaması; geçilmedi.
+  - JBL PROAIR a50: ana kaynak JBL'in ana sayfasına yönleniyor, ama ek kaynaktaki kılavuz 50 L/saat ve 10–50 L'yi doğruluyor (yukarıdaki 24 doğru değerin içinde).
+  - 1 kaydın kaynağı kabul edilmeyen bir pazar yeri (Meç Turbo Pipo, Trendyol); değer taşımıyor.
+- Oranlar:
+  - Canlı: değeri kaynağıyla uyuşmayan 2/40 (%5); ana kaynağı kabul listesinde olmayan 2/40 (%5).
+  - Ekipman, okunabilen 26 değerli kayıtta: yanlış aktarılan 1 (%3,8), kaynakta yazmayan 1 (%3,8).
+  - Ekipman, örneklemin tamamında: kural dışı liste sayfası kaynağı 5/40 (%12,5; HT-650 dahil); değeri bugün yeniden doğrulanamayan 8/40 (%20).
+- Bütün katalog taraması (aynı gün, örneklemin dışında; bu paketin düzeltmelerinden sonra). Ayrıntılar `docs/CATALOG_SOURCE_GAPS.md`'de:
+  - Ana kaynağı kabul listesinde olmayan 38 canlı kaydı var; 20'si açık listedeydi, 18'i eklendi. Fishipedia'nın İngilizce sitesi (fishi-pedia.com) aynı ISSN'i (2270-7247) taşıyor, kabul edilen kaynak sayıldı.
+  - Hesaba giren ve değer taşıyan 1.099 ekipmandan 54'ünün kaynağı bir mağazanın marka ya da liste sayfası.
+  - 351 JBL kaydının 298'inin ana kaynağı JBL'in eski adresi; bunların 48'i hesaba giriyor.
+  - Bugün açılamayan alan adları: Resun 172 kayıt (90'ı hesapta), Fluval 87 (40), Haqos 38 (14).
+- Değerlendirme:
+  - Canlıda bulunan değer hataları, kaynağı sonradan yenilenen ya da hiç kabul edilen kaynağa bağlanmamış kayıtlarda.
+  - Ekipmanda iki tür hata var: kaynağın koşullu yazdığı değerin koşulsuz aktarılması (X-Edge) ve model adından çıkarılan değer (Boyu HT ve DR).
+  - Kaynak bağlantılarının eskimesi daha yaygın: JBL'in adres değişikliği, kayan liste sayfaları, açılamayan siteler.
+- Altın fikstür: motor değişmedi; 1.077 vakadan 13'ü değişti, hiçbirinin genel durumu değişmedi. Puanı değişenler Endlicheri biçirin iki vakası ve beş Boyu DR ısıtıcısı vakası; ayrıntı `docs/COMPATIBILITY.md`'de.
+- Araştırma dosyaları (oturuma özel scratchpad `ornek/`): seçim betiği ve seçilen kayıtlar, indirilen sayfalar, Boyu'nun kırpılmış tabloları, uygulama ve tarama betikleri.

@@ -1012,7 +1012,7 @@ for (const [specificGravity, expected] of [[1.018, "none"], [1.025, "warning"], 
     [animal("endlicheri-bichir", "Endlicheri bichir", 1), animal("neon-tetra", "Neon tetra", 10)],
     [],
   );
-  assert.equal(analysis.warnings.find((warning) => warning.title === "Endlicheri bichir: akvaryum çok küçük")?.level, "danger", "Polypterus endlicherii 2000 litre/300 cm altındaki akvaryuma önerilmemeli");
+  assert.equal(analysis.warnings.find((warning) => warning.title === "Endlicheri bichir: akvaryum çok küçük")?.level, "danger", "Polypterus endlicherii 2268 litre/210 cm altındaki akvaryuma önerilmemeli");
   assert(warningTitles(analysis).includes("Endlicheri bichir için tür akvaryumu önerilir"), "Polypterus endlicherii uzman tür akvaryumu güvenliğini göstermeli");
   assert(warningTitles(analysis).includes("Endlicheri bichir: özel bakım gereksinimi"), "Polypterus endlicherii yüzey havası, kaçış kapağı, alan ve sosyal kaynak farkını göstermeli");
 }
