@@ -46,6 +46,7 @@ Teknik kararlar (Claude):
   3. Katalog: 11 kaydın kaynağı ve yeni türler.
 - **Geçiş:** motor değişikliği gelene kadar katalogdaki deniz kayıtlarının özgül ağırlık aralığı yerinde kalır; yoksa bugünkü tuzluluk denetimi sessizce kaybolurdu.
 - **2. adımın uygulaması (2026-10-30):** motor 1.13.0, karar 0030 (`docs/DECISIONS/0030-deniz-suyu-hedefleri.md`). Ürün sahibi puan etkisini ve ekran taslağını görüp dört ayrıntıyı onayladı. Aynı değişiklikle deniz kayıtlarının pH ve özgül ağırlık aralığı kaldırıldı.
+- **3. adımın uygulaması (2026-10-30):** deniz kataloğu, karar 0031 (`docs/DECISIONS/0031-deniz-katalogu.md`): 11 kayıt yenilendi, 20 başlangıç türü eklendi. Ürün sahibi aynı gün ad, atık katsayısı, ana kaynaklarda sayfası olmayan kayıtlar ve akvaryum hacmi kurallarını netleştirdi; hacimde "en büyüğü" kuralının yerini "OATA ile Fishipedia ve Practical Fishkeeping'in büyüğü, Meerwasser-Lexikon yedek" aldı.
 
 ## Sonuçlar
 

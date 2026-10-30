@@ -572,22 +572,22 @@ for (const [specificGravity, expected] of [[1.018, "none"], [1.025, "warning"], 
     [],
     { id: "marine-water-maroon", aquariumId: "test-aquarium", measuredAt: "2026-08-31", temperature: 25, ph: 8.2, specificGravity: 1.023 },
   );
-  assert(warningTitles(analysis).includes("Maroon palyaço balığı: alan sınırda"), "Maroon palyaço balığı 120 litre ve 100 cm altındaki akvaryumda alan uyarısı üretmeli");
+  assert(warningTitles(analysis).includes("Maroon palyaço balığı: alan sınırda"), "Maroon palyaço balığı 200 litrenin altındaki akvaryumda alan uyarısı üretmeli (Fishipedia, karar 0031)");
   assert(warningTitles(analysis).includes("Maroon palyaço balığı: tank arkadaşı seçimine dikkat"), "Maroon palyaço balığının yüksek bölgeciliği kullanıcıya açıklanmalı");
   assert(!warningTitles(analysis).includes("Özgül ağırlık canlı aralığı dışında"), "Geçerli deniz suyu ölçümü Maroon profili için tuzluluk tehlikesi üretmemeli");
 }
 
 {
   const analysis = analyzeAquarium(
-    aquarium({ type: "saltwater", netVolumeLiters: 250, lengthCm: 150 }),
+    aquarium({ type: "saltwater", netVolumeLiters: 60, lengthCm: 150 }),
     // Anemon katalogda "other" kategorisindedir; alan uyarısının tehlike basamağı yalnızca balıklar için geçerlidir (kural seti 1.6.0).
     [{ ...animal("long-tentacle-anemone", "Uzun tentaküllü anemon"), category: "other" }, animal("ocellaris-clownfish", "Ocellaris palyaço balığı", 2)],
     [],
     { id: "marine-water-anemone", aquariumId: "test-aquarium", measuredAt: "2026-08-31", temperature: 25, ph: 8.2, specificGravity: 1.024 },
   );
-  assert(warningTitles(analysis).includes("Uzun tentaküllü anemon: alan sınırda"), "Uzun tentaküllü anemon 300 litrenin altında hacim uyarısı üretmeli");
+  assert(warningTitles(analysis).includes("Uzun tentaküllü anemon: alan sınırda"), "Uzun tentaküllü anemon OATA'nın 80 litresinin altında hacim uyarısı üretmeli (karar 0031)");
   assert(warningTitles(analysis).includes("Uzun tentaküllü anemon: tank arkadaşı seçimine dikkat"), "Hareketli ve sokucu anemon karma akvaryumda uyumluluk uyarısı üretmeli");
-  assert(warningTitles(analysis).includes("Uzun tentaküllü anemon: özel bakım gereksinimi"), "Anemon için kum, ışık, pompa koruması ve bakır uyarıları görünmeli");
+  assert(warningTitles(analysis).includes("Uzun tentaküllü anemon: özel bakım gereksinimi"), "Anemon için kum, olgun akvaryum ve bakır uyarıları görünmeli");
 }
 
 {
@@ -603,24 +603,42 @@ for (const [specificGravity, expected] of [[1.018, "none"], [1.025, "warning"], 
 {
   const analysis = analyzeAquarium(
     aquarium({ type: "saltwater", netVolumeLiters: 120, lengthCm: 60 }),
-    [animal("blue-striped-sea-slug", "Mavi çizgili deniz tavşanı"), animal("ocellaris-clownfish", "Ocellaris palyaço balığı", 2)],
+    [animal("blue-striped-sea-slug", "Mavi kadife deniz salyangozu"), animal("ocellaris-clownfish", "Ocellaris palyaço balığı", 2)],
     [],
     { id: "marine-water-specialist-slug", aquariumId: "test-aquarium", measuredAt: "2026-08-31", temperature: 25, ph: 8.2, specificGravity: 1.024 },
   );
-  assert(warningTitles(analysis).includes("Mavi çizgili deniz tavşanı için tür akvaryumu önerilir"), "Yalnız planarya yiyen deniz tavşanı sıradan topluluk canlısı gibi gösterilmemeli");
-  assert(warningTitles(analysis).includes("Mavi çizgili deniz tavşanı: özel bakım gereksinimi"), "Uzman yem ve pompa koruması uyarısı kullanıcıya gösterilmeli");
-  assert(!warningTitles(analysis).includes("Mavi çizgili deniz tavşanı: alan sınırda"), "Kaynak tank uzunluğu yayımlamıyorsa nudibranch için uydurma santimetre uyarısı verilmemeli");
+  // Karar 0031: Fishkeeper resif uyumunu "Excellent" yazıyor; tür akvaryumu işareti eski, kabul edilmeyen kaynaktandı.
+  assert(!warningTitles(analysis).includes("Mavi kadife deniz salyangozu için tür akvaryumu önerilir"), "Fishkeeper'a göre resife uygun salyangoz tür akvaryumu uyarısı üretmemeli");
+  assert(warningTitles(analysis).includes("Mavi kadife deniz salyangozu: özel bakım gereksinimi"), "Yassı kurt kaynağı gereksinimi kullanıcıya gösterilmeli");
+  assert(!warningTitles(analysis).includes("Mavi kadife deniz salyangozu: alan sınırda"), "OATA'nın 40 litresini aşan akvaryumda alan uyarısı verilmemeli");
 }
 
 {
   const analysis = analyzeAquarium(
-    aquarium({ type: "saltwater", netVolumeLiters: 100, lengthCm: 40 }),
+    aquarium({ type: "saltwater", netVolumeLiters: 200, lengthCm: 40 }),
     [animal("percula-clownfish", "Percula palyaço balığı", 2)],
     [],
     { id: "marine-water-percula-no-length", aquariumId: "test-aquarium", measuredAt: "2026-08-31", temperature: 25, ph: 8.2, specificGravity: 1.023 },
   );
   assert(warningTitles(analysis).includes("Percula palyaço balığı: tank uzunluğu verisi sınırlı"), "Percula kaynağında santimetre eşiği yoksa veri sınırı kullanıcıya açıklanmalı");
   assert(!warningTitles(analysis).includes("Percula palyaço balığı: alan sınırda"), "Percula için kaynaksız tank uzunluğu uyarısı üretilmemeli");
+}
+
+// Deniz kataloğu (karar 0031): kaynaklı davranış kayıtları gerçek deniz kayıtlarıyla.
+{
+  const marineReading = { id: "marine-water-behavior", aquariumId: "test-aquarium", measuredAt: "2026-10-30", temperature: 25, ph: 8.1, specificGravity: 1.025 };
+  const tank = aquarium({ type: "saltwater", netVolumeLiters: 300, lengthCm: 120 });
+  let analysis = analyzeAquarium(tank, [animal("orchid-dottyback", "Orkide dottyback"), { ...animal("sexy-shrimp", "Seksi karides", 3), category: "shrimp" }], [], marineReading);
+  assert(analysis.warnings.some((item) => item.title === "Karidesler yenebilir" && item.message.includes("Orkide dottyback") && item.message.includes("Fishkeeper")), "Fishkeeper'a göre süs karideslerini avlayan orkide dottyback seksi karidesle uyarı üretmeli");
+  analysis = analyzeAquarium(tank, [animal("ocellaris-clownfish", "Ocellaris palyaço balığı", 2), { ...animal("peppermint-shrimp", "Nane karidesi", 2), category: "shrimp" }], [], marineReading);
+  assert(analysis.warnings.some((item) => item.title === "Karidesler yenebilir" && item.message.includes("Practical Fishkeeping")), "Ocellaris ile nane karidesi Practical Fishkeeping'in notuyla uyarı üretmeli");
+  analysis = analyzeAquarium(tank, [animal("yellow-wrasse", "Sarı lapin"), { ...animal("nassarius-snail", "Nassarius salyangozu", 3), category: "snail" }], [], marineReading);
+  assert(warningTitles(analysis).includes("Salyangozlar yenebilir"), "Fishkeeper'a göre küçük salyangozlar için tehdit olan sarı lapin salyangozla uyarı üretmeli");
+  analysis = analyzeAquarium(tank, [animal("algae-blenny", "Yosun horozbinası", 2)], [], marineReading);
+  assert(warningTitles(analysis).includes("Yosun horozbinası: tek tutulmalı"), "Fishkeeper'a göre tek tutulması gereken yosun horozbinası çift olunca uyarı üretmeli");
+  analysis = analyzeAquarium(tank, [{ ...animal("purple-antenna-nudibranch", "Mor antenli nudibranch"), category: "other" }, animal("ocellaris-clownfish", "Ocellaris palyaço balığı", 2)], [], marineReading);
+  assert(!warningTitles(analysis).includes("Mor antenli nudibranch için tür akvaryumu önerilir"), "Kabul edilen kaynaklar tür akvaryumu demediği için nudibranch tehlike üretmemeli");
+  assert(warningTitles(analysis).includes("Mor antenli nudibranch: özel bakım gereksinimi"), "Akvaryuma uygun olmadığı bakım notunda görünmeli");
 }
 
 {

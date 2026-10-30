@@ -4079,42 +4079,43 @@ const ocellarisClownfish = speciesCatalog.find((item) => item.id === "ocellaris-
 assert(ocellarisClownfish, "Ocellaris palyaço balığı doğrulanmış deniz canlısı kataloğunda bulunmalı");
 assert.deepEqual(
   [ocellarisClownfish.scientificName, ocellarisClownfish.minVolumeL, ocellarisClownfish.minTankLengthCm, ocellarisClownfish.minGroup, ocellarisClownfish.temperature, ocellarisClownfish.ph, ocellarisClownfish.specificGravity],
-  ["Amphiprion ocellaris", 60, 60, 2, [24, 26], undefined, undefined],
-  "Ocellaris palyaço balığı OATA ve uzman kaynaklardaki tür değerlerini taşımalı; pH ve tuzluluk akvaryum düzeyinde (karar 0029, 0030)",
+  ["Amphiprion ocellaris", 100, 60, 2, [23, 27], undefined, undefined],
+  "Ocellaris palyaço balığı Fishkeeper, Fishipedia ve Practical Fishkeeping değerlerini taşımalı; pH ve tuzluluk akvaryum düzeyinde (karar 0029, 0030, 0031)",
 );
 assert.deepEqual(speciesWaterTypes(ocellarisClownfish), ["saltwater"], "Ocellaris yalnızca tuzlu su akvaryumu seçicisinde görünmeli");
 assert.deepEqual(speciesWaterTypes(speciesCatalog.find((item) => item.id === "neon-tetra")), ["freshwater"], "Eski tatlı su profilleri açık su türü alanı olmadan geriye uyumlu kalmalı");
 assert.equal(speciesForLivestock({commonName:"Ocelleris Clown (Wild)",category:"fish",quantity:1})?.id, "ocellaris-clownfish", "Cikletist satış adı doğru Ocellaris profiline bağlanmalı");
-assert.equal(ocellarisClownfish.verifiedAt, "2026-08-31", "İlk deniz canlısı güncel doğrulama tarihini taşımalı");
+assert.equal(ocellarisClownfish.verifiedAt, "2026-10-30", "İlk deniz canlısı deniz kataloğu paketinin doğrulama tarihini taşımalı (karar 0031)");
+// Karar 0031: hacim OATA ile Fishipedia'nın büyüğü; sıcaklık Fishkeeper ile Fishipedia'nın ortak aralığı; kaynakta uzunluk yok.
 const verifiedClownfishProfiles = [
-  ["pink-skunk-clownfish", "Amphiprion perideraion", "False Skunk-Stripe Anemonefish", 10, 120, 70],
-  ["tomato-clownfish", "Amphiprion frenatus", "Tomato Clown", 14, 120, 90],
-  ["saddleback-clownfish", "Amphiprion polymnus", "Saddleback Clown", 13, 120, 90],
-  ["maroon-clownfish", "Amphiprion biaculeatus", "Maroon Clown", 17, 120, 100],
+  ["pink-skunk-clownfish", "Amphiprion perideraion", "False Skunk-Stripe Anemonefish", 10, 100, undefined, 2, [23, 27]],
+  ["tomato-clownfish", "Amphiprion frenatus", "Tomato Clown", 14, 120, undefined, 2, [23, 26]],
+  ["saddleback-clownfish", "Amphiprion polymnus", "Saddleback Clown", 13, 120, undefined, 2, [23, 26]],
+  ["maroon-clownfish", "Amphiprion biaculeatus", "Maroon Clown", 17, 200, undefined, 1, [23, 26]],
 ];
-for (const [id, scientificName, salesName, adultSizeCm, minVolumeL, minTankLengthCm] of verifiedClownfishProfiles) {
+for (const [id, scientificName, salesName, adultSizeCm, minVolumeL, minTankLengthCm, minGroup, temperature] of verifiedClownfishProfiles) {
   const profile = speciesCatalog.find((item) => item.id === id);
   assert(profile, `${salesName} doğrulanmış deniz canlısı kataloğunda bulunmalı`);
   assert.deepEqual(
     [profile.scientificName, profile.adultSizeCm, profile.minVolumeL, profile.minTankLengthCm, profile.minGroup],
-    [scientificName, adultSizeCm, minVolumeL, minTankLengthCm, 2],
-    `${salesName} tür bazlı kimlik, erişkin boy ve güvenli çift eşiğini taşımalı`,
+    [scientificName, adultSizeCm, minVolumeL, minTankLengthCm, minGroup],
+    `${salesName} tür bazlı kimlik, erişkin boy, hacim ve grup değerini taşımalı`,
   );
   assert.deepEqual(speciesWaterTypes(profile), ["saltwater"], `${salesName} yalnızca tuzlu su akvaryumu seçicisinde görünmeli`);
-  assert.deepEqual([profile.temperature, profile.ph, profile.specificGravity], [[24, 26], undefined, undefined], `${salesName} doğrulanmış sıcaklık aralığını taşımalı; pH ve tuzluluk akvaryum düzeyinde (karar 0029, 0030)`);
+  assert.deepEqual([profile.temperature, profile.ph, profile.specificGravity], [temperature, undefined, undefined], `${salesName} doğrulanmış sıcaklık aralığını taşımalı; pH ve tuzluluk akvaryum düzeyinde (karar 0029, 0030)`);
   assert.equal(speciesForLivestock({commonName:salesName,category:"fish",quantity:1})?.id, id, `${salesName} doğru bilimsel profile bağlanmalı`);
   assert(profile.sourceUrl?.startsWith("https://"), `${salesName} doğrudan HTTPS bakım kaynağı taşımalı`);
-  assert.equal(profile.verifiedAt, "2026-08-31", `${salesName} güncel doğrulama tarihini taşımalı`);
+  assert.equal(profile.verifiedAt, "2026-10-30", `${salesName} deniz kataloğu paketinin doğrulama tarihini taşımalı`);
 }
 const perculaClownfish = speciesCatalog.find((item) => item.id === "percula-clownfish");
 assert(perculaClownfish, "Full Black Percula satış adı için doğrulanmış Amphiprion percula profili bulunmalı");
 assert.deepEqual(
   [perculaClownfish.scientificName, perculaClownfish.adultSizeCm, perculaClownfish.minVolumeL, perculaClownfish.minTankLengthCm, perculaClownfish.minGroup],
-  ["Amphiprion percula", 11, 100, undefined, 2],
+  ["Amphiprion percula", 11, 200, undefined, 2],
   "Percula profili yayımlanmayan tank uzunluğunu uydurmadan tür bazlı boy, hacim ve çift eşiğini taşımalı",
 );
-assert(perculaClownfish.tankLengthDataNote?.includes("yayımlıyor ancak"), "Percula eksik tank uzunluğu verisini kullanıcıdan ve denetimden gizlememeli");
-assert.deepEqual([perculaClownfish.temperature, perculaClownfish.ph, perculaClownfish.specificGravity], [[23, 27], undefined, undefined], "Percula doğrulanmış sıcaklık aralığını taşımalı; pH ve tuzluluk akvaryum düzeyinde (karar 0029, 0030)");
+assert(perculaClownfish.tankLengthDataNote?.includes("uzunluğu vermiyor"), "Percula eksik tank uzunluğu verisini kullanıcıdan ve denetimden gizlememeli");
+assert.deepEqual([perculaClownfish.temperature, perculaClownfish.ph, perculaClownfish.specificGravity], [[26, 27], undefined, undefined], "Percula doğrulanmış sıcaklık aralığını taşımalı; pH ve tuzluluk akvaryum düzeyinde (karar 0029, 0030)");
 assert.equal(speciesForLivestock({commonName:"Percula Clownfish (Full Black)",category:"fish",quantity:1})?.id, "percula-clownfish", "Cikletist Full Black satış adı doğru Amphiprion percula profiline bağlanmalı");
 assert.deepEqual(speciesWaterTypes(perculaClownfish), ["saltwater"], "Percula yalnız tuzlu su akvaryumu seçicisinde görünmeli");
 assert(perculaClownfish.sourceUrl?.startsWith("https://") && perculaClownfish.additionalSourceUrls?.length >= 4, "Percula tür ve varyete kimliği birden fazla HTTPS kaynakla doğrulanmalı");
@@ -4122,8 +4123,8 @@ const longTentacleAnemone = speciesCatalog.find((item) => item.id === "long-tent
 assert(longTentacleAnemone, "Green Long Tentacle Anemone doğrulanmış deniz omurgasızı kataloğunda bulunmalı");
 assert.deepEqual(
   [longTentacleAnemone.scientificName, longTentacleAnemone.adultSizeCm, longTentacleAnemone.minVolumeL, longTentacleAnemone.minTankLengthCm, longTentacleAnemone.flow],
-  ["Macrodactyla doreensis", 50, 300, undefined, "medium"],
-  "Uzun tentaküllü anemon yalnız yayımlanmış boy, hacim ve akıntı değerlerini taşımalı",
+  ["Radianthus doreensis", 50, 80, undefined, undefined],
+  "Uzun tentaküllü anemon WoRMS'un geçerli adını, OATA'nın anemon hacmini ve Meerwasser-Lexikon'un boyunu taşımalı; kaynaksız akıntı yazılmamalı (karar 0031)",
 );
 assert.deepEqual(speciesWaterTypes(longTentacleAnemone), ["saltwater"], "Uzun tentaküllü anemon yalnız tuzlu su seçicisinde görünmeli");
 assert.equal(speciesForLivestock({commonName:"Green Long Tentacle Anemone",category:"other",quantity:1})?.id, "long-tentacle-anemone", "Cikletist Green Long Tentacle adı doğru Macrodactyla profiline bağlanmalı");
@@ -4132,18 +4133,18 @@ const tiledSeaStar = speciesCatalog.find((item) => item.id === "tiled-sea-star")
 assert(tiledSeaStar, "Tiled Sea Star doğrulanmış deniz omurgasızı kataloğunda bulunmalı");
 assert.deepEqual(
   [tiledSeaStar.scientificName, tiledSeaStar.adultSizeCm, tiledSeaStar.minVolumeL, tiledSeaStar.minTankLengthCm, tiledSeaStar.flow],
-  ["Fromia monilis", 13, 210, undefined, undefined],
-  "Mozaik denizyıldızı kaynakta yayımlanmayan uzunluk ve akıntı değerlerini uydurmamalı",
+  ["Fromia monilis", 10, 60, undefined, undefined],
+  "Mozaik denizyıldızı Meerwasser-Lexikon boyunu ve OATA'nın küçük denizyıldızı hacmini taşımalı, kaynaksız uzunluk ve akıntı uydurmamalı (karar 0031)",
 );
-assert.deepEqual([tiledSeaStar.temperature, tiledSeaStar.ph, tiledSeaStar.specificGravity], [[22, 26], undefined, undefined], "Mozaik denizyıldızı doğrulanmış sıcaklık aralığını taşımalı; pH ve tuzluluk akvaryum düzeyinde (karar 0029, 0030)");
+assert.deepEqual([tiledSeaStar.temperature, tiledSeaStar.ph, tiledSeaStar.specificGravity], [[21.6, 29], undefined, undefined], "Mozaik denizyıldızı Meerwasser-Lexikon sıcaklık aralığını taşımalı; pH ve tuzluluk akvaryum düzeyinde (karar 0029, 0030)");
 assert.equal(speciesForLivestock({commonName:"Tiled Sea Star",category:"other",quantity:1})?.id, "tiled-sea-star", "Cikletist Tiled Sea Star adı doğru Fromia profiline bağlanmalı");
 
 const bubbleTipAnemone = speciesCatalog.find((item) => item.id === "bubble-tip-anemone");
 assert(bubbleTipAnemone, "Rose/Bubble Green satış adları için doğrulanmış balon uçlu anemon profili bulunmalı");
 assert.deepEqual(
   [bubbleTipAnemone.scientificName, bubbleTipAnemone.adultSizeCm, bubbleTipAnemone.minVolumeL, bubbleTipAnemone.minTankLengthCm, bubbleTipAnemone.flow],
-  ["Entacmaea quadricolor", 30, 114, undefined, "medium"],
-  "Balon uçlu anemon yalnız yayımlanmış boy, hacim ve akıntı değerlerini taşımalı",
+  ["Entacmaea quadricolor", 40, 80, undefined, "medium"],
+  "Balon uçlu anemon SeaLifeBase boyunu, OATA'nın anemon hacmini ve Fishkeeper'ın orta-güçlü akıntısını taşımalı",
 );
 for (const salesName of ["Rose Corn Bulb Anemone", "Bubble Green Anemone"]) {
   assert.equal(speciesForLivestock({commonName:salesName,category:"other",quantity:1})?.id, "bubble-tip-anemone", `${salesName} doğru Entacmaea profiline bağlanmalı`);
@@ -4153,24 +4154,43 @@ const blueStripedSeaSlug = speciesCatalog.find((item) => item.id === "blue-strip
 assert(blueStripedSeaSlug, "Blue Stripe Nudibranch doğrulanmış uzman canlı kataloğunda bulunmalı");
 assert.deepEqual(
   [blueStripedSeaSlug.scientificName, blueStripedSeaSlug.adultSizeCm, blueStripedSeaSlug.minVolumeL, blueStripedSeaSlug.minTankLengthCm, blueStripedSeaSlug.flow, blueStripedSeaSlug.speciesOnly],
-  ["Chelidonura varians", 7, 100, undefined, undefined, true],
-  "Mavi çizgili deniz tavşanı kaynaksız tank uzunluğu veya akıntı değeri uydurmadan uzmanlık sınırını taşımalı",
+  ["Chelidonura varians", 7, 40, undefined, undefined, undefined],
+  "Mavi kadife deniz salyangozu Fishkeeper'ın resif uyumuna göre tür akvaryumu işareti taşımamalı; kaynaksız uzunluk ve akıntı uydurmamalı",
 );
 assert.equal(speciesForLivestock({commonName:"Blue Stripe Nudibranch",category:"other",quantity:1})?.id, "blue-striped-sea-slug", "İhracat adı doğru Chelidonura profiline bağlanmalı");
+assert.equal(speciesForLivestock({commonName:"Mavi çizgili deniz tavşanı",category:"other",quantity:1})?.id, "blue-striped-sea-slug", "Eski Türkçe adla kaydedilmiş canlı yeniden adlandırılan profile bağlanmaya devam etmeli");
 
 const purpleAntennaNudibranch = speciesCatalog.find((item) => item.id === "purple-antenna-nudibranch");
 assert(purpleAntennaNudibranch, "Antenna Purple Nudibranch doğrulanmış uzman canlı kataloğunda bulunmalı");
 assert.deepEqual(
   [purpleAntennaNudibranch.scientificName, purpleAntennaNudibranch.adultSizeCm, purpleAntennaNudibranch.minVolumeL, purpleAntennaNudibranch.minTankLengthCm, purpleAntennaNudibranch.flow, purpleAntennaNudibranch.speciesOnly],
-  ["Hypselodoris bullockii", 5, 114, undefined, undefined, true],
-  "Mor antenli nudibranch güncel kabul edilen bilimsel adla ve yayımlanmayan teknik alanlar boş bırakılarak kaydedilmeli",
+  ["Hypselodoris bullockii", 4, 40, undefined, undefined, undefined],
+  "Mor antenli nudibranch güncel kabul edilen bilimsel adla kaydedilmeli; kabul edilen kaynaklar tür akvaryumu demediği için işaret taşımamalı (karar 0031)",
 );
 assert.equal(speciesForLivestock({commonName:"Antenna Purple Nudibranch",category:"other",quantity:1})?.id, "purple-antenna-nudibranch", "Resmi ihracat adı doğru Hypselodoris profiline bağlanmalı");
 for (const profile of [bubbleTipAnemone, blueStripedSeaSlug, purpleAntennaNudibranch]) {
   assert.deepEqual(speciesWaterTypes(profile), ["saltwater"], `${profile.commonName} yalnız tuzlu su seçicisinde görünmeli`);
   assert(profile.sourceUrl?.startsWith("https://"), `${profile.commonName} HTTPS bakım kaynağı taşımalı`);
-  assert.equal(profile.verifiedAt, "2026-08-31", `${profile.commonName} güncel doğrulama tarihini taşımalı`);
+  assert.equal(profile.verifiedAt, "2026-10-30", `${profile.commonName} deniz kataloğu paketinin doğrulama tarihini taşımalı`);
 }
+
+// Deniz kataloğu (karar 0031): 20 başlangıç türü yalnız tuzlu su seçicisinde, doğru kategoride ve Fishkeeper kaynaklı.
+const marineStarterCategories = {
+  "royal-gramma": "fish", "orchid-dottyback": "fish", "firefish": "fish", "blue-neon-goby": "fish", "bicolour-blenny": "fish", "algae-blenny": "fish",
+  "banggai-cardinalfish": "fish", "yellowtail-damsel": "fish", "azure-damsel": "fish", "yellow-tang": "fish", "yellow-wrasse": "fish", "flame-angelfish": "fish",
+  "cleaner-shrimp": "shrimp", "peppermint-shrimp": "shrimp", "sexy-shrimp": "shrimp", "emerald-crab": "other", "blue-legged-hermit-crab": "other",
+  "red-legged-hermit-crab": "other", "marine-turbo-snail": "snail", "nassarius-snail": "snail",
+};
+for (const [id, category] of Object.entries(marineStarterCategories)) {
+  const profile = speciesCatalog.find((item) => item.id === id);
+  assert(profile, `${id} deniz başlangıç türü katalogda bulunmalı`);
+  assert.equal(profile.category, category, `${id} motorun karides, salyangoz ve omurgasız kurallarına doğru kategoriyle girmeli`);
+  assert.deepEqual(speciesWaterTypes(profile), ["saltwater"], `${id} yalnız tuzlu su seçicisinde görünmeli`);
+  assert.deepEqual([profile.ph, profile.specificGravity], [undefined, undefined], `${id} pH ve tuzluluğu tür kaydında taşımamalı (karar 0029)`);
+  assert(profile.sourceUrl?.startsWith("https://www.fishkeeper.co.uk/fish/marine/"), `${id} ana kaynağı Fishkeeper'ın tür sayfası olmalı`);
+  assert.equal(profile.verifiedAt, "2026-10-30", `${id} deniz kataloğu paketinin doğrulama tarihini taşımalı`);
+}
+assert.equal(speciesForLivestock({commonName:"Turbo salyangoz",category:"snail",quantity:1})?.id, "turbo-snail", "Tatlı sudaki Turbo salyangoz kaydı deniz kaydıyla karışmamalı");
 
 for (const unresolvedMarineName of [
   "Red Carpet Anemone (Rare)",

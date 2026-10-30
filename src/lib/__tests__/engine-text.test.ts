@@ -99,6 +99,10 @@ const species: Record<string, SpeciesProfileInput> = {
   snailEater: { id: "snailEater", commonName: "Salyangoz yiyen tür", adultSizeCm: 10, minVolumeL: 100, minGroup: 1, temperature: [22, 27], ph: [6, 7.5], wasteFactor: 1, behavior: { eatsSnails: { source: "Fishkeeper", condition: "Küçük salyangozları kabuğundan çeker" } } },
   snail: { id: "snail", commonName: "Salyangoz türü", adultSizeCm: 2, minVolumeL: 10, minGroup: 1, temperature: [20, 28], ph: [6.5, 8], wasteFactor: 0.2 },
   halfCm: { id: "halfCm", commonName: "Buçuklu tür", adultSizeCm: 4.5, minVolumeL: 40, minTankLengthCm: 45, minGroup: 1, temperature: [22, 27], ph: [6, 7.5], wasteFactor: 0.5 },
+  // Altın fikstürün tür çiftleri katalogla değişir (karar 0031); bu iki davranış kodu stub ile de sınanır.
+  shrimpEater: { id: "shrimpEater", commonName: "Karides yiyen tür", adultSizeCm: 8, minVolumeL: 60, minTankLengthCm: 60, minGroup: 1, temperature: [22, 27], ph: [6, 7.5], wasteFactor: 0.8, behavior: { eatsShrimp: { source: "Fishkeeper", condition: "Küçük karidesler" } } },
+  dwarfShrimp: { id: "dwarfShrimp", commonName: "Cüce karides türü", adultSizeCm: 3, minVolumeL: 20, minGroup: 1, temperature: [20, 28], ph: [6.5, 8], wasteFactor: 0.15 },
+  hunter: { id: "hunter", commonName: "Fırsatçı avcı tür", adultSizeCm: 15, minVolumeL: 100, minTankLengthCm: 80, minGroup: 1, temperature: [22, 27], ph: [6, 7.5], wasteFactor: 1, behavior: { eatsSmallFish: { source: "Seriously Fish" } } },
   marine: { id: "marine", commonName: "Deniz türü", waterTypes: ["saltwater"], adultSizeCm: 5, minVolumeL: 100, minGroup: 1, temperature: [24, 27], ph: [8, 8.4], wasteFactor: 0.5, specificGravity: [1.02, 1.026] },
 };
 const devices: Record<string, EquipmentProfileInput> = {
@@ -166,6 +170,8 @@ const scenarios: Array<[string, HealthAnalysis]> = [
   // Motor 1.13.0: deniz akvaryumunun OATA hedefleri (karar 0029, 0030).
   ["deniz: yalnız balık, hedef dışı tuzluluk, pH ve nitrat", analyze(tank({ type: "saltwater" }), [animal("marine")], [], reading({ specificGravity: 1.025, ph: 8.4, nitrate: 40, temperature: 25 }))],
   ["deniz: güvenli aralığın üstünde tuzluluk", analyze(tank({ type: "saltwater" }), [animal("marine")], [], reading({ specificGravity: 1.03, ph: 8.1, temperature: 25 }))],
+  ["karides yiyen balık ve cüce karides", analyze(tank({ netVolumeLiters: 150 }), [animal("shrimpEater"), animal("dwarfShrimp", "shrimp", 5)], [])],
+  ["fırsatçı avcı ve küçük balık", analyze(tank({ netVolumeLiters: 150 }), [animal("hunter"), animal("plain")], [])],
   ["deniz: omurgasızlı, düşük KH ve pH", analyze(tank({ type: "saltwater" }), [animal("marine"), animal("snail", "snail")], [], reading({ specificGravity: 1.022, ph: 7.9, kh: 6.5, temperature: 25 }))],
 ];
 const scenario = (name: string) => scenarios.find(([label]) => label === name)![1];
