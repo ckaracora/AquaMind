@@ -111,12 +111,8 @@ Son yedisi uzman kaynağı olmayan "diğer" kayıtlar (kerevit, yengeç, kurbağ
 Örnek denetiminde ekipman değerlerinin çoğu doğru çıktı; bulunan iki değer hatası bu pakette düzeltildi (`docs/CATALOG_LOG.md`). Asıl sorun bağlantılarda. Sayılar 2026-10-30 taramasının, bu paketteki düzeltmelerden sonraki hâli.
 
 - **JBL'in eski adresleri:** 351 JBL kaydının 298'inin ana kaynağı eski biçimde: `jbl.de/.../products/detail/...`, `.../products/group/...` ya da `.../products/<sayı>/...`. Bu adresler artık JBL'in ana sayfasına yönleniyor; JBL ürün sayfalarını `productsv2` adreslerine taşımış. Bunların 48'i hesaba giriyor (24 filtre, 18 ısıtıcı, 6 hava motoru). Değerler yanlış değil; yeni adreslerle yeniden okunmalı. JBL'in site araması sorguyu sayfa adresinden almıyor; eşleme için ürün sayfalarındaki ürün numarası ("Item no.") kullanılabilir.
-- **Marka ya da liste sayfası kaynaklı ekipman:** hesaba giren ve değer taşıyan 1.099 kaydın 54'ü. Kural: kabul edilen mağazada değer ürünün kendi sayfasında yazmalı. Ölçüt: mağazada tek parçalı ve rakamsız yol (marka ya da kategori sayfası) ya da sayfalı liste (`/sayfa/N`).
-  - Atakan: 32 kayıt (25'i marka, 7'si kategori sayfası).
-  - Akvaryum Express: 21 kayıt (marka, kategori ve sayfalı liste).
-  - Aquarubi: 1 kayıt (hava motorları kategorisi).
-  - Liste sayfaları ürün eklendikçe kayıyor: Boyu CJY-1000 bir ayda listenin 4. sayfasından çıktı.
-- **Başlık ve açıklaması çelişen mağaza değerleri:** Ejet 3358, 3368, 3378 ve 3388'in debisi karar 0019'dan önceki yöntemle yazılmış: mağaza sayfasının başlığı ile açıklaması (3358'de iki satıcı) farklı debi yazdığında düşük olan alınmış. Güncel kural çelişen alanı kullanmıyor. Dördünün kapasitesi üreticinin hacim değerinden geldiği için bugünkü hesap sonucu değişmiyor.
+- **Marka ya da liste sayfası kaynaklı ekipman (kapandı, 2026-10-30):** hesaba giren ve değer taşıyan 1.099 kaydın 54'ü bir mağazanın marka, kategori ya da sayfalı liste sayfasına bağlıydı (Atakan 32, Akvaryum Express 21, Aquarubi 1). Ekipman kaynak bağlantısı paketi 1'de hepsi ürünün kendi sayfasına bağlandı (Boyu WF-2055 üreticinin sayfasına); altı kayıtta alan düzeltildi (`docs/CATALOG_LOG.md`). Katalog akışı testi yenisinin eklenmesini engelliyor.
+- **Başlık ve açıklaması çelişen mağaza değerleri (kapandı, 2026-10-30):** Ejet 3368, 3378, 3388 ve Jingye CD300'ün debisi karar 0019'dan önceki "düşük olanı al" yöntemiyle yazılmıştı; debi kaldırıldı. Ejet 3358'de kabul edilen sayfa tutarlı, değer kaldı.
 - **Bugün açılamayan kaynaklar:** zorlanmadı. Ürün sahibi kendi tarayıcısında açarsa birlikte okunabilir.
   - Resun: 172 kayıt, 90'ı hesapta. Sitenin sertifikası kendinden imzalı.
   - Fluval: 87 kayıt, 40'ı hesapta. Cloudflare insan doğrulaması.
