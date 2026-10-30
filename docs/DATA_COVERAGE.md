@@ -74,6 +74,7 @@ Katalogların her bilgisinin yüzde kaçının dolu olduğu ve kaynağının tü
 
 ## Geçmiş
 
+- 2026-10-30 (açık listedeki canlılar, paket 2): 7 "diğer" kayıt kabul edilen kaynaklara bağlandı; ölçülen alanların hepsi zaten doluydu, tablo değişmedi.
 - 2026-10-30 (açık listedeki canlılar, paket 1): 10 balık kabul edilen kaynaklara bağlandı; iki goodeid'in en az tank uzunluğu Seriously Fish tabanından geldi. En az tank uzunluğu %90,1 → %90,5.
 - 2026-10-30 (JBL kaynak bağlantısı paketi): eski adresli 49 hesaplı JBL kaydı yeni sayfalara ya da açık belgelere bağlandı. 3 WHITE filtrenin değeri çekildi; üç kayıtta çelişen ya da kaynaksız hacim kaldırıldı, klasik i60, i100 ve i200'e kılavuzdaki hacim eklendi. Doğrulanmamışlar listesinde değil %97,3 → %97,2, hesap değeri %89,8 → %89,5, güç %47,7 → %47,6, önerilen hacim %20,6 → %20,5.
 - 2026-10-30 (ekipman kaynak bağlantısı paketi 1): liste sayfasına bağlı 54 ekipman ürün sayfasına bağlandı. Aynı sayfada çelişen ya da sayfada olmayan güç beş kayıttan kaldırıldı (güç %47,9 → %47,7). Jingye CD300 ve YE-22'nin çelişkili hava debisi kaldırıldı (hesap değeri %90 → %89,8).

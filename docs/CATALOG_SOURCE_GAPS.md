@@ -89,15 +89,8 @@ Karides ve salyangoz için kabul edilen kaynaklar ürün sahibinin 2026-10-20 ka
 | Kimlik | Ad | Bilimsel ad | Bugünkü ana kaynak |
 |---|---|---|---|
 | `tropheus-kiriza` | Kiriza Tropheus | *Tropheus* sp. "Black" Kiriza | zoopet.com (mağaza); Seriously Fish'te ve Fishkeeper'da bu formun sayfası yok; Fishipedia'daki taslak temel alanlarda hatalı (8–23 °C, pH "28–8,8") (2026-10-30) |
-| `thai-micro-crab` | Tayland mikro yengeci | *Limnopilos naiyanetri* | melbournetropical.com (mağaza) |
-| `mexican-dwarf-crayfish` | Meksika cüce kereviti | *Cambarellus patzcuarensis* | aquairi.app |
-| `least-dwarf-crayfish` | Minik cüce kerevit | *Cambarellus diminutus* | aquascapedia.com |
-| `electric-blue-crayfish` | Elektrik mavi kerevit | *Procambarus alleni* | aquariumcoop.com (mağaza blogu; örneklemde çıktı) |
-| `african-dwarf-frog` | Afrika cüce kurbağası | *Hymenochirus boettgeri* | fishkeeping.co.uk |
-| `axolotl` | Axolotl | *Ambystoma mexicanum* | NSW Eğitim Bakanlığı (okul hayvanları) |
-| `african-clawed-frog` | Afrika pençeli kurbağası | *Xenopus laevis* | dubiaroaches.com (mağaza) |
 
-Son yedisi uzman kaynağı olmayan "diğer" kayıtlar (kerevit, yengeç, kurbağa, aksolotl); kerevit ve yengeç omurgasız kaynaklarıyla denenecek.
+Paket 2 (2026-10-30, `docs/CATALOG_LOG.md`): 7 "diğer" kayıt Fishkeeper'a, Fishipedia'ya ya da wirbellose.de'ye bağlandı (Tayland mikro yengeci, üç kerevit, iki kurbağa, aksolotl).
 
 Fishipedia'nın taslak sayfaları (2026-10-30): sayfa "hazırlanıyor; metinler veri modelinden geliyor" diyor ve Tropheus taslaklarında şablon hataları görüldü ("en az 0 birey", Kiriza'da 8–23 °C). Katalogdaki 31 Fishipedia bağlantısının (İngilizce, Fransızca, İspanyolca ve İtalyanca sürümler) hepsi açıldı. Ikola dışında kaynaklarından biri böyle bir taslak olan 12 kayıt var; değerleri alan alan yeniden okunmalı (sayfada tutarlı olan alan kullanılır, çelişen ya da hatalı alan kullanılmaz). Taslak sayfalar: *Cichla piquiti*, *Hyphessobrycon pyrrhonotus*, *Apistogramma commbrae*, *Centropyge loriculus*, *Corydoras similis*, *Pterygoplichthys pardalis*, *Salarias fasciatus*, *Semaprochilodus insignis*, *Vieja maculicauda* (İspanyolca), *Placidochromis milomo*, *Channa stewartii* ve *Cichla ocellaris* (İtalyanca).
 
