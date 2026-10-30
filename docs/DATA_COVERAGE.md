@@ -29,7 +29,7 @@ Katalogların her bilgisinin yüzde kaçının dolu olduğu ve kaynağının tü
 |---|---|---|
 | Kendi kaynak sayfası var (otomatik bağlantı değil) | 443/443 | %100 |
 | Yalnız otomatik kaynak bağlantısı | 0/443 | %0 |
-| En az tank uzunluğu | 401/443 | %90,5 |
+| En az tank uzunluğu | 403/443 | %91 |
 | Akıntı | 398/443 | %89,8 |
 | Davranış ya da bakım notu | 334/443 | %75,4 |
 | Eş ad ya da satış adı | 383/443 | %86,5 |
@@ -74,6 +74,7 @@ Katalogların her bilgisinin yüzde kaçının dolu olduğu ve kaynağının tü
 
 ## Geçmiş
 
+- 2026-10-30 (açık listedeki canlılar, paket 3): Fishipedia taslaklarına bağlı 12 kayıt yeniden okundu; Apistogramma commbrae ve Semaprochilodus insignis'in en az tank uzunluğu Seriously Fish tabanından geldi. En az tank uzunluğu %90,5 → %91.
 - 2026-10-30 (açık listedeki canlılar, paket 2): 7 "diğer" kayıt kabul edilen kaynaklara bağlandı; ölçülen alanların hepsi zaten doluydu, tablo değişmedi.
 - 2026-10-30 (açık listedeki canlılar, paket 1): 10 balık kabul edilen kaynaklara bağlandı; iki goodeid'in en az tank uzunluğu Seriously Fish tabanından geldi. En az tank uzunluğu %90,1 → %90,5.
 - 2026-10-30 (JBL kaynak bağlantısı paketi): eski adresli 49 hesaplı JBL kaydı yeni sayfalara ya da açık belgelere bağlandı. 3 WHITE filtrenin değeri çekildi; üç kayıtta çelişen ya da kaynaksız hacim kaldırıldı, klasik i60, i100 ve i200'e kılavuzdaki hacim eklendi. Doğrulanmamışlar listesinde değil %97,3 → %97,2, hesap değeri %89,8 → %89,5, güç %47,7 → %47,6, önerilen hacim %20,6 → %20,5.

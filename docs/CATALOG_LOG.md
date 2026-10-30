@@ -3362,3 +3362,45 @@ Güncel alt adım: JBL filtre medyası, bakteri başlangıcı, sorun giderici/pH
 | `african-dwarf-frog` | 7 | 50 | 45 | 1 | 24–26 → 22–25 | 7,2–7,6 → 7–7,8 | Fishkeeper (*Hymenochirus* spp.) |
 | `axolotl` | 30 → 45 | 76 → 200 | 60 → 100 | 1 | 15–18 → 10–20 | 6,5–8 → 7–8 | Fishkeeper; Fishipedia; Practical Fishkeeping |
 | `african-clawed-frog` | 15 | 38 → 40 | 50 | 1 | 18–22 → 10–28 | 6,5–8,5 → 6,8–7,8 | Fishkeeper; Practical Fishkeeping |
+
+## 2026-10-30 Açık listedeki canlılar, paket 3: Fishipedia taslaklarına bağlı 12 kayıt (Claude)
+
+- Paket 1'de bulunan madde: kaynaklarından biri Fishipedia'nın taslak sayfası olan 12 kayıt ("hazırlanıyor; metinler veri modelinden geliyor"). Her taslak alan alan yeniden okundu. Fishipedia'nın dört dil sürümü (İngilizce, Fransızca, İspanyolca, İtalyanca), Seriously Fish sayfaları (davranış metniyle birlikte) ve Fishkeeper sayfaları da okundu; Fishkeeper'da bilimsel adın yanında ortak adla da arandı. Practical Fishkeeping'in aramasında bu türlere özel bakım yazısı çıkmadı; bir okur akvaryumu yazısında C. stewartii 'violet blue' için tür kutusu var (aşağıda). Sayfalar 2026-10-30'da (UTC) okundu.
+- Taslak alanlarının değerlendirmesi (paket 1 ve 2 ile aynı kural): sayfada tutarlı alan kullanılır; öneri ile doğal ortam bölümü farklıysa o alan kullanılmaz; Fishipedia'nın birçok türde aynı olan öneri pH'ı (7,2–8) şüpheli varsayılan sayılır. Aynı sayfadaki tekrar bağımsız doğrulama sayılmaz.
+  - Üç türün tamamlanmış sürümü var: Cichla piquiti ve Hyphessobrycon pyrrhonotus (Fransızca), Cichla ocellaris (Fransızca ve İspanyolca). Değerleri taslaklarla aynı; yalnız piquiti'nin tamamlanmış Fransızca sayfası 300 cm cepheyi yazmıyor, bu ölçü İngilizce taslakta. Bağlantılar tamamlanmış Fransızca sürüme çevrildi; piquiti'nin İngilizce taslağı 300 cm'nin kaynağı olarak ek kaynakta kaldı. Öbür 9 türün bütün sürümleri taslak.
+  - Çelişen pH alanları: blackbelt (öneri 6,8–7,2, doğal ortam 6,5–8,5) ve smudge-spot (öneri 6,8–7,2, doğal ortam 5,6–7). Kayıttaki pH Fishipedia'nın öneri alanından gelmişti; SF'nin aralığı alındı.
+  - Fishipedia'nın grup cümlesi ("Étant un poisson vivant en banc/colonies, il convient d'installer au moins N individus …") taslaklarda bir şablondan geliyor (Tropheus'ta "en az 0 birey"). Ana kaynak açık bir grup önerisi veriyorsa o kullanıldı.
+- Kurallar (paket 1): Seriously Fish sayfası varsa ana kaynak ve sıcaklık/pH SF; boy kaynakların en büyüğü (FishBase boyu kullanılmaz); uzunluk ve hacim iki kabul edilen kaynaktan büyüğü; grup ana kaynağın davranış metnindeki açık öneri (sayı aralığında alt sınır; "tek tutulabilir" 1), yoksa öbür kabul edilen kaynağın açık sayısı.
+- Değişmeyen kayıtlar:
+  - Deniz kayıtları (flame-angelfish, algae-blenny): kuralları karar 0031. Bazı değerler Fishipedia taslağından geliyor ve taslağın o alanları tutarlı: flame-angelfish'in 300 L ve 100 cm'si ile sıcaklığın 26 °C üst sınırı, algae-blenny'nin 200 L'si ile sıcaklığın 25 °C alt sınırı (bakım metinleri bunu yazıyor). Değişiklik yok.
+  - Common pleco (karar 0014 çok adaylı profil): Fishipedia'nın P. pardalis taslağındaki "en az 3 birey" şablon cümlesi kullanılmadı; Fishkeeper birden fazla bireyde küçük kavgalar olabileceğini yazıyor, grup şartı koymuyor. 400 L Fishipedia taslağının tutarlı alanından.
+  - Cichla piquiti: Seriously Fish'te sayfası yok; değerler aynı, tarih yenilendi. Fishkeeper'ın Peacock Bass sayfası eş adı ve dağılımıyla *C. ocellaris*'i anlatıyor; piquiti'ye uygulanmadı.
+- Değişen kayıtlar ve kararlar:
+  - Grup (SF davranış metni): S. insignis "aggressive towards its own kind when kept in small numbers, but can be maintained in groups of six or more in larger tanks. Otherwise it's best kept as a single specimen" → 1 (bakım metni 2–5 bireyin önerilmediğini ve en az altılı grubu yazıyor); C. stewartii "best kept singly or as a pair" (Fishkeeper de) → 1; Hoplisoma simile "A group of at least six is best" → 6; H. pyrrhonotus "at least 8-10" → 8 (önceki paketlerdeki gibi alt sınır); P. milomo SF "fine alone", Fishkeeper "can be kept singly … or one male with a harem" → 1; C. ocellaris SF grubu zorunlu tutmuyor ("can be kept in species groups or with other large species"), Fishkeeper "best maintained singly or as a known mated pair. Do not attempt to house more than one male" → 1 (Fishipedia'nın 5'i bakım metninde grup için).
+  - Hacim: iki kabul edilen kaynaktan büyüğü korundu (koruyucu). S. insignis'te 1.500 L ve C. ocellaris'te 5.000 L Fishipedia'nın grup değerleri; SF tek erişkin için 150 × 60 × 60 cm ve 10 ft yazıyor. Bakım metinleri ikisini de gösteriyor.
+  - Uzunluk: S. insignis artık tek erişkin profili olduğu için SF'nin 150 cm'si (önceki "uzunluk tahmin edilmedi" notu kalktı); C. ocellaris SF "10'x3'x4' for an adult fish" → 305 cm; P. milomo Fishkeeper "at least 6ft" → 183 cm. Blackbelt ve smudge-spot'un eski 180 ve 60 cm'si kabul edilen bir kaynağa dayanmıyordu; SF tabanı 120 ve 45 cm. Fishkeeper'ın Black Belt sayfası erişkin akvaryumunu birim hatasıyla yazıyor (6" x2" x 2"); kullanılmadı.
+  - Boy: P. milomo Fishipedia "I maschi dominanti possono raggiungere 28 cm" → 28 cm. C. stewartii: SF 297 mm TL, Fishkeeper 25 cm; Practical Fishkeeping'in okur akvaryumu yazısındaki tür kutusu "Channa stewartii 'violet blue' … Size: 25.4-33cm" diyor ve bu formu yaygın bir ova tipi olarak tanımlıyor; boy kuralı gereği büyüğü (33 cm). H. pyrrhonotus: Fishkeeper'ın "Redback Bleeding Heart Tetra" sayfası (eş ad H. pyrrhonotus; "Flameback" adıyla da satılır) 6 cm, Fishipedia'nın Fransızca sayfası akvaryumda 5–6 cm bildirimi → 6 cm.
+  - Tür akvaryumu işareti: H. pyrrhonotus'ta kaynaklarla çelişiyordu (SF uygun arkadaşlar sayıyor; Fishkeeper "Community with no long-finned fish"); kaldırıldı. Grup SF'nin "8-10"unun alt sınırı 8 (Fishkeeper "six specimens … absolute minimum").
+  - Fishkeeper'ın Peacock Bass (ocellaris), Assamese Snakehead, Black Belt ve Redback Bleeding Heart Tetra sayfaları ile Practical Fishkeeping'in yılanbaşı yazısı ek kaynak oldu.
+- Kullanıcıya etkisi:
+  - S. insignis, C. ocellaris ve VC-10 tek tutulabiliyor (önce 5, 5 ve 4 isteniyordu); bakım metinleri küçük grubun ve birden fazla erkeğin riskini anlatıyor. Similis çöpçü en az 6 (önce 8), alev sırtlı tetra en az 8 (önce 10).
+  - Alev sırtlı tetra artık barışçıl balıklarla seçilince tür akvaryumu tehlikesi almıyor (ör. 300 L'de sekiz tetra ve altı similis çöpçü: önce tehlike, şimdi iyi).
+  - Sıcaklık ve pH aralıkları SF'ye göre değişti: commbrae 15–27 °C ve pH 6–7,4; insignis 23–29 °C; blackbelt 22–27 °C ve pH 6–8; VC-10 24–28 °C ve pH 7,6–8,8; yılanbaşı 16–25 °C ve pH 6–8; ocellaris pH 6,5–7; smudge-spot pH 5,6–7.
+  - Uzunluklar: commbrae 60 cm ve insignis 150 cm (önce yok), blackbelt 120 cm (önce 180), smudge-spot 45 cm (önce 60), ocellaris 305 cm.
+- Altın fikstür: motor değişmedi; 1.077 vakadan 18'i değişti (8 "sığar", 8 "dar", 2 tür çifti), hepsi bu türlerin değerlerinden. Değişen ölçütler: yük 18, ısıtıcı 5, uyumluluk 4, sosyal 3. Durum geçişi yok. Tek tutulabilen üç türün vakalarında grup ve "aynı tür bireyleri kavga edebilir" uyarıları kalktı. Fikstür yeniden üretildi; veri değişikliğinden ayrı bir commit'te kaydedilir.
+- Testler: paketin 9 kaydını sabitleyen blok; eski beklentiler yeni değer ve kaynaklara göre; ocellaris sağlık senaryosu tek bireyde grup uyarısı beklemiyor.
+- Kalan açık liste: yalnız Kiriza Tropheus.
+- Codex'in 1. turu SF'nin davranış metnindeki grup önerilerini, ortak adla bulunan üç Fishkeeper sayfasını, VC-10'un 28 cm'sini ve piquiti'nin 300 cm kaynağını gösterdi; 2. turu alev sırtlı tetranın Fishkeeper sayfasını ve yanlış tür akvaryumu işaretini, yılanbaşı boyunu dışlama gerekçemin yanlış olduğunu gösterdi (okur değerleri kuralı yalnız sıcaklık ve pH içindi). Düzeltildi.
+- Değişiklik tablosu ("eski → yeni"; değişmeyen değer tek yazıldı):
+
+| Kimlik | Boy | Hacim (L) | Uzunluk (cm) | Grup | Sıcaklık | pH | Ana kaynak |
+|---|---|---|---|---|---|---|---|
+| `piquiti-peacock-bass` | 80 | 5000 | 300 | 1 | 21–32 | 5,8–7,3 | Fishipedia (tamamlanmış Fransızca; 300 cm İngilizce taslakta) |
+| `flameback-bleeding-heart-tetra` | 4,5 → 6 | 100 | 100 | 10 → 8 | 20–28 | 4–7 | Seriously Fish (tür akvaryumu işareti kalktı) |
+| `apisto-commbrae` | 4 → 5 | 50 → 54 | — → 60 | 2 | 23–28 → 15–27 | 5–7 → 6–7,4 | Seriously Fish (eski: Fishipedia taslağı) |
+| `smudge-spot-cory` | 5,5 → 6 | 100 | 60 → 45 | 8 → 6 | 21–27 | 6,8–7,2 → 5,6–7 | Seriously Fish (eski: Fishipedia taslağı) |
+| `insignis-flagtail-prochilodus` | 35 | 1500 | — → 150 | 5 → 1 | 18–29 → 23–29 | 5,5–7,2 | Seriously Fish (eski: Fishipedia taslağı) |
+| `blackbelt-cichlid` | 30 → 36 | 600 | 180 → 120 | 1 | 22–28 → 22–27 | 6,8–7,2 → 6–8 | Seriously Fish (eski: FishBase) |
+| `super-vc10-milomo` | 25 → 28 | 1000 | 183 | 4 → 1 | 23–28 → 24–28 | 7,5–8,5 → 7,6–8,8 | Seriously Fish (eski: FishBase) |
+| `assamese-snakehead` | 25 → 33 | 300 | 120 | 1 | 18–25 → 16–25 | 6–7 → 6–8 | Seriously Fish (eski: Fishipedia taslağı) |
+| `ocellaris-peacock-bass` | 74 → 75 | 5000 | 300 → 305 | 5 → 1 | 24–27 | 6,5–7,5 → 6,5–7 | Seriously Fish (eski: Fishipedia taslağı) |

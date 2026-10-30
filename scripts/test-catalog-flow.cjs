@@ -5320,6 +5320,27 @@ for (const [id, expected] of Object.entries(sourcedSpeciesBatch2Traits)) {
 }
 assert.deepEqual(["mascara-barb","chinese-algae-eater"].map((id) => speciesCatalog.find((item) => item.id === id)?.flow), ["medium","medium"], "Mascara barb ve Çin yosun yiyicisi kaynağın orta su hareketini taşımalı");
 assert.equal(speciesCatalog.find((item) => item.id === "panda-loach")?.speciesOnly, undefined, "Panda Loach kaynağa göre diğer türlerle tutulabilmeli");
+// 2026-10-30 açık liste, paket 3 (docs/CATALOG_LOG.md): Fishipedia taslaklarına bağlı kayıtlar alan alan yeniden okundu; Seriously Fish
+// sayfası olanlar ona bağlandı. Sıra: boy, hacim, uzunluk, en az grup, sıcaklık, pH, ana kaynak.
+const fishipediaDraftBatch3 = {
+  "piquiti-peacock-bass":[80,5000,300,1,[21,32],[5.8,7.3],"https://www.fishipedia.fr/fr/poissons/cichla-piquiti"],
+  "flameback-bleeding-heart-tetra":[6,100,100,8,[20,28],[4,7],"https://www.seriouslyfish.com/species/hyphessobrycon-pyrrhonotus"],
+  "apisto-commbrae":[5,54,60,2,[15,27],[6,7.4],"https://www.seriouslyfish.com/species/apistogramma-commbrae/"],
+  "smudge-spot-cory":[6,100,45,6,[21,27],[5.6,7],"https://www.seriouslyfish.com/species/hoplisoma-simile"],
+  "insignis-flagtail-prochilodus":[35,1500,150,1,[23,29],[5.5,7.2],"https://www.seriouslyfish.com/species/semaprochilodus-insignis/"],
+  "blackbelt-cichlid":[36,600,120,1,[22,27],[6,8],"https://www.seriouslyfish.com/species/vieja-maculicauda/"],
+  "super-vc10-milomo":[28,1000,183,1,[24,28],[7.6,8.8],"https://www.seriouslyfish.com/species/placidochromis-milomo/"],
+  "assamese-snakehead":[33,300,120,1,[16,25],[6,8],"https://www.seriouslyfish.com/species/channa-stewartii/"],
+  "ocellaris-peacock-bass":[75,5000,305,1,[24,27],[6.5,7],"https://www.seriouslyfish.com/species/cichla-ocellaris/"]
+};
+for (const [id, [size, volume, length, group, temperature, ph, source]] of Object.entries(fishipediaDraftBatch3)) {
+  const profile = speciesCatalog.find((item) => item.id === id);
+  assert.deepEqual([profile?.adultSizeCm,profile?.minVolumeL,profile?.minTankLengthCm,profile?.minGroup,profile?.temperature,profile?.ph], [size,volume,length,group,temperature,ph], `${id} kabul edilen kaynakların bakım eşiklerini taşımalı`);
+  assert.equal(profile?.sourceUrl, source, `${id} kabul edilen ana kaynağa bağlanmalı`);
+  assert.equal(profile?.verifiedAt, "2026-10-30", `${id} kaynak okuma tarihini taşımalı`);
+  assert((profile?.additionalSourceUrls ?? []).some((url) => url.includes("fishbase.")), `${id} bilimsel kimlik için FishBase bağlantısını taşımalı`);
+  assert(profile?.sourceUrl.includes("fishi") || (profile?.additionalSourceUrls ?? []).some((url) => /fishi-?pedia/.test(url)), `${id} alan alan okunan Fishipedia sayfasını taşımalı`);
+}
 // 2026-10-30 açık listedeki canlılar, paket 2 (docs/CATALOG_LOG.md): 7 "diğer" kayıt Fishkeeper'a, Fishipedia'ya ya da wirbellose.de'ye bağlandı.
 // Sıra: boy, hacim, uzunluk, en az grup, sıcaklık, pH, ana kaynak.
 const openListOtherBatch2 = {
@@ -5837,11 +5858,12 @@ assert(knersYellowFlagtail?.additionalSourceUrls?.some((url) => url.includes("fi
 assert.equal(speciesForCatalogExactSearch("Semaprochilodus kneri", "fish", "freshwater")?.id, "kners-yellow-flagtail", "Kesin Semaprochilodus kneri bilimsel adı doğru profili bulmalı");
 assert.equal(speciesForCatalogExactSearch("YELLOW FLAGTAİL", "fish", "freshwater"), undefined, "Belirsiz Yellow Flagtail ticari adı kesin Semaprochilodus kneri profiline dönüşmemeli");
 const insignisFlagtail = speciesForLivestock({ commonName: "Insignis flagtail prochilodus", scientificName: "Semaprochilodus insignis", category: "fish", quantity: 5 });
-assert.deepEqual([insignisFlagtail?.id, insignisFlagtail?.adultSizeCm, insignisFlagtail?.minVolumeL, insignisFlagtail?.minTankLengthCm, insignisFlagtail?.minGroup, insignisFlagtail?.temperature, insignisFlagtail?.ph, insignisFlagtail?.flow], ["insignis-flagtail-prochilodus", 35, 1500, undefined, 5, [18, 29], [5.5, 7.2], "high"], "Kesin Semaprochilodus insignis koruyucu sürü, hacim ve su eşiklerini taşımalı; grup cephesi tahmin edilmemeli");
-assert(insignisFlagtail?.communityCaution?.includes("beş") && insignisFlagtail?.communityCaution?.includes("strese"), "Semaprochilodus insignis yalnız bırakılma ve asgari sürü riskini açıklamalı");
+assert.deepEqual([insignisFlagtail?.id, insignisFlagtail?.adultSizeCm, insignisFlagtail?.minVolumeL, insignisFlagtail?.minTankLengthCm, insignisFlagtail?.minGroup, insignisFlagtail?.temperature, insignisFlagtail?.ph, insignisFlagtail?.flow], ["insignis-flagtail-prochilodus", 35, 1500, 150, 1, [23, 29], [5.5, 7.2], "high"], "Kesin Semaprochilodus insignis koruyucu sürü, hacim ve su eşiklerini taşımalı; grup cephesi tahmin edilmemeli");
+assert(insignisFlagtail?.communityCaution?.includes("tek birey") && insignisFlagtail?.communityCaution?.includes("altılı") && insignisFlagtail?.communityCaution?.includes("2–5"), "Semaprochilodus insignis tek birey ya da en az altılı grup seçeneğini ve küçük grup saldırganlığını açıklamalı");
 assert(insignisFlagtail?.husbandryCaution?.includes("1.500 litre") && insignisFlagtail?.husbandryCaution?.includes("10–20 kat"), "Semaprochilodus insignis kaynaklı sürü hacmi ve akıntı gereksinimini açıklamalı");
-assert(insignisFlagtail?.tankLengthDataNote?.includes("uzunluk tahmin edilmedi"), "Semaprochilodus insignis için yayımlanmayan grup akvaryumu cephesi uydurulmamalı");
-assert(insignisFlagtail?.sourceUrl?.includes("fishipedia.fr/fr/poissons/semaprochilodus-insignis"), "Semaprochilodus insignis koruyucu grup bakım kaynağına bağlanmalı");
+assert.equal(insignisFlagtail?.tankLengthDataNote, undefined, "Semaprochilodus insignis tek erişkin profiline döndüğü için uzunluk Seriously Fish tabanından gelmeli");
+assert(insignisFlagtail?.additionalSourceUrls?.includes("https://www.fishipedia.fr/fr/poissons/semaprochilodus-insignis"), "Semaprochilodus insignis koruyucu grup hacminin kaynağını taşımalı");
+assert(insignisFlagtail?.sourceUrl?.includes("seriouslyfish.com/species/semaprochilodus-insignis"), "Semaprochilodus insignis ayrıntılı uzman bakım kaynağına bağlanmalı");
 assert(insignisFlagtail?.additionalSourceUrls?.some((url) => url.includes("fishbase.se/summary/Semaprochilodus-insignis")), "Semaprochilodus insignis bilimsel kimlik ve boy kaynağına bağlanmalı");
 assert.equal(speciesForCatalogExactSearch("Semaprochilodus insignis", "fish", "freshwater")?.id, "insignis-flagtail-prochilodus", "Kesin Semaprochilodus insignis bilimsel adı doğru profile bağlanmalı");
 const silverFlagtail = speciesForLivestock({ commonName: "Gümüş flagtail prochilodus", scientificName: "Semaprochilodus taeniurus", category: "fish", quantity: 1 });
@@ -5932,7 +5954,7 @@ assert.equal(unresolvedSpeciesForSearch("zig-zag eel", "fish", "freshwater")?.na
 assert.equal(unresolvedSpeciesForSearch("golden limbata", "fish", "freshwater")?.name, "CHANNA GOLDEN LİMBATA", "Kısaltılmış satış adı çözülmemiş Golden Limbata kaydını bulmalı");
 for (const [id, scientificName, size, volume, length, group, temperature, ph, sourceDomain] of [
   ["andrao-snakehead", "Channa andrao", 10, 72, 80, 1, [12,26], [6,7], "seriouslyfish.com"],
-  ["assamese-snakehead", "Channa stewartii", 25, 300, 120, 1, [18,25], [6,7], "fishipedia.it"],
+  ["assamese-snakehead", "Channa stewartii", 33, 300, 120, 1, [16,25], [6,8], "seriouslyfish.com"],
   ["ornate-snakehead", "Channa ornatipinnis", 30, 300, 120, 1, [18,25], [6,7], "fishipedia.es"],
   ["peacock-snakehead", "Channa pulchra", 25, 200, 100, 1, [20,25], [6,7], "practicalfishkeeping.co.uk"],
   ["emperor-snakehead", "Channa marulioides", 65, 1000, 200, 1, [20,25], [4,6], "fishi-pedia.com"],
@@ -5945,7 +5967,7 @@ for (const [id, scientificName, size, volume, length, group, temperature, ph, so
     [scientificName,size,volume,length,group,temperature,ph],
     `${id} kaynaklı kimlik, yetişkin boyu, akvaryum, sosyal yapı ve su değerlerini taşımalı`,
   );
-  assert.equal(profile.verifiedAt, id === "half-banded-spiny-eel" ? "2026-10-30" : "2026-08-28", `${id} güncel doğrulama tarihini taşımalı`);
+  assert.equal(profile.verifiedAt, ["half-banded-spiny-eel", "assamese-snakehead"].includes(id) ? "2026-10-30" : "2026-08-28", `${id} güncel doğrulama tarihini taşımalı`);
   assert(profile.sourceUrl?.includes(sourceDomain), `${id} yerel mağaza açıklaması yerine güvenilir uzman kaynağına bağlanmalı`);
   assert.equal(profile.predatory, true, `${id} küçük canlılar için avcılık güvenlik uyarısını taşımalı`);
   if (id !== "half-banded-spiny-eel") {
@@ -7032,30 +7054,31 @@ assert.equal(pepperedCory?.temperature[0], 15, "Benekli çöpçünün serin su t
 const apistoCommbrae = speciesCatalog.find((item) => item.id === "apisto-commbrae");
 assert.deepEqual(
   [apistoCommbrae?.scientificName, apistoCommbrae?.adultSizeCm, apistoCommbrae?.minVolumeL, apistoCommbrae?.minTankLengthCm, apistoCommbrae?.minGroup, apistoCommbrae?.temperature, apistoCommbrae?.ph, apistoCommbrae?.flow],
-  ["Apistogramma commbrae", 4, 50, undefined, 2, [23, 28], [5, 7], undefined],
-  "Apistogramma commbrae yalnız yayımlanmış tür bazlı bakım eşiklerini taşımalı",
+  ["Apistogramma commbrae", 5, 54, 60, 2, [15, 27], [6, 7.4], undefined],
+  "Apistogramma commbrae Seriously Fish'in tür bazlı bakım eşiklerini taşımalı",
 );
-assert(apistoCommbrae?.tankLengthDataNote?.includes("uzunluk değeri tahmin edilmedi"), "Apistogramma commbrae yayımlanmayan tank uzunluğunu açıkça belirtmeli");
-assert.equal(apistoCommbrae?.additionalSourceUrls?.length, 3, "Apistogramma commbrae kimlik ve Türkiye satış adı kaynaklarını saklamalı");
-assert.equal(apistoCommbrae?.verifiedAt, "2026-08-31", "Apistogramma commbrae güncel doğrulama tarihini taşımalı");
+assert.equal(apistoCommbrae?.tankLengthDataNote, undefined, "Apistogramma commbrae uzunluğu artık Seriously Fish tabanından geldiği için eski uzunluk notunu taşımamalı");
+assert.equal(apistoCommbrae?.additionalSourceUrls?.length, 4, "Apistogramma commbrae kimlik, Fishipedia ve Türkiye satış adı kaynaklarını saklamalı");
+assert.equal(apistoCommbrae?.verifiedAt, "2026-10-30", "Apistogramma commbrae güncel doğrulama tarihini taşımalı");
 const ocellarisPeacockBass = speciesCatalog.find((item) => item.id === "ocellaris-peacock-bass");
 assert.deepEqual(
   [ocellarisPeacockBass?.scientificName, ocellarisPeacockBass?.adultSizeCm, ocellarisPeacockBass?.minVolumeL, ocellarisPeacockBass?.minTankLengthCm, ocellarisPeacockBass?.minGroup, ocellarisPeacockBass?.temperature, ocellarisPeacockBass?.ph, ocellarisPeacockBass?.flow],
-  ["Cichla ocellaris", 74, 5000, 300, 5, [24, 27], [6.5, 7.5], "high"],
+  ["Cichla ocellaris", 75, 5000, 305, 1, [24, 27], [6.5, 7], "high"],
   "Ocellaris Peacock Bass dev sürü avcısı için yayımlanmış güvenli eşikleri taşımalı",
 );
 assert.equal(ocellarisPeacockBass?.predatory, true, "Ocellaris Peacock Bass küçük canlılar için avlanma riski taşımalı");
 assert.equal(ocellarisPeacockBass?.speciesOnly, true, "Ocellaris Peacock Bass sıradan topluluk canlısı gibi sunulmamalı");
-assert.equal(ocellarisPeacockBass?.additionalSourceUrls?.length, 2, "Ocellaris Peacock Bass kimlik ve Türkiye satış adı kaynaklarını saklamalı");
+assert.equal(ocellarisPeacockBass?.additionalSourceUrls?.length, 4, "Ocellaris Peacock Bass kimlik, Fishkeeper, Fishipedia ve Türkiye satış adı kaynaklarını saklamalı");
+assert(ocellarisPeacockBass?.husbandryCaution?.includes("birden fazla erkek"), "Ocellaris Peacock Bass tek birey ya da uyumlu çift önerisini ve erkek kısıtını açıklamalı");
 assert.deepEqual(ocellarisPeacockBass?.waterTypes, ["freshwater"], "Ocellaris Peacock Bass akvaryum profilinde güvenli tatlı su kapsamını taşımalı");
 assert(ocellarisPeacockBass?.husbandryCaution?.includes("10–20 kat") && ocellarisPeacockBass?.husbandryCaution?.includes("74 cm"), "Ocellaris Peacock Bass kaynaklı filtrasyon ve boy güvenliğini açıklamalı");
-assert.equal(ocellarisPeacockBass?.verifiedAt, "2026-10-02", "Ocellaris Peacock Bass güncel doğrulama tarihini taşımalı");
+assert.equal(ocellarisPeacockBass?.verifiedAt, "2026-10-30", "Ocellaris Peacock Bass güncel doğrulama tarihini taşımalı");
 assert.equal(speciesCatalog.filter((item) => speciesGroup(item) === "cichlid").length, 73, "Cichlid kataloğu doğrulanmış Geophagus steindachneri profili dahil 73 profil içermeli");
 assert.equal(speciesCatalog.filter((item) => speciesGroup(item) === "bottom").length, 74, "Dip balığı kataloğu ayrı Beaufortia kweichowensis, Gastromyzon stellatus ve Farlowella vittata; gerçek Julii, doğrulanmış Garra türleri, Ninja woodcat ve kesin L146/Ucayalensis profilleri dahil 74 profil içermeli");
 assert.equal(speciesCatalog.filter((item) => speciesGroup(item) === "goby").length, 12, "Goby kataloğu üç ayrı Lipstick Sicyopus türü ve yinelenmeyen iki Blue Neon adayı dahil 12 benzersiz profil içermeli");
 assert.equal(speciesCatalog.filter((item) => speciesGroup(item) === "crayfish").length, 4, "Kerevit kataloğu Cambarellus diminutus dahil dört tür içermeli");
 for (const [id,group,volume,length,count,temperature,ph,flow] of [
-  ["smudge-spot-cory","bottom",100,60,8,[21,27],[6.8,7.2],"medium"],
+  ["smudge-spot-cory","bottom",100,45,6,[21,27],[5.6,7],"medium"],
   ["least-dwarf-crayfish","crayfish",20,20,2,[18,30],[6,8.5],"low"],
 ]) {
   const profile=speciesCatalog.find((item)=>item.id===id);
@@ -7065,7 +7088,7 @@ for (const [id,group,volume,length,count,temperature,ph,flow] of [
     [group,volume,length,count,temperature,ph,flow],
     id+" doğrulanmış hacim, uzunluk, grup ve su gereksinimlerini taşımalı",
   );
-  assert.equal(profile.verifiedAt,id === "least-dwarf-crayfish" ? "2026-10-30" : "2026-08-27",id+" güncel doğrulama tarihini taşımalı");
+  assert.equal(profile.verifiedAt,"2026-10-30",id+" güncel doğrulama tarihini taşımalı");
   assert(profile.husbandryCaution,id+" özel bakım uyarısını taşımalı");
 }
 for (const id of ["tinfoil-barb", "spotted-silver-dollar", "bala-shark"]) {
@@ -7101,10 +7124,10 @@ for (const [id, scientificName, minVolumeL, minTankLengthCm, minGroup, temperatu
 assert(speciesCatalog.find((item) => item.id === "winemillers-eartheater")?.husbandryCaution?.includes("180 × 60 cm") && speciesCatalog.find((item) => item.id === "winemillers-eartheater")?.husbandryCaution?.includes("%50–70"), "Geophagus winemilleri kaynaklı taban ve bakım sıklığını açıklamalı");
 assert(speciesCatalog.find((item) => item.id === "threadfin-acara")?.husbandryCaution?.includes("150 × 45 cm") && speciesCatalog.find((item) => item.id === "threadfin-acara")?.husbandryCaution?.includes("ayırıcı"), "Acarichthys heckelii çift alanı ve saldırganlık güvenliğini açıklamalı");
 for (const [id, scientificName, minVolumeL, minTankLengthCm, minGroup] of [
-  ["blackbelt-cichlid", "Vieja maculicauda", 600, 180, 1],
+  ["blackbelt-cichlid", "Vieja maculicauda", 600, 120, 1],
   ["malawi-eyebiter", "Dimidiochromis compressiceps", 680, 183, 4],
   ["redfin-borleyi", "Copadichromis borleyi", 450, 120, 5],
-  ["super-vc10-milomo", "Placidochromis milomo", 1000, 183, 4],
+  ["super-vc10-milomo", "Placidochromis milomo", 1000, 183, 1],
   ["teardrop-guianacara", "Guianacara dacrya", 240, 120, 2],
   ["owroewefi-guianacara", "Guianacara owroewefi", 250, 140, 4],
   ["silver-maskaheros", "Maskaheros argenteus", 700, 200, 1],
@@ -7120,8 +7143,11 @@ for (const [id, scientificName, minVolumeL, minTankLengthCm, minGroup] of [
     [scientificName, minVolumeL, minTankLengthCm, minGroup],
     `${id} güvenli erişkin alanı ve sosyal gereksinimleri taşımalı`,
   );
-  assert.equal(profile.verifiedAt, "2026-08-29", `${id} güncel doğrulama tarihini taşımalı`);
-  assert.match(profile.sourceUrl ?? "", /^https:\/\/www\.fishbase\.(?:se|org)\//, `${id} bilimsel kimlik için FishBase kaynağı taşımalı`);
+  // Blackbelt ve VC-10 2026-10-30 açık liste paket 3'te Seriously Fish'e bağlandı; FishBase ek kaynakta.
+  const sfSourced = ["blackbelt-cichlid", "super-vc10-milomo"].includes(id);
+  assert.equal(profile.verifiedAt, sfSourced ? "2026-10-30" : "2026-08-29", `${id} güncel doğrulama tarihini taşımalı`);
+  assert.match(profile.sourceUrl ?? "", sfSourced ? /^https:\/\/www\.seriouslyfish\.com\// : /^https:\/\/www\.fishbase\.(?:se|org)\//, `${id} bilimsel kimlik ya da uzman bakım kaynağı taşımalı`);
+  if (sfSourced) assert(profile.additionalSourceUrls?.some((url) => url.includes("fishbase.")), `${id} FishBase kimlik bağlantısını ek kaynakta taşımalı`);
   assert(profile.additionalSourceUrls?.length, `${id} bakım gereksinimi için ek güvenilir kaynak taşımalı`);
   assert(profile.husbandryCaution, `${id} özel bakım uyarısını taşımalı`);
 }
@@ -8187,9 +8213,10 @@ assert.deepEqual([piquitiPeacockBass?.id, piquitiPeacockBass?.adultSizeCm, piqui
 assert.equal(piquitiPeacockBass?.predatory, true, "Cichla piquiti küçük canlılar için avcılık riskini taşımalı");
 assert.equal(piquitiPeacockBass?.speciesOnly, true, "Cichla piquiti genel topluluk balığı olarak önerilmemeli");
 assert(piquitiPeacockBass?.husbandryCaution?.includes("48 cm") && piquitiPeacockBass?.husbandryCaution?.includes("80 cm"), "Cichla piquiti bilimsel ölçüm ile koruyucu bakım boyu farkını açıklamalı");
-assert(piquitiPeacockBass?.sourceUrl?.includes("fishi-pedia.com/fishes/cichla-piquiti"), "Cichla piquiti ayrıntılı uzman bakım kaynağına bağlanmalı");
+assert(piquitiPeacockBass?.sourceUrl?.includes("fishipedia.fr/fr/poissons/cichla-piquiti"), "Cichla piquiti ayrıntılı uzman bakım kaynağının tamamlanmış sürümüne bağlanmalı");
 assert(piquitiPeacockBass?.additionalSourceUrls?.some((url) => url.toLowerCase().includes("fishbase.se/summary/cichla-piquiti")), "Cichla piquiti bilimsel kimlik ve boy kaynağına bağlanmalı");
-assert.equal(piquitiPeacockBass?.verifiedAt, "2026-10-02", "Cichla piquiti güncel kaynak denetim tarihini taşımalı");
+assert.equal(piquitiPeacockBass?.verifiedAt, "2026-10-30", "Cichla piquiti güncel kaynak denetim tarihini taşımalı");
+assert(piquitiPeacockBass?.additionalSourceUrls?.includes("https://www.fishi-pedia.com/fishes/cichla-piquiti"), "Cichla piquiti 300 cm cephenin kaynağı olan İngilizce Fishipedia sayfasını taşımalı");
 assert(piquitiPeacockBass?.husbandryCaution?.includes("akıntı değeri tahmin edilmedi"), "Cichla piquiti yayımlanmayan akıntı eşiğini uydurmamalı");
 assert.equal(speciesForCatalogExactSearch("Cichla piquiti", "fish", "freshwater")?.id, "piquiti-peacock-bass", "Kesin Cichla piquiti bilimsel adı doğru profili bulmalı");
 assert.equal(speciesForCatalogExactSearch("Azul Peacock Bass", "fish", "freshwater"), undefined, "Belirsiz Azul ticari adı kesin Cichla piquiti profiline dönüşmemeli");
@@ -8218,9 +8245,9 @@ assert(unresolvedRedBellyTetra?.additionalSourceUrls.some((url) => url.includes(
 assert.equal(speciesForLivestock({ commonName: "RED BELLY TETRA", category: "fish", quantity: 1 }), undefined, "Bilimsel kimliği belirsiz Red Belly Tetra için sahte bakım profili üretilmemeli");
 const flamebackBleedingHeart = speciesForLivestock({ commonName: "Alev sırtlı kanayan kalp tetra", scientificName: "Hyphessobrycon pyrrhonotus", category: "fish", quantity: 10 });
 assert.equal(flamebackBleedingHeart?.id, "flameback-bleeding-heart-tetra", "Bilimsel Hyphessobrycon pyrrhonotus adı ayrı güvenli profile bağlanmalı");
-assert.deepEqual([flamebackBleedingHeart?.adultSizeCm, flamebackBleedingHeart?.minVolumeL, flamebackBleedingHeart?.minTankLengthCm, flamebackBleedingHeart?.minGroup], [4.5, 100, 100, 10], "Alev sırtlı kanayan kalp tetra kaynaklı boy, hacim, cephe ve sürü eşiklerini taşımalı");
+assert.deepEqual([flamebackBleedingHeart?.adultSizeCm, flamebackBleedingHeart?.minVolumeL, flamebackBleedingHeart?.minTankLengthCm, flamebackBleedingHeart?.minGroup], [6, 100, 100, 8], "Alev sırtlı kanayan kalp tetra kaynaklı boy, hacim, cephe ve sürü eşiklerini taşımalı");
 assert.deepEqual([flamebackBleedingHeart?.temperature, flamebackBleedingHeart?.ph], [[20, 28], [4, 7]], "Alev sırtlı kanayan kalp tetra kaynaklı su aralıklarını taşımalı");
-assert.equal(flamebackBleedingHeart?.speciesOnly, true, "Yeni profil belirsiz ticari ada bulanık eşleşmemeli");
+assert.equal(flamebackBleedingHeart?.speciesOnly, undefined, "Alev sırtlı kanayan kalp tetra kaynaklara göre barışçıl topluluk balığıdır; tür akvaryumu işareti taşımamalı");
 assert(flamebackBleedingHeart?.sourceUrl.includes("seriouslyfish.com/species/hyphessobrycon-pyrrhonotus"), "Yeni profil doğrudan uzman bakım kaynağına bağlanmalı");
 assert.equal(speciesForCatalogExactSearch("Flame-back Bleeding Heart Tetra", "fish", "freshwater")?.id, "flameback-bleeding-heart-tetra", "Doğrulanmış Flame-back ortak adı yeni profili bulmalı");
 const unresolvedBlueNeonGoby = unresolvedSpeciesForSearch("BLUE NEON GOBBY GOBİ", "fish", "freshwater");
