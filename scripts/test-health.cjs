@@ -749,8 +749,8 @@ for (const [specificGravity, expected] of [[1.018, "none"], [1.025, "warning"], 
     [],
   );
   assert(warningTitles(analysis).includes("Kelebek Goodeid: alan sınırda"), "Kelebek Goodeid 250 litrenin altında hacim uyarısı üretmeli");
-  assert(warningTitles(analysis).includes("Kelebek Goodeid: grup sayısı düşük"), "Kelebek Goodeid altılı grubun altında sosyal uyarı üretmeli");
-  assert(warningTitles(analysis).includes("Kelebek Goodeid: tank uzunluğu verisi sınırlı"), "Kelebek Goodeid için yayımlanmayan santimetre eşiği açıkça belirtilmeli");
+  assert(warningTitles(analysis).includes("Kelebek Goodeid: grup sayısı düşük"), "Kelebek Goodeid sekizli grubun altında sosyal uyarı üretmeli");
+  assert(!warningTitles(analysis).includes("Kelebek Goodeid: tank uzunluğu verisi sınırlı"), "Kelebek Goodeid uzunluğu Seriously Fish tabanından (90 cm) geldiği için veri sınırlı uyarısı almamalı");
   assert(warningTitles(analysis).includes("Kelebek Goodeid için tür akvaryumu önerilir"), "Kelebek Goodeid sıradan topluluk akvaryumunda tehlike üretmeli");
   assert(warningTitles(analysis).includes("Akıntı ihtiyaçları farklı"), "Kelebek Goodeid düşük akıntı isteyen Betta ile seçildiğinde akıntı çatışması vermeli");
   assert(warningTitles(analysis).includes("Kelebek Goodeid: özel bakım gereksinimi"), "Kelebek Goodeid sıcaklık, oksijen ve yüksek su değişimi uyarılarını göstermeli");
@@ -765,7 +765,7 @@ for (const [specificGravity, expected] of [[1.018, "none"], [1.025, "warning"], 
   );
   assert(warningTitles(analysis).includes("Kırmızı kuyruklu Goodeid: alan sınırda"), "Kırmızı kuyruklu Goodeid 250 litrenin altında hacim uyarısı üretmeli");
   assert(warningTitles(analysis).includes("Kırmızı kuyruklu Goodeid: grup sayısı düşük"), "Kırmızı kuyruklu Goodeid altılı grubun altında sosyal uyarı üretmeli");
-  assert(warningTitles(analysis).includes("Kırmızı kuyruklu Goodeid: tank uzunluğu verisi sınırlı"), "Kırmızı kuyruklu Goodeid için yayımlanmayan santimetre eşiği açıkça belirtilmeli");
+  assert(!warningTitles(analysis).includes("Kırmızı kuyruklu Goodeid: tank uzunluğu verisi sınırlı"), "Kırmızı kuyruklu Goodeid uzunluğu Seriously Fish tabanından (60 cm) geldiği için veri sınırlı uyarısı almamalı");
   assert(warningTitles(analysis).includes("Kırmızı kuyruklu Goodeid için tür akvaryumu önerilir"), "Kırmızı kuyruklu Goodeid sıradan topluluk akvaryumunda tehlike üretmeli");
   assert(warningTitles(analysis).includes("Akıntı ihtiyaçları farklı"), "Kırmızı kuyruklu Goodeid düşük akıntı isteyen Betta ile seçildiğinde akıntı çatışması vermeli");
   assert(warningTitles(analysis).includes("Kırmızı kuyruklu Goodeid: özel bakım gereksinimi"), "Kırmızı kuyruklu Goodeid sıcaklık, oksijen, su değişimi ve soy uyarılarını göstermeli");

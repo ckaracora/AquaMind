@@ -83,19 +83,12 @@ Karides ve salyangoz için kabul edilen kaynaklar ürün sahibinin 2026-10-20 ka
 
 Örnek denetiminin bütün katalog taramasında bulundu: ana kaynağın alan adı `docs/DATA_SOURCES.md`'deki uzman kaynaklardan biri değil. Yukarıdaki iki listedekiler burada tekrar edilmedi (20 kayıt). Değerleri yanlış olmak zorunda değil; kabul edilen bir kaynakla yeniden okunmaları gerekiyor.
 
+- Paket 1 (2026-10-30, `docs/CATALOG_LOG.md`): 11 balığın 10'u Seriously Fish'e, Fishkeeper'a ya da kabul edilen tür uzmanına bağlandı (Flowerhorn, Celebes halfbeak, iki goodeid, Koyu kenarlı Splitfin, carpintis, Ikola Tropheus, Mogurnda adspersa, P. deissneri, yarım bantlı dikenli yılan balığı). Goodeid Working Group ve Parosphromenus Project kabul edilen uzman kaynaklara eklendi.
+- Kalan:
+
 | Kimlik | Ad | Bilimsel ad | Bugünkü ana kaynak |
 |---|---|---|---|
-| `flowerhorn` | Flowerhorn | melez | fishkeeping.co.uk (Fishkeeper değil) |
-| `celebes-halfbeak` | Celebes Halfbeak | *Nomorhamphus liemi* | tropicalfreshwaterfish.com |
-| `butterfly-goodeid` | Kelebek Goodeid | *Ameca splendens* | Goodeid Working Group |
-| `red-tailed-goodeid` | Kırmızı kuyruklu Goodeid | *Xenotoca eiseni* | Goodeid Working Group |
-| `dark-edged-splitfin` | Koyu kenarlı Splitfin | *Girardinichthys multiradiatus* | Goodeid Working Group |
-| `pearlscale-cichlid` | İnci pullu carpintis ciklet | *Herichthys carpintis* | cichlidamerique.fr |
-| `tropheus-ikola` | Ikola Kaiser Tropheus | *Tropheus* sp. "Ikola" | ciklid.org |
-| `tropheus-kiriza` | Kiriza Tropheus | *Tropheus* sp. "Black" Kiriza | zoopet.com (mağaza) |
-| `southern-purple-spotted-gudgeon` | Güney mor benekli gudgeon | *Mogurnda adspersa* | Fishes of Australia |
-| `deissners-licorice-gourami` | Deissner meyan kökü guramisi | *Parosphromenus deissneri* | Parosphromenus Project |
-| `half-banded-spiny-eel` | Yarım bantlı dikenli yılan balığı | *Macrognathus circumcinctus* | tankbud.com |
+| `tropheus-kiriza` | Kiriza Tropheus | *Tropheus* sp. "Black" Kiriza | zoopet.com (mağaza); Seriously Fish'te ve Fishkeeper'da bu formun sayfası yok; Fishipedia'daki taslak temel alanlarda hatalı (8–23 °C, pH "28–8,8") (2026-10-30) |
 | `thai-micro-crab` | Tayland mikro yengeci | *Limnopilos naiyanetri* | melbournetropical.com (mağaza) |
 | `mexican-dwarf-crayfish` | Meksika cüce kereviti | *Cambarellus patzcuarensis* | aquairi.app |
 | `least-dwarf-crayfish` | Minik cüce kerevit | *Cambarellus diminutus* | aquascapedia.com |
@@ -104,7 +97,9 @@ Karides ve salyangoz için kabul edilen kaynaklar ürün sahibinin 2026-10-20 ka
 | `axolotl` | Axolotl | *Ambystoma mexicanum* | NSW Eğitim Bakanlığı (okul hayvanları) |
 | `african-clawed-frog` | Afrika pençeli kurbağası | *Xenopus laevis* | dubiaroaches.com (mağaza) |
 
-Son yedisi uzman kaynağı olmayan "diğer" kayıtlar (kerevit, yengeç, kurbağa, aksolotl); kerevit ve yengeç omurgasız kaynaklarıyla denenecek. Goodeid Working Group, Parosphromenus Project ve Fishes of Australia türe adanmış uzman ya da müze kaynaklarıdır; kabul listesine girip girmeyecekleri o paketin kararı.
+Son yedisi uzman kaynağı olmayan "diğer" kayıtlar (kerevit, yengeç, kurbağa, aksolotl); kerevit ve yengeç omurgasız kaynaklarıyla denenecek.
+
+Fishipedia'nın taslak sayfaları (2026-10-30): sayfa "hazırlanıyor; metinler veri modelinden geliyor" diyor ve Tropheus taslaklarında şablon hataları görüldü ("en az 0 birey", Kiriza'da 8–23 °C). Katalogdaki 31 Fishipedia bağlantısının (İngilizce, Fransızca, İspanyolca ve İtalyanca sürümler) hepsi açıldı. Ikola dışında kaynaklarından biri böyle bir taslak olan 12 kayıt var; değerleri alan alan yeniden okunmalı (sayfada tutarlı olan alan kullanılır, çelişen ya da hatalı alan kullanılmaz). Taslak sayfalar: *Cichla piquiti*, *Hyphessobrycon pyrrhonotus*, *Apistogramma commbrae*, *Centropyge loriculus*, *Corydoras similis*, *Pterygoplichthys pardalis*, *Salarias fasciatus*, *Semaprochilodus insignis*, *Vieja maculicauda* (İspanyolca), *Placidochromis milomo*, *Channa stewartii* ve *Cichla ocellaris* (İtalyanca).
 
 ## Ekipman kaynak bağlantıları (örnek denetimi 2026-10-30, geliştirilecek)
 

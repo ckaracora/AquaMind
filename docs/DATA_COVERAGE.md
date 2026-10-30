@@ -29,7 +29,7 @@ Katalogların her bilgisinin yüzde kaçının dolu olduğu ve kaynağının tü
 |---|---|---|
 | Kendi kaynak sayfası var (otomatik bağlantı değil) | 443/443 | %100 |
 | Yalnız otomatik kaynak bağlantısı | 0/443 | %0 |
-| En az tank uzunluğu | 399/443 | %90,1 |
+| En az tank uzunluğu | 401/443 | %90,5 |
 | Akıntı | 398/443 | %89,8 |
 | Davranış ya da bakım notu | 334/443 | %75,4 |
 | Eş ad ya da satış adı | 383/443 | %86,5 |
@@ -74,6 +74,7 @@ Katalogların her bilgisinin yüzde kaçının dolu olduğu ve kaynağının tü
 
 ## Geçmiş
 
+- 2026-10-30 (açık listedeki canlılar, paket 1): 10 balık kabul edilen kaynaklara bağlandı; iki goodeid'in en az tank uzunluğu Seriously Fish tabanından geldi. En az tank uzunluğu %90,1 → %90,5.
 - 2026-10-30 (JBL kaynak bağlantısı paketi): eski adresli 49 hesaplı JBL kaydı yeni sayfalara ya da açık belgelere bağlandı. 3 WHITE filtrenin değeri çekildi; üç kayıtta çelişen ya da kaynaksız hacim kaldırıldı, klasik i60, i100 ve i200'e kılavuzdaki hacim eklendi. Doğrulanmamışlar listesinde değil %97,3 → %97,2, hesap değeri %89,8 → %89,5, güç %47,7 → %47,6, önerilen hacim %20,6 → %20,5.
 - 2026-10-30 (ekipman kaynak bağlantısı paketi 1): liste sayfasına bağlı 54 ekipman ürün sayfasına bağlandı. Aynı sayfada çelişen ya da sayfada olmayan güç beş kayıttan kaldırıldı (güç %47,9 → %47,7). Jingye CD300 ve YE-22'nin çelişkili hava debisi kaldırıldı (hesap değeri %90 → %89,8).
 - 2026-10-30 (örnek denetimi): Boyu HT ve DR serilerinin 11 ısıtıcısının (HT 6, DR 5) gücü üretici sayfasında yazmadığı için hesaptan çekildi (karar 0019). Doğrulanmamışlar listesinde değil %97,6 → %97,3, hesap değeri %90,8 → %90, güç %48,2 → %47,9. Canlıların oranları değişmedi.
