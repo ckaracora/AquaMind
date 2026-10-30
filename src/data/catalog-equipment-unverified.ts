@@ -13,6 +13,9 @@ export const unverifiedEquipmentIds: readonly string[] = [
   "aquawing-aq101f", "aquawing-aq101fb", "aquawing-aq102f", "aquawing-aq160", "aquawing-aq600f", "aquawing-aq607f", "aquawing-aq80f",
   "aquawing-wp1000fa", "aquawing-wp1000fb", "aquawing-wp2300a", "aquawing-wp3300a", "aquawing-wp3300b", "aquawing-wp3300c", "aquawing-wp750fa",
   "aquawing-wp750fb", "aquawing-wp850fa", "aquawing-wp850fb", "aquawing-wp950fa", "aquawing-wp950fb",
+  // JBL (3; 2026-10-30 JBL kaynak bağlantısı paketi: WHITE kayıtları değerleri eşdeğer greenline modelden almıştı; eski ürün sayfaları
+  // JBL'in ana sayfasına yönleniyor ve WHITE'ı adıyla yazan açık bir JBL sayfası ya da belgesi bulunamadı.)
+  "jbl-cristalprofi-e401-white-archive", "jbl-cristalprofi-e701-white-archive", "jbl-cristalprofi-e901-white-archive",
   // Boyu (11; 2026-10-30 örnek denetimi: HT ve DR serilerinin üretici sayfaları yalnız model adlarını ve boyları veriyor, gücü yazmıyor.
   // Güç model adından çıkarılmıştı; kabul edilen yerel mağazalarda bu modeller yok. DR-50 listede değil: seri sayfasındaki ürün
   // resminin etiketi "DR-50 220V 50Hz 50W" yazıyor. GR ve TR serilerinin tabloları gücü yazıyor.)

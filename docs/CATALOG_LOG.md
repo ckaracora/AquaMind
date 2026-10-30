@@ -3233,3 +3233,40 @@ Güncel alt adım: JBL filtre medyası, bakteri başlangıcı, sorun giderici/pH
 - Altın fikstür değişmedi (bu kayıtların hiçbiri fikstürde değil).
 - Codex'in 1. turu WF-2055 ve YE-22'deki çelişkiyi, CD300'ün sünger filtreye etkisinin anlatılmadığını, testin mağaza ana sayfasını kaçırdığını ve sayıların yanlış olduğunu buldu; hepsi düzeltildi.
 - Araştırma dosyaları (oturuma özel scratchpad `baglanti/`): toplama, eşleştirme, okuma ve uygulama betikleri, indirilen ürün sayfaları.
+
+## 2026-10-30 JBL kaynak bağlantısı paketi: hesaba giren 49 kayıt (Claude)
+
+- Örnek denetiminin taramasında 351 JBL kaydının 298'inin ana kaynağı JBL'in eski ürün adresiydi (`/products/detail/...`, `/products/group/...`, `/products/<sayı>/...`); bu adresler artık JBL'in ana sayfasına yönleniyor. Bu paketin taramasında Almanca biçim (`/de/produkte/...`) de eklendi; CristalProfi i80 greenline bu biçimdeydi. Bu paket bunlardan hesaba giren 49 kaydı (filtre, ısıtıcı, hava motoru) kapsıyor; öbür 250 kayıt (CO₂, aydınlatma, aksesuar) hesaba girmiyor ve açık listede kaldı.
+- Yöntem:
+  - JBL ürün sayfalarını yeni adreslere (`productsv2`) taşımış; her ülkenin ayrı ürün numarası var ve site haritası eski adresleri listeliyor.
+  - Yeni sayfalar JBL'in ürün listesinde (Almanya, "Alle", yani güncel ve arşiv) sitenin kendi arama kutusuyla bulundu. Listeyi getiren isteği doğrudan çağırma denemesini otomatik izin denetimi reddetti, istek gönderilmedi; arama normal kullanıcı gibi yapıldı.
+  - Almanca ürün sayfaları ve sayfalardaki kullanım kılavuzları açılıp okundu.
+  - Yeni sayfası olmayan arşiv modelleri için hâlâ açılan JBL belgeleri kullanıldı: CristalProfi e701 greenline kılavuzu (tablosu e401…e1901'i kapsıyor), JBL Aqua-Terra 2015 Fransızca kataloğu, ProScape rehberi ve JBL'in indirme bağlantılarındaki kılavuzlar. İndirme bağlantılarını Codex'in 1. denetim turu buldu.
+  - Karar 0019 uygulandı: değer üreticinin sayfasında ya da belgesinde yazmalı; iki resmî kaynak bir alanı farklı yazıyorsa o alan otomatik hesaba alınmaz ve fark açıklamada kalır.
+- Sonuç (49 kayıt):
+  - 23 güncel model yeni Almanca ürün sayfasına bağlandı: CRISTALPROFI e402/e702/e902/e1502/e1902, ProCristal i30, CristalProfi i60/i80/i100/i200 greenline, CristalProfi m greenline, PROTEMP e300/e500, PROTEMP S 25…300, PROTEMP b10…b60 III. Değerler sayfayla ya da sayfanın kılavuzuyla aynı. İki düzeltme:
+    - PROTEMP b60 III: kılavuzun tablosu 300–600 L (60 W, 120–200 cm) yazıyor; kayıtta 160–600 L vardı. 300–600 L oldu.
+    - CristalProfi m greenline: ürün sayfası 20–80 L, kılavuzun tablosu 20–112 L yazıyor. Hacim kaldırıldı, fark açıklamada; debi (200 L/saat) kılavuzda ve kaldı.
+  - 5 arşiv modelin yeni arşiv sayfası var ve bağlandı: PROAIR a50 ile PROSILENT a100/a200/a300/a400. Değerler aynı; bir düzeltme:
+    - PROSILENT a100: arşiv sayfası 60–200 L ve 2,5 W, 2015 kataloğu 40–150 L ve 2,9 W, kılavuz 40–150 L ve 3 W yazıyor. Kayıtta 40–150 L vardı; hacim kaldırıldı (güç zaten çekiliydi), farklar açıklamada.
+  - 12 arşiv model hâlâ açılan JBL belgelerine bağlandı:
+    - CristalProfi e401/e701/e901/e1901/e1501 greenline: e701 greenline kılavuzu. e1501'in debisi kılavuzda ve 2015 kataloğunda 1400, 2011 duyurusunda 1500 L/saat; önceki gibi kullanılmıyor.
+    - ProSilent a50 ve TekAir: 2015 kataloğu.
+    - PROTEMP b10/b20/b40/b60 (ilk nesil): 2015 kataloğu güç ve hacim (10 W 50–120 L … 60 W 300–600 L); ProScape rehberi güç.
+    - CristalProfi i40: 2015 kataloğu ve i40 kılavuzu 3 W ve 80 L/saat hava motoru yazıyor, akvaryum hacmi yazmıyor. Kayıttaki 10–40 L kaldırıldı; kapasite notu nedeni açıklıyor.
+  - 6 arşiv model JBL'in indirme bağlantılarındaki kılavuzlara bağlandı (`?mod=download&id=...`):
+    - Klasik CristalProfi i60/i80/i100/i200 (JBL dosyayı `JBL_CristalProfi_i60.pdf` adıyla veriyor; kılavuz dördünü kapsıyor): tablo dördü için 800 L/saat ve 11 W yazıyor, kayıtla aynı. Akvaryum hacmini de yazıyor; kayıtta "üretici hacim yayımlamadı" yazıyordu. Kılavuzun 15 dil bölümü i60, i100 ve i200 için aynı hacmi yazıyor (40–80, 90–160, 130–200 L); bunlar eklendi. i80'i ise Almanca, Lehçe ve Çince bölümler 60–110 L, öbür bölümler 60–100 L yazıyor; karar 0019 gereği i80'in hacmi hesaba alınmadı, fark açıklamada.
+    - PROTEMP b40 II ve b60 II: JBL dosyaları `JBL_ProTemp_b40_II.pdf` ve `JBL_ProTemp_b60_II.pdf` adıyla veriyor; ikisi aynı ProTemp b kılavuzu. Tablosu 40 W ve 200–400 L, 60 W ve 300–600 L yazıyor. Kablo uzunlukları ve vantuz sayıları da kayıtla aynı.
+  - 3 arşiv modelin değerleri hesaptan çekildi (karar 0019), kayıtlar adıyla listede: CristalProfi e401/e701/e901 WHITE. Kayıtlar değerleri eşdeğer greenline modelden almıştı; WHITE'ı adıyla yazan açık bir kaynak bulunamadı. JBL'de WHITE adını taşıyan yedek parça ve video sayfaları var, ama bunlar filtrenin debisini, gücünü ve hacmini vermiyor.
+- Test: hesaba giren JBL ekipmanı eski ürün adreslerine (`/products/...`, `/produkte/...`) bağlı olamaz. JBL beklentileri yeni kaynaklara ve değerlere göre güncellendi; 0019 listelerinin sayısı 177 → 180.
+- Kullanıcıya etkisi:
+  - JBL ekipmanının kaynak bağlantısı artık çalışan bir JBL sayfasını ya da belgesini açıyor.
+  - Üç WHITE filtre "değer bekliyor" görünür; kullanıcı etiket değerini girebilir.
+  - Klasik CristalProfi i60, i100 ve i200 artık üreticinin hacmiyle değerlendiriliyor. Önce debiden (800 L/saat) 200 L'ye kadar uygun sayılıyordu; şimdi i60 80 L'ye, i100 160 L'ye, i200 200 L'ye kadar uygun. Örneğin i60 ile 100 L'de filtrasyon 95 → 60 ("Filtre üretici önerisinin üstünde"), 130 L ve üstünde 95 → 35 ("Filtre bu akvaryum için küçük"). i200'de 200 L'ye kadar sonuç değişmiyor. i80 eskisi gibi debiden değerlendiriliyor.
+  - CristalProfi m'in kapasitesi artık debiden hesaplanıyor: 50 L'ye kadar uygun. Önce 80 L'lik hacimden hesaplanıyordu; 60–80 L'de filtrasyon 95 → 60 ("Filtre debisi düşük olabilir").
+  - CristalProfi i40'ın hacmi kaldırıldığı için kapasitesi artık bilinmiyor. "Ekipman kapasite bilgisi eksik" uyarısı çıkar, veri güveni 100 → 50; 40 L'ye kadar filtrasyon 95 → 60. Önceki 40 L'lik sınırın verdiği uyarılar da kalkar (80 L'de 35 → 60).
+  - PROSILENT a100 ve b60 III'teki değişiklik hesabı değiştirmez: hava motorunda yalnız debi kullanılıyor, taban ısıtıcısı ana ısıtıcı sayılmıyor.
+- Altın fikstür değişmedi (bu kayıtların hiçbiri fikstürde değil).
+- Kalan JBL eski adresleri: 253 kayıt. 250'si hesaba girmeyen CO₂, aydınlatma ve aksesuar kaydı, 3'ü değeri çekilen WHITE filtre. Açık listede.
+- Codex'in 1. turu klasik i ve b II kılavuzlarını JBL'in indirme bağlantılarında buldu (değerler gereksiz yere çekilmişti) ve i40'ın etkisinin yanlış anlatıldığını gösterdi; düzeltildi. Klasik i kılavuzunun bütün dil bölümleri sonra tek tek karşılaştırıldı; i80'in farklı hacmi böyle bulundu.
+- Araştırma dosyaları (oturuma özel scratchpad `jbl/`): ürün sayfaları, kılavuz ve katalog PDF'leri, katalog metni, eşleme, uygulama ve test betikleri.

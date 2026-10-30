@@ -40,10 +40,10 @@ Katalogların her bilgisinin yüzde kaçının dolu olduğu ve kaynağının tü
 | Bilgi | Dolu | Oran |
 |---|---|---|
 | Kaynak sayfası | 3541/3541 | %100 |
-| Doğrulanmamışlar listesinde değil | 3444/3541 | %97,3 |
-| Hesap değeri (filtre, ısıtıcı, hava motoru) | 1127/1255 | %89,8 |
-| Güç (W) | 1690/3541 | %47,7 |
-| Önerilen hacim | 730/3541 | %20,6 |
+| Doğrulanmamışlar listesinde değil | 3441/3541 | %97,2 |
+| Hesap değeri (filtre, ısıtıcı, hava motoru) | 1123/1255 | %89,5 |
+| Güç (W) | 1687/3541 | %47,6 |
+| Önerilen hacim | 727/3541 | %20,5 |
 | Son 92 günde doğrulanmış | 3541/3541 | %100 |
 
 ### Bakım ürünleri (1893 kayıt)
@@ -74,6 +74,7 @@ Katalogların her bilgisinin yüzde kaçının dolu olduğu ve kaynağının tü
 
 ## Geçmiş
 
+- 2026-10-30 (JBL kaynak bağlantısı paketi): eski adresli 49 hesaplı JBL kaydı yeni sayfalara ya da açık belgelere bağlandı. 3 WHITE filtrenin değeri çekildi; üç kayıtta çelişen ya da kaynaksız hacim kaldırıldı, klasik i60, i100 ve i200'e kılavuzdaki hacim eklendi. Doğrulanmamışlar listesinde değil %97,3 → %97,2, hesap değeri %89,8 → %89,5, güç %47,7 → %47,6, önerilen hacim %20,6 → %20,5.
 - 2026-10-30 (ekipman kaynak bağlantısı paketi 1): liste sayfasına bağlı 54 ekipman ürün sayfasına bağlandı. Aynı sayfada çelişen ya da sayfada olmayan güç beş kayıttan kaldırıldı (güç %47,9 → %47,7). Jingye CD300 ve YE-22'nin çelişkili hava debisi kaldırıldı (hesap değeri %90 → %89,8).
 - 2026-10-30 (örnek denetimi): Boyu HT ve DR serilerinin 11 ısıtıcısının (HT 6, DR 5) gücü üretici sayfasında yazmadığı için hesaptan çekildi (karar 0019). Doğrulanmamışlar listesinde değil %97,6 → %97,3, hesap değeri %90,8 → %90, güç %48,2 → %47,9. Canlıların oranları değişmedi.
 - 2026-10-30 (deniz kataloğu, karar 0031): canlılar 443 kayıt; 20 deniz başlangıç türü eklendi, 11 deniz kaydı kabul edilen kaynaklarla yenilendi. En az tank uzunluğu %94,8 → %90,1, akıntı %94,3 → %89,8: deniz kayıtlarının eski uzunluk ve akıntı değerleri kabul edilmeyen kaynaklardandı, kabul edilen kaynaklar çoğu türde bunları yazmıyor. Davranış ya da bakım notu %74,2 → %75,4.
