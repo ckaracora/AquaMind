@@ -28,6 +28,12 @@ const spaceReference = (p: EngineTextParams, f: EngineTextFormat) =>
     ? `Kayıtlı adet için minimum ${f.volume(num(p, "volume"))} ve ${f.length(num(p, "length"))} uzunluk referansı kullanıldı.`
     : `Kayıtlı adet için minimum ${f.volume(num(p, "volume"))} referansı kullanıldı; kaynak tank uzunluğu yayımlamıyor.`;
 const fixed = (text: string): Text => () => text;
+/** Deniz akvaryumunun hedefinin adı (motor 1.13.0, `MarineProfile`). */
+const marineTarget = (p: EngineTextParams) => (str(p, "profile") === "fishOnly" ? "yalnız balıklı akvaryum" : "omurgasızlı akvaryum");
+const marineRange = (p: EngineTextParams, f: EngineTextFormat) => `${f.measurement(num(p, "min"), 3)}–${f.measurement(num(p, "max"), 3)}`;
+/** Özgül ağırlığın güvenli aralığı: OATA'nın iki ev akvaryumu hedefinin birleşimi; motorun `MARINE_SPECIFIC_GRAVITY_SAFE` sabitiyle aynı olmalı (testte denetlenir). */
+export const MARINE_SPECIFIC_GRAVITY_SAFE_MIN = 1.017;
+export const MARINE_SPECIFIC_GRAVITY_SAFE_MAX = 1.026;
 /** Nitrat sınırları (ppm); motorun `MARINE_NITRATE_LIMIT`, `TAP_WATER_NITRATE_LIMIT` ve `NITRATE_ABOVE_TAP_LIMIT` sabitleriyle aynı olmalı (testte denetlenir). */
 export const MARINE_NITRATE_LIMIT_PPM = 100;
 export const TAP_WATER_NITRATE_LIMIT_PPM = 50;
@@ -178,6 +184,27 @@ export const trEngine = {
     salinityOutOfRange: {
       title: fixed("Özgül ağırlık canlı aralığı dışında"),
       message: (p, f) => `${f.number(num(p, "count"))} canlı için son özgül ağırlık ölçümü güvenli katalog aralığının dışında.`,
+    },
+    marineSpecificGravity: {
+      title: fixed("Özgül ağırlık hedefin dışında"),
+      message: (p, f) => `OATA'nın ${marineTarget(p)} hedefi ${marineRange(p, f)}; son ölçüm ${f.measurement(num(p, "value"), 3)}.`,
+    },
+    marineSpecificGravityDanger: {
+      title: fixed("Özgül ağırlık güvenli aralığın dışında"),
+      message: (p, f) =>
+        `Son ölçüm ${f.measurement(num(p, "value"), 3)}. OATA'nın hiçbir ev akvaryumu hedefi bu değeri kapsamıyor (${f.measurement(MARINE_SPECIFIC_GRAVITY_SAFE_MIN, 3)}–${f.measurement(MARINE_SPECIFIC_GRAVITY_SAFE_MAX, 3)}). Tuzluluğu yavaşça hedefe getirin.`,
+    },
+    marinePh: {
+      title: fixed("pH hedefin dışında"),
+      message: (p, f) => `OATA'nın ${marineTarget(p)} hedefi pH ${marineRange(p, f)}; son ölçüm ${f.measurement(num(p, "value"), 2)}.`,
+    },
+    marineKh: {
+      title: fixed("KH hedefin dışında"),
+      message: (p, f) => `OATA'nın ${marineTarget(p)} hedefi KH ${marineRange(p, f)} dKH; son ölçüm ${f.measurement(num(p, "value"), 2)} dKH.`,
+    },
+    marineNitrate: {
+      title: fixed("Nitrat hedefin üstünde"),
+      message: (p, f) => `OATA'nın ${marineTarget(p)} hedefi nitrat en çok ${f.measurement(num(p, "max"), 3)} mg/L; son ölçüm ${f.measurement(num(p, "value"), 2)} mg/L.`,
     },
     invalidReading: {
       title: fixed("Geçersiz su ölçümü"),

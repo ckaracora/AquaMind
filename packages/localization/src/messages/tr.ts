@@ -125,6 +125,9 @@ export const tr = {
     veryHigh: "Çok yüksek",
     mayBeHigh: "Yüksek olabilir",
     informational: "Bilgi amaçlı",
+    /** Deniz akvaryumu: OATA'nın akvaryum hedefi (türe özgü değil). */
+    inTarget: "Hedefte",
+    outOfTarget: "Hedefin dışında",
     pending: "…",
     unavailable: "Yüklenemedi",
   },
@@ -221,6 +224,29 @@ export const tr = {
   },
   health: {
     pageTitle: "Sağlık Analizi",
+    /** Deniz akvaryumunun su hedefleri bölümü (motor 1.13.0, karar 0030). */
+    marine: {
+      eyebrow: "Deniz suyu",
+      title: { fishOnly: "Yalnız balıklı akvaryum hedefi", invertebrates: "Omurgasızlı akvaryum hedefi" },
+      reason: { fishOnly: "Akvaryumda deniz omurgasızı kayıtlı değil.", invertebrates: "Akvaryumda deniz omurgasızı (karides, salyangoz, anemon gibi) kayıtlı." },
+      source: "Kaynak: OATA, deniz akvaryumu kurulum rehberi (2022).",
+      parameters: { specificGravity: "Özgül ağırlık", ph: "pH", kh: "KH", nitrate: "Nitrat", phosphate: "Fosfat", temperature: "Sıcaklık" },
+      /** Değerin birimi; özgül ağırlık ve pH birimsiz. Sıcaklık kullanıcının birimiyle ayrıca yazılır. */
+      units: { kh: "dKH", nitrate: "mg/L", phosphate: "mg/L" },
+      status: {
+        ok: "Hedefte",
+        missing: "Ölçüm yok",
+        temperatureInfo: "Canlılara göre",
+        speciesDependent: "Türe bağlı",
+        outOfTarget: (target: string) => `Hedef ${target}`,
+      },
+      atMost: (value: string) => `en çok ${value}`,
+      targetLabel: (value: string) => `Hedef ${value}`,
+      /** Yalnız bilgi olarak gösterilen OATA aralığı (sıcaklık; omurgasızlı akvaryumda nitrat ve fosfat). */
+      oataLabel: (value: string) => `OATA'nın aralığı ${value}`,
+      noReading: "—",
+      note: "Bu hedef türe özgü değildir; deniz akvaryumu için genel hedeftir. Sıcaklık her canlının kendi aralığıyla değerlendirilir. Omurgasızlı akvaryumda nitrat ve fosfatı OATA türe bağlı yazıyor; bu yüzden yalnız bilgi olarak gösterilir.",
+    },
     overall: { good: "İyi", warning: "Dikkat", danger: "Yüksek risk" },
     loadFailed: "Analiz yüklenemedi.",
     loadFailedHelp: "Bağlantınızı kontrol edip yeniden deneyin.",

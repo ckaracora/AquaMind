@@ -75,7 +75,7 @@ export function buildGoldenCases(): GoldenCase[] {
         }),
         [animal(profile, Math.max(1, profile.minGroup - 1))],
         [],
-        { id: "w", aquariumId: "g", measuredAt: "2026-01-02", temperature: profile.temperature[1] + 3, ph: profile.ph[0] - 0.5 },
+        { id: "w", aquariumId: "g", measuredAt: "2026-01-02", temperature: profile.temperature[1] + 3, ph: (profile.ph?.[0] ?? 8) - 0.5 },
       ],
     });
   }

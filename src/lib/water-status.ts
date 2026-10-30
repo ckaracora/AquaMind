@@ -1,7 +1,7 @@
 // Su değeri kartları (ana sayfa, akvaryum sayfası, su değerleri sayfası) ve ana sayfanın özet cümlesi. Etiketler sabit yazılmaz;
 // son ölçüm, akvaryumdaki türlerin katalog aralıkları ve uyumluluk motorunun sonucundan hesaplanır. Fonksiyonlar metin değil anahtar
 // döndürür; ekran metni dil dosyasından alır (`t.waterStatus[key]`, `t.healthSummary[key]`; docs/DECISIONS/0021-dil-altyapisi.md).
-import { assessWaterQuality, type HealthAnalysis } from "@aquamind/compatibility-engine";
+import { assessMarineWater, assessWaterQuality, type HealthAnalysis, type MarineRow } from "@aquamind/compatibility-engine";
 import type { Messages } from "@aquamind/localization";
 import { isVerifiedSpeciesProfile } from "@/data/catalog-shared";
 import type { SpeciesProfile } from "@/data/catalog-species";
@@ -19,9 +19,10 @@ export interface ParameterStatus { key: WaterStatusKey; tone: StatusTone; }
 export function commonSpeciesRanges(animals: Livestock[], speciesFor: (item: Livestock) => SpeciesProfile | undefined): { temperature?: [number, number]; ph?: [number, number] } {
   const profiles = animals.map((item) => speciesFor(item)).filter(isVerifiedSpeciesProfile);
   if (!profiles.length) return {};
-  const common = (pick: (profile: (typeof profiles)[number]) => [number, number]): [number, number] =>
-    [Math.max(...profiles.map((profile) => pick(profile)[0])), Math.min(...profiles.map((profile) => pick(profile)[1]))];
-  return { temperature: common((profile) => profile.temperature), ph: common((profile) => profile.ph) };
+  const common = (ranges: [number, number][]): [number, number] | undefined =>
+    ranges.length ? [Math.max(...ranges.map((range) => range[0])), Math.min(...ranges.map((range) => range[1]))] : undefined;
+  // Deniz canlılarının pH aralığı yoktur (karar 0029); pH yalnız aralığı olan türlerle hesaplanır.
+  return { temperature: common(profiles.map((profile) => profile.temperature)), ph: common(profiles.flatMap((profile) => (profile.ph ? [profile.ph] : []))) };
 }
 
 export function rangeStatus(value: number | undefined, range: [number, number] | undefined): ParameterStatus {
@@ -56,21 +57,34 @@ export const unavailableStatus: ParameterStatus = { key: "unavailable", tone: "w
 
 export interface ParameterStatuses { temperature: ParameterStatus; ph: ParameterStatus; nitrate: ParameterStatus; tds: ParameterStatus; specificGravity: ParameterStatus; }
 
+/** Deniz akvaryumunun hedef satırının etiketi (motorun `assessMarineWater` sonucu; OATA hedefi). */
+export function marineRowStatus(row: MarineRow | undefined): ParameterStatus | undefined {
+  if (!row || row.status === "info") return undefined;
+  if (row.status === "missing") return { key: "noReading", tone: "neutral" };
+  if (row.status === "ok") return { key: "inTarget", tone: "good" };
+  return { key: "outOfTarget", tone: row.status === "danger" ? "danger" : "warning" };
+}
+
 /**
  * Su değeri kartlarının etiketleri. Sıcaklık ve pH akvaryumdaki doğrulanmış türlerin ortak aralığıyla, nitrat motorun su kalitesi
- * kuralıyla karşılaştırılır; TDS ve özgül ağırlık yalnızca bilgi amaçlıdır. Her sayfa aynı kuralı buradan alır.
+ * kuralıyla karşılaştırılır; TDS ve özgül ağırlık yalnızca bilgi amaçlıdır. Deniz akvaryumunda pH ve özgül ağırlık (yalnız balıklı
+ * akvaryumda nitrat da) OATA'nın hedefiyle karşılaştırılır (motor 1.13.0, karar 0029); 100 mg/L'nin üstündeki nitrat yine "çok yüksek".
+ * Her sayfa aynı kuralı buradan alır.
  * Türlerin katalog kayıtları henüz yoksa (`speciesFor` verilmemiş) ölçülmüş sıcaklık ve pH `unknownRange` etiketini alır (yüklenirken
  * `pendingStatus`, yüklenemediyse `unavailableStatus`); katalog gerektirmeyen etiketler yine hesaplanır.
  */
 export function parameterStatuses(animals: Livestock[], speciesFor: ((item: Livestock) => SpeciesProfile | undefined) | undefined, latest: WaterParameters | undefined, type: AquariumType, unknownRange: ParameterStatus = pendingStatus): ParameterStatuses {
   const ranges = speciesFor ? commonSpeciesRanges(animals, speciesFor) : undefined;
   const range = (value: number | undefined, key: "temperature" | "ph") => (value === undefined || ranges ? rangeStatus(value, ranges?.[key]) : unknownRange);
+  const marine = assessMarineWater(type, animals, latest);
+  const row = (parameter: MarineRow["parameter"]) => marineRowStatus(marine?.rows.find((item) => item.parameter === parameter));
+  const nitrate = nitrateStatus(latest, type);
   return {
     temperature: range(latest?.temperature, "temperature"),
-    ph: range(latest?.ph, "ph"),
-    nitrate: nitrateStatus(latest, type),
+    ph: row("ph") ?? range(latest?.ph, "ph"),
+    nitrate: nitrate.tone === "danger" || nitrate.key === "invalidReading" ? nitrate : row("nitrate") ?? nitrate,
     tds: informationalStatus(latest?.tds),
-    specificGravity: informationalStatus(latest?.specificGravity),
+    specificGravity: row("specificGravity") ?? informationalStatus(latest?.specificGravity),
   };
 }
 

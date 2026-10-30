@@ -45,6 +45,7 @@ Teknik kararlar (Claude):
   2. Motor değişikliği: deniz akvaryumunun su hedefleri akvaryum düzeyinde. Sağlık puanına etkisi kodlamadan önce ürün sahibine gösterilir. Altın fikstür ayrı commit'te yeniden üretilir.
   3. Katalog: 11 kaydın kaynağı ve yeni türler.
 - **Geçiş:** motor değişikliği gelene kadar katalogdaki deniz kayıtlarının özgül ağırlık aralığı yerinde kalır; yoksa bugünkü tuzluluk denetimi sessizce kaybolurdu.
+- **2. adımın uygulaması (2026-10-30):** motor 1.13.0, karar 0030 (`docs/DECISIONS/0030-deniz-suyu-hedefleri.md`). Ürün sahibi puan etkisini ve ekran taslağını görüp dört ayrıntıyı onayladı. Aynı değişiklikle deniz kayıtlarının pH ve özgül ağırlık aralığı kaldırıldı.
 
 ## Sonuçlar
 

@@ -7,11 +7,11 @@ import { readFileSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 import { describe, expect, it } from "vitest";
 import type { Aquarium, Equipment, Livestock, WaterParameters } from "@aquamind/domain";
-import { createAnalyzer, MARINE_NITRATE_LIMIT, NITRATE_ABOVE_TAP_LIMIT, TAP_WATER_NITRATE_LIMIT, type EquipmentProfileInput, type HealthAnalysis, type KnowledgeResolver, type SpeciesProfileInput } from "@aquamind/compatibility-engine";
+import { createAnalyzer, MARINE_NITRATE_LIMIT, MARINE_SPECIFIC_GRAVITY_SAFE, NITRATE_ABOVE_TAP_LIMIT, TAP_WATER_NITRATE_LIMIT, type EquipmentProfileInput, type HealthAnalysis, type KnowledgeResolver, type SpeciesProfileInput } from "@aquamind/compatibility-engine";
 import { createDisplayFormat, type VolumeUnit } from "@aquamind/localization";
 import { engineMessagesFor, engineTextFormat, type EngineTextFormat, type EngineTextParams } from "@aquamind/localization/engine";
 import { engineMetricText, engineWarningText } from "@/lib/engine-text";
-import { MARINE_NITRATE_LIMIT_PPM, NITRATE_ABOVE_TAP_LIMIT_PPM, TAP_WATER_NITRATE_LIMIT_PPM } from "../../../packages/localization/src/messages/tr-engine";
+import { MARINE_NITRATE_LIMIT_PPM, MARINE_SPECIFIC_GRAVITY_SAFE_MAX, MARINE_SPECIFIC_GRAVITY_SAFE_MIN, NITRATE_ABOVE_TAP_LIMIT_PPM, TAP_WATER_NITRATE_LIMIT_PPM } from "../../../packages/localization/src/messages/tr-engine";
 
 const tr = engineMessagesFor("tr");
 const formatFor = (volume: VolumeUnit) => engineTextFormat(createDisplayFormat("tr", { temperature: "celsius", volume, dateFormat: "day-first" }));
@@ -163,6 +163,10 @@ const scenarios: Array<[string, HealthAnalysis]> = [
   ["elle girilen debi", analyze(tank(), [animal("plain")], [{ id: "e-manual", aquariumId: "a", category: "filter", brand: "Listede", model: "Yok", installedAt: "2026-01-01", userRatedFlowLph: 800 }])],
   ["acı su akvaryumunda tatlı su türü", analyze(tank({ type: "brackish" }), [animal("plain")], [])],
   ["iki önerili filtrenin toplamının üstünde", analyze(tank({ netVolumeLiters: 150 }), [animal("plain")], [device("sized"), device("sized2")])],
+  // Motor 1.13.0: deniz akvaryumunun OATA hedefleri (karar 0029, 0030).
+  ["deniz: yalnız balık, hedef dışı tuzluluk, pH ve nitrat", analyze(tank({ type: "saltwater" }), [animal("marine")], [], reading({ specificGravity: 1.025, ph: 8.4, nitrate: 40, temperature: 25 }))],
+  ["deniz: güvenli aralığın üstünde tuzluluk", analyze(tank({ type: "saltwater" }), [animal("marine")], [], reading({ specificGravity: 1.03, ph: 8.1, temperature: 25 }))],
+  ["deniz: omurgasızlı, düşük KH ve pH", analyze(tank({ type: "saltwater" }), [animal("marine"), animal("snail", "snail")], [], reading({ specificGravity: 1.022, ph: 7.9, kh: 6.5, temperature: 25 }))],
 ];
 const scenario = (name: string) => scenarios.find(([label]) => label === name)![1];
 const warningOf = (analysis: HealthAnalysis, code: string) => analysis.warnings.find((warning) => warning.code === code)!;
@@ -179,7 +183,8 @@ describe("motor metinleri dil dosyasından (karar 0021, 3. paket)", () => {
   });
 
   it("motorun her kodu dil dosyasında var, dil dosyasında kullanılmayan kod yok, her kod en az bir kez sınandı", () => {
-    expect(sourceWarningCodes.size).toBe(48);
+    // 1.13.0: beş deniz suyu kodu (karar 0030).
+    expect(sourceWarningCodes.size).toBe(53);
     expect(sourceDetailCodes.size).toBe(38);
     expect(new Set(Object.keys(tr.warnings))).toEqual(sourceWarningCodes);
     expect(new Set(Object.keys(tr.metricDetails))).toEqual(sourceDetailCodes);
@@ -258,6 +263,7 @@ describe("motor metinleri dil dosyasından (karar 0021, 3. paket)", () => {
     expect(engineWarningText(tr, liters, warningOf(tiny, "filterOverManufacturer")).message).toMatch(/^Akvaryumun net hacmi \(600,0000001 L\), filtrenin üreticisinin önerdiği en büyük hacmin \(600 L\) üstünde\./);
     // Kalıptaki sabit sınırlar da değerle karşılaştırılır; sabitler motorunkilerle aynıdır.
     expect([MARINE_NITRATE_LIMIT_PPM, TAP_WATER_NITRATE_LIMIT_PPM, NITRATE_ABOVE_TAP_LIMIT_PPM]).toEqual([MARINE_NITRATE_LIMIT, TAP_WATER_NITRATE_LIMIT, NITRATE_ABOVE_TAP_LIMIT]);
+    expect([MARINE_SPECIFIC_GRAVITY_SAFE_MIN, MARINE_SPECIFIC_GRAVITY_SAFE_MAX]).toEqual([...MARINE_SPECIFIC_GRAVITY_SAFE]);
     expect(engineWarningText(tr, liters, warningOf(scenario("deniz akvaryumunda sınırı çok az aşan nitrat"), "nitrateTooHighSaltwater")).message).toMatch(
       /^Nitrat 100,0004 ppm; deniz akvaryumu için üst sınır 100 ppm\./,
     );
@@ -445,6 +451,11 @@ describe("motor metinleri dil dosyasından (karar 0021, 3. paket)", () => {
       "uyarı filterTooSmallManufacturer": "volume:volume volume:liters",
       "uyarı filterTooSmallMixed": "volume:volume volume:liters",
       "uyarı groupLow": "number:count number:min",
+      "uyarı marineKh": "measurement(3):min measurement(3):max measurement(2):value",
+      "uyarı marineNitrate": "measurement(3):max measurement(2):value",
+      "uyarı marinePh": "measurement(3):min measurement(3):max measurement(2):value",
+      "uyarı marineSpecificGravity": "measurement(3):min measurement(3):max measurement(3):value",
+      "uyarı marineSpecificGravityDanger": "measurement(3):value measurement(3):sabit measurement(3):sabit",
       "uyarı missingCapacity": "number:remaining",
       "uyarı nitrateHigh": "measurement(3):value measurement(3):sabit",
       "uyarı nitrateTooHigh": "measurement(3):value measurement(3):sabit measurement(3):sabit",

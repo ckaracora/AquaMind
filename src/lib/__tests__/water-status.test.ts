@@ -18,7 +18,7 @@ describe("commonSpeciesRanges", () => {
     const cory = speciesById("corydoras-panda")!;
     const ranges = commonSpeciesRanges([animal("neon-tetra"), animal("corydoras-panda")], speciesForLivestock);
     expect(ranges.temperature).toEqual([Math.max(neon.temperature[0], cory.temperature[0]), Math.min(neon.temperature[1], cory.temperature[1])]);
-    expect(ranges.ph).toEqual([Math.max(neon.ph[0], cory.ph[0]), Math.min(neon.ph[1], cory.ph[1])]);
+    expect(ranges.ph).toEqual([Math.max(neon.ph![0], cory.ph![0]), Math.min(neon.ph![1], cory.ph![1])]);
   });
 
   it("canlı yoksa aralık vermez", () => {
@@ -74,6 +74,8 @@ describe("durum metinleri", () => {
     expect(t.waterStatus).toEqual({
       noReading: "Ölçüm yok", noSpeciesData: "Tür verisi yok", speciesConflict: "Türler uyuşmuyor", inRange: "Uygun", outOfRange: "Aralık dışında",
       invalidReading: "Geçersiz ölçüm", veryHigh: "Çok yüksek", mayBeHigh: "Yüksek olabilir", informational: "Bilgi amaçlı", pending: "…", unavailable: "Yüklenemedi",
+      // Motor 1.13.0: deniz akvaryumunun OATA hedefi (karar 0029).
+      inTarget: "Hedefte", outOfTarget: "Hedefin dışında",
     });
     expect(t.healthSummary).toEqual({
       noData: "Durum özeti için canlı ve su ölçümü ekle.",
@@ -87,7 +89,7 @@ describe("durum metinleri", () => {
 describe("parameterStatuses ve latestReading", () => {
   it("su değeri kartlarını son ölçüme ve türlere göre etiketler (ana sayfa, akvaryum ve su sayfaları aynı kuralı kullanır)", () => {
     const neon = speciesById("neon-tetra")!;
-    const statuses = parameterStatuses([animal("neon-tetra")], speciesForLivestock, reading({ temperature: neon.temperature[1] + 5, ph: neon.ph[0], nitrate: 10, specificGravity: 1.024 }), "freshwater");
+    const statuses = parameterStatuses([animal("neon-tetra")], speciesForLivestock, reading({ temperature: neon.temperature[1] + 5, ph: neon.ph![0], nitrate: 10, specificGravity: 1.024 }), "freshwater");
     expect(statuses.temperature).toEqual({ key: "outOfRange", tone: "danger" });
     expect(statuses.ph).toEqual({ key: "inRange", tone: "good" });
     expect(statuses.nitrate).toEqual({ key: "inRange", tone: "good" });
@@ -109,6 +111,28 @@ describe("parameterStatuses ve latestReading", () => {
     expect([failed.temperature, failed.ph]).toEqual([{ key: "unavailable", tone: "warning" }, { key: "unavailable", tone: "warning" }]);
     // Ölçülmemiş değer için katalog beklenmez.
     expect(parameterStatuses([animal("neon-tetra")], undefined, reading({}), "freshwater", unavailableStatus).temperature.key).toBe("noReading");
+  });
+
+  it("deniz akvaryumunda pH, özgül ağırlık ve yalnız balıklı akvaryumda nitrat OATA'nın hedefiyle etiketlenir (motor 1.13.0, karar 0030)", () => {
+    const fishOnly = (values: object) => parameterStatuses([animal("ocellaris-clownfish")], speciesForLivestock, reading(values), "saltwater");
+    const sea = fishOnly({ temperature: 25, ph: 8.1, specificGravity: 1.025, nitrate: 30 });
+    expect(sea.temperature).toEqual({ key: "inRange", tone: "good" });
+    expect(sea.ph).toEqual({ key: "inTarget", tone: "good" });
+    expect(sea.specificGravity).toEqual({ key: "outOfTarget", tone: "warning" });
+    expect(sea.nitrate).toEqual({ key: "outOfTarget", tone: "warning" });
+    expect(fishOnly({ specificGravity: 1.03 }).specificGravity).toEqual({ key: "outOfTarget", tone: "danger" });
+    expect(fishOnly({ ph: 7.9 }).ph).toEqual({ key: "outOfTarget", tone: "warning" });
+    expect(fishOnly({}).specificGravity).toEqual({ key: "noReading", tone: "neutral" });
+    // 100 mg/L'nin üstü ve geçersiz ölçüm su kalitesi kuralının etiketini korur.
+    expect(fishOnly({ nitrate: 150 }).nitrate).toEqual({ key: "veryHigh", tone: "danger" });
+    expect(fishOnly({ nitrate: -5 }).nitrate).toEqual({ key: "invalidReading", tone: "warning" });
+    // Omurgasızlı akvaryumda özgül ağırlık 1,024–1,026; nitrat türe bağlı (yalnız bilgi), su kalitesi kuralının etiketi kalır.
+    const reef = parameterStatuses([animal("ocellaris-clownfish"), animal("bubble-tip-anemone")], speciesForLivestock, reading({ specificGravity: 1.025, nitrate: 30 }), "saltwater");
+    expect(reef.specificGravity).toEqual({ key: "inTarget", tone: "good" });
+    expect(reef.nitrate).toEqual({ key: "inRange", tone: "good" });
+    // Acı su akvaryumu değişmedi: özgül ağırlık bilgi amaçlı, pH türün aralığıyla.
+    const brackish = parameterStatuses([animal("molly")], speciesForLivestock, reading({ specificGravity: 1.005, ph: 7.5 }), "brackish");
+    expect([brackish.specificGravity.key, brackish.ph.key]).toEqual(["informational", "inRange"]);
   });
 
   it("en son ölçümü kayıt sırasına değil ölçüm tarihine göre seçer", () => {
