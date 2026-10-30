@@ -3319,3 +3319,46 @@ Güncel alt adım: JBL filtre medyası, bakteri başlangıcı, sorun giderici/pH
 | `southern-purple-spotted-gudgeon` | 14 → 15 | 108 | 120 | 1 | 16–24 | 7–7,5 | SF 140 mm SL, taban 120 × 30 cm (yaklaşık 108 L), 16–24 °C, pH 7–7,5, sosyal yapı yayımlanmıyor; Practical Fishkeeping en fazla 15 cm; Fishes of Australia (müze, kimlik ve boy) 12 cm SL; eski ana kaynak ek kaynak oldu |
 | `deissners-licorice-gourami` | 4 → 5 | 25 | 40 | 2 | 22–28 | 3–6,5 | SF 40 mm SL, taban 40 × 20 cm (yaklaşık 16 L), 22–28 °C, pH 3–6,5, "best in a pair"; Parosphromenus Project (kabul edildi) en fazla 5 cm ve "a 25-liter tank would be the minimum"; hacim için büyük olan (25 L) korundu |
 | `half-banded-spiny-eel` | 20 | 215 | 90 | 1 → 5 (Fishkeeper: "Spiny Eels are fairly sociable and are best kept in groups of 5 or more") | 24–27 | 6–7,5 → 6–7 | Seriously Fish'te sayfası yok; Fishkeeper 20 cm, 24–27 °C, pH 6–7; akvaryum ölçüsü yayımlanmıyor, kayıttaki değer korundu |
+
+## 2026-10-30 Açık listedeki canlılar, paket 2: kerevit, yengeç ve amfibiler (Claude)
+
+- Açık listenin 7 "diğer" kaydı: Tayland mikro yengeci, üç kerevit, iki kurbağa ve aksolotl. 7'si de kabul edilen kaynağa bağlandı.
+- Yöntem:
+  - Fishkeeper'ın sayfaları sitenin kendi arama sayfasıyla ("Fish" sekmesi) bulundu: aksolotl, Afrika cüce kurbağası (*Hymenochirus* spp.), Afrika pençeli kurbağası, Tayland mikro yengeci. Fishkeeper'da ve Practical Fishkeeping'de kerevit sayfası yok.
+  - wirbellose.de'nin arama kutusu tür veri tabanını kapsamadığı için kerevit listesi (`/kategorie/krebse/`, 134 kayıt) sayfa sayfa tarandı.
+  - Fishipedia'nın amfibi (`/amphibians/`) ve kabuklular (`/crustacea/`, Fransızca `/fr/crustacea/`) bölümleri açıldı: aksolotl, *C. patzcuarensis* ve *C. diminutus*'un Fransızca sayfaları tamamlanmış; pençeli kurbağa ve *P. alleni* sayfaları taslak; *Hymenochirus* ve *Limnopilos* sayfası yok. Kabuklular bölümünü ilk taramamda kaçırmıştım; Codex'in 1. turu buldu.
+  - Practical Fishkeeping'in aramasında aksolotl rehberi, Tayland mikro yengeci yazısı ve pençeli kurbağa için bir okur cevabı bulundu. Sayfalar 2026-10-30'da (UTC) okundu.
+- Kurallar: `docs/DATA_SOURCES.md`'deki omurgasız değer kuralı kerevit ve yengeçte, aynı ilkeyle amfibilerde uygulandı (amfibiler için kaynak bölümü eklendi; Fishipedia kabuklular bölümü kerevit notuna eklendi):
+  - Ana kaynak Fishkeeper'ın tür ya da cins sayfası; yoksa wirbellose.de'nin satılan form sayfası (turuncu CPO) ya da Fishipedia'nın tamamlanmış sayfası.
+  - Sıcaklık ve pH: aralık veren kaynakların ortak aralığı. "İdeal" aralıklar ve yazarın kendi akvaryumundan gözlemi kullanılmadı.
+  - Boy: katalog ile kaynakların büyüğü. Akvaryum: kaynağın yayımladığı hacim ve uzunluk; iki kaynak farklı hacim veriyorsa büyüğü; yayımlanmıyorsa kayıttaki değer. Grup: kaynağın açık sayısı; sayısız "grup halinde" denirse kayıttaki değer.
+- Kararlar:
+  - Fishipedia'nın öneri pH'ı (7,2–8) dört ayrı türde (Ikola, Kiriza, CPO, *P. alleni*) aynı ve her birinin aynı sayfadaki doğal ortam pH'ından farklı; veri modeli varsayılanı olduğundan şüphelenildi ve kullanılmadı (bu bir kanıt değil, kaynak güvenilirliği değerlendirmesi; doğal ortamla bakım önerisinin farklı olması tek başına hata sayılmaz). Öneri ve doğal ortam aynıysa (*C. diminutus*, 6–8,5) kullanıldı; aynı sayfadaki iki bölüm bağımsız doğrulama sayılmaz.
+  - Aksolotl sıcaklığı: Fishkeeper 10–22 °C ve Fishipedia 6–20 °C; ortak aralık 10–20 °C. Practical Fishkeeping yalnız "ideal" aralık veriyor (16–20 °C; tür kutusunda 16–18 °C), ama aynı yazı 20 °C'nin üstünde uzun sürenin stres yaratıp ömrü kısalttığını söylüyor; ortak aralıkla uyumlu.
+  - Aksolotl akvaryumu: Fishipedia "Min volume 200 liters"; Practical Fishkeeping "A 90-litre tank should be considered the absolute minimum for an adult" ve tür kutusunda "Tank size: 100x45x30cm". Hacim için büyüğü (200 L), uzunluk için uzunluk veren tek kaynak (100 cm). Boy: Fishkeeper 30 cm, Fishipedia 15–33 cm, Practical Fishkeeping "To 45cm (rare), usually tops out at 25cm"; kural gereği büyüğü (45 cm, nadir azami boy).
+  - Pençeli kurbağa: Practical Fishkeeping "a singleton in a 30-40 l tank will be perfectly happy"; aralığın büyüğü (40 L). Fishipedia'nın sayfası taslak (boy 7–12 cm, doğal ortam sıcaklığı "25 - 15 °C" ters yazılmış, öneri bölümü yok); değer değiştirmedi.
+  - Tayland mikro yengecinde Practical Fishkeeping yazarının "22–25 °C'de sorun yaşamadılar" gözlemi aralık sayılmadı; Fishkeeper'ın 22–26 °C'si kullanıldı.
+  - Meksika cüce kereviti (CPO): wirbellose.de 10–25 °C ve Fishipedia 15–30 °C; ortak aralık 15–25 °C. Fishipedia en az 2 birey ve 30 cm cephe için 30 L (kayıtla aynı).
+  - Minik cüce kerevit (*C. diminutus*): ana kaynak Fishipedia'nın tamamlanmış Fransızca sayfası: en az 2 birey, 20 cm cephe için 20 L, 18–30 °C, pH 6–8,5, en büyük 3 cm (kayıttaki 4 cm kaldı). Bakım metnindeki eski "tek birey 20 L, birden fazla 40–60 L" ifadesi kabul edilen bir kaynağa dayanmıyordu, yeniden yazıldı.
+  - Elektrik mavi kerevit: wirbellose.de "ab 60x30 cm für ein Paar" → uzunluk 60 cm; Fishipedia taslağı en az 120 L (sayfada tutarlı) → hacim 120 L (kayıttaki 115'ten büyük). Sıcaklık wirbellose.de 20–24 ∩ Fishipedia 18–30 = 20–24 °C.
+  - Afrika cüce kurbağası: Fishkeeper "should be kept in small groups" diyor, sayı vermiyor; sayı uydurulmadı, kayıttaki 1 kaldı.
+- Kullanıcıya etkisi:
+  - Tayland mikro yengeci en az 5'li koloni, iki cüce kerevit en az 2 birey istiyor; tek ya da az tutulursa "grup sayısı düşük" uyarısı çıkar.
+  - Aksolotl için en az 200 L ve 100 cm (önce 76 L, 60 cm); yetişkin boy 45 cm. Sıcaklık 10–20 °C; tropik balıklarla seçilince sıcaklık uyuşmazlığı uyarısı sürüyor.
+  - Pençeli kurbağa 10–28 °C ve pH 6,8–7,8; Afrika cüce kurbağası 22–25 °C ve pH 7–7,8.
+  - Kerevitler: Meksika cüce kereviti 15–25 °C, pH 6,5–9; minik cüce kerevit 18–30 °C, pH 6–8,5, 20 cm; elektrik mavi kerevit 20–24 °C, pH 6,5–8, 60 cm ve 120 L (117 L'lik akvaryumda artık "alan sınırda" uyarısı).
+- Altın fikstür: motor değişmedi; 1.077 vakadan 16'sı değişti (7 "sığar", 7 "dar", 2 tür çifti), hepsi bu türlerin değerlerinden. Değişen ölçütler: yük 11, ısıtıcı 2, sosyal 3. Durum geçişi yok. Tayland mikro yengeci ile iki cüce kerevitin dar vakalarına grup uyarısı geldi. Fikstür yeniden üretildi; veri değişikliğinden ayrı bir commit'te kaydedilir.
+- Testler: paketin 7 kaydını değer, ana kaynak, tarih ve ek kaynakla sabitleyen yeni blok; kerevitlerin Fishipedia bağlantıları; amfibi testindeki en yüksek sıcaklık beklentileri (aksolotl 20, pençeli kurbağa 28); minik cüce kerevitin eski beklentisi yeni değerlere göre.
+- Kalan açık liste: Kiriza Tropheus ve Fishipedia taslaklarına bağlı 12 kayıt.
+- Codex'in 1. turu Fishipedia'nın kabuklular bölümündeki üç kerevit sayfasını buldu (C. diminutus'un "kabul edilen kaynakta sayfası yok" sonucu yanlıştı); düzeltildi.
+- Değişiklik tablosu ("eski → yeni"; değişmeyen değer tek yazıldı):
+
+| Kimlik | Boy | Hacim (L) | Uzunluk (cm) | Grup | Sıcaklık | pH | Ana kaynak |
+|---|---|---|---|---|---|---|---|
+| `thai-micro-crab` | 1 | 20 | 30 | 1 → 5 | 22–28 → 22–26 | 7–8 → 6,5–7 | Fishkeeper (eski: mağaza) |
+| `mexican-dwarf-crayfish` | 5 | 30 | 40 → 30 | 1 → 2 | 18–26 → 15–25 | 6,5–8 → 6,5–9 | wirbellose.de (CPO); Fishipedia |
+| `least-dwarf-crayfish` | 4 | 20 | 30 → 20 | 1 → 2 | 20–26 → 18–30 | 6,5–8 → 6–8,5 | Fishipedia (eski: aquascapedia.com) |
+| `electric-blue-crayfish` | 12 | 115 → 120 | 90 → 60 | 1 | 18–24 → 20–24 | 7–8,5 → 6,5–8 | wirbellose.de; Fishipedia (taslak) |
+| `african-dwarf-frog` | 7 | 50 | 45 | 1 | 24–26 → 22–25 | 7,2–7,6 → 7–7,8 | Fishkeeper (*Hymenochirus* spp.) |
+| `axolotl` | 30 → 45 | 76 → 200 | 60 → 100 | 1 | 15–18 → 10–20 | 6,5–8 → 7–8 | Fishkeeper; Fishipedia; Practical Fishkeeping |
+| `african-clawed-frog` | 15 | 38 → 40 | 50 | 1 | 18–22 → 10–28 | 6,5–8,5 → 6,8–7,8 | Fishkeeper; Practical Fishkeeping |

@@ -5320,6 +5320,26 @@ for (const [id, expected] of Object.entries(sourcedSpeciesBatch2Traits)) {
 }
 assert.deepEqual(["mascara-barb","chinese-algae-eater"].map((id) => speciesCatalog.find((item) => item.id === id)?.flow), ["medium","medium"], "Mascara barb ve Çin yosun yiyicisi kaynağın orta su hareketini taşımalı");
 assert.equal(speciesCatalog.find((item) => item.id === "panda-loach")?.speciesOnly, undefined, "Panda Loach kaynağa göre diğer türlerle tutulabilmeli");
+// 2026-10-30 açık listedeki canlılar, paket 2 (docs/CATALOG_LOG.md): 7 "diğer" kayıt Fishkeeper'a, Fishipedia'ya ya da wirbellose.de'ye bağlandı.
+// Sıra: boy, hacim, uzunluk, en az grup, sıcaklık, pH, ana kaynak.
+const openListOtherBatch2 = {
+  "thai-micro-crab":[1,20,30,5,[22,26],[6.5,7],"https://www.fishkeeper.co.uk/fish/freshwater/miscellaneous/thai-micro-spider-crab"],
+  "mexican-dwarf-crayfish":[5,30,30,2,[15,25],[6.5,9],"https://www.wirbellose.de/artendatenbank/cambarellus-patzcuarensis-sp-orange-oranger-zwergkrebs-cpo/"],
+  "electric-blue-crayfish":[12,120,60,1,[20,24],[6.5,8],"https://www.wirbellose.de/artendatenbank/procambarus-alleni-sp-blau-florida-krebs/"],
+  "african-dwarf-frog":[7,50,45,1,[22,25],[7,7.8],"https://www.fishkeeper.co.uk/fish/freshwater/miscellaneous/african-dwarf-frog"],
+  "least-dwarf-crayfish":[4,20,20,2,[18,30],[6,8.5],"https://www.fishipedia.fr/fr/crustacea/cambarellus-diminutus"],
+  "axolotl":[45,200,100,1,[10,20],[7,8],"https://www.fishkeeper.co.uk/fish/freshwater/miscellaneous/axolotl"],
+  "african-clawed-frog":[15,40,50,1,[10,28],[6.8,7.8],"https://www.fishkeeper.co.uk/fish/freshwater/miscellaneous/african-clawed-frog"]
+};
+for (const [id, [size, volume, length, group, temperature, ph, source]] of Object.entries(openListOtherBatch2)) {
+  const profile = speciesCatalog.find((item) => item.id === id);
+  assert.deepEqual([profile?.adultSizeCm,profile?.minVolumeL,profile?.minTankLengthCm,profile?.minGroup,profile?.temperature,profile?.ph], [size,volume,length,group,temperature,ph], `${id} kabul edilen kaynakların bakım eşiklerini taşımalı`);
+  assert.equal(profile?.sourceUrl, source, `${id} kabul edilen ana kaynağa bağlanmalı`);
+  assert.equal(profile?.verifiedAt, "2026-10-30", `${id} kaynak okuma tarihini taşımalı`);
+  assert((profile?.additionalSourceUrls?.length ?? 0) >= 1 && profile.additionalSourceUrls.every((url) => url.startsWith("https://")), `${id} eski kaynağını ek kaynak olarak taşımalı`);
+}
+// Fishipedia'nın öneri pH'ı (7,2–8) birden çok türde aynı ve sayfanın doğal ortam pH'ından farklı; kullanılmadı.
+assert.deepEqual(["mexican-dwarf-crayfish","electric-blue-crayfish"].map((id) => speciesCatalog.find((item) => item.id === id)?.additionalSourceUrls?.[0]), ["https://www.fishipedia.fr/fr/crustacea/cambarellus-patzcuarensis","https://www.fishipedia.fr/fr/crustacea/procambarus-alleni"], "Kerevitler grup, sıcaklık ve hacim için okunan Fishipedia sayfalarını taşımalı");
 // 2026-10-30 açık listedeki canlılar, paket 1 (docs/CATALOG_LOG.md): ana kaynağı kabul listesinde olmayan 10 balık Seriously Fish'e,
 // Fishkeeper'a ya da kabul edilen tür uzmanına (Goodeid Working Group) bağlandı. Sıra: boy, hacim, uzunluk, en az grup, sıcaklık, pH, ana kaynak.
 const openListFishBatch1 = {
@@ -7036,7 +7056,7 @@ assert.equal(speciesCatalog.filter((item) => speciesGroup(item) === "goby").leng
 assert.equal(speciesCatalog.filter((item) => speciesGroup(item) === "crayfish").length, 4, "Kerevit kataloğu Cambarellus diminutus dahil dört tür içermeli");
 for (const [id,group,volume,length,count,temperature,ph,flow] of [
   ["smudge-spot-cory","bottom",100,60,8,[21,27],[6.8,7.2],"medium"],
-  ["least-dwarf-crayfish","crayfish",20,30,1,[20,26],[6.5,8],"low"],
+  ["least-dwarf-crayfish","crayfish",20,20,2,[18,30],[6,8.5],"low"],
 ]) {
   const profile=speciesCatalog.find((item)=>item.id===id);
   assert(profile,id+" yerel canlı karşılaştırmasından sonra katalogda bulunmalı");
@@ -7045,7 +7065,7 @@ for (const [id,group,volume,length,count,temperature,ph,flow] of [
     [group,volume,length,count,temperature,ph,flow],
     id+" doğrulanmış hacim, uzunluk, grup ve su gereksinimlerini taşımalı",
   );
-  assert.equal(profile.verifiedAt,"2026-08-27",id+" güncel doğrulama tarihini taşımalı");
+  assert.equal(profile.verifiedAt,id === "least-dwarf-crayfish" ? "2026-10-30" : "2026-08-27",id+" güncel doğrulama tarihini taşımalı");
   assert(profile.husbandryCaution,id+" özel bakım uyarısını taşımalı");
 }
 for (const id of ["tinfoil-barb", "spotted-silver-dollar", "bala-shark"]) {
@@ -8054,8 +8074,8 @@ assert.deepEqual(
 assert.equal(africanButterflyFish?.verifiedAt, "2026-09-07", "African Butterfly Fish güncel doğrulama tarihini taşımalı");
 assert.equal(unresolvedSpeciesForSearch("BUTTERFLY FISH", "fish", "freshwater"), undefined, "Doğrulanmış tatlı su Butterfly Fish çözülmemiş listede kalmamalı");
 for (const [id, group, maxTemperature] of [
-  ["axolotl", "coldwater", 18],
-  ["african-clawed-frog", "other", 22],
+  ["axolotl", "coldwater", 20],
+  ["african-clawed-frog", "other", 28],
 ]) {
   const profile = speciesCatalog.find((item) => item.id === id);
   assert(profile, `${id} amfibi kataloğunda bulunmalı`);

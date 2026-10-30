@@ -87,6 +87,17 @@ Değer kuralı (balıklardaki kuralın omurgasız karşılığı):
 - **Nitelikler:** kaynakla doğrudan çelişen nitelikler (akıntı, avcılık, tür akvaryumu) düzeltilir.
 - **Eski kaynaklar:** ek kaynak olarak kalır.
 - **Okuma:** değerler sayfa açılarak okunur; arama özeti kaynak sayılmaz.
+- **Kerevit ve yengeç (2026-10-30):** aynı kaynaklar ve aynı değer kuralı kullanılır. Fishkeeper'da ve Practical Fishkeeping'de sayfası olmayan kerevitlerde wirbellose.de'nin tür ya da satılan form sayfası ya da Fishipedia'nın kabuklular bölümündeki tamamlanmış sayfa (`/crustacea/`, Fransızca `/fr/crustacea/`) ana kaynaktır; Fishipedia'nın taslak sayfaları alan alan değerlendirilir. Fishipedia'nın öneri pH'ı (7,2–8) birçok türde aynı ve doğal ortam pH'ından farklıysa veri modeli varsayılanı olduğundan şüphelenilir ve kullanılmaz (kaynak güvenilirliği değerlendirmesi); "ab 60x30 cm für ein Paar" gibi taban ölçüsünden yalnız uzunluk alınır, hacim yayımlanmıyorsa kayıttaki değer kalır.
+
+## Amfibiler (aksolotl, kurbağalar)
+
+2026-10-30'da açık listedeki üç amfibi kaydı için seçildi (teknik yöntem, Claude). Seriously Fish amfibi yayımlamıyor.
+
+1. **Fishkeeper (Maidenhead Aquatics):** tür ya da cins sayfası olan amfibilerde ana kaynaktır (sıcaklık, pH, boy, uyumluluk).
+2. **Fishipedia:** amfibi bölümündeki tamamlanmış sayfalar (`/amphibians/`); taslak sayfalar alan alan değerlendirilir (balıklardaki gibi).
+3. **Practical Fishkeeping:** adlı yazarların bakım yazıları ve okur cevapları; akvaryum ölçüsü ve sosyal yapı için kullanılır.
+
+Değer kuralı omurgasızlardakiyle aynıdır. Okul, satıcı ve tek yazarlı bakım sayfaları ek kaynak olarak kalır.
 
 ## Bitkiler
 
