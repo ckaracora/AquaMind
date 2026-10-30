@@ -2,6 +2,7 @@
 
 import { Activity, CalendarDays, ChevronRight, CircleGauge, Droplets, FlaskConical, Plus, Thermometer, Waves } from "lucide-react";
 import { useEffect, useMemo, useState } from "react";
+import { BackupReminder } from "@/components/backup-reminder";
 import { MobileNav } from "@/components/mobile-nav";
 import { ParameterCard, statusTones } from "@/components/parameter-card";
 import { Sidebar } from "@/components/sidebar";
@@ -55,6 +56,7 @@ export default function Dashboard() {
         <div className="flex items-center gap-3 lg:hidden"><span className="grid size-9 place-items-center rounded-xl bg-aqua text-ink"><Waves size={20}/></span><span className="font-extrabold">{t.app.name}</span></div>
         <div className="hidden items-center gap-2 text-xs text-[#647981] lg:flex"><span>{t.navigation.dashboard}</span><ChevronRight size={13}/><span className="text-[#aab9be]">{t.navigation.items.overview}</span></div>
       </header>
+      <BackupReminder />
       <div className="mx-auto max-w-[1440px] px-5 py-7 sm:px-8 lg:px-10 lg:py-10">
         <section className="mb-8 flex flex-col justify-between gap-4 sm:flex-row sm:items-end">
           <div><p className="eyebrow mb-2 text-aqua">{fmt.date(new Date(),{day:"numeric",month:"long",weekday:"long"})}</p><h1 className="text-2xl font-extrabold tracking-tight sm:text-3xl">{greeting ? t.greeting[greeting] : t.greeting.fallback}</h1><p className={`mt-2 text-sm ${summaryTones[summary.tone]}`}>{summary.text} <a href={`/aquariums/${aquarium.id}/health`} className="-my-3.5 inline-block py-3.5 font-bold text-aqua hover:underline">{t.dashboard.openHealth}</a></p></div>

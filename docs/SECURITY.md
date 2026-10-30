@@ -1,6 +1,6 @@
 # AquaMind güvenlik planı
 
-Son güncelleme: 2026-09-02. **Durum: tasarım.** Uygulama bugün tamamen istemci tarafında çalışır; kullanıcı hesabı, arka uç ve gizli anahtar yoktur. Bu belge Phase 1 ve sonrası için bağlayıcı ilkeleri tanımlar. Hiçbir kullanıcı verisi tablosu burada tanımlanan yetkilendirme stratejisi ve testleri olmadan üretime çıkmaz.
+Son güncelleme: 2026-10-29. **Durum: tasarım** (tarayıcı güvenlik başlıkları ve gizlilik metni uygulamada). Uygulama bugün tamamen istemci tarafında çalışır; kullanıcı hesabı, arka uç ve gizli anahtar yoktur. Bu belge Phase 1 ve sonrası için bağlayıcı ilkeleri tanımlar. Hiçbir kullanıcı verisi tablosu burada tanımlanan yetkilendirme stratejisi ve testleri olmadan üretime çıkmaz.
 
 ## Temel ilke
 
@@ -55,6 +55,21 @@ Arayüzde gizlemek yetki değildir. Yetkilendirme kararı veritabanında (Row Le
 
 - Akvaryum silme: `soft_deleted` durumu ve `purge_after = deleted_at + 30 gün`; pencere içinde geri yükleme bir durum değişikliğidir; süre dolunca zamanlanmış bir iş alt satırları ve fotoğrafları temizler.
 - Hesap silme: sahip olunan akvaryumlar devredilir veya silinir; kişisel satırlar, depolama nesneleri ve keşif hücreleri temizlenir; işlem kaydedilir.
+
+## Tarayıcı güvenlik başlıkları
+
+2026-10-29'dan beri (`docs/DECISIONS/0027-yedekten-geri-yukleme.md`) `next.config.ts` her sayfaya `src/lib/security-headers.ts` içindeki başlıkları ekler. HSTS'yi Vercel gönderir; burada yinelenmez.
+
+- **Content-Security-Policy:** her şey aynı kaynaktan (`default-src 'self'`); `object-src 'none'`, `frame-ancestors 'none'`, `base-uri` ve `form-action` aynı kaynak. `script-src` ve `style-src` `'unsafe-inline'` taşır: Next.js sayfaya kendi satır içi betiklerini yazar ve nonce her isteğin sunucuda çizilmesini gerektirir; uygulama dış betik, yazı tipi, resim yüklemediği ve dışarıya istek göndermediği için dış kaynak yine engellidir. `'unsafe-eval'` ve `ws:` yalnız geliştirme sunucusunda, Vercel araç çubuğunun belgelenmiş adresleri yalnız Vercel önizlemesinde eklenir.
+- **X-Content-Type-Options: nosniff**, **X-Frame-Options: DENY**, **Referrer-Policy: strict-origin-when-cross-origin**, **Cross-Origin-Opener-Policy: same-origin**.
+- **Permissions-Policy:** kamera, mikrofon, konum, ödeme, USB ve ilgi alanı (browsing-topics) kapalı. Fotoğraf, konum ya da uygulama içi ödeme gelince ilgili izin aynı işte açılır ve bu belge güncellenir.
+- `X-Powered-By` gönderilmez.
+
+Hesap ve sunucu kodu gelince (Phase 1) nonce'lu sıkı içerik politikası yeniden değerlendirilir.
+
+## Gizlilik metni
+
+`/privacy` uygulamanın bugünkü veri akışını anlatır (0027). Veri sorumlusu ve iletişim adresi gelene kadar taslaktır ve ekranda bağlantısı yoktur (ürün sahibinin 2026-10-30 kararı). Veri akışını değiştiren her iş (hesap, bulut eşitleme, analiz, sosyal özellikler, yapay zekâ geçidi) metni aynı işte günceller; metin uygulamanın önüne geçmez, gerisinde de kalmaz.
 
 ## Yapay zekâ kodlama araçları için kurallar
 
