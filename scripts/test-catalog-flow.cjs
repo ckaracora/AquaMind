@@ -4234,7 +4234,7 @@ assert.equal(speciesCatalog.find((item) => item.id === "texas-cichlid")?.species
 assert.equal(speciesCatalog.find((item) => item.id === "tropheus-duboisi")?.minGroup, 10, "Duboisi Tropheus tekli veya küçük grup olarak önerilmemeli");
 assert(speciesCatalog.filter((item) => speciesGroup(item) === "livebearer").length >= 13, "Canlı doğuran kataloğu yaygın Poeciliid, Limia ve Goodeid türlerini kapsamalı");
 for (const [id, minVolumeL, minGroup] of [
-  ["butterfly-goodeid", 250, 6],
+  ["butterfly-goodeid", 250, 8],
   ["red-tailed-goodeid", 250, 6],
   ["sparkling-limia", 75, 6],
   ["dark-edged-splitfin", 80, 6],
@@ -4250,25 +4250,25 @@ assert.equal(speciesCatalog.find((item) => item.id === "butterfly-goodeid")?.flo
 const butterflyGoodeid = speciesCatalog.find((item) => item.id === "butterfly-goodeid");
 assert.deepEqual(
   [butterflyGoodeid?.adultSizeCm,butterflyGoodeid?.minVolumeL,butterflyGoodeid?.minTankLengthCm,butterflyGoodeid?.minGroup,butterflyGoodeid?.temperature,butterflyGoodeid?.ph,butterflyGoodeid?.flow],
-  [9,250,undefined,6,[17,25],[7,8],"high"],
-  "Kelebek Goodeid kaynaklı boy, hacim, grup ve mevsimsel su eşiklerini taşımalı",
+  [9,250,90,8,[20,25],[7,8],"high"],
+  "Kelebek Goodeid kaynaklı boy, hacim, uzunluk, grup ve su eşiklerini taşımalı",
 );
 assert.equal(butterflyGoodeid?.speciesOnly,true,"Kelebek Goodeid sıradan topluluk balığı gibi önerilmemeli");
-assert.equal(butterflyGoodeid?.verifiedAt,"2026-09-30","Kelebek Goodeid güncel doğrulama tarihini taşımalı");
-assert.match(butterflyGoodeid?.sourceUrl || "",/^https:\/\/www\.goodeidworkinggroup\.com\/ameca-splendens$/,"Kelebek Goodeid doğrudan koruma ve tür uzmanı kaynağa bağlanmalı");
-assert(butterflyGoodeid?.tankLengthDataNote?.includes("eski 100 cm eşiği kaldırıldı"),"Kelebek Goodeid kaynakta olmayan tank uzunluğunu korumamalı");
+assert.equal(butterflyGoodeid?.verifiedAt,"2026-10-30","Kelebek Goodeid güncel doğrulama tarihini taşımalı");
+assert(butterflyGoodeid?.additionalSourceUrls?.includes("https://www.goodeidworkinggroup.com/ameca-splendens"),"Kelebek Goodeid 250 L hacmin kaynağı olan tür uzmanı sayfasını taşımalı");
+assert.equal(butterflyGoodeid?.tankLengthDataNote,undefined,"Kelebek Goodeid uzunluğu artık Seriously Fish tabanından geldiği için eski uzunluk notunu taşımamalı");
 assert(butterflyGoodeid?.husbandryCaution?.includes("8 mg/L") && butterflyGoodeid.husbandryCaution.includes("%60–80") && butterflyGoodeid.husbandryCaution.includes("25 °C üzeri"),"Kelebek Goodeid oksijen, su değişimi ve sıcaklık güvenliğini taşımalı");
 const redTailedGoodeid = speciesCatalog.find((item) => item.id === "red-tailed-goodeid");
 assert.deepEqual(
   [redTailedGoodeid?.adultSizeCm,redTailedGoodeid?.minVolumeL,redTailedGoodeid?.minTankLengthCm,redTailedGoodeid?.minGroup,redTailedGoodeid?.temperature,redTailedGoodeid?.ph,redTailedGoodeid?.flow],
-  [7.5,250,undefined,6,[17,25],[6,8],"high"],
-  "Kırmızı kuyruklu Goodeid kaynaklı boy, hacim, grup ve mevsimsel su eşiklerini taşımalı",
+  [7.5,250,60,6,[15,30],[6,8],"high"],
+  "Kırmızı kuyruklu Goodeid kaynaklı boy, hacim, uzunluk, grup ve su eşiklerini taşımalı",
 );
 assert.equal(redTailedGoodeid?.speciesOnly,true,"Kırmızı kuyruklu Goodeid güvenli topluluk balığı gibi önerilmemeli");
 assert.deepEqual(redTailedGoodeid?.waterTypes,["freshwater"],"Kırmızı kuyruklu Goodeid yalnız tatlı su profili taşımalı");
-assert.equal(redTailedGoodeid?.verifiedAt,"2026-09-30","Kırmızı kuyruklu Goodeid güncel doğrulama tarihini taşımalı");
-assert.match(redTailedGoodeid?.sourceUrl || "",/^https:\/\/goodeidworkinggroup\.com\/xenotoca-eiseni$/,"Kırmızı kuyruklu Goodeid doğrudan koruma ve tür uzmanı kaynağa bağlanmalı");
-assert(redTailedGoodeid?.tankLengthDataNote?.includes("eski 80 cm eşiği kaldırıldı"),"Kırmızı kuyruklu Goodeid kaynakta olmayan tank uzunluğunu korumamalı");
+assert.equal(redTailedGoodeid?.verifiedAt,"2026-10-30","Kırmızı kuyruklu Goodeid güncel doğrulama tarihini taşımalı");
+assert(redTailedGoodeid?.additionalSourceUrls?.includes("https://goodeidworkinggroup.com/xenotoca-eiseni"),"Kırmızı kuyruklu Goodeid 250 L hacmin kaynağı olan tür uzmanı sayfasını taşımalı");
+assert.equal(redTailedGoodeid?.tankLengthDataNote,undefined,"Kırmızı kuyruklu Goodeid uzunluğu artık Seriously Fish tabanından geldiği için eski uzunluk notunu taşımamalı");
 assert(redTailedGoodeid?.husbandryCaution?.includes("8 mg/L") && redTailedGoodeid.husbandryCaution.includes("%60–80") && redTailedGoodeid.husbandryCaution.includes("25 °C üzeri"),"Kırmızı kuyruklu Goodeid oksijen, su değişimi ve sıcaklık güvenliğini taşımalı");
 assert(redTailedGoodeid?.husbandryCaution?.includes("X. doadrioi") && redTailedGoodeid.husbandryCaution.includes("X. lyonsi") && redTailedGoodeid.husbandryCaution.includes("melez"),"Kırmızı kuyruklu Goodeid taksonomi ve akvaryum soyu riskini açıklamalı");
 const sparklingLimia = speciesCatalog.find((item) => item.id === "sparkling-limia");
@@ -4286,12 +4286,12 @@ assert(sparklingLimia?.communityCaution?.includes("melezleşebildiğinden"),"Spa
 const darkEdgedSplitfin = speciesCatalog.find((item) => item.id === "dark-edged-splitfin");
 assert.deepEqual(
   [darkEdgedSplitfin?.scientificName,darkEdgedSplitfin?.adultSizeCm,darkEdgedSplitfin?.minVolumeL,darkEdgedSplitfin?.minTankLengthCm,darkEdgedSplitfin?.minGroup,darkEdgedSplitfin?.temperature,darkEdgedSplitfin?.ph,darkEdgedSplitfin?.flow],
-  ["Girardinichthys multiradiatus",5,80,undefined,6,[10,22],[7.5,8.5],"medium"],
+  ["Girardinichthys multiradiatus",5.5,80,undefined,6,[10,22],[7.5,8.5],"medium"],
   "Koyu kenarlı Splitfin kaynaklı kimlik, boy, hacim, grup ve serin su eşiklerini taşımalı",
 );
 assert.equal(darkEdgedSplitfin?.speciesOnly,true,"Koyu kenarlı Splitfin sıradan tropikal topluluk balığı gibi önerilmemeli");
 assert.deepEqual(darkEdgedSplitfin?.waterTypes,["freshwater"],"Koyu kenarlı Splitfin yalnız tatlı su profili taşımalı");
-assert.equal(darkEdgedSplitfin?.verifiedAt,"2026-09-30","Koyu kenarlı Splitfin güncel doğrulama tarihini taşımalı");
+assert.equal(darkEdgedSplitfin?.verifiedAt,"2026-10-30","Koyu kenarlı Splitfin güncel doğrulama tarihini taşımalı");
 assert.match(darkEdgedSplitfin?.sourceUrl || "",/^https:\/\/goodeidworkinggroup\.com\/girardinichthys-multiradiatus$/,"Koyu kenarlı Splitfin doğrudan koruma ve tür uzmanı kaynağa bağlanmalı");
 assert(darkEdgedSplitfin?.tankLengthDataNote?.includes("eski 60 cm eşiği kaldırıldı"),"Koyu kenarlı Splitfin kaynakta olmayan tank uzunluğunu korumamalı");
 assert(darkEdgedSplitfin?.husbandryCaution?.includes("8 mg/L") && darkEdgedSplitfin.husbandryCaution.includes("%60–80") && darkEdgedSplitfin.husbandryCaution.includes("22 °C üzeri") && darkEdgedSplitfin.husbandryCaution.includes("18 °C altı"),"Koyu kenarlı Splitfin oksijen, su değişimi ve mevsimsel sıcaklık güvenliğini taşımalı");
@@ -5320,6 +5320,50 @@ for (const [id, expected] of Object.entries(sourcedSpeciesBatch2Traits)) {
 }
 assert.deepEqual(["mascara-barb","chinese-algae-eater"].map((id) => speciesCatalog.find((item) => item.id === id)?.flow), ["medium","medium"], "Mascara barb ve Çin yosun yiyicisi kaynağın orta su hareketini taşımalı");
 assert.equal(speciesCatalog.find((item) => item.id === "panda-loach")?.speciesOnly, undefined, "Panda Loach kaynağa göre diğer türlerle tutulabilmeli");
+// 2026-10-30 açık listedeki canlılar, paket 1 (docs/CATALOG_LOG.md): ana kaynağı kabul listesinde olmayan 10 balık Seriously Fish'e,
+// Fishkeeper'a ya da kabul edilen tür uzmanına (Goodeid Working Group) bağlandı. Sıra: boy, hacim, uzunluk, en az grup, sıcaklık, pH, ana kaynak.
+const openListFishBatch1 = {
+  "flowerhorn":[40,648,180,1,[25,29],[6.5,7.8],"https://www.fishkeeper.co.uk/fish/freshwater/cichlids/flowerhorn-cichlid"],
+  "celebes-halfbeak":[10,132,91,5,[20,25],[6.5,7.5],"https://www.fishkeeper.co.uk/fish/freshwater/livebearers/celebes-halfbeak"],
+  "butterfly-goodeid":[9,250,90,8,[20,25],[7,8],"https://www.seriouslyfish.com/species/ameca-splendens/"],
+  "red-tailed-goodeid":[7.5,250,60,6,[15,30],[6,8],"https://www.seriouslyfish.com/species/xenotoca-eiseni/"],
+  "dark-edged-splitfin":[5.5,80,undefined,6,[10,22],[7.5,8.5],"https://goodeidworkinggroup.com/girardinichthys-multiradiatus"],
+  "pearlscale-cichlid":[35,213,120,1,[24,26],[7.5,8.5],"https://www.seriouslyfish.com/species/herichthys-carpintis/"],
+  "tropheus-ikola":[13,700,150,15,[23,26],[8,9],"https://www.fishkeeper.co.uk/fish/freshwater/cichlids/yellowband-tropheus"],
+  "southern-purple-spotted-gudgeon":[15,108,120,1,[16,24],[7,7.5],"https://www.seriouslyfish.com/species/mogurnda-adspersa/"],
+  "deissners-licorice-gourami":[5,25,40,2,[22,28],[3,6.5],"https://www.seriouslyfish.com/species/parosphromenus-deissneri/"],
+  "half-banded-spiny-eel":[20,215,90,5,[24,27],[6,7],"https://www.fishkeeper.co.uk/fish/freshwater/miscellaneous/half-banded-spiny-eel"]
+};
+for (const [id, [size, volume, length, group, temperature, ph, source]] of Object.entries(openListFishBatch1)) {
+  const profile = speciesCatalog.find((item) => item.id === id);
+  assert.deepEqual([profile?.adultSizeCm,profile?.minVolumeL,profile?.minTankLengthCm,profile?.minGroup,profile?.temperature,profile?.ph], [size,volume,length,group,temperature,ph], `${id} kabul edilen kaynakların bakım eşiklerini taşımalı`);
+  assert.equal(profile?.sourceUrl, source, `${id} kabul edilen ana kaynağa bağlanmalı`);
+  assert.equal(profile?.verifiedAt, "2026-10-30", `${id} kaynak okuma tarihini taşımalı`);
+  // Melez Flowerhorn ve tanımlanmamış Tropheus sp. 'Ikola' için FishBase tür sayfası yok.
+  if (!["flowerhorn","tropheus-ikola"].includes(id)) assert((profile?.additionalSourceUrls ?? []).some((url) => url.includes("fishbase.se")), `${id} bilimsel kimlik için FishBase bağlantısını taşımalı`);
+}
+// Sıra: bilimsel ad, akıntı, avcı, tür akvaryumu. Kaynaklar bu nitelikleri değiştirmedi.
+const openListFishBatch1Traits = {
+  "flowerhorn":["Flowerhorn hybrid","medium",true,true],
+  "celebes-halfbeak":["Nomorhamphus liemi","medium",true,false],
+  "butterfly-goodeid":["Ameca splendens","high",false,true],
+  "red-tailed-goodeid":["Xenotoca eiseni","high",false,true],
+  "dark-edged-splitfin":["Girardinichthys multiradiatus","medium",false,true],
+  "pearlscale-cichlid":["Herichthys carpintis","medium",true,true],
+  "tropheus-ikola":["Tropheus sp. \"ikola\"","high",false,true],
+  "southern-purple-spotted-gudgeon":["Mogurnda adspersa","low",true,false],
+  "deissners-licorice-gourami":["Parosphromenus deissneri","low",true,true],
+  "half-banded-spiny-eel":["Macrognathus circumcinctus","medium",true,false]
+};
+for (const [id, expected] of Object.entries(openListFishBatch1Traits)) {
+  const profile = speciesCatalog.find((item) => item.id === id);
+  assert.deepEqual([profile?.scientificName,profile?.flow,profile?.predatory === true,profile?.speciesOnly === true], expected, `${id} kimlik ve bakım niteliklerini korumalı`);
+}
+// Ikola: Fishipedia taslağının sayfada tutarlı alanları (boy, 700 L) kullanıldı; çelişen pH alanı kullanılmadı.
+assert(speciesCatalog.find((item) => item.id === "tropheus-ikola")?.additionalSourceUrls?.includes("https://www.fishi-pedia.com/fishes/tropheus-sp-black-ikola"), "Ikola Tropheus hacmin kaynağı olan Fishipedia sayfasını taşımalı");
+// Kiriza Tropheus değişmedi: Fishipedia'nın Kiriza taslağı temel alanlarda hatalı (8–23 °C, pH "28–8,8"); açık listede kalır.
+const kirizaUnchanged = speciesCatalog.find((item) => item.id === "tropheus-kiriza");
+assert.deepEqual([kirizaUnchanged?.adultSizeCm,kirizaUnchanged?.minVolumeL,kirizaUnchanged?.minTankLengthCm,kirizaUnchanged?.minGroup,kirizaUnchanged?.temperature,kirizaUnchanged?.ph,kirizaUnchanged?.flow,kirizaUnchanged?.sourceUrl,kirizaUnchanged?.verifiedAt], [14,375,150,10,[23,26],[7.8,9],"high","https://www.zoopet.com/fiskar/fisk.php?NR=123","2026-08-29"], "Kiriza Tropheus kabul edilen güvenilir bir kaynak bulunana kadar değişmemeli");
 // 2026-10-19 tür kaynak yenilemesi 3 (docs/CATALOG_LOG.md): Seriously Fish sayfası olmayan 14 tür, kabul edilen uzman kaynaklardan
 // (Fishkeeper, ScotCat). İki kaynakta sıcaklık ve pH ortak aralık. Sıra: boy, hacim, uzunluk, en az grup, sıcaklık, pH.
 const sourcedSpeciesBatch3 = {
@@ -5793,10 +5837,10 @@ assert.deepEqual([texasCichlid?.id, texasCichlid?.adultSizeCm, texasCichlid?.min
 assert(texasCichlid?.sourceUrl?.includes("seriouslyfish.com/species/herichthys-cyanoguttatus"), "Herichthys cyanoguttatus ayrıntılı uzman bakım kaynağına bağlanmalı");
 assert.equal(texasCichlid?.speciesOnly, true, "Herichthys cyanoguttatus sıradan topluluk balığı gibi sunulmamalı");
 const pearlscaleCichlid = speciesForLivestock({ commonName: "İnci pullu carpintis ciklet", scientificName: "Herichthys carpintis", category: "fish", quantity: 2 });
-assert.deepEqual([pearlscaleCichlid?.id, pearlscaleCichlid?.adultSizeCm, pearlscaleCichlid?.minVolumeL, pearlscaleCichlid?.minTankLengthCm, pearlscaleCichlid?.minGroup, pearlscaleCichlid?.temperature, pearlscaleCichlid?.ph], ["pearlscale-cichlid", 30.5, 400, 150, 2, [24, 25], [7, 7.5]], "Herichthys carpintis kaynaklı çift, hacim, cephe ve su eşiklerini taşımalı");
+assert.deepEqual([pearlscaleCichlid?.id, pearlscaleCichlid?.adultSizeCm, pearlscaleCichlid?.minVolumeL, pearlscaleCichlid?.minTankLengthCm, pearlscaleCichlid?.minGroup, pearlscaleCichlid?.temperature, pearlscaleCichlid?.ph], ["pearlscale-cichlid", 35, 213, 120, 1, [24, 26], [7.5, 8.5]], "Herichthys carpintis kaynaklı çift, hacim, cephe ve su eşiklerini taşımalı");
 assert.equal(pearlscaleCichlid?.predatory, true, "Herichthys carpintis küçük canlılar için avlanma riskini taşımalı");
 assert.equal(pearlscaleCichlid?.speciesOnly, true, "Herichthys carpintis genel topluluk balığı olarak önerilmemeli");
-assert(pearlscaleCichlid?.sourceUrl?.includes("cichlidamerique.fr/blog/herichthys-carpintis"), "Herichthys carpintis ayrıntılı tür bakım kaynağına bağlanmalı");
+assert(pearlscaleCichlid?.sourceUrl?.includes("seriouslyfish.com/species/herichthys-carpintis"), "Herichthys carpintis ayrıntılı tür bakım kaynağına bağlanmalı");
 assert.equal(speciesForCatalogExactSearch("Herichthys carpintis", "fish", "freshwater")?.id, "pearlscale-cichlid", "Kesin Herichthys carpintis bilimsel adı doğru profile bağlanmalı");
 assert.equal(speciesForCatalogExactSearch("GREEN TEXAS CİKLET BALIKLARI", "fish", "freshwater"), undefined, "Belirsiz Green Texas satış adı iki Herichthys türünden birine zorla bağlanmamalı");
 for (const listing of unresolvedCatfishSafetyListings) {
@@ -5872,7 +5916,7 @@ for (const [id, scientificName, size, volume, length, group, temperature, ph, so
   ["ornate-snakehead", "Channa ornatipinnis", 30, 300, 120, 1, [18,25], [6,7], "fishipedia.es"],
   ["peacock-snakehead", "Channa pulchra", 25, 200, 100, 1, [20,25], [6,7], "practicalfishkeeping.co.uk"],
   ["emperor-snakehead", "Channa marulioides", 65, 1000, 200, 1, [20,25], [4,6], "fishi-pedia.com"],
-  ["half-banded-spiny-eel", "Macrognathus circumcinctus", 20, 215, 90, 1, [24,27], [6,7.5], "tankbud.com"],
+  ["half-banded-spiny-eel", "Macrognathus circumcinctus", 20, 215, 90, 5, [24,27], [6,7], "fishkeeper.co.uk"],
 ]) {
   const profile = speciesCatalog.find((item) => item.id === id);
   assert(profile, `${id} doğrulanmış yılanbaş kataloğunda bulunmalı`);
@@ -5881,7 +5925,7 @@ for (const [id, scientificName, size, volume, length, group, temperature, ph, so
     [scientificName,size,volume,length,group,temperature,ph],
     `${id} kaynaklı kimlik, yetişkin boyu, akvaryum, sosyal yapı ve su değerlerini taşımalı`,
   );
-  assert.equal(profile.verifiedAt, "2026-08-28", `${id} güncel doğrulama tarihini taşımalı`);
+  assert.equal(profile.verifiedAt, id === "half-banded-spiny-eel" ? "2026-10-30" : "2026-08-28", `${id} güncel doğrulama tarihini taşımalı`);
   assert(profile.sourceUrl?.includes(sourceDomain), `${id} yerel mağaza açıklaması yerine güvenilir uzman kaynağına bağlanmalı`);
   assert.equal(profile.predatory, true, `${id} küçük canlılar için avcılık güvenlik uyarısını taşımalı`);
   if (id !== "half-banded-spiny-eel") {
@@ -6248,16 +6292,16 @@ assert.equal(speciesForLivestock({commonName:"Gül Tetra",category:"fish",quanti
 const celebesHalfbeak = speciesCatalog.find((item) => item.id === "celebes-halfbeak");
 assert.deepEqual(
   [celebesHalfbeak?.scientificName,celebesHalfbeak?.adultSizeCm,celebesHalfbeak?.minVolumeL,celebesHalfbeak?.minTankLengthCm,celebesHalfbeak?.minGroup,celebesHalfbeak?.temperature,celebesHalfbeak?.ph,celebesHalfbeak?.flow],
-  ["Nomorhamphus liemi",10,132,91,5,[24,27],[6.5,8],"medium"],
+  ["Nomorhamphus liemi",10,132,91,5,[20,25],[6.5,7.5],"medium"],
   "Celebes Halfbeak doğrulanmış kimlik, erişkin dişi boyu, grup, yüzme alanı ve su eşiklerini taşımalı",
 );
 assert.deepEqual(celebesHalfbeak?.waterTypes, ["freshwater"], "Nomorhamphus liemi tatlı su profili olarak tutulmalı");
 assert.equal(celebesHalfbeak?.predatory, true, "Nomorhamphus liemi küçük canlı avı riskini sağlık analizine taşımalı");
-assert.equal(celebesHalfbeak?.verifiedAt, "2026-09-30", "Nomorhamphus liemi güncel doğrulama tarihini taşımalı");
-assert.match(celebesHalfbeak?.sourceUrl || "", /^https:\/\/tropicalfreshwaterfish\.com\/species\/Nomorhamphus_liemi_liemi\.html$/, "Nomorhamphus liemi doğrudan tür bakım kaynağına bağlanmalı");
+assert.equal(celebesHalfbeak?.verifiedAt, "2026-10-30", "Nomorhamphus liemi güncel doğrulama tarihini taşımalı");
+assert.match(celebesHalfbeak?.sourceUrl || "", /^https:\/\/www\.fishkeeper\.co\.uk\/fish\/freshwater\/livebearers\/celebes-halfbeak$/, "Nomorhamphus liemi doğrudan tür bakım kaynağına bağlanmalı");
 assert(celebesHalfbeak?.additionalSourceUrls?.some((url) => url.includes("fishbase.se/summary/Nomorhamphus-liemi")), "Nomorhamphus liemi doğal aralık ve boy için FishBase çapraz kaynağını taşımalı");
 assert(celebesHalfbeak?.additionalSourceUrls?.some((url) => url.includes("practicalfishkeeping.co.uk/features/what-conditions-do-halfbeaks-need")), "Nomorhamphus liemi uzman halfbeak bakım çapraz kaynağını taşımalı");
-assert(celebesHalfbeak?.husbandryCaution?.includes("20–24 °C") && celebesHalfbeak.husbandryCaution.includes("23–27 °C") && celebesHalfbeak.husbandryCaution.includes("24–27 °C"), "Nomorhamphus liemi kaynaklar arasındaki sıcaklık farkını kullanıcıdan saklamamalı");
+assert(celebesHalfbeak?.husbandryCaution?.includes("20–25 °C") && celebesHalfbeak.husbandryCaution.includes("6,5–7,8") && celebesHalfbeak.husbandryCaution.includes("6,5–7,5"), "Nomorhamphus liemi kaynaklar arasındaki pH farkını kullanıcıdan saklamamalı");
 assert(celebesHalfbeak?.husbandryCaution?.includes("çözünmüş oksijen"), "Nomorhamphus liemi yüksek sıcaklıkta oksijen güvenliğini taşımalı");
 assert.equal(speciesForLivestock({commonName:"PLATİNİUM HALF BEAK CÜCE ZARGANA",category:"fish",quantity:1}), undefined, "Genel Platinum Halfbeak satış adı Dermogenys veya Nomorhamphus profiline tahminle bağlanmamalı");
 assert.equal(speciesCatalog.filter((item) => speciesGroup(item) === "rasbora").length, 14, "Rasbora kataloğu Phoenix rasbora ve Sawbwa dahil 14 güvenilir profile ulaşmalı");
@@ -6557,11 +6601,11 @@ assert.equal(harlequinRasbora?.verifiedAt, "2026-10-03", "Harlequin rasbora gün
 assert(harlequinRasbora?.aliases?.includes("Rasbora heteromorpha"), "Harlequin rasboranın eski bilimsel adı aramada korunmalı");
 assert(harlequinRasbora?.husbandryCaution?.includes("54 litre") && harlequinRasbora?.husbandryCaution?.includes("5 cm"), "Harlequin rasbora alan ve koruyucu boy farkını açıklamalı");
 for (const [id,sourceDomain,extraSourceCount] of [
-  ["flowerhorn","fishkeeping.co.uk",1],
+  ["flowerhorn","fishkeeper.co.uk",2],
 ]) {
   const profile = speciesCatalog.find((item) => item.id === id);
   assert(profile, `${id} güvenilir kaynaklı Monster kataloğunda bulunmalı`);
-  assert.equal(profile.verifiedAt, "2026-08-28", `${id} güncel doğrulama tarihini taşımalı`);
+  assert.equal(profile.verifiedAt, "2026-10-30", `${id} güncel doğrulama tarihini taşımalı`);
   assert(profile.sourceUrl?.includes(sourceDomain), `${id} yerel satış açıklaması yerine bilimsel veya uzman ana kaynağa bağlanmalı`);
   assert((profile.additionalSourceUrls?.length || 0) >= extraSourceCount, `${id} bağımsız güvenilir ek kaynakları saklamalı`);
   assert(profile.communityCaution, `${id} topluluk güvenlik uyarısını taşımalı`);
@@ -6796,7 +6840,7 @@ for (const [retailName, expectedId] of cikletistTropheusTanganyikaInventory) {
 }
 
 const ikolaTropheus = speciesCatalog.find((item) => item.id === "tropheus-ikola");
-assert.deepEqual([ikolaTropheus?.minVolumeL, ikolaTropheus?.minTankLengthCm, ikolaTropheus?.minGroup], [400, 120, 10], "Ikola Kaiser küçük tank veya küçük grup için önerilmemeli");
+assert.deepEqual([ikolaTropheus?.minVolumeL, ikolaTropheus?.minTankLengthCm, ikolaTropheus?.minGroup], [700, 150, 15], "Ikola Kaiser küçük tank veya küçük grup için önerilmemeli");
 assert.equal(ikolaTropheus?.speciesOnly, true, "Ikola Kaiser özel Tanganika kurulumu uyarısı taşımalı");
 const kirizaTropheus = speciesCatalog.find((item) => item.id === "tropheus-kiriza");
 assert.deepEqual([kirizaTropheus?.minVolumeL, kirizaTropheus?.minTankLengthCm, kirizaTropheus?.minGroup], [375, 150, 10], "Kiriza Tropheus küçük tank veya küçük grup için önerilmemeli");
@@ -8063,13 +8107,13 @@ const southernPurpleSpottedGudgeon = speciesForLivestock({ commonName: "Güney m
 assert.equal(southernPurpleSpottedGudgeon?.id, "southern-purple-spotted-gudgeon", "Mogurnda adspersa bilimsel kimliğiyle güvenli profile bağlanmalı");
 assert.deepEqual(
   [southernPurpleSpottedGudgeon?.scientificName, southernPurpleSpottedGudgeon?.adultSizeCm, southernPurpleSpottedGudgeon?.minVolumeL, southernPurpleSpottedGudgeon?.minTankLengthCm, southernPurpleSpottedGudgeon?.minGroup, southernPurpleSpottedGudgeon?.temperature, southernPurpleSpottedGudgeon?.ph, southernPurpleSpottedGudgeon?.flow],
-  ["Mogurnda adspersa", 14, 108, 120, 1, [16, 24], [7, 7.5], "low"],
+  ["Mogurnda adspersa", 15, 108, 120, 1, [16, 24], [7, 7.5], "low"],
   "Southern Purple-spotted Gudgeon kaynaklı boy, akvaryum tabanı ve su eşiklerini taşımalı",
 );
 assert.equal(southernPurpleSpottedGudgeon?.predatory, true, "Southern Purple-spotted Gudgeon küçük balık avlama riskini taşımalı");
-assert.equal(southernPurpleSpottedGudgeon?.verifiedAt, "2026-09-08", "Southern Purple-spotted Gudgeon güncel doğrulama tarihini taşımalı");
-assert(southernPurpleSpottedGudgeon?.sourceUrl?.includes("fishesofaustralia.net.au/home/species/4148"), "Mogurnda adspersa kurumsal tür kimliği kaynağına bağlanmalı");
-assert(southernPurpleSpottedGudgeon?.additionalSourceUrls?.some((url) => url.includes("seriouslyfish.com/species/mogurnda-adspersa")), "Southern Purple-spotted Gudgeon ayrıntılı bakım kaynağına bağlanmalı");
+assert.equal(southernPurpleSpottedGudgeon?.verifiedAt, "2026-10-30", "Southern Purple-spotted Gudgeon güncel doğrulama tarihini taşımalı");
+assert(southernPurpleSpottedGudgeon?.additionalSourceUrls?.some((url) => url.includes("fishesofaustralia.net.au/home/species/4148")), "Mogurnda adspersa kurumsal tür kimliği kaynağını taşımalı");
+assert(southernPurpleSpottedGudgeon?.sourceUrl?.includes("seriouslyfish.com/species/mogurnda-adspersa"), "Southern Purple-spotted Gudgeon ayrıntılı bakım kaynağına bağlanmalı");
 assert.equal(speciesForLivestock({ commonName: "PURPLE SPOTTED GUDGEON MOGURNDA BALIĞI", category: "fish", quantity: 1 }), undefined, "Belirsiz Purple Spotted Gudgeon satış adı iki Mogurnda türünden birine zorla bağlanmamalı");
 assert.equal(unresolvedSpeciesForSearch("PURPLE SPOTTED GUDGEON MOGURNDA BALIĞI", "fish", "freshwater")?.name, "PURPLE SPOTTED GUDGEON MOGURNDA BALIĞI", "Belirsiz mağaza başlığı açıklamalı güvenlik listesinde kalmalı");
 const northernPurpleSpottedGudgeon = speciesForLivestock({ commonName: "Kuzey mor benekli gudgeon", scientificName: "Mogurnda mogurnda", category: "fish", quantity: 1 });
@@ -8261,12 +8305,12 @@ assert(unresolvedLicoriceGourami?.reason.includes("P. deissneri") && unresolvedL
 assert(unresolvedLicoriceGourami?.reason.includes("pH 3,0–6,5"), "Meyan Kökü Gurami kaydı yanlış profil seçiminin dar siyah su riskini göstermeli");
 assert.equal(speciesForLivestock({ commonName: "MEYAN KÖKÜ GURAMİ", category: "fish", quantity: 1 }), undefined, "Bilimsel kimliği belirsiz Meyan Kökü Gurami gerçek deissneri profiline otomatik bağlanmamalı");
 const deissnersLicoriceGourami = speciesForLivestock({ commonName: "Deissner meyan kökü guramisi", scientificName: "Parosphromenus deissneri", category: "fish", quantity: 2 });
-assert.deepEqual([deissnersLicoriceGourami?.id, deissnersLicoriceGourami?.adultSizeCm, deissnersLicoriceGourami?.minVolumeL, deissnersLicoriceGourami?.minTankLengthCm, deissnersLicoriceGourami?.minGroup, deissnersLicoriceGourami?.temperature, deissnersLicoriceGourami?.ph, deissnersLicoriceGourami?.flow], ["deissners-licorice-gourami", 4, 25, 40, 2, [22, 28], [3, 6.5], "low"], "Gerçek Parosphromenus deissneri kaynaklı boy, çift, siyah su ve alan eşiklerini taşımalı");
+assert.deepEqual([deissnersLicoriceGourami?.id, deissnersLicoriceGourami?.adultSizeCm, deissnersLicoriceGourami?.minVolumeL, deissnersLicoriceGourami?.minTankLengthCm, deissnersLicoriceGourami?.minGroup, deissnersLicoriceGourami?.temperature, deissnersLicoriceGourami?.ph, deissnersLicoriceGourami?.flow], ["deissners-licorice-gourami", 5, 25, 40, 2, [22, 28], [3, 6.5], "low"], "Gerçek Parosphromenus deissneri kaynaklı boy, çift, siyah su ve alan eşiklerini taşımalı");
 assert.equal(deissnersLicoriceGourami?.speciesOnly, true, "Gerçek P. deissneri genel topluluk balığı olarak önerilmemeli");
 assert.equal(deissnersLicoriceGourami?.predatory, true, "Gerçek P. deissneri mikroavcı beslenme gereksinimini taşımalı");
-assert.equal(deissnersLicoriceGourami?.verifiedAt, "2026-09-08", "Gerçek P. deissneri güncel kaynak denetim tarihini taşımalı");
-assert(deissnersLicoriceGourami?.sourceUrl?.includes("parosphromenus-project.org/species/parosphromenus-deissneri"), "Gerçek P. deissneri uzman koruma ağı kaynağına bağlanmalı");
-assert(deissnersLicoriceGourami?.additionalSourceUrls?.some((url) => url.includes("seriouslyfish.com/species/parosphromenus-deissneri")), "Gerçek P. deissneri ayrıntılı bakım kaynağına bağlanmalı");
+assert.equal(deissnersLicoriceGourami?.verifiedAt, "2026-10-30", "Gerçek P. deissneri güncel kaynak denetim tarihini taşımalı");
+assert(deissnersLicoriceGourami?.additionalSourceUrls?.some((url) => url.includes("parosphromenus-project.org/species/parosphromenus-deissneri")), "Gerçek P. deissneri uzman koruma ağı kaynağını taşımalı");
+assert(deissnersLicoriceGourami?.sourceUrl?.includes("seriouslyfish.com/species/parosphromenus-deissneri"), "Gerçek P. deissneri ayrıntılı bakım kaynağına bağlanmalı");
 assert.equal(speciesForCatalogExactSearch("Parosphromenus deissneri", "fish", "freshwater")?.id, "deissners-licorice-gourami", "Kesin P. deissneri bilimsel adı doğru profile bağlanmalı");
 assert.equal(speciesForCatalogExactSearch("Licorice Gourami", "fish", "freshwater"), undefined, "Genel Licorice Gourami adı tür kanıtı olmadan gerçek deissneri profiline dönüşmemeli");
 const unresolvedWhiteCheckMoray = unresolvedSpeciesForSearch("WHITE CHECK EEL MÜREN", "fish", "brackish");
