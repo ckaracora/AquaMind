@@ -24,6 +24,8 @@ export const STORAGE_KEYS = {
   preferences: "aquamind:preferences:v1",
   journal: "aquamind:journal:v1",
   deletedAquariums: "aquamind:deleted-aquariums:v1",
+  /** Son yedeğin zamanı ve yedek hatırlatmasının ertelenmesi (docs/DECISIONS/0027-yedekten-geri-yukleme.md). Yedeğe girmez. */
+  backupStatus: "aquamind:backup-status:v1",
 } as const;
 
 export type StorageKey = (typeof STORAGE_KEYS)[keyof typeof STORAGE_KEYS];
@@ -91,3 +93,28 @@ export const EMPTY_JOURNAL_STEPS: JournalSteps = {
   plants: false,
   equipment: false,
 };
+
+/**
+ * Yedekten geri yükleme günlüğü (docs/DECISIONS/0027-yedekten-geri-yukleme.md). Silme günlüğüyle aynı anahtarı
+ * (`STORAGE_KEYS.journal`) kullanır; böylece günlük dururken normal kaydetmeler yazamaz ve yarıda kalan geri
+ * yükleme sonraki açılışta tamamlanır. `writes` sırayla uygulanır: `value` anahtara yazılacak ham JSON metnidir,
+ * `null` anahtarın kaldırılacağını bildirir. Her yazma sabit bir değer yazdığı için yinelenebilir; yarıda kalan geri yükleme baştan uygulanır.
+ */
+export const restoreBackupJournalSchema = z.object({
+  op: z.literal("restore-backup"),
+  startedAt: z.string(),
+  writes: z.array(z.object({ key: z.string(), value: z.string().nullable() })),
+});
+
+export type RestoreBackupJournal = z.infer<typeof restoreBackupJournalSchema>;
+
+/** Son yedeğin zamanı ve hatırlatmanın ertelendiği an; ikisi de ISO zaman damgası. */
+export const backupStatusSchema = z.object({
+  lastExportAt: z.string().optional(),
+  remindAfter: z.string().optional(),
+});
+
+export type BackupStatus = z.infer<typeof backupStatusSchema>;
+
+/** Yedek hatırlatmasının aralığı (gün): son yedekten bu kadar gün geçince hatırlatılır; "Sonra" da bu kadar erteler. */
+export const BACKUP_REMINDER_DAYS = 7;

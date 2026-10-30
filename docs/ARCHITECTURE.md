@@ -65,6 +65,8 @@ Kullanıcı verisi hâlâ tarayıcı `localStorage` alanındadır; anahtar adlar
 
 Ayarlar sayfasındaki JSON yedeği yapılandırılmıştır: ana koleksiyonlar yalnızca geçerli ve yetim olmayan kullanıcı verisini taşır; yetim kayıtlar, karantina değerleri ve silinen akvaryum paketleri ayrı bölümlerdedir. Aynı sayfada, kayıt içeriği göstermeyen bir kurtarma/karantina özeti bulunur.
 
+Yedek aynı sayfadan geri yüklenir (`docs/DECISIONS/0027-yedekten-geri-yukleme.md`): dosya şemadan bütünüyle geçmelidir; altı koleksiyon ve tercihler yedektekiyle değişir, silinen akvaryum arşivi ve karantina kayıtları birleştirilir. Yazma, silme günlüğüyle aynı anahtarda `op: "restore-backup"` günlüğüyle yapılır; yarıda kalırsa açılışta tamamlanır. Son yedek zamanı `aquamind:backup-status:v1` anahtarındadır (yedeğe girmez); yedek hatırlatması ve tarayıcıdan kalıcı depolama isteği bu kayda ve `navigator.storage` arayüzüne dayanır.
+
 ### Paketlerin yayım biçimi
 
 - Paketler derlenmiş çıktı değil TypeScript kaynağı yayımlar (`main`, `types`, `exports` → `./src/index.ts`).
