@@ -40,9 +40,9 @@ Katalogların her bilgisinin yüzde kaçının dolu olduğu ve kaynağının tü
 | Bilgi | Dolu | Oran |
 |---|---|---|
 | Kaynak sayfası | 3541/3541 | %100 |
-| Doğrulanmamışlar listesinde değil | 3455/3541 | %97,6 |
-| Hesap değeri (filtre, ısıtıcı, hava motoru) | 1140/1255 | %90,8 |
-| Güç (W) | 1706/3541 | %48,2 |
+| Doğrulanmamışlar listesinde değil | 3444/3541 | %97,3 |
+| Hesap değeri (filtre, ısıtıcı, hava motoru) | 1129/1255 | %90 |
+| Güç (W) | 1695/3541 | %47,9 |
 | Önerilen hacim | 730/3541 | %20,6 |
 | Son 92 günde doğrulanmış | 3541/3541 | %100 |
 
@@ -74,6 +74,7 @@ Katalogların her bilgisinin yüzde kaçının dolu olduğu ve kaynağının tü
 
 ## Geçmiş
 
+- 2026-10-30 (örnek denetimi): Boyu HT ve DR serilerinin 11 ısıtıcısının (HT 6, DR 5) gücü üretici sayfasında yazmadığı için hesaptan çekildi (karar 0019). Doğrulanmamışlar listesinde değil %97,6 → %97,3, hesap değeri %90,8 → %90, güç %48,2 → %47,9. Canlıların oranları değişmedi.
 - 2026-10-30 (deniz kataloğu, karar 0031): canlılar 443 kayıt; 20 deniz başlangıç türü eklendi, 11 deniz kaydı kabul edilen kaynaklarla yenilendi. En az tank uzunluğu %94,8 → %90,1, akıntı %94,3 → %89,8: deniz kayıtlarının eski uzunluk ve akıntı değerleri kabul edilmeyen kaynaklardandı, kabul edilen kaynaklar çoğu türde bunları yazmıyor. Davranış ya da bakım notu %74,2 → %75,4.
 - 2026-10-29 (bitki kataloğu 4): Practical Fishkeeping'in tür kutuları 22 bitki kaydına girdi; 13 kayıt sıcaklığı, 11 kayıt pH'ı ilk kez aldı, 4 kayıtta aralık daraldı. Sıcaklık %44 → %53,2, pH %43,3 → %51,1, bütün değerler dolu %21,3 → %25,5.
 - 2026-10-28 (bitki kataloğu 3): bitkiler 141 kayıt; üç yalnız uyarı kaydı eklendi (*Azolla filiculoides*, *Ophiopogon japonicus*, *Pistia stratiotes*), değerleri olmadığı için değer satırlarının oranı biraz düştü (sıcaklık %44, pH %43,3, bütün değerler dolu %21,3); istilacı tür etiketi 7, su bitkisi değil etiketi 1.

@@ -13,6 +13,11 @@ export const unverifiedEquipmentIds: readonly string[] = [
   "aquawing-aq101f", "aquawing-aq101fb", "aquawing-aq102f", "aquawing-aq160", "aquawing-aq600f", "aquawing-aq607f", "aquawing-aq80f",
   "aquawing-wp1000fa", "aquawing-wp1000fb", "aquawing-wp2300a", "aquawing-wp3300a", "aquawing-wp3300b", "aquawing-wp3300c", "aquawing-wp750fa",
   "aquawing-wp750fb", "aquawing-wp850fa", "aquawing-wp850fb", "aquawing-wp950fa", "aquawing-wp950fb",
+  // Boyu (11; 2026-10-30 örnek denetimi: HT ve DR serilerinin üretici sayfaları yalnız model adlarını ve boyları veriyor, gücü yazmıyor.
+  // Güç model adından çıkarılmıştı; kabul edilen yerel mağazalarda bu modeller yok. DR-50 listede değil: seri sayfasındaki ürün
+  // resminin etiketi "DR-50 220V 50Hz 50W" yazıyor. GR ve TR serilerinin tabloları gücü yazıyor.)
+  "boyu-dr-100", "boyu-dr-150", "boyu-dr-200", "boyu-dr-250", "boyu-dr-300",
+  "boyu-ht-650", "boyu-ht-6100", "boyu-ht-6150", "boyu-ht-6200", "boyu-ht-6250", "boyu-ht-6300",
   // Ejet (3; 905F için Malawi İzmir 1000 L/saat yazıyor ama 2026-08-27 Ejet denetimi bu değeri eldeki 470 L/saat kaydıyla çelişkili
   // bulup kullanmamıştı ve mağaza sayfası güç vermiyor. Değerin hangisinin doğru olduğu kurala uyan bir kaynaktan çözülemediği için
   // ikisi de kullanılmadı.)
@@ -189,12 +194,13 @@ const hostOf = (url?: string) => {
   }
 };
 
-// Açıklamaya eklenen ifade çekilen değere göre seçilir: debi çekildiyse debi, yalnız hacim önerisi çekildiyse hacim; ikisi de yoksa
-// (ör. yalnız güç değeri olan hava motoru) ek ifade gerekmez.
+// Açıklamaya eklenen ifade çekilen değere göre seçilir: debi çekildiyse debi, yalnız hacim önerisi çekildiyse hacim, yalnız güç
+// çekildiyse güç (ör. üreticinin gücü yazmadığı ısıtıcı). Açıklama değerin neden olmadığını zaten söylüyorsa eklenmez.
 const missingText = (item: EquipmentProfile, withdrawn: readonly ValueField[]) =>
   withdrawn.includes("ratedFlowLph") ? (item.category === "air_pump" ? "hava debisi doğrulanamadı" : "debi doğrulanamadı")
     : withdrawn.includes("recommendedMinL") || withdrawn.includes("recommendedMaxL") ? "önerilen hacim doğrulanamadı"
-      : undefined;
+      : withdrawn.includes("powerW") ? "güç doğrulanamadı"
+        : undefined;
 
 function withdraw(item: EquipmentProfile, fields: readonly ValueField[], parts: readonly RegExp[], note: string) {
   const withdrawn = fields.filter((field) => item[field] !== undefined);

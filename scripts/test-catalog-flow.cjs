@@ -51,8 +51,8 @@ const acceptedShopHosts = ["akvaryumexpress.com", "atakanpetshop.com", "malawiiz
 // Rakamla ya da yazıyla yazılmış kapasite değeri ("600 L/saat", "60 cm", "üç litre filtre hacimli").
 const numericValueText = /\d[\d.,]*\s*(?:L\/saat|L\/dakika|W\b|litre|L\b|cm\b|kPa|MPa)/;
 const writtenValueText = /(?:^|[\s(])(?:yarım|bir|iki|üç|dört|beş|altı|yedi|sekiz|dokuz|on|yirmi|otuz|kırk|elli|altmış|yetmiş|seksen|doksan|yüz|bin)(?:\s+(?:buçuk|yüz|bin))?\s+(?:litre|watt|santimetre|metre)/iu;
-assert.equal(withdrawnEquipmentIds.size + withdrawnAirFlowIds.size + Object.keys(shopVerifiedEquipment).length, 166, "0019 listeleri 86 + 4 + 76 kayıt içermeli");
-assert.equal(new Set([...withdrawnEquipmentIds, ...withdrawnAirFlowIds, ...Object.keys(shopVerifiedEquipment)]).size, 166, "0019'daki bir kayıt yalnız bir listede bulunmalı");
+assert.equal(withdrawnEquipmentIds.size + withdrawnAirFlowIds.size + Object.keys(shopVerifiedEquipment).length, 177, "0019 listeleri 97 (86 ve 2026-10-30 örnek denetiminin 11 Boyu ısıtıcısı) + 4 + 76 kayıt içermeli");
+assert.equal(new Set([...withdrawnEquipmentIds, ...withdrawnAirFlowIds, ...Object.keys(shopVerifiedEquipment)]).size, 177, "0019'daki bir kayıt yalnız bir listede bulunmalı");
 assert.match("Üç litre filtre hacimli askı dış filtre", writtenValueText, "Yazıyla yazılmış kapasite yakalanmalı");
 assert.doesNotMatch("Üç aşamalı kompakt iç filtre · Dört çıkış", writtenValueText, "Yazıyla yazılmış özellik kapasite sayılmamalı");
 for (const id of [...withdrawnEquipmentIds, ...withdrawnAirFlowIds]) {
@@ -4556,14 +4556,14 @@ assert(redBelliedPiranha?.husbandryCaution?.includes("240 × 90 × 60 cm") && re
 const endlicheriBichir = speciesCatalog.find((item) => item.id === "endlicheri-bichir");
 assert.deepEqual(
   [endlicheriBichir?.scientificName,endlicheriBichir?.adultSizeCm,endlicheriBichir?.minVolumeL,endlicheriBichir?.minTankLengthCm,endlicheriBichir?.minGroup,endlicheriBichir?.temperature,endlicheriBichir?.ph,endlicheriBichir?.flow],
-  ["Polypterus endlicherii",70,2000,300,1,[26,28],[6.5,7.5],"low"],
+  ["Polypterus endlicherii",75,2268,210,1,[22,27],[6,8],"low"],
   "Endlicheri Biçir kaynaklı kimlik, koruyucu boy, uzman sistem tabanı ve su eşiklerini taşımalı",
 );
 assert.deepEqual(endlicheriBichir?.waterTypes,["freshwater"],"Endlicheri Biçir yalnız tatlı su profili taşımalı");
-assert.equal(endlicheriBichir?.verifiedAt,"2026-10-02","Endlicheri Biçir güncel doğrulama tarihini taşımalı");
-assert.equal(endlicheriBichir?.sourceUrl,"https://www.einrichtungsbeispiele.de/zierfische/afrika/polypterus-endlicherii-slnk.html","Endlicheri Biçir doğrudan uzman bakım kaynağına bağlanmalı");
+assert.equal(endlicheriBichir?.verifiedAt,"2026-10-30","Endlicheri Biçir güncel doğrulama tarihini taşımalı");
+assert.equal(endlicheriBichir?.sourceUrl,"https://www.seriouslyfish.com/species/polypterus-endlicherii/","Endlicheri Biçir doğrudan uzman bakım kaynağına bağlanmalı");
 assert(endlicheriBichir?.additionalSourceUrls?.some((url) => url.includes("fishbase.se/summary/Polypterus_endlicherii")),"Endlicheri Biçir bilimsel boyu FishBase ile çapraz doğrulamalı");
-assert(endlicheriBichir?.husbandryCaution?.includes("3 metre") && endlicheriBichir.husbandryCaution.includes("65,5 cm") && endlicheriBichir.husbandryCaution.includes("ağır"),"Endlicheri Biçir alan, boy farkı ve kaçış güvenliğini açıklamalı");
+assert(endlicheriBichir?.husbandryCaution?.includes("210 × 120 cm") && endlicheriBichir.husbandryCaution.includes("65,5 cm") && endlicheriBichir.husbandryCaution.includes("ağır"),"Endlicheri Biçir alan, boy farkı ve kaçış güvenliğini açıklamalı");
 const monoculusPeacockBass = speciesCatalog.find((item) => item.id === "monoculus-peacock-bass");
 assert.deepEqual(
   [monoculusPeacockBass?.scientificName,monoculusPeacockBass?.adultSizeCm,monoculusPeacockBass?.minVolumeL,monoculusPeacockBass?.minTankLengthCm,monoculusPeacockBass?.minGroup,monoculusPeacockBass?.temperature,monoculusPeacockBass?.ph,monoculusPeacockBass?.flow],
@@ -6202,7 +6202,7 @@ for (const [id, scientificName, size, volume, length, group, temperature, ph, ex
   ["green-fire-tetra", "Aphyocharax rathbuni", 7.1, 54, 60, 6, [20,26], [6.5,7.5], "2026-10-02"],
   ["red-neon-blue-eye", "Pseudomugil luminatus", 3, 60, 60, 10, [20,28], [6.5,8], "2026-10-02"],
   ["ninja-woodcat", "Tatia musaica", 7, 56, 60, 5, [25,26], [6,7.2], "2026-10-02"],
-  ["endlicheri-bichir", "Polypterus endlicherii", 70, 2000, 300, 1, [26,28], [6.5,7.5], "2026-10-02"],
+  ["endlicheri-bichir", "Polypterus endlicherii", 75, 2268, 210, 1, [22,27], [6,8], "2026-10-30"],
   ["monoculus-peacock-bass", "Cichla monoculus", 80, 1200, 200, 1, [25,31], [5.5,6.5], "2026-10-02"],
 ]) {
   const profile = speciesCatalog.find((item) => item.id === id);
@@ -8310,5 +8310,57 @@ for (const [category, expectedCount] of [
 ]) {
   assert.equal(cikletistMainCategoryInventory.filter(([retailCategory]) => retailCategory === category).length, expectedCount, `Ana kategori alt başlık sayısı korunmalı: ${category}`);
 }
+
+// Örnek denetimi (2026-10-30): örneklemde kaynağıyla uyuşmayan iki balık Seriously Fish'in güncel sayfasından yeniden okundu.
+for (const [id, values, sourceUrl] of [
+  ["glowlight-danio", ["Celestichthys choprae",3,72,80,8,[16,26],[6,8]], "https://www.seriouslyfish.com/species/celestichthys-choprae/"],
+  ["apisto-macmasteri", ["Apistogramma macmasteri",7,41,60,2,[24,28],[5.5,7]], "https://www.seriouslyfish.com/species/apistogramma-macmasteri/"],
+]) {
+  const profile = speciesCatalog.find((item) => item.id === id);
+  assert.deepEqual(
+    [profile?.scientificName,profile?.adultSizeCm,profile?.minVolumeL,profile?.minTankLengthCm,profile?.minGroup,profile?.temperature,profile?.ph],
+    values,
+    `${id} örnek denetimde okunan Seriously Fish değerlerini taşımalı`,
+  );
+  assert.equal(profile?.sourceUrl, sourceUrl, `${id} Seriously Fish sayfasına bağlanmalı`);
+  assert.equal(profile?.verifiedAt, "2026-10-30", `${id} örnek denetim tarihini taşımalı`);
+}
+const macmasteriAudit = speciesCatalog.find((item) => item.id === "apisto-macmasteri");
+assert(macmasteriAudit?.husbandryCaution?.includes("45 × 30 cm") && !macmasteriAudit.husbandryCaution.includes("75 litre"), "Macmaster bakım notu eski 75 litre yerine kaynağın tabanını yazmalı");
+assert(macmasteriAudit?.additionalSourceUrls?.includes("https://www.fishbase.se/summary/Apistogramma-macmasteri.html"), "Macmaster eski ana kaynağı FishBase'i ek kaynak olarak korumalı");
+// Örnek denetimi: kabul edilen mağazada değer ürünün kendi sayfasında yazmalı; marka ya da liste sayfası yetmez (DATA_SOURCES).
+for (const [id, sourceUrl, values] of [
+  ["boyu-cjy-1000", "https://www.akvaryumexpress.com/cjy-1000-boyu-tek-cikisli-hava-motoru-1l-min-17-w", [60,1.7]],
+  ["jingye-611", "https://atakanpetshop.com/jingye-611-tek-cikisli-hava-motoru-beyaz-3w-3lmin", [180,3]],
+  ["waterbear-sd01", "https://atakanpetshop.com/waterbear-sd-01-pipo-filtresi", [undefined,undefined]],
+  ["waterbear-sd02", "https://atakanpetshop.com/waterbear-sd-02-motorlu-pipo-filtresi-2w-200ls", [200,2]],
+  ...[100,150,200,250,300].map((power) => [`boyu-gr-${power}`, "https://www.boyuaquarium.com/En_Pr_d_gci_57_id_108.html", [undefined,power]]),
+]) {
+  const item = equipmentCatalog.find((entry) => entry.id === id);
+  assert.equal(item?.sourceUrl, sourceUrl, `${id} liste sayfası yerine ürünün kendi sayfasına bağlanmalı`);
+  assert.deepEqual([item?.ratedFlowLph,item?.powerW], values, `${id} ürün sayfasındaki değerleri taşımalı`);
+  assert.equal(item?.verifiedAt, "2026-10-30", `${id} örnek denetim tarihini taşımalı`);
+}
+// Örnek denetimi: Sera X-Edge'in hacmi stok yoğunluğuna bağlı (birkaç küçük balık / yalnız iki küçük balık); kapasite olağan stokun değeri.
+for (const [id, capacity, twoFishCapacity] of [["sera-x-edge-300",50,100],["sera-x-edge-450",80,200],["sera-x-edge-700",100,300]]) {
+  const item = equipmentCatalog.find((entry) => entry.id === id);
+  assert.deepEqual([item?.recommendedMinL,item?.recommendedMaxL], [undefined,capacity], `${id} kapasitesi birkaç küçük balıklı stokun değeri olmalı`);
+  assert(item?.specifications.includes(`${twoFishCapacity} litreye kadar`) && item.specifications.includes("yalnız iki küçük balık"), `${id} açıklaması iki balıklı üst değeri koşuluyla yazmalı`);
+}
+// Örnek denetimi: Boyu TR serisinin tablosu gücü yazıyor; HT ve DR seri sayfaları gücü yazmıyor, değerleri hesaptan çekiliyor (0019).
+for (const power of [100,150,200,250,300]) {
+  const item = equipmentCatalog.find((entry) => entry.id === `boyu-tr-${power}a`);
+  assert.deepEqual([item?.powerW,item?.sourceUrl], [power,"https://www.boyuaquarium.com/En_Pr_d_gci_57_id_109.html"], `boyu-tr-${power}a seri sayfasındaki gücü taşımalı`);
+}
+for (const [prefix, powers, sourceUrl] of [["boyu-ht-6",[50,100,150,200,250,300],"https://www.boyuaquarium.com/En_Pr_d_gci_57_id_162.html"],["boyu-dr-",[100,150,200,250,300],"https://www.boyuaquarium.com/En_Pr_d_gci_57_id_163.html"]]) {
+  for (const power of powers) {
+    const item = equipmentCatalog.find((entry) => entry.id === `${prefix}${power}`);
+    assert.equal(item?.powerW, undefined, `${prefix}${power} model adından çıkarılan gücü taşımamalı`);
+    assert.equal(item?.sourceUrl, sourceUrl, `${prefix}${power} kendi seri sayfasına bağlanmalı`);
+    assert(item?.specifications.includes("güç doğrulanamadı") && item.capacityDataNote?.includes("Otomatik hesapta kullanılmaz"), `${prefix}${power} gücün neden olmadığını söylemeli`);
+  }
+}
+const boyuDr50 = equipmentCatalog.find((entry) => entry.id === "boyu-dr-50");
+assert.deepEqual([boyuDr50?.powerW,boyuDr50?.sourceUrl,boyuDr50?.capacityDataNote], [50,"https://www.boyuaquarium.com/En_Pr_d_gci_57_id_163.html",undefined], "Boyu DR-50 seri sayfasındaki ürün resminin etiketindeki 50 W ile hesapta kalmalı");
 
 console.log(`Katalog akışı: ${equipmentCategories.length} ekipman kategorisi, ${livestockCategories.length} canlı sınıfı ve ${careProductCatalog.length} bakım ürünü başarıyla doğrulandı.`);
