@@ -128,6 +128,35 @@ Değer kuralı (balık ve omurgasızlardaki kuralın bitki karşılığı):
 - **Okuma:** değerler sayfa açılarak okunur; arama özeti kaynak sayılmaz. Kaynaklar üç ayda bir, katalogla birlikte yeniden açılır (karar 0020).
 - **Ekranda (karar 0024):** bitki sayfası kaydın değerlerini olduğu gibi gösterir; kaynakta olmayan değer "Kaynakta yok" yazar, tahmin edilmez. Kaynak bağlantıları kaydın kendi sayfalarıdır (Fishkeeper, Tropica, Practical Fishkeeping, UF/IFAS ve resmî listeler). İstilacı tür uyarısı listenin adını ve kaynağını yazar ve "Türkiye'de yasak" anlamına gelmediğini söyler.
 
+## Deniz canlıları (tuzlu su başlangıç paketi)
+
+Ürün sahibi kaynak listesini 2026-10-29'da onayladı (`docs/DECISIONS/0029-tuzlu-su-baslangic-paketi.md`). Sayfalar 2026-10-29'da (UTC) açılarak okundu. Bu kurallar başlangıç paketinin kayıtlarına uygulanır. Katalogdaki 11 deniz kaydı bu kurallarla yeniden kaynaklanacak; o güne kadar bugünkü değerleriyle kalır.
+
+Kabul edilen kaynaklar:
+
+1. **Fishkeeper (Maidenhead Aquatics):** deniz balıklarında ve omurgasızlarında ana kaynaktır (321 deniz balığı, 99 deniz omurgasızı; ör. temizlikçi karides *Lysmata amboinensis* 23–27 °C, resif uyumu "Excellent"). Türe özel verdiği alanlar sıcaklık, en büyük boy, resif uyumu ("Reef", "Reef with caution") ve huydur; huy ve beslenme düzyazıdadır. Açılan balık ve omurgasız sayfalarında aynı yazdığı özgül ağırlık (1.020–1.025) ve pH (8,1–8,4) tür değeri olarak alınmaz. En az akvaryum hacmi yazmaz.
+2. **OATA (Ornamental Aquatic Trade Association):** genel su hedefleri için ana kaynaktır (kurulum rehberi, aşağıda). Tür grubu sayfaları (17 deniz balığı grubu, 4 omurgasız grubu) grup düzeyinde akvaryum hacmi ve bakım bilgisi için destekleyici kaynaktır. Bu sayfaların su tabloları türe özgü değildir, grubun genel değeridir ve gruptan gruba biraz değişir (ör. palyaço özgül ağırlık 1.020–1.025, pH 7,9–8,3; anemon 1.023–1.026, pH 8,1–8,3); tür değeri olarak alınmaz.
+3. **Practical Fishkeeping:** destekleyicidir. Tür kutularındaki boy ve akvaryum ölçüsü alınır. Su değerleri alınmaz, çünkü su değerleri akvaryum düzeyinde OATA'dan gelir (karar 0029). İncelenen karides yazısı, o yazıdaki türler için değerleri tür kutularından çıkarıp standart resif değerlerini geçerli saydığını yazıyor. Öbür yazılar farklı genel değer verebilir (ör. ocellaris bakım yazısında KH 7–11 dKH).
+4. **FishBase ve SeaLifeBase:** destekleyicidir: boy ve IUCN durumu. Sıcaklıkları doğal yaşam alanının değeridir, akvaryum aralığı olarak alınmaz.
+5. **Fishipedia ve Meerwasser-Lexikon:** destekleyicidir. Yalnız türe özel akvaryum hacmi ve (Fishipedia'da "maintenance en aquarium" bölümü olan türlerde) sıcaklık aralığı için. Meerwasser-Lexikon bir topluluk veri tabanıdır; birim hatası görülen değer (ör. °F etiketiyle yazılmış °C değerleri) kullanılmaz.
+6. **WoRMS (World Register of Marine Species):** yalnız geçerli bilimsel ad ve eş ad eşleştirmesi için; değer kaynağı değildir.
+
+Kabul edilmeyenler: LiveAquaria (satıcı; açılan balık sayfalarında aynı genel su bloğu), Quality Marine (toptancı; genel su değerleri, ör. ocellaris 1.020–1.025, uzun dokunaçlı anemon 1.023–1.025), Reefs.com balık sayfaları (yazarsız ve tarihsiz; değerleri satıcıyla aynı), TFH (aynı blok, yazarsız), WetWebMedia (cins düzeyinde düzyazı; yapılandırılmış değer yok). Reef Builders, CORAL ve Advanced Aquarist arşivi haber ve makale siteleridir. Bazı yazılar türe özgü değer veriyor (ör. Reef Builders'ın Royal Gramma yazısında boy ve akvaryum hacmi), ama yapılandırılmış bir tür veri tabanı değildirler; bu pakette değer kaynağı olarak kabul edilmez.
+
+Değer kuralı:
+
+- **Tuzluluk, pH, KH ve öbür su değerleri:** tür kaydına yazılmaz. Deniz akvaryumunun son ölçümü OATA'nın ev akvaryumu kurulum rehberindeki ("How to set up and maintain a marine aquarium", Eylül 2022) hedeflerle karşılaştırılır. Akvaryumda deniz omurgasızı varsa omurgasızlı hedefler kullanılır.
+  - Yalnız balık: özgül ağırlık 1.017–1.023, pH 8,0–8,2, amonyak ve nitrit sıfır, nitrat en çok 20 mg/L.
+  - Omurgasızlı: özgül ağırlık 1.024–1.026, pH 8,0–8,2, amonyak ve nitrit sıfır, KH 8–12 dKH. Rehber nitratı 5–10 mg/L ve fosfatı 0,04–0,1 mg/L diye, ikisinde de "türe bağlı" ("species depending") koşuluyla yazıyor. Bu iki aralık her omurgasızlı akvaryuma uygulanan bir eşik olarak kullanılmaz, bilgi olarak gösterilir.
+  - Rehberin sıcaklık aralıkları (yalnız balık 24–27 °C, omurgasızlı 24–26 °C) bilgi olarak gösterilir, ayrıca değerlendirilmez. Sıcaklık türün aralığıyla değerlendirilir (aşağıda). OATA'nın tür grubu sayfalarının farklı değerleri günlüğe yazılır, hedef olarak kullanılmaz. OATA'nın ticaret için su kalitesi ölçütü (Ekim 2022) ev akvaryumu hedefi değildir; motorun bugünkü amonyak, nitrit ve nitrat tehlike sınırlarının kaynağı olarak kalır (karar 0008; deniz için serbest amonyak 0,01, nitrit 0,125, nitrat 100 mg/L). Uygulama motor değişikliğiyle gelir (karar 0029, sıra 2).
+- **Sıcaklık:** türe özel tutma aralıklarının ortak aralığı (koruyucu; tatlı sudaki kural). Ana kaynak Fishkeeper'dır; Fishipedia'nın akvaryum bölümündeki aralık da ortak aralığa girer. Doğal yaşam alanı değeri (FishBase) ve "ideal" ya da üreme aralıkları kullanılmaz.
+- **Boy:** kaynakların yazdığı en büyük yetişkin boy (Fishkeeper, Practical Fishkeeping, FishBase).
+- **Akvaryum:** OATA'nın grup değeri ile türe özel destek kaynağının (Practical Fishkeeping, Fishipedia, Meerwasser-Lexikon) değerinden büyüğü. Grup değeri bir çift ya da tek balık içinse kayıtta bu yazılır.
+- **Resif uyumu ve huy:** Fishkeeper'ın yazdığı (balık ve omurgasız); Fishkeeper'da sayfası olmayan türde OATA ve Practical Fishkeeping'in açık ifadesi. Kaynağın yazmadığı uyum tahmin edilmez.
+- **Satış kanıtı:** deniz canlılarında aranmaz (karar 0029). Türler Türk uzman deniz mağazalarında sık görülen başlangıç ailelerinden seçilir; mağaza kayıtta kaynak ya da satış adı olarak yer almaz.
+- **Nesli tehlike:** FishBase'teki IUCN durumu "tehlikede" ya da daha kötüyse kayıtta kaynaklı bir bilgi notu yazılır.
+- **Okuma:** değerler sayfa açılarak okunur; arama özeti kaynak sayılmaz. Kaynaklar üç ayda bir yeniden açılır (karar 0020).
+
 ## Hastalık ve tedavi yönlendirme kaynakları
 
 Hastalık ve tedavi sayfası (`docs/DECISIONS/0022-hastalik-ve-tedavi-sayfasi.md`) teşhis koymaz ve ilaç önermez; yalnız aşağıdaki kaynaklara yönlendirir. Adresler `src/data/disease-guide.ts` içindedir; her sayfa 2026-10-22'de (UTC) açılarak okundu.

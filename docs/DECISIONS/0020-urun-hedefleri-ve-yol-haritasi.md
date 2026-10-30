@@ -72,6 +72,6 @@ Sonra: mercanlar, bitki uyarılarının ışık ve CO₂ ölçümüyle geliştir
 
 - Ücretsiz ve premium özelliklerin ayrımı.
 - Sosyal ilk sürümün kapsamı (taslakla birlikte).
-- Tuzlu su ve bitki için kabul edilecek uzman kaynak listesi (`docs/DATA_SOURCES.md`'ye eklenecek).
+- Tuzlu su ve bitki için kabul edilecek uzman kaynak listesi (`docs/DATA_SOURCES.md`'ye eklenecek). Bitki: 2026-10-25, karar 0023. Tuzlu su: 2026-10-29, karar 0029.
 - Görsel stratejisi (kendi fotoğraflar, açık lisanslı görseller, markalardan izinli ürün fotoğrafları, kullanıcı fotoğrafları).
 - İngilizceden sonra hangi diller.
