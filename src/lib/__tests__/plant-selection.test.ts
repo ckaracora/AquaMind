@@ -106,8 +106,11 @@ describe("bitkinin bilgileri", () => {
       "Işık Düşük–yüksek CO₂ Düşük Sıcaklık 18–30 °C pH 5–9 Boy 40 cm'ye kadar Büyüme Çok hızlı");
     expect(text(renderToStaticMarkup(createElement(PlantFacts, { item: item("anubias-barteri-var-nana") })))).toContain("pH 5–8,5");
     // Tropica'ya dayanan kayıt: sıcaklık ve pH yok.
+    expect(text(renderToStaticMarkup(createElement(PlantFacts, { item: item("eleocharis-acicularis") })))).toBe(
+      "Işık Düşük CO₂ Düşük Sıcaklık Kaynakta yok pH Kaynakta yok Boy 15 cm'ye kadar Büyüme Orta");
+    // Tropica'ya dayanan kayıt, sıcaklık ve pH Practical Fishkeeping'in tür kutusundan (4. paket).
     expect(text(renderToStaticMarkup(createElement(PlantFacts, { item: item("staurogyne-repens") })))).toBe(
-      "Işık Düşük CO₂ Düşük Sıcaklık Kaynakta yok pH Kaynakta yok Boy 10 cm'ye kadar Büyüme Orta");
+      "Işık Düşük CO₂ Düşük Sıcaklık 20–28 °C pH 6–8 Boy 10 cm'ye kadar Büyüme Orta");
     expect(text(renderToStaticMarkup(createElement(PlantFacts, { item: item("anubias-heterophylla") })))).toBe(
       "Işık Orta CO₂ Kaynakta yok Sıcaklık 22–30 °C pH Kaynakta yok Boy 80 cm'ye kadar Büyüme Kaynakta yok");
   });
@@ -158,7 +161,7 @@ describe("bitkinin bilgileri", () => {
     expect(text(render(createElement(PlantSources, { item: item("azolla-filiculoides") })))).toBe("Kaynak: legislation.gov.uk");
     // "Su bitkisi değil" etiketinin kaynağı, ana kaynaktan farklıysa da kaynak satırında bağlantılıdır.
     const pfk = ophiopogon.notAquatic!.sourceUrl;
-    const mixed = render(createElement(PlantSources, { item: { ...item("staurogyne-repens"), notAquatic: { sourceUrl: pfk } } }));
+    const mixed = render(createElement(PlantSources, { item: { ...item("eleocharis-acicularis"), notAquatic: { sourceUrl: pfk } } }));
     expect(text(mixed)).toBe("Kaynak: Tropica · Practical Fishkeeping");
     expect(mixed).toContain(`href="${pfk}"`);
     // Seçilince: not, değerler "Kaynakta yok", uyarı ve kaynak; kartta kısa bilgi ve kısa uyarı.

@@ -6,7 +6,7 @@ import { AppShell } from "@/components/app-shell";
 import { PageHeader } from "@/components/page-header";
 import { PlantCardCatalog, PlantForm, plantPositions } from "@/components/plant-catalog";
 import { PlantCardWarnings, PlantCatalogFailed } from "@/components/plant-warnings";
-import { checkAquariumPlants } from "@/lib/plant-warning-text";
+import { checkAquariumPlants, isLabelWarning } from "@/lib/plant-warning-text";
 import { useDisplayFormat } from "@/lib/use-display-format";
 import { usePlantCatalog } from "@/lib/use-plant-catalog";
 import { useAquariums } from "@/providers/aquarium-provider";
@@ -25,7 +25,8 @@ export default function PlantsPage(){
  const catalog=usePlantCatalog(open||base.length>0);
  // Bitki uyarıları (docs/DECISIONS/0025-bitki-uyarilari.md): akvaryumun ekipmanı ve son su ölçümüyle, katalog yüklenince hesaplanır.
  // Katalog yüklenemezse kartlar kısa bilgi ve uyarı olmadan kalır; bunu söyleyen satır ve yeniden deneme düğmesi listenin üstünde.
- const aquarium=aquariums.find(a=>a.id===aquariumId); const warnings=catalog.catalog&&aquarium?checkAquariumPlants(catalog.catalog,aquarium,plants,equipment,waterReadings).warnings:[];
+ // Etiket uyarıları (su bitkisi değil, istilacı tür; karar 0028) kartta katalogun kısa uyarısı olarak zaten görünür, listeye girmez.
+ const aquarium=aquariums.find(a=>a.id===aquariumId); const warnings=catalog.catalog&&aquarium?checkAquariumPlants(catalog.catalog,aquarium,plants,equipment,waterReadings).warnings.filter(w=>!isLabelWarning(w)):[];
  return <AppShell><PageHeader title={t.navigation.items.plants}/><div className="mx-auto max-w-[1200px] px-5 py-8 sm:px-8 lg:px-10 lg:py-10">
   <div className="mb-7 flex flex-col justify-between gap-4 sm:flex-row sm:items-end"><div><p className="eyebrow mb-2 text-emerald-400">{t.plants.eyebrow}</p><h1 className="text-2xl font-extrabold sm:text-3xl">{t.navigation.items.plants}</h1><p className="mt-2 text-sm text-[#71858d]">{t.plants.description}</p></div><div className="flex gap-2"><label className="relative flex-1 sm:min-w-52"><select value={aquariumId} onChange={e=>setAquariumId(e.target.value)} className="min-h-11 w-full appearance-none rounded-xl border border-white/[.08] bg-panel px-4 py-3 pr-9 text-xs font-bold outline-none sm:min-h-0">{aquariums.map(a=><option key={a.id} value={a.id}>{a.name}</option>)}</select><ChevronDown size={14} className="pointer-events-none absolute right-3 top-3.5 text-[#71858d]"/></label><button onClick={()=>setOpen(true)} className="flex min-h-11 min-w-11 items-center gap-2 rounded-xl bg-aqua px-4 py-3 text-xs font-extrabold text-ink sm:min-h-0 sm:min-w-0"><Plus size={16}/>{t.common.addPlant}</button></div></div>
   <div className="mb-5 grid grid-cols-1 gap-2 min-[360px]:grid-cols-3 min-[360px]:gap-3"><Summary icon={Leaf} label={t.plants.speciesTotal} value={base.length}/><Summary icon={Sprout} label={t.plants.total} value={base.reduce((s,p)=>s+p.quantity,0)}/><Summary icon={MapPin} label={t.plants.areas} value={new Set(base.map(p=>p.position).filter(Boolean)).size}/></div>

@@ -3,8 +3,9 @@ import { createElement, type ReactNode } from "react";
 import { renderToStaticMarkup } from "react-dom/server";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { assessPlants, type PlantProfileInput, type PlantWarning } from "@aquamind/compatibility-engine/plants";
-import { createDisplayFormat } from "@aquamind/localization";
+import { createDisplayFormat, messagesFor } from "@aquamind/localization";
 import { plantWarningFormat, plantWarningMessagesFor, type PlantWarningFormat } from "@aquamind/localization/plant-warnings";
+import type { PlantProfile } from "@/data/catalog-plants";
 import { checkAquariumPlants, plantWarningText, warningsFirst } from "@/lib/plant-warning-text";
 import type { PlantCatalogModule } from "@/lib/use-plant-catalog";
 import type { Aquarium, Equipment, Plant, WaterParameters } from "@/types/aquarium";
@@ -13,6 +14,7 @@ import type { Aquarium, Equipment, Plant, WaterParameters } from "@/types/aquari
 // sayılar dilin ayırıcılarıyla ve sıcaklık kullanıcının birimiyle yazılır.
 
 const tr = plantWarningMessagesFor("tr");
+const t = messagesFor("tr");
 const formatFor = (temperature: "celsius" | "fahrenheit") => plantWarningFormat(createDisplayFormat("tr", { temperature, volume: "liters", dateFormat: "day-first" }));
 const celsius = formatFor("celsius");
 const fahrenheit = formatFor("fahrenheit");
@@ -21,10 +23,12 @@ const tank: Aquarium = { id: "a", name: "Senaryo", type: "freshwater", lengthCm:
 const profiles: Record<string, PlantProfileInput> = {
   carpet: { id: "carpet", scientificName: "Hemianthus callitrichoides", light: ["medium", "high"], co2: "high", heightCm: 3, temperature: [20, 28], ph: [5, 7] },
   tall: { id: "tall", scientificName: "Vallisneria gigantea", light: ["high", "high"], co2: "low", heightCm: 100, temperature: [18, 28.5], ph: [6.5, 7.5] },
+  // Etiketli kayıt (karar 0028): değer alanı yok; iki etiket birlikte yalnız metin sınaması içindir.
+  marked: { id: "marked", scientificName: "Pistia stratiotes", invasiveListings: [{ list: "eu-union-list" }, { list: "fisc-invasive" }], notAquatic: { sourceUrl: "https://www.practicalfishkeeping.co.uk/features/21-plants-to-avoid-in-the-aquarium/" } },
 };
 const plant = (id: string, name = profiles[id].scientificName): Plant => ({ id: `p-${id}`, aquariumId: "a", name, quantity: 1, addedAt: "2026-01-01", catalogId: id });
 const reading = (values: Partial<WaterParameters>, measuredAt = "2026-10-01T10:00:00Z"): WaterParameters => ({ id: measuredAt, aquariumId: "a", measuredAt, ...values });
-const run = (latest?: WaterParameters, equipment: Equipment[] = []) => assessPlants(tank, ["carpet", "tall"].map((id) => ({ plant: plant(id), profile: profiles[id] })), equipment, latest);
+const run = (latest?: WaterParameters, equipment: Equipment[] = []) => assessPlants(tank, ["carpet", "tall", "marked"].map((id) => ({ plant: plant(id), profile: profiles[id] })), equipment, latest);
 const textFor = (warnings: PlantWarning[], code: string, format: PlantWarningFormat = celsius) => plantWarningText(tr, format, warnings.find((warning) => warning.code === code)!);
 // Bileşenler gerçek çıktılarıyla sınanır: dil, görüntü biçimi, kayıtlar ve bitki kataloğu kancası sınama değerleriyle verilir.
 const store = vi.hoisted(() => ({
@@ -45,6 +49,7 @@ vi.mock("@/components/app-shell", () => ({ AppShell: ({ children }: { children: 
 vi.mock("@/components/page-header", () => ({ PageHeader: () => null }));
 const { PlantWarningsBody } = await import("@/components/plant-warnings");
 const { default: PlantsPage } = await import("@/app/plants/page");
+const { PlantInvasiveNotice } = await import("@/components/plant-catalog");
 const decode = (html: string) => html.replace(/&#x27;/g, "'").replace(/&quot;/g, "\"").replace(/&amp;/g, "&");
 const textOf = (html: string) => decode(html.replace(/<[^>]+>/g, " ")).replace(/\s+/g, " ").trim();
 const fakeCatalog = { plantForRecord: (record: Plant) => (record.catalogId ? profiles[record.catalogId] : undefined) } as unknown as PlantCatalogModule;
@@ -59,7 +64,7 @@ const engineCodes = new Set([...readFileSync("packages/compatibility-engine/src/
 
 describe("bitki uyarılarının metinleri", () => {
   it("motorun her kodu dil dosyasında var, dil dosyasında kullanılmayan kod yok", () => {
-    expect(engineCodes).toEqual(new Set(["plantCo2", "plantLight", "plantTemperature", "plantPh", "plantHeight"]));
+    expect(engineCodes).toEqual(new Set(["plantNotAquatic", "plantInvasive", "plantCo2", "plantLight", "plantTemperature", "plantPh", "plantHeight"]));
     expect(new Set(Object.keys(tr.warnings))).toEqual(engineCodes);
   });
 
@@ -76,6 +81,19 @@ describe("bitki uyarılarının metinleri", () => {
     expect(textFor(scenarios[0], "plantTemperature").message).toBe("Bu bitkinin kaynaktaki sıcaklık aralığı 20–28 °C; son ölçüm 29,5 °C.");
     expect(textFor(scenarios[1], "plantPh")).toEqual({ title: "Hemianthus callitrichoides için pH düşük", message: "Bu bitkinin kaynaktaki pH aralığı 5–7; son ölçüm 4,5." });
     expect(textFor(scenarios[2], "plantHeight").message).toBe("Akvaryumun yüksekliği 36 cm. Bitki su yüzeyine ulaşır; düzenli budama gerekir.");
+    expect(textFor(scenarios[0], "plantInvasive")).toEqual({ title: "Pistia stratiotes istilacı tür listesinde",
+      message: "Doğaya bırakmayın. Bu bitki Florida İstilacı Türler Konseyi'nin listesinde (UF/IFAS) ve Avrupa Birliği'nin istilacı yabancı türler listesinde. Bu, Türkiye'de yasak olduğu anlamına gelmez." });
+  });
+
+  it("etiket uyarılarının metni bitki kartındaki uyarıyla aynı (liste adları, sıra, \"su bitkisi değil\" metni)", () => {
+    const all: PlantProfileInput = { id: "all", scientificName: "Hepsi", invasiveListings: [{ list: "england-sale-ban" }, { list: "eu-union-list" }, { list: "fisc-invasive" }, { list: "us-federal-noxious-weed" }] };
+    for (const profile of [all, profiles.marked, { ...all, invasiveListings: [{ list: "fisc-invasive" as const }] }]) {
+      const [warning] = assessPlants(tank, [{ plant: plant("carpet"), profile }], []).filter((item) => item.code === "plantInvasive");
+      const card = textOf(renderToStaticMarkup(createElement(PlantInvasiveNotice, { item: profile as unknown as PlantProfile })));
+      expect(plantWarningText(tr, celsius, warning).message, profile.id).toBe(card);
+    }
+    const [notAquatic] = assessPlants(tank, [{ plant: plant("carpet"), profile: profiles.marked }], []);
+    expect(plantWarningText(tr, celsius, notAquatic).message).toBe(t.plants.catalog.notAquatic.text);
   });
 
   it("sıcaklık kullanıcının biriminde yazılır (°F)", () => {
@@ -134,6 +152,11 @@ describe("bitki uyarılarının metinleri", () => {
     const warningOnly = { plantForRecord: (record: Plant) => (record.catalogId === "w" ? { id: "w", scientificName: "Pistia stratiotes", warningOnly: true } : record.catalogId ? profiles[record.catalogId] : undefined) } as unknown as PlantCatalogModule;
     const pistia: Plant = { ...manual("p-w", "Su marulu"), catalogId: "w" };
     expect(checkAquariumPlants(warningOnly, tank, [pistia, plant("carpet")], [], [])).toMatchObject({ unmatched: [], noValues: [pistia], checked: 1 });
+    // Etiketi olan yalnız uyarı kaydı (karar 0028): etiket uyarı verir, bitki yine `noValues`te ve değerlendirilen sayısına girmez.
+    const labelled = { plantForRecord: (record: Plant) => (record.catalogId === "w" ? { ...profiles.marked, id: "w", warningOnly: true } : undefined) } as unknown as PlantCatalogModule;
+    const marked = checkAquariumPlants(labelled, tank, [pistia], [], []);
+    expect(marked.warnings.map((warning) => `${warning.plantId}:${warning.code}`)).toEqual(["p-w:plantNotAquatic", "p-w:plantInvasive"]);
+    expect(marked).toMatchObject({ noValues: [pistia], checked: 0 });
   });
 
   it("sağlık analizindeki bölüm: hiçbir bitki eşleşmediyse yeşil 'uyarı yok' yerine 'hesaplanamadı' der ve adları yazar", () => {
@@ -145,8 +168,12 @@ describe("bitki uyarılarının metinleri", () => {
     expect(body({ result: { warnings: [], unmatched: [manual("m1", "Java yosunu")], noValues: [], checked: 2 }, failed: false, retry })).toBe("Değerlendirilen bitkiler için uyarı yok. Katalogla eşleşmeyen bitkiler için uyarı hesaplanmadı: Java yosunu.");
     expect(body({ result: { warnings: [], unmatched: [], noValues: [], checked: 2 }, failed: false, retry })).toBe("Kayıtlı bitkiler için uyarı yok.");
     // Değerleri kaynakta olmayan bitkiler (yalnız uyarı kaydı) ayrıca yazılır; yalnız onlar varsa yeşil sonuç yok.
-    expect(body({ result: { warnings: [], unmatched: [], noValues: [manual("w", "Su marulu")], checked: 1 }, failed: false, retry })).toBe("Değerlendirilen bitkiler için uyarı yok. Değerleri kaynakta olmayan bitkiler için uyarı hesaplanmadı: Su marulu. Bitki kartındaki uyarıya bakın.");
-    expect(body({ result: { warnings: [], unmatched: [manual("m1", "Java yosunu")], noValues: [manual("w", "Su marulu")], checked: 0 }, failed: false, retry })).toBe("Katalogla eşleşmeyen bitkiler için uyarı hesaplanmadı: Java yosunu. Değerleri kaynakta olmayan bitkiler için uyarı hesaplanmadı: Su marulu. Bitki kartındaki uyarıya bakın.");
+    expect(body({ result: { warnings: [], unmatched: [], noValues: [manual("w", "Su marulu")], checked: 1 }, failed: false, retry })).toBe("Değerlendirilen bitkiler için uyarı yok. Değerleri kaynakta olmayan bitkilerde ışık, CO₂, sıcaklık, pH ve boy denetlenemedi: Su marulu.");
+    expect(body({ result: { warnings: [], unmatched: [manual("m1", "Java yosunu")], noValues: [manual("w", "Su marulu")], checked: 0 }, failed: false, retry })).toBe("Katalogla eşleşmeyen bitkiler için uyarı hesaplanmadı: Java yosunu. Değerleri kaynakta olmayan bitkilerde ışık, CO₂, sıcaklık, pH ve boy denetlenemedi: Su marulu.");
+    // Yalnız uyarı kaydının etiketi (karar 0028) sarı uyarı olarak yazılır; değerleri denetlenemediği ayrıca söylenir, yeşil sonuç yok.
+    const labelled = assessPlants(tank, [{ plant: { ...manual("w", "Su marulu"), catalogId: "marked" }, profile: profiles.marked }], []);
+    expect(body({ result: { warnings: labelled, unmatched: [], noValues: [manual("w", "Su marulu")], checked: 0 }, failed: false, retry })).toBe(
+      "Su marulu su bitkisi değil " + t.plants.catalog.notAquatic.text + " Su marulu istilacı tür listesinde " + plantWarningText(tr, celsius, labelled[1]).message + " " + "Değerleri kaynakta olmayan bitkilerde ışık, CO₂, sıcaklık, pH ve boy denetlenemedi: Su marulu.");
     // Uyarı varken eşleşmeyenler listenin sonunda; adı boş kayıtta liste yazılmaz.
     const warnings = run(reading({ temperature: 30 }));
     const listed = body({ result: { warnings, unmatched: [manual("m1", " ")], noValues: [], checked: 2 }, failed: false, retry });
@@ -168,6 +195,14 @@ describe("bitki uyarılarının metinleri", () => {
     store.catalog = { failed: false, catalog: fakeCatalog, retry: () => {} };
     expect(page()).not.toContain(tr.loadFailed);
     expect(textOf(page())).toContain("Hemianthus callitrichoides yüksek CO₂ ister");
+    // Etiket uyarıları (karar 0028) kartta katalogun kısa uyarısı olarak görünür; motorun uyarısı olarak ikinci kez yazılmaz.
+    store.data = { ...store.data, plants: [plant("carpet"), plant("marked")] };
+    const withLabels = textOf(page());
+    expect(withLabels).toContain(t.plants.catalog.notAquatic.short);
+    expect(withLabels).toContain(t.plants.catalog.invasive.short);
+    expect(withLabels).not.toContain("Pistia stratiotes su bitkisi değil");
+    expect(withLabels).not.toContain("Pistia stratiotes istilacı tür listesinde");
+    expect(withLabels).toContain("Hemianthus callitrichoides yüksek CO₂ ister");
     // Bitki yokken hata satırı gösterilmez (katalog zaten istenmez).
     store.data = { ...store.data, plants: [] };
     store.catalog = { failed: true, catalog: undefined, retry: () => {} };
