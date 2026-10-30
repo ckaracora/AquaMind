@@ -52,5 +52,11 @@
 // 1.12.0: bitki uyarılarına katalogdaki kaynaklı etiketler girer: "su bitkisi değil" ve istilacı tür listesi (sarı uyarı). Değerleri kaynakta
 // olmayan yalnız uyarı kayıtlarında da çıkar. Sağlık puanı, `analyzeAquarium` ve kural seti değişmez
 // (bkz. docs/DECISIONS/0028-bitki-etiketleri-saglik-analizinde.md).
-export const ENGINE_VERSION = "1.12.0";
-export const RULESET_VERSION = "1.9.0";
+//
+// 1.13.0: deniz akvaryumunun su hedefleri akvaryum düzeyinde (src/marine.ts). Son ölçümün özgül ağırlığı, pH'ı, (omurgasızlı akvaryumda)
+// KH'si ve (yalnız balıklı akvaryumda) nitratı OATA'nın ev akvaryumu kurulum rehberindeki hedeflerle karşılaştırılır; hedef dışı sarı uyarıdır.
+// Özgül ağırlık iki hedefin de dışındaysa (1,017–1,026) kesin tehlikedir. Deniz canlılarının kayıtlarında pH ve özgül ağırlık yoktur;
+// pH aralığı olmayan canlı pH kesişimine girmez. Yeni gömülü eşikler (OATA hedefleri) eklendiği için kural seti 1.10.0
+// (bkz. docs/DECISIONS/0029-tuzlu-su-baslangic-paketi.md, 0030-deniz-suyu-hedefleri.md).
+export const ENGINE_VERSION = "1.13.0";
+export const RULESET_VERSION = "1.10.0";

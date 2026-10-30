@@ -45,6 +45,7 @@ export default function Dashboard() {
   const phStatus = status?.ph ?? pendingStatus;
   const nitrate = status?.nitrate ?? pendingStatus;
   const tds = status?.tds ?? pendingStatus;
+  const specificGravity = status?.specificGravity ?? pendingStatus;
   const upcomingTasks = maintenanceTasks.filter((item) => item.aquariumId === aquarium.id && !item.completedAt).slice(0, 3);
   // "Akvaryumum" kartı seçili akvaryumun kendi kayıtlarından yazılır (eskiden sabit örnek değerler gösteriyordu).
   const animalCount = animals.reduce((sum, item) => sum + item.quantity, 0);
@@ -66,7 +67,9 @@ export default function Dashboard() {
         <section className="mb-5 grid grid-cols-2 gap-3 xl:grid-cols-4">
           <ParameterCard icon={Thermometer} label={t.common.temperature} value={latest?.temperature !== undefined ? fmt.temperature(latest.temperature) : "—"} status={t.waterStatus[temperatureStatus.key]} statusTone={temperatureStatus.tone} />
           <ParameterCard icon={FlaskConical} label={t.dashboard.phValue} value={latest?.ph !== undefined ? fmt.measurement(latest.ph) : "—"} status={t.waterStatus[phStatus.key]} statusTone={phStatus.tone} tone="green" />
-          <ParameterCard icon={CircleGauge} label="TDS" value={latest?.tds !== undefined ? `${fmt.measurement(latest.tds)} ppm` : "—"} status={t.waterStatus[tds.key]} statusTone={tds.tone} />
+          {/* Su değerleri sayfasıyla aynı: tatlı suda TDS, deniz ve acı suda özgül ağırlık. */}
+          {aquarium.type === "freshwater" ? <ParameterCard icon={CircleGauge} label="TDS" value={latest?.tds !== undefined ? `${fmt.measurement(latest.tds)} ppm` : "—"} status={t.waterStatus[tds.key]} statusTone={tds.tone} />
+            : <ParameterCard icon={CircleGauge} label={t.water.fields.specificGravity} value={latest?.specificGravity !== undefined ? fmt.measurement(latest.specificGravity) : "—"} status={t.waterStatus[specificGravity.key]} statusTone={specificGravity.tone} />}
           <ParameterCard icon={Activity} label={t.dashboard.nitrate} value={latest?.nitrate !== undefined ? `${fmt.measurement(latest.nitrate)} ppm` : "—"} status={t.waterStatus[nitrate.key]} statusTone={nitrate.tone} tone="green" />
         </section>
 

@@ -4079,8 +4079,8 @@ const ocellarisClownfish = speciesCatalog.find((item) => item.id === "ocellaris-
 assert(ocellarisClownfish, "Ocellaris palyaço balığı doğrulanmış deniz canlısı kataloğunda bulunmalı");
 assert.deepEqual(
   [ocellarisClownfish.scientificName, ocellarisClownfish.minVolumeL, ocellarisClownfish.minTankLengthCm, ocellarisClownfish.minGroup, ocellarisClownfish.temperature, ocellarisClownfish.ph, ocellarisClownfish.specificGravity],
-  ["Amphiprion ocellaris", 60, 60, 2, [24, 26], [7.9, 8.3], [1.020, 1.025]],
-  "Ocellaris palyaço balığı OATA ve uzman kaynaklardaki güvenli deniz akvaryumu eşiklerini taşımalı",
+  ["Amphiprion ocellaris", 60, 60, 2, [24, 26], undefined, undefined],
+  "Ocellaris palyaço balığı OATA ve uzman kaynaklardaki tür değerlerini taşımalı; pH ve tuzluluk akvaryum düzeyinde (karar 0029, 0030)",
 );
 assert.deepEqual(speciesWaterTypes(ocellarisClownfish), ["saltwater"], "Ocellaris yalnızca tuzlu su akvaryumu seçicisinde görünmeli");
 assert.deepEqual(speciesWaterTypes(speciesCatalog.find((item) => item.id === "neon-tetra")), ["freshwater"], "Eski tatlı su profilleri açık su türü alanı olmadan geriye uyumlu kalmalı");
@@ -4101,7 +4101,7 @@ for (const [id, scientificName, salesName, adultSizeCm, minVolumeL, minTankLengt
     `${salesName} tür bazlı kimlik, erişkin boy ve güvenli çift eşiğini taşımalı`,
   );
   assert.deepEqual(speciesWaterTypes(profile), ["saltwater"], `${salesName} yalnızca tuzlu su akvaryumu seçicisinde görünmeli`);
-  assert.deepEqual([profile.temperature, profile.ph, profile.specificGravity], [[24, 26], [8.1, 8.3], [1.020, 1.025]], `${salesName} doğrulanmış deniz suyu aralıklarını taşımalı`);
+  assert.deepEqual([profile.temperature, profile.ph, profile.specificGravity], [[24, 26], undefined, undefined], `${salesName} doğrulanmış sıcaklık aralığını taşımalı; pH ve tuzluluk akvaryum düzeyinde (karar 0029, 0030)`);
   assert.equal(speciesForLivestock({commonName:salesName,category:"fish",quantity:1})?.id, id, `${salesName} doğru bilimsel profile bağlanmalı`);
   assert(profile.sourceUrl?.startsWith("https://"), `${salesName} doğrudan HTTPS bakım kaynağı taşımalı`);
   assert.equal(profile.verifiedAt, "2026-08-31", `${salesName} güncel doğrulama tarihini taşımalı`);
@@ -4114,7 +4114,7 @@ assert.deepEqual(
   "Percula profili yayımlanmayan tank uzunluğunu uydurmadan tür bazlı boy, hacim ve çift eşiğini taşımalı",
 );
 assert(perculaClownfish.tankLengthDataNote?.includes("yayımlıyor ancak"), "Percula eksik tank uzunluğu verisini kullanıcıdan ve denetimden gizlememeli");
-assert.deepEqual([perculaClownfish.temperature, perculaClownfish.ph, perculaClownfish.specificGravity], [[23, 27], [8.1, 8.4], [1.020, 1.025]], "Percula doğrulanmış deniz suyu aralıklarını taşımalı");
+assert.deepEqual([perculaClownfish.temperature, perculaClownfish.ph, perculaClownfish.specificGravity], [[23, 27], undefined, undefined], "Percula doğrulanmış sıcaklık aralığını taşımalı; pH ve tuzluluk akvaryum düzeyinde (karar 0029, 0030)");
 assert.equal(speciesForLivestock({commonName:"Percula Clownfish (Full Black)",category:"fish",quantity:1})?.id, "percula-clownfish", "Cikletist Full Black satış adı doğru Amphiprion percula profiline bağlanmalı");
 assert.deepEqual(speciesWaterTypes(perculaClownfish), ["saltwater"], "Percula yalnız tuzlu su akvaryumu seçicisinde görünmeli");
 assert(perculaClownfish.sourceUrl?.startsWith("https://") && perculaClownfish.additionalSourceUrls?.length >= 4, "Percula tür ve varyete kimliği birden fazla HTTPS kaynakla doğrulanmalı");
@@ -4135,7 +4135,7 @@ assert.deepEqual(
   ["Fromia monilis", 13, 210, undefined, undefined],
   "Mozaik denizyıldızı kaynakta yayımlanmayan uzunluk ve akıntı değerlerini uydurmamalı",
 );
-assert.deepEqual([tiledSeaStar.temperature, tiledSeaStar.ph, tiledSeaStar.specificGravity], [[22, 26], [8.1, 8.3], [1.023, 1.025]], "Mozaik denizyıldızı doğrulanmış hassas deniz suyu aralıklarını taşımalı");
+assert.deepEqual([tiledSeaStar.temperature, tiledSeaStar.ph, tiledSeaStar.specificGravity], [[22, 26], undefined, undefined], "Mozaik denizyıldızı doğrulanmış sıcaklık aralığını taşımalı; pH ve tuzluluk akvaryum düzeyinde (karar 0029, 0030)");
 assert.equal(speciesForLivestock({commonName:"Tiled Sea Star",category:"other",quantity:1})?.id, "tiled-sea-star", "Cikletist Tiled Sea Star adı doğru Fromia profiline bağlanmalı");
 
 const bubbleTipAnemone = speciesCatalog.find((item) => item.id === "bubble-tip-anemone");

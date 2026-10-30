@@ -548,15 +548,21 @@ const metric = (analysis, key) => analysis.metrics.find(item => item.key === key
   assert(!warningTitles(analysis).includes("Ocellaris palyaço balığı: akvaryum türü uyumsuz"), "Ocellaris tuzlu su akvaryumunda yaşam ortamı uyarısı üretmemeli");
 }
 
-{
+// Motor 1.13.0 (karar 0029, 0030): deniz akvaryumunda özgül ağırlık OATA'nın ev akvaryumu hedefiyle karşılaştırılır. Akvaryumda deniz
+// omurgasızı yoksa yalnız balık hedefi 1,017–1,023; hedef dışı sarı uyarı, 1,017–1,026 dışı kesin tehlike.
+for (const [specificGravity, expected] of [[1.018, "none"], [1.025, "warning"], [1.016, "danger"]]) {
   const analysis = analyzeAquarium(
     aquarium({ type: "saltwater", netVolumeLiters: 100, lengthCm: 60 }),
     [animal("ocellaris-clownfish", "Ocellaris palyaço balığı", 2)],
     [],
-    { id: "marine-water-low-sg", aquariumId: "test-aquarium", measuredAt: "2026-08-31", temperature: 25, ph: 8.1, specificGravity: 1.018 },
+    { id: "marine-water-sg", aquariumId: "test-aquarium", measuredAt: "2026-08-31", temperature: 25, ph: 8.1, specificGravity },
   );
-  assert(warningTitles(analysis).includes("Özgül ağırlık canlı aralığı dışında"), "Düşük özgül ağırlık deniz canlısı için tehlike üretmeli");
-  assert.equal(metric(analysis, "water").status, "warning", "Tek uygunsuz deniz suyu parametresi su metriğini uyarı seviyesine düşürmeli");
+  const titles = warningTitles(analysis);
+  assert.equal(titles.includes("Özgül ağırlık hedefin dışında"), expected === "warning", `${specificGravity}: yalnız balıklı akvaryum hedefinin dışı sarı uyarı olmalı`);
+  assert.equal(titles.includes("Özgül ağırlık güvenli aralığın dışında"), expected === "danger", `${specificGravity}: iki hedefin de dışı tehlike olmalı`);
+  assert(!titles.includes("Özgül ağırlık canlı aralığı dışında"), "Deniz canlısının kaydında artık özgül ağırlık aralığı yok");
+  if (expected === "danger") assert(analysis.score <= 49, "Güvenli aralığın dışındaki tuzluluk genel puanı en çok 49'a çekmeli");
+  if (expected === "warning") assert.equal(metric(analysis, "water").status, "warning", "Tek hedef dışı deniz suyu değeri su metriğini uyarı seviyesine düşürmeli");
 }
 
 {
