@@ -21,6 +21,10 @@
     "./plant-warnings": {
       "types": "./src/plant-warnings.ts",
       "default": "./src/plant-warnings.ts"
+    },
+    "./privacy": {
+      "types": "./src/privacy.ts",
+      "default": "./src/privacy.ts"
     }
   },
   "sideEffects": false
