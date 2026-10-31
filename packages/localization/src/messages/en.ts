@@ -52,9 +52,9 @@ export const en: Messages = {
     },
     deletePending: "An unfinished data operation (a deletion or a restore from backup) is in progress. New changes cannot be saved meanwhile, and the attempted action is not applied. Reload the page; the app will try to finish the operation automatically.",
     unsaved: (collections: string) => `Your changes could not be saved on this device (${collections}).`,
-    unsavedHelpBefore: "If you reload the page, these changes will be lost. Storage may be full. To avoid losing them, make a backup with",
+    unsavedHelpBefore: "If you reload the page, these changes will be lost. Storage may be full. To avoid losing them, use",
     unsavedHelpLink: "Settings → Export data",
-    unsavedHelpAfter: ".",
+    unsavedHelpAfter: "to make a backup.",
   },
   backupReminder: {
     never: "Your data is stored only on this device, and you haven't made a backup yet.",
@@ -407,7 +407,7 @@ export const en: Messages = {
     catalog: {
       searchLabel: "Search the catalog",
       searchPlaceholder: "Scientific name, sales name or synonym",
-      searchHint: "e.g. anubias nana, java fern, hornwort",
+      searchHint: "e.g. anubias nana, java fern, ceratophyllum",
       resultCount: (count: string) => `${count} ${count === "1" ? "result" : "results"} in the catalog`,
       moreResults: (count: string) => `${count} more ${count === "1" ? "result" : "results"}; narrow your search`,
       noResult: "Not found in the catalog. Search with another name or type the plant yourself.",

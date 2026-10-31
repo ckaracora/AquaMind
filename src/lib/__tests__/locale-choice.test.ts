@@ -3,7 +3,7 @@ import { afterEach, describe, expect, it, vi } from "vitest";
 import { DEFAULT_PREFERENCES } from "@aquamind/domain";
 import { DEFAULT_LOCALE, SUPPORTED_LOCALES } from "@aquamind/localization";
 import {
-  LOCALE_BOOT_SCRIPT, LOCALE_PENDING_ATTRIBUTE, LOCALE_REVEAL_TIMEOUT_MS, LOCALE_STORAGE_KEY, initialLocale, localeFromLanguages, regionalPreferences,
+  LOCALE_BOOT_SCRIPT, LOCALE_PENDING_ATTRIBUTE, LOCALE_REVEAL_TIMEOUT_MS, LOCALE_STORAGE_KEY, initialLocale, keepDocumentTitle, localeFromLanguages, regionalPreferences,
   storeLocale, storedLocale,
 } from "@/lib/locale-choice";
 
@@ -76,6 +76,47 @@ describe("cihazda saklanan seçim", () => {
     expect(LOCALE_STORAGE_KEY.startsWith("aquamind:")).toBe(true);
     expect(readFileSync("packages/domain/src/local-export.ts", "utf8")).not.toContain(LOCALE_STORAGE_KEY);
     expect(readFileSync("packages/domain/src/local-storage.ts", "utf8")).not.toContain(LOCALE_STORAGE_KEY);
+  });
+});
+
+describe("sekme başlığı", () => {
+  /** Sahte belge ve gözlemci: `<head>` değişikliğini elle bildirir, başlık yazımlarını sayar. */
+  const fakeDocument = (initial: string) => {
+    let title = initial;
+    let writes = 0;
+    const observers: Array<{ callback: () => void; target?: unknown; options?: MutationObserverInit; connected: boolean }> = [];
+    class FakeObserver {
+      private entry: { callback: () => void; target?: unknown; options?: MutationObserverInit; connected: boolean };
+      constructor(callback: () => void) { this.entry = { callback, connected: false }; observers.push(this.entry); }
+      observe(target: unknown, options?: MutationObserverInit) { this.entry.target = target; this.entry.options = options; this.entry.connected = true; }
+      disconnect() { this.entry.connected = false; }
+      takeRecords() { return []; }
+    }
+    const head = {};
+    const doc = { head, get title() { return title; }, set title(value: string) { title = value; writes += 1; } };
+    /** Next.js'in başlığı yeniden yazması: başlık değişir ve bağlı gözlemciler bildirim alır. */
+    const nextWrites = (value: string) => { title = value; for (const observer of observers) if (observer.connected) observer.callback(); };
+    return { doc: doc as unknown as Pick<Document, "title" | "head">, Observer: FakeObserver as unknown as typeof MutationObserver, nextWrites, observers, head, writes: () => writes, title: () => title };
+  };
+
+  it("başlığı hemen seçili dilde yazar; Next.js sonradan Türkçe yazarsa yeniden İngilizceye çevirir; aynıysa yazmaz", () => {
+    const page = fakeDocument("AquaMind — Akvaryum yönetimi");
+    const stop = keepDocumentTitle(page.doc, "AquaMind — Aquarium management", page.Observer);
+    expect(page.title()).toBe("AquaMind — Aquarium management");
+    expect(page.observers.map((observer) => observer.target)).toEqual([page.head]);
+    // `<title>` öğesinin değişmesi (childList), içindeki metnin değişmesi (characterData, öğenin altında: subtree) izlenir.
+    expect(page.observers[0].options).toEqual({ childList: true, subtree: true, characterData: true });
+    page.nextWrites("AquaMind — Akvaryum yönetimi");
+    expect(page.title()).toBe("AquaMind — Aquarium management");
+    const before = page.writes();
+    page.nextWrites("AquaMind — Aquarium management");
+    expect(page.writes()).toBe(before);
+    // Dil değişince (efekt temizlenir) eski gözlemci durur; yeni dilin başlığı geçerli olur.
+    stop();
+    expect(page.observers.every((observer) => !observer.connected)).toBe(true);
+    keepDocumentTitle(page.doc, "AquaMind — Akvaryum yönetimi", page.Observer);
+    page.nextWrites("AquaMind — Akvaryum yönetimi");
+    expect(page.title()).toBe("AquaMind — Akvaryum yönetimi");
   });
 });
 

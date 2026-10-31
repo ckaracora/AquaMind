@@ -79,6 +79,19 @@ export function storeLocale(locale: Locale): boolean {
   }
 }
 
+/**
+ * Sekme başlığını seçili dilde tutar (`I18nProvider`): hemen yazar ve `<head>` değiştikçe başlık farklıysa yeniden yazar; aynıysa
+ * yazmaz (döngü olmaz). Next.js başlığı sayfa değişince ve sunucuda çizilen sayfalarda üst bilgi akışla gelince sonradan yeniden yazar.
+ * Gözlemciyi durduran fonksiyonu döner.
+ */
+export function keepDocumentTitle(doc: Pick<Document, "title" | "head">, wanted: string, Observer: typeof MutationObserver = MutationObserver): () => void {
+  const apply = () => { if (doc.title !== wanted) doc.title = wanted; };
+  apply();
+  const observer = new Observer(apply);
+  observer.observe(doc.head, { childList: true, subtree: true, characterData: true });
+  return () => observer.disconnect();
+}
+
 /** Dil paketi beklenirken gizlenen sayfayı gösterir. */
 export function revealPage(): void {
   if (typeof document !== "undefined") document.documentElement.removeAttribute(LOCALE_PENDING_ATTRIBUTE);

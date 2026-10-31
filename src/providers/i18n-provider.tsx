@@ -1,10 +1,9 @@
 "use client";
 
 import { createContext, useCallback, useContext, useEffect, useMemo, useRef, useState, type ReactNode } from "react";
-import { usePathname } from "next/navigation";
 import { DEFAULT_LOCALE, loadLocaleBundle, localeBundle, messagesFor, type Locale, type Messages } from "@aquamind/localization";
 import { catalogTranslator, type CatalogTranslator } from "@aquamind/localization/catalog";
-import { initialLocale, revealPage, storeLocale } from "@/lib/locale-choice";
+import { initialLocale, keepDocumentTitle, revealPage, storeLocale } from "@/lib/locale-choice";
 import { createLocaleRequester } from "@/lib/locale-requests";
 
 // Arayüz dili (docs/DECISIONS/0021-dil-altyapisi.md). Açılışta bu cihazda seçilmiş dil, yoksa tarayıcının dili kullanılır
@@ -30,7 +29,6 @@ export function I18nProvider({ locale: fixed, children }: { locale?: Locale; chi
   const [requestedLocale, setRequestedLocale] = useState<Locale>(fixed ?? DEFAULT_LOCALE);
   // Uygulanmış dil: son isteğin yüklemesi başarısız olursa seçim buna döner.
   const applied = useRef<Locale>(fixed ?? DEFAULT_LOCALE);
-  const pathname = usePathname();
   const requester = useMemo(() => createLocaleRequester(loadLocaleBundle, (next, remember) => {
     if (remember) storeLocale(next);
     applied.current = next;
@@ -60,10 +58,9 @@ export function I18nProvider({ locale: fixed, children }: { locale?: Locale; chi
     if (locale === (requester.latest() ?? locale)) revealPage();
   }, [locale, requester]);
 
-  // Sekme başlığı: sayfaların ortak başlığı sunucuda Türkçe yazılır; dil ve sayfa değişince seçili dilde yeniden yazılır.
-  useEffect(() => {
-    document.title = messagesFor(locale).app.title;
-  }, [locale, pathname]);
+  // Sekme başlığı: sayfaların ortak başlığı sunucuda Türkçe yazılır. Next.js başlığı sayfa değişince ve sunucuda çizilen sayfalarda
+  // (ör. sağlık analizi) üst bilgi akışla geldiğinde sonradan yeniden yazar; bu yüzden `<head>` izlenir ve başlık seçili dilde tutulur.
+  useEffect(() => keepDocumentTitle(document, messagesFor(locale).app.title), [locale]);
 
   const setLocale = useCallback((next: Locale) => request(next, true), [request]);
 

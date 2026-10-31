@@ -65,6 +65,8 @@ describe("dil isteklerinin sırası", () => {
     expect(provider).toContain("if (wanted !== DEFAULT_LOCALE) request(wanted, false).catch(() => {});");
     expect(provider).toContain("const setLocale = useCallback((next: Locale) => request(next, true), [request]);");
     expect(provider).not.toMatch(/loadLocaleBundle\([a-z]+\)\.then/);
+    // Sekme başlığı seçili dilde tutulur (davranış testi: locale-choice.test.ts).
+    expect(provider).toContain("useEffect(() => keepDocumentTitle(document, messagesFor(locale).app.title), [locale]);");
     const settings = readFileSync("src/app/settings/page.tsx", "utf8");
     expect(settings).toContain("value={requestedLocale}");
     expect(settings).not.toContain("value===locale");

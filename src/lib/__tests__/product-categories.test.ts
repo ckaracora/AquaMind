@@ -21,3 +21,15 @@ describe("ürün kataloğu kategorileri", () => {
     expect(page).toContain("const shown=catalogText(text)");
   });
 });
+
+describe("arama örnekleri", () => {
+  it("bitki aramasının örnek adlarının her biri her dilde katalogda sonuç verir", async () => {
+    const { searchPlants } = await import("@/data/catalog-plants");
+    for (const locale of ["tr", "en"] as const) {
+      const hint = messagesFor(locale).plants.catalog.searchHint;
+      const examples = hint.replace(/^[^ ]+ /, "").split(", ");
+      expect(examples.length, locale).toBeGreaterThan(1);
+      for (const example of examples) expect(searchPlants(example).length, `${locale}: ${example}`).toBeGreaterThan(0);
+    }
+  });
+});
