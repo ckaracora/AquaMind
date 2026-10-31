@@ -353,7 +353,15 @@ export const tr = {
     remove: "Canlıyı sil",
     emptyTitle: "Canlı bulunamadı",
     emptyText: "İlk canlı kaydını ekleyebilirsin.",
-    /** Katalogdan canlı ekleme penceresi. Tür ve grup adları katalogdan gelir (4. paket). */
+    /** Canlı grupları (katalogdaki `group` kimliği); her kimliğin adı olduğu test edilir. */
+    speciesGroups: {
+      livebearer: "Canlı doğuranlar", tetra: "Tetralar", rasbora: "Rasboralar", danio: "Daniolar", barb: "Barblar",
+      rainbowfish: "Gökkuşağı balıkları", killifish: "Killifishler", cichlid: "Cichlidler", labyrinth: "Labirentliler",
+      bottom: "Dip balıkları ve vatozlar", goby: "Goby ve kaya balıkları", puffer: "Puffer / balon balıkları",
+      monster: "Monster / büyük türler", coldwater: "Soğuk su balıkları", shrimp: "Karidesler", snail: "Salyangozlar",
+      crayfish: "Kerevitler", other: "Diğer canlılar",
+    },
+    /** Katalogdan canlı ekleme penceresi. Tür adları ve türün notları katalogdan gelir ve katalog çevirmeninden geçer (4. paket). */
     form: {
       title: "Canlı seç",
       help: "Ana sınıf → canlı grubu → tür sırasıyla ilerle.",

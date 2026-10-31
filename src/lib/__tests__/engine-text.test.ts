@@ -10,7 +10,8 @@ import type { Aquarium, Equipment, Livestock, WaterParameters } from "@aquamind/
 import { createAnalyzer, MARINE_NITRATE_LIMIT, MARINE_SPECIFIC_GRAVITY_SAFE, NITRATE_ABOVE_TAP_LIMIT, TAP_WATER_NITRATE_LIMIT, type EquipmentProfileInput, type HealthAnalysis, type KnowledgeResolver, type SpeciesProfileInput } from "@aquamind/compatibility-engine";
 import { createDisplayFormat, type VolumeUnit } from "@aquamind/localization";
 import { engineMessagesFor, engineTextFormat, type EngineTextFormat, type EngineTextParams } from "@aquamind/localization/engine";
-import { engineMetricText, engineWarningText } from "@/lib/engine-text";
+import { catalogTranslator } from "@aquamind/localization/catalog";
+import { SPECIES_CATALOG_LIST_PARAMS, SPECIES_CATALOG_PARAMS, engineMetricText, engineWarningText, translateCatalogParams } from "@/lib/engine-text";
 import { MARINE_NITRATE_LIMIT_PPM, MARINE_SPECIFIC_GRAVITY_SAFE_MAX, MARINE_SPECIFIC_GRAVITY_SAFE_MIN, NITRATE_ABOVE_TAP_LIMIT_PPM, TAP_WATER_NITRATE_LIMIT_PPM } from "../../../packages/localization/src/messages/tr-engine";
 
 const tr = engineMessagesFor("tr");
@@ -489,3 +490,117 @@ describe("motor metinleri dil dosyasından (karar 0021, 3. paket)", () => {
     }
   });
 });
+
+describe("katalogdan gelen değişkenlerin çevirisi (karar 0021, 4. paket)", () => {
+  // Katalogdan gelen Türkçe metin taşımayan metin değişkenleri: kaynak adları (özel ad), ekipman adı ve kapasite notu (ekipman aşaması),
+  // dilden bağımsız kodlar (akvaryum türü, deniz suyu profili ve yönü, geçersiz ölçüm alanları).
+  const notSpeciesCatalog = new Set(["source", "sources", "names", "note", "aquariumType", "profile", "direction", "fields"]);
+  const speciesCatalog = new Set<string>([...SPECIES_CATALOG_PARAMS, ...SPECIES_CATALOG_LIST_PARAMS]);
+  const analyses = [...fixture.map(({ name, result }) => [name, result] as const), ...scenarios];
+
+  it("uyarı ve ölçütlerdeki her metin değişkeni sınıflandırılmış: ya katalog metni ya da bilerek çevrilmeyen değer", () => {
+    const seen = new Set<string>();
+    for (const [, analysis] of analyses) {
+      for (const params of [...analysis.warnings.map((warning) => warning.params), ...analysis.metrics.map((metric) => metric.detailParams)]) {
+        for (const [key, value] of Object.entries(params)) if (typeof value === "string" || Array.isArray(value)) seen.add(key);
+      }
+    }
+    expect([...seen].filter((key) => !speciesCatalog.has(key) && !notSpeciesCatalog.has(key))).toEqual([]);
+    for (const key of speciesCatalog) expect(seen.has(key), key).toBe(true);
+  });
+
+  it("motor kaynağındaki her değişken de sınıflandırılmış: senaryolarda çalışmayan dallar dahil", async () => {
+    // Fikstür ve senaryolar her dalı çalıştırmaz. Motorun kaynağında `params`/`detailParams` nesnelerinin, adı `...Params` ya da
+    // `...Detail` ile biten değişkenlerin ve fonksiyonların içindeki her anahtar toplanır. Senaryolarda yalnız sayı ya da mantıksal
+    // değerle görülen anahtarlar metin değildir; kalan her anahtar metin sınıflarından birinde olmalıdır.
+    const valueOnly = new Set<string>();
+    const text = new Set<string>();
+    for (const [, analysis] of analyses) {
+      for (const params of [...analysis.warnings.map((warning) => warning.params), ...analysis.metrics.map((metric) => metric.detailParams)]) {
+        for (const [key, value] of Object.entries(params)) (typeof value === "string" || Array.isArray(value) ? text : valueOnly).add(key);
+      }
+    }
+    const { keys: source, unresolved } = await engineParamKeys();
+    expect(unresolved, "tarama motorun params biçimlerini çözebilmeli").toEqual([]);
+    expect([...text, ...valueOnly].filter((key) => !source.has(key)), "kaynak taraması senaryolardaki her anahtarı bulmalı").toEqual([]);
+    expect([...source].filter((key) => !speciesCatalog.has(key) && !notSpeciesCatalog.has(key) && !(valueOnly.has(key) && !text.has(key)))).toEqual([]);
+  });
+
+  it("Türkçe çevirmenle metin aynen kalır", () => {
+    const format = formatFor("liters");
+    const identity = catalogTranslator("tr");
+    for (const [name, analysis] of analyses) {
+      for (const warning of analysis.warnings) expect(engineWarningText(tr, format, warning, identity), name).toEqual(engineWarningText(tr, format, warning));
+    }
+  });
+
+  it("yalnız katalog metinleri çevrilir; kaynak adları ve kodlar çevrilmez", () => {
+    const mark = (text: string) => `«${text}»`;
+    const translated = translateCatalogParams(
+      { name: "Neon tetra", text: "Not", condition: "", source: "Seriously Fish", sources: ["Fishkeeper"], eaters: ["A", "B"], noteConditions: ["koşul"], aquariumType: "freshwater", count: 3 },
+      mark,
+    );
+    expect(translated).toEqual({ name: "«Neon tetra»", text: "«Not»", condition: "", source: "Seriously Fish", sources: ["Fishkeeper"], eaters: ["«A»", "«B»"], noteConditions: ["«koşul»"], aquariumType: "freshwater", count: 3 });
+    // Çevirisi olmayan ad katalogdaki adla kalır; çevirisi olmayan not ve koşul boş verilir (ürün sahibi kararı 2026-10-30).
+    expect(translateCatalogParams({ name: "Ad", eaters: ["A"], text: "Not", condition: "Koşul", noteConditions: ["K"], noteNames: ["N"] }, () => undefined))
+      .toEqual({ name: "Ad", eaters: ["A"], text: "", condition: "", noteConditions: [""], noteNames: ["N"] });
+    const nip = scenario("yüzgeç ısırma").warnings.find((warning) => warning.code === "finNip")!;
+    const text = engineWarningText(tr, formatFor("liters"), nip, mark);
+    expect(text.title).toContain(`«${nip.params.target}»`);
+    expect(text.message).toContain(`«${nip.params.nipper}»`);
+    expect(text.message).toContain(`Kaynak: ${nip.params.source}.`);
+  });
+});
+
+/**
+ * Motor kaynağında uyarı ve ölçüt değişkenlerinin anahtarları: `params`/`detailParams` değerleri ve adı `...Params`/`...Detail` ile biten
+ * tanımlar. Tarama yalnız bu biçimleri izler; `params` değerinde başka bir biçim (adı `...Params` olmayan değişkenin yayılması, yardımcı
+ * fonksiyon çağrısı) `unresolved` listesine girer ve test onu reddeder: yeni biçim ya `...Params` adıyla yazılır ya da tarama genişletilir.
+ * Adı `...Params`/`...Detail` olan nesneye sonradan eklenen alanlar da toplanır.
+ */
+async function engineParamKeys(): Promise<{ keys: Set<string>; unresolved: string[] }> {
+  const ts = (await import("typescript")).default;
+  type Node = import("typescript").Node;
+  const source = ts.createSourceFile("index.ts", engineSource, ts.ScriptTarget.ES2022, true);
+  const keys = new Set<string>();
+  const unresolved: string[] = [];
+  // `params`/`detailParams` adlı yerel değişken (`{ params }` kısa yazımı) de izlenen bir addır.
+  const named = (node: Node) => ts.isIdentifier(node) && /(^params$|^detailParams$|Params$|Detail$)/.test(node.text);
+  // `params` değeri ya da yayılan ifade: nesne, koşullu ifade, `...Params`/`...Detail` adlı değişken ya da çağrı, `filterDetail[2]`.
+  const check = (node: Node): void => {
+    if (ts.isParenthesizedExpression(node)) return check(node.expression);
+    if (ts.isConditionalExpression(node)) return [node.whenTrue, node.whenFalse].forEach(check);
+    if (ts.isObjectLiteralExpression(node)) {
+      for (const property of node.properties) {
+        if ((ts.isPropertyAssignment(property) || ts.isShorthandPropertyAssignment(property)) && (ts.isIdentifier(property.name) || ts.isStringLiteral(property.name))) keys.add(property.name.text);
+        else if (ts.isSpreadAssignment(property)) check(property.expression);
+        else unresolved.push(property.getText(source));
+      }
+      return;
+    }
+    if (named(node) || (ts.isCallExpression(node) && named(node.expression)) || (ts.isElementAccessExpression(node) && named(node.expression))) return;
+    unresolved.push(node.getText(source));
+  };
+  const collect = (node: Node) => {
+    if (ts.isObjectLiteralExpression(node)) check(node);
+    else ts.forEachChild(node, collect);
+  };
+  const visit = (node: Node) => {
+    if (ts.isPropertyAssignment(node) && ts.isIdentifier(node.name) && (node.name.text === "params" || node.name.text === "detailParams")) check(node.initializer);
+    if (ts.isShorthandPropertyAssignment(node) && (node.name.text === "params" || node.name.text === "detailParams")) check(node.name);
+    if (ts.isVariableDeclaration(node) && named(node.name) && node.initializer) collect(node.initializer);
+    if (ts.isFunctionDeclaration(node) && node.name && named(node.name) && node.body) collect(node.body);
+    // Sonradan eklenen alan (`spaceParams.extra = …`, `spaceParams["extra"] = …`) da anahtardır.
+    if (ts.isBinaryExpression(node) && node.operatorToken.kind === ts.SyntaxKind.EqualsToken) {
+      const target = node.left;
+      if (ts.isPropertyAccessExpression(target) && named(target.expression)) keys.add(target.name.text);
+      if (ts.isElementAccessExpression(target) && named(target.expression)) {
+        if (ts.isStringLiteral(target.argumentExpression)) keys.add(target.argumentExpression.text);
+        else unresolved.push(target.getText(source));
+      }
+    }
+    ts.forEachChild(node, visit);
+  };
+  visit(source);
+  return { keys, unresolved };
+}
