@@ -366,6 +366,12 @@ const fluvalUvcClarifiers = ["fluval-uvc-inline-a198","fluval-fx-uvc-inline-a199
 assert.deepEqual(fluvalUvcClarifiers.map((item) => [item?.category,item?.ratedFlowLph,item?.powerW,item?.integratedUvcW,item?.recommendedMaxL]), [["uv",930,3,3,400],["uv",2130,6,6,1500]], "Fluval hat üstü UV-C berraklaştırıcıları resmî akış, güç ve hacim sınırlarını taşımalı");
 assert(fluvalUvcClarifiers.every((item) => item?.specifications.includes("ana biyolojik filtre yerine geçmez") && item.sourceUrl?.startsWith("https://fluvalaquatics.com/") && item.additionalSourceUrls?.length === 2 && item.verifiedAt === "2026-09-28"), "Fluval UV-C cihazları filtre kapasitesine karışmadan resmî ürün ve kılavuz kaynaklarına bağlı olmalı");
 
+// JBL kaynak bağlantısı paketi 2 (2026-10-30): yeni ürün sayfasına (productsv2) taşınan kayıtlar o günün doğrulama tarihini taşır; taşınmayanlar eski tarihlerini korur.
+const jblMovedToProductsV2 = (item) => /^https:\/\/www\.jbl\.de\/de-de\/productsv2\/detail\/\d+$/.test(item?.sourceUrl ?? "");
+// 2. paketin Codex düzeltme turunda (2026-10-31) kaynağı yeniden okunan kayıtlar o günün tarihini taşır.
+const jblRecheckedOn1031 = new Set(["jbl-proflora-co2-taifun-glass","jbl-aquarium-thermometer-float","jbl-aquarium-tubing-green-cardboard-4-6","jbl-aquarium-tubing-green-cardboard-9-12","jbl-aquarium-tubing-green-cardboard-12-16","jbl-aquarium-tubing-green-cardboard-16-22","jbl-aquarium-tubing-grey-cardboard-4-6","jbl-aquarium-tubing-grey-cardboard-9-12","jbl-aquarium-tubing-grey-cardboard-12-16","jbl-aquarium-tubing-grey-cardboard-16-22","jbl-aquarium-thermometer-mini","jbl-proflora-co2-taifun-count-safe","jbl-proflora-co2-taifun-safestop","jbl-proflora-safestop-archive","jbl-proflora-direct-12-16-archive","jbl-proflora-direct-16-22-archive","jbl-proflora-direct-19-25-archive"]);
+const jblPackage2Date = (item) => (jblRecheckedOn1031.has(item?.id) ? "2026-10-31" : "2026-10-30");
+const jblVerifiedAt = (item, previous) => item?.verifiedAt === (jblMovedToProductsV2(item) ? jblPackage2Date(item) : previous);
 const expectedJblCurrentHardware = [
   ["jbl-protemp-cooler-x200-gen2","other",3,60,200],
   ["jbl-protemp-cooler-x300-gen2","other",4,90,300],
@@ -381,7 +387,7 @@ for (const [id,category,powerW,minL,maxL] of expectedJblCurrentHardware) {
   assert.equal(item.powerW, powerW, `${id} resmî güç değerini taşımalı`);
   assert.equal(item.recommendedMinL, minL, `${id} yalnız yayımlanan alt hacmi taşımalı`);
   assert.equal(item.recommendedMaxL, maxL, `${id} resmî üst hacmi taşımalı`);
-  assert.equal(item.verifiedAt, "2026-09-14", `${id} güncel doğrulama tarihi taşımalı`);
+  assert(jblVerifiedAt(item, "2026-09-14"), `${id} güncel doğrulama tarihi taşımalı`);
 }
 
 const jblProFlowIds = ["jbl-proflow-t300","jbl-proflow-t500","jbl-proflow-u800","jbl-proflow-u1100","jbl-proflow-u2000"];
@@ -488,7 +494,7 @@ const jblAerationAccessoryIds = [
 ];
 const jblAerationAccessories = jblAerationAccessoryIds.map((id) => equipmentCatalog.find((item) => item.id === id));
 assert(jblAerationAccessories.every(Boolean), "JBL havalandırma aksesuar ailesinin 15 doğrulanmış seçeneği bulunmalı");
-assert(jblAerationAccessories.every((item) => item?.category === "other" && item.passiveComponent === true && item.sourceUrl?.startsWith("https://www.jbl.de/") && item.verifiedAt === "2026-09-17"), "JBL havalandırma aksesuarları pasif kalmalı ve resmî JBL kaynağı taşımalı");
+assert(jblAerationAccessories.every((item) => item?.category === "other" && item.passiveComponent === true && item.sourceUrl?.startsWith("https://www.jbl.de/") && jblVerifiedAt(item, "2026-09-17")), "JBL havalandırma aksesuarları pasif kalmalı ve resmî JBL kaynağı taşımalı");
 assert(jblAerationAccessories.every((item) => item?.ratedFlowLph === undefined && item.powerW === undefined && item.recommendedMinL === undefined && item.recommendedMaxL === undefined), "JBL pasif havalandırma parçaları pompa debisi, gücü veya hacim kapasitesi kazanmamalı");
 assert.deepEqual(
   ["jbl-prosilent-aeras-micro-s2","jbl-prosilent-aeras-micro-s3","jbl-prosilent-aeras-micro-s","jbl-prosilent-aeras-micro-m","jbl-prosilent-aeras-micro-plus-m","jbl-prosilent-aeras-micro-plus-l","jbl-prosilent-aeras-micro-ball-l"].map((id) => equipmentCatalog.find((item) => item.id === id)?.specifications.match(/(?:Ø )?\d+(?: × \d+)? mm/g)),
@@ -515,7 +521,7 @@ const jblTubingAccessoryIds = [
 ];
 const jblTubingAccessories = jblTubingAccessoryIds.map((id) => equipmentCatalog.find((item) => item.id === id));
 assert(jblTubingAccessories.every(Boolean), "JBL çek valf ve hortum paketinin 29 doğrulanmış seçeneği bulunmalı");
-assert(jblTubingAccessories.every((item) => item?.category === "other" && item.passiveComponent === true && item.sourceUrl?.startsWith("https://www.jbl.de/") && item.verifiedAt === "2026-09-17"), "JBL çek valf ve hortumları pasif kalmalı ve doğrudan resmî kaynak taşımalı");
+assert(jblTubingAccessories.every((item) => item?.category === "other" && item.passiveComponent === true && item.sourceUrl?.startsWith("https://www.jbl.de/") && jblVerifiedAt(item, "2026-09-17")), "JBL çek valf ve hortumları pasif kalmalı ve doğrudan resmî kaynak taşımalı");
 assert(jblTubingAccessories.every((item) => item?.ratedFlowLph === undefined && item.powerW === undefined && item.recommendedMinL === undefined && item.recommendedMaxL === undefined), "JBL hortum ve çek valfleri cihaz kapasitesi kazanmamalı");
 assert.deepEqual(
   ["jbl-aquarium-tubing-green-reel-4-6-archive","jbl-aquarium-tubing-green-reel-9-12-archive","jbl-aquarium-tubing-green-reel-12-16-archive","jbl-aquarium-tubing-green-reel-16-22-archive"].map((id) => equipmentCatalog.find((item) => item.id === id)?.specifications.match(/· (\d+) m/)?.[1]),
@@ -541,14 +547,14 @@ const jblCurrentSiliconeReel = equipmentCatalog.find((item) => item.id === "jbl-
 assert(jblCurrentSiliconeReel?.specifications.includes("180 m") && !jblCurrentSiliconeReel.model.includes("Arşiv"), "JBL güncel silikon karton makarası 4/6 mm ve 180 m olarak bulunmalı");
 assert(["jbl-aquarium-tubing-grey-reel-4-6-archive","jbl-aquarium-tubing-grey-reel-9-12-archive","jbl-aquarium-tubing-grey-reel-12-16-archive","jbl-aquarium-tubing-grey-reel-16-22-archive"].every((id) => equipmentCatalog.find((item) => item.id === id)?.model.includes("Arşiv")), "JBL eski plastik makaralı gri hortumlar güncel ürün gibi gösterilmemeli");
 const jblGrey1927 = equipmentCatalog.find((item) => item.id === "jbl-aquatube-grey-19-27");
-assert(jblGrey1927?.model.includes("19/27") && jblGrey1927.specifications.includes("19/25") && jblGrey1927.specifications.includes("çelişkisi"), "JBL gri hortum sayfasındaki 19/25 ve 19/27 üretici çelişkisi kullanıcıdan saklanmamalı");
+assert(jblGrey1927?.model === "Aquatube GREY 19/25, 2,5 m" && jblGrey1927.specifications.includes("Ø 19/25 mm") && jblGrey1927.specifications.includes("19/27'ydi") && jblGrey1927.sourceUrl === "https://www.jbl.de/de-de/productsv2/detail/25140120", "JBL gri hortumun yeni sayfasındaki 19/25 ölçüsü kullanılmalı; eski 19/27 etiketi açıklamada kalmalı");
 const jblHoseFittingIds = [
   "jbl-double-stopcock-quick-coupling-12-16","jbl-double-stopcock-quick-coupling-16-22","jbl-double-stopcock-quick-coupling-19-25",
   "jbl-antikink-12-16","jbl-antikink-16-22","jbl-clipsafe-vario","jbl-clipsafe-archive","jbl-cleany",
 ];
 const jblHoseFittings = jblHoseFittingIds.map((id) => equipmentCatalog.find((item) => item.id === id));
 assert(jblHoseFittings.every(Boolean), "JBL hortum bağlantısı, kelepçe ve temizleme ailesinin sekiz seçeneği bulunmalı");
-assert(jblHoseFittings.every((item) => item?.category === "other" && item.passiveComponent === true && item.sourceUrl?.startsWith("https://www.jbl.de/") && item.verifiedAt === "2026-09-17"), "JBL hortum bağlantı aksesuarları pasif ve doğrudan resmî kaynaklı kalmalı");
+assert(jblHoseFittings.every((item) => item?.category === "other" && item.passiveComponent === true && item.sourceUrl?.startsWith("https://www.jbl.de/") && jblVerifiedAt(item, "2026-09-17")), "JBL hortum bağlantı aksesuarları pasif ve doğrudan resmî kaynaklı kalmalı");
 assert(jblHoseFittings.every((item) => item?.ratedFlowLph === undefined && item.powerW === undefined && item.recommendedMinL === undefined && item.recommendedMaxL === undefined), "JBL hortum bağlantıları cihaz debisi, gücü veya hacim kapasitesi kazanmamalı");
 assert.deepEqual(
   ["jbl-double-stopcock-quick-coupling-12-16","jbl-double-stopcock-quick-coupling-16-22","jbl-double-stopcock-quick-coupling-19-25"].map((id) => equipmentCatalog.find((item) => item.id === id)?.model.match(/\d+\/\d+/)?.[0]),
@@ -563,7 +569,7 @@ const jblSuctionCupIds = [
 ];
 const jblSuctionCups = jblSuctionCupIds.map((id) => equipmentCatalog.find((item) => item.id === id));
 assert(jblSuctionCups.every(Boolean), "JBL vantuz ailesinin sekiz güncel ve bir arşiv seçeneği bulunmalı");
-assert(jblSuctionCups.every((item) => item?.category === "other" && item.passiveComponent === true && item.sourceUrl?.startsWith("https://www.jbl.de/") && item.verifiedAt === "2026-09-17"), "JBL vantuzları pasif ve doğrudan resmî kaynaklı kalmalı");
+assert(jblSuctionCups.every((item) => item?.category === "other" && item.passiveComponent === true && item.sourceUrl?.startsWith("https://www.jbl.de/") && jblVerifiedAt(item, "2026-09-17")), "JBL vantuzları pasif ve doğrudan resmî kaynaklı kalmalı");
 assert(jblSuctionCups.every((item) => item?.ratedFlowLph === undefined && item.powerW === undefined && item.recommendedMinL === undefined && item.recommendedMaxL === undefined), "JBL vantuzları cihaz debisi, gücü veya hacim kapasitesi kazanmamalı");
 assert.deepEqual(
   ["jbl-suction-cup-clip-6","jbl-suction-cup-clip-12","jbl-suction-cup-clip-16","jbl-suction-cup-clip-23","jbl-suction-cup-clip-37"].map((id) => equipmentCatalog.find((item) => item.id === id)?.model.match(/\d+/)?.[0]),
@@ -574,7 +580,7 @@ assert(equipmentCatalog.find((item) => item.id === "jbl-suction-cup-hole-5-archi
 const jblBreedingIds = ["jbl-babyhome-oxygen","jbl-babyhome-pro-air","jbl-nbox","jbl-discon","jbl-ceramic-spawning-cave"];
 const jblBreedingEquipment = jblBreedingIds.map((id) => equipmentCatalog.find((item) => item.id === id));
 assert(jblBreedingEquipment.every(Boolean), "JBL yavruluk ve yumurtlama yardımcılarının beş güncel ürünü bulunmalı");
-assert(jblBreedingEquipment.every((item) => item?.category === "other" && item.sourceUrl?.startsWith("https://www.jbl.de/") && item.verifiedAt === "2026-09-17"), "JBL yavruluk ve yumurtlama yardımcıları doğrudan resmî kaynaklı kalmalı");
+assert(jblBreedingEquipment.every((item) => item?.category === "other" && item.sourceUrl?.startsWith("https://www.jbl.de/") && jblVerifiedAt(item, "2026-09-17")), "JBL yavruluk ve yumurtlama yardımcıları doğrudan resmî kaynaklı kalmalı");
 assert(equipmentCatalog.find((item) => item.id === "jbl-babyhome-oxygen")?.powerW === 3 && equipmentCatalog.find((item) => item.id === "jbl-babyhome-oxygen")?.passiveComponent !== true, "JBL BabyHome Oxygen dâhilî 3 W hava motoruyla aktif set olarak kalmalı");
 assert(jblBreedingEquipment.filter((item) => item?.id !== "jbl-babyhome-oxygen").every((item) => item?.passiveComponent === true && item.powerW === undefined), "Motor içermeyen JBL yavruluk ve yumurtlama yardımcıları pasif kalmalı");
 assert(equipmentCatalog.find((item) => item.id === "jbl-nbox")?.specifications.includes("2 L") && equipmentCatalog.find((item) => item.id === "jbl-discon")?.specifications.includes("25,5 cm") && equipmentCatalog.find((item) => item.id === "jbl-ceramic-spawning-cave")?.specifications.includes("Ø 11,5 cm"), "JBL yavruluk ve yumurtlama ürünleri resmî hacim ve ölçülerini korumalı");
@@ -584,15 +590,18 @@ const jblThermometerIds = [
 ];
 const jblThermometers = jblThermometerIds.map((id) => equipmentCatalog.find((item) => item.id === id));
 assert(jblThermometers.every(Boolean), "JBL termometre ve hidrometre ailesinin sekiz seçeneği bulunmalı");
-assert(jblThermometers.every((item) => item?.category === "other" && item.sourceUrl?.startsWith("https://www.jbl.de/") && item.verifiedAt === "2026-09-17"), "JBL termometre ve hidrometreleri doğrudan resmî kaynaklı kalmalı");
+assert(jblThermometers.every((item) => item?.category === "other" && item.sourceUrl?.startsWith("https://www.jbl.de/") && jblVerifiedAt(item, "2026-09-17")), "JBL termometre ve hidrometreleri doğrudan resmî kaynaklı kalmalı");
 assert(["jbl-aquarium-thermometer-float","jbl-aquarium-thermometer-slim","jbl-aquarium-thermometer-digital-strip","jbl-aquarium-thermometer-mini","jbl-hydrometer"].every((id) => equipmentCatalog.find((item) => item.id === id)?.passiveComponent === true), "JBL pilsiz termometre ve hidrometreler pasif kalmalı");
 assert(["jbl-aquarium-thermometer-digiscan","jbl-aquarium-thermometer-digiscan-alarm-archive","jbl-aquarium-thermometer-digiscan-tube"].every((id) => equipmentCatalog.find((item) => item.id === id)?.passiveComponent !== true), "JBL pilli DigiScan modelleri pasif parça gibi işaretlenmemeli");
-assert(equipmentCatalog.find((item) => item.id === "jbl-aquarium-thermometer-digiscan-alarm-archive")?.model.includes("Arşiv") && equipmentCatalog.find((item) => item.id === "jbl-aquarium-thermometer-digiscan-tube")?.specifications.includes("12–26 mm"), "JBL DigiScan Alarm arşiv durumu ve Tube hortum aralığı korunmalı");
+const jblDigiScanAlarm = equipmentCatalog.find((item) => item.id === "jbl-aquarium-thermometer-digiscan-alarm-archive");
+assert(!jblDigiScanAlarm?.model.includes("Arşiv") && jblDigiScanAlarm?.specifications.includes("yeniden satışta") && jblDigiScanAlarm.specifications.includes("pakette yoktur") && jblDigiScanAlarm.specifications.includes("18 °C altı") && equipmentCatalog.find((item) => item.id === "jbl-aquarium-thermometer-digiscan-tube")?.specifications.includes("12–26 mm"), "JBL DigiScan Alarm yeni sayfadaki satış durumu, pilsiz paketi ve kılavuzdaki 18/28 °C alarmıyla; Tube hortum aralığıyla bulunmalı");
+assert(equipmentCatalog.find((item) => item.id === "jbl-hydrometer")?.model.includes("Arşiv"), "JBL hidrometre yeni sayfasındaki arşiv durumunu göstermeli");
 assert(equipmentCatalog.find((item) => item.id === "jbl-hydrometer")?.specifications.includes("1,016–1,028") && equipmentCatalog.find((item) => item.id === "jbl-hydrometer")?.specifications.includes("0,0005"), "JBL hidrometre resmî yoğunluk aralığı ve çözünürlüğünü korumalı");
 const jblAquaPadIds = ["jbl-aquapad-80-41","jbl-aquapad-60-31","jbl-aquapad-100-40","jbl-aquapad-100-50","jbl-aquapad-120-40","jbl-aquapad-120-50","jbl-aquapad-150-51"];
 const jblAquaPads = jblAquaPadIds.map((id) => equipmentCatalog.find((item) => item.id === id));
 assert(jblAquaPads.every(Boolean), "JBL AquaPad ailesinin yedi güncel ölçü seçeneği bulunmalı");
-assert.deepEqual(jblAquaPads.map((item) => item?.model.replace("AquaPad ","")), ["80x41","60x31","100x40","100x50","120x40","120x50","150x51"], "JBL AquaPad ölçüleri güncel resmî seçimlerle aynı kalmalı");
+assert.deepEqual(jblAquaPads.map((item) => item?.model.replace("AquaPad ","")), ["80x40","60x30","100x40","100x50","120x40","120x50","150x50"], "JBL AquaPad ölçüleri JBL'in yeni ürün adlarıyla aynı olmalı");
+assert(["jbl-aquapad-80-41","jbl-aquapad-60-31","jbl-aquapad-150-51"].every((id) => equipmentCatalog.find((item) => item.id === id)?.specifications.includes("eski ürün sayfası")), "JBL AquaPad'in eski sayfadaki farklı ölçüsü açıklamada kalmalı");
 const jblProscapeToolIds = [
   "jbl-proscape-tools-s20-straight","jbl-proscape-tools-s20-curved","jbl-proscape-tools-s30-straight","jbl-proscape-tools-s30-curved",
   "jbl-proscape-tools-s20-wave","jbl-proscape-tools-s16-spring","jbl-proscape-tools-p30-straight","jbl-proscape-tools-p30-slim-line",
@@ -601,7 +610,7 @@ const jblProscapeToolIds = [
 const jblProscapeTools = jblProscapeToolIds.map((id) => equipmentCatalog.find((item) => item.id === id));
 assert(jblProscapeTools.every(Boolean), "JBL PROSCAPE araçlarının 12 seçilebilir ürün ve varyantı bulunmalı");
 const jblAquaPadAndTools = [...jblAquaPads,...jblProscapeTools];
-assert(jblAquaPadAndTools.every((item) => item?.brand === "JBL" && item.category === "other" && item.passiveComponent === true && item.sourceUrl?.startsWith("https://www.jbl.de/") && item.verifiedAt === "2026-09-17"), "JBL AquaPad ve PROSCAPE araçları pasif ve doğrudan resmî kaynaklı kalmalı");
+assert(jblAquaPadAndTools.every((item) => item?.brand === "JBL" && item.category === "other" && item.passiveComponent === true && jblMovedToProductsV2(item) && item.verifiedAt === "2026-10-30"), "JBL AquaPad ve PROSCAPE araçları pasif ve doğrudan resmî kaynaklı kalmalı");
 assert(jblAquaPadAndTools.every((item) => item?.ratedFlowLph === undefined && item.powerW === undefined && item.recommendedMinL === undefined && item.recommendedMaxL === undefined), "JBL AquaPad ve PROSCAPE araçları cihaz debisi, gücü veya hacim kapasitesi kazanmamalı");
 assert(equipmentCatalog.find((item) => item.id === "jbl-proscape-tools-s16-spring")?.specifications.includes("16 cm") && equipmentCatalog.find((item) => item.id === "jbl-proscape-tools-sp30-straight")?.specifications.includes("62 mm ve 25 mm"), "JBL PROSCAPE makas ve spatula ölçüleri korunmalı");
 assert(equipmentCatalog.find((item) => item.id === "jbl-proscape-plantis-pins")?.specifications.includes("12 adet") && equipmentCatalog.find((item) => item.id === "jbl-combifix")?.specifications.includes("46 cm"), "JBL Plantis Pins paket adedi ve CombiFix uzunluğu korunmalı");
@@ -628,12 +637,12 @@ for (const family of ["basic","advanced","professional"]) {
 }
 const jblProfloraControl = equipmentCatalog.filter((item) => item.id.startsWith("jbl-proflora-co2-") && ["jbl-proflora-co2-control","jbl-proflora-co2-ph-sensor-set","jbl-proflora-co2-calibration-set"].includes(item.id));
 assert.equal(jblProfloraControl.length, 3, "JBL PROFLORA kontrol, pH sensörü ve kalibrasyon seti bulunmalı");
-const jblProfloraRegulators = equipmentCatalog.filter((item) => item.sourceUrl?.includes("/group/9427/proflora-co2-regulator-adapt"));
+const jblProfloraRegulators = ["basic","advanced","professional","valve","adapt-u-m","adapt-u-u201","adapt-u-dennerle"].map((id) => equipmentCatalog.find((item) => item.id === `jbl-proflora-co2-${id}`)).filter(Boolean);
 const jblProfloraTaifun = equipmentCatalog.filter((item) => item.id.startsWith("jbl-proflora-co2-taifun-"));
 assert.equal(jblProfloraRegulators.length, 7, "JBL PROFLORA regülatör ve adaptör ailesinin yedi güncel modeli bulunmalı");
 assert.equal(jblProfloraTaifun.length, 14, "JBL PROFLORA TAIFUN ailesinin 14 güncel model ve varyantı bulunmalı");
-assert([...jblProfloraSets,...jblProfloraControl,...jblProfloraRegulators].every((item) => item.brand === "JBL" && item.category === "co2" && item.verifiedAt === "2026-09-14"), "JBL PROFLORA set, kontrol ve regülatör paketi CO₂ kategorisinde ve doğrulama tarihiyle bulunmalı");
-assert(jblProfloraTaifun.every((item) => item.brand === "JBL" && item.category === "co2" && item.sourceUrl?.includes("/products/detail/") && item.verifiedAt === "2026-09-16"), "JBL güncel TAIFUN ailesi doğrudan resmî ürün sayfası ve güncel doğrulama tarihi taşımalı");
+assert([...jblProfloraSets,...jblProfloraControl,...jblProfloraRegulators].every((item) => item.brand === "JBL" && item.category === "co2" && jblMovedToProductsV2(item) && item.verifiedAt === "2026-10-30"), "JBL PROFLORA set, kontrol ve regülatör paketi CO₂ kategorisinde ve doğrulama tarihiyle bulunmalı");
+assert(jblProfloraTaifun.every((item) => item.brand === "JBL" && item.category === "co2" && jblMovedToProductsV2(item) && item.verifiedAt === jblPackage2Date(item)), "JBL güncel TAIFUN ailesi doğrudan resmî ürün sayfası ve güncel doğrulama tarihi taşımalı");
 assert.deepEqual(
   ["jbl-proflora-co2-taifun-spiral-5","jbl-proflora-co2-taifun-spiral-10"].map((id) => {
     const item = equipmentCatalog.find((entry) => entry.id === id);
@@ -712,7 +721,7 @@ const expectedJblCurrentCylinderIds = [
 const jblCurrentCylinders = expectedJblCurrentCylinderIds.map((id) => equipmentCatalog.find((item) => item.id === id));
 assert(jblCurrentCylinders.every(Boolean), "JBL güncel CO₂ CYLINDER ailesinin beş tüp/paket ve iki montaj yardımcısı bulunmalı");
 assert(jblCurrentCylinders.every((item) => item.category === "co2" && item.passiveComponent === true && item.recommendedMinL === undefined && item.recommendedMaxL === undefined), "JBL güncel tüp ve montaj yardımcıları bağımsız akvaryum kapasitesi sağlamamalı");
-assert(jblCurrentCylinders.every((item) => item.sourceUrl?.startsWith("https://www.jbl.de/") && item.verifiedAt === "2026-09-15"), "JBL güncel CYLINDER ailesi resmî kaynak ve güncel doğrulama tarihi taşımalı");
+assert(jblCurrentCylinders.every((item) => jblMovedToProductsV2(item) && item.verifiedAt === "2026-10-30"), "JBL güncel CYLINDER ailesi resmî kaynak ve güncel doğrulama tarihi taşımalı");
 assert(equipmentCatalog.find((item) => item.id === "jbl-proflora-co2-cylinder-500-m")?.specifications.includes("kendi başına dik durmaz"), "JBL 500 M için stand veya duvar askısı gereksinimi açık olmalı");
 assert(equipmentCatalog.find((item) => item.id === "jbl-proflora-co2-cylinder-1200-u")?.specifications.includes("eski JBL PROFLORA U regülatörleriyle uyumlu"), "JBL 1200 U geriye dönük uyumluluğu korunmalı");
 const expectedJblPhArchiveIds = [
@@ -722,7 +731,7 @@ const expectedJblPhArchiveIds = [
 ];
 const jblPhArchiveProducts = expectedJblPhArchiveIds.map((id) => equipmentCatalog.find((item) => item.id === id));
 assert(jblPhArchiveProducts.every(Boolean), "JBL pH kontrol grubunun iki cihazı, sensörü, iki Cal nesli ve beş tekil aksesuarı bulunmalı");
-assert(jblPhArchiveProducts.every((item) => item.category === "co2" && item.sourceUrl?.startsWith("https://www.jbl.de/") && item.verifiedAt === "2026-09-16"), "JBL pH kontrol ürünleri CO₂ kategorisinde, resmî kaynaklı ve güncel doğrulama tarihli olmalı");
+assert(jblPhArchiveProducts.every((item) => item.category === "co2" && item.sourceUrl?.startsWith("https://www.jbl.de/") && jblVerifiedAt(item, "2026-09-16")), "JBL pH kontrol ürünleri CO₂ kategorisinde, resmî kaynaklı ve güncel doğrulama tarihli olmalı");
 assert(jblPhArchiveProducts.every((item) => item.recommendedMinL === undefined && item.recommendedMaxL === undefined), "JBL pH kontrol parçalarına üreticinin yayımlamadığı akvaryum kapasitesi uydurulmamalı");
 assert(jblPhArchiveProducts.slice(0,2).every((item) => item.passiveComponent !== true), "JBL pH kontrol bilgisayarları pasif aksesuar sayılmamalı");
 assert(jblPhArchiveProducts.slice(2).every((item) => item.passiveComponent === true), "JBL pH sensörü, kalibrasyon setleri, sıvıları ve tablası pasif aksesuar olmalı");
@@ -736,7 +745,7 @@ const expectedJblLegacyRegulatorIds = [
 ];
 const jblLegacyRegulators = expectedJblLegacyRegulatorIds.map((id) => equipmentCatalog.find((item) => item.id === id));
 assert(jblLegacyRegulators.every(Boolean), "JBL arşiv regülatör, solenoid valf ve adaptör grubunun sekiz ürünü bulunmalı");
-assert(jblLegacyRegulators.every((item) => item.category === "co2" && item.sourceUrl?.startsWith("https://www.jbl.de/") && item.verifiedAt === "2026-09-16"), "JBL arşiv regülatör parçaları CO₂ kategorisinde, resmî kaynaklı ve güncel doğrulama tarihli olmalı");
+assert(jblLegacyRegulators.every((item) => item.category === "co2" && item.sourceUrl?.startsWith("https://www.jbl.de/") && jblVerifiedAt(item, "2026-09-16")), "JBL arşiv regülatör parçaları CO₂ kategorisinde, resmî kaynaklı ve güncel doğrulama tarihli olmalı");
 assert(jblLegacyRegulators.every((item) => item.recommendedMinL === undefined && item.recommendedMaxL === undefined), "JBL regülatör ve adaptör parçalarına bağımsız akvaryum kapasitesi uydurulmamalı");
 assert(jblLegacyRegulators.slice(0,4).every((item) => item.passiveComponent !== true), "JBL basınç düşürücüleri ve solenoid valf pasif aksesuar sayılmamalı");
 assert(jblLegacyRegulators.slice(4).every((item) => item.passiveComponent === true), "JBL adaptörleri pasif bileşen olmalı");
@@ -755,7 +764,7 @@ const expectedJblLegacyAccessoryIds = [
 ];
 const jblLegacyAccessories = expectedJblLegacyAccessoryIds.map((id) => equipmentCatalog.find((item) => item.id === id));
 assert(jblLegacyAccessories.every(Boolean), "JBL arşiv duo regülatör ve CO₂ yardımcıları sekiz ürünle bulunmalı");
-assert(jblLegacyAccessories.every((item) => item.category === "co2" && item.sourceUrl?.startsWith("https://www.jbl.de/") && item.verifiedAt === "2026-09-16"), "JBL arşiv CO₂ yardımcıları resmî kaynak ve güncel doğrulama tarihi taşımalı");
+assert(jblLegacyAccessories.every((item) => item.category === "co2" && item.sourceUrl?.startsWith("https://www.jbl.de/") && jblVerifiedAt(item, "2026-09-16")), "JBL arşiv CO₂ yardımcıları resmî kaynak ve güncel doğrulama tarihi taşımalı");
 assert(jblLegacyAccessories.every((item) => item.recommendedMinL === undefined && item.recommendedMaxL === undefined), "JBL duo regülatör ve pasif CO₂ yardımcılarına bağımsız akvaryum kapasitesi uydurulmamalı");
 assert(jblLegacyAccessories.slice(0,2).every((item) => item.passiveComponent !== true), "JBL m001 duo regülatörleri pasif aksesuar sayılmamalı");
 assert(jblLegacyAccessories.slice(2).every((item) => item.passiveComponent === true), "JBL stand, hortum, sayaç ve geri akış valfleri pasif bileşen olmalı");
@@ -764,7 +773,10 @@ assert(equipmentCatalog.find((item) => item.id === "jbl-proflora-cylinder-stand-
 assert(["jbl-proflora-t3-black-legacy","jbl-proflora-t3-archive"].every((id) => equipmentCatalog.find((item) => item.id === id)?.specifications.includes("3 m") && equipmentCatalog.find((item) => item.id === id)?.specifications.includes("4/6 mm")), "JBL T3 hortum nesilleri resmî uzunluk ve çap değerini taşımalı");
 assert(equipmentCatalog.find((item) => item.id === "jbl-proflora-co2-count-safe-archive")?.specifications.includes("entegre geri akış koruması"), "JBL eski Count Safe entegre çek valfini açıklamalı");
 assert(["jbl-proflora-safestop-legacy","jbl-proflora-safestop-archive"].every((id) => equipmentCatalog.find((item) => item.id === id)?.specifications.includes("4/6 mm")), "JBL SafeStop nesilleri doğru hortum çapını taşımalı");
-assert(equipmentCatalog.find((item) => item.id === "jbl-proflora-safestop-archive")?.specifications.includes("yalnız bir çek valf"), "JBL SafeStop çoklu çek valf riskini kullanıcıya göstermeli");
+// Tek çek valf uyarısı JBL'in SSS 819 sayfasında (Direct ve Count Safe'in entegre çek valfi, ayrıca eklenen SafeStop).
+const jblSingleCheckValveFaq = "https://www.jbl.de/de/faq/show_faq/service-faq?country=de&faqid=819";
+assert(["jbl-proflora-co2-taifun-count-safe","jbl-proflora-co2-taifun-safestop","jbl-proflora-safestop-archive","jbl-proflora-direct-12-16-archive","jbl-proflora-direct-16-22-archive","jbl-proflora-direct-19-25-archive"].every((id) => { const item = equipmentCatalog.find((entry) => entry.id === id); return item?.additionalSourceUrls?.includes(jblSingleCheckValveFaq) && /çek valf (eklenmemeli|kullanılmalı)/.test(item.specifications); }), "JBL'in tek çek valf uyarısı SSS kaynağıyla kayıtlarda kalmalı");
+assert(equipmentCatalog.find((item) => item.id === "jbl-proflora-safestop-archive")?.specifications.includes("CO₂ sistemi, pH kontrol cihazı ve solenoid valfi sudan korur"), "JBL SafeStop (2016) arşiv sayfasındaki koruma görevini göstermeli");
 
 const expectedJblLegacyDiffuserIds = [
   "jbl-proflora-taifun-p-legacy","jbl-proflora-taifun-p-archive","jbl-proflora-taifun-s5-legacy","jbl-proflora-taifun-s-archive",
@@ -773,7 +785,7 @@ const expectedJblLegacyDiffuserIds = [
 ];
 const jblLegacyDiffusers = expectedJblLegacyDiffuserIds.map((id) => equipmentCatalog.find((item) => item.id === id));
 assert(jblLegacyDiffusers.every(Boolean), "JBL arşiv Taifun ve Direct difüzör ailesinin 12 seçeneği bulunmalı");
-assert(jblLegacyDiffusers.every((item) => item.category === "co2" && item.sourceUrl?.startsWith("https://www.jbl.de/") && item.verifiedAt === "2026-09-16"), "JBL arşiv difüzörleri CO₂ kategorisinde, resmî kaynaklı ve güncel doğrulama tarihli olmalı");
+assert(jblLegacyDiffusers.every((item) => item.category === "co2" && item.sourceUrl?.startsWith("https://www.jbl.de/") && jblVerifiedAt(item, "2026-09-16")), "JBL arşiv difüzörleri CO₂ kategorisinde, resmî kaynaklı ve güncel doğrulama tarihli olmalı");
 assert.deepEqual(
   ["jbl-proflora-taifun-p-legacy","jbl-proflora-taifun-s5-legacy","jbl-proflora-taifun-m10-legacy"].map((id) => equipmentCatalog.find((item) => item.id === id)?.recommendedMaxL),
   [undefined,200,400],
@@ -793,7 +805,8 @@ assert(["jbl-proflora-taifun-extend-legacy","jbl-proflora-taifun-extend-archive"
 }), "JBL Taifun uzatmaları ve Direct membranı pasif kalmalı, bağımsız kapasite kazanmamalı");
 const jblDirectDiffusers = ["jbl-proflora-direct-12-16-archive","jbl-proflora-direct-16-22-archive","jbl-proflora-direct-19-25-archive"].map((id) => equipmentCatalog.find((item) => item.id === id));
 assert.deepEqual(jblDirectDiffusers.map((item) => [item?.recommendedMinL,item?.recommendedMaxL]), [[40,300],[160,600],[200,800]], "JBL Direct hortum seçeneklerinin resmî hacim aralıkları korunmalı");
-assert(jblDirectDiffusers.every((item) => item?.passiveComponent !== true && item.specifications.includes("entegre kabarcık sayacı") && item.specifications.includes("1,0–1,5 bar")), "JBL Direct seçenekleri aktif difüzör ve resmî çalışma basıncıyla tanımlanmalı");
+// Direct: hacimler JBL'in indirme bağlantısındaki kılavuzda, 1,0–1,5 bar çalışma basıncı JBL'in SSS 576 sayfasında.
+assert(jblDirectDiffusers.every((item) => item?.passiveComponent !== true && item.specifications.includes("entegre kabarcık sayacı") && item.specifications.includes("1,0–1,5 bar") && item.additionalSourceUrls?.includes("https://www.jbl.de/?mod=download&func=execute&country=de&lang=de&id=13672") && item.additionalSourceUrls.includes("https://www.jbl.de/de/faq/show_faq/service-faq?country=de&faqid=576")), "JBL Direct seçenekleri aktif difüzör olarak, kılavuzdaki hacimlerle ve SSS'deki çalışma basıncıyla tanımlanmalı");
 assert(equipmentCatalog.find((item) => item.id === "jbl-proflora-direct-membrane-archive")?.specifications.includes("24 saat") && equipmentCatalog.find((item) => item.id === "jbl-proflora-direct-membrane-archive")?.specifications.includes("yıllık değişim"), "JBL Direct membran hazırlık ve bakım sınırını taşımalı");
 
 const jblAutomaticFeeders = equipmentCatalog.filter((item) => [
@@ -810,7 +823,7 @@ assert(equipmentCatalog.find((item) => item.id === "jbl-autofood-black-archive")
 
 const jblCleaningEquipment = equipmentCatalog.filter((item) =>
   item.brand === "JBL" &&
-  item.verifiedAt === "2026-09-14" &&
+  jblVerifiedAt(item, "2026-09-14") &&
   (
     item.id.startsWith("jbl-proclean-") ||
     item.id.startsWith("jbl-floaty-") ||
@@ -828,14 +841,14 @@ assert.deepEqual(
 );
 const jblFeedingAccessories = equipmentCatalog.filter((item) => ["jbl-novostation","jbl-food-clip"].includes(item.id));
 assert.equal(jblFeedingAccessories.length, 2, "JBL'nin iki güncel pasif yemleme aksesuarı bulunmalı");
-assert(jblFeedingAccessories.every((item) => item.category === "other" && item.passiveComponent === true && item.sourceUrl?.includes("/group/7989/accessories-feeding")), "JBL yemleme aksesuarları pasif olmalı ve kapasite hesabına karışmamalı");
-const jblArtemioAccessories = equipmentCatalog.filter((item) => item.brand === "JBL" && item.sourceUrl?.includes("/group/3391/accessories-for-artemio"));
+assert(jblFeedingAccessories.every((item) => item.category === "other" && item.passiveComponent === true && item.sourceUrl?.startsWith("https://www.jbl.de/")), "JBL yemleme aksesuarları pasif olmalı ve kapasite hesabına karışmamalı");
+const jblArtemioAccessories = ["jbl-artemioset","jbl-artemio-1","jbl-artemio-2","jbl-artemio-3","jbl-artemio-4"].map((id) => equipmentCatalog.find((item) => item.id === id)).filter((item) => item && jblMovedToProductsV2(item));
 assert.equal(jblArtemioAccessories.length, 5, "JBL Artemio grubunda tam set ve dört aksesuar bulunmalı");
 assert.deepEqual(jblArtemioAccessories.map((item) => item.model), ["ArtemioSet","Artemio 1","Artemio 2","Artemio 3","Artemio 4"], "JBL Artemio aksesuarlarının model ayrımı korunmalı");
 assert(jblArtemioAccessories.slice(1).every((item) => item.passiveComponent === true), "JBL Artemio yedek kap ve elekleri pasif aksesuar olmalı");
 const jblPestTraps = equipmentCatalog.filter((item) => ["jbl-limcollect","jbl-placollect"].includes(item.id));
 assert.equal(jblPestTraps.length, 2, "JBL LimCollect ve PlaCollect tuzakları bulunmalı");
-assert(jblPestTraps.every((item) => item.category === "other" && item.passiveComponent === true && item.sourceUrl?.includes("/products/detail/") && item.verifiedAt === "2026-09-15"), "JBL zararlı tuzakları pasif ekipman ve doğrudan resmî kaynakla tutulmalı");
+assert(jblPestTraps.every((item) => item.category === "other" && item.passiveComponent === true && jblMovedToProductsV2(item) && item.verifiedAt === "2026-10-30"), "JBL zararlı tuzakları pasif ekipman ve doğrudan resmî kaynakla tutulmalı");
 assert(equipmentCatalog.find((item) => item.id === "jbl-placollect")?.specifications.includes("kıl kurtları için uygun değildir"), "JBL PlaCollect ürün sınırı kullanıcıdan saklanmamalı");
 const jblLegacyGravelCleaning = equipmentCatalog.filter((item) => [
   "jbl-aquaex-set-10-35","jbl-aquaex-set-20-45","jbl-aquaex-set-45-70","jbl-aqua-in-out-complete-set","jbl-aqua-in-out-extension",
@@ -8481,6 +8494,51 @@ assert.deepEqual([boyuDr50?.powerW,boyuDr50?.sourceUrl,boyuDr50?.capacityDataNot
   // JBL kaynak bağlantısı paketi (2026-10-30): JBL'in eski ürün adresleri (/products/..., /produkte/...) ana sayfaya yönleniyor.
   const jblOldAddress = equipmentCatalog.filter((item) => ["filter", "heater", "air_pump"].includes(item.category) && !withdrawnEquipmentIds.has(item.id) && /jbl\.de\/[a-z-]+\/(?:products|produkte)\//.test(item.sourceUrl ?? ""));
   assert.deepEqual(jblOldAddress.map((item) => item.id), [], "Hesaba giren JBL ekipmanı JBL'in eski ürün adreslerine bağlı olmamalı");
+  // JBL kaynak bağlantısı paketi 2 (2026-10-30): hesaba girmeyen JBL ekipmanı da yeni ürün sayfalarına taşındı. Yeni sayfası bulunamayan
+  // arşiv modelleri sonraki pakette (eski sayfanın internet arşivi kopyası, 2015 kataloğu ya da kılavuz); yeni bir eski adres eklenemez.
+  const jblRecord = (id) => equipmentCatalog.find((item) => item.id === id);
+  const jblOldAddressPattern = /^https:\/\/www\.jbl\.de\/[a-z-]+\/(?:products|produkte|productos)\//;
+  const jblOldAddressPending = [
+    "jbl-silicone-hose-4-6-reel-archive",
+  "jbl-proflora-ph-control-touch-archive","jbl-proflora-ph-control-archive","jbl-proflora-ph-sensor-cal-archive","jbl-proflora-cal-legacy",
+  "jbl-proflora-cal-archive","jbl-buffer-solution-ph-7-archive","jbl-proflora-cal-tray-archive","jbl-proflora-u001-archive",
+  "jbl-proflora-m001-legacy","jbl-proflora-m001-archive","jbl-proflora-v002-archive","jbl-proflora-adapt-u-m-legacy",
+  "jbl-proflora-adapt-u201-u500-archive","jbl-proflora-adapt-u-dennerle-archive","jbl-proflora-m001-duo-legacy","jbl-proflora-m001-duo-archive",
+  "jbl-proflora-cylinder-stand-archive","jbl-proflora-t3-black-legacy","jbl-proflora-t3-archive","jbl-proflora-co2-count-safe-archive",
+  "jbl-proflora-safestop-legacy","jbl-proflora-taifun-p-legacy","jbl-proflora-taifun-s5-legacy","jbl-proflora-taifun-s-archive",
+  "jbl-proflora-taifun-m10-legacy","jbl-proflora-taifun-extend-legacy","jbl-proflora-taifun-extend-archive","jbl-proflora-direct-membrane-archive",
+  "jbl-proflora-bio80-eco","jbl-proflora-bio80","jbl-proflora-bio160","jbl-proflora-m502","jbl-proflora-m2003","jbl-proflora-m500-silver",
+  "jbl-cristalprofi-e401-white-archive","jbl-cristalprofi-e701-white-archive","jbl-cristalprofi-e901-white-archive","jbl-backflow-protection-archive",
+  "jbl-aquarium-tubing-silicone-cardboard-4-6",
+  "jbl-aquarium-tubing-green-reel-4-6-archive","jbl-aquarium-tubing-green-reel-9-12-archive","jbl-aquarium-tubing-green-reel-12-16-archive",
+  "jbl-aquarium-tubing-green-reel-16-22-archive","jbl-aquarium-tubing-grey-reel-4-6-archive","jbl-aquarium-tubing-grey-reel-9-12-archive",
+  "jbl-aquarium-tubing-grey-reel-12-16-archive","jbl-aquarium-tubing-grey-reel-16-22-archive","jbl-clipsafe-archive","jbl-suction-cup-hole-5-archive",
+  "jbl-protemp-cooler-x200-archive","jbl-protemp-cooler-x300-archive","jbl-cooler-100-archive","jbl-cooler-200-archive","jbl-cooler-300-archive",
+  "jbl-coolcontrol-archive","jbl-pronovo-autofood-black","jbl-autofood-black-archive","jbl-autofood-white-archive","jbl-food-clip",
+  "jbl-aquaex-set-10-35","jbl-aquaex-set-20-45","jbl-aquaex-set-45-70","jbl-aqua-in-out-complete-set","jbl-aqua-in-out-extension","jbl-nano-floaty",
+  "jbl-clean-a","jbl-desinfekt","jbl-power-clean",
+  ];
+  const jblStillOld = equipmentCatalog.filter((item) => item.brand === "JBL" && (jblOldAddressPattern.test(item.sourceUrl ?? "") || (item.sourceUrl ?? "").includes("mod=productpdf"))).map((item) => item.id);
+  assert.deepEqual([...jblStillOld].sort(), [...jblOldAddressPending].sort(), "Eski JBL adresinde ya da açılmayan ürün PDF bağlantısında yalnız sonraki pakete bırakılan arşiv kayıtları kalmalı");
+  const jblMovedRecords = equipmentCatalog.filter((item) => item.brand === "JBL" && jblMovedToProductsV2(item));
+  assert(jblMovedRecords.length >= 214, "JBL'in yeni ürün sayfalarına bağlı kayıtları (1. ve 2. paket) eksilmemeli");
+  assert(jblMovedRecords.every((item) => !(item.additionalSourceUrls ?? []).some((url) => jblOldAddressPattern.test(url) || url.includes("mod=productpdf"))), "Yeni sayfaya taşınan JBL kayıtlarında açılmayan eski ek kaynak kalmamalı");
+  // Yeni sayfada yazmayan değerlerin kanıtı: kılavuz, sayfanın SSS bölümü ya da eski sayfanın internet arşivi kopyası.
+  assert(equipmentCatalog.filter((item) => item.id.startsWith("jbl-led-solar-")).every((item) => item.additionalSourceUrls?.some((url) => url.includes("download_instruction_manual_pdf/2504"))), "JBL LED SOLAR uzunluk aralıkları kılavuzun teknik veri tablosuna bağlı olmalı");
+  assert.deepEqual(["jbl-led-solar-effect-gen2-8w","jbl-led-solar-effect-gen2-14w","jbl-led-solar-effect-gen2-20w","jbl-led-solar-effect-gen2-22w"].map((id) => jblRecord(id)?.model.includes("Arşiv")), [true,true,true,true], "JBL'in arşive aldığı LED SOLAR EFFECT boyları arşiv olarak görünmeli");
+  assert(["jbl-proflora-co2-taifun-inline","jbl-proflora-co2-taifun-inline-16-22","jbl-proflora-co2-taifun-inline-19-25"].every((id) => jblRecord(id)?.additionalSourceUrls?.includes("https://www.jbl.de/de-de/productsv2/download_instruction_manual_pdf/25049204")), "JBL TAIFUN INLINE hacimleri ortak kılavuza bağlı olmalı");
+  assert(["jbl-protemp-cooler-x200-gen2","jbl-protemp-cooler-x300-gen2"].every((id) => jblRecord(id)?.additionalSourceUrls?.some((url) => url.startsWith("https://web.archive.org/web/2025"))), "JBL Gen 2 soğutucuların hacmi eski sayfanın arşiv kopyasına bağlı olmalı");
+  assert(["s","m","l"].every((size) => jblRecord(`jbl-algae-magnet-${size}`)?.additionalSourceUrls?.some((url) => url.startsWith("https://web.archive.org/"))), "JBL Algenmagnet boy başına cam kalınlığı eski sayfanın arşiv kopyasına bağlı olmalı");
+  assert(["jbl-aquarium-tubing-green-cardboard-4-6","jbl-aquarium-tubing-green-cardboard-9-12","jbl-aquarium-tubing-green-cardboard-12-16","jbl-aquarium-tubing-green-cardboard-16-22","jbl-aquarium-tubing-grey-cardboard-4-6","jbl-aquarium-tubing-grey-cardboard-9-12","jbl-aquarium-tubing-grey-cardboard-12-16","jbl-aquarium-tubing-grey-cardboard-16-22"].every((id) => jblMovedToProductsV2(jblRecord(id)) && jblRecord(id)?.additionalSourceUrls?.some((url) => url.startsWith("https://web.archive.org/"))), "Karton makaralı hortumların makara uzunluğu eski sayfanın arşiv kopyasına bağlı olmalı");
+  assert(["green","grey"].every((color) => ["4-6","9-12","12-16","16-22"].every((size) => jblRecord(`jbl-aquarium-tubing-${color}-cardboard-${size}`)?.specifications.includes("ağır metal içermez"))), "Karton makaralı hortumlar JBL'in yazdığı ağır metal bilgisini taşımalı (yeşilde arşiv kopyasının ürün bilgisi sekmesi)");
+  assert(jblRecord("jbl-proflora-co2-taifun-glass")?.specifications.includes("uzatılamaz") && jblRecord("jbl-proflora-co2-taifun-glass")?.additionalSourceUrls?.includes("https://www.jbl.de/de-de/productsv2/download_instruction_manual_pdf/25000523") && ["jbl-proflora-co2-taifun-glass-mini","jbl-proflora-co2-taifun-glass-maxi"].every((id) => !jblRecord(id)?.specifications.includes("uzatılamaz")), "Uzatılamama yalnız kılavuzun yazdığı GLASS MIDI'de olmalı");
+  assert(jblRecord("jbl-aquarium-thermometer-float")?.specifications.includes("renkli alkol dolgulu ve cıva içermez") && jblRecord("jbl-aquarium-thermometer-float")?.additionalSourceUrls?.includes("https://www.jbl.de/en-dk/productsv2/detail/25153887"), "Float'ın dolgusu aynı ürünün İngilizce sayfasındaki SSS'ye bağlı olmalı");
+  assert(jblRecord("jbl-artemio-1")?.specifications.includes("en çok beş uzatma kabı"), "Artemio 1 kılavuzun kurulum adımındaki beş uzatma sınırını taşımalı");
+  assert(jblRecord("jbl-proflora-co2-adapt-u-u201")?.specifications.includes("5/8 inç UNF bağlantılı basınç düşürücüyü") && jblRecord("jbl-proflora-co2-adapt-u-dennerle")?.specifications.includes("Dennerle basınç düşürücüsünü M10×1"), "JBL adaptörleri ürün sayfasındaki bağlantı yönünü anlatmalı (regülatör → tüp)");
+  assert(jblRecord("jbl-aquarium-thermometer-mini")?.specifications.includes("60 mm uzunluk, Ø 5 mm") && jblRecord("jbl-aquarium-thermometer-mini")?.additionalSourceUrls?.some((url) => url.includes("/blog/detail/850/")), "Thermometer Mini ölçüleri JBL'in termometre yazısına bağlı olmalı");
+  assert(jblRecord("jbl-buffer-solution-ph-4")?.specifications.includes("Arşiv") && jblRecord("jbl-buffer-solution-ph-4")?.specifications.includes("sayfa hatası") && jblRecord("jbl-buffer-solution-ph-4")?.additionalSourceUrls?.some((url) => url.includes("faqid=426")), "JBL pH 4,0 tamponu arşiv durumu, sayfa hatası ve renk kodu SSS'siyle bulunmalı");
+  assert(jblRecord("jbl-proscape-cleaning-glove")?.model.includes("Arşiv") && jblRecord("jbl-pronovo-autofood-white")?.specifications.includes("arşive") && jblRecord("jbl-aeras-marin-m-archive")?.verifiedAt === "2026-10-30" && jblRecord("jbl-aeras-marin-s-archive")?.verifiedAt === "2026-09-17", "JBL arşive alınan eldiven ve AUTOFOOD WHITE görünmeli; Aeras Marin boylarının tarihleri ayrı kalmalı");
+  assert(["jbl-proscape-tools-s30-straight","jbl-proscape-tools-s30-curved"].every((id) => jblRecord(id)?.specifications.includes("30 cm") && jblRecord(id)?.specifications.includes("S20'nin 20 cm")), "PROSCAPE S30 sayfa metnindeki 20 cm hatası açıklamada kalmalı");
   const linkFix = (id) => equipmentCatalog.find((item) => item.id === id);
   // Aynı sayfa gücü iki farklı değerle yazıyor: alan kullanılmaz, debi kalır.
   // Boyu WF-2055: mağaza sayfası 720 L/saat ile "saatte 300 litre" arasında çelişiyor; üreticinin tablosu (öncelikli) 720 L/h ve 8.6 W.
