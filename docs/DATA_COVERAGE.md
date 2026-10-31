@@ -21,7 +21,7 @@ Katalogların her bilgisinin yüzde kaçının dolu olduğu ve kaynağının tü
 ## Güncel durum
 
 <!-- kapsam:başla -->
-Ölçüm tarihi: 2026-10-30
+Ölçüm tarihi: 2026-10-31
 
 ### Canlılar (443 kayıt)
 
@@ -74,6 +74,7 @@ Katalogların her bilgisinin yüzde kaçının dolu olduğu ve kaynağının tü
 
 ## Geçmiş
 
+- 2026-10-31 (JBL kaynak bağlantısı paketi 2): hesaba girmeyen 186 JBL kaydı yeni ürün sayfalarına bağlandı. Bu kayıtların 17'si Codex denetiminde 2026-10-31'de yeniden okunduğu için ölçüm tarihi 2026-10-31; oranlar değişmedi.
 - 2026-10-30 (açık listedeki canlılar, paket 3): Fishipedia taslaklarına bağlı 12 kayıt yeniden okundu; Apistogramma commbrae ve Semaprochilodus insignis'in en az tank uzunluğu Seriously Fish tabanından geldi. En az tank uzunluğu %90,5 → %91.
 - 2026-10-30 (açık listedeki canlılar, paket 2): 7 "diğer" kayıt kabul edilen kaynaklara bağlandı; ölçülen alanların hepsi zaten doluydu, tablo değişmedi.
 - 2026-10-30 (açık listedeki canlılar, paket 1): 10 balık kabul edilen kaynaklara bağlandı; iki goodeid'in en az tank uzunluğu Seriously Fish tabanından geldi. En az tank uzunluğu %90,1 → %90,5.

@@ -3267,7 +3267,7 @@ Güncel alt adım: JBL filtre medyası, bakteri başlangıcı, sorun giderici/pH
   - CristalProfi i40'ın hacmi kaldırıldığı için kapasitesi artık bilinmiyor. "Ekipman kapasite bilgisi eksik" uyarısı çıkar, veri güveni 100 → 50; 40 L'ye kadar filtrasyon 95 → 60. Önceki 40 L'lik sınırın verdiği uyarılar da kalkar (80 L'de 35 → 60).
   - PROSILENT a100 ve b60 III'teki değişiklik hesabı değiştirmez: hava motorunda yalnız debi kullanılıyor, taban ısıtıcısı ana ısıtıcı sayılmıyor.
 - Altın fikstür değişmedi (bu kayıtların hiçbiri fikstürde değil).
-- Kalan JBL eski adresleri: 253 kayıt. 250'si hesaba girmeyen CO₂, aydınlatma ve aksesuar kaydı, 3'ü değeri çekilen WHITE filtre. Açık listede.
+- Kalan JBL eski adresleri: 253 kayıt (doğrusu 254; JBL kaynak bağlantısı paketi 2'de sayılırken görüldü). 250'si hesaba girmeyen CO₂, aydınlatma ve aksesuar kaydı, 3'ü değeri çekilen WHITE filtre. Açık listede.
 - Codex'in 1. turu klasik i ve b II kılavuzlarını JBL'in indirme bağlantılarında buldu (değerler gereksiz yere çekilmişti) ve i40'ın etkisinin yanlış anlatıldığını gösterdi; düzeltildi. Klasik i kılavuzunun bütün dil bölümleri sonra tek tek karşılaştırıldı; i80'in farklı hacmi böyle bulundu.
 - Araştırma dosyaları (oturuma özel scratchpad `jbl/`): ürün sayfaları, kılavuz ve katalog PDF'leri, katalog metni, eşleme, uygulama ve test betikleri.
 
@@ -3404,3 +3404,46 @@ Güncel alt adım: JBL filtre medyası, bakteri başlangıcı, sorun giderici/pH
 | `super-vc10-milomo` | 25 → 28 | 1000 | 183 | 4 → 1 | 23–28 → 24–28 | 7,5–8,5 → 7,6–8,8 | Seriously Fish (eski: FishBase) |
 | `assamese-snakehead` | 25 → 33 | 300 | 120 | 1 | 18–25 → 16–25 | 6–7 → 6–8 | Seriously Fish (eski: Fishipedia taslağı) |
 | `ocellaris-peacock-bass` | 74 → 75 | 5000 | 300 → 305 | 5 → 1 | 24–27 | 6,5–7,5 → 6,5–7 | Seriously Fish (eski: Fishipedia taslağı) |
+
+## 2026-10-30 JBL kaynak bağlantısı paketi 2: hesaba girmeyen 186 kayıt (Claude)
+
+- JBL kaynak bağlantısı paketinden sonra eski JBL adresinde 254 kayıt kalmıştı (hesaba girmeyen CO₂, aydınlatma, UV ve aksesuar kayıtları ile 3 WHITE filtre). Bu paket bunların yeni sayfası bulunan 186'sını kapsıyor: Diğer 117, CO₂ 51, aydınlatma 14, UV 4. Hiçbiri sağlık hesabına girmiyor.
+- Yöntem:
+  - Yeni sayfalar JBL'in ürün listesinde (Almanya, "Alle") sitenin kendi arama kutusuyla bulundu; liste isteği doğrudan çağrılmadı. 186 Almanca ürün sayfası (`/de-de/productsv2/detail/...`) indirilip okundu; ürün adları kayıtlarla tek tek karşılaştırıldı.
+  - Her kaydın açıklaması yeni sayfayla yan yana okundu. Sayfanın altındaki SSS bölümü, sayfadaki kılavuz, JBL'in indirme bağlantısındaki kılavuzlar, 2015 kataloğu ve ProScape rehberi de okundu.
+  - Yeni sayfada yazmayan bir değer ya da ayrıntı için JBL'in eski ürün sayfasının internet arşivi (web.archive.org) kopyasına da bakıldı; açıkça yazıyorsa kopya ek kaynak oldu (`docs/DATA_SOURCES.md`).
+  - Hiçbir açık kaynakta yazmayan ayrıntı kayıttan çıkarıldı.
+- Değer taşıyan 46 kaydın değerleri kaynaklarla aynı:
+  - LED SOLAR NATUR ve EFFECT Gen 2: güç yeni sayfanın başlığında. Akvaryum uzunluğu sayfada yok; kılavuzun teknik veri tablosunda (s. 100–101) aynı yazıyor. Kılavuz ek kaynak.
+  - PROFLORA CO₂ setleri, TAIFUN SPIRAL ve GLASS, arşiv Taifun P ve M, ProFlow pompaları, UV-C cihazları, BabyHome Oxygen: değerler yeni sayfada aynı.
+  - TAIFUN INLINE: hacim sayfada yok; ortak kılavuzun çiziminde ölçüye göre (40–300, 160–600, 200–800 L). Kılavuz ek kaynak.
+  - Arşiv ProFlora Direct: hacim yeni arşiv sayfasında yok; JBL'in indirme bağlantısındaki Direct kılavuzunda aynı. Önerilen 1,0–1,5 bar çalışma basıncı JBL'in SSS sayfasında (576). Kılavuz ve SSS ek kaynak.
+  - PROTEMP Cooler x200 ve x300 Gen 2: güç sayfada ve kılavuzda. Hacim (60–200 ve 90–300 L) yeni sayfada yok; JBL'in ürün listesindeki ürün adında ve eski sayfanın 2025 arşiv kopyasında yazıyor. Kopya ek kaynak. Arşiv kopyaları kendi içinde tutarsız: iki kopyanın başlığı 60–200 ve 90–300 L, teknik tablosu ise ikisinde de 80–200 L yazıyor. Kayıt, JBL'in güncel ürün listesiyle aynı olan başlık değerini taşıyor.
+  - Karton makaralı yeşil ve gri hortum (8 kayıt): JBL'in yeni metre başı sayfaları karton makaralı hortumu anlatıyor, makara uzunluğunu yazmıyor. 180, 60, 40 ve 18 m eski sayfaların arşiv kopyalarında (yeşil 2025, gri 2020); kopyalar ek kaynak. Yeşil hortumun ağır metal içermediği de arşiv kopyasında ("Product information" sekmesi); gri hortumda yeni sayfa da yazıyor. Codex denetiminden önce bu kayıtlar "yeni sayfası bulunamayan" sayılmıştı.
+- Düzeltmeler:
+  - Gri hortum 19/27: JBL'in yeni sayfası ve ürün adı 19/25 yazıyor; kayıt 19/25 oldu, eski etiket açıklamada.
+  - AquaPad: JBL'in yeni ürün adları 80x40, 60x30 ve 150x50; kayıtlar 80x41, 60x31 ve 150x51 yazıyordu. Adlar yeni sayfaya göre, eski ölçü açıklamada. Kimlikler değişmedi.
+  - JBL'in arşive aldığı ürünler artık arşiv olarak görünüyor: LED SOLAR EFFECT 8, 14, 20 ve 22 W, tekli pH 4,0 tamponu, hidrometre, tek bedenli PROSCAPE eldiveni (yerini S/M ve L/XL aldı), PRONOVO AUTOFOOD WHITE.
+  - DigiScan Alarm: yeni sayfada yeniden satışta; "Arşiv" kalktı (kimlik değişmedi). Sayfa pilin pakette olmadığını yazıyor; kayıt "pil dahil" diyordu, düzeltildi. 18 °C altı ve 28 °C üstü alarm kılavuzda.
+  - pH 4,0 tamponu: JBL'in arşiv sayfası başlıkta pH 4,0, ürün metninde pH 7,0 yazıyor; sayfa hatası açıklamada. Sarımsı renk kodu JBL'in SSS'sinde, SSS ek kaynak.
+  - PROSCAPE S30: yeni S30 sayfalarının metni S20'nin 20 cm ve ağırlık değerlerini tekrarlıyor; 30 cm ürün adında ve ProScape rehberinde. Fark açıklamada.
+  - Artemio 1: kılavuzun ürün tanıtımı "istenen sayıda uzatma" diyor, kurulum adımı (Almanca s. 7, İngilizce s. 12) ise ek hava motoru gerekmeden en çok beş uzatma yazıyor. Kayıt kurulum adımındaki beş sınırını taşıyor (Codex denetiminden önce yanlışlıkla "istenen sayıda" yazılmıştı).
+  - PROFLORA CO₂ ADAPT U-u201 ve U-Dennerle: eski açıklamalar bağlantı yönünü belirsiz ya da ters anlatıyordu. Ürün sayfalarına göre U-u201, 5/8 inç UNF bağlantılı basınç düşürücüyü (ör. u201); U-Dennerle, M10×1,25 bağlantılı Dennerle basınç düşürücüsünü M10×1 tek kullanımlık tüplere uyarlar. Düzeltildi.
+  - PROCLEAN AQUA: kayıt yalnız dış cam diyordu; sayfanın SSS'si camın iç yüzünde de kullanılabileceğini yazıyor. Düzeltildi.
+  - 12 mm delikli vantuz: "11–12 mm" yerine sayfadaki 12 mm.
+- Açık kaynakta bulunamadığı için çıkarılan ayrıntılar: TAIFUN GLASS MINI ve MAXI için "uzatılamaz" (MIDI için kılavuzda var, aşağıda); ProSilent Control için "metal"; Thermometer Float için 11 cm ve tatlı/deniz suyu; DigiScan Alarm için AG10 pil adı; CYLINDER 2000 M için "yetkili dolum noktasında doldurulmalı"; eldiven için "hassas silikon bölgeler".
+- Başka kaynakta bulunduğu için kalan ayrıntılar:
+  - Sayfanın SSS bölümünde: Adapt u-m'nin başka adaptörle birleştirilemeyeceği, CYLINDER 1200 U'nun eski u regülatörlerine uyduğu, PlaCollect'in 45° yerleşimi ve kıl kurtlarına uygun olmadığı, INLINE membranının 24 saat ıslatılması, PROSCAPE aletlerinin kurutulması, çift muslukta farklı çap birleştirmenin sızıntı riski.
+  - Algenmagnet S/M/L'nin 6, 10 ve 15 mm cam sınırları: yeni sayfa aile için 6–15 mm yazıyor; boy başına değer eski sayfanın arşiv kopyasında. Kopya ek kaynak.
+  - Aeras Marin'in kayın ağacı ve 65 mm boyu: 2015 kataloğunda.
+  - Tek çek valf uyarısı: JBL'in SSS sayfasında (819). Direct ve Count Safe'in entegre çek valfi varken ayrıca SafeStop eklenirse çek valfler açılmayabilir; gece kapatmasından sonra CO₂ akışı yeniden başlamayabilir; her CO₂ hattında yalnız bir çek valf kullanılmalı. Count Safe, TAIFUN SAFESTOP, SafeStop (2016) ve üç Direct kaydında; SSS ek kaynak.
+  - Thermometer Mini'nin 60 mm uzunluğu ve Ø 5 mm çapı: JBL'in termometre yazısında (2024); yazı ek kaynak.
+  - Thermometer Float'ın renkli alkol dolgulu ve cıvasız olması: JBL'in aynı ürünün (6140500) İngilizce sayfasındaki SSS'de (25153887); sayfa ek kaynak. Almanca sayfada bu SSS yok.
+  - TAIFUN GLASS MIDI'nin uzatılamadığı: PROFLORA CO₂ setlerinin kılavuzunda (25000523, 5.5: "kann nicht erweitert werden"); kılavuz ek kaynak.
+  - CO₂ CONTROL'ün 12 V'u: kılavuzda; kılavuz ek kaynak.
+- Açılmayan eski ek kaynaklar (JBL'in eski grup sayfaları, `mod=productpdf` bağlantıları) yeni sayfaya bağlanan kayıtlardan kaldırıldı.
+- Test: eski JBL adresinde ya da açılmayan ürün PDF bağlantısında yalnız sonraki pakete bırakılan 69 kayıt kalabilir (açık liste); yeni sayfaya taşınan kayıtlarda açılmayan eski ek kaynak olamaz. Kılavuz, SSS ve arşiv kopyası kanıtları ile arşiv durumu değişiklikleri sabitlendi; eski adres ve tarih beklentileri yeni kaynaklara göre güncellendi.
+- Codex denetimi (1. tur, 2026-10-31): 5 P2 ve 1 P3 bulgu (Artemio 1, iki adaptörün yönü, tek çek valf uyarısı, Direct'in çalışma basıncı, karton makaralı hortumlar, Thermometer Mini). Hepsi kaynakta doğrulandı ve yukarıdaki gibi düzeltildi. 2. tur (2026-10-31): 2 P3 bulgu; yeşil hortumun ağır metal bilgisi ve GLASS MIDI'nin uzatılamaması kaynakta bulundu, geri geldi. 3. tur (2026-10-31): 1 P3 bulgu; Float'ın alkol dolgusu aynı ürünün İngilizce sayfasındaki SSS'de bulundu, geri geldi. Bu turlarda yeniden okunan 17 kaydın doğrulama tarihi 2026-10-31.
+- Kullanıcıya etkisi: 186 JBL kaydının kaynak bağlantısı artık çalışan JBL sayfasını açıyor. Sağlık hesabı değişmiyor (bu kayıtların hiçbiri hesaba girmiyor). Bazı ürün adları ve açıklamaları değişti (yukarıda); altın fikstür değişmedi.
+- Kalan JBL eski adresleri: 68 kayıt (CO₂ 34, Diğer 31, değeri çekilmiş 3 WHITE filtre); ayrıca ana kaynağı açılmayan bir ürün PDF bağlantısı olan arşiv silikon hortum makarası. Yeni sayfası bulunamayan eski nesil ve arşiv ürünleri: ProFlora u001/m001/v002 nesilleri, eski Taifun ve Bio-CO₂ setleri, silikon karton makara ve plastik hortum makaraları, eski soğutucular, AUTOFOOD BLACK, Food Clip, AquaEx ve Aqua In Out setleri, Nano-Floaty, Clean A, Desinfekt, Power Clean. Ayrıca ana kaynağı açılan 22 kaydın bir ek kaynağı eski adreste. Sonraki pakette eski sayfaların internet arşivi kopyaları, 2015 kataloğu ve kılavuzlarla bakılacak.
+- Araştırma dosyaları (oturuma özel scratchpad `jbl2/`): arama sonuçları, eşleme, ürün sayfaları, kılavuzlar, SSS bölümleri, uygulama ve test betikleri.
