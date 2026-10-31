@@ -11,8 +11,22 @@ import { enDiseases } from "../src/messages/en-diseases";
 import { enEngine } from "../src/messages/en-engine";
 import { enPlantWarnings } from "../src/messages/en-plant-warnings";
 import { enPrivacy } from "../src/messages/en-privacy";
+import { es } from "../src/messages/es";
+import { esCatalogSpecies } from "../src/messages/es-catalog-species";
+import { esDiseases } from "../src/messages/es-diseases";
+import { esEngine } from "../src/messages/es-engine";
+import { esPlantWarnings } from "../src/messages/es-plant-warnings";
+import { esPrivacy } from "../src/messages/es-privacy";
 
-// Dil paketleri (docs/DECISIONS/0021-dil-altyapisi.md, 5. paket): Türkçe dışındaki dilin metinleri yalnız o dil seçilince yüklenir.
+// Dil paketleri (docs/DECISIONS/0021-dil-altyapisi.md, 5. paket ve İspanyolca paketi): Türkçe dışındaki her dilin metinleri yalnız o dil
+// seçilince, kendi ayrı parçasında yüklenir.
+
+const OTHER = ["en", "es"] as const;
+const BUNDLES = {
+  en: { messages: en, engine: enEngine, diseases: enDiseases, plantWarnings: enPlantWarnings, privacy: enPrivacy, catalogSpecies: enCatalogSpecies },
+  es: { messages: es, engine: esEngine, diseases: esDiseases, plantWarnings: esPlantWarnings, privacy: esPrivacy, catalogSpecies: esCatalogSpecies },
+};
+const FILES = ["bundle", "catalog-species", "diseases", "engine", "plant-warnings", "privacy"];
 
 const src = new URL("../src/", import.meta.url);
 const read = (path: string) => readFileSync(new URL(path, src), "utf8");
@@ -23,31 +37,34 @@ const imports = (source: string) => {
   const dynamic = [...source.matchAll(/import\("([^"]+)"\)/g)].map((match) => match[1]);
   return { values: [...all, ...reexports].filter((item) => !item.typeOnly).map((item) => item.from), dynamic };
 };
+/** Başka bir dilin mesaj dosyası (`messages/en.ts`, `messages/es-engine.ts` …). */
+const otherLanguageFile = /(?:^|\/)messages\/(?:en|es)(?:-[a-z-]+)?(?:\.ts)?$/;
 
 describe("dil paketi yüklenmeden", () => {
-  it("varsayılan dilin metni döner; paket kayıtlı değil", () => {
-    expect(localeBundle("en")).toBeUndefined();
+  it.each(OTHER)("varsayılan dilin metni döner; paket kayıtlı değil (%s)", (locale) => {
+    expect(localeBundle(locale)).toBeUndefined();
     expect(localeBundle(DEFAULT_LOCALE)).toBeUndefined();
-    expect(messagesFor("en")).toBe(messagesFor("tr"));
-    expect(engineMessagesFor("en")).toBe(engineMessagesFor("tr"));
-    expect(diseaseMessagesFor("en")).toBe(diseaseMessagesFor("tr"));
-    expect(plantWarningMessagesFor("en")).toBe(plantWarningMessagesFor("tr"));
-    expect(privacyMessagesFor("en")).toBe(privacyMessagesFor("tr"));
+    expect(messagesFor(locale)).toBe(messagesFor("tr"));
+    expect(engineMessagesFor(locale)).toBe(engineMessagesFor("tr"));
+    expect(diseaseMessagesFor(locale)).toBe(diseaseMessagesFor("tr"));
+    expect(plantWarningMessagesFor(locale)).toBe(plantWarningMessagesFor("tr"));
+    expect(privacyMessagesFor(locale)).toBe(privacyMessagesFor("tr"));
   });
 });
 
 describe("dil paketi yüklenince", () => {
-  it("bütün girişler İngilizce metni verir; katalog çevirisi pakette", async () => {
+  it.each(OTHER)("bütün girişler o dilin metnini verir; katalog çevirisi pakette (%s)", async (locale) => {
     await loadLocaleBundle("tr");
     expect(localeBundle("tr")).toBeUndefined();
-    await loadLocaleBundle("en");
-    await loadLocaleBundle("en");
-    expect(messagesFor("en")).toBe(en);
-    expect(engineMessagesFor("en")).toBe(enEngine);
-    expect(diseaseMessagesFor("en")).toBe(enDiseases);
-    expect(plantWarningMessagesFor("en")).toBe(enPlantWarnings);
-    expect(privacyMessagesFor("en")).toBe(enPrivacy);
-    expect(localeBundle("en")?.catalogSpecies).toBe(enCatalogSpecies);
+    await loadLocaleBundle(locale);
+    await loadLocaleBundle(locale);
+    const expected = BUNDLES[locale];
+    expect(messagesFor(locale)).toBe(expected.messages);
+    expect(engineMessagesFor(locale)).toBe(expected.engine);
+    expect(diseaseMessagesFor(locale)).toBe(expected.diseases);
+    expect(plantWarningMessagesFor(locale)).toBe(expected.plantWarnings);
+    expect(privacyMessagesFor(locale)).toBe(expected.privacy);
+    expect(localeBundle(locale)?.catalogSpecies).toBe(expected.catalogSpecies);
     // Türkçe etkilenmez.
     expect(messagesFor("tr").app.description).toBe("Akvaryumunuzu bilinçle yönetin.");
   });
@@ -56,15 +73,15 @@ describe("dil paketi yüklenince", () => {
 describe("paketin sınırı", () => {
   const entries = ["index.ts", "engine.ts", "catalog.ts", "diseases.ts", "plant-warnings.ts", "privacy.ts", "bundles.ts", "locales.ts", "format.ts", "units.ts", "engine-format.ts"];
 
-  it("hiçbir giriş İngilizce dosyayı durağan olarak içe aktarmaz; paketi yalnız `loadLocaleBundle` ayrı parça olarak yükler", () => {
+  it("hiçbir giriş başka dilin dosyasını durağan olarak içe aktarmaz; paketleri yalnız `loadLocaleBundle` ayrı parça olarak yükler", () => {
     for (const file of entries) {
       const { values, dynamic } = imports(read(file));
-      expect(values.filter((from) => /\/en(?:-|\.|")|\/en$/.test(`${from}"`)), file).toEqual([]);
-      expect(dynamic, file).toEqual(file === "bundles.ts" ? ["./messages/en-bundle"] : []);
+      expect(values.filter((from) => otherLanguageFile.test(from)), file).toEqual([]);
+      expect(dynamic, file).toEqual(file === "bundles.ts" ? OTHER.map((locale) => `./messages/${locale}-bundle`) : []);
     }
   });
 
-  it("uygulamada ve öbür paketlerde hiçbir dosya İngilizce dosyaları içe aktarmaz; paket onları dışa açmaz", () => {
+  it("uygulamada ve öbür paketlerde hiçbir dosya başka dilin dosyalarını içe aktarmaz; paket onları dışa açmaz", () => {
     // Derleme sonrasındaki denetim (scripts/check-locale-bundle.cjs, `pnpm verify`) aynı sınırı gerçek ilk yükleme dosyalarında sınar.
     const repo = new URL("../../../", import.meta.url);
     const files: string[] = [];
@@ -77,23 +94,23 @@ describe("paketin sınırı", () => {
     };
     for (const dir of ["src/", "packages/"]) walk(new URL(dir, repo));
     expect(files.some((file) => file.endsWith("src/providers/i18n-provider.tsx"))).toBe(true);
-    const english = /(?:^|\/)messages\/en(?:-[a-z-]+)?(?:\.ts)?$/;
     const offenders = files.flatMap((file) => {
       const source = readFileSync(decodeURIComponent(file.replace(/^\/([A-Za-z]:)/, "$1")), "utf8");
       const specifiers = [...source.matchAll(/(?:from|import)\s*\(?\s*["']([^"']+)["']/g)].map((match) => match[1]);
-      return specifiers.filter((specifier) => english.test(specifier)).map((specifier) => `${file}: ${specifier}`);
-    }).filter((line) => !/packages\/localization\/src\/(?:bundles\.ts|messages\/en-bundle\.ts):/.test(line));
+      return specifiers.filter((specifier) => otherLanguageFile.test(specifier)).map((specifier) => `${file}: ${specifier}`);
+    }).filter((line) => !/packages\/localization\/src\/(?:bundles\.ts|messages\/(?:en|es)-bundle\.ts):/.test(line));
     expect(offenders).toEqual([]);
     const pkg = JSON.parse(readFileSync(new URL("../package.json", import.meta.url), "utf8")) as { exports: Record<string, unknown> };
-    expect(JSON.stringify(pkg.exports)).not.toMatch(/messages\/en|en-bundle/);
+    expect(JSON.stringify(pkg.exports)).not.toMatch(/messages\/(?:en|es)|(?:en|es)-bundle/);
   });
 
-  it("İngilizce dosyalar Türkçe dosyalardan yalnız tip alır (Türkçe metin İngilizce parçaya girmez)", () => {
-    const files = readdirSync(new URL("messages/", src)).filter((name) => /^en(?:-[a-z-]+)?\.ts$/.test(name));
-    expect(files.sort()).toEqual(["en-bundle.ts", "en-catalog-species.ts", "en-diseases.ts", "en-engine.ts", "en-plant-warnings.ts", "en-privacy.ts", "en.ts"]);
+  it.each(OTHER)("%s dosyaları Türkçe dosyalardan yalnız tip alır, başka dilin dosyasını hiç almaz (her dil kendi parçasında)", (locale) => {
+    const files = readdirSync(new URL("messages/", src)).filter((name) => new RegExp(`^${locale}(?:-[a-z-]+)?\\.ts$`).test(name));
+    expect(files.sort()).toEqual([`${locale}.ts`, ...FILES.map((name) => `${locale}-${name}.ts`)].sort());
     for (const name of files) {
       const { values } = imports(read(`messages/${name}`));
       expect(values.filter((from) => /(?:^|\/)tr(?:-[a-z-]+)?$/.test(from)), name).toEqual([]);
+      expect(values.filter((from) => otherLanguageFile.test(from) && !from.startsWith(`./${locale}`)), name).toEqual([]);
     }
   });
 });

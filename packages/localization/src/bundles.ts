@@ -25,6 +25,7 @@ type OtherLocale = Exclude<Locale, "tr">;
 
 const loaders: Record<OtherLocale, () => Promise<LocaleBundle>> = {
   en: () => import("./messages/en-bundle").then((module) => module.enBundle),
+  es: () => import("./messages/es-bundle").then((module) => module.esBundle),
 };
 
 const bundles: Partial<Record<OtherLocale, LocaleBundle>> = {};

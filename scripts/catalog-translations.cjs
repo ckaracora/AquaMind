@@ -1,5 +1,6 @@
 // Katalog çeviri tablolarını üretir (docs/DECISIONS/0021-dil-altyapisi.md, 4. paket). Kaynak, gözden geçirilen JSON dosyasıdır
-// (`packages/localization/translations/<dil>-species.json`: anahtar, alanlar, Türkçe metin, çeviri, adlarda yöntem ve kaynak); uygulamaya
+// (`packages/localization/translations/<dil>-species.json`: anahtar, alanlar, Türkçe metin, dilin kodu adındaki alanda çeviri, adlarda yöntem
+// ve kaynak); uygulamaya
 // giren tablo yalnız anahtar → çeviri tutar (`packages/localization/src/messages/<dil>-catalog-species.ts`).
 // Kullanım:
 //   node scripts/catalog-translations.cjs           tabloları yazar
@@ -20,10 +21,13 @@ const load = (file) => {
 };
 const { catalogTextKey } = load(path.join(pkg, "src/catalog.ts"));
 
-const TABLES = [{ source: "translations/en-species.json", target: "src/messages/en-catalog-species.ts", name: "enCatalogSpecies" }];
+const TABLES = [
+  { locale: "en", source: "translations/en-species.json", target: "src/messages/en-catalog-species.ts", name: "enCatalogSpecies" },
+  { locale: "es", source: "translations/es-species.json", target: "src/messages/es-catalog-species.ts", name: "esCatalogSpecies" },
+];
 
-function render({ source, name }, entries) {
-  const lines = entries.map((entry) => `  ${JSON.stringify(entry.key)}: ${JSON.stringify(entry.en)},`);
+function render({ locale, source, name }, entries) {
+  const lines = entries.map((entry) => `  ${JSON.stringify(entry.key)}: ${JSON.stringify(entry[locale])},`);
   return [
     `// Bu dosya üretilir: node scripts/catalog-translations.cjs (kaynak packages/localization/${source}). Elle düzenlemeyin.`,
     `import type { CatalogTexts } from "../catalog";`,

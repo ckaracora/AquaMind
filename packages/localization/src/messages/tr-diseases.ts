@@ -21,8 +21,8 @@ export const trDiseases = {
   guidesTitle: "Güvenilir rehberler",
   sourceLabel: "Kaynak",
   /** Bağlantının dili; ekran okuyucu için tam adı. */
-  language: { tr: "Türkçe", en: "İngilizce" },
-  languageShort: { tr: "TR", en: "EN" },
+  language: { tr: "Türkçe", en: "İngilizce", es: "İspanyolca" },
+  languageShort: { tr: "TR", en: "EN", es: "ES" },
   opensNewTab: "yeni sekmede açılır",
   sponsorNote: "Sponsorlu içerik olursa açıkça \"Sponsorlu\" diye işaretlenir ve önerileri etkilemez.",
   sources: {
@@ -34,8 +34,9 @@ export const trDiseases = {
     tvhbChambers: { name: "İl veteriner hekimleri odaları", publisher: "Türk Veteriner Hekimleri Birliği" },
     erciyesAquatic: { name: "Sucul Hayvan Hastalıkları Anabilim Dalı", publisher: "Erciyes Üniversitesi Veteriner Fakültesi" },
     fishVetSociety: { name: "Süs balığı tedavi eden veteriner listesi (İngiltere ve İrlanda)", publisher: "Fish Veterinary Society" },
-    aafvFindVet: { name: "Balık veterineri bul (Kuzey Amerika)", publisher: "American Association of Fish Veterinarians" },
+    aafvFindVet: { name: "Balık veterineri bul (ABD ve Kanada)", publisher: "American Association of Fish Veterinarians" },
     wavmaFindVet: { name: "Balık veterineri ara (dünya geneli)", publisher: "World Aquatic Veterinary Medical Association" },
+    colvetColleges: { name: "İl veteriner hekimleri odaları (İspanya)", publisher: "İspanya Veteriner Hekimleri Odaları Genel Konseyi" },
     ufFishHealth: { name: "Balık sağlığı yönetimi", publisher: "Florida Üniversitesi (UF/IFAS)" },
     oataCareSheets: { name: "Türlere göre bakım kartları", publisher: "OATA" },
   },

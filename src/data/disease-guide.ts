@@ -16,14 +16,15 @@ export type DiseaseSourceId =
   | "fishVetSociety"
   | "aafvFindVet"
   | "wavmaFindVet"
+  | "colvetColleges"
   | "ufFishHealth"
   | "oataCareSheets";
 
 export interface DiseaseSource {
   id: DiseaseSourceId;
   url: string;
-  /** Kaynağın dili; ekranda etiketle gösterilir. */
-  language: "tr" | "en";
+  /** Kaynağın dili; arayüz dilinden farklıysa ekranda etiketle gösterilir. */
+  language: "tr" | "en" | "es";
   verifiedAt: string;
 }
 
@@ -38,11 +39,13 @@ export const diseaseSources: Record<DiseaseSourceId, DiseaseSource> = {
   tvhbChambers: source("tvhbChambers", "https://tvhb.org.tr/odalar/", "tr"),
   erciyesAquatic: source("erciyesAquatic", "https://veteriner.erciyes.edu.tr/tr/d/su-urunleri-ve-hastaliklari-anabilim-dali-tanitimi/klinik-oncesi-bolumler", "tr"),
   fishVetSociety: source("fishVetSociety", "https://www.fishvetsociety.org.uk/find-a-vet/", "en"),
-  // Kuzey Amerika haritası ve herkese açık arama; çevrede balık veterineri yoksa yerel veterinerin AAFV aracılığıyla bir balık veterinerine
-  // bağlanabileceğini söylüyor. Sitenin yalnız bu sayfasına bağlanılır.
+  // Herkese açık harita ve arama; harita yalnız ABD ve Kanada adreslerini kapsar (üyelik sayfası, 2026-10-31). Çevrede balık veterineri yoksa
+  // yerel veterinerin AAFV aracılığıyla bir balık veterinerine bağlanabileceğini söylüyor. Sitenin yalnız bu sayfasına bağlanılır.
   aafvFindVet: source("aafvFindVet", "https://fishvets.org/find-a-fish-vet/", "en", "2026-10-31"),
   // Ülke ve şehre göre herkese açık arama formu (üyelik gerekmez).
   wavmaFindVet: source("wavmaFindVet", "https://www.wavma.org/find-a-fish-vet", "en", "2026-10-31"),
+  // İspanya'nın 52 il veteriner odası, iletişim bilgileriyle (Türkçedeki il veteriner hekimleri odalarının karşılığı).
+  colvetColleges: source("colvetColleges", "https://www.colvet.es/es/13-CGCPVE/30-Colegios", "es", "2026-10-31"),
   ufFishHealth: source("ufFishHealth", "https://ask.ifas.ufl.edu/topics/fish-health-management", "en"),
   oataCareSheets: source("oataCareSheets", "https://ornamentalfish.org/what-we-do/advice-information/care-sheets/", "en"),
 };
@@ -55,10 +58,15 @@ export const firstSteps = [
 ] as const satisfies ReadonlyArray<{ key: string; sources: readonly DiseaseSourceId[] }>;
 
 export const copperSources = ["oataInvertebrates", "pfkShrimpMedication"] as const satisfies readonly DiseaseSourceId[];
-/** Veteriner bulma yolları arayüz diline göre: Türkçede Türkiye, İngilizcede İngilizce konuşulan ülkeler ve dünya geneli. */
+/**
+ * Veteriner bulma yolları arayüz diline göre: Türkçede Türkiye, İngilizcede İngilizce konuşulan ülkeler, İspanyolcada İspanya'nın il
+ * veteriner odaları ve ABD/Kanada dizini; hepsinde dünya geneli dizin. Latin Amerika için herkese açık bir balık
+ * veterineri dizini bulunamadı (2026-10-31); metin yerel veteriner odasına yönlendirir.
+ */
 export const vetSources: Record<Locale, readonly DiseaseSourceId[]> = {
   tr: ["tvhbChambers", "erciyesAquatic", "fishVetSociety"],
   en: ["aafvFindVet", "fishVetSociety", "wavmaFindVet"],
+  es: ["colvetColleges", "aafvFindVet", "wavmaFindVet"],
 };
 export const guideSources = ["ufFishHealth", "oataCareSheets", "ufAmmonia"] as const satisfies readonly DiseaseSourceId[];
 

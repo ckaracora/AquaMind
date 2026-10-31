@@ -23,10 +23,13 @@ describe("demo kayıtların dili", () => {
     expect(localizeDemoRows("maintenanceTasks", remaining, "en").map((task) => task.id)).toEqual(["m1", "m3"]);
   });
 
-  it("İngilizce demo metinlerinde Türkçe harf yok", () => {
-    for (const rows of [localizeDemoRows("aquariums", aquariums, "en"), localizeDemoRows("maintenanceTasks", maintenanceTasks, "en"), localizeDemoRows("equipment", equipment, "en")]) {
-      expect(JSON.stringify(rows)).not.toMatch(/[çğıöşüÇĞİÖŞÜ]/);
+  it.each(["en", "es"] as const)("demo metinlerinde Türkçe harf yok; her demo satırının metni çevrilmiş (%s)", (locale) => {
+    for (const [collection, rows] of [["aquariums", aquariums], ["maintenanceTasks", maintenanceTasks], ["equipment", equipment]] as const) {
+      const localized = localizeDemoRows(collection, rows as Array<{ id: string }>, locale);
+      expect(JSON.stringify(localized), `${locale} ${collection}`).not.toMatch(/[çğıöşüÇĞİÖŞÜ]/);
     }
+    expect(localizeDemoRows("plants", plants, locale)[0].name).not.toBe(plants[0].name);
+    expect(localizeDemoRows("maintenanceTasks", maintenanceTasks, "es").map((task) => task.title)).toEqual(["Cambio de agua del 30%", "Limpiar la esponja del prefiltro", "Podar las plantas del fondo"]);
   });
 
   it("sağlayıcı yalnız hâlâ demo olan koleksiyonları yerelleştirir", () => {
