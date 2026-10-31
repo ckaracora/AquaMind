@@ -18,6 +18,7 @@ describe("diller", () => {
     expect(SUPPORTED_LOCALES).toContain(DEFAULT_LOCALE);
     expect(isLocale("tr")).toBe(true);
     expect(isLocale("en")).toBe(true);
+    expect(isLocale("es")).toBe(true);
     expect(isLocale("xx")).toBe(false);
     expect(isLocale(undefined)).toBe(false);
   });
@@ -55,6 +56,13 @@ describe("biçimleme", () => {
     expect(formatVolume(120, "gallons", "en")).toBe("31.7 gal");
     expect(formatTemperature(25.4, "celsius", "en")).toBe("25.4 °C");
     expect(formatDate("2026-10-19", "en", { day: "numeric", month: "short", year: "numeric" })).toBe("Oct 19, 2026");
+  });
+
+  it("İspanyolcada Latin Amerika biçimi: binlik virgül, ondalık nokta, ay adı İspanyolca", () => {
+    expect(formatNumber(1234.56, "es")).toBe("1,234.6");
+    expect(formatVolume(120, "gallons", "es")).toBe("31.7 gal");
+    expect(formatTemperature(25.4, "celsius", "es")).toBe("25.4 °C");
+    expect(formatDate("2026-10-19", "es", { day: "numeric", month: "long", year: "numeric" })).toBe("19 de octubre de 2026");
   });
 
   it("hacim ve sıcaklık tercih edilen birimde gösterilir", () => {

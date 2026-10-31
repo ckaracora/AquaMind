@@ -17,7 +17,7 @@ const animal = (aquariumId: string, category: Livestock["category"], quantity = 
 
 // Sayfanın içeriği gerçek bileşen çıktısıyla sınanır: veri sağlayıcısı ve kabuk yerine sınama değerleri verilir. Adres (`search`) bileşene
 // doğrudan verilir; sayfa (src/app/diseases/page.tsx) yalnız tarayıcıdaki adresi okuyup bu bileşene geçirir.
-const store = vi.hoisted(() => ({ value: { aquariums: [] as Aquarium[], livestock: [] as Livestock[], hydrated: true }, locale: "tr" as "tr" | "en" }));
+const store = vi.hoisted(() => ({ value: { aquariums: [] as Aquarium[], livestock: [] as Livestock[], hydrated: true }, locale: "tr" as Locale }));
 vi.mock("@/providers/aquarium-provider", () => ({ useAquariums: () => store.value }));
 vi.mock("@/providers/i18n-provider", async () => {
   const { messagesFor: messages } = await import("@aquamind/localization");
@@ -27,6 +27,7 @@ vi.mock("@/components/app-shell", () => ({ AppShell: ({ children }: { children: 
 vi.mock("@/components/page-header", () => ({ PageHeader: () => null }));
 const { DiseaseGuideView } = await import("@/components/disease-guide-view");
 await loadLocaleBundle("en");
+await loadLocaleBundle("es");
 const render = (search = "", locale: Locale = "tr") => {
   store.locale = locale;
   return renderToStaticMarkup(createElement(DiseaseGuideView, { search }));
@@ -100,14 +101,14 @@ describe("sayfanın metinleri kaynağa sadık", () => {
 });
 
 describe("kaynaklar", () => {
-  const used: DiseaseSourceId[] = [...firstSteps.flatMap((step) => step.sources), ...copperSources, ...vetSources.tr, ...vetSources.en, ...guideSources];
+  const used: DiseaseSourceId[] = [...firstSteps.flatMap((step) => step.sources), ...copperSources, ...vetSources.tr, ...vetSources.en, ...vetSources.es, ...guideSources];
 
   it("her kaynak HTTPS, okuma tarihli ve dili belli; sayfada kullanılmayan kaynak yok", () => {
     for (const [id, source] of Object.entries(diseaseSources)) {
       expect(source.id).toBe(id);
       expect(source.url).toMatch(/^https:\/\/[^\s]+$/);
-      expect(source.verifiedAt).toBe(["aafvFindVet", "wavmaFindVet"].includes(id) ? "2026-10-31" : "2026-10-22");
-      expect(["tr", "en"]).toContain(source.language);
+      expect(source.verifiedAt).toBe(["aafvFindVet", "wavmaFindVet", "colvetColleges"].includes(id) ? "2026-10-31" : "2026-10-22");
+      expect(["tr", "en", "es"]).toContain(source.language);
       expect(used).toContain(id);
     }
   });
@@ -127,10 +128,16 @@ describe("kaynaklar", () => {
       ["https://veteriner.erciyes.edu.tr/tr/d/su-urunleri-ve-hastaliklari-anabilim-dali-tanitimi/klinik-oncesi-bolumler", "tr"],
       ["https://www.fishvetsociety.org.uk/find-a-vet/", "en"],
     ]);
-    // İngilizcede İngilizce konuşulan ülkeler ve dünya geneli: AAFV (Kuzey Amerika), FVS (İngiltere ve İrlanda), WAVMA (dünya geneli).
+    // İngilizcede İngilizce konuşulan ülkeler ve dünya geneli: AAFV (ABD ve Kanada), FVS (İngiltere ve İrlanda), WAVMA (dünya geneli).
     expect(vetSources.en.map((id) => [diseaseSources[id].url, diseaseSources[id].language])).toEqual([
       ["https://fishvets.org/find-a-fish-vet/", "en"],
       ["https://www.fishvetsociety.org.uk/find-a-vet/", "en"],
+      ["https://www.wavma.org/find-a-fish-vet", "en"],
+    ]);
+    // İspanyolcada İspanya'nın il veteriner odaları, ABD/Kanada dizini (ABD'deki İspanyolca konuşanlar için) ve dünya geneli dizin.
+    expect(vetSources.es.map((id) => [diseaseSources[id].url, diseaseSources[id].language])).toEqual([
+      ["https://www.colvet.es/es/13-CGCPVE/30-Colegios", "es"],
+      ["https://fishvets.org/find-a-fish-vet/", "en"],
       ["https://www.wavma.org/find-a-fish-vet", "en"],
     ]);
     expect(guideSources.map((id) => diseaseSources[id].url)).toEqual([
@@ -181,7 +188,7 @@ describe("sayfanın çıktısı", () => {
     expect(html).toMatch(/<a href="\/water"[^>]*>Su ölçümü ekle<\/a>/);
   });
 
-  it.each(["tr", "en"] as const)("her dış bağlantı yeni sekmede, doğru dille açılır ve en az 44 × 44 piksel dokunma alanı vardır (%s)", (locale) => {
+  it.each(["tr", "en", "es"] as const)("her dış bağlantı yeni sekmede, doğru dille açılır ve en az 44 × 44 piksel dokunma alanı vardır (%s)", (locale) => {
     const html = decode(render("", locale));
     const d = diseaseMessagesFor(locale);
     const links = [...html.matchAll(/<a ([^>]*)>(.*?)<\/a>/g)].filter(([, attributes]) => /href="https:/.test(attributes));
@@ -218,6 +225,19 @@ describe("İngilizce sayfa", () => {
     expect(en.copperAquarium("Shrimp tank", "both")).toMatch(/^There are shrimp and snails in Shrimp tank\. /);
     for (const id of ["tvhbChambers", "erciyesAquatic"] as const) expect(html).not.toContain(diseaseSources[id].url);
     expect(html).not.toMatch(/[çğıöşüÇĞİÖŞÜ]/);
+  });
+});
+
+describe("İspanyolca sayfa", () => {
+  it("İspanyolca metinleri, İspanya'nın il veteriner odalarını ve dünya geneli dizinleri gösterir; Türkiye'ye özel kaynak yok", () => {
+    store.value = { aquariums: [tank("b", "Acuario camarones")], livestock: [animal("b", "shrimp", 10)], hydrated: true };
+    const es = diseaseMessagesFor("es");
+    const html = decode(render("", "es"));
+    for (const text of [es.notice, es.vetHelp, es.copperGeneral, es.copperAquarium("Acuario camarones", "shrimp"), ...Object.values(es.steps)]) expect(html).toContain(text);
+    expect(es.copperAquarium("Acuario camarones", "both")).toMatch(/^En Acuario camarones hay camarones y caracoles\. /);
+    for (const id of ["tvhbChambers", "erciyesAquatic", "fishVetSociety"] as const) expect(html).not.toContain(diseaseSources[id].url);
+    expect(html).toContain("https://www.colvet.es/es/13-CGCPVE/30-Colegios");
+    expect(html).not.toMatch(/[çğıöşÇĞİÖŞ]/);
   });
 });
 

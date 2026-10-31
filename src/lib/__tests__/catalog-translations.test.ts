@@ -1,29 +1,19 @@
-import { readFileSync } from "node:fs";
-import { fileURLToPath } from "node:url";
 import { describe, expect, it } from "vitest";
 import { catalogTextKey } from "@aquamind/localization/catalog";
 import { speciesCatalog } from "@/data/catalog-species";
 import { speciesBehavior } from "@/data/species-behavior";
 import { speciesCatalogTexts } from "@/lib/catalog-texts";
 import { enCatalogSpecies } from "../../../packages/localization/src/messages/en-catalog-species";
+import { PROPER, codes, latinNameFinder, readTranslations, turkishTimedNumberWords, values } from "./catalog-translation-checks";
 
 // Canlıların İngilizce çevirisi (docs/DECISIONS/0021-dil-altyapisi.md, "4b"): kaynak JSON gözden geçirilen dosyadır, tablo ondan üretilir
 // (`node scripts/catalog-translations.cjs`). Çeviri Claude'undur; burada sayılar, birimler, özel adlar, Latince adlar, kimlik kodları ve
-// ad yöntemi denetlenir.
+// ad yöntemi denetlenir. Dilden bağımsız parçalar `catalog-translation-checks.ts` dosyasındadır.
 
-interface Entry { key: string; fields: string[]; tr: string; en: string; method?: "a" | "k" | "t"; source?: string }
-const entries = JSON.parse(readFileSync(fileURLToPath(new URL("../../../packages/localization/translations/en-species.json", import.meta.url)), "utf8")) as Entry[];
+const entries = readTranslations("en") as Array<ReturnType<typeof readTranslations>[number] & { en: string }>;
 const texts = speciesCatalogTexts(speciesCatalog, speciesBehavior);
+const latinNames = latinNameFinder(entries.map((entry) => entry.tr));
 
-/** Metindeki sayılar, her dilin kendi ayırıcısıyla okunmuş değer olarak (Türkçe 1.200 = İngilizce 1,200; özgül ağırlık 1.001–1.029 ikisinde de ondalık). */
-const values = (text: string, locale: "tr" | "en") =>
-  (text.match(/\d+(?:[.,]\d+)*/g) ?? [])
-    .map((raw) => {
-      if (/^1\.0(?:0[1-9]|[12]\d)$/.test(raw)) return Number(raw);
-      if (locale === "tr") return Number(/^\d{1,3}(\.\d{3})+(,\d+)?$/.test(raw) ? raw.replace(/\./g, "").replace(",", ".") : raw.replace(",", "."));
-      return Number(/^\d{1,3}(,\d{3})+(\.\d+)?$/.test(raw) ? raw.replace(/,/g, "") : raw);
-    })
-    .sort((a, b) => a - b);
 /** Ölçü birimleri aynı sayıda geçmeli (litre ile galon, cm ile inç karışmasın). */
 // Sözcük sınırı Unicode harfe göredir (`\b` Türkçe harfleri sözcük saymaz: "zayıftır" içinde "ft" bulunurdu).
 const UNITS: Array<[string, RegExp, RegExp]> = [
@@ -61,52 +51,14 @@ const UNITS: Array<[string, RegExp, RegExp]> = [
   ["bir kez", /(?<!\p{L})(?:günde|haftada|ayda|yılda|saatte) (?:yaklaşık )?bir (?:kez|defa|kere)/giu, /(?<!\p{L})once (?:a|per) (?:hour|day|week|month|year)(?!\p{L})/giu],
   ["iki kez", /(?<!\p{L})(?:günde|haftada|ayda|yılda|saatte) (?:yaklaşık )?iki (?:kez|defa|kere)/giu, /(?<!\p{L})twice (?:a|per) (?:hour|day|week|month|year)(?!\p{L})/giu],
 ];
-/**
- * Yazıyla yazılmış süre miktarları ("iki-üç ay" ↔ "two to three months"): sayı denetimi yalnız rakamları okur. Yalnız süre birimine
- * bağlı sözcükler karşılaştırılır; tek başına "altı" (altında) ya da "iki cinsiyet" (both sexes) gibi sözcükler sayı sayılmaz.
- */
-const NUMBER_WORDS = {
-  tr: { iki: 2, üç: 3, dört: 4, beş: 5, altı: 6, yedi: 7, sekiz: 8, dokuz: 9, on: 10 } as Record<string, number>,
-  en: { two: 2, three: 3, four: 4, five: 5, six: 6, seven: 7, eight: 8, nine: 9, ten: 10 } as Record<string, number>,
-};
-const timedNumberWords = (text: string, locale: "tr" | "en") => {
-  const words = Object.keys(NUMBER_WORDS[locale]).join("|");
-  const phrase = locale === "tr"
-    ? new RegExp(`(?<!\\p{L})(?:${words})(?:(?:\\s?[-–]\\s?|\\s(?:ile|veya|ya da)\\s)(?:${words}))?\\s(?:saat|gün|hafta|ay|yıl)`, "giu")
-    : new RegExp(`(?<!\\p{L})(?:${words})(?:(?:\\s(?:to|or)\\s|\\s?[-–]\\s?)(?:${words}))?[\\s-](?:hours?|days?|weeks?|months?|years?)(?!\\p{L})`, "giu");
-  return (text.match(phrase) ?? []).flatMap((match) => [...match.toLocaleLowerCase(locale).matchAll(/\p{L}+/gu)].map((word) => NUMBER_WORDS[locale][word[0]]).filter((value) => value !== undefined)).sort();
+/** Yazıyla yazılmış süre miktarları ("iki-üç ay" ↔ "two to three months"): sayı denetimi yalnız rakamları okur. */
+const EN_NUMBER_WORDS: Record<string, number> = { two: 2, three: 3, four: 4, five: 5, six: 6, seven: 7, eight: 8, nine: 9, ten: 10 };
+const englishTimedNumberWords = (text: string) => {
+  const words = Object.keys(EN_NUMBER_WORDS).join("|");
+  const phrase = new RegExp(`(?<!\\p{L})(?:${words})(?:(?:\\s(?:to|or)\\s|\\s?[-–]\\s?)(?:${words}))?[\\s-](?:hours?|days?|weeks?|months?|years?)(?!\\p{L})`, "giu");
+  return (text.match(phrase) ?? []).flatMap((match) => [...match.toLowerCase().matchAll(/\p{L}+/gu)].map((word) => EN_NUMBER_WORDS[word[0]]).filter((value) => value !== undefined)).sort();
 };
 const TURKISH = /[çğıöşüÇĞİÖŞÜ]/;
-const PROPER = ["Seriously Fish", "Fishkeeper", "Practical Fishkeeping", "FishBase", "OATA", "Fishipedia", "Cikletist", "Meerwasser-Lexikon", "wirbellose.de"];
-/** Latince cins adları: katalogdakiler ve notlarda geçen öbürleri. Tam ad ("Psalidodon anisitsi") ve kısaltma ("P. sphenops") aynen kalmalı. */
-const OTHER_GENERA = [
-  "Ancistomus", "Artemia", "Atherina", "Atherinosoma", "Cochliodon", "Convolutriloba", "Daphnia", "Macrodactyla", "Moenkhausia", "Moina",
-  "Piabarchus", "Premnas", "Telmatherina", "Tritia", "Ilyanassa", "Aiptasia", "Rhynchocinetes", "Zoanthus", "Ricordea", "Euphyllia",
-  "Condylactis", "Gambusia", "Chaetostoma", "Vallisneria", "Anubias", "Physa", "Ancistrini", "Gastromyzontidae", "Pimelodidae",
-  "Loricariid",
-];
-const genera = new Set([...speciesCatalog.map((profile) => profile.scientificName.split(" ")[0]).filter((word) => /^[A-Z][a-z]+$/.test(word)), ...OTHER_GENERA]);
-/**
- * Latince tür adları (cins adından sonra gelen ikinci sözcük): katalogdakiler, notlardaki kısaltmaların ("P. sphenops") tür adları ve
- * notlarda geçen öbürleri. Cins adından sonra gelen Türkçe sözcük ("Betta ile", "Vallisneria benzeri") tür adı sayılmaz.
- */
-const OTHER_EPITHETS = [
-  "aequipinnatus", "affinis", "altus", "brevifilis", "brevirostre", "cirrhosus", "clarkii", "digueti", "georgiae", "inspector",
-  "jamesonii", "lacortei", "mexicana", "plecostomus", "retrogemma", "rhodostomus", "signata", "stramineus", "subviridis", "ucayalensis",
-];
-const epithets = new Set([
-  ...speciesCatalog.flatMap((profile) => profile.scientificName.split(" ").slice(1)).filter((word) => /^[a-z]+$/.test(word)),
-  ...entries.flatMap((entry) => [...entry.tr.matchAll(/(?<!\p{L})[A-Z]\. ([a-z]{3,})(?!\p{L})/gu)].map((match) => match[1])),
-  ...OTHER_EPITHETS,
-]);
-const latinNames = (text: string) => [
-  ...[...text.matchAll(/(?<!\p{L})([A-Z][a-z]+) ([a-z]{3,})(?!\p{L})/gu)].filter((match) => genera.has(match[1]) && epithets.has(match[2])).map((match) => match[0]),
-  ...[...genera].filter((genus) => new RegExp(`(?<!\\p{L})${genus}(?!\\p{L})`, "u").test(text)),
-  ...(text.match(/(?<!\p{L})[A-Z]\. [a-z]{3,}(?!\p{L})/gu) ?? []),
-];
-/** Kimlik kodları (L, LDA, CW, C numaraları); adda da korunur. */
-const codes = (text: string) => text.match(/\b(?:L|LDA|CW|C)\d+[A-Z]?\b/g) ?? [];
-
 describe("canlıların İngilizce çeviri kaynağı", () => {
   it("canlılar aşamasının her metninin çevirisi var; eskimiş ya da fazla çeviri yok", () => {
     const current = new Set(texts.map((item) => item.key));
@@ -123,7 +75,7 @@ describe("canlıların İngilizce çeviri kaynağı", () => {
     for (const entry of entries) {
       // Kaynaktan alınan ad kaynağın yazımıdır (ör. eklenmiş L numarası); sayı denetimi çevrilen metinler içindir, kodlar ayrıca denetlenir.
       if (entry.method !== "k") expect(values(entry.en, "en"), entry.key).toEqual(values(entry.tr, "tr"));
-      expect(timedNumberWords(entry.en, "en"), `${entry.key} süre sözcükleri`).toEqual(timedNumberWords(entry.tr, "tr"));
+      expect(englishTimedNumberWords(entry.en), `${entry.key} süre sözcükleri`).toEqual(turkishTimedNumberWords(entry.tr));
       for (const [unit, tr, en] of UNITS) expect((entry.en.match(en) ?? []).length, `${entry.key} ${unit}`).toBe((entry.tr.match(tr) ?? []).length);
       for (const name of PROPER) expect(entry.en.split(name).length, `${entry.key} ${name}`).toBe(entry.tr.split(name).length);
       for (const latin of latinNames(entry.tr)) expect(entry.en.includes(latin), `${entry.key} ${latin}`).toBe(true);

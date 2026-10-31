@@ -56,6 +56,12 @@ const demoTexts: Record<Exclude<Locale, "tr">, Record<DemoCollection, Record<str
     plants: { p1: { name: "Amazon sword" } },
     equipment: { e1: { specifications: "1100 L/h" } },
   },
+  es: {
+    aquariums: { "aqua-1": { name: "Río Amazonas", description: "Biotopo sudamericano densamente plantado" } },
+    maintenanceTasks: { m1: { title: "Cambio de agua del 30%" }, m2: { title: "Limpiar la esponja del prefiltro" }, m3: { title: "Podar las plantas del fondo" } },
+    plants: { p1: { name: "Espada amazónica" } },
+    equipment: { e1: { specifications: "1100 L/h" } },
+  },
 };
 
 /** Demo satırlarını seçili dilin metinleriyle verir; demo olmayan satır olduğu gibi kalır. Değişiklik yoksa aynı dizi döner. */

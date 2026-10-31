@@ -8,6 +8,7 @@ import type { Equipment } from "@/types/aquarium";
 // Ekipmanın teknik bilgi satırı (karar 0021, 5. paket): Türkçede katalogdaki satır aynen; çevirisi olmayan dilde sayısal özet.
 
 await loadLocaleBundle("en");
+await loadLocaleBundle("es");
 const prefs = { temperature: "celsius", volume: "liters", dateFormat: "day-first" } as const;
 const tr = { translate: catalogTranslator("tr"), texts: messagesFor("tr").equipment.specSummary, fmt: createDisplayFormat("tr", prefs) };
 const en = { translate: catalogTranslator("en", {}), texts: messagesFor("en").equipment.specSummary, fmt: createDisplayFormat("en", prefs) };
@@ -29,6 +30,14 @@ describe("ekipmanın teknik bilgi satırı", () => {
     expect(profileSpecsText(filter, en.translate, en.texts, gallons)).toBe("750 L/h · 22 W · up to 66 gal");
     for (const profile of equipmentCatalog) expect(profileSpecsText(profile, en.translate, en.texts, en.fmt), profile.id).not.toMatch(/[çğıöşüÇĞİÖŞÜ]|saat|litre/);
     expect(profileSpecsText({ ...filter, ratedFlowLph: undefined, powerW: undefined, recommendedMaxL: undefined }, en.translate, en.texts, en.fmt)).toBe("");
+  });
+
+  it("İspanyolcada da sayısal özet: Latin Amerika sayı biçimi, Türkçe satır yok", () => {
+    const texts = messagesFor("es").equipment.specSummary;
+    const fmt = createDisplayFormat("es", prefs);
+    const filter = equipmentCatalog.find((profile) => profile.ratedFlowLph === 750 && profile.powerW === 22 && profile.recommendedMaxL === 250 && profile.recommendedMinL === undefined)!;
+    expect(profileSpecsText({ ...filter, ratedFlowLph: 1100 }, catalogTranslator("es", {}), texts, fmt)).toMatch(/^1,100 L\/h · 22 W · /);
+    for (const profile of equipmentCatalog) expect(profileSpecsText(profile, catalogTranslator("es", {}), texts, fmt), profile.id).not.toMatch(/[çğıöşüÇĞİÖŞÜ]|saat|litre/);
   });
 
   it("katalogda karşılığı olmayan ekipmanda kullanıcının yazdığı metin aynen kalır", () => {

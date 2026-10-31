@@ -23,6 +23,9 @@ describe("tarayıcı dili", () => {
     expect(localeFromLanguages(["en-GB"])).toBe("en");
     expect(localeFromLanguages(["EN"])).toBe("en");
     expect(localeFromLanguages(["de-DE", "en-US"])).toBe("en");
+    expect(localeFromLanguages(["es-MX", "en-US"])).toBe("es");
+    expect(localeFromLanguages(["es"])).toBe("es");
+    expect(localeFromLanguages(["pt-BR", "es-AR"])).toBe("es");
     expect(localeFromLanguages(["de-DE", "fr-FR"])).toBe(DEFAULT_LOCALE);
     expect(localeFromLanguages([])).toBe(DEFAULT_LOCALE);
     expect(localeFromLanguages([""])).toBe(DEFAULT_LOCALE);
@@ -137,6 +140,8 @@ describe("açılış betiği", () => {
     [null, ["tr-TR", "en-US"], "", false],
     [null, ["de-DE", "en-GB"], "", false],
     [null, ["de-DE"], "", false],
+    [null, ["es-MX"], "", false],
+    ["es", ["tr-TR"], "", false],
     [null, [], "en-US", false],
     [null, undefined, "en", false],
     [null, undefined, "", false],

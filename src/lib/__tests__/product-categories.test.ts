@@ -9,9 +9,12 @@ import { careCategoryLabels } from "@/data/care-product-catalog";
 describe("ürün kataloğu kategorileri", () => {
   it("Türkçe adlar katalogdakilerle aynı ve aynı sırada; İngilizcede her kategorinin adı var", async () => {
     await loadLocaleBundle("en");
+    await loadLocaleBundle("es");
     expect(Object.entries(messagesFor("tr").products.categories)).toEqual(Object.entries(careCategoryLabels));
-    expect(Object.keys(messagesFor("en").products.categories)).toEqual(Object.keys(careCategoryLabels));
-    for (const label of Object.values(messagesFor("en").products.categories)) expect(label).not.toMatch(/[çğıöşüÇĞİÖŞÜ]|^\s*$/);
+    for (const locale of ["en", "es"] as const) {
+      expect(Object.keys(messagesFor(locale).products.categories), locale).toEqual(Object.keys(careCategoryLabels));
+      for (const label of Object.values(messagesFor(locale).products.categories)) expect(label, locale).not.toMatch(/[çğıöşüÇĞİÖŞÜ]|^\s*$/);
+    }
   });
 
   it("sayfa kategori adını dil dosyasından, açıklamayı katalog çevirmeninden alır", () => {
@@ -25,7 +28,8 @@ describe("ürün kataloğu kategorileri", () => {
 describe("arama örnekleri", () => {
   it("bitki aramasının örnek adlarının her biri her dilde katalogda sonuç verir", async () => {
     const { searchPlants } = await import("@/data/catalog-plants");
-    for (const locale of ["tr", "en"] as const) {
+    await loadLocaleBundle("es");
+    for (const locale of ["tr", "en", "es"] as const) {
       const hint = messagesFor(locale).plants.catalog.searchHint;
       const examples = hint.replace(/^[^ ]+ /, "").split(", ");
       expect(examples.length, locale).toBeGreaterThan(1);

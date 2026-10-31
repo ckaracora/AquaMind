@@ -16,7 +16,9 @@ import { MARINE_NITRATE_LIMIT_PPM, MARINE_SPECIFIC_GRAVITY_SAFE_MAX, MARINE_SPEC
 
 const tr = engineMessagesFor("tr");
 await loadLocaleBundle("en");
+await loadLocaleBundle("es");
 const en = engineMessagesFor("en");
+const es = engineMessagesFor("es");
 const formatFor = (volume: VolumeUnit) => engineTextFormat(createDisplayFormat("tr", { temperature: "celsius", volume, dateFormat: "day-first" }));
 const liters = formatFor("liters");
 const gallons = formatFor("gallons");
@@ -283,7 +285,7 @@ describe("motor metinleri dil dosyasından (karar 0021, 3. paket)", () => {
     expect(engineWarningText(tr, liters, warningOf(scenario("tatlı suda uyarı sınırını çok az aşan nitrat"), "nitrateHigh")).message).toMatch(/^Nitrat 50,0004 ppm\. /);
   });
 
-  it.each(["tr-engine.ts", "en-engine.ts"])("3b: dil dosyasında sayı türündeki hiçbir değer metne biçimleyicisiz girmez (tip denetimi, bütün dallar; %s)", async (name) => {
+  it.each(["tr-engine.ts", "en-engine.ts", "es-engine.ts"])("3b: dil dosyasında sayı türündeki hiçbir değer metne biçimleyicisiz girmez (tip denetimi, bütün dallar; %s)", async (name) => {
     // Çalışma zamanı denetimleri yalnız açılan dalları görür; bu denetim TypeScript tip bilgisiyle dosyanın tamamını tarar ve izin
     // listesiyle çalışır. Sayı türündeki (ya da sayı içeren birleşik türdeki) her ifade yalnız şunlardan biri olabilir: biçimleyicinin
     // (`f.`) bağımsız değişkeni, karşılaştırmanın ya da koşulun parçası, dizi sırası, ad tanımı, sayı sabiti tanımı. Başka her kullanım
@@ -339,7 +341,7 @@ describe("motor metinleri dil dosyasından (karar 0021, 3. paket)", () => {
     expect(problems).toEqual([]);
   }, 30_000);
 
-  it.each(["tr-engine.ts", "en-engine.ts"])("3b: dil dosyası her değişkeni kendi türünün okuyucusuyla okur (sayıyı metin gibi okumak yasak; %s)", async (name) => {
+  it.each(["tr-engine.ts", "en-engine.ts", "es-engine.ts"])("3b: dil dosyası her değişkeni kendi türünün okuyucusuyla okur (sayıyı metin gibi okumak yasak; %s)", async (name) => {
     // Tip denetimi okuyucuların (`num`, `str`, `list`, `flag`) verdiği türe güvenir; sayı olan bir değişkeni `str` ile okumak onu
     // metin gibi gösterir. Motorun gerçekten gönderdiği türler fikstürden ve senaryolardan toplanır. Dil dosyası söz dizimi ağacıyla
     // taranır: okuyucuya yapılan her başvuru doğrudan bir çağrı olmalı (takma ad ya da değer olarak geçirme yok), çağrı `(p, "ad")`
@@ -493,12 +495,12 @@ describe("motor metinleri dil dosyasından (karar 0021, 3. paket)", () => {
     });
   });
 
-  it("5: İngilizce dosya her sayıyı Türkçe dosyayla aynı yöntem ve ondalıkla yazar (cümle sırası farklı olabilir)", () => {
+  it.each([["İngilizce", en], ["İspanyolca", es]] as const)("5: %s dosya her sayıyı Türkçe dosyayla aynı yöntem ve ondalıkla yazar (cümle sırası farklı olabilir)", (_name, messages) => {
     const sorted = (table: Record<string, string>) =>
       Object.fromEntries(Object.entries(table).map(([code, sequences]) => [code, sequences.split(" | ").map((sequence) => sequence.split(" ").sort().join(" ")).sort().join(" | ")]));
-    const english = formatCalls(en);
-    expect(english.unexplained).toEqual([]);
-    expect(sorted(english.table)).toEqual(sorted(formatCalls(tr).table));
+    const other = formatCalls(messages);
+    expect(other.unexplained).toEqual([]);
+    expect(sorted(other.table)).toEqual(sorted(formatCalls(tr).table));
   });
 
   it("motor metinleri dil paketinin ana girişine bağlı değil (yalnız sağlık sayfasının paketine girer)", () => {
@@ -570,11 +572,16 @@ describe("katalogdan gelen değişkenlerin çevirisi (karar 0021, 4. paket)", ()
   });
 });
 
-describe("İngilizce motor metinleri (karar 0021, 5. paket)", () => {
-  const english = engineTextFormat(createDisplayFormat("en", { temperature: "fahrenheit", volume: "gallons", dateFormat: "month-first" }));
+// Başka dilin motor metinleri (karar 0021, 5. paket ve İspanyolca paketi). İspanyolcada "ü" yalnız "güe/güi" içinde Türkçe harf sayılmaz
+// (pingüino); boş not yerine yazılan genel cümle ve kaynağın notu etiketi dile göredir.
+describe.each([
+  { label: "İngilizce", locale: "en" as const, messages: en, turkish: /[çğıöşüÇĞİÖŞÜ]/, fallback: "not yet available in English", sourceNote: "Source note:" },
+  { label: "İspanyolca", locale: "es" as const, messages: es, turkish: /[çğıöşÇĞİÖŞÜ]|ü(?![ei])/, fallback: "aún no está disponible en español", sourceNote: "Nota de la fuente:" },
+])("$label motor metinleri", ({ locale, messages, turkish, fallback, sourceNote }) => {
+  const english = engineTextFormat(createDisplayFormat(locale, { temperature: "fahrenheit", volume: "gallons", dateFormat: "month-first" }));
   const analyses = [...fixture.map(({ name, result }) => [name, result] as const), ...scenarios];
-  const full = catalogTranslator("en", localeBundle("en")?.catalogSpecies);
-  const none = catalogTranslator("en", {});
+  const full = catalogTranslator(locale, localeBundle(locale)?.catalogSpecies);
+  const none = catalogTranslator(locale, {});
   /** Boş kalan bir parçanın izleri: çift boşluk, noktalamadan önce boşluk, boş iki nokta ya da parantez, art arda nokta. */
   const broken = /\s{2}|\s[.,;:]|:\s*[.,;]|\(\s*\)|\.\.|^\s|\s$/;
   /**
@@ -586,19 +593,19 @@ describe("İngilizce motor metinleri (karar 0021, 5. paket)", () => {
     ...[...SPECIES_NAME_PARAMS, ...SPECIES_NAME_LIST_PARAMS].flatMap((key) => [params[key] ?? []].flat()).filter((value): value is string => typeof value === "string" && full(value) === undefined),
   ].filter(Boolean);
 
-  it("her uyarı ve ölçüt İngilizce; Türkçe yalnız bilerek çevrilmeyen ekipman adı ve kapasite notunda kalır", () => {
+  it("her uyarı ve ölçüt seçili dilde; Türkçe yalnız bilerek çevrilmeyen ekipman adında ve çevirisi olmayan tür adında kalır", () => {
     for (const [name, analysis] of analyses) {
       for (const warning of analysis.warnings) {
-        const { title, message } = engineWarningText(en, english, warning, full);
+        const { title, message } = engineWarningText(messages, english, warning, full);
         let rest = `${title}\n${message}`;
         for (const value of untranslated(warning.params)) rest = rest.split(value).join("");
-        expect(rest, `${name}: ${warning.code}`).not.toMatch(/[çğıöşüÇĞİÖŞÜ]/);
+        expect(rest, `${name}: ${warning.code}`).not.toMatch(turkish);
         expect(title.trim(), `${name}: ${warning.code}`).not.toBe("");
         for (const text of [title, message]) expect(text, `${name}: ${warning.code}`).not.toMatch(broken);
       }
       for (const metric of analysis.metrics) {
-        const { label, detail } = engineMetricText(en, english, metric);
-        expect(`${label}\n${detail}`, `${name}: ${metric.key}`).not.toMatch(/[çğıöşüÇĞİÖŞÜ]/);
+        const { label, detail } = engineMetricText(messages, english, metric);
+        expect(`${label}\n${detail}`, `${name}: ${metric.key}`).not.toMatch(turkish);
         for (const text of [label, detail]) expect(text, `${name}: ${metric.key}`).not.toMatch(broken);
       }
     }
@@ -608,12 +615,12 @@ describe("İngilizce motor metinleri (karar 0021, 5. paket)", () => {
     let withNote = 0;
     for (const [name, analysis] of analyses) {
       for (const warning of analysis.warnings) {
-        const { title, message } = engineWarningText(en, english, warning, none);
+        const { title, message } = engineWarningText(messages, english, warning, none);
         expect(title.trim(), `${name}: ${warning.code}`).not.toBe("");
         expect(message.trim(), `${name}: ${warning.code}`).not.toBe("");
         for (const text of [title, message]) expect(text, `${name}: ${warning.code}`).not.toMatch(broken);
-        expect(message, `${name}: ${warning.code}`).not.toMatch(/Source note:\s*(?:\.|$)/);
-        if (message.includes("not yet available in English")) withNote++;
+        expect(message, `${name}: ${warning.code}`).not.toMatch(new RegExp(`${sourceNote}\\s*(?:\\.|$)`));
+        if (message.includes(fallback)) withNote++;
       }
     }
     // Bakım ve uyum notlarının çevirisi yoksa yerine genel cümle yazılır.
