@@ -8,13 +8,15 @@ import { fileURLToPath } from "node:url";
 import { describe, expect, it } from "vitest";
 import type { Aquarium, Equipment, Livestock, WaterParameters } from "@aquamind/domain";
 import { createAnalyzer, MARINE_NITRATE_LIMIT, MARINE_SPECIFIC_GRAVITY_SAFE, NITRATE_ABOVE_TAP_LIMIT, TAP_WATER_NITRATE_LIMIT, type EquipmentProfileInput, type HealthAnalysis, type KnowledgeResolver, type SpeciesProfileInput } from "@aquamind/compatibility-engine";
-import { createDisplayFormat, type VolumeUnit } from "@aquamind/localization";
-import { engineMessagesFor, engineTextFormat, type EngineTextFormat, type EngineTextParams } from "@aquamind/localization/engine";
+import { createDisplayFormat, loadLocaleBundle, localeBundle, type VolumeUnit } from "@aquamind/localization";
+import { engineMessagesFor, engineTextFormat, type EngineMessages, type EngineTextFormat, type EngineTextParams } from "@aquamind/localization/engine";
 import { catalogTranslator } from "@aquamind/localization/catalog";
-import { SPECIES_CATALOG_LIST_PARAMS, SPECIES_CATALOG_PARAMS, engineMetricText, engineWarningText, translateCatalogParams } from "@/lib/engine-text";
+import { EQUIPMENT_NOTE_PARAMS, SPECIES_CATALOG_LIST_PARAMS, SPECIES_CATALOG_PARAMS, SPECIES_NAME_LIST_PARAMS, SPECIES_NAME_PARAMS, engineMetricText, engineWarningText, translateCatalogParams } from "@/lib/engine-text";
 import { MARINE_NITRATE_LIMIT_PPM, MARINE_SPECIFIC_GRAVITY_SAFE_MAX, MARINE_SPECIFIC_GRAVITY_SAFE_MIN, NITRATE_ABOVE_TAP_LIMIT_PPM, TAP_WATER_NITRATE_LIMIT_PPM } from "../../../packages/localization/src/messages/tr-engine";
 
 const tr = engineMessagesFor("tr");
+await loadLocaleBundle("en");
+const en = engineMessagesFor("en");
 const formatFor = (volume: VolumeUnit) => engineTextFormat(createDisplayFormat("tr", { temperature: "celsius", volume, dateFormat: "day-first" }));
 const liters = formatFor("liters");
 const gallons = formatFor("gallons");
@@ -281,14 +283,14 @@ describe("motor metinleri dil dosyasından (karar 0021, 3. paket)", () => {
     expect(engineWarningText(tr, liters, warningOf(scenario("tatlı suda uyarı sınırını çok az aşan nitrat"), "nitrateHigh")).message).toMatch(/^Nitrat 50,0004 ppm\. /);
   });
 
-  it("3b: dil dosyasında sayı türündeki hiçbir değer metne biçimleyicisiz girmez (tip denetimi, bütün dallar)", async () => {
+  it.each(["tr-engine.ts", "en-engine.ts"])("3b: dil dosyasında sayı türündeki hiçbir değer metne biçimleyicisiz girmez (tip denetimi, bütün dallar; %s)", async (name) => {
     // Çalışma zamanı denetimleri yalnız açılan dalları görür; bu denetim TypeScript tip bilgisiyle dosyanın tamamını tarar ve izin
     // listesiyle çalışır. Sayı türündeki (ya da sayı içeren birleşik türdeki) her ifade yalnız şunlardan biri olabilir: biçimleyicinin
     // (`f.`) bağımsız değişkeni, karşılaştırmanın ya da koşulun parçası, dizi sırası, ad tanımı, sayı sabiti tanımı. Başka her kullanım
     // (şablon parçası, birleştirme, `String()`, `JSON.stringify`, `toString`, köşeli parantezli çağrı, dizi içinde `join`...) hatadır.
     const ts = (await import("typescript")).default;
     type Node = import("typescript").Node;
-    const file = fileURLToPath(new URL("../../../packages/localization/src/messages/tr-engine.ts", import.meta.url));
+    const file = fileURLToPath(new URL(`../../../packages/localization/src/messages/${name}`, import.meta.url));
     const program = ts.createProgram([file], { strict: true, noEmit: true, target: ts.ScriptTarget.ES2022, module: ts.ModuleKind.ESNext, moduleResolution: ts.ModuleResolutionKind.Bundler });
     const checker = program.getTypeChecker();
     const source = program.getSourceFile(file)!;
@@ -306,8 +308,8 @@ describe("motor metinleri dil dosyasından (karar 0021, 3. paket)", () => {
       const parent = node.parent;
       if (ts.isCallExpression(parent) && parent.arguments.some((argument) => argument === node)) {
         const callee = parent.expression;
-        // `Boolean(n)` yalnız doğru/yanlış verir; sayı metne girmez.
-        if (ts.isIdentifier(callee) && callee.text === "Boolean") return true;
+        // `Boolean(n)` yalnız doğru/yanlış verir; İngilizce dosyadaki `plural(n, tekil, çoğul)` yalnız sözcüğü seçer. Sayı metne girmez.
+        if (ts.isIdentifier(callee) && (callee.text === "Boolean" || callee.text === "plural")) return true;
         if (!ts.isPropertyAccessExpression(callee)) return false;
         if (ts.isIdentifier(callee.expression) && callee.expression.text === "f") return true;
         // Dizi kesme konumu (`names.slice(0, -1)`): sonuç yine dizidir, sayı metne girmez.
@@ -320,6 +322,8 @@ describe("motor metinleri dil dosyasından (karar 0021, 3. paket)", () => {
       if (ts.isElementAccessExpression(parent) && parent.argumentExpression === node) return true;
       if ((ts.isParameter(parent) || ts.isVariableDeclaration(parent) || ts.isBindingElement(parent)) && parent.name === node) return true;
       if (ts.isVariableDeclaration(parent) && parent.initializer === node && ts.isNumericLiteral(node)) return true;
+      // Sabit sınırların içe ve dışa aktarımı (`engine-limits.ts`) metin değildir.
+      if (ts.isImportSpecifier(parent) || ts.isExportSpecifier(parent)) return true;
       return false;
     };
     const problems: string[] = [];
@@ -335,7 +339,7 @@ describe("motor metinleri dil dosyasından (karar 0021, 3. paket)", () => {
     expect(problems).toEqual([]);
   }, 30_000);
 
-  it("3b: dil dosyası her değişkeni kendi türünün okuyucusuyla okur (sayıyı metin gibi okumak yasak)", async () => {
+  it.each(["tr-engine.ts", "en-engine.ts"])("3b: dil dosyası her değişkeni kendi türünün okuyucusuyla okur (sayıyı metin gibi okumak yasak; %s)", async (name) => {
     // Tip denetimi okuyucuların (`num`, `str`, `list`, `flag`) verdiği türe güvenir; sayı olan bir değişkeni `str` ile okumak onu
     // metin gibi gösterir. Motorun gerçekten gönderdiği türler fikstürden ve senaryolardan toplanır. Dil dosyası söz dizimi ağacıyla
     // taranır: okuyucuya yapılan her başvuru doğrudan bir çağrı olmalı (takma ad ya da değer olarak geçirme yok), çağrı `(p, "ad")`
@@ -348,7 +352,7 @@ describe("motor metinleri dil dosyasından (karar 0021, 3. paket)", () => {
     }
     const expected: Record<string, string> = { num: "number", str: "string", list: "list", flag: "boolean" };
     const ts = (await import("typescript")).default;
-    const file = fileURLToPath(new URL("../../../packages/localization/src/messages/tr-engine.ts", import.meta.url));
+    const file = fileURLToPath(new URL(`../../../packages/localization/src/messages/${name}`, import.meta.url));
     const source = ts.createSourceFile(file, readFileSync(file, "utf8"), ts.ScriptTarget.ES2022, true);
     const problems: string[] = [];
     let reads = 0;
@@ -392,7 +396,8 @@ describe("motor metinleri dil dosyasından (karar 0021, 3. paket)", () => {
     }
   });
 
-  it("3b: her kod sayısını doğru türde yazar (adet, çevrim/saat, su ölçümü, hacim, uzunluk)", () => {
+  /** Bir dil dosyasının her kodda biçimleyiciye yaptığı çağrılar (aşağıdaki iki test). */
+  const formatCalls = (messages: EngineMessages) => {
     // Her yazımda biçimleyicinin hangi yöntemiyle, hangi değişkenin, kaç ondalıkla ve hangi sırayla yazıldığı kaydedilir. Yanlış yöntem
     // ya da ondalık (ör. su ölçümünü bir ondalıklı adet gibi yazmak, iki değerin ondalıklarını değiştirmek) değeri çoğu örnekte
     // değiştirmediği ve sınama biçimleyicisinin payı dil dosyasının seçtiği ondalıktan türediği için yukarıdaki karşılaştırmalardan kaçabilir.
@@ -426,8 +431,8 @@ describe("motor metinleri dil dosyasından (karar 0021, 3. paket)", () => {
       add(original, code, calls(params, (format) => render(params, format)));
     };
     for (const analysis of [...fixture.map(({ result }) => result), ...scenarios.map(([, analysis]) => analysis)]) {
-      for (const warning of analysis.warnings) record(`uyarı ${warning.code}`, warning.params, (params, format) => engineWarningText(tr, format, { ...warning, params }));
-      for (const metric of analysis.metrics) record(`ölçüt ${metric.detailCode}`, metric.detailParams, (params, format) => engineMetricText(tr, format, { ...metric, detailParams: params }));
+      for (const warning of analysis.warnings) record(`uyarı ${warning.code}`, warning.params, (params, format) => engineWarningText(messages, format, { ...warning, params }));
+      for (const metric of analysis.metrics) record(`ölçüt ${metric.detailCode}`, metric.detailParams, (params, format) => engineMetricText(messages, format, { ...metric, detailParams: params }));
     }
     const methodsOf = (sequence: string) => sequence.split(" ").map((call) => call.slice(0, call.indexOf(":")));
     const isSubsequence = (small: string[], large: string[]) => {
@@ -438,8 +443,13 @@ describe("motor metinleri dil dosyasından (karar 0021, 3. paket)", () => {
     const unexplained = [...original].flatMap(([code, sequences]) =>
       [...sequences].filter((sequence) => ![...(used.get(code) ?? [])].some((full) => isSubsequence(methodsOf(sequence), methodsOf(full)))).map((sequence) => `${code}: ${sequence}`),
     );
-    expect(unexplained).toEqual([]);
     const table = Object.fromEntries([...used].map(([code, sequences]) => [code, [...sequences].sort().join(" | ")]));
+    return { unexplained, table };
+  };
+
+  it("3b: her kod sayısını doğru türde yazar (adet, çevrim/saat, su ölçümü, hacim, uzunluk)", () => {
+    const { unexplained, table } = formatCalls(tr);
+    expect(unexplained).toEqual([]);
     expect(table).toEqual({
       "ölçüt estimatedOk": "number:watts",
       "ölçüt groupLow": "number:count",
@@ -483,6 +493,14 @@ describe("motor metinleri dil dosyasından (karar 0021, 3. paket)", () => {
     });
   });
 
+  it("5: İngilizce dosya her sayıyı Türkçe dosyayla aynı yöntem ve ondalıkla yazar (cümle sırası farklı olabilir)", () => {
+    const sorted = (table: Record<string, string>) =>
+      Object.fromEntries(Object.entries(table).map(([code, sequences]) => [code, sequences.split(" | ").map((sequence) => sequence.split(" ").sort().join(" ")).sort().join(" | ")]));
+    const english = formatCalls(en);
+    expect(english.unexplained).toEqual([]);
+    expect(sorted(english.table)).toEqual(sorted(formatCalls(tr).table));
+  });
+
   it("motor metinleri dil paketinin ana girişine bağlı değil (yalnız sağlık sayfasının paketine girer)", () => {
     for (const file of ["index.ts", "messages/tr.ts"]) {
       const source = readFileSync(fileURLToPath(new URL(`../../../packages/localization/src/${file}`, import.meta.url)), "utf8");
@@ -492,10 +510,10 @@ describe("motor metinleri dil dosyasından (karar 0021, 3. paket)", () => {
 });
 
 describe("katalogdan gelen değişkenlerin çevirisi (karar 0021, 4. paket)", () => {
-  // Katalogdan gelen Türkçe metin taşımayan metin değişkenleri: kaynak adları (özel ad), ekipman adı ve kapasite notu (ekipman aşaması),
-  // dilden bağımsız kodlar (akvaryum türü, deniz suyu profili ve yönü, geçersiz ölçüm alanları).
-  const notSpeciesCatalog = new Set(["source", "sources", "names", "note", "aquariumType", "profile", "direction", "fields"]);
-  const speciesCatalog = new Set<string>([...SPECIES_CATALOG_PARAMS, ...SPECIES_CATALOG_LIST_PARAMS]);
+  // Katalogdan gelen Türkçe metin taşımayan metin değişkenleri: kaynak adları (özel ad), ekipman adı (marka ve model), dilden bağımsız
+  // kodlar (akvaryum türü, deniz suyu profili ve yönü, geçersiz ölçüm alanları). Ekipmanın kapasite notu katalog metnidir (5. paket).
+  const notSpeciesCatalog = new Set(["source", "sources", "names", "aquariumType", "profile", "direction", "fields"]);
+  const speciesCatalog = new Set<string>([...SPECIES_CATALOG_PARAMS, ...SPECIES_CATALOG_LIST_PARAMS, ...EQUIPMENT_NOTE_PARAMS]);
   const analyses = [...fixture.map(({ name, result }) => [name, result] as const), ...scenarios];
 
   it("uyarı ve ölçütlerdeki her metin değişkeni sınıflandırılmış: ya katalog metni ya da bilerek çevrilmeyen değer", () => {
@@ -542,13 +560,64 @@ describe("katalogdan gelen değişkenlerin çevirisi (karar 0021, 4. paket)", ()
     );
     expect(translated).toEqual({ name: "«Neon tetra»", text: "«Not»", condition: "", source: "Seriously Fish", sources: ["Fishkeeper"], eaters: ["«A»", "«B»"], noteConditions: ["«koşul»"], aquariumType: "freshwater", count: 3 });
     // Çevirisi olmayan ad katalogdaki adla kalır; çevirisi olmayan not ve koşul boş verilir (ürün sahibi kararı 2026-10-30).
-    expect(translateCatalogParams({ name: "Ad", eaters: ["A"], text: "Not", condition: "Koşul", noteConditions: ["K"], noteNames: ["N"] }, () => undefined))
-      .toEqual({ name: "Ad", eaters: ["A"], text: "", condition: "", noteConditions: [""], noteNames: ["N"] });
+    expect(translateCatalogParams({ name: "Ad", eaters: ["A"], text: "Not", condition: "Koşul", noteConditions: ["K"], noteNames: ["N"], note: "Kapasite notu", names: ["Marka Model"] }, () => undefined))
+      .toEqual({ name: "Ad", eaters: ["A"], text: "", condition: "", noteConditions: [""], noteNames: ["N"], note: "", names: ["Marka Model"] });
     const nip = scenario("yüzgeç ısırma").warnings.find((warning) => warning.code === "finNip")!;
     const text = engineWarningText(tr, formatFor("liters"), nip, mark);
     expect(text.title).toContain(`«${nip.params.target}»`);
     expect(text.message).toContain(`«${nip.params.nipper}»`);
     expect(text.message).toContain(`Kaynak: ${nip.params.source}.`);
+  });
+});
+
+describe("İngilizce motor metinleri (karar 0021, 5. paket)", () => {
+  const english = engineTextFormat(createDisplayFormat("en", { temperature: "fahrenheit", volume: "gallons", dateFormat: "month-first" }));
+  const analyses = [...fixture.map(({ name, result }) => [name, result] as const), ...scenarios];
+  const full = catalogTranslator("en", localeBundle("en")?.catalogSpecies);
+  const none = catalogTranslator("en", {});
+  /** Boş kalan bir parçanın izleri: çift boşluk, noktalamadan önce boşluk, boş iki nokta ya da parantez, art arda nokta. */
+  const broken = /\s{2}|\s[.,;:]|:\s*[.,;]|\(\s*\)|\.\.|^\s|\s$/;
+  /**
+   * Bilerek çevrilmeyen değişkenler: ekipman adları (marka ve model) ve çevirisi olmayan tür adı (katalogdaki adla kalır; senaryoların
+   * uydurma türleri, ör. "Uzun yüzgeçli tür"). Katalogdaki her türün adının çevirisi olduğunu çeviri testi denetler.
+   */
+  const untranslated = (params: EngineTextParams) => [
+    ...((params.names as string[] | undefined) ?? []),
+    ...[...SPECIES_NAME_PARAMS, ...SPECIES_NAME_LIST_PARAMS].flatMap((key) => [params[key] ?? []].flat()).filter((value): value is string => typeof value === "string" && full(value) === undefined),
+  ].filter(Boolean);
+
+  it("her uyarı ve ölçüt İngilizce; Türkçe yalnız bilerek çevrilmeyen ekipman adı ve kapasite notunda kalır", () => {
+    for (const [name, analysis] of analyses) {
+      for (const warning of analysis.warnings) {
+        const { title, message } = engineWarningText(en, english, warning, full);
+        let rest = `${title}\n${message}`;
+        for (const value of untranslated(warning.params)) rest = rest.split(value).join("");
+        expect(rest, `${name}: ${warning.code}`).not.toMatch(/[çğıöşüÇĞİÖŞÜ]/);
+        expect(title.trim(), `${name}: ${warning.code}`).not.toBe("");
+        for (const text of [title, message]) expect(text, `${name}: ${warning.code}`).not.toMatch(broken);
+      }
+      for (const metric of analysis.metrics) {
+        const { label, detail } = engineMetricText(en, english, metric);
+        expect(`${label}\n${detail}`, `${name}: ${metric.key}`).not.toMatch(/[çğıöşüÇĞİÖŞÜ]/);
+        for (const text of [label, detail]) expect(text, `${name}: ${metric.key}`).not.toMatch(broken);
+      }
+    }
+  });
+
+  it("katalog çevirisi olmasa da cümleler eksiksiz: not ve koşul atlanır, gövdesi boş kalacak uyarı genel bir cümle yazar", () => {
+    let withNote = 0;
+    for (const [name, analysis] of analyses) {
+      for (const warning of analysis.warnings) {
+        const { title, message } = engineWarningText(en, english, warning, none);
+        expect(title.trim(), `${name}: ${warning.code}`).not.toBe("");
+        expect(message.trim(), `${name}: ${warning.code}`).not.toBe("");
+        for (const text of [title, message]) expect(text, `${name}: ${warning.code}`).not.toMatch(broken);
+        expect(message, `${name}: ${warning.code}`).not.toMatch(/Source note:\s*(?:\.|$)/);
+        if (message.includes("not yet available in English")) withNote++;
+      }
+    }
+    // Bakım ve uyum notlarının çevirisi yoksa yerine genel cümle yazılır.
+    expect(withNote).toBeGreaterThan(0);
   });
 });
 

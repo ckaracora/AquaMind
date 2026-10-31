@@ -1,3 +1,4 @@
+import type { Locale } from "@aquamind/localization";
 import type { Aquarium, Equipment, Livestock, MaintenanceTask, Plant, WaterParameters } from "@/types/aquarium";
 
 export const aquariums: Aquarium[] = [{
@@ -41,3 +42,33 @@ export const equipment: Equipment[] = [
   { id: "e2", aquariumId: "aqua-1", category: "lighting", brand: "Chihiros", model: "WRGB II 90", installedAt: "2024-03-12", specifications: "100 W", catalogId:"chihiros-wrgb2-90" },
   { id: "e3", aquariumId: "aqua-1", category: "co2", brand: "ISTA", model: "2L Set", installedAt: "2024-03-18" },
 ];
+
+// Demo kayıtların başka dildeki metinleri (karar 0021, 5. paket). Demo kayıtlar yalnız ekranda gösterilir, depoya yazılmaz; dil değişince
+// hâlâ demo olan koleksiyonların satırları kimliğe göre bu metinlerle değiştirilir (aquarium-provider). Demo akvaryuma kayıt eklenip
+// akvaryum gerçek veriye dönüşürse o anki dildeki adıyla kalır. Canlı adları katalog çevirisinden, bitki yerleşimleri dil dosyasından
+// gösterildiği için burada yoktur.
+type DemoCollection = "aquariums" | "maintenanceTasks" | "plants" | "equipment";
+const demoSeeds: Record<DemoCollection, ReadonlyArray<{ id: string }>> = { aquariums, maintenanceTasks, plants, equipment };
+const demoTexts: Record<Exclude<Locale, "tr">, Record<DemoCollection, Record<string, Record<string, string>>>> = {
+  en: {
+    aquariums: { "aqua-1": { name: "Amazon River", description: "Densely planted South American biotope" } },
+    maintenanceTasks: { m1: { title: "30% water change" }, m2: { title: "Clean the filter's prefilter sponge" }, m3: { title: "Trim the background plants" } },
+    plants: { p1: { name: "Amazon sword" } },
+    equipment: { e1: { specifications: "1100 L/h" } },
+  },
+};
+
+/** Demo satırlarını seçili dilin metinleriyle verir; demo olmayan satır olduğu gibi kalır. Değişiklik yoksa aynı dizi döner. */
+export function localizeDemoRows<T extends { id: string }>(collection: DemoCollection, rows: T[], locale: Locale): T[] {
+  let changed = false;
+  const next = rows.map((row) => {
+    const seed = demoSeeds[collection].find((item) => item.id === row.id) as T | undefined;
+    if (!seed) return row;
+    const localized = { ...seed, ...(locale === "tr" ? {} : demoTexts[locale][collection][row.id]) } as T;
+    const keys = new Set([...Object.keys(localized), ...Object.keys(row)]);
+    if ([...keys].every((key) => (localized as Record<string, unknown>)[key] === (row as Record<string, unknown>)[key])) return row;
+    changed = true;
+    return localized;
+  });
+  return changed ? next : rows;
+}

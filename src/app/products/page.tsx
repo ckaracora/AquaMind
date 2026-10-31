@@ -4,11 +4,12 @@ import { useMemo, useState } from "react";
 import { PackageSearch, Search } from "lucide-react";
 import { AppShell } from "@/components/app-shell";
 import { PageHeader } from "@/components/page-header";
-import { careCategoryLabels, careProductCatalog, type CareProductCategory } from "@/data/care-product-catalog";
+import { careProductCatalog, type CareProductCategory } from "@/data/care-product-catalog";
 import { useI18n } from "@/providers/i18n-provider";
 
 export default function ProductsPage(){
-  // Kategori adları ve ürün açıklamaları katalogdan gelir (4. paket); arama, Türkçe katalog metni için Türkçe küçük harfle eşleşir.
+  // Kategori adları dil dosyasındadır; ürün açıklaması katalog metnidir ve çevirisi olmayan dilde gösterilmez (ürün sahibi kararı
+  // 2026-10-30). Arama, Türkçe katalog metni için Türkçe küçük harfle eşleşir.
   const {t}=useI18n();
   const [category,setCategory]=useState<"all"|CareProductCategory>("all");
   const [brand,setBrand]=useState("all");
@@ -21,8 +22,10 @@ export default function ProductsPage(){
       <label className="relative"><Search size={16} className="absolute left-4 top-3.5 text-[#586e77]"/><input value={query} onChange={e=>setQuery(e.target.value)} placeholder={t.products.search} className="w-full rounded-xl border border-white/[.08] bg-panel py-3 pl-11 pr-4 text-xs outline-none focus:border-aqua/50"/></label>
       <select value={brand} onChange={e=>setBrand(e.target.value)} className="rounded-xl border border-white/[.08] bg-panel px-4 py-3 text-xs font-bold outline-none"><option value="all">{t.products.allBrands}</option>{brands.map(value=><option key={value}>{value}</option>)}</select>
     </div>
-    <div className="mb-6 flex gap-1 overflow-x-auto">{(["all",...Object.keys(careCategoryLabels)] as Array<"all"|CareProductCategory>).map(value=><button key={value} onClick={()=>setCategory(value)} className={`min-h-11 min-w-11 shrink-0 rounded-xl px-3 py-2.5 text-[11px] sm:text-[10px] font-bold sm:min-h-0 sm:min-w-0 ${category===value?"bg-aqua/10 text-aqua":"bg-white/[.025] text-[#71858d]"}`}>{value==="all"?t.common.all:careCategoryLabels[value]}</button>)}</div>
+    <div className="mb-6 flex gap-1 overflow-x-auto">{(["all",...Object.keys(t.products.categories)] as Array<"all"|CareProductCategory>).map(value=><button key={value} onClick={()=>setCategory(value)} className={`min-h-11 min-w-11 shrink-0 rounded-xl px-3 py-2.5 text-[11px] sm:text-[10px] font-bold sm:min-h-0 sm:min-w-0 ${category===value?"bg-aqua/10 text-aqua":"bg-white/[.025] text-[#71858d]"}`}>{value==="all"?t.common.all:t.products.categories[value]}</button>)}</div>
     <p className="mb-4 text-xs font-bold text-[#71858d]">{t.products.count(items.length)}</p>
-    {items.length?<div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">{items.map(item=><article key={item.id} className="surface p-5"><div className="flex items-start justify-between gap-3"><span className="grid size-10 place-items-center rounded-xl bg-aqua/10 text-aqua"><PackageSearch size={19}/></span><span className="rounded-full bg-white/[.04] px-2 py-1 text-[11px] sm:text-[8px] font-bold text-[#71858d]">{careCategoryLabels[item.category]}</span></div><h2 className="mt-4 font-extrabold">{item.brand}</h2><p className="mt-1 text-sm font-semibold text-[#a8bbc2]">{item.model}</p><p className="mt-3 text-[11px] leading-5 text-[#71858d]">{item.description}</p></article>)}</div>:<div className="surface grid min-h-52 place-items-center p-8 text-center text-sm text-[#71858d]">{t.products.empty}</div>}
+    {items.length?<div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">{items.map(item=><article key={item.id} className="surface p-5"><div className="flex items-start justify-between gap-3"><span className="grid size-10 place-items-center rounded-xl bg-aqua/10 text-aqua"><PackageSearch size={19}/></span><span className="rounded-full bg-white/[.04] px-2 py-1 text-[11px] sm:text-[8px] font-bold text-[#71858d]">{t.products.categories[item.category]}</span></div><h2 className="mt-4 font-extrabold">{item.brand}</h2><p className="mt-1 text-sm font-semibold text-[#a8bbc2]">{item.model}</p><ProductDescription text={item.description}/></article>)}</div>:<div className="surface grid min-h-52 place-items-center p-8 text-center text-sm text-[#71858d]">{t.products.empty}</div>}
   </div></AppShell>;
 }
+
+function ProductDescription({text}:{text:string}){const {catalogText}=useI18n();const shown=catalogText(text);return shown?<p className="mt-3 text-[11px] leading-5 text-[#71858d]">{shown}</p>:null}

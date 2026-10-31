@@ -499,6 +499,16 @@ export const tr = {
     noModel: "Model belirtilmemiş",
     specs: "Teknik bilgiler",
     noSpecs: "Bilgi eklenmemiş",
+    /**
+     * Katalogdaki teknik bilgi satırı çevrilmemiş bir dilde gösterilmez; yerine kaydın sayılarından kurulan özet yazılır
+     * (`src/lib/equipment-text.ts`). Türkçede katalogdaki satır gösterildiği için bu özet kullanılmaz.
+     */
+    specSummary: {
+      flow: (value: string) => `${value} L/saat`,
+      power: (value: string) => `${value} W`,
+      volumeUpTo: (volume: string) => `en çok ${volume}`,
+      volumeRange: (min: string, max: string) => `${min}–${max}`,
+    },
     installedOn: (date: string) => `Kurulum: ${date}`,
     remove: "Ekipmanı sil",
     emptyTitle: "Ekipman bulunamadı",
@@ -574,6 +584,13 @@ export const tr = {
     allBrands: "Tüm markalar",
     count: (count: number) => `${count} ürün`,
     empty: "Aramana uygun ürün bulunamadı.",
+    /** Kategori adları; sıra filtre düğmelerinin sırasıdır. Türkçe adlar katalogdaki `careCategoryLabels` ile aynı olmalı (test). */
+    categories: {
+      food: "Yem", fertilizer: "Gübre", water_conditioner: "Su düzenleyici", bacteria: "Bakteri kültürü",
+      test: "Test", filter_media: "Filtre medyası", substrate: "Taban malzemesi", plant_seed: "Bitki tohumu", treatment: "Tedavi", decoration: "Dekorasyon",
+      aquarium_set: "Akvaryum seti", aquaterrarium: "Aquaterrarium", terrarium: "Terrarium", tank: "Boş akvaryum",
+      cover: "Akvaryum kapağı", cabinet: "Akvaryum dolabı",
+    },
   },
   calculators: {
     eyebrow: "Araç kutusu",
@@ -644,7 +661,10 @@ export const tr = {
     },
     units: {
       title: "Birimler ve bölge",
-      description: "Hesaplamalarda kullanılacak ölçü biçimleri",
+      description: "Arayüz dili ve hesaplamalarda kullanılacak ölçü biçimleri",
+      language: "Dil",
+      /** Dil seçimi hemen uygulanır; paketi yüklenemezse dil değişmez. */
+      languageLoadFailed: "Dil yüklenemedi; bağlantını kontrol edip tekrar dene.",
       temperature: "Sıcaklık",
       celsius: "Santigrat (°C)",
       fahrenheit: "Fahrenheit (°F)",
@@ -716,14 +736,14 @@ export const tr = {
         downloadCurrent: "Önce şu anki verilerimi indir",
         confirm: "Yedeği geri yükle",
         cancel: "Vazgeç",
-        /** Sayının yanında tekil yazılır ("3 akvaryum"). */
+        /** `count`: kayıt sayısı; Türkçede ad sayının yanında tekil yazılır ("3 akvaryum"). Başka dil çoğulu sayıya göre seçer. */
         units: {
-          aquariums: "akvaryum",
-          waterReadings: "su ölçümü",
-          maintenanceTasks: "bakım kaydı",
-          livestock: "canlı",
-          plants: "bitki",
-          equipment: "ekipman",
+          aquariums: (_count: number) => "akvaryum",
+          waterReadings: (_count: number) => "su ölçümü",
+          maintenanceTasks: (_count: number) => "bakım kaydı",
+          livestock: (_count: number) => "canlı",
+          plants: (_count: number) => "bitki",
+          equipment: (_count: number) => "ekipman",
         },
       },
       persistence: {

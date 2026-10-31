@@ -1,6 +1,6 @@
-import { describe, expect, it } from "vitest";
+import { beforeAll, describe, expect, it } from "vitest";
 import {
-  DEFAULT_LOCALE, SUPPORTED_LOCALES, celsiusToFahrenheit, cmToInches, createDisplayFormat, fahrenheitToCelsius, formatCalendarDate,
+  DEFAULT_LOCALE, SUPPORTED_LOCALES, loadLocaleBundle, celsiusToFahrenheit, cmToInches, createDisplayFormat, fahrenheitToCelsius, formatCalendarDate,
   formatDate, formatNumber, formatTemperature, formatVolume, gallonsToLiters, inchesToCm, isLocale, litersToGallons, messagesFor,
   temperatureFromCelsius, temperatureToCelsius, volumeFromLiters, volumeInputText, volumeInputToLiters, volumeToLiters, type Messages,
 } from "../src";
@@ -17,9 +17,12 @@ describe("diller", () => {
     expect(DEFAULT_LOCALE).toBe("tr");
     expect(SUPPORTED_LOCALES).toContain(DEFAULT_LOCALE);
     expect(isLocale("tr")).toBe(true);
+    expect(isLocale("en")).toBe(true);
     expect(isLocale("xx")).toBe(false);
     expect(isLocale(undefined)).toBe(false);
   });
+
+  beforeAll(() => Promise.all(SUPPORTED_LOCALES.map((locale) => loadLocaleBundle(locale))));
 
   it("her dilin metinleri boş değil; değişkenli metin fonksiyon", () => {
     for (const locale of SUPPORTED_LOCALES) {
@@ -45,6 +48,13 @@ describe("biçimleme", () => {
     expect(formatNumber(1234.56, "tr")).toBe("1.234,6");
     expect(formatNumber(25.4, "tr")).toBe("25,4");
     expect(formatNumber(1500, "tr", { maximumFractionDigits: 0 })).toBe("1.500");
+  });
+
+  it("İngilizcede Amerikan biçimi: binlik virgül, ondalık nokta, ay adı İngilizce", () => {
+    expect(formatNumber(1234.56, "en")).toBe("1,234.6");
+    expect(formatVolume(120, "gallons", "en")).toBe("31.7 gal");
+    expect(formatTemperature(25.4, "celsius", "en")).toBe("25.4 °C");
+    expect(formatDate("2026-10-19", "en", { day: "numeric", month: "short", year: "numeric" })).toBe("Oct 19, 2026");
   });
 
   it("hacim ve sıcaklık tercih edilen birimde gösterilir", () => {

@@ -27,7 +27,7 @@ const values = (text: string, locale: "tr" | "en") =>
 /** Ölçü birimleri aynı sayıda geçmeli (litre ile galon, cm ile inç karışmasın). */
 // Sözcük sınırı Unicode harfe göredir (`\b` Türkçe harfleri sözcük saymaz: "zayıftır" içinde "ft" bulunurdu).
 const UNITS: Array<[string, RegExp, RegExp]> = [
-  ["litre", /(?<!\p{L})litre/giu, /(?<!\p{L})litre/giu],
+  ["litre", /(?<!\p{L})litre/giu, /(?<!\p{L})liter/giu],
   ["L", /\d\s?L(?![\p{L}\d])/gu, /\d\s?L(?![\p{L}\d])/gu],
   ["galon", /(?<!\p{L})galon/giu, /(?<!\p{L})gallon/giu],
   ["cm", /(?<!\p{L})cm(?!\p{L})/gu, /(?<!\p{L})cm(?!\p{L})/gu],
@@ -37,7 +37,7 @@ const UNITS: Array<[string, RegExp, RegExp]> = [
   ["mg/L", /mg\/L/g, /mg\/L/g],
   ["g/L", /(?<!m)g\/L/g, /(?<!m)g\/L/g],
   ["m", /\d\s?m(?![\p{L}\d/])/gu, /\d\s?m(?![\p{L}\d/])/gu],
-  ["metre", /(?<!\p{L})metre/giu, /(?<!\p{L})metre/giu],
+  ["metre", /(?<!\p{L})metre/giu, /(?<!\p{L})meter/giu],
   ["%", /%/g, /%/g],
   ["SG", /(?<!\p{L})SG(?!\p{L})/gu, /(?<!\p{L})SG(?!\p{L})/gu],
   ["dGH", /dGH/g, /dGH/g],

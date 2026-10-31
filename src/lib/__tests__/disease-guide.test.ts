@@ -2,7 +2,7 @@ import { existsSync, readFileSync } from "node:fs";
 import { createElement, type ReactNode } from "react";
 import { renderToStaticMarkup } from "react-dom/server";
 import { beforeEach, describe, expect, it, vi } from "vitest";
-import { messagesFor } from "@aquamind/localization";
+import { loadLocaleBundle, messagesFor, type Locale } from "@aquamind/localization";
 import { diseaseMessagesFor } from "@aquamind/localization/diseases";
 import { aquariumsWithInvertebrates, copperSources, diseaseSources, firstSteps, guideSources, requestedAquariumId, vetSources, type DiseaseSourceId } from "@/data/disease-guide";
 import { AQUARIUM_PARAM, diseaseGuideHref, waterReadingHref } from "@/lib/aquarium-links";
@@ -17,16 +17,20 @@ const animal = (aquariumId: string, category: Livestock["category"], quantity = 
 
 // Sayfanın içeriği gerçek bileşen çıktısıyla sınanır: veri sağlayıcısı ve kabuk yerine sınama değerleri verilir. Adres (`search`) bileşene
 // doğrudan verilir; sayfa (src/app/diseases/page.tsx) yalnız tarayıcıdaki adresi okuyup bu bileşene geçirir.
-const store = vi.hoisted(() => ({ value: { aquariums: [] as Aquarium[], livestock: [] as Livestock[], hydrated: true } }));
+const store = vi.hoisted(() => ({ value: { aquariums: [] as Aquarium[], livestock: [] as Livestock[], hydrated: true }, locale: "tr" as "tr" | "en" }));
 vi.mock("@/providers/aquarium-provider", () => ({ useAquariums: () => store.value }));
 vi.mock("@/providers/i18n-provider", async () => {
   const { messagesFor: messages } = await import("@aquamind/localization");
-  return { useI18n: () => ({ t: messages("tr"), locale: "tr" }) };
+  return { useI18n: () => ({ t: messages(store.locale), locale: store.locale }) };
 });
 vi.mock("@/components/app-shell", () => ({ AppShell: ({ children }: { children: ReactNode }) => children }));
 vi.mock("@/components/page-header", () => ({ PageHeader: () => null }));
 const { DiseaseGuideView } = await import("@/components/disease-guide-view");
-const render = (search = "") => renderToStaticMarkup(createElement(DiseaseGuideView, { search }));
+await loadLocaleBundle("en");
+const render = (search = "", locale: Locale = "tr") => {
+  store.locale = locale;
+  return renderToStaticMarkup(createElement(DiseaseGuideView, { search }));
+};
 const decode = (html: string) => html.replace(/&#x27;/g, "'").replace(/&quot;/g, "\"").replace(/&amp;/g, "&");
 
 describe("bakır uyarısının akvaryumları", () => {
@@ -96,13 +100,13 @@ describe("sayfanın metinleri kaynağa sadık", () => {
 });
 
 describe("kaynaklar", () => {
-  const used: DiseaseSourceId[] = [...firstSteps.flatMap((step) => step.sources), ...copperSources, ...vetSources, ...guideSources];
+  const used: DiseaseSourceId[] = [...firstSteps.flatMap((step) => step.sources), ...copperSources, ...vetSources.tr, ...vetSources.en, ...guideSources];
 
   it("her kaynak HTTPS, okuma tarihli ve dili belli; sayfada kullanılmayan kaynak yok", () => {
     for (const [id, source] of Object.entries(diseaseSources)) {
       expect(source.id).toBe(id);
       expect(source.url).toMatch(/^https:\/\/[^\s]+$/);
-      expect(source.verifiedAt).toBe("2026-10-22");
+      expect(source.verifiedAt).toBe(["aafvFindVet", "wavmaFindVet"].includes(id) ? "2026-10-31" : "2026-10-22");
       expect(["tr", "en"]).toContain(source.language);
       expect(used).toContain(id);
     }
@@ -118,10 +122,16 @@ describe("kaynaklar", () => {
       "https://ornamentalfish.org/what-we-do/advice-information/care-sheets/caresheets-tropical-freshwater-invertebrates/how-to-look-after-freshwater-shrimp-and-snails/",
       "https://www.practicalfishkeeping.co.uk/fishkeeping-answers/articles/are-there-any-shrimps-my-fish-wont-eat",
     ]);
-    expect(vetSources.map((id) => [diseaseSources[id].url, diseaseSources[id].language])).toEqual([
+    expect(vetSources.tr.map((id) => [diseaseSources[id].url, diseaseSources[id].language])).toEqual([
       ["https://tvhb.org.tr/odalar/", "tr"],
       ["https://veteriner.erciyes.edu.tr/tr/d/su-urunleri-ve-hastaliklari-anabilim-dali-tanitimi/klinik-oncesi-bolumler", "tr"],
       ["https://www.fishvetsociety.org.uk/find-a-vet/", "en"],
+    ]);
+    // İngilizcede İngilizce konuşulan ülkeler ve dünya geneli: AAFV (Kuzey Amerika), FVS (İngiltere ve İrlanda), WAVMA (dünya geneli).
+    expect(vetSources.en.map((id) => [diseaseSources[id].url, diseaseSources[id].language])).toEqual([
+      ["https://fishvets.org/find-a-fish-vet/", "en"],
+      ["https://www.fishvetsociety.org.uk/find-a-vet/", "en"],
+      ["https://www.wavma.org/find-a-fish-vet", "en"],
     ]);
     expect(guideSources.map((id) => diseaseSources[id].url)).toEqual([
       "https://ask.ifas.ufl.edu/topics/fish-health-management",
@@ -171,10 +181,11 @@ describe("sayfanın çıktısı", () => {
     expect(html).toMatch(/<a href="\/water"[^>]*>Su ölçümü ekle<\/a>/);
   });
 
-  it("her dış bağlantı yeni sekmede, doğru dille açılır ve en az 44 × 44 piksel dokunma alanı vardır", () => {
-    const html = decode(render());
+  it.each(["tr", "en"] as const)("her dış bağlantı yeni sekmede, doğru dille açılır ve en az 44 × 44 piksel dokunma alanı vardır (%s)", (locale) => {
+    const html = decode(render("", locale));
+    const d = diseaseMessagesFor(locale);
     const links = [...html.matchAll(/<a ([^>]*)>(.*?)<\/a>/g)].filter(([, attributes]) => /href="https:/.test(attributes));
-    const expected = [...firstSteps.flatMap((step) => step.sources), ...copperSources, ...vetSources, ...guideSources];
+    const expected = [...firstSteps.flatMap((step) => step.sources), ...copperSources, ...vetSources[locale], ...guideSources];
     expect(links.map(([, attributes]) => attributes.match(/href="([^"]+)"/)?.[1])).toEqual(expected.map((id) => diseaseSources[id].url));
     links.forEach(([, attributes, content], index) => {
       const source = diseaseSources[expected[index]];
@@ -185,9 +196,28 @@ describe("sayfanın çıktısı", () => {
       expect(classes).toContain("min-h-11");
       // Satır boyu bağlantılar (liste, `flex`) tam genişliktedir; satır içindeki kaynak etiketi (`inline-flex`) en az 44 piksel genişliktedir.
       expect(classes.includes("flex") || (classes.includes("inline-flex") && classes.includes("min-w-11"))).toBe(true);
-      expect(content).toContain(`${d.language[source.language]}, ${d.opensNewTab}`);
-      expect(content).toContain(`>${d.languageShort[source.language]}<`);
+      // Dil etiketi yalnız kaynağın dili arayüz dilinden farklıysa görünür ve okunur.
+      if (source.language === locale) {
+        expect(content).not.toContain(d.language[source.language]);
+        expect(content).not.toContain(`>${d.languageShort[source.language]}<`);
+        expect(content).toContain(d.opensNewTab);
+      } else {
+        expect(content).toContain(`${d.language[source.language]}, ${d.opensNewTab}`);
+        expect(content).toContain(`>${d.languageShort[source.language]}<`);
+      }
     });
+  });
+});
+
+describe("İngilizce sayfa", () => {
+  it("İngilizce metinleri ve İngilizce konuşulan ülkelerin veteriner kaynaklarını gösterir; Türkiye'ye özel kaynak yok", () => {
+    store.value = { aquariums: [tank("b", "Shrimp tank")], livestock: [animal("b", "shrimp", 10)], hydrated: true };
+    const en = diseaseMessagesFor("en");
+    const html = decode(render("", "en"));
+    for (const text of [en.notice, en.vetHelp, en.copperGeneral, en.copperAquarium("Shrimp tank", "shrimp"), ...Object.values(en.steps)]) expect(html).toContain(text);
+    expect(en.copperAquarium("Shrimp tank", "both")).toMatch(/^There are shrimp and snails in Shrimp tank\. /);
+    for (const id of ["tvhbChambers", "erciyesAquatic"] as const) expect(html).not.toContain(diseaseSources[id].url);
+    expect(html).not.toMatch(/[çğıöşüÇĞİÖŞÜ]/);
   });
 });
 
