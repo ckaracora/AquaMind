@@ -2,7 +2,7 @@
 
 import { createContext, useContext, useEffect, useMemo, useRef, useState } from "react";
 import { DEFAULT_PREFERENCES, type Preferences } from "@aquamind/domain";
-import { aquariums as seedAquariums, equipment as seedEquipment, livestock as seedLivestock, maintenanceTasks as seedMaintenanceTasks, plants as seedPlants, waterReadings as seedWaterReadings } from "@/data/mock-data";
+import { aquariums as seedAquariums, equipment as seedEquipment, livestock as seedLivestock, localizeDemoRows, maintenanceTasks as seedMaintenanceTasks, plants as seedPlants, waterReadings as seedWaterReadings } from "@/data/mock-data";
 import {
   beginStorageSuspension,
   checkMutationGate,
@@ -23,6 +23,8 @@ import {
   type PersistResult,
   type StorageIssue,
 } from "@/lib/aquarium-storage";
+import { browserPreferenceDefaults } from "@/lib/locale-choice";
+import { useI18n } from "@/providers/i18n-provider";
 import type { Aquarium, Equipment, Livestock, MaintenanceTask, Plant, WaterParameters } from "@/types/aquarium";
 
 interface AquariumContextValue {
@@ -86,6 +88,7 @@ export function AquariumProvider({ children }: { children: React.ReactNode }) {
   const [unsavedCollections, setUnsavedCollections] = useState<CollectionName[]>([]);
   const [writeBlocked, setWriteBlocked] = useState(false);
   const [preferences, setPreferences] = useState<Preferences>(DEFAULT_PREFERENCES);
+  const { locale } = useI18n();
 
   // Demo takibi: bir koleksiyon depoda yoksa tohum veri YALNIZCA ekranda gösterilir.
   // Bu kayıtlar kalıcı depoya ve JSON yedeğinin ana koleksiyonlarına girmez.
@@ -153,7 +156,8 @@ export function AquariumProvider({ children }: { children: React.ReactNode }) {
     setEquipment(snapshot.equipment);
     applyDemo(demoFlags);
     // Tercihler yarım kalmış silme toparlandıktan sonra okunur; bozuksa karantinaya alınır ve sorun kurtarma özetine girer.
-    setPreferences(loadPreferences());
+    // Kayıtlı tercih yoksa birimler tarayıcının bölgesine göre başlar (ABD: galon, °F, AA/GG/YYYY; karar 0021, 5. paket).
+    setPreferences(loadPreferences(browserPreferenceDefaults()));
     setStorageIssues(getStorageIssues());
 
     pendingReleaseRef.current = true;
@@ -183,6 +187,17 @@ export function AquariumProvider({ children }: { children: React.ReactNode }) {
   useEffect(() => {
     persistIfActive("equipment", equipment);
   }, [equipment, hydrated, demo]);
+
+  // Demo kayıtların metinleri seçili dildedir (karar 0021, 5. paket). Yalnız hâlâ demo olan koleksiyonların satırları kimliğe göre
+  // değiştirilir; demo koleksiyon depoya yazılmadığı için kayıt değişmez, silinen demo satırı geri gelmez.
+  useEffect(() => {
+    if (!hydrated) return;
+    const flags = demoRef.current;
+    if (flags.aquariums) setAquariums((rows) => localizeDemoRows("aquariums", rows, locale));
+    if (flags.maintenanceTasks) setMaintenanceTasks((rows) => localizeDemoRows("maintenanceTasks", rows, locale));
+    if (flags.plants) setPlants((rows) => localizeDemoRows("plants", rows, locale));
+    if (flags.equipment) setEquipment((rows) => localizeDemoRows("equipment", rows, locale));
+  }, [locale, hydrated]);
 
   // Bu efekt, yukarıdaki altı kaydetme efektinden SONRA tanımlandığı için aynı
   // commit içinde onlardan sonra çalışır. Askı ancak o noktada kaldırılır.

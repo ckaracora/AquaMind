@@ -23,6 +23,15 @@ export function CatalogLivestockForm({ aquarium, initialCategory, close, submit 
   const { t, catalogText } = useI18n();
   // Tür adı çevirisi yoksa katalogdaki ad kalır; çevirisi olmayan not gösterilmez (ürün sahibi kararı 2026-10-30).
   const speciesName = (item: SpeciesProfile) => catalogText(item.commonName) ?? item.commonName;
+  // Başka dilde tür adının çevirisi de aranır; Türkçe ad, bilimsel ad ve eş adlar her dilde aranır. Türkçede çeviri adın kendisidir.
+  const translatedName = (item: SpeciesProfile) => {
+    const name = catalogText(item.commonName);
+    return name !== undefined && name !== item.commonName ? normalizeSearch(name) : undefined;
+  };
+  const translatedMatch = (normalized: string, exact: boolean) => speciesForCategoryAndWaterType(category, aquarium.type).find((item) => {
+    const name = translatedName(item);
+    return name !== undefined && (exact ? name === normalized : name.includes(normalized));
+  });
   const compatibleSpecies = speciesCatalog.filter((item) => speciesWaterTypes(item).includes(aquarium.type));
   const categories = allCategories.filter((key) => compatibleSpecies.some((item) => item.category === key));
   const initialCompatibleCategory = compatibleSpecies.some((item) => item.category === initialCategory) ? initialCategory : (compatibleSpecies[0]?.category ?? initialCategory);
@@ -33,13 +42,15 @@ export function CatalogLivestockForm({ aquarium, initialCategory, close, submit 
   const [query, setQuery] = useState("");
   const normalizedQuery = normalizeSearch(query);
   const allGroupItems = categoryItems.filter((item) => speciesGroup(item) === group);
-  const groupItems = allGroupItems.filter((item) => searchableText(item).includes(normalizedQuery));
+  const groupItems = allGroupItems.filter((item) => searchableText(item).includes(normalizedQuery) || Boolean(translatedName(item)?.includes(normalizedQuery)));
   const [selected, setSelected] = useState(allGroupItems[0]?.id ?? "");
   const profile = speciesById(selected);
   const [quantity, setQuantity] = useState(profile?.minGroup ?? 1);
-  const exactVerifiedMatch = normalizedQuery ? speciesForCatalogExactSearch(normalizedQuery, category, aquarium.type) : undefined;
+  const exactVerifiedMatch = normalizedQuery ? (speciesForCatalogExactSearch(normalizedQuery, category, aquarium.type) ?? translatedMatch(normalizedQuery, true)) : undefined;
   const unresolvedMatch = normalizedQuery && !exactVerifiedMatch ? unresolvedSpeciesForSearch(query, category, aquarium.type) : undefined;
-  const verifiedSearchMatch = exactVerifiedMatch ?? (unresolvedMatch ? undefined : (normalizedQuery ? speciesForCatalogSearch(normalizedQuery, category, aquarium.type) : undefined));
+  const verifiedSearchMatch = exactVerifiedMatch ?? (unresolvedMatch ? undefined : (normalizedQuery ? (speciesForCatalogSearch(normalizedQuery, category, aquarium.type) ?? translatedMatch(normalizedQuery, false)) : undefined));
+  // Çözülmemiş satış adının gerekçesi katalog metnidir: çevirisi olmayan dilde gösterilmez (ürün sahibi kararı 2026-10-30); ad katalogdaki adla kalır.
+  const unresolvedReason = unresolvedMatch ? catalogText(unresolvedMatch.reason) : undefined;
 
   function changeCategory(next: Livestock["category"]) {
     const items = speciesForCategoryAndWaterType(next, aquarium.type);
@@ -60,11 +71,11 @@ export function CatalogLivestockForm({ aquarium, initialCategory, close, submit 
       const item = allGroupItems[0];
       setSelected(item?.id ?? ""); setQuantity(item?.minGroup ?? 1); return;
     }
-    const exactVerified = speciesForCatalogExactSearch(normalized, category, aquarium.type);
+    const exactVerified = speciesForCatalogExactSearch(normalized, category, aquarium.type) ?? translatedMatch(normalized, true);
     if (exactVerified) { setGroup(speciesGroup(exactVerified)); setSelected(exactVerified.id); setQuantity(exactVerified.minGroup); return; }
     const unresolved = unresolvedSpeciesForSearch(next, category, aquarium.type);
     if (unresolved) { setGroup(unresolved.group); setSelected(""); return; }
-    const item = speciesForCatalogSearch(normalized, category, aquarium.type);
+    const item = speciesForCatalogSearch(normalized, category, aquarium.type) ?? translatedMatch(normalized, false);
     if (item) { setGroup(speciesGroup(item)); setSelected(item.id); setQuantity(item.minGroup); return; }
     setSelected("");
   }
@@ -89,7 +100,7 @@ export function CatalogLivestockForm({ aquarium, initialCategory, close, submit 
         <label className="text-xs font-bold text-[#91a3aa]">{t.livestock.form.category}<select value={category} onChange={(e) => changeCategory(e.target.value as Livestock["category"])} className={field}>{categories.map((key) => <option key={key} value={key}>{t.livestock.categories[key]}</option>)}</select></label>
         <label className="text-xs font-bold text-[#91a3aa]">{t.livestock.form.group}<select value={group} onChange={(e) => changeGroup(e.target.value)} className={field}>{groups.map((item) => <option key={item} value={item}>{t.livestock.speciesGroups[item]}</option>)}</select></label>
         <label className="relative text-xs font-bold text-[#91a3aa] sm:col-span-2">{t.livestock.form.search}<Search size={15} className="pointer-events-none absolute left-3 top-[42px] text-[#586e77]" /><input value={query} onChange={(e) => changeQuery(e.target.value)} placeholder={t.livestock.form.searchPlaceholder} className={`${field} pl-9`} /></label>
-        {unresolvedMatch && <div className="rounded-xl border border-amber-300/20 bg-amber-300/[.07] p-4 sm:col-span-2"><div className="flex items-start justify-between gap-3"><div><p className="text-[11px] sm:text-[10px] font-extrabold text-amber-300">{t.livestock.form.unresolvedTitle}</p><p className="mt-1 text-sm font-bold text-amber-50">{unresolvedMatch.name}</p></div><span className="rounded-full bg-amber-300/10 px-2 py-1 text-[11px] sm:text-[8px] font-bold text-amber-200">{t.livestock.form.unresolvedBadge}</span></div><p className="mt-2 text-[11px] sm:text-[10px] leading-relaxed text-amber-100/65">{unresolvedMatch.reason}</p><p className="mt-2 text-[11px] sm:text-[9px] font-semibold text-amber-200/70">{t.livestock.form.unresolvedBlocked}</p><a href={unresolvedMatch.sourceUrl} target="_blank" rel="noreferrer" className="-mb-[15.25px] -mt-[3.25px] inline-flex min-h-11 items-center text-[11px] sm:text-[9px] font-bold text-aqua hover:underline">{t.livestock.form.unresolvedSource}</a></div>}
+        {unresolvedMatch && <div className="rounded-xl border border-amber-300/20 bg-amber-300/[.07] p-4 sm:col-span-2"><div className="flex items-start justify-between gap-3"><div><p className="text-[11px] sm:text-[10px] font-extrabold text-amber-300">{t.livestock.form.unresolvedTitle}</p><p className="mt-1 text-sm font-bold text-amber-50">{catalogText(unresolvedMatch.name) ?? unresolvedMatch.name}</p></div><span className="rounded-full bg-amber-300/10 px-2 py-1 text-[11px] sm:text-[8px] font-bold text-amber-200">{t.livestock.form.unresolvedBadge}</span></div>{unresolvedReason && <p className="mt-2 text-[11px] sm:text-[10px] leading-relaxed text-amber-100/65">{unresolvedReason}</p>}<p className="mt-2 text-[11px] sm:text-[9px] font-semibold text-amber-200/70">{t.livestock.form.unresolvedBlocked}</p><a href={unresolvedMatch.sourceUrl} target="_blank" rel="noreferrer" className="-mb-[15.25px] -mt-[3.25px] inline-flex min-h-11 items-center text-[11px] sm:text-[9px] font-bold text-aqua hover:underline">{t.livestock.form.unresolvedSource}</a></div>}
         <label className="text-xs font-bold text-[#91a3aa] sm:col-span-2">{t.livestock.form.species}<select required name="catalogId" value={hasSelectedProfile ? selected : ""} onChange={(e) => changeSpecies(e.target.value)} className={field}><option value="" disabled>{groupItems.length ? t.livestock.form.chooseSpecies : unresolvedMatch ? t.livestock.form.awaitingIdentity : t.livestock.form.noMatch}</option>{groupItems.map((item) => <option key={item.id} value={item.id}>{speciesName(item)} · {item.scientificName}</option>)}</select></label>
         {hasSelectedProfile && profile && <div className="rounded-xl border border-aqua/15 bg-aqua/[.05] p-4 sm:col-span-2"><div className="flex justify-between"><div><p className="text-sm font-extrabold">{speciesName(profile)}</p><p className="mt-1 text-[11px] sm:text-[10px] italic text-[#71858d]">{profile.scientificName}</p></div><span className="rounded-full bg-emerald-400/10 px-2 py-1 text-[11px] sm:text-[8px] font-bold text-emerald-400">{t.livestock.form.inCatalog}</span></div><div className="mt-3 grid grid-cols-3 gap-2 text-[11px] sm:text-[9px]"><span>{t.livestock.form.adultSize} <b>{profile.adultSizeCm} cm</b></span><span>{t.livestock.form.minVolume} <b>{fmt.volume(profile.minVolumeL)}</b></span><span>{t.livestock.form.minGroup} <b>{profile.minGroup}+</b></span></div></div>}
         <label className="text-xs font-bold text-[#91a3aa]">{t.common.quantity}<input required name="quantity" type="number" inputMode="numeric" min="1" value={quantity} onChange={(e) => setQuantity(Number(e.target.value))} className={field} /></label><label className="text-xs font-bold text-[#91a3aa]">{t.livestock.form.gender}<select name="gender" className={field}><option value="unknown">{t.livestock.form.genders.unknown}</option><option value="mixed">{t.livestock.form.genders.mixed}</option><option value="male">{t.livestock.form.genders.male}</option><option value="female">{t.livestock.form.genders.female}</option></select></label>

@@ -15,6 +15,8 @@ body {
   color: #edf7f6;
   font-family: "Manrope Variable", ui-sans-serif, system-ui, sans-serif;
 }
+/* Türkçe dışındaki dilin paketi yüklenirken sayfa gizlenir; önce Türkçe metin görünmesin (src/lib/locale-choice.ts). Arka plan görünür kalır. */
+html[data-locale-loading] body { visibility: hidden; }
 button, a { -webkit-tap-highlight-color: transparent; }
 button { font: inherit; }
 /* iPhone, yazısı 16 pikselden küçük bir alana dokunulunca sayfayı kendiliğinden yakınlaştırır. Dokunmatik cihazlarda ve dar ekranda

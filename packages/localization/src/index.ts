@@ -1,9 +1,11 @@
 // AquaMind dil altyapısı (docs/DECISIONS/0021-dil-altyapisi.md): dil dosyaları, dile göre biçimleme ve birim dönüşümü.
 // Bağımlılıksızdır; web ve ileride telefon uygulaması aynı paketi kullanır.
+import { localeBundle } from "./bundles";
 import { DEFAULT_LOCALE, type Locale } from "./locales";
 import { tr, type Messages } from "./messages/tr";
 
-export { DEFAULT_LOCALE, LOCALE_TAGS, SUPPORTED_LOCALES, isLocale, type Locale } from "./locales";
+export { DEFAULT_LOCALE, LOCALE_NAMES, LOCALE_TAGS, SUPPORTED_LOCALES, isLocale, type Locale } from "./locales";
+export { loadLocaleBundle, localeBundle, type LocaleBundle } from "./bundles";
 export {
   createDisplayFormat, formatCalendarDate, formatDate, formatNumber, formatTemperature, formatVolume,
   type DateOrder, type DisplayFormat, type DisplayPreferences,
@@ -15,9 +17,7 @@ export {
 } from "./units";
 export type { Messages } from "./messages/tr";
 
-const catalogs: Record<Locale, Messages> = { tr };
-
-/** Dilin arayüz metinleri; bilinmeyen dil varsayılan dile düşer. */
+/** Dilin arayüz metinleri; bilinmeyen ya da paketi henüz yüklenmemiş dil varsayılan dile düşer (`loadLocaleBundle`). */
 export function messagesFor(locale: Locale): Messages {
-  return catalogs[locale] ?? catalogs[DEFAULT_LOCALE];
+  return locale === DEFAULT_LOCALE ? tr : localeBundle(locale)?.messages ?? tr;
 }

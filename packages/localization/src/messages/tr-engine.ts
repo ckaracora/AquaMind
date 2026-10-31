@@ -4,6 +4,13 @@
 // src/lib/__tests__/engine-text.test.ts. Bu metinler yalnız sağlık sayfasında gerektiği için arayüz metinlerinden (`Messages`) ayrı
 // tutulur ve paketin ayrı girişinden (`@aquamind/localization/engine`, `engineMessagesFor`) alınır; öteki sayfaların paketine girmez.
 import type { EngineTextFormat } from "../engine-format";
+import {
+  MARINE_NITRATE_LIMIT_PPM, MARINE_SPECIFIC_GRAVITY_SAFE_MAX, MARINE_SPECIFIC_GRAVITY_SAFE_MIN, NITRATE_ABOVE_TAP_LIMIT_PPM, TAP_WATER_NITRATE_LIMIT_PPM,
+} from "./engine-limits";
+
+export {
+  MARINE_NITRATE_LIMIT_PPM, MARINE_SPECIFIC_GRAVITY_SAFE_MAX, MARINE_SPECIFIC_GRAVITY_SAFE_MIN, NITRATE_ABOVE_TAP_LIMIT_PPM, TAP_WATER_NITRATE_LIMIT_PPM,
+} from "./engine-limits";
 
 /** Motor değişkenlerinin değer türleri (motorun `EngineParams` türüyle aynı biçim). */
 export type EngineTextParams = Record<string, string | number | boolean | string[]>;
@@ -31,13 +38,6 @@ const fixed = (text: string): Text => () => text;
 /** Deniz akvaryumunun hedefinin adı (motor 1.13.0, `MarineProfile`). */
 const marineTarget = (p: EngineTextParams) => (str(p, "profile") === "fishOnly" ? "yalnız balıklı akvaryum" : "omurgasızlı akvaryum");
 const marineRange = (p: EngineTextParams, f: EngineTextFormat) => `${f.measurement(num(p, "min"), 3)}–${f.measurement(num(p, "max"), 3)}`;
-/** Özgül ağırlığın güvenli aralığı: OATA'nın iki ev akvaryumu hedefinin birleşimi; motorun `MARINE_SPECIFIC_GRAVITY_SAFE` sabitiyle aynı olmalı (testte denetlenir). */
-export const MARINE_SPECIFIC_GRAVITY_SAFE_MIN = 1.017;
-export const MARINE_SPECIFIC_GRAVITY_SAFE_MAX = 1.026;
-/** Nitrat sınırları (ppm); motorun `MARINE_NITRATE_LIMIT`, `TAP_WATER_NITRATE_LIMIT` ve `NITRATE_ABOVE_TAP_LIMIT` sabitleriyle aynı olmalı (testte denetlenir). */
-export const MARINE_NITRATE_LIMIT_PPM = 100;
-export const TAP_WATER_NITRATE_LIMIT_PPM = 50;
-export const NITRATE_ABOVE_TAP_LIMIT_PPM = 50;
 
 export const trEngine = {
   /** Ölçütlerin adları, motorun `key` alanına göre. */

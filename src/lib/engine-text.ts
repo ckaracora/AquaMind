@@ -16,13 +16,15 @@ export function own<T>(table: Record<string, T>, key: string): T | undefined {
  * geçer; Türkçede her metin kendisidir. Ürün sahibi kararı (2026-10-30): çevirisi olmayan tür adı katalogdaki adla kalır, çevirisi
  * olmayan not ve koşul metni boş verilir. Türkçe dil dosyası boş tekil `condition`ı atlar, ama boş `text` uyarı gövdesini boş, boş
  * `noteConditions` salyangoz cümlesini eksik bırakır; Türkçe çevirmen kimlik olduğu için bu Türkçede olmaz. Başka dilin dosyası boş
- * notu atlamalıdır (karar 0021, "4. paket ayrıntıları"). Ekipman adları (`names`) ve kapasite notu (`note`) ekipman aşamasında
- * eklenir; kaynak adları (`sources`, `source`) özel addır, çevrilmez.
+ * notu atlamalıdır (karar 0021, "4. paket ayrıntıları"). Ekipmanın kapasite notu (`note`) da katalog metnidir: çevirisi olmayan dilde
+ * boş verilir ve uyarı genel cümlesini yazar (5. paket). Ekipman adları (`names`) marka ve modeldir, çevrilmez; kaynak adları (`sources`,
+ * `source`) özel addır, çevrilmez.
  */
 export const SPECIES_NAME_PARAMS = ["name", "hunter", "prey", "predator", "nipper", "target"] as const;
 export const SPECIES_NAME_LIST_PARAMS = ["eaters", "shrimp", "snails", "fish", "noteNames"] as const;
 export const SPECIES_NOTE_PARAMS = ["text", "condition"] as const;
 export const SPECIES_NOTE_LIST_PARAMS = ["noteConditions"] as const;
+export const EQUIPMENT_NOTE_PARAMS = ["note"] as const;
 export const SPECIES_CATALOG_PARAMS = [...SPECIES_NAME_PARAMS, ...SPECIES_NOTE_PARAMS] as const;
 export const SPECIES_CATALOG_LIST_PARAMS = [...SPECIES_NAME_LIST_PARAMS, ...SPECIES_NOTE_LIST_PARAMS] as const;
 
@@ -30,7 +32,7 @@ export function translateCatalogParams(params: EngineParams, translate: CatalogT
   const out: EngineParams = { ...params };
   const name = (value: string) => translate(value) ?? value;
   const note = (value: string) => (value === "" ? "" : (translate(value) ?? ""));
-  for (const [keys, convert] of [[SPECIES_NAME_PARAMS, name], [SPECIES_NOTE_PARAMS, note]] as const) {
+  for (const [keys, convert] of [[SPECIES_NAME_PARAMS, name], [SPECIES_NOTE_PARAMS, note], [EQUIPMENT_NOTE_PARAMS, note]] as const) {
     for (const key of keys) {
       const value = own<EngineParams[string]>(params, key);
       if (typeof value === "string") out[key] = convert(value);

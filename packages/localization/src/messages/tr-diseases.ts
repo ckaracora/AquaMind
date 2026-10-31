@@ -34,6 +34,8 @@ export const trDiseases = {
     tvhbChambers: { name: "İl veteriner hekimleri odaları", publisher: "Türk Veteriner Hekimleri Birliği" },
     erciyesAquatic: { name: "Sucul Hayvan Hastalıkları Anabilim Dalı", publisher: "Erciyes Üniversitesi Veteriner Fakültesi" },
     fishVetSociety: { name: "Süs balığı tedavi eden veteriner listesi (İngiltere ve İrlanda)", publisher: "Fish Veterinary Society" },
+    aafvFindVet: { name: "Balık veterineri bul (Kuzey Amerika)", publisher: "American Association of Fish Veterinarians" },
+    wavmaFindVet: { name: "Balık veterineri ara (dünya geneli)", publisher: "World Aquatic Veterinary Medical Association" },
     ufFishHealth: { name: "Balık sağlığı yönetimi", publisher: "Florida Üniversitesi (UF/IFAS)" },
     oataCareSheets: { name: "Türlere göre bakım kartları", publisher: "OATA" },
   },
