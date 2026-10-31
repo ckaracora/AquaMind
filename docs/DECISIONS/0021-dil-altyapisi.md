@@ -123,3 +123,24 @@ Uygulamanın bütün metinleri koda Türkçe yazılmıştı: ekranlarda yaklaş�
   - Çevirisi olmayan not boş verilir; Türkçe dil dosyası boş tekil `condition`ı atlar, ama boş `text` (bakım, uyum, tank uzunluğu uyarıları) gövdeyi boş, boş `noteConditions` salyangoz cümlesini eksik bırakır. Türkçe çevirmen kimlik olduğu için Türkçede olmaz. Başka dilin dosyası boş notu atlamalı ve gövdesi boş kalan uyarının nasıl gösterileceği belirlenmelidir; bütün uyarıların boş çevirmenle çizildiği bir test eklenecek.
   - Canlı ekleme penceresindeki çözülmemiş satış adlarının adı ve gerekçesi (`unresolvedMatch.name`, `reason`) çeviri hattında değil; başka dilde Türkçe kalır.
   - Anahtar 64 bitliktir (iki FNV-1a); bugünkü 12 binden fazla metinde çakışma yok ve test her pakette denetler. Çeviri tablosu Türkçe metni tutmadığı için ileride bir çakışma sessizce yanlış çeviri gösterebilir; çeviri tabloları kurulurken kaynak metin de denetlenecek (tablo üretim betiği).
+
+## 4b: canlıların İngilizce çevirisi (2026-10-31)
+
+- **Dosyalar:** gözden geçirilen kaynak `packages/localization/translations/en-species.json`. Her satırda anahtar, alan, Türkçe metin ve İngilizce çeviri var; tür adlarında ayrıca yöntem ve kaynak bağlantısı. Uygulamaya giren tablo `packages/localization/src/messages/en-catalog-species.ts` yalnız anahtar → İngilizce tutar ve `node scripts/catalog-translations.cjs` ile üretilir. Betik her satırın anahtarının Türkçe metnin anahtarı olduğunu denetler; böylece tablo kurulurken kaynak metin de doğrulanmış olur (4. paketteki çakışma notu). Test tablonun kaynakla aynı olduğunu sınar.
+- **Tür adları (443), yöntemler:**
+  - `a` (104): katalog adı zaten uluslararası satış adıdır (ör. Ember tetra, Flowerhorn, Kribensis); olduğu gibi kalır.
+  - `k` (219): kaydın kendi kaynağının İngilizce adı. Seriously Fish sayfa başlığındaki parantez, Fishkeeper sayfasının adı ya da FishBase'in ana adı alınır. Kendi kaynağı İngilizce ad vermiyorsa FishBase ya da SeaLifeBase'in ana adı alınır; kaynak bağlantısı satırda yazılı.
+  - `t` (120): katalog adının çevirisi. Satış adı korunur, yalnız Türkçe genel sözcükler çevrilir (ör. "Blue Bolt karides" → "Blue Bolt Shrimp"). Kullanıldığı durumlar:
+    - renk ve satış formları ya da aynı kaynak adını paylaşan kayıtlar (ör. bütün Neocaridina renkleri "Cherry Shrimp" olurdu);
+    - kaynağın adı yerine kod vermesi (A93, L239);
+    - kaynakta İngilizce ad olmaması (50 tür);
+    - yedek kaynağın adının fazla genel ya da tanınmaz olması (ör. "Koi sazanı" için "Common carp", "Hayalet karides" için "Riverine grass shrimp");
+    - kaynağın adının kaydı ayırt eden parçayı düşürmesi ya da kaydın kapsamına uymaması: L numarası (L091, L116, L200A), "High-fin" gibi biçim sözcüğü, renk formunun adı ("Gold Gourami" yerine "Three-spot Gourami", "Red/Red Zebra" yerine "Red Zebra Cichlid"), türe özgü kayıt için cinsin genel adı ("Apple snail" yerine "Mystery Snail", "Twig Catfish" yerine "Striped Twig Catfish"), kaydın kendi notunun uyardığı belirsiz satış adı ("Zig-zag eel" yerine "Tyre Track Spiny Eel", "Butterfly Loach" yerine "Chinese Butterfly Loach", "Doctor Fish" yerine "Red Garra", "Julii Cory" yerine "True Julii Cory").
+  - Hiçbir ad uydurulmaz: `k` kaynaktan, `t` katalogdaki adın çevirisidir. İki tür aynı İngilizce adı almaz (test).
+- **Not metinleri (687):** bakım ve uyum uyarıları, tank uzunluğu notu ve kaynağın davranış koşulu Claude tarafından çevrildi (ürün sahibi kararı 2026-10-30). Test şunları denetler:
+  - sayılar her dilin ayırıcısıyla okunmuş değer olarak aynı (Türkçe 1.200 = İngilizce 1,200; ondalık 3,5 = 3.5);
+  - ölçü birimleri aynı sayıda geçiyor (litre, L, galon, cm, mm, m, metre, °C, kg, mg/L, g/L, dGH, dKH, ft, inç, SG, %) ve süreler aynı sayıda geçiyor (dakika, saat, gün, hafta, ay, yıl); sıklıkta birim başına tekrar ("haftada 2–3 kez") ile tekrarlar arası süre ("2–3 haftada bir", "every other week"), tekrarın çokluğu (bir, iki, birkaç kez) ve günlük/haftalık korunuyor; yazıyla yazılmış süre miktarları ("iki-üç ay" ↔ "two to three months", "birkaç saat" ↔ "several hours") aynı;
+  - kaynak adları, Latince cins ve aile adları, tam bilimsel adlar ve kısaltmaları ("P. sphenops") korunmuş; adlardaki L/CW kodları korunmuş;
+  - Türkçe harf kalmamış.
+- **Kapsam kuralı:** canlılar aşamasının her metninin çevirisi olmalı ve kaynakta eskimiş satır kalmamalı (test). Katalogda bir canlı metni değişir ya da eklenirse, aynı pakette çevirisi kaynağa eklenir ve tablo yeniden üretilir.
+- **Henüz ekranda yok:** İngilizce dil seçimi 5. pakette gelir; tablo o zaman yalnız İngilizce seçilince yüklenecek. Arama o pakette İngilizce adları da kapsayacak.
