@@ -25,7 +25,7 @@ Arayüzde gizlemek yetki değildir. Yetkilendirme kararı veritabanında (Row Le
 - Herkese açık istemciler yalnızca Supabase URL'sini ve anon anahtarını alır. Anon anahtarı yalnızca RLS yetkilendirme katmanı olduğu için güvenlidir.
 - `service_role`, yapay zekâ sağlayıcı anahtarları, RevenueCat gizli anahtarı ve webhook gizli anahtarları Vercel ve Supabase ortam ayarlarında yaşar; yalnızca sunucu kodunda okunur; asla `NEXT_PUBLIC_` önekiyle veya Expo paketinde görünmez.
 - Depoda yalnızca `.env.example` (ad var, değer yok) bulunur. `.gitignore` zaten `.env*` dosyalarını dışlar.
-- Yapay zekâ kodlama araçları üretim kimlik bilgisi almaz; yerel testler gizli anahtar gerektirmez (karar 0032). Hazırlık projesinin sırlarını ürün sahibi GitHub'a ve Vercel'e kendisi girer; araçlar bu değerleri görmez ve yazmaz.
+- Yapay zekâ kodlama araçları üretim kimlik bilgisi almaz; yerel testler gizli anahtar gerektirmez (karar 0032). Hazırlık projesinin sırlarını ürün sahibi GitHub'a ve Vercel'e kendisi girer; araçlar bu değerleri görmez ve yazmaz. Hazırlık iş akışının sır listesi ve kullanımı: `docs/DECISIONS/0034-hazirlik-projesinde-dogrulama.md`.
 
 ## Kimlik doğrulama sınırı
 
