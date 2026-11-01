@@ -5,8 +5,10 @@ import { diseaseMessagesFor } from "../src/diseases";
 import { engineMessagesFor } from "../src/engine";
 import { plantWarningMessagesFor } from "../src/plant-warnings";
 import { privacyMessagesFor } from "../src/privacy";
+import { careTextsFor, loadCareTexts } from "../src/care";
 import { equipmentTextsFor, loadEquipmentTexts } from "../src/equipment";
 import { en } from "../src/messages/en";
+import { enCatalogCare } from "../src/messages/en-catalog-care";
 import { enCatalogEquipment } from "../src/messages/en-catalog-equipment";
 import { enCatalogSpecies } from "../src/messages/en-catalog-species";
 import { enDiseases } from "../src/messages/en-diseases";
@@ -14,6 +16,7 @@ import { enEngine } from "../src/messages/en-engine";
 import { enPlantWarnings } from "../src/messages/en-plant-warnings";
 import { enPrivacy } from "../src/messages/en-privacy";
 import { es } from "../src/messages/es";
+import { esCatalogCare } from "../src/messages/es-catalog-care";
 import { esCatalogEquipment } from "../src/messages/es-catalog-equipment";
 import { esCatalogSpecies } from "../src/messages/es-catalog-species";
 import { esDiseases } from "../src/messages/es-diseases";
@@ -22,15 +25,17 @@ import { esPlantWarnings } from "../src/messages/es-plant-warnings";
 import { esPrivacy } from "../src/messages/es-privacy";
 
 // Dil paketleri (docs/DECISIONS/0021-dil-altyapisi.md, 5. paket ve İspanyolca paketi): Türkçe dışındaki her dilin metinleri yalnız o dil
-// seçilince, kendi ayrı parçasında yüklenir. Ekipman kataloğunun çevirisi (7. paket) dil paketinden de ayrı, dil başına kendi parçasındadır.
+// seçilince, kendi ayrı parçasında yüklenir. Ekipman (7. paket) ve bakım ürünü (8. paket) kataloglarının çevirisi dil paketinden de ayrı,
+// katalog ve dil başına kendi parçasındadır.
 
 const OTHER = ["en", "es"] as const;
 const BUNDLES = {
   en: { messages: en, engine: enEngine, diseases: enDiseases, plantWarnings: enPlantWarnings, privacy: enPrivacy, catalogSpecies: enCatalogSpecies },
   es: { messages: es, engine: esEngine, diseases: esDiseases, plantWarnings: esPlantWarnings, privacy: esPrivacy, catalogSpecies: esCatalogSpecies },
 };
-const FILES = ["bundle", "catalog-equipment", "catalog-species", "diseases", "engine", "plant-warnings", "privacy"];
+const FILES = ["bundle", "catalog-care", "catalog-equipment", "catalog-species", "diseases", "engine", "plant-warnings", "privacy"];
 const EQUIPMENT = { en: enCatalogEquipment, es: esCatalogEquipment };
+const CARE = { en: enCatalogCare, es: esCatalogCare };
 
 const src = new URL("../src/", import.meta.url);
 const read = (path: string) => readFileSync(new URL(path, src), "utf8");
@@ -82,16 +87,29 @@ describe("dil paketi yüklenince", () => {
     expect(equipmentTextsFor(locale)).toBe(EQUIPMENT[locale]);
     expect(equipmentTextsFor("tr")).toBeUndefined();
   });
+
+  it.each(OTHER)("bakım ürünü çevirisi dil paketinde değil; ayrı yüklenir ve kaydedilir (%s)", async (locale) => {
+    expect(Object.values(localeBundle(locale) ?? {})).not.toContain(CARE[locale]);
+    expect(careTextsFor(locale)).toBeUndefined();
+    expect(await loadCareTexts("tr")).toBeUndefined();
+    expect(await loadCareTexts(locale)).toBe(CARE[locale]);
+    expect(await loadCareTexts(locale)).toBe(CARE[locale]);
+    expect(careTextsFor(locale)).toBe(CARE[locale]);
+    expect(careTextsFor("tr")).toBeUndefined();
+    // Ekipman ve bakım tabloları ayrı kayıtlarda.
+    expect(equipmentTextsFor(locale)).not.toBe(CARE[locale]);
+  });
 });
 
 describe("paketin sınırı", () => {
-  const entries = ["index.ts", "engine.ts", "catalog.ts", "diseases.ts", "plant-warnings.ts", "privacy.ts", "equipment.ts", "bundles.ts", "locales.ts", "format.ts", "units.ts", "engine-format.ts"];
+  const entries = ["index.ts", "engine.ts", "catalog.ts", "diseases.ts", "plant-warnings.ts", "privacy.ts", "catalog-segments.ts", "equipment.ts", "care.ts", "bundles.ts", "locales.ts", "format.ts", "units.ts", "engine-format.ts"];
   const DYNAMIC: Record<string, string[]> = {
     "bundles.ts": OTHER.map((locale) => `./messages/${locale}-bundle`),
     "equipment.ts": OTHER.map((locale) => `./messages/${locale}-catalog-equipment`),
+    "care.ts": OTHER.map((locale) => `./messages/${locale}-catalog-care`),
   };
 
-  it("hiçbir giriş başka dilin dosyasını durağan olarak içe aktarmaz; paketleri `loadLocaleBundle`, ekipman çevirisini `loadEquipmentTexts` ayrı parça olarak yükler", () => {
+  it("hiçbir giriş başka dilin dosyasını durağan olarak içe aktarmaz; paketleri `loadLocaleBundle`, ekipman ve bakım çevirisini `loadEquipmentTexts`, `loadCareTexts` ayrı parça olarak yükler", () => {
     for (const file of entries) {
       const { values, dynamic } = imports(read(file));
       expect(values.filter((from) => otherLanguageFile.test(from)), file).toEqual([]);
@@ -116,7 +134,7 @@ describe("paketin sınırı", () => {
       const source = readFileSync(decodeURIComponent(file.replace(/^\/([A-Za-z]:)/, "$1")), "utf8");
       const specifiers = [...source.matchAll(/(?:from|import)\s*\(?\s*["']([^"']+)["']/g)].map((match) => match[1]);
       return specifiers.filter((specifier) => otherLanguageFile.test(specifier)).map((specifier) => `${file}: ${specifier}`);
-    }).filter((line) => !/packages\/localization\/src\/(?:bundles\.ts|equipment\.ts|messages\/(?:en|es)-bundle\.ts):/.test(line));
+    }).filter((line) => !/packages\/localization\/src\/(?:bundles\.ts|equipment\.ts|care\.ts|messages\/(?:en|es)-bundle\.ts):/.test(line));
     expect(offenders).toEqual([]);
     const pkg = JSON.parse(readFileSync(new URL("../package.json", import.meta.url), "utf8")) as { exports: Record<string, unknown> };
     expect(JSON.stringify(pkg.exports)).not.toMatch(/messages\/(?:en|es)|(?:en|es)-bundle/);

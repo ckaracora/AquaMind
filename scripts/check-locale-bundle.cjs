@@ -3,7 +3,8 @@
 // metinleri yalnız o dil seçilince yüklenen kendi ayrı parçasında olmalı; hiçbir sayfanın ilk yüklemesinde bulunmamalı. Türkçe kullanan
 // kimse onları indirmez. `next build` sonrasında çalışır (`pnpm verify`): derleme manifestindeki her sayfanın ilk yükleme dosyalarında her
 // dilin dosyalarına özgü işaret cümleleri aranır. İşaretler kaynak dosyalarda bulunmalı (dosya değişince betik de güncellenir).
-// Ekipman kataloğunun çevirisi (7. paket) dil paketinden de ayrı, dil başına kendi parçasındadır; yalnız ekipman gösteren ekranlar yükler.
+// Ekipman (7. paket) ve bakım ürünü (8. paket) kataloglarının çevirisi dil paketinden de ayrı, katalog ve dil başına kendi parçasındadır;
+// yalnız o kataloğu gösteren ekranlar yükler.
 "use strict";
 
 const fs = require("node:fs");
@@ -30,10 +31,18 @@ const MARKERS = {
   ],
 };
 
-const EQUIPMENT_MARKERS = {
-  en: ["en-catalog-equipment.ts", "is not included in the automatic capacity calculation"],
-  es: ["es-catalog-equipment.ts", "no se incluye en el cálculo automático de capacidad"],
+/** Katalog çevirilerinin işaretleri: katalog → dil → [dosya, işaret]. */
+const SEGMENT_MARKERS = {
+  ekipman: {
+    en: ["en-catalog-equipment.ts", "is not included in the automatic capacity calculation"],
+    es: ["es-catalog-equipment.ts", "no se incluye en el cálculo automático de capacidad"],
+  },
+  "bakım ürünü": {
+    en: ["en-catalog-care.ts", "Archived Novo"],
+    es: ["es-catalog-care.ts", "paquete de recarga"],
+  },
 };
+const segmentMarkers = Object.entries(SEGMENT_MARKERS).flatMap(([catalog, locales]) => Object.entries(locales).map(([locale, [file, marker]]) => ({ catalog, locale, file, marker })));
 
 /**
  * Küçültücü ASCII dışı harfleri kaçış dizisiyle yazar ("cálculos" → "c\xe1lculos", 0xFF üstü "ı"); işaret her biçimde aranır.
@@ -53,7 +62,7 @@ for (const [locale, list] of Object.entries(MARKERS)) {
     if (!source.includes(marker)) failures.push(`İşaret ${file} içinde yok: "${marker}" (betiği güncelle; ${locale})`);
   }
 }
-for (const [locale, [file, marker]] of Object.entries(EQUIPMENT_MARKERS)) {
+for (const { locale, file, marker } of segmentMarkers) {
   if (!fs.readFileSync(path.join(messages, file), "utf8").includes(marker)) failures.push(`İşaret ${file} içinde yok: "${marker}" (betiği güncelle; ${locale})`);
 }
 
@@ -72,8 +81,8 @@ for (const file of firstLoad) {
   for (const [locale, list] of Object.entries(MARKERS)) {
     for (const [, marker] of list) if (contains(content, marker)) failures.push(`${locale} metni ilk yüklemede: ${file} → "${marker}"`);
   }
-  for (const [locale, [, marker]] of Object.entries(EQUIPMENT_MARKERS)) {
-    if (contains(content, marker)) failures.push(`${locale} ekipman çevirisi ilk yüklemede: ${file} → "${marker}"`);
+  for (const { catalog, locale, marker } of segmentMarkers) {
+    if (contains(content, marker)) failures.push(`${locale} ${catalog} çevirisi ilk yüklemede: ${file} → "${marker}"`);
   }
 }
 
@@ -97,18 +106,21 @@ for (const [locale, list] of Object.entries(MARKERS)) {
   else found[locale] = bundles[0];
 }
 if (found.en && found.es && found.en === found.es) failures.push("İngilizce ve İspanyolca aynı parçada");
-const equipment = {};
-for (const [locale, [, marker]] of Object.entries(EQUIPMENT_MARKERS)) {
+// Her katalog çevirisi dil başına tek bir parçada; dil paketinde, öbür dilin ya da öbür kataloğun parçasında değil.
+const segments = [];
+for (const { catalog, locale, marker } of segmentMarkers) {
   const holders = all.filter((file) => contains(contents.get(file), marker));
-  if (holders.length !== 1) failures.push(`${locale} ekipman çevirisini taşıyan tek bir parça bekleniyordu; bulunan: ${holders.length}`);
-  else if (holders[0] === found[locale]) failures.push(`${locale} ekipman çevirisi dil paketinin içinde: ${holders[0]}`);
-  else equipment[locale] = holders[0];
+  if (holders.length !== 1) failures.push(`${locale} ${catalog} çevirisini taşıyan tek bir parça bekleniyordu; bulunan: ${holders.length}`);
+  else if (Object.values(found).includes(holders[0])) failures.push(`${locale} ${catalog} çevirisi dil paketinin içinde: ${holders[0]}`);
+  else segments.push({ catalog, locale, file: holders[0] });
 }
-if (equipment.en && equipment.es && equipment.en === equipment.es) failures.push("İngilizce ve İspanyolca ekipman çevirisi aynı parçada");
+for (const [index, segment] of segments.entries()) {
+  for (const other of segments.slice(index + 1)) if (other.file === segment.file) failures.push(`${segment.locale} ${segment.catalog} ve ${other.locale} ${other.catalog} çevirisi aynı parçada`);
+}
 
 if (failures.length) {
   console.error(failures.join("\n"));
   process.exit(1);
 }
 const describe = (file) => `${path.relative(root, file)} (${Math.round(fs.statSync(file).size / 1024)} kB)`;
-console.log(`Dil paketi sınırı: ${firstLoad.size} ilk yükleme dosyasında başka dilin metni yok; ${Object.entries(found).map(([locale, file]) => `${locale} ${describe(file)}`).join(", ")}; ekipman çevirisi ayrı parçalarda: ${Object.entries(equipment).map(([locale, file]) => `${locale} ${describe(file)}`).join(", ")}.`);
+console.log(`Dil paketi sınırı: ${firstLoad.size} ilk yükleme dosyasında başka dilin metni yok; ${Object.entries(found).map(([locale, file]) => `${locale} ${describe(file)}`).join(", ")}; katalog çevirileri ayrı parçalarda: ${segments.map(({ catalog, locale, file }) => `${catalog} ${locale} ${describe(file)}`).join(", ")}.`);

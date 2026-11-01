@@ -1,7 +1,7 @@
-// Katalog çeviri tablolarını üretir (docs/DECISIONS/0021-dil-altyapisi.md, 4. ve 7. paket). Kaynak, gözden geçirilen JSON dosyasıdır
-// (`packages/localization/translations/<dil>-species.json` ve `<dil>-equipment.json`: anahtar, alanlar, Türkçe metin — ekipmanda sayıları
+// Katalog çeviri tablolarını üretir (docs/DECISIONS/0021-dil-altyapisi.md, 4., 7. ve 8. paket). Kaynak, gözden geçirilen JSON dosyasıdır
+// (`packages/localization/translations/<dil>-species.json`, `<dil>-equipment.json` ve `<dil>-care.json`: anahtar, alanlar, Türkçe metin — ekipmanda sayıları
 // "#" yapılmış parça kalıbı —, dilin kodu adındaki alanda çeviri, canlı adlarında yöntem ve kaynak); uygulamaya giren tablo yalnız anahtar →
-// çeviri tutar (`packages/localization/src/messages/<dil>-catalog-species.ts`, `<dil>-catalog-equipment.ts`).
+// çeviri tutar (`packages/localization/src/messages/<dil>-catalog-species.ts`, `<dil>-catalog-equipment.ts`, `<dil>-catalog-care.ts`).
 // Kullanım:
 //   node scripts/catalog-translations.cjs           tabloları yazar
 //   node scripts/catalog-translations.cjs --check   tablo kaynağıyla aynı değilse ya da bir anahtar Türkçe metne uymuyorsa çıkış kodu 1
@@ -23,11 +23,14 @@ const { catalogTextKey } = load(path.join(pkg, "src/catalog.ts"));
 
 const SPECIES = { type: "CatalogTexts", from: "../catalog" };
 const EQUIPMENT = { type: "EquipmentTexts", from: "../equipment" };
+const CARE = { type: "CareTexts", from: "../care" };
 const TABLES = [
   { locale: "en", source: "translations/en-species.json", target: "src/messages/en-catalog-species.ts", name: "enCatalogSpecies", ...SPECIES },
   { locale: "es", source: "translations/es-species.json", target: "src/messages/es-catalog-species.ts", name: "esCatalogSpecies", ...SPECIES },
   { locale: "en", source: "translations/en-equipment.json", target: "src/messages/en-catalog-equipment.ts", name: "enCatalogEquipment", ...EQUIPMENT },
   { locale: "es", source: "translations/es-equipment.json", target: "src/messages/es-catalog-equipment.ts", name: "esCatalogEquipment", ...EQUIPMENT },
+  { locale: "en", source: "translations/en-care.json", target: "src/messages/en-catalog-care.ts", name: "enCatalogCare", ...CARE },
+  { locale: "es", source: "translations/es-care.json", target: "src/messages/es-catalog-care.ts", name: "esCatalogCare", ...CARE },
 ];
 
 function render({ locale, source, name, type, from }, entries) {

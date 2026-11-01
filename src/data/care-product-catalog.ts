@@ -248,7 +248,7 @@ export const careProductCatalog: CareProductProfile[] = [
     ["Mini Wafers Mix","Küçük dip balıkları için kırmızı ve yeşil batan wafer karışımı"],
     ["Green Algae Wafers","Otçul Loricariidae türleri için spirulinalı batan wafer yem"],
     ["Pleco's Tablets","Büyük vatozlar için bitkisel batan tablet yem"],
-    ["Welsi Gran","Kir, piskor ve diğer dip balıkları için batan granül yem"],
+    ["Welsi Gran","Corydoras, loach ve diğer dip balıkları için batan granül yem"],
     ["Carnivore","Etçil dip balıkları için yüksek proteinli batan granül yem"],
     ["Shrimp Sticks","Tatlı ve deniz suyu kabukluları için batan çubuk yem"],
     ["Crusta Sticks","Karides ve kerevitler için kalsiyum destekli batan çubuk yem"],

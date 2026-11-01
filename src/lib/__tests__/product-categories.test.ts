@@ -17,11 +17,12 @@ describe("ürün kataloğu kategorileri", () => {
     }
   });
 
-  it("sayfa kategori adını dil dosyasından, açıklamayı katalog çevirmeninden alır", () => {
+  it("sayfa kategori adını dil dosyasından, açıklamayı bakım ürünü çevirmeninden alır (8. paket)", () => {
     const page = readFileSync("src/app/products/page.tsx", "utf8");
     expect(page).not.toContain("careCategoryLabels");
     expect(page).toContain("t.products.categories[item.category]");
-    expect(page).toContain("const shown=catalogText(text)");
+    expect(page).toContain("<ProductDescription text={shown.get(item.id)}/>");
+    expect(page).toContain("careText(item.description)");
   });
 });
 
