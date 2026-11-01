@@ -18,6 +18,10 @@
       "types": "./src/catalog.ts",
       "default": "./src/catalog.ts"
     },
+    "./equipment": {
+      "types": "./src/equipment.ts",
+      "default": "./src/equipment.ts"
+    },
     "./diseases": {
       "types": "./src/diseases.ts",
       "default": "./src/diseases.ts"

@@ -26,7 +26,7 @@ const ISE_ALLOWED = new Set([
   "advise", "advertise", "arise", "chastise", "comprise", "compromise", "concise", "demise", "despise", "devise", "disguise", "enterprise", "excise",
   "exercise", "expertise", "franchise", "improvise", "incise", "merchandise", "precise", "premise", "promise", "raise", "revise", "rise", "supervise",
   "surmise", "surprise", "televise", "wise", "noise", "poise", "praise", "cruise", "bruise", "guise", "paradise", "anise", "treatise", "reprise",
-  "apprise", "tortoise", "turquoise", "porpoise", "otherwise", "likewise", "clockwise", "counterclockwise", "lengthwise", "unwise", "sunrise",
+  "apprise", "tortoise", "turquoise", "porpoise", "otherwise", "likewise", "clockwise", "counterclockwise", "lengthwise", "crosswise", "unwise", "sunrise",
   "kaiser",
 ]);
 // "analys" kökü "analyses" (çoğul ad), "analysis" ve "analyst" sözcüklerinde Amerikan yazımıdır.
@@ -48,7 +48,7 @@ function britishWords(text: string): string[] {
 }
 
 describe("İngilizce metinler Amerikan yazımıyla", () => {
-  const files = readdirSync(MESSAGES).filter((name) => /^en(?:-[a-z-]+)?\.ts$/.test(name) && name !== "en-catalog-species.ts");
+  const files = readdirSync(MESSAGES).filter((name) => /^en(?:-[a-z-]+)?\.ts$/.test(name) && !name.startsWith("en-catalog-"));
 
   it.each(files)("%s İngiliz yazımı içermez", (name) => {
     expect(britishWords(stripComments(readFileSync(`${MESSAGES}${name}`, "utf8")))).toEqual([]);
@@ -57,6 +57,11 @@ describe("İngilizce metinler Amerikan yazımıyla", () => {
   it("canlıların katalog çevirisi İngiliz yazımı içermez (tablo bu kaynaktan üretilir)", () => {
     const entries = JSON.parse(readFileSync("packages/localization/translations/en-species.json", "utf8")) as Array<{ key: string; en: string }>;
     expect(entries.flatMap((entry) => britishWords(entry.en).map((word) => `${entry.key}: ${word}`))).toEqual([]);
+  });
+
+  it("ekipmanın katalog çevirisi İngiliz yazımı içermez; büyük harfle yazılmış ürün adları (Aquatube GREY) taranmaz", () => {
+    const entries = JSON.parse(readFileSync("packages/localization/translations/en-equipment.json", "utf8")) as Array<{ key: string; en: string }>;
+    expect(entries.flatMap((entry) => britishWords(entry.en.replace(/\b\p{Lu}{2,}\b/gu, "")).map((word) => `${entry.key}: ${word}`))).toEqual([]);
   });
 
   it("denetim İngiliz yazımını yakalar, Amerikan yazımını ve -ise ile yazılan sözcükleri geçirir", () => {

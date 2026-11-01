@@ -1,6 +1,9 @@
 import { describe, expect, it } from "vitest";
 import { createDisplayFormat, loadLocaleBundle, messagesFor } from "@aquamind/localization";
 import { catalogTranslator } from "@aquamind/localization/catalog";
+import { equipmentText } from "@aquamind/localization/equipment";
+import { enCatalogEquipment } from "../../../packages/localization/src/messages/en-catalog-equipment";
+import { esCatalogEquipment } from "../../../packages/localization/src/messages/es-catalog-equipment";
 import { equipmentCatalog, specificationsForEquipment } from "@/data/catalog-equipment";
 import { equipmentSpecsText, profileSpecsText } from "@/lib/equipment-text";
 import type { Equipment } from "@/types/aquarium";
@@ -38,6 +41,17 @@ describe("ekipmanın teknik bilgi satırı", () => {
     const filter = equipmentCatalog.find((profile) => profile.ratedFlowLph === 750 && profile.powerW === 22 && profile.recommendedMaxL === 250 && profile.recommendedMinL === undefined)!;
     expect(profileSpecsText({ ...filter, ratedFlowLph: 1100 }, catalogTranslator("es", {}), texts, fmt)).toMatch(/^1,100 L\/h · 22 W · /);
     for (const profile of equipmentCatalog) expect(profileSpecsText(profile, catalogTranslator("es", {}), texts, fmt), profile.id).not.toMatch(/[çğıöşüÇĞİÖŞÜ]|saat|litre/);
+  });
+
+  it("ekipman çevirisi yüklenmiş dilde katalogdaki satırın çevirisi gösterilir; hacim kullanıcının biriminde (7. paket)", () => {
+    const sera = equipmentCatalog.find((profile) => profile.id === "sera-fil-bioactive-130")!;
+    const english = (fmt: typeof en.fmt) => (text: string) => equipmentText(text, enCatalogEquipment, fmt);
+    expect(profileSpecsText(sera, english(en.fmt), en.texts, en.fmt)).toBe("Canister filter · 300 L/h · 11 W");
+    expect(profileSpecsText(sera, (text) => equipmentText(text, esCatalogEquipment, createDisplayFormat("es", prefs)), messagesFor("es").equipment.specSummary, createDisplayFormat("es", prefs))).toBe("Filtro externo · 300 L/h · 11 W");
+    const upTo = equipmentCatalog.find((profile) => / 30 litreye kadar(?: ·|$)/.test(profile.specifications))!;
+    const gallons = createDisplayFormat("en", { ...prefs, volume: "gallons" });
+    expect(profileSpecsText(upTo, english(en.fmt), en.texts, en.fmt)).toContain("up to 30 L");
+    expect(profileSpecsText(upTo, english(gallons), en.texts, gallons)).toContain("up to 7.9 gal");
   });
 
   it("katalogda karşılığı olmayan ekipmanda kullanıcının yazdığı metin aynen kalır", () => {

@@ -570,6 +570,18 @@ describe("katalogdan gelen değişkenlerin çevirisi (karar 0021, 4. paket)", ()
     expect(text.message).toContain(`«${nip.params.nipper}»`);
     expect(text.message).toContain(`Kaynak: ${nip.params.source}.`);
   });
+
+  it("ekipmanın kapasite notu ekipman çevirmeninden geçer (7. paket); verilmemişse canlı çevirmeninden", () => {
+    const species = (value: string) => `«${value}»`;
+    const equipment = (value: string) => `[${value}]`;
+    expect(translateCatalogParams({ name: "Ad", note: "Kapasite notu", names: ["Marka Model"] }, species, equipment)).toEqual({ name: "«Ad»", note: "[Kapasite notu]", names: ["Marka Model"] });
+    expect(translateCatalogParams({ note: "Kapasite notu" }, species)).toEqual({ note: "«Kapasite notu»" });
+    // Ekipman tablosu henüz yüklenmemişse not boş verilir, uyarı genel cümlesini yazar.
+    expect(translateCatalogParams({ note: "Kapasite notu" }, species, () => undefined)).toEqual({ note: "" });
+    const missing = scenario("notlu tek cihaz").warnings.find((warning) => warning.code === "missingCapacity")!;
+    expect(engineWarningText(tr, formatFor("liters"), missing, species, equipment).message).toContain(`[${missing.params.note}]`);
+    expect(engineWarningText(tr, formatFor("liters"), missing, species, () => undefined).message).not.toContain(String(missing.params.note));
+  });
 });
 
 // Başka dilin motor metinleri (karar 0021, 5. paket ve İspanyolca paketi). İspanyolcada "ü" yalnız "güe/güi" içinde Türkçe harf sayılmaz
