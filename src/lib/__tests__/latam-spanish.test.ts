@@ -4,14 +4,15 @@ import { spainOnlySpanish as spainOnly } from "./catalog-translation-checks";
 
 // İspanyolca metinler Latin Amerika ortak İspanyolcasıdır (ürün sahibi kararı 2026-10-31): kullanıcıya "tú" ile hitap edilir; "vosotros",
 // "vos" ve İspanya'ya özgü sözcükler (ordenador, móvil, coger, grifo…) kullanılmaz. Arayüz, motor, bitki uyarıları, hastalık ve gizlilik
-// sayfaları taranır (yorumlar Türkçedir, taranmaz); canlıların çevirisi kendi testinde (catalog-translations-es.test.ts).
+// sayfaları taranır (yorumlar Türkçedir, taranmaz); canlıların ve ekipmanın çevirisi kendi testlerinde (catalog-translations-es.test.ts,
+// equipment-translations.test.ts).
 
 const MESSAGES = "packages/localization/src/messages/";
 
 const stripComments = (source: string) => source.replace(/\/\*[\s\S]*?\*\//g, "").replace(/(^|[^:"'`\\])\/\/.*$/gm, "$1");
 
 describe("İspanyolca metinler Latin Amerika ortak İspanyolcasıyla", () => {
-  const files = readdirSync(MESSAGES).filter((name) => /^es(?:-[a-z-]+)?\.ts$/.test(name) && name !== "es-catalog-species.ts");
+  const files = readdirSync(MESSAGES).filter((name) => /^es(?:-[a-z-]+)?\.ts$/.test(name) && !name.startsWith("es-catalog-"));
 
   it("İspanyolca dosyalar var", () => {
     expect(files.sort()).toEqual(["es-bundle.ts", "es-diseases.ts", "es-engine.ts", "es-plant-warnings.ts", "es-privacy.ts", "es.ts"]);

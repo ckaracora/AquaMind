@@ -7,8 +7,8 @@ import { speciesCatalog } from "@/data/catalog-species";
 
 export interface TranslationEntry { key: string; fields: string[]; tr: string; method?: "a" | "k" | "t"; source?: string; [locale: string]: unknown }
 
-export function readTranslations(locale: string): TranslationEntry[] {
-  return JSON.parse(readFileSync(fileURLToPath(new URL(`../../../packages/localization/translations/${locale}-species.json`, import.meta.url)), "utf8")) as TranslationEntry[];
+export function readTranslations(locale: string, catalog: "species" | "equipment" = "species"): TranslationEntry[] {
+  return JSON.parse(readFileSync(fileURLToPath(new URL(`../../../packages/localization/translations/${locale}-${catalog}.json`, import.meta.url)), "utf8")) as TranslationEntry[];
 }
 
 /** Metindeki sayılar, her dilin kendi ayırıcısıyla okunmuş değer olarak (Türkçe 1.200 = İngilizce 1,200; özgül ağırlık 1.001–1.029 ikisinde de ondalık). */
@@ -88,7 +88,7 @@ const SPAIN_OR_VOSOTROS = [
 const STRESSED_NON_VOSEO = new Set([
   "más", "además", "demás", "atrás", "detrás", "jamás", "compás", "después", "estrés", "inglés", "siamés", "tailandés", "través", "japonés",
   "francés", "interés", "cortés", "revés", "ciprés", "portugués", "holandés", "escocés", "irlandés", "danés", "finlandés", "país", "anís", "maíz",
-  "quizás", "veintitrés", "bebés", "ciempiés", "estás", "estés",
+  "quizás", "veintitrés", "bebés", "ciempiés", "estás", "estés", "plexiglás",
   "está", "esté", "dé", "sé", "té", "sí", "mí", "qué", "así", "aquí", "allí", "ahí", "allá", "acá", "quizá", "café", "bebé", "sofá", "mamá", "papá",
   "rubí", "maní", "ají", "colibrí", "bogotá", "canadá", "panamá", "paraná", "acandí",
 ]);

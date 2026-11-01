@@ -4,7 +4,8 @@ import type { EquipmentProfile } from "@/data/catalog-equipment";
 
 // Ekipmanın teknik bilgi satırı (karar 0021, 5. paket). Katalogdaki satır Türkçe yazılmış katalog metnidir: çevirisi olan dilde çevirisi
 // gösterilir; çevirisi olmayan dilde satır gösterilmez (ürün sahibi kararı 2026-10-30), yerine kaydın sayısal alanlarından (debi, güç,
-// önerilen hacim) seçili dilde bir özet kurulur. Türkçede çevirmen metnin kendisini verdiği için katalogdaki satır aynen kalır.
+// önerilen hacim) seçili dilde bir özet kurulur. Türkçede çevirmen metnin kendisini verdiği için katalogdaki satır aynen kalır. Çevirmen
+// ekipman çevirmenidir (`useEquipmentText`, 7. paket); başka dilde tablosu yüklenene kadar özet görünür.
 // Katalogda karşılığı olmayan ekipmanın satırı kullanıcının yazdığıdır ve aynen gösterilir.
 
 /** Katalog kaydının seçili dildeki teknik bilgi satırı; çevirisi yoksa sayısal alanlardan özet, o da yoksa boş. */

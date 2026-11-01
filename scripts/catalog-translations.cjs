@@ -1,7 +1,7 @@
-// Katalog çeviri tablolarını üretir (docs/DECISIONS/0021-dil-altyapisi.md, 4. paket). Kaynak, gözden geçirilen JSON dosyasıdır
-// (`packages/localization/translations/<dil>-species.json`: anahtar, alanlar, Türkçe metin, dilin kodu adındaki alanda çeviri, adlarda yöntem
-// ve kaynak); uygulamaya
-// giren tablo yalnız anahtar → çeviri tutar (`packages/localization/src/messages/<dil>-catalog-species.ts`).
+// Katalog çeviri tablolarını üretir (docs/DECISIONS/0021-dil-altyapisi.md, 4. ve 7. paket). Kaynak, gözden geçirilen JSON dosyasıdır
+// (`packages/localization/translations/<dil>-species.json` ve `<dil>-equipment.json`: anahtar, alanlar, Türkçe metin — ekipmanda sayıları
+// "#" yapılmış parça kalıbı —, dilin kodu adındaki alanda çeviri, canlı adlarında yöntem ve kaynak); uygulamaya giren tablo yalnız anahtar →
+// çeviri tutar (`packages/localization/src/messages/<dil>-catalog-species.ts`, `<dil>-catalog-equipment.ts`).
 // Kullanım:
 //   node scripts/catalog-translations.cjs           tabloları yazar
 //   node scripts/catalog-translations.cjs --check   tablo kaynağıyla aynı değilse ya da bir anahtar Türkçe metne uymuyorsa çıkış kodu 1
@@ -21,18 +21,22 @@ const load = (file) => {
 };
 const { catalogTextKey } = load(path.join(pkg, "src/catalog.ts"));
 
+const SPECIES = { type: "CatalogTexts", from: "../catalog" };
+const EQUIPMENT = { type: "EquipmentTexts", from: "../equipment" };
 const TABLES = [
-  { locale: "en", source: "translations/en-species.json", target: "src/messages/en-catalog-species.ts", name: "enCatalogSpecies" },
-  { locale: "es", source: "translations/es-species.json", target: "src/messages/es-catalog-species.ts", name: "esCatalogSpecies" },
+  { locale: "en", source: "translations/en-species.json", target: "src/messages/en-catalog-species.ts", name: "enCatalogSpecies", ...SPECIES },
+  { locale: "es", source: "translations/es-species.json", target: "src/messages/es-catalog-species.ts", name: "esCatalogSpecies", ...SPECIES },
+  { locale: "en", source: "translations/en-equipment.json", target: "src/messages/en-catalog-equipment.ts", name: "enCatalogEquipment", ...EQUIPMENT },
+  { locale: "es", source: "translations/es-equipment.json", target: "src/messages/es-catalog-equipment.ts", name: "esCatalogEquipment", ...EQUIPMENT },
 ];
 
-function render({ locale, source, name }, entries) {
+function render({ locale, source, name, type, from }, entries) {
   const lines = entries.map((entry) => `  ${JSON.stringify(entry.key)}: ${JSON.stringify(entry[locale])},`);
   return [
     `// Bu dosya üretilir: node scripts/catalog-translations.cjs (kaynak packages/localization/${source}). Elle düzenlemeyin.`,
-    `import type { CatalogTexts } from "../catalog";`,
+    `import type { ${type} } from "${from}";`,
     ``,
-    `export const ${name}: CatalogTexts = {`,
+    `export const ${name}: ${type} = {`,
     ...lines,
     `};`,
     ``,
