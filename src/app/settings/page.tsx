@@ -5,6 +5,7 @@ import { AlertTriangle, Bell, Check, Database, Download, Globe2, HardDrive, Moon
 import type { Preferences } from "@aquamind/domain";
 import { LOCALE_NAMES, SUPPORTED_LOCALES, isLocale } from "@aquamind/localization";
 import { AppShell } from "@/components/app-shell";
+import { AccountSettings } from "@/components/account-settings";
 import { ModalDialog } from "@/components/modal-dialog";
 import { PageHeader } from "@/components/page-header";
 import { beginStorageSuspension, buildLocalExport, countOrphans, endStorageSuspension, findOrphans, loadDeletedAquariums, restoreFromBackup, type CollectionName, type RestoreResult } from "@/lib/aquarium-storage";
@@ -13,6 +14,7 @@ import { localIsoDate } from "@/lib/local-date";
 import { downloadBackup, useBackupStatus, usePersistentStorage } from "@/lib/use-backup";
 import { useDisplayFormat } from "@/lib/use-display-format";
 import { useAquariums } from "@/providers/aquarium-provider";
+import { useAuth } from "@/providers/auth-provider";
 import { useI18n } from "@/providers/i18n-provider";
 
 const input="mt-1.5 w-full rounded-xl border border-white/[.08] bg-[#09171e] px-3 py-3 text-sm outline-none focus:border-aqua/60";
@@ -22,6 +24,8 @@ export default function SettingsPage(){
  // yedeğe ve yetim sayımına girmez.
  const {persistedSnapshot,storageIssues,preferences,updatePreferences}=useAquariums();
  const {t,requestedLocale,setLocale}=useI18n();
+ // Hesaplar açıksa (karar 0035) "Profil" bölümünün yerine Hesap bölümü gelir; kapalıyken bugünkü bölüm aynen kalır.
+ const {state}=useAuth();
  const fmt=useDisplayFormat();
  const backup=useBackupStatus();
  const persistence=usePersistentStorage();
@@ -85,7 +89,7 @@ export default function SettingsPage(){
  const persistenceText={checking:d.persistence.checking,persisted:d.persistence.persisted,"best-effort":d.persistence.bestEffort,denied:d.persistence.denied,unsupported:d.persistence.unsupported}[persistence.state];
  function reset(){if(!confirm(t.settings.data.confirmReset))return;Object.keys(localStorage).filter(k=>k.startsWith("aquamind:")).forEach(k=>localStorage.removeItem(k));location.reload()}
  return <AppShell><PageHeader title={t.navigation.items.settings}/><div className="mx-auto max-w-[980px] px-5 py-8 sm:px-8 lg:px-10 lg:py-10"><div className="mb-8"><p className="eyebrow mb-2 text-aqua">{t.settings.eyebrow}</p><h1 className="text-2xl font-extrabold sm:text-3xl">{t.navigation.items.settings}</h1><p className="mt-2 text-sm text-[#71858d]">{t.settings.description}</p></div>
-  <div className="space-y-5"><Section icon={UserRound} title={t.settings.profile.title} description={t.settings.profile.description}><div className="grid gap-4 sm:grid-cols-2"><label className="text-xs font-bold text-[#91a3aa]">{t.settings.profile.name}<input placeholder={t.settings.profile.namePlaceholder} className={input}/></label><label className="text-xs font-bold text-[#91a3aa]">{t.settings.profile.email}<input type="email" placeholder={t.settings.profile.emailPlaceholder} className={input}/></label></div><p className="mt-3 text-[11px] text-[#586e77] sm:text-[9px]">{t.settings.profile.note}</p></Section>
+  <div className="space-y-5">{state.status==="disabled"?<Section icon={UserRound} title={t.settings.profile.title} description={t.settings.profile.description}><div className="grid gap-4 sm:grid-cols-2"><label className="text-xs font-bold text-[#91a3aa]">{t.settings.profile.name}<input placeholder={t.settings.profile.namePlaceholder} className={input}/></label><label className="text-xs font-bold text-[#91a3aa]">{t.settings.profile.email}<input type="email" placeholder={t.settings.profile.emailPlaceholder} className={input}/></label></div><p className="mt-3 text-[11px] text-[#586e77] sm:text-[9px]">{t.settings.profile.note}</p></Section>:<AccountSettings/>}
   <Section icon={Ruler} title={t.settings.units.title} description={t.settings.units.description}><div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4"><Select label={t.settings.units.language} value={requestedLocale} onChange={chooseLanguage} options={SUPPORTED_LOCALES.map(code=>[code,LOCALE_NAMES[code],code])}/><Select label={t.settings.units.temperature} value={prefs.temperature} onChange={v=>setPrefs({...prefs,temperature:v as Preferences["temperature"]})} options={[["celsius",t.settings.units.celsius],["fahrenheit",t.settings.units.fahrenheit]]}/><Select label={t.settings.units.volume} value={prefs.volume} onChange={v=>setPrefs({...prefs,volume:v as Preferences["volume"]})} options={[["liters",t.settings.units.liters],["gallons",t.settings.units.gallons]]}/><Select label={t.settings.units.dateFormat} value={prefs.dateFormat} onChange={v=>setPrefs({...prefs,dateFormat:v as Preferences["dateFormat"]})} options={[["day-first",t.settings.units.dayFirst],["month-first",t.settings.units.monthFirst]]}/></div>{languageFailed&&<p role="alert" className="mt-3 text-xs font-bold text-amber-200">{t.settings.units.languageLoadFailed}</p>}</Section>
   <Section icon={Bell} title={t.settings.notifications.title} description={t.settings.notifications.description}><div className="divide-y divide-white/[.05]"><Toggle label={t.settings.notifications.maintenance} description={t.settings.notifications.maintenanceHelp} checked={prefs.maintenance} onChange={v=>setPrefs({...prefs,maintenance:v})}/><Toggle label={t.settings.notifications.water} description={t.settings.notifications.waterHelp} checked={prefs.waterAlerts} onChange={v=>setPrefs({...prefs,waterAlerts:v})}/><Toggle label={t.settings.notifications.news} description={t.settings.notifications.newsHelp} checked={prefs.productNews} onChange={v=>setPrefs({...prefs,productNews:v})}/></div></Section>
   <Section icon={Moon} title={t.settings.appearance.title} description={t.settings.appearance.description}><div className="grid gap-3 sm:grid-cols-2"><div className="rounded-xl border border-aqua/20 bg-aqua/[.05] p-4"><div className="flex items-center justify-between"><div><p className="text-xs font-bold">{t.settings.appearance.darkTheme}</p><p className="mt-1 text-[11px] text-[#647981] sm:text-[9px]">{t.settings.appearance.darkThemeHelp}</p></div><Check size={17} className="text-aqua"/></div></div><Toggle label={t.settings.appearance.compact} description={t.settings.appearance.compactHelp} checked={prefs.compactMode} onChange={v=>setPrefs({...prefs,compactMode:v})}/></div></Section>

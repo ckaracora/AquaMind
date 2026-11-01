@@ -1,7 +1,8 @@
 "use client";
 
-import { Box, Calculator, CalendarCheck, Droplets, Fish, Gauge, HeartHandshake, Leaf, PackageSearch, Settings, SlidersHorizontal, Stethoscope, UserRound, Waves } from "lucide-react";
+import { Box, Calculator, CalendarCheck, Droplets, Fish, Gauge, HeartHandshake, Leaf, PackageSearch, Settings, SlidersHorizontal, Stethoscope, Waves } from "lucide-react";
 import { usePathname } from "next/navigation";
+import { AccountCard } from "@/components/account-card";
 import { primaryNavigationItems, settingsNavigationItem, type NavigationKey } from "@/data/navigation";
 import { useI18n } from "@/providers/i18n-provider";
 
@@ -20,7 +21,7 @@ export function Sidebar() {
     </nav>
     <div className="mt-auto border-t border-white/[.06] pt-4">
       <a href={settingsNavigationItem.href} className={`flex items-center gap-3 rounded-xl px-3 py-3 text-[13px] font-semibold ${pathname.startsWith(settingsNavigationItem.href)?"bg-aqua/10 text-aqua":"text-[#82969e]"}`}><Settings size={18}/>{t.navigation.items[settingsNavigationItem.key]}</a>
-      <div className="mt-3 flex items-center gap-3 rounded-xl bg-white/[.025] p-3"><div className="grid size-9 place-items-center rounded-full bg-gradient-to-br from-aqua to-cyan-700 text-xs font-extrabold text-ink"><UserRound size={16}/></div><div><p className="text-xs font-bold">{t.account.guest}</p><p className="text-[10px] text-[#647981]">{t.account.freePlan}</p></div></div>
+      <AccountCard variant="sidebar"/>
     </div>
   </aside>;
 }
