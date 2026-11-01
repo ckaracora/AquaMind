@@ -1,0 +1,133 @@
+name: Hazırlık veritabanı
+
+# Hesaplar 1B (karar 0032, 3. madde; karar 0034): migration'ları ürün sahibinin hesabındaki hazırlık (staging) projesine gönderir ve
+# gerçek Supabase'te doğrular. Yalnız elle başlatılır: Actions sekmesi → "Hazırlık veritabanı" → "Run workflow" ya da
+# `gh workflow run staging-db.yml`. Varsayılan denemedir: hiçbir şey yazmadan gönderilecek migration'ları listeler; "apply" açıkken
+# uygular, ardından katalog ve izin denetimlerini ve gerçek istemciyle yetki senaryolarını çalıştırır.
+# Sırları ürün sahibi GitHub'a kendisi girer; iş akışı onları yazdırmaz. Her sır yalnız onu kullanan adıma verilir (kurulum adımları
+# sır görmez). Eylemler commit SHA'sıyla sabittir (yorumdaki etiket karşılığı). Üretim projesine dokunmaz.
+
+on:
+  workflow_dispatch:
+    inputs:
+      apply:
+        description: "Migration'ları uygula ve doğrula (kapalıysa yalnız deneme)"
+        type: boolean
+        default: false
+
+# Aynı anda tek çalışma; yarıda kesilmez.
+concurrency:
+  group: staging-db
+  cancel-in-progress: false
+
+permissions:
+  contents: read
+
+jobs:
+  push:
+    name: Migration gönder
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    env:
+      SUPABASE_TELEMETRY_DISABLED: "1"
+
+    steps:
+      - name: Sırları denetle
+        env:
+          SUPABASE_ACCESS_TOKEN: ${{ secrets.SUPABASE_ACCESS_TOKEN }}
+          SUPABASE_DB_PASSWORD: ${{ secrets.STAGING_DB_PASSWORD }}
+          STAGING_PROJECT_ID: ${{ secrets.STAGING_PROJECT_ID }}
+        run: |
+          for name in SUPABASE_ACCESS_TOKEN SUPABASE_DB_PASSWORD STAGING_PROJECT_ID; do
+            if [ -z "${!name}" ]; then echo "::error::$name tanımlı değil (Settings → Secrets and variables → Actions)"; exit 1; fi
+          done
+
+      - name: Depoyu indir
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          persist-credentials: false
+
+      - name: Supabase CLI kur
+        uses: supabase/setup-cli@45a513f8c64c0bc8e0e3dfe572b5c95be85f6359 # v3.0.1
+        with:
+          version: 2.121.0
+
+      - name: CLI sürümü
+        run: supabase --version
+
+      - name: Hazırlık projesine bağlan
+        env:
+          SUPABASE_ACCESS_TOKEN: ${{ secrets.SUPABASE_ACCESS_TOKEN }}
+          SUPABASE_DB_PASSWORD: ${{ secrets.STAGING_DB_PASSWORD }}
+          STAGING_PROJECT_ID: ${{ secrets.STAGING_PROJECT_ID }}
+        run: supabase link --project-ref "$STAGING_PROJECT_ID"
+
+      - name: Gönderilecek migration'lar (deneme)
+        env:
+          SUPABASE_ACCESS_TOKEN: ${{ secrets.SUPABASE_ACCESS_TOKEN }}
+          SUPABASE_DB_PASSWORD: ${{ secrets.STAGING_DB_PASSWORD }}
+        run: supabase db push --dry-run
+
+      - name: Migration'ları uygula
+        if: ${{ inputs.apply }}
+        env:
+          SUPABASE_ACCESS_TOKEN: ${{ secrets.SUPABASE_ACCESS_TOKEN }}
+          SUPABASE_DB_PASSWORD: ${{ secrets.STAGING_DB_PASSWORD }}
+        run: supabase db push
+
+  verify:
+    name: Gerçek Supabase'te doğrula
+    needs: push
+    if: ${{ inputs.apply }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    steps:
+      - name: Sırları denetle
+        env:
+          STAGING_PROJECT_ID: ${{ secrets.STAGING_PROJECT_ID }}
+          STAGING_PUBLISHABLE_KEY: ${{ secrets.STAGING_PUBLISHABLE_KEY }}
+          STAGING_SECRET_KEY: ${{ secrets.STAGING_SECRET_KEY }}
+          STAGING_DB_PASSWORD: ${{ secrets.STAGING_DB_PASSWORD }}
+          STAGING_POOLER_HOST: ${{ vars.STAGING_POOLER_HOST }}
+        run: |
+          for name in STAGING_PROJECT_ID STAGING_PUBLISHABLE_KEY STAGING_SECRET_KEY STAGING_DB_PASSWORD STAGING_POOLER_HOST; do
+            if [ -z "${!name}" ]; then echo "::error::$name tanımlı değil (Settings → Secrets and variables → Actions)"; exit 1; fi
+          done
+
+      - name: Depoyu indir
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          persist-credentials: false
+
+      - name: pnpm kur
+        uses: pnpm/action-setup@b906affcce14559ad1aafd4ab0e942779e9f58b1 # v4
+        with:
+          version: 11.11.0
+
+      - name: Node.js kur
+        uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
+        with:
+          node-version: 24
+          cache: pnpm
+
+      - name: Bağımlılıkları kur
+        run: pnpm install --frozen-lockfile
+
+      - name: psql
+        run: command -v psql || (sudo apt-get update && sudo apt-get install -y postgresql-client)
+
+      # Oturum havuzu (IPv4) üzerinden; kullanıcı adı `postgres.<proje kimliği>` (Supabase'in bağlantı belgesi).
+      - name: Katalog ve izin denetimleri
+        env:
+          PGPASSWORD: ${{ secrets.STAGING_DB_PASSWORD }}
+          STAGING_PROJECT_ID: ${{ secrets.STAGING_PROJECT_ID }}
+          STAGING_POOLER_HOST: ${{ vars.STAGING_POOLER_HOST }}
+        run: psql "host=$STAGING_POOLER_HOST port=5432 dbname=postgres user=postgres.$STAGING_PROJECT_ID sslmode=require" -X -q -v ON_ERROR_STOP=1 -f supabase/tests/catalog-checks.sql
+
+      - name: Gerçek istemciyle yetki senaryoları
+        env:
+          STAGING_PROJECT_ID: ${{ secrets.STAGING_PROJECT_ID }}
+          STAGING_PUBLISHABLE_KEY: ${{ secrets.STAGING_PUBLISHABLE_KEY }}
+          STAGING_SECRET_KEY: ${{ secrets.STAGING_SECRET_KEY }}
+        run: pnpm test:staging

@@ -1,7 +1,7 @@
 import { readdirSync, readFileSync } from "node:fs";
 import type { PGlite } from "@electric-sql/pglite";
 import { afterAll, beforeAll, describe, expect, it } from "vitest";
-import { migratedDatabase, migrationFiles, ROLLBACKS } from "./test-database";
+import { migratedDatabase, migrationFiles, ROLLBACKS, sqlState } from "./test-database";
 
 // Şemanın katalog ve izin denetimleri (karar 0032 ve 0033): tablo ve sütun izinleri, fonksiyon izinleri, RLS ve politikalar, sabit
 // `search_path`, migration adları ve geri alma. Aynı denetimler 1B'de hazırlık projesinde de çalıştırılır (karar 0032, 3. madde).
@@ -124,6 +124,27 @@ describe("satır politikaları", () => {
       "profiles.profiles_update_own:UPDATE",
     ]);
     expect(policies.every((r) => r.roles.join() === "authenticated")).toBe(true);
+  });
+});
+
+describe("paylaşılan katalog denetimi (catalog-checks.sql)", () => {
+  // Hazırlık projesinde de aynı dosya çalışır (karar 0034); yerelde geçmesi, dosyanın migration'la uyumlu kaldığını gösterir.
+  const checks = readFileSync(new URL("./catalog-checks.sql", import.meta.url), "utf8");
+
+  it("migration'ı uygulanmış veritabanında geçer", async () => {
+    expect(await sqlState(() => db.exec(checks))).toBe("ok");
+  });
+
+  it("izin ya da politika bozulunca AQ900 ile hangi denetimin düştüğünü yazar", async () => {
+    const copy = await db.clone();
+    try {
+      await copy.exec("grant delete on public.aquariums to authenticated; grant execute on function public.set_updated_at() to anon; alter table public.profiles disable row level security");
+      const message = await copy.exec(checks).then(() => "ok", (error: { code?: string; message: string }) => `${error.code}: ${error.message}`);
+      expect(message).toMatch(/^AQ900: /);
+      for (const part of ["authenticated tablo aquariums DELETE", "set_updated_at: anon EXECUTE", "profiles: RLS kapalı"]) expect(message).toContain(part);
+    } finally {
+      await copy.close();
+    }
   });
 });
 
