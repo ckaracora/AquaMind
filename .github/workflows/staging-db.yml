@@ -5,7 +5,7 @@ name: Hazırlık veritabanı
 # `gh workflow run staging-db.yml`. Varsayılan denemedir: hiçbir şey yazmadan gönderilecek migration'ları listeler; "apply" açıkken
 # uygular, ardından katalog ve izin denetimlerini ve gerçek istemciyle yetki senaryolarını çalıştırır.
 # Sırları ürün sahibi GitHub'a kendisi girer; iş akışı onları yazdırmaz. Her sır yalnız onu kullanan adıma verilir (kurulum adımları
-# sır görmez). Eylemler commit SHA'sıyla sabittir (yorumdaki etiket karşılığı). Üretim projesine dokunmaz.
+# sır görmez). Veritabanına IPv4 oturum havuzundan bağlanır (gönderme ve doğrulama aynı yoldan; erişim jetonu gerekmez). Eylemler commit SHA'sıyla sabittir (yorumdaki etiket karşılığı). Üretim projesine dokunmaz.
 
 on:
   workflow_dispatch:
@@ -34,11 +34,11 @@ jobs:
     steps:
       - name: Sırları denetle
         env:
-          SUPABASE_ACCESS_TOKEN: ${{ secrets.SUPABASE_ACCESS_TOKEN }}
-          SUPABASE_DB_PASSWORD: ${{ secrets.STAGING_DB_PASSWORD }}
+          STAGING_DB_PASSWORD: ${{ secrets.STAGING_DB_PASSWORD }}
           STAGING_PROJECT_ID: ${{ secrets.STAGING_PROJECT_ID }}
+          STAGING_POOLER_HOST: ${{ vars.STAGING_POOLER_HOST }}
         run: |
-          for name in SUPABASE_ACCESS_TOKEN SUPABASE_DB_PASSWORD STAGING_PROJECT_ID; do
+          for name in STAGING_DB_PASSWORD STAGING_PROJECT_ID STAGING_POOLER_HOST; do
             if [ -z "${!name}" ]; then echo "::error::$name tanımlı değil (Settings → Secrets and variables → Actions)"; exit 1; fi
           done
 
@@ -55,25 +55,29 @@ jobs:
       - name: CLI sürümü
         run: supabase --version
 
-      - name: Hazırlık projesine bağlan
-        env:
-          SUPABASE_ACCESS_TOKEN: ${{ secrets.SUPABASE_ACCESS_TOKEN }}
-          SUPABASE_DB_PASSWORD: ${{ secrets.STAGING_DB_PASSWORD }}
-          STAGING_PROJECT_ID: ${{ secrets.STAGING_PROJECT_ID }}
-        run: supabase link --project-ref "$STAGING_PROJECT_ID"
-
+      # GitHub'ın çalıştırıcısında IPv6 yok; ücretsiz planda doğrudan bağlantı IPv6'dır. `supabase link` ile kurulan bağlantı ilk
+      # denemede IPv6'ya düştü (2026-11-01), bu yüzden gönderme doğrulama işiyle aynı yoldan, IPv4 oturum havuzuna bağlantı adresiyle
+      # (`--db-url`) yapılır. Şifre adres için kodlanır ve kodlanmış hali de günlükte maskelenir; adres yalnız bu adımda kurulur.
       - name: Gönderilecek migration'lar (deneme)
         env:
-          SUPABASE_ACCESS_TOKEN: ${{ secrets.SUPABASE_ACCESS_TOKEN }}
-          SUPABASE_DB_PASSWORD: ${{ secrets.STAGING_DB_PASSWORD }}
-        run: supabase db push --dry-run
+          STAGING_DB_PASSWORD: ${{ secrets.STAGING_DB_PASSWORD }}
+          STAGING_PROJECT_ID: ${{ secrets.STAGING_PROJECT_ID }}
+          STAGING_POOLER_HOST: ${{ vars.STAGING_POOLER_HOST }}
+        run: |
+          encoded=$(node -e 'process.stdout.write(encodeURIComponent(process.env.STAGING_DB_PASSWORD))')
+          echo "::add-mask::$encoded"
+          supabase db push --dry-run --db-url "postgresql://postgres.${STAGING_PROJECT_ID}:${encoded}@${STAGING_POOLER_HOST}:5432/postgres"
 
       - name: Migration'ları uygula
         if: ${{ inputs.apply }}
         env:
-          SUPABASE_ACCESS_TOKEN: ${{ secrets.SUPABASE_ACCESS_TOKEN }}
-          SUPABASE_DB_PASSWORD: ${{ secrets.STAGING_DB_PASSWORD }}
-        run: supabase db push
+          STAGING_DB_PASSWORD: ${{ secrets.STAGING_DB_PASSWORD }}
+          STAGING_PROJECT_ID: ${{ secrets.STAGING_PROJECT_ID }}
+          STAGING_POOLER_HOST: ${{ vars.STAGING_POOLER_HOST }}
+        run: |
+          encoded=$(node -e 'process.stdout.write(encodeURIComponent(process.env.STAGING_DB_PASSWORD))')
+          echo "::add-mask::$encoded"
+          supabase db push --db-url "postgresql://postgres.${STAGING_PROJECT_ID}:${encoded}@${STAGING_POOLER_HOST}:5432/postgres"
 
   verify:
     name: Gerçek Supabase'te doğrula
