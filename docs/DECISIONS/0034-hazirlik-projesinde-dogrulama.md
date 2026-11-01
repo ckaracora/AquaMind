@@ -1,7 +1,7 @@
 # 0034 — Hazırlık projesinde doğrulama (Phase 1B)
 
 - Tarih: 2026-11-01
-- Durum: Kabul edildi; ilk gerçek çalıştırma ürün sahibi hazırlık projesini açıp sırları girdikten sonra. İş akışı o güne kadar hiçbir şey yapmaz (yalnız elle başlatılır ve sır yoksa ilk adımda durur).
+- Durum: Kabul edildi ve gerçek Supabase'te geçti (2026-11-01; aşağıda "İlk çalıştırmanın sonuçları"). Taklidin farkı kapandı; 1C başlayabilir (karar 0032).
 - Dayanak: karar 0032 (3. ve 4. madde), karar 0033 (1A şeması), `docs/SECURITY.md`.
 
 ## Ne geldi
@@ -14,7 +14,7 @@
 
 ## Neden böyle
 
-- **Gönderme Supabase'in belgelediği yolla:** `supabase/setup-cli` eylemi, `supabase link`, `supabase db push` (supabase.com/docs/guides/deployment/managing-environments). Eylem (v3.0.1, 2026-09-24; commit SHA'sıyla sabit) ve CLI (2.121.0, 2026-10-14) sabit sürümle; belgedeki `latest` kullanılmaz. Eylem CLI'yi kendi geçici klasöründe npm ile kurar (README ve kaynak kodu); CLI depo bağımlılığı olarak eklenmedi, deponun `allowBuilds` ayarı o kurulumu sınırlamaz. Bu yüzden eylem adımı hiçbir sır görmez (aşağıda).
+- **Gönderme IPv4 oturum havuzundan:** Supabase'in belgelediği yol `supabase/setup-cli` eylemi, `supabase link` ve `supabase db push`'tur (supabase.com/docs/guides/deployment/managing-environments). İlk denemede `link` geçti ama `db push` "IPv6 is not supported on your current network" ile durdu: GitHub'ın çalıştırıcısında IPv6 yok ve CLI havuz bağlantısına geçmedi. Bu yüzden gönderme, doğrulama işinin `psql` için kullandığı yoldan yapılır: `supabase db push --db-url` ile oturum havuzu adresi (`sslmode=require`). Adreste şifre yoktur; şifre `PGPASSWORD` ile verilir (CLI 2.121.0 adreste şifre yoksa ortamdakini kullanır). Böylece şifre ne süreç argümanında görünür ne de kodlanıp ayrıca maskelenmesi gerekir; ilk sürümde şifre adrese kodlanıyordu ve `%` içeren şifrelerde GitHub'ın maskesi kodlanmış hali yakalayamayabilirdi (Codex). Bu yolda erişim jetonu gerekmez. Eylem (v3.0.1, 2026-09-24; commit SHA'sıyla sabit) ve CLI (2.121.0, 2026-10-14) sabit sürümle; belgedeki `latest` kullanılmaz. Eylem CLI'yi kendi geçici klasöründe npm ile kurar (README ve kaynak kodu); CLI depo bağımlılığı olarak eklenmedi, deponun `allowBuilds` ayarı o kurulumu sınırlamaz. Bu yüzden eylem adımı hiçbir sır görmez (aşağıda).
 - **Geçmiş:** CLI gönderilen migration'ları `supabase_migrations.schema_migrations` tablosunda tutar; sonraki gönderim uygulananları atlar (aynı belge). Hazırlık için yeni bir proje gerekir.
 - **Gerçek istemci için `supabase-js`:** Supabase'in yeni anahtarlarıyla (`sb_publishable_…`, `sb_secret_…`) yönetici çağrılarının (test kullanıcısı oluşturma ve silme) ham HTTP biçimi belgelerde açık değil; anahtarlar `apikey` başlığında gider, `Authorization: Bearer` olarak gönderilmez (supabase.com/docs/guides/api/api-keys). Tahmin yerine resmî istemci kullanıldı.
 - **Katalog denetimi `psql` ile, oturum havuzundan:** ücretsiz planda doğrudan bağlantı IPv6'dır, paylaşılan havuz IPv4'tür; havuz kullanıcı adı `postgres.<proje kimliği>`, sunucu adı bölgeden türetilemez, panelin "Connect" penceresinden kopyalanır (supabase.com/docs/guides/database/connecting-to-postgres). Bu yüzden sunucu adı ayrı bir değişkendir.
@@ -25,7 +25,6 @@ Hepsini ürün sahibi GitHub'da depo ayarlarına (Settings → Secrets and varia
 
 | Ad | Tür | Nereden |
 |---|---|---|
-| `SUPABASE_ACCESS_TOKEN` | sır | Supabase hesap ayarları → erişim jetonları; yalnız hazırlık projesine kapsamlı, `supabase link` için Project Settings, API Keys ve API Key Secrets okuma izniyle |
 | `STAGING_PROJECT_ID` | sır | panel adresindeki proje kimliği (`/dashboard/project/<kimlik>`) |
 | `STAGING_DB_PASSWORD` | sır | proje oluşturulurken belirlenen veritabanı şifresi |
 | `STAGING_PUBLISHABLE_KEY` | sır | Settings → API Keys, yayınlanabilir anahtar (`sb_publishable_…`) |
@@ -45,10 +44,18 @@ Belgelerde açık olmayan ya da yerelde sınanamayan şeyler ilk denemede görü
 
 ## Güvenlik
 
-- İş akışı hazırlık sırlarını ve hazırlık projesine kapsamlı erişim jetonunu (`SUPABASE_ACCESS_TOKEN`) okur; üretim projesi yok ve bu iş akışı ona bağlanamaz. Her sır yalnız onu kullanan adımın `env` alanında verilir; depo indirme, CLI, pnpm ve Node kurulumu, bağımlılık kurulumu ve `psql` kurulumu adımları sır görmez (GitHub'ın maskelemesi bir sürecin sırra erişmesini engellemez; docs.github.com, "Secure use reference"). Sırlar hiçbir adımda yazdırılmaz.
+- İş akışı yalnız hazırlık sırlarını ve havuz sunucusu değişkenini okur (erişim jetonu kullanılmaz); üretim projesi yok ve bu iş akışı ona bağlanamaz. Her sır yalnız onu kullanan adımın `env` alanında verilir; depo indirme, CLI, pnpm ve Node kurulumu, bağımlılık kurulumu ve `psql` kurulumu adımları sır görmez (GitHub'ın maskelemesi bir sürecin sırra erişmesini engellemez; docs.github.com, "Secure use reference"). Sırlar hiçbir adımda yazdırılmaz.
 - Eylemler etiket yerine commit SHA'sıyla sabittir (yorumda etiket karşılığı); etiketin sonradan taşınması iş akışını değiştiremez.
 - Gizli anahtar yalnız test kullanıcılarını oluşturup silmek ve sonda test akvaryumlarını temizlemek için kullanılır. Hazırlık projesinde gerçek kullanıcı yoktur (karar 0032).
-- Veritabanı şifresi yalnız `link`/`db push` ve katalog denetimi için kullanılır.
+- Veritabanı şifresi yalnız `db push` ve katalog denetimi için kullanılır.
+
+## İlk çalıştırmanın sonuçları (2026-11-01)
+
+- Ürün sahibi hazırlık projesini açtı (`aquamind-staging`, ücretsiz plan, West EU (Paris), `eu-west-3`) ve sırları girdi; proje kimliğini ve havuz sunucusunun adını (gizli olmayan iki değer) ürün sahibinin isteğiyle Claude girdi.
+- İlk deneme (`main`, çalıştırma `41343483842`): `link` geçti, `db push --dry-run` IPv6 hatasıyla durdu (yukarıda). Düzeltme dalından deneme (`41343653489`) geçti: CLI bağlandı ve gönderilecek migration'ı listeledi.
+- Uygulama (`41343706404`): `20261101160000_core_aquariums.sql` uygulandı. Hazırlık projesi PostgreSQL 17.11. Katalog ve izin denetimi geçti (Supabase'in hazır izinleri migration'la kapanmış; public şemasında beklenenden başka nesne yok). Gerçek istemciyle 13 senaryonun 13'ü geçti; özel SQLSTATE kodları PostgREST'ten `code` olarak geldi; temizlik tamamlandı.
+- Şifrenin `PGPASSWORD` ile verildiği son sürüm (`41344690723`, uygulama kipinde): "Remote database is up to date" (migration zaten uygulanmıştı), katalog denetimi ve 13/13 senaryo yine geçti.
+- En küçük `config.toml` yetti; çalıştırıcıda `psql` hazırdı. Üç çalıştırmanın günlüklerinde hiçbir anahtar, jeton ya da şifreli bağlantı adresi görünmüyor (yalnız açılmamış şablon satırı).
 
 ## Geri alma
 

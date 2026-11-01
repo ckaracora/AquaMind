@@ -1,6 +1,6 @@
 # AquaMind veritabanı evrim planı
 
-Son güncelleme: 2026-11-01 (Phase 1A: `profiles`, `aquariums`, `aquarium_members` migration'ı `supabase/migrations/20261101160000_core_aquariums.sql`, ayrıntılar `docs/DECISIONS/0033-cekirdek-sema-ve-yetki.md`; yalnız yerel test veritabanında doğrulandı, hiçbir Supabase projesine gönderilmedi); 2026-10-11 (ekipman kaydına elle girilen değer sütunları eklendi; önceki güncelleme 2026-09-02). **Durum: tasarım; ilk üç tablo yerel testte.** Bu belgedeki öbür tablolar ve hiçbir Supabase projesi henüz oluşturulmamıştır. Phase 1'in çalışma taslağıdır; uygulama sırasında `supabase/migrations/` altındaki dosyalar gerçek kaynak olur ve bu belge onlara göre güncellenir.
+Son güncelleme: 2026-11-01 (Phase 1A: `profiles`, `aquariums`, `aquarium_members` migration'ı `supabase/migrations/20261101160000_core_aquariums.sql`, ayrıntılar `docs/DECISIONS/0033-cekirdek-sema-ve-yetki.md`; yerel test veritabanında ve 2026-11-01'den beri hazırlık projesinde doğrulandı, `docs/DECISIONS/0034-hazirlik-projesinde-dogrulama.md`); 2026-10-11 (ekipman kaydına elle girilen değer sütunları eklendi; önceki güncelleme 2026-09-02). **Durum: tasarım; ilk üç tablo hazırlık projesinde.** Bu belgedeki öbür tablolar henüz oluşturulmamıştır; üretim projesi yoktur ve uygulama hiçbir projeye bağlanmıyor. Phase 1'in çalışma taslağıdır; uygulama sırasında `supabase/migrations/` altındaki dosyalar gerçek kaynak olur ve bu belge onlara göre güncellenir.
 
 ## İlkeler
 

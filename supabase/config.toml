@@ -1,3 +1,4 @@
 # Supabase CLI yapılandırması (karar 0034). Yerel Supabase yığını kullanılmaz (karar 0032); bu dosya yalnız hazırlık projesine
-# migration gönderen iş akışı (`.github/workflows/staging-db.yml`) için. Proje kimliği iş akışında `supabase link` ile verilir.
+# migration gönderen iş akışı (`.github/workflows/staging-db.yml`) için. Buradaki `project_id` yalnız yerel bir addır; hedef proje
+# iş akışında `supabase db push --db-url` adresiyle (sır `STAGING_PROJECT_ID`, değişken `STAGING_POOLER_HOST`) seçilir.
 project_id = "aquamind"
