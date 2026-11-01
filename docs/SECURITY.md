@@ -18,14 +18,14 @@ Arayüzde gizlemek yetki değildir. Yetkilendirme kararı veritabanında (Row Le
   - **Anonim:** açıkça herkese açık görünümler dışında hiçbir şey.
 - Herkese açık erişim yalnızca beyaz listeye alınmış sütunları yansıtan görünümler veya RPC'ler üzerinden verilir (örneğin `public_aquarium_profiles`); tablo politikaları genişletilmez.
 - Sahiplik devri tek bir SQL fonksiyonunda çalışır: denetim satırını ekler, `owner_id` ve üye rollerini atomik olarak değiştirir, alt satırlara dokunmaz. Ölçüm, bakım, canlı, ekipman ve fotoğraf geçmişi akvaryuma bağlı kalır.
-- Politika test matrisi (sahip, editör, izleyici, ilgisiz, anonim) her tablo için CI'da yerel Supabase'e karşı çalışır. Testi olmayan politika birleştirilmez.
+- Politika test matrisi (sahip, editör, izleyici, ilgisiz, anonim) her tablo için CI'da yerel test veritabanına karşı çalışır (karar 0032: PGlite ve testte kurulan Supabase taklidi); özeti hazırlık (staging) projesinde gerçek istemciyle ayrıca denenir. Testi olmayan politika birleştirilmez.
 
 ## Gizli anahtarlar
 
 - Herkese açık istemciler yalnızca Supabase URL'sini ve anon anahtarını alır. Anon anahtarı yalnızca RLS yetkilendirme katmanı olduğu için güvenlidir.
 - `service_role`, yapay zekâ sağlayıcı anahtarları, RevenueCat gizli anahtarı ve webhook gizli anahtarları Vercel ve Supabase ortam ayarlarında yaşar; yalnızca sunucu kodunda okunur; asla `NEXT_PUBLIC_` önekiyle veya Expo paketinde görünmez.
 - Depoda yalnızca `.env.example` (ad var, değer yok) bulunur. `.gitignore` zaten `.env*` dosyalarını dışlar.
-- Yapay zekâ kodlama araçları üretim kimlik bilgisi almaz; yerel geliştirme CLI'nin yerel anahtarlarını kullanır.
+- Yapay zekâ kodlama araçları üretim kimlik bilgisi almaz; yerel testler gizli anahtar gerektirmez (karar 0032). Hazırlık projesinin sırlarını ürün sahibi GitHub'a ve Vercel'e kendisi girer; araçlar bu değerleri görmez ve yazmaz.
 
 ## Kimlik doğrulama sınırı
 

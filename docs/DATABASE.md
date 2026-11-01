@@ -80,10 +80,10 @@ Neden plan ve olay ayrı: "her 7 günde %25 su değişimi" bir plandır (`mainte
 1b. **Issue #8 (tamamlandı — PR #9 ile `main` dalına birleştirildi, `76cabd2`, 2026-09-03):** yerel veri yüklemede doğrulanıyor; bozuk değerler karantinaya alınıyor, demo veri kalıcı yazılmıyor ve akvaryum silme günlükle yapılıp bağlı kayıtları yetim bırakmıyor. Dışa aktarım bölümlendi: ana koleksiyonlar yalnızca geçerli ve yetim olmayan kullanıcı verisini, ayrı bölümler ise yetimleri, karantina değerlerini ve 30 gün saklanan silinmiş akvaryum paketlerini taşıyor. İçe aktarma bunun üç sonucunu dikkate almalıdır: (a) ana koleksiyonlar doğrudan aktarılabilir, (b) `orphans` bölümü kullanıcıya sorulmadan aktarılmaz, (c) `quarantine` bölümü ham metindir ve otomatik aktarılmaz. Ayrıntı: `docs/DECISIONS/0006-yerel-depolama-butunlugu.md`.
 2. **Phase 1:** girişten sonra "yerel verileri içe aktar" akışı dışa aktarımı okur, doğrular, eşler, RLS altında normal API üzerinden yazar; içe aktarılan, atlanan ve eşleşmeyen kayıtları raporlar. Kullanıcı onaylayana kadar `localStorage` dokunulmadan kalır.
 3. **Phase 2:** web'de `localStorage` okuma önbelleği, mobilde expo-sqlite; giden kutusu ve `updated_at` + `version` ile çakışma tespiti.
-4. **Doğrulama:** tarayıcı fikstüründen yerel Supabase'e ve geri gidiş-dönüş testi; RLS politika matrisi aynı pakette.
+4. **Doğrulama:** tarayıcı fikstüründen yerel test veritabanına (karar 0032) ve geri gidiş-dönüş testi; RLS politika matrisi aynı pakette.
 
 ## Migration ve ortam kuralları
 
 - Şema yalnızca `supabase/migrations/` altındaki sürümlü dosyalarla değişir; Supabase panelinden veya SQL editöründen üretimde doğrudan değişiklik yapılmaz.
-- Her migration önce yerel Supabase üzerinde, sonra staging'de çalıştırılır; üretim yalnızca kullanıcı onayıyla.
+- Her migration önce yerel test veritabanında (karar 0032: PGlite ve Supabase taklidi), sonra staging'de çalıştırılır; üretim yalnızca kullanıcı onayıyla.
 - Yapay zekâ kodlama araçları üretim kimlik bilgisi almaz ve üretim verisine bağlanmaz.
