@@ -25,9 +25,9 @@ Depo, kökünde çalışan Next.js 15 web uygulamasını barındıran bir pnpm �
 | `src/lib/engine-text.ts` | Motorun uyarı ve ölçüt kodlarından (sonuç biçimi v2, motor 1.10.0) seçili dilde ekran metni kurar; sayıları ve hacimleri ekranın biçimleyicisiyle yazar (`engineTextFormat`: dilin ayırıcıları, hacim tercihi) | Sağlık sayfası kullanır; dil dosyasında karşılığı olmayan kodda motorun Türkçe metnine düşer |
 | `scripts/` | CommonJS doğrulama betikleri (katalog akışı, sağlık senaryoları, hesaplayıcılar, katalog denetimi) | `pnpm verify` içinde kalır; hesaplayıcı betiği katalog entegrasyonuyla eklendi |
 | `vitest.config.mts` | Vitest yapılandırması; `packages/**/*.test.ts`, `src/**/*.test.ts`, `supabase/tests/**/*.test.ts` | `@` takma adı `src/` hedefler. Hazırlık projesine karşı çalışan testler ayrı: `vitest.staging.config.mts` (`pnpm test:staging`, karar 0034) |
-| `supabase/` | Phase 1A (karar 0033): `migrations/` (ilk migration: `profiles`, `aquariums`, `aquarium_members`, izinler, RLS, tetikleyiciler), `rollbacks/` (geri alma SQL'i), `tests/` (Supabase taklidi, PGlite test veritabanı, yetki matrisi, izin denetimleri ve iki yerde çalışan `catalog-checks.sql`), `staging/` (gerçek istemciyle yetki senaryoları, karar 0034), `config.toml` (CLI için en küçük yapılandırma) | Yalnız yerel test veritabanında doğrulandı (karar 0032); hiçbir projeye gönderilmedi, uygulama bağlanmıyor. `@electric-sql/pglite` yalnız geliştirme bağımlılığı |
+| `supabase/` | Phase 1A (karar 0033): `migrations/` (ilk migration: `profiles`, `aquariums`, `aquarium_members`, izinler, RLS, tetikleyiciler), `rollbacks/` (geri alma SQL'i), `tests/` (Supabase taklidi, PGlite test veritabanı, yetki matrisi, izin denetimleri ve iki yerde çalışan `catalog-checks.sql`), `staging/` (gerçek istemciyle yetki senaryoları, karar 0034), `config.toml` (CLI için en küçük yapılandırma) | Yerel test veritabanında (karar 0032) ve 2026-11-01'den beri hazırlık projesinde doğrulandı (karar 0034); uygulama henüz bağlanmıyor. `@electric-sql/pglite` yalnız geliştirme bağımlılığı |
 | `.github/workflows/verify.yml` | `pnpm verify`; yalnızca `main` dalına push'ta ve tüm pull request olaylarında tetiklenir (diğer dallara push tetiklemez) | Değişmedi |
-| `.github/workflows/staging-db.yml` | "Hazırlık veritabanı" (karar 0034): yalnız elle; varsayılan deneme, `apply` ile migration'ları hazırlık projesine gönderir, `catalog-checks.sql`'i `psql` ile ve `pnpm test:staging`'i çalıştırır | Sırları ürün sahibi girer; yalnız `STAGING_*` |
+| `.github/workflows/staging-db.yml` | "Hazırlık veritabanı" (karar 0034): yalnız elle; varsayılan deneme, `apply` ile migration'ları IPv4 oturum havuzundan (`supabase db push --db-url`) hazırlık projesine gönderir, `catalog-checks.sql`'i `psql` ile ve `pnpm test:staging`'i çalıştırır | Sırları ürün sahibi girer; yalnız `STAGING_*`. İlk çalıştırma 2026-11-01'de geçti |
 
 ### Bağımlılık yönü
 
@@ -114,7 +114,7 @@ PostgreSQL, Auth, Storage, Realtime ve Edge Functions tek sağlayıcıda. Yetkil
 | `packages/knowledge` | Planlanan (Phase 1) | Kataloglar `src/data`'dan buraya taşınır ve sunucuda sürümlü veri olarak yayımlanır (0020) |
 | `packages/localization` | Var (0021, 1., 2. ve 3. paket) | Dil dosyaları, dile göre tarih/sayı biçimi ve birim dönüşümü, motor uyarı ve ölçüt kodlarının metinleri; katalog adları ve İngilizce sonraki paketlerde (0020, 0021) |
 | `packages/ui`, `packages/ai` | Planlanan (Phase 2–3) | İhtiyaç doğduğunda, boş paket açılmaz |
-| `supabase/` | Var (1A, yalnız yerel test) | Migration, geri alma ve politika testleri; hazırlık projesine gönderme 1B'de |
+| `supabase/` | Var (1A şeması; yerelde ve 2026-11-01'den beri hazırlık projesinde doğrulandı, uygulama henüz bağlanmıyor) | Migration, geri alma, politika testleri ve hazırlık projesine gönderme (karar 0033, 0034) |
 
 ### Ortamlar
 
