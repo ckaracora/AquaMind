@@ -137,8 +137,10 @@ talebi, sonra bu dosya, sonra ilgili belge geçerlidir.
 - Çalışan davranışı koru. `pnpm verify`, mevcut `localStorage` davranışı ve
   katalog testleri geçmeye devam eder. Bir davranışı kaldırmak ayrı ve onaylı
   bir görevdir.
-- Şema değişikliğinde migration kullan ve migration'ı yerel Supabase üzerinde
-  çalıştırarak doğrula.
+- Şema değişikliğinde migration kullan ve migration'ı yerel test veritabanında
+  (karar 0032: PGlite ve Supabase taklidi), sonra hazırlık projesinde
+  çalıştırarak doğrula. Hazırlık projesindeki doğrulama geçmeden uygulama o
+  şemaya bağlanmaz.
 - Kritik davranışı test et. Uyumluluk motoru, RLS yetki matrisi, sahiplik devri,
   ortak roller ve tarihsel bütünlük değişiklikleri testsiz teslim edilmez.
 - İlgili belgeyi aynı görevde güncelle. Mimari, veritabanı, güvenlik veya motor
@@ -164,7 +166,8 @@ talebi, sonra bu dosya, sonra ilgili belge geçerlidir.
 
 ### Ortamlar
 
-- `development`: yerel Supabase (CLI) ve `.env.local`.
+- `development`: yerel test veritabanı (karar 0032: PGlite ve Supabase taklidi;
+  Docker gerekmez) ve `.env.local`.
 - `staging`: ayrı Supabase projesi ve Vercel önizleme ortamı.
 - `production`: ayrı Supabase projesi. Yalnızca kullanıcı onayıyla ve migration
   üzerinden değişir.
