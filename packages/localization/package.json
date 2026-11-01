@@ -18,6 +18,14 @@
       "types": "./src/catalog.ts",
       "default": "./src/catalog.ts"
     },
+    "./catalog-segments": {
+      "types": "./src/catalog-segments.ts",
+      "default": "./src/catalog-segments.ts"
+    },
+    "./care": {
+      "types": "./src/care.ts",
+      "default": "./src/care.ts"
+    },
     "./equipment": {
       "types": "./src/equipment.ts",
       "default": "./src/equipment.ts"
