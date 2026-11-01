@@ -29,6 +29,8 @@ const OTHER_GENERA = [
   "Piabarchus", "Premnas", "Telmatherina", "Tritia", "Ilyanassa", "Aiptasia", "Rhynchocinetes", "Zoanthus", "Ricordea", "Euphyllia",
   "Condylactis", "Gambusia", "Chaetostoma", "Vallisneria", "Anubias", "Physa", "Ancistrini", "Gastromyzontidae", "Pimelodidae",
   "Loricariid",
+  // Türe bağlanmayan satış kayıtlarının gerekçelerinde geçenler (9. paket).
+  "Atractosteus", "Cambarus", "Geosesarma", "Lepisosteus", "Stichodactyla",
 ];
 const genera = new Set([...speciesCatalog.map((profile) => profile.scientificName.split(" ")[0]).filter((word) => /^[A-Z][a-z]+$/.test(word)), ...OTHER_GENERA]);
 /**
@@ -38,7 +40,15 @@ const genera = new Set([...speciesCatalog.map((profile) => profile.scientificNam
 const OTHER_EPITHETS = [
   "aequipinnatus", "affinis", "altus", "brevifilis", "brevirostre", "cirrhosus", "clarkii", "digueti", "georgiae", "inspector",
   "jamesonii", "lacortei", "mexicana", "plecostomus", "retrogemma", "rhodostomus", "signata", "stramineus", "subviridis", "ucayalensis",
+  "dennerle", "haddoni", "hagen", "hondae", "punctulatus", "spatula",
 ];
+
+/**
+ * Latince ad metinde tam sözcük olarak geçer mi ("Inpaichthys kerrii" içinde "Inpaichthys kerri" geçmiş sayılmaz). Tek sözcüklü ad
+ * (cins ya da aile, "Loricariid") İngilizcede çoğul yazılabilir ("Loricariids"); iki sözcüklü tür adı yazıldığı gibi kalır.
+ */
+export const hasLatinName = (text: string, name: string) =>
+  new RegExp(`(?<![\\p{L}\\d])${name.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}${name.includes(" ") ? "" : "s?"}(?![\\p{L}\\d])`, "u").test(text);
 
 /** Türkçe metinlerdeki Latince adları bulan fonksiyon; kısaltmaların tür adları verilen Türkçe metinlerden toplanır. */
 export function latinNameFinder(turkishTexts: readonly string[]) {
@@ -49,6 +59,9 @@ export function latinNameFinder(turkishTexts: readonly string[]) {
   ]);
   return (text: string) => [
     ...[...text.matchAll(/(?<!\p{L})([A-Z][a-z]+) ([a-z]{3,})(?!\p{L})/gu)].filter((match) => genera.has(match[1]) && epithets.has(match[2])).map((match) => match[0]),
+    // Eğik çizgili tür listesi ("Pseudoplatystoma fasciatum/tigrinum") ve "cf."/"aff." ile yazılan ad ("Peckoltichthys cf. bachi") bütün olarak kalır.
+    ...[...text.matchAll(/(?<!\p{L})([A-Z][a-z]+) [a-z]{3,}(?:\/[a-z]{3,})+(?![\p{L}/])/gu)].filter((match) => genera.has(match[1])).map((match) => match[0]),
+    ...[...text.matchAll(/(?<!\p{L})([A-Z][a-z]+) (?:cf|aff)\. [a-z]{3,}(?!\p{L})/gu)].filter((match) => genera.has(match[1])).map((match) => match[0]),
     ...[...genera].filter((genus) => new RegExp(`(?<!\\p{L})${genus}(?!\\p{L})`, "u").test(text)),
     ...(text.match(/(?<!\p{L})[A-Z]\. [a-z]{3,}(?!\p{L})/gu) ?? []),
   ];
@@ -57,11 +70,14 @@ export function latinNameFinder(turkishTexts: readonly string[]) {
 /** Kimlik kodları (L, LDA, CW, C numaraları); adda da korunur. */
 export const codes = (text: string) => text.match(/\b(?:L|LDA|CW|C)\d+[A-Z]?\b/g) ?? [];
 
-/** Türkçe yazılmış süre miktarları ("iki-üç ay"); karşılığı her dilin testinde. Yalnız süre birimine bağlı sözcükler sayılır. */
+/**
+ * Türkçe yazılmış süre miktarları ("iki-üç ay"); karşılığı her dilin testinde. Yalnız süre birimine bağlı sözcükler sayılır; "üç ayrı"
+ * süre değildir, "yılan" ve "yıldız" de.
+ */
 export const TR_NUMBER_WORDS: Record<string, number> = { iki: 2, üç: 3, dört: 4, beş: 5, altı: 6, yedi: 7, sekiz: 8, dokuz: 9, on: 10 };
 export function turkishTimedNumberWords(text: string): number[] {
   const words = Object.keys(TR_NUMBER_WORDS).join("|");
-  const phrase = new RegExp(`(?<!\\p{L})(?:${words})(?:(?:\\s?[-–]\\s?|\\s(?:ile|veya|ya da)\\s)(?:${words}))?\\s(?:saat|gün|hafta|ay|yıl)`, "giu");
+  const phrase = new RegExp(`(?<!\\p{L})(?:${words})(?:(?:\\s?[-–]\\s?|\\s(?:ile|veya|ya da)\\s)(?:${words}))?\\s(?:saat|gün|hafta|ay(?!r)|yıl(?!dız|an))`, "giu");
   return (text.match(phrase) ?? []).flatMap((match) => [...match.toLocaleLowerCase("tr").matchAll(/\p{L}+/gu)].map((word) => TR_NUMBER_WORDS[word[0]]).filter((value) => value !== undefined)).sort();
 }
 

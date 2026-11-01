@@ -1,17 +1,18 @@
 import { describe, expect, it } from "vitest";
 import { catalogTextKey } from "@aquamind/localization/catalog";
 import { speciesCatalog } from "@/data/catalog-species";
+import { unresolvedSpeciesListings } from "@/data/catalog-species-unresolved";
 import { speciesBehavior } from "@/data/species-behavior";
 import { speciesCatalogTexts } from "@/lib/catalog-texts";
 import { enCatalogSpecies } from "../../../packages/localization/src/messages/en-catalog-species";
-import { PROPER, codes, latinNameFinder, readTranslations, turkishTimedNumberWords, values } from "./catalog-translation-checks";
+import { PROPER, codes, hasLatinName, latinNameFinder, readTranslations, turkishTimedNumberWords, values } from "./catalog-translation-checks";
 
 // Canlıların İngilizce çevirisi (docs/DECISIONS/0021-dil-altyapisi.md, "4b"): kaynak JSON gözden geçirilen dosyadır, tablo ondan üretilir
 // (`node scripts/catalog-translations.cjs`). Çeviri Claude'undur; burada sayılar, birimler, özel adlar, Latince adlar, kimlik kodları ve
 // ad yöntemi denetlenir. Dilden bağımsız parçalar `catalog-translation-checks.ts` dosyasındadır.
 
 const entries = readTranslations("en") as Array<ReturnType<typeof readTranslations>[number] & { en: string }>;
-const texts = speciesCatalogTexts(speciesCatalog, speciesBehavior);
+const texts = speciesCatalogTexts(speciesCatalog, speciesBehavior, unresolvedSpeciesListings);
 const latinNames = latinNameFinder(entries.map((entry) => entry.tr));
 
 /** Ölçü birimleri aynı sayıda geçmeli (litre ile galon, cm ile inç karışmasın). */
@@ -78,7 +79,7 @@ describe("canlıların İngilizce çeviri kaynağı", () => {
       expect(englishTimedNumberWords(entry.en), `${entry.key} süre sözcükleri`).toEqual(turkishTimedNumberWords(entry.tr));
       for (const [unit, tr, en] of UNITS) expect((entry.en.match(en) ?? []).length, `${entry.key} ${unit}`).toBe((entry.tr.match(tr) ?? []).length);
       for (const name of PROPER) expect(entry.en.split(name).length, `${entry.key} ${name}`).toBe(entry.tr.split(name).length);
-      for (const latin of latinNames(entry.tr)) expect(entry.en.includes(latin), `${entry.key} ${latin}`).toBe(true);
+      for (const latin of latinNames(entry.tr)) expect(hasLatinName(entry.en, latin), `${entry.key} ${latin}`).toBe(true);
       for (const code of codes(entry.tr)) expect(codes(entry.en), `${entry.key} ${code}`).toContain(code);
       expect(TURKISH.test(entry.en), entry.key).toBe(false);
       expect(entry.en.trim()).not.toBe("");
@@ -95,5 +96,21 @@ describe("canlıların İngilizce çeviri kaynağı", () => {
     }
     expect(new Set(names.map((entry) => entry.en)).size).toBe(names.length);
     expect(entries.filter((entry) => !entry.fields.includes("species.commonName")).every((entry) => entry.method === undefined)).toBe(true);
+  });
+});
+
+describe("Latince ad denetimi", () => {
+  it("tür listesi ve cf. adı bütün olarak bulunur; ad tam sözcük olarak aranır", () => {
+    const found = latinNameFinder([])("Kürek burun adı Pseudoplatystoma fasciatum/tigrinum için; L146 için Peckoltichthys cf. bachi profili");
+    expect(found).toEqual(expect.arrayContaining(["Pseudoplatystoma fasciatum/tigrinum", "Peckoltichthys cf. bachi"]));
+    for (const [name, typo] of [
+      ["Pseudoplatystoma fasciatum/tigrinum", "Pseudoplatystoma fasciatum/tigrinumm"],
+      ["Peckoltichthys cf. bachi", "Peckoltichthys cf. bachii"],
+      ["Inpaichthys kerri", "Inpaichthys kerrii"],
+    ]) {
+      expect(hasLatinName(`for ${name}, which`, name), name).toBe(true);
+      expect(hasLatinName(`for ${typo}, which`, name), typo).toBe(false);
+    }
+    expect(hasLatinName("Corydoras/Loricariids", "Loricariid")).toBe(true);
   });
 });
