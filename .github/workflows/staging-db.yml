@@ -57,27 +57,21 @@ jobs:
 
       # GitHub'ın çalıştırıcısında IPv6 yok; ücretsiz planda doğrudan bağlantı IPv6'dır. `supabase link` ile kurulan bağlantı ilk
       # denemede IPv6'ya düştü (2026-11-01), bu yüzden gönderme doğrulama işiyle aynı yoldan, IPv4 oturum havuzuna bağlantı adresiyle
-      # (`--db-url`) yapılır. Şifre adres için kodlanır ve kodlanmış hali de günlükte maskelenir; adres yalnız bu adımda kurulur.
+      # (`--db-url`) yapılır. Adreste şifre yoktur; şifre PGPASSWORD ile verilir (kodlama ve ek maskeleme gerekmez). TLS zorunlu.
       - name: Gönderilecek migration'lar (deneme)
         env:
-          STAGING_DB_PASSWORD: ${{ secrets.STAGING_DB_PASSWORD }}
+          PGPASSWORD: ${{ secrets.STAGING_DB_PASSWORD }}
           STAGING_PROJECT_ID: ${{ secrets.STAGING_PROJECT_ID }}
           STAGING_POOLER_HOST: ${{ vars.STAGING_POOLER_HOST }}
-        run: |
-          encoded=$(node -e 'process.stdout.write(encodeURIComponent(process.env.STAGING_DB_PASSWORD))')
-          echo "::add-mask::$encoded"
-          supabase db push --dry-run --db-url "postgresql://postgres.${STAGING_PROJECT_ID}:${encoded}@${STAGING_POOLER_HOST}:5432/postgres"
+        run: supabase db push --dry-run --db-url "postgresql://postgres.${STAGING_PROJECT_ID}@${STAGING_POOLER_HOST}:5432/postgres?sslmode=require"
 
       - name: Migration'ları uygula
         if: ${{ inputs.apply }}
         env:
-          STAGING_DB_PASSWORD: ${{ secrets.STAGING_DB_PASSWORD }}
+          PGPASSWORD: ${{ secrets.STAGING_DB_PASSWORD }}
           STAGING_PROJECT_ID: ${{ secrets.STAGING_PROJECT_ID }}
           STAGING_POOLER_HOST: ${{ vars.STAGING_POOLER_HOST }}
-        run: |
-          encoded=$(node -e 'process.stdout.write(encodeURIComponent(process.env.STAGING_DB_PASSWORD))')
-          echo "::add-mask::$encoded"
-          supabase db push --db-url "postgresql://postgres.${STAGING_PROJECT_ID}:${encoded}@${STAGING_POOLER_HOST}:5432/postgres"
+        run: supabase db push --db-url "postgresql://postgres.${STAGING_PROJECT_ID}@${STAGING_POOLER_HOST}:5432/postgres?sslmode=require"
 
   verify:
     name: Gerçek Supabase'te doğrula
