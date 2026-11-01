@@ -1,10 +1,11 @@
 import { describe, expect, it } from "vitest";
 import { catalogTextKey } from "@aquamind/localization/catalog";
 import { speciesCatalog } from "@/data/catalog-species";
+import { unresolvedSpeciesListings } from "@/data/catalog-species-unresolved";
 import { speciesBehavior } from "@/data/species-behavior";
 import { speciesCatalogTexts } from "@/lib/catalog-texts";
 import { esCatalogSpecies } from "../../../packages/localization/src/messages/es-catalog-species";
-import { PROPER, codes, latinNameFinder, readTranslations, spainOnlySpanish, turkishTimedNumberWords, values } from "./catalog-translation-checks";
+import { PROPER, codes, hasLatinName, latinNameFinder, readTranslations, spainOnlySpanish, turkishTimedNumberWords, values } from "./catalog-translation-checks";
 
 // Canlıların İspanyolca çevirisi (docs/DECISIONS/0021-dil-altyapisi.md, İspanyolca paketi; Latin Amerika ortak İspanyolcası): kaynak JSON
 // gözden geçirilen dosyadır, tablo ondan üretilir (`node scripts/catalog-translations.cjs`). İngilizce testin (catalog-translations.test.ts)
@@ -12,7 +13,7 @@ import { PROPER, codes, latinNameFinder, readTranslations, spainOnlySpanish, tur
 // İspanyolca adlarda yöntem `a` (katalogdaki ad uluslararası satış adı) ya da `t` (katalog adının çevirisi); İspanyolca kaynak adı yok.
 
 const entries = readTranslations("es") as Array<ReturnType<typeof readTranslations>[number] & { es: string }>;
-const texts = speciesCatalogTexts(speciesCatalog, speciesBehavior);
+const texts = speciesCatalogTexts(speciesCatalog, speciesBehavior, unresolvedSpeciesListings);
 const latinNames = latinNameFinder(entries.map((entry) => entry.tr));
 
 /** Ölçü birimleri, süreler ve sıklıklar aynı sayıda geçmeli. Sözcük sınırı Unicode harfe göredir. */
@@ -81,7 +82,7 @@ describe("canlıların İspanyolca çeviri kaynağı", () => {
       expect(spanishTimedNumberWords(entry.es), `${entry.key} süre sözcükleri`).toEqual(turkishTimedNumberWords(entry.tr));
       for (const [unit, tr, es] of UNITS) expect((entry.es.match(es) ?? []).length, `${entry.key} ${unit}`).toBe((entry.tr.match(tr) ?? []).length);
       for (const name of PROPER) expect(entry.es.split(name).length, `${entry.key} ${name}`).toBe(entry.tr.split(name).length);
-      for (const latin of latinNames(entry.tr)) expect(entry.es.includes(latin), `${entry.key} ${latin}`).toBe(true);
+      for (const latin of latinNames(entry.tr)) expect(hasLatinName(entry.es, latin), `${entry.key} ${latin}`).toBe(true);
       for (const code of codes(entry.tr)) expect(codes(entry.es), `${entry.key} ${code}`).toContain(code);
       expect(TURKISH.test(entry.es), entry.key).toBe(false);
       expect(spainOnlySpanish(entry.es), entry.key).toEqual([]);
