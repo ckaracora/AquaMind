@@ -22,7 +22,7 @@ Arayüzde gizlemek yetki değildir. Yetkilendirme kararı veritabanında (Row Le
 
 ## Gizli anahtarlar
 
-- Herkese açık istemciler yalnızca Supabase URL'sini ve anon anahtarını alır. Anon anahtarı yalnızca RLS yetkilendirme katmanı olduğu için güvenlidir.
+- Herkese açık istemciler yalnızca Supabase URL'sini ve yayınlanabilir anahtarı (`sb_publishable_…`, eski adıyla anon anahtarı) alır. Bu anahtar yalnızca RLS yetkilendirme katmanı olduğu için güvenlidir. Web uygulamasında adları `NEXT_PUBLIC_SUPABASE_URL` ve `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY`'dir; ikisi de yoksa hesaplar kapalıdır. `NEXT_PUBLIC_` ile başlayan herhangi bir değişkende gizli anahtar (`sb_secret_` ya da rolü `service_role` olan eski JWT) varsa derleme durur (`docs/DECISIONS/0035-giris-temeli.md`).
 - `service_role`, yapay zekâ sağlayıcı anahtarları, RevenueCat gizli anahtarı ve webhook gizli anahtarları Vercel ve Supabase ortam ayarlarında yaşar; yalnızca sunucu kodunda okunur; asla `NEXT_PUBLIC_` önekiyle veya Expo paketinde görünmez.
 - Depoda yalnızca `.env.example` (ad var, değer yok) bulunur. `.gitignore` zaten `.env*` dosyalarını dışlar.
 - Yapay zekâ kodlama araçları üretim kimlik bilgisi almaz; yerel testler gizli anahtar gerektirmez (karar 0032). Hazırlık projesinin sırlarını ürün sahibi GitHub'a ve Vercel'e kendisi girer; araçlar bu değerleri görmez ve yazmaz. Hazırlık iş akışının sır listesi ve kullanımı: `docs/DECISIONS/0034-hazirlik-projesinde-dogrulama.md`.
@@ -30,7 +30,8 @@ Arayüzde gizlemek yetki değildir. Yetkilendirme kararı veritabanında (Row Le
 ## Kimlik doğrulama sınırı
 
 - Supabase Auth: önce e-posta/parola, sonra Google, iOS mağaza politikasının gerektirdiği durumda Apple. Misafir ve telefon girişi yok.
-- Web: Supabase SSR yardımcılarıyla sunucu tarafı oturum; mobil: güvenli depolamayla Supabase istemcisi.
+- Web (karar 0035): `@supabase/supabase-js` tarayıcıda; oturum tarayıcının yerel deposunda, Supabase süresi dolmadan kendisi yeniler. Hiçbir sunucu kodu oturumu okumadığı için SSR yardımcıları, çerezde oturum ve ara katman (middleware) yok. Sunucuda oturum gereken ilk iş (ör. hesap silme) erişim jetonunu istekle gönderir ya da bu kararı yeniden açar. Mobil: güvenli depolamayla Supabase istemcisi.
+- E-posta onayı zorunlu; parola en az 8 karakter (ekranda ve Supabase ayarında). E-postadaki onay ve sıfırlama bağlantıları anahtarı sayfa açılınca değil düğmeye dokununca doğrular (posta hizmetlerinin bağlantıyı önceden açması anahtarı tüketmesin); anahtar okunur okunmaz adresten silinir ve `/account/*` sayfaları başvuru başlığı göndermez. Ekranlar kayıtta, onay e-postasını yeniden göndermede ve parola sıfırlamada hesabın var olup olmadığını ayırt etmez; bu ekranların iletileri e-postanın gittiğini garanti etmez ("istek alındı; gelmezse biraz sonra yeniden dene"). Auth API'sini doğrudan çağırana karşı güvence Supabase'te "Confirm email" ve "Confirm phone" ikisinin de açık olmasına bağlıdır. Çıkış yalnız bu cihazdaki oturumu kapatır; Supabase hata verse de yerel oturum silinir, sayfa yenilenmez. Tarayıcının deposuna erişilemediği için yerel oturum silinemezse ekran çıkış yapılmış demez.
 - Apple, Google ile giriş sunan bir iOS uygulamasında Apple ile girişi zorunlu kılar; mobil açılış sağlayıcı seçimi ürün sahibinin kararıdır.
 
 ## Özel ve herkese açık veri
@@ -60,12 +61,12 @@ Arayüzde gizlemek yetki değildir. Yetkilendirme kararı veritabanında (Row Le
 
 2026-10-29'dan beri (`docs/DECISIONS/0027-yedekten-geri-yukleme.md`) `next.config.ts` her sayfaya `src/lib/security-headers.ts` içindeki başlıkları ekler. HSTS'yi Vercel gönderir; burada yinelenmez.
 
-- **Content-Security-Policy:** her şey aynı kaynaktan (`default-src 'self'`); `object-src 'none'`, `frame-ancestors 'none'`, `base-uri` ve `form-action` aynı kaynak. `script-src` ve `style-src` `'unsafe-inline'` taşır: Next.js sayfaya kendi satır içi betiklerini yazar ve nonce her isteğin sunucuda çizilmesini gerektirir; uygulama dış betik, yazı tipi, resim yüklemediği ve dışarıya istek göndermediği için dış kaynak yine engellidir. `'unsafe-eval'` ve `ws:` yalnız geliştirme sunucusunda, Vercel araç çubuğunun belgelenmiş adresleri yalnız Vercel önizlemesinde eklenir.
-- **X-Content-Type-Options: nosniff**, **X-Frame-Options: DENY**, **Referrer-Policy: strict-origin-when-cross-origin**, **Cross-Origin-Opener-Policy: same-origin**.
+- **Content-Security-Policy:** her şey aynı kaynaktan (`default-src 'self'`); `object-src 'none'`, `frame-ancestors 'none'`, `base-uri` ve `form-action` aynı kaynak. `script-src` ve `style-src` `'unsafe-inline'` taşır: Next.js sayfaya kendi satır içi betiklerini yazar ve nonce her isteğin sunucuda çizilmesini gerektirir; uygulama dış betik, yazı tipi, resim yüklemediği için dış kaynak yine engellidir. Tek dış istek, hesaplar açıksa Supabase projesinin kendisine gider: `connect-src` yalnız o kökeni ekler (karar 0035); hesaplar kapalıyken politika değişmez. `'unsafe-eval'` ve `ws:` yalnız geliştirme sunucusunda, Vercel araç çubuğunun belgelenmiş adresleri yalnız Vercel önizlemesinde eklenir.
+- **X-Content-Type-Options: nosniff**, **X-Frame-Options: DENY**, **Referrer-Policy: strict-origin-when-cross-origin** (hesap sayfalarında `no-referrer`, karar 0035), **Cross-Origin-Opener-Policy: same-origin**.
 - **Permissions-Policy:** kamera, mikrofon, konum, ödeme, USB ve ilgi alanı (browsing-topics) kapalı. Fotoğraf, konum ya da uygulama içi ödeme gelince ilgili izin aynı işte açılır ve bu belge güncellenir.
 - `X-Powered-By` gönderilmez.
 
-Hesap ve sunucu kodu gelince (Phase 1) nonce'lu sıkı içerik politikası yeniden değerlendirilir.
+Hesaplar (karar 0035) sunucu kodu getirmedi; sayfalar statik kaldı, `script-src` aynı. Nonce'lu sıkı içerik politikası, sayfaları sunucuda çizen ilk iş gelince yeniden değerlendirilir.
 
 ## Gizlilik metni
 

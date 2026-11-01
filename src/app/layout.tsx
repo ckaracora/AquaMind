@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import "./globals.css";
 import { DEFAULT_LOCALE, messagesFor } from "@aquamind/localization";
 import { AquariumProvider } from "@/providers/aquarium-provider";
+import { AuthProvider } from "@/providers/auth-provider";
 import { LOCALE_BOOT_SCRIPT } from "@/lib/locale-choice";
 import { I18nProvider } from "@/providers/i18n-provider";
 import "@/data/catalog-coverage";
@@ -17,5 +18,5 @@ export const metadata: Metadata = {
 // değerini değiştirir ve sayfayı dil paketi yüklenene kadar gizler (src/lib/locale-choice.ts); bu yüzden `<html>` özniteliklerindeki
 // fark hidrasyon uyarısı sayılmaz.
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
-  return <html lang={DEFAULT_LOCALE} suppressHydrationWarning><head><script dangerouslySetInnerHTML={{ __html: LOCALE_BOOT_SCRIPT }}/></head><body><I18nProvider><AquariumProvider>{children}</AquariumProvider></I18nProvider></body></html>;
+  return <html lang={DEFAULT_LOCALE} suppressHydrationWarning><head><script dangerouslySetInnerHTML={{ __html: LOCALE_BOOT_SCRIPT }}/></head><body><I18nProvider><AuthProvider><AquariumProvider>{children}</AquariumProvider></AuthProvider></I18nProvider></body></html>;
 }

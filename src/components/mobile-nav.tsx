@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { Box, Calculator, CalendarCheck, Droplets, Fish, Gauge, HeartHandshake, Leaf, Menu, PackageSearch, Plus, Settings, SlidersHorizontal, Stethoscope, Waves, X } from "lucide-react";
 import { usePathname } from "next/navigation";
+import { AccountCard } from "@/components/account-card";
 import { allNavigationItems, type NavigationKey } from "@/data/navigation";
 import { useDialogFocus } from "@/lib/dialog-focus";
 import { useI18n } from "@/providers/i18n-provider";
@@ -20,7 +21,7 @@ function MobileMenu({pathname,close}:{pathname:string;close:()=>void}) {
       <nav className="space-y-1 overflow-y-auto">
         {allNavigationItems.map(({key,href,comingSoon})=>{const Icon=navIcons[key];const label=t.navigation.items[key];if(comingSoon)return <div key={href} aria-disabled="true" className="flex cursor-default items-center gap-3 rounded-xl px-3 py-3 text-[13px] font-semibold text-[#91a3aa]"><Icon size={18}/><span>{label}<span className="mt-0.5 block text-[11px] sm:text-[9px] font-bold uppercase tracking-wider text-aqua/60">{t.navigation.comingSoon}</span></span></div>;const active=href==="/"?pathname==="/":pathname.startsWith(href);return <a key={href} href={href} className={`flex min-h-11 items-center gap-3 rounded-xl px-3 py-3 text-[13px] font-semibold ${active?"bg-aqua/10 text-aqua":"text-[#91a3aa]"}`}><Icon size={18}/>{label}{active&&<span className="ml-auto size-1.5 rounded-full bg-aqua"/>}</a>})}
       </nav>
-      <div className="mt-auto rounded-xl bg-white/[.025] p-3"><p className="text-xs font-bold">{t.account.guest}</p><p className="mt-1 text-[11px] sm:text-[10px] text-[#647981]">{t.account.freePlan}</p></div>
+      <AccountCard variant="menu"/>
     </aside>
   </div>;
 }
