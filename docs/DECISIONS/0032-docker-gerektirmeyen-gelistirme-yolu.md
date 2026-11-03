@@ -1,7 +1,7 @@
 # 0032 — Hesaplar ve bulut: Docker gerektirmeyen geliştirme yolu
 
 - Tarih: 2026-11-01
-- Durum: Kabul edildi. Ürün sahibi 2026-11-01'de dil altyapısından sonraki iş olarak "Hesaplar ve bulut planı"nı seçti; seçenekte Docker gerektirmeyen yol ve ileride ücretsiz bir Supabase projesi açması gerektiği yazıyordu. Yöntem teknik karardır (Claude). Yol haritasının 7. adımı (karar 0020); arka uç adayı karar 0003; Phase 1A planı Issue #7.
+- Durum: Kabul edildi. Ürün sahibi 2026-11-01'de dil altyapısından sonraki iş olarak "Hesaplar ve bulut planı"nı seçti; seçenekte Docker gerektirmeyen yol ve ileride ücretsiz bir Supabase projesi açması gerektiği yazıyordu. Yöntem teknik karardır (Claude). Yol haritasının 7. adımı (karar 0020); arka uç adayı karar 0003; Phase 1A planı Issue #7. Supabase'e bağlı kısımlar (hazırlık projesi, Supabase taklidi) 2026-11-03'te bırakıldı (karar 0036); PGlite'la yerel doğrulama yolu sürer.
 
 ## Bağlam
 

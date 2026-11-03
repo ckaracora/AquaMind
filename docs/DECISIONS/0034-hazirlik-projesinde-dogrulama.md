@@ -1,7 +1,7 @@
 # 0034 — Hazırlık projesinde doğrulama (Phase 1B)
 
 - Tarih: 2026-11-01
-- Durum: Kabul edildi ve gerçek Supabase'te geçti (2026-11-01; aşağıda "İlk çalıştırmanın sonuçları"). Taklidin farkı kapandı; 1C başlayabilir (karar 0032).
+- Durum: Kabul edildi ve gerçek Supabase'te geçti (2026-11-01; aşağıda "İlk çalıştırmanın sonuçları"). Taklidin farkı kapandı; 1C başlayabilir (karar 0032). 2026-11-03'te Supabase bırakıldı (karar 0036); iş akışı ve hazırlık projesi tarihseldir, 4. aşamada uyarlanır ya da kaldırılır.
 - Dayanak: karar 0032 (3. ve 4. madde), karar 0033 (1A şeması), `docs/SECURITY.md`.
 
 ## Ne geldi

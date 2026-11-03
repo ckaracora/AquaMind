@@ -1,6 +1,6 @@
 # AquaMind güvenlik planı
 
-Son güncelleme: 2026-10-29. **Durum: tasarım** (tarayıcı güvenlik başlıkları ve gizlilik metni uygulamada). Uygulama bugün tamamen istemci tarafında çalışır; kullanıcı hesabı, arka uç ve gizli anahtar yoktur. Bu belge Phase 1 ve sonrası için bağlayıcı ilkeleri tanımlar. Hiçbir kullanıcı verisi tablosu burada tanımlanan yetkilendirme stratejisi ve testleri olmadan üretime çıkmaz.
+Son güncelleme: 2026-11-03 (karar 0036: Supabase bırakıldı; Supabase'e göre yazılmış maddeler 4. aşamada kendi giriş sistemimize ve sunucumuza göre yeniden yazılacak, ilkeler geçerli); önceki 2026-10-29. **Durum: tasarım** (tarayıcı güvenlik başlıkları ve gizlilik metni uygulamada). Uygulama bugün tamamen istemci tarafında çalışır; kullanıcı hesabı, arka uç ve gizli anahtar yoktur. Bu belge Phase 1 ve sonrası için bağlayıcı ilkeleri tanımlar. Hiçbir kullanıcı verisi tablosu burada tanımlanan yetkilendirme stratejisi ve testleri olmadan üretime çıkmaz.
 
 ## Temel ilke
 
@@ -22,16 +22,16 @@ Arayüzde gizlemek yetki değildir. Yetkilendirme kararı veritabanında (Row Le
 
 ## Gizli anahtarlar
 
-- Herkese açık istemciler yalnızca Supabase URL'sini ve anon anahtarını alır. Anon anahtarı yalnızca RLS yetkilendirme katmanı olduğu için güvenlidir.
+- Herkese açık istemciler yalnızca Supabase URL'sini ve anon anahtarını alır. Anon anahtarı yalnızca RLS yetkilendirme katmanı olduğu için güvenlidir. (Supabase'e göre yazıldı; 4. aşamada yeni yapıya göre yeniden yazılacak, karar 0036. İlke aynı: herkese açık istemciye gizli anahtar verilmez.)
 - `service_role`, yapay zekâ sağlayıcı anahtarları, RevenueCat gizli anahtarı ve webhook gizli anahtarları Vercel ve Supabase ortam ayarlarında yaşar; yalnızca sunucu kodunda okunur; asla `NEXT_PUBLIC_` önekiyle veya Expo paketinde görünmez.
 - Depoda yalnızca `.env.example` (ad var, değer yok) bulunur. `.gitignore` zaten `.env*` dosyalarını dışlar.
 - Yapay zekâ kodlama araçları üretim kimlik bilgisi almaz; yerel testler gizli anahtar gerektirmez (karar 0032). Hazırlık projesinin sırlarını ürün sahibi GitHub'a ve Vercel'e kendisi girer; araçlar bu değerleri görmez ve yazmaz. Hazırlık iş akışının sır listesi ve kullanımı: `docs/DECISIONS/0034-hazirlik-projesinde-dogrulama.md`.
 
 ## Kimlik doğrulama sınırı
 
-- Supabase Auth: önce e-posta/parola, sonra Google, iOS mağaza politikasının gerektirdiği durumda Apple. Misafir ve telefon girişi yok.
-- Web: Supabase SSR yardımcılarıyla sunucu tarafı oturum; mobil: güvenli depolamayla Supabase istemcisi.
-- Apple, Google ile giriş sunan bir iOS uygulamasında Apple ile girişi zorunlu kılar; mobil açılış sağlayıcı seçimi ürün sahibinin kararıdır.
+- Kendi giriş sistemimiz (karar 0036): e-posta/parola, Google, Apple ve Facebook. Misafir ve telefon girişi yok. Parola saklama, oturum ve sağlayıcı akışları sıfırdan yazılmaz; kendi sunucumuzda çalışan, açık kaynak ve yaygın kullanılan bir giriş kütüphanesi kullanılır (4. aşamada seçilir, ayrı karar kaydıyla).
+- Web ve mobilde oturumun nasıl tutulacağı seçilen kütüphaneyle birlikte belirlenir; mobilde güvenli depolama kullanılır.
+- Başka şirketlerin girişini sunan bir iOS uygulamasında App Store gizliliği koruyan eşdeğer bir seçenek ister; Apple ile giriş bunu karşılar (kural mağaza hazırlığında güncel metniyle yeniden okunur). Sağlayıcıları ürün sahibi 2026-11-03'te seçti.
 
 ## Özel ve herkese açık veri
 

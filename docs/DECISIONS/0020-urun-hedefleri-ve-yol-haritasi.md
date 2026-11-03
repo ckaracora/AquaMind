@@ -1,7 +1,7 @@
 # 0020 — Ürün hedefleri ve yol haritası
 
 - Tarih: 2026-10-19
-- Durum: Kabul edildi (ürün sahibi `buraksenfx`, 2026-10-19). Teknik sıra ve yöntem Claude'a bırakıldı ("öneri sırana uyuyorum … sen hakim ol"). Belge `codex/roadmap` dalında; Codex iki tur denetledi (2. tur temiz, 2026-10-19); commit ve PR planlandı.
+- Durum: Kabul edildi (ürün sahibi `buraksenfx`, 2026-10-19). Teknik sıra ve yöntem Claude'a bırakıldı ("öneri sırana uyuyorum … sen hakim ol"). Belge `codex/roadmap` dalında; Codex iki tur denetledi (2. tur temiz, 2026-10-19); commit ve PR planlandı. Aşama sırası 2026-11-03'te karar 0036 ile değişti; 3 aylık bilgi yenilemesinin ilk turu (2027 Ocak) yayından sonraya ertelendi (2026-11-04, karar 0036).
 
 ## Bağlam
 
