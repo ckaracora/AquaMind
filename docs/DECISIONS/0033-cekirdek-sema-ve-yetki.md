@@ -1,7 +1,7 @@
 # 0033 — Çekirdek şema ve yetki (Phase 1A)
 
 - Tarih: 2026-11-01
-- Durum: Kabul edildi. Önce yalnız yerel doğrulamayla geçiciydi (karar 0032, 4. madde); 2026-11-01'de hazırlık projesine gönderildi ve oradaki denetimden geçti (karar 0034), geçicilik kalktı. Uygulama veritabanına henüz bağlanmıyor (1C). Migration dosyasının başındaki yorum gönderimden önceki durumu anlatır; uygulanmış migration değiştirilmez.
+- Durum: Kabul edildi. Önce yalnız yerel doğrulamayla geçiciydi (karar 0032, 4. madde); 2026-11-01'de hazırlık projesine gönderildi ve oradaki denetimden geçti (karar 0034), geçicilik kalktı. Uygulama veritabanına henüz bağlanmıyor (1C). Migration dosyasının başındaki yorum gönderimden önceki durumu anlatır; uygulanmış migration değiştirilmez. 2026-11-03: tablo tasarımı geçerli; Supabase'e özgü roller ve `auth.uid()` 4. aşamada kendi sunucumuza göre uyarlanacak (karar 0036).
 - Dayanak: Issue #7 (Phase 1A planı, 2026-09-02 onaylı), karar 0003 (Supabase), karar 0032 (Docker gerektirmeyen yol), `docs/SECURITY.md`, `docs/DATABASE.md`.
 
 ## Ne geldi

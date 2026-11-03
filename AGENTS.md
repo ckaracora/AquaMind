@@ -60,7 +60,7 @@ Bu devralma sözü commit, push, `main` birleştirmesi veya Vercel/canlı yayın
 - Paket yöneticisi: pnpm. Bağımlılık kurarken `pnpm install --frozen-lockfile` kullan.
 - Paket sürümlerini görev gerektirmedikçe yükseltme.
 - Uygulama mobil önceliklidir; değişiklikleri dar ve geniş ekranlarda değerlendir.
-- Kullanıcı verileri şu anda tarayıcı `localStorage` alanındadır. Supabase geçişi tamamlanmış gibi davranma.
+- Kullanıcı verileri şu anda tarayıcı `localStorage` alanındadır. Sunucu ve hesaplar henüz yoktur. Supabase planı 2026-11-03'te bırakıldı; giriş sistemi ve veritabanı 4. aşamada kendimizce kurulacak (karar 0036). Bunlar varmış gibi davranma.
 
 ## Zorunlu doğrulama
 
@@ -120,9 +120,10 @@ talebi, sonra bu dosya, sonra ilgili belge geçerlidir.
 - Gerekçesiz bağımlılık ekleme. Yeni çalışma zamanı bağımlılığı, çözdüğü sorun ve
   değerlendirilen alternatif yazılmadan eklenmez. Görev gerektirmedikçe sürüm
   yükseltilmez.
-- Üretim şemasını elle değiştirme. Her şema değişikliği `supabase/migrations/`
-  altında sürümlü bir dosyadır. Supabase panelinden veya SQL editöründen üretimde
-  doğrudan değişiklik yapılmaz. Yapay zekâ araçları üretim verisine bağlanmaz.
+- Üretim şemasını elle değiştirme. Her şema değişikliği sürümlü bir migration
+  dosyasıdır (bugün `supabase/migrations/`; yeri 4. aşamada değişebilir, karar
+  0036). Yönetim panelinden veya SQL editöründen üretimde doğrudan değişiklik
+  yapılmaz. Yapay zekâ araçları üretim verisine bağlanmaz.
 - Çekirdek alan tanımlarını çoğaltma. Alan tipleri ve doğrulama şemaları
   `packages/domain` içinde tek yerde tanımlanır; uygulamalar içe aktarır,
   kopyalamaz.
@@ -138,9 +139,8 @@ talebi, sonra bu dosya, sonra ilgili belge geçerlidir.
   katalog testleri geçmeye devam eder. Bir davranışı kaldırmak ayrı ve onaylı
   bir görevdir.
 - Şema değişikliğinde migration kullan ve migration'ı yerel test veritabanında
-  (karar 0032: PGlite ve Supabase taklidi), sonra hazırlık projesinde
-  çalıştırarak doğrula. Hazırlık projesindeki doğrulama geçmeden uygulama o
-  şemaya bağlanmaz.
+  (karar 0032: PGlite), sonra hazırlık ortamında çalıştırarak doğrula. Hazırlık
+  ortamındaki doğrulama geçmeden uygulama o şemaya bağlanmaz.
 - Kritik davranışı test et. Uyumluluk motoru, RLS yetki matrisi, sahiplik devri,
   ortak roller ve tarihsel bütünlük değişiklikleri testsiz teslim edilmez.
 - İlgili belgeyi aynı görevde güncelle. Mimari, veritabanı, güvenlik veya motor
@@ -162,12 +162,15 @@ talebi, sonra bu dosya, sonra ilgili belge geçerlidir.
 - `packages/domain`: alan tipleri, doğrulama şemaları ve yerel dışa aktarma biçimi.
 - `packages/compatibility-engine`: deterministik uyumluluk motoru ve testleri.
 - `src/data/`: katalog verisi. Şimdilik yerinde kalır.
-- `supabase/`: migration, fonksiyon ve politika dosyaları. Phase 1 ile oluşur.
+- `supabase/`: 1A migration'ı, politika testleri ve hazırlık projesi araçları
+  (karar 0033, 0034). Supabase'e özgü kısımlar 4. aşamada uyarlanır ya da
+  kaldırılır (karar 0036).
 
 ### Ortamlar
 
 - `development`: yerel test veritabanı (karar 0032: PGlite ve Supabase taklidi;
   Docker gerekmez) ve `.env.local`.
-- `staging`: ayrı Supabase projesi ve Vercel önizleme ortamı.
-- `production`: ayrı Supabase projesi. Yalnızca kullanıcı onayıyla ve migration
+- `staging`: ayrı hazırlık veritabanı ve Vercel önizleme ortamı. Sağlayıcısı ve
+  yeri 4. aşamada seçilir (karar 0036); bugünkü Supabase hazırlık projesi tarihseldir.
+- `production`: ayrı üretim veritabanı. Yalnızca kullanıcı onayıyla ve migration
   üzerinden değişir.
