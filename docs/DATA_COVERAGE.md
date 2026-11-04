@@ -21,7 +21,7 @@ Katalogların her bilgisinin yüzde kaçının dolu olduğu ve kaynağının tü
 ## Güncel durum
 
 <!-- kapsam:başla -->
-Ölçüm tarihi: 2026-10-31
+Ölçüm tarihi: 2026-11-04
 
 ### Canlılar (443 kayıt)
 
@@ -68,12 +68,14 @@ Katalogların her bilgisinin yüzde kaçının dolu olduğu ve kaynağının tü
 | Bütün değerler dolu | 36/141 | %25,5 |
 | İstilacı tür etiketi | 7/141 | %5 |
 | Su bitkisi değil etiketi | 1/141 | %0,7 |
+| İngilizce ortak ad (Fishkeeper) | 42/141 | %29,8 |
 | Yalnız uyarı kaydı (değer kaynağı yok) | 3/141 | %2,1 |
 | Son 92 günde doğrulanmış | 141/141 | %100 |
 <!-- kapsam:bitir -->
 
 ## Geçmiş
 
+- 2026-11-04 (bitkilerin İngilizce ortak adları, veri aşaması): bitkilere "İngilizce ortak ad (Fishkeeper)" satırı eklendi, 42/141 (%29,8). Değerler ve öbür oranlar değişmedi; ölçüm tarihi yeni satır için 2026-11-04.
 - 2026-10-31 (JBL kaynak bağlantısı paketi 2): hesaba girmeyen 186 JBL kaydı yeni ürün sayfalarına bağlandı. Bu kayıtların 17'si Codex denetiminde 2026-10-31'de yeniden okunduğu için ölçüm tarihi 2026-10-31; oranlar değişmedi.
 - 2026-10-30 (açık listedeki canlılar, paket 3): Fishipedia taslaklarına bağlı 12 kayıt yeniden okundu; Apistogramma commbrae ve Semaprochilodus insignis'in en az tank uzunluğu Seriously Fish tabanından geldi. En az tank uzunluğu %90,5 → %91.
 - 2026-10-30 (açık listedeki canlılar, paket 2): 7 "diğer" kayıt kabul edilen kaynaklara bağlandı; ölçülen alanların hepsi zaten doluydu, tablo değişmedi.

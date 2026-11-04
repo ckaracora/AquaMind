@@ -1,23 +1,25 @@
+import { readFileSync } from "node:fs";
 import { createElement } from "react";
 import { renderToStaticMarkup } from "react-dom/server";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { createDisplayFormat, messagesFor, type DisplayPreferences } from "@aquamind/localization";
 import * as plantCatalogModule from "@/data/catalog-plants";
 import { plantById, plantForRecord, searchPlants } from "@/data/catalog-plants";
+import { plantShownName } from "@/lib/plant-names";
 
 // Bitki sayfasında katalogdan seçme (docs/DECISIONS/0024-bitki-secme.md). Bileşenler gerçek çıktılarıyla sınanır; dil ve görüntü
 // biçimi sağlayıcı yerine sınama değerleriyle verilir.
 const t = messagesFor("tr");
-const store = vi.hoisted(() => ({ preferences: { temperature: "celsius", volume: "liters", dateFormat: "day-first" } as DisplayPreferences }));
+const store = vi.hoisted(() => ({ preferences: { temperature: "celsius", volume: "liters", dateFormat: "day-first" } as DisplayPreferences, locale: "tr" as "tr" | "en" | "es" }));
 vi.mock("@/providers/i18n-provider", async () => {
   const { messagesFor: messages } = await import("@aquamind/localization");
-  return { useI18n: () => ({ t: messages("tr"), locale: "tr" }) };
+  return { useI18n: () => ({ t: messages(store.locale), locale: store.locale }) };
 });
 vi.mock("@/lib/use-display-format", async () => {
   const { createDisplayFormat: format } = await import("@aquamind/localization");
   return { useDisplayFormat: () => format("tr", store.preferences) };
 });
-const { PlantCardCatalog, PlantFacts, PlantForm, PlantInvasiveNotice, PlantNotAquaticNotice, PlantSearchResults, PlantSelectedFields, PlantShortFacts, PlantSources, PlantWarningOnlyNote, plantFromForm, plantRecord, suggestedPositions } = await import("@/components/plant-catalog");
+const { PlantCardCatalog, PlantFacts, PlantForm, plantOtherNames, PlantInvasiveNotice, PlantNotAquaticNotice, PlantSearchResults, PlantSelectedFields, PlantShortFacts, PlantSources, PlantWarningOnlyNote, plantFromForm, plantRecord, suggestedPositions } = await import("@/components/plant-catalog");
 const decode = (html: string) => html.replace(/&#x27;/g, "'").replace(/&quot;/g, "\"").replace(/&amp;/g, "&");
 const text = (html: string) => decode(html.replace(/<[^>]+>/g, " ")).replace(/\s+/g, " ").trim();
 const item = (id: string) => plantById(id)!;
@@ -261,5 +263,98 @@ describe("bitki listesindeki kart", () => {
 
   it("listedeki tarih satırı katalogdan seçilen bitkiyi gösterir", () => {
     expect(t.plants.catalog.fromCatalog(createDisplayFormat("tr", store.preferences).calendarDate("2026-10-25"))).toBe("Katalogdan · 25.10.2026");
+  });
+});
+
+describe("dile göre adlar (veri aşaması, karar 0036)", () => {
+  beforeEach(() => { store.locale = "tr"; });
+
+  it("İngilizce ortak ad yalnız İngilizce ekranda aranır ve kayda önerilir", () => {
+    const [first] = searchPlants("hornwort", "en");
+    expect(first.item.id).toBe("ceratophyllum-demersum");
+    expect(first.matchedName).toBe("Rigid Hornwort");
+    expect(searchPlants("hornwort", "tr")).toEqual([]);
+    expect(searchPlants("hornwort", "es")).toEqual([]);
+    expect(searchPlants("hornwort")).toEqual([]);
+  });
+
+  it("Türkçe satış adı yalnız Türkçe ekranda gösterilir, aramada her dilde bulunur", () => {
+    expect(plantOtherNames(item("ceratophyllum-demersum"), "tr")).toEqual(["Tilki kuyruğu"]);
+    expect(plantOtherNames(item("ceratophyllum-demersum"), "en")).toEqual(["Rigid Hornwort"]);
+    expect(plantOtherNames(item("ceratophyllum-demersum"), "es")).toEqual([]);
+    expect(plantOtherNames(item("hygrophila-polysperma"), "en")).toEqual(["Indian Swampweed"]);
+    for (const locale of ["tr", "en", "es"] as const) expect(searchPlants("tilki kuyrugu", locale)[0].item.id).toBe("ceratophyllum-demersum");
+  });
+
+  it("İngilizce ad önce gelir, eş adla aynıysa bir kez yazılır; en çok üç ad", () => {
+    const names = plantOtherNames(item("microsorum-pteropus"), "en");
+    expect(names[0]).toBe("Java Fern");
+    expect(names.filter((name) => name.toLowerCase() === "java fern")).toHaveLength(1);
+    expect(names.length).toBeLessThanOrEqual(3);
+  });
+
+  it("Türkçe ekranda öteki adlar eskisi gibi: ilk üç eş ad", () => {
+    for (const entry of plantCatalogModule.plantCatalog) expect(plantOtherNames(entry, "tr")).toEqual((entry.aliases ?? []).slice(0, 3));
+  });
+
+  it("Türkçe dışındaki ekranda Türkçe satış adıyla seçilen bitkinin ad alanına Türkçe ad gelmez (İngilizcede ortak ad, yoksa bilimsel ad)", () => {
+    const nameValue = (html: string) => decode(html.match(/<input[^>]*name="name"[^>]*>/)![0].match(/value="([^"]*)"/)![1]);
+    for (const [locale, query, id, expected] of [
+      ["en", "tilki", "ceratophyllum-demersum", "Rigid Hornwort"],
+      ["es", "tilki", "ceratophyllum-demersum", "Ceratophyllum demersum"],
+      ["en", "cinar", "hygrophila-difformis", "Hygrophila difformis"],
+      ["en", "su marulu", "pistia-stratiotes", "Pistia stratiotes"],
+      ["tr", "tilki", "ceratophyllum-demersum", "Tilki kuyruğu"],
+    ] as const) {
+      store.locale = locale;
+      const result = searchPlants(query, locale).find((entry) => entry.item.id === id)!;
+      expect(result.matchedName, `${locale} ${query}`).toBe(expected);
+      expect(nameValue(render(createElement(PlantSelectedFields, { selected: result, change: () => {} }))), `${locale} ${query}`).toBe(expected);
+    }
+    // Bütün Türkçe satış adları için: İngilizce ve İspanyolcada önerilen ad hiçbir zaman Türkçe satış adı değil.
+    for (const entry of plantCatalogModule.plantCatalog.filter((plant) => plant.turkishAliases)) {
+      for (const name of entry.turkishAliases!) {
+        for (const locale of ["en", "es"] as const) {
+          const result = searchPlants(name, locale).find((found) => found.item.id === entry.id)!;
+          expect(entry.turkishAliases, `${locale} ${name}`).not.toContain(result.matchedName);
+        }
+      }
+    }
+  });
+
+  it("kayıttaki ad katalogdaki Türkçe satış adıysa öteki dilde o dilin adıyla gösterilir; kayıt ve kullanıcının kendi adı değişmez", () => {
+    const record = (name: string, id = "ceratophyllum-demersum") => plantRecord({ aquariumId: "a", name, quantity: 1, position: "", addedAt: "2026-11-04", notes: "" }, item(id));
+    expect(plantShownName(record("Tilki kuyruğu"), item("ceratophyllum-demersum"), "en")).toBe("Rigid Hornwort");
+    expect(plantShownName(record("Tilki kuyruğu"), item("ceratophyllum-demersum"), "es")).toBe("Ceratophyllum demersum");
+    expect(plantShownName(record("Tilki kuyruğu"), item("ceratophyllum-demersum"), "tr")).toBe("Tilki kuyruğu");
+    expect(plantShownName(record("Hygrophila difformis (Çınar)", "hygrophila-difformis"), item("hygrophila-difformis"), "en")).toBe("Hygrophila difformis");
+    expect(plantShownName(record("Akvaryumun köşesindeki"), item("ceratophyllum-demersum"), "en")).toBe("Akvaryumun köşesindeki");
+    expect(plantShownName(record("Rigid Hornwort"), item("ceratophyllum-demersum"), "tr")).toBe("Rigid Hornwort");
+    expect(plantShownName(record("Tilki kuyruğu"), undefined, "en")).toBe("Tilki kuyruğu");
+    // Bitki sayfası kart başlığında, listedeki aramada ve uyarılarda bu adı kullanır (sayfa sunucu çıktısıyla sınanmadığı için kaynakta).
+    const page = readFileSync("src/app/plants/page.tsx", "utf8");
+    expect(page).toContain("const name=plantShownName(plant,profile,locale);");
+    expect(page).toContain('<h2 className="text-sm font-extrabold">{name}</h2>');
+    expect(page).toContain("confirm(t.common.confirmRemove(name))");
+    expect(page).not.toContain("plant.name)");
+    expect(page).toContain("[p.name,shownName(p),p.scientificName??\"\"].join(\" \")");
+    expect(page).toContain("checkAquariumPlants(catalog.catalog,aquarium,plants,equipment,waterReadings,locale)");
+    expect(readFileSync("src/components/plant-warnings.tsx", "utf8")).toContain("checkAquariumPlants(catalog, aquarium, plants, equipment, readings, locale)");
+  });
+
+  it("bitki ekleme penceresi aramaya ekranın dilini verir", () => {
+    // Pencere sorguyu kendi durumunda tuttuğu için sunucu çıktısıyla yazılamaz; çağrı kaynakta sınanır (dil verilmezse İngilizce ad aranmaz).
+    expect(readFileSync("src/components/plant-catalog.tsx", "utf8")).toMatch(/catalog\.catalog\.searchPlants\(query, locale\)/);
+  });
+
+  it("arama sonucu ve seçilen bitki dile göre adları gösterir", () => {
+    const result = { item: item("ceratophyllum-demersum"), matchedName: "Ceratophyllum demersum" };
+    store.locale = "en";
+    expect(text(render(createElement(PlantSearchResults, { results: [result], select: () => {} })))).toContain("Rigid Hornwort");
+    expect(text(render(createElement(PlantSelectedFields, { selected: result, change: () => {} })))).not.toContain("Tilki kuyruğu");
+    store.locale = "tr";
+    const turkish = text(render(createElement(PlantSearchResults, { results: [result], select: () => {} })));
+    expect(turkish).toContain("Tilki kuyruğu");
+    expect(turkish).not.toContain("Rigid Hornwort");
   });
 });

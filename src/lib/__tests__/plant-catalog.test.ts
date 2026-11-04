@@ -23,6 +23,71 @@ const fromFishkeeper = (item: PlantProfile) => !TROPICA.test(item.sourceUrl);
 const sourced = plantCatalog.filter((item) => !item.warningOnly);
 
 describe("bitki kataloğu bütünlüğü", () => {
+  it("İngilizce ortak ad Fishkeeper sayfasının başlığıdır (olduğu gibi); Türkçe satış adları eş adlardan işaretlenir", () => {
+    // 2026-11-03'te Fishkeeper'ın 54 bitki sayfası açıldı; başlığı Latince addan farklı olan sayfaların adı. Kendi Fishkeeper sayfası
+    // olmayan formda türün sayfasının adı (ör. 'Narrow' ve 'Trident' için "Java Fern"). Yazım kaynaktaki gibi ("Narrow Crinium").
+    expect(Object.fromEntries(plantCatalog.filter((item) => item.commonNameEn).map((item) => [item.id, item.commonNameEn]))).toEqual({
+      "aponogeton-crispus": "Ruffled Sword Plant",
+      "aponogeton-madagascariensis": "Madagascar Lace Plant",
+      "bacopa-caroliniana": "Blue Hyssop",
+      "bacopa-monnieri": "Water Hyssop",
+      "bacopa-monnieri-compact": "Water Hyssop",
+      "barclaya-longifolia": "Orchid Lily",
+      "bolbitis-heudelotii": "African Water Fern",
+      "cabomba-aquatica": "Fanwort",
+      "cardamine-lyrata": "Japanese Cress",
+      "ceratophyllum-demersum": "Rigid Hornwort",
+      "ceratopteris-thalictroides": "Water Sprite",
+      "crinum-calamistratum": "Narrow Crinium",
+      "cryptocoryne-beckettii-petchii": "Beckett's Water Trumpet",
+      "cryptocoryne-walkeri": "Walker's Water Trumpet",
+      "cryptocoryne-wendtii-brown": "Brown Wendt's Water Trumpet",
+      "cryptocoryne-wendtii-green": "Green Wendt's Water Trumpet",
+      "echinodorus-ozelot": "Ozelot Sword",
+      "egeria-densa": "Common Waterweed",
+      "eleocharis-vivipara": "Umbrella Hairgrass",
+      "glossostigma-elatinoides": "Small Mud-Mat",
+      "helanthium-tenellum-green": "Mudbabies",
+      "hottonia-palustris": "Water Violet",
+      "hygrophila-polysperma": "Indian Swampweed",
+      "hygrophila-polysperma-rosanervig": "Indian Swampweed",
+      "lilaeopsis-brasiliensis": "Micro Sword",
+      "limnophila-aromatica": "Rice Paddy Herb",
+      "limnophila-sessiliflora": "Asian Marshweed",
+      "lysimachia-nummularia": "Creeping Jenny",
+      "lysimachia-nummularia-aurea": "Golden Creeping Jenny",
+      "mayaca-fluviatilis": "Stream Bogmoss",
+      "micranthemum-umbrosum": "Shade Mudflower",
+      "microsorum-pteropus": "Java Fern",
+      "microsorum-pteropus-narrow": "Java Fern",
+      "microsorum-pteropus-trident": "Java Fern",
+      "microsorum-pteropus-windelov": "Lace Java Fern",
+      "pogostemon-stellatus": "Water Star",
+      "riccia-fluitans": "Floating Crystalwort",
+      "rotala-macrandra": "Giant Red Rotala",
+      "rotala-macrandra-japan": "Giant Red Rotala",
+      "salvinia-natans": "Floating Fern",
+      "taxiphyllum-barbieri": "Java Moss",
+      "vallisneria-americana-var-gigantea": "Giant Vallis",
+    });
+    for (const item of plantCatalog.filter((entry) => entry.commonNameEn)) expect([item.sourceUrl, ...(item.additionalSourceUrls ?? [])].some((url) => FISHKEEPER.test(url))).toBe(true);
+    expect(Object.fromEntries(plantCatalog.filter((item) => item.turkishAliases).map((item) => [item.id, item.turkishAliases]))).toEqual({
+      "ceratophyllum-demersum": ["Tilki kuyruğu"],
+      "hygrophila-corymbosa": ["Hygrophila corymbosa (Limon)"],
+      "hygrophila-corymbosa-compact": ["Hygrophila corymbosa 'Compact' (Cüce Limon)"],
+      "hygrophila-difformis": ["Hygrophila difformis (Çınar)"],
+      "hygrophila-polysperma": ["Hygrophila polysperma (Zeytin)"],
+      "pistia-stratiotes": ["Su marulu"],
+    });
+  });
+
+  it("İngilizce ad Fishkeeper'a bağlı olmayan kayıtta ve boşlukla kabul edilmez; Türkçe satış adı eş adlarda olmalıdır", () => {
+    const tropicaOnly = sourced.find((item) => !fromFishkeeper(item) && !item.additionalSourceUrls?.some((url) => FISHKEEPER.test(url)))!;
+    expect(() => assertPlantCatalogIntegrity(withChange(tropicaOnly.id, (item) => { item.commonNameEn = "Some Plant"; }))).toThrow("Geçersiz İngilizce bitki adı");
+    expect(() => assertPlantCatalogIntegrity(withChange("ceratophyllum-demersum", (item) => { item.commonNameEn = " Rigid Hornwort"; }))).toThrow("Geçersiz İngilizce bitki adı");
+    expect(() => assertPlantCatalogIntegrity(withChange("ceratophyllum-demersum", (item) => { item.turkishAliases = ["Boynuz otu"]; }))).toThrow("Türkçe satış adı eş adlarda yok");
+  });
+
   it("katalog, kaynaktan üretilen kayıtlarla alan alan aynı", () => {
     const expected = JSON.parse(readFileSync("src/lib/__tests__/plant-catalog.expected.json", "utf8")) as PlantProfile[];
     expect(sourced).toEqual(expected);
@@ -32,7 +97,7 @@ describe("bitki kataloğu bütünlüğü", () => {
     expect(plantCatalog.filter((item) => item.warningOnly)).toEqual([
       { id: "azolla-filiculoides", scientificName: "Azolla filiculoides", warningOnly: true, invasiveListings: [{ list: "england-sale-ban", sourceUrl: "https://www.legislation.gov.uk/uksi/2014/538/article/3" }], sourceUrl: "https://www.legislation.gov.uk/uksi/2014/538/article/3", shopUrls: ["https://aquarubi.com/azolla-filiculoides-porsiyon"], verifiedAt: "2026-10-28" },
       { id: "ophiopogon-japonicus", scientificName: "Ophiopogon japonicus", warningOnly: true, notAquatic: { sourceUrl: "https://www.practicalfishkeeping.co.uk/features/21-plants-to-avoid-in-the-aquarium/" }, sourceUrl: "https://www.practicalfishkeeping.co.uk/features/21-plants-to-avoid-in-the-aquarium/", shopUrls: ["https://aquarubi.com/ophiopogon-japonicus"], verifiedAt: "2026-10-28" },
-      { id: "pistia-stratiotes", scientificName: "Pistia stratiotes", aliases: ["Su marulu"], warningOnly: true, invasiveListings: [{ list: "eu-union-list", sourceUrl: "https://eur-lex.europa.eu/legal-content/EN/TXT/HTML/?uri=CELEX:02016R1141-20250807" }, { list: "fisc-invasive", category: 1, sourceUrl: ufUrl("pistia-stratiotes") }], sourceUrl: "https://eur-lex.europa.eu/legal-content/EN/TXT/HTML/?uri=CELEX:02016R1141-20250807", shopUrls: ["https://aquarubi.com/pistia-stratiotes-su-marulu"], verifiedAt: "2026-10-28" },
+      { id: "pistia-stratiotes", scientificName: "Pistia stratiotes", aliases: ["Su marulu"], turkishAliases: ["Su marulu"], warningOnly: true, invasiveListings: [{ list: "eu-union-list", sourceUrl: "https://eur-lex.europa.eu/legal-content/EN/TXT/HTML/?uri=CELEX:02016R1141-20250807" }, { list: "fisc-invasive", category: 1, sourceUrl: ufUrl("pistia-stratiotes") }], sourceUrl: "https://eur-lex.europa.eu/legal-content/EN/TXT/HTML/?uri=CELEX:02016R1141-20250807", shopUrls: ["https://aquarubi.com/pistia-stratiotes-su-marulu"], verifiedAt: "2026-10-28" },
     ]);
     // Satış adıyla da bulunur.
     expect(plantForName("su marulu")?.id).toBe("pistia-stratiotes");
@@ -455,7 +520,7 @@ describe("bitki kataloğu modülü", () => {
 
   it("uygulama kodu kataloğu yalnız kancadaki ayrı parça olarak yükler; öbür dosyalar ondan yalnız tür alır", () => {
     const users = appFiles().map(({ file, text }) => ({ file, ...catalogUses(file, text) })).filter(({ value, dynamic, typeOnly }) => value.length || dynamic || typeOnly);
-    expect(users.map(({ file }) => file).sort()).toEqual(["src/components/plant-catalog.tsx", "src/lib/use-plant-catalog.ts"]);
+    expect(users.map(({ file }) => file).sort()).toEqual(["src/components/plant-catalog.tsx", "src/lib/plant-names.ts", "src/lib/use-plant-catalog.ts"]);
     expect(users.flatMap(({ file, value }) => value.map((use) => `${file}: ${use}`))).toEqual([]);
     expect(users.filter(({ dynamic }) => dynamic).map(({ file }) => file)).toEqual(["src/lib/use-plant-catalog.ts"]);
   });
