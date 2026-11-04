@@ -375,9 +375,9 @@ const fluvalPreviousGenerationLighting: EquipmentProfile[] = [
     return {id:`fluval-aquasky-2-${powerW}w`,category:"lighting" as const,brand:"Fluval",model:`Aquasky 2.0 Bluetooth LED ${powerW} W`,specifications:`FluvalSmart uygulamalı önceki nesil RGB + 6500 K beyaz LED · ${powerW} W · IP67 · ${minLength}–${maxLength} cm`,powerW,recommendedTankLengthCm:[minLength,maxLength] as [number,number],sourceUrl:"https://fluvalaquatics.com/us/shop/product/aquasky-2-0",verifiedAt:"2026-09-28"};
   }),
   ...([22,32,46,59] as const).map((powerW,index)=>{
-    const ranges = [[38,61],[61,85],[91,115],[122,153]] as const;
+    const ranges = [[38,61],[61,85],[91,122],[122,153]] as const;
     const [minLength,maxLength] = ranges[index];
-    return {id:`fluval-plant-3-${powerW}w`,category:"lighting" as const,brand:"Fluval",model:`Plant 3.0 Bluetooth LED ${powerW} W`,specifications:`FluvalSmart uygulamalı önceki nesil altı bantlı bitki LED'i · ${powerW} W · 7500 K · IP67 · ${minLength}–${maxLength} cm`,powerW,recommendedTankLengthCm:[minLength,maxLength] as [number,number],sourceUrl:"https://fluvalaquatics.com/us/shop/product/plant-3-0",verifiedAt:"2026-09-28"};
+    return {id:`fluval-plant-3-${powerW}w`,category:"lighting" as const,brand:"Fluval",model:`Plant 3.0 Bluetooth LED ${powerW} W`,specifications:`FluvalSmart uygulamalı önceki nesil altı bantlı bitki LED'i · ${powerW} W · 6500 K · IP67 · ${minLength}–${maxLength} cm`,powerW,recommendedTankLengthCm:[minLength,maxLength] as [number,number],sourceUrl:"https://fluvalaquatics.com/us/shop/product/plant-3-0",additionalSourceUrls:["https://fluvalaquatics.com/manuals/14520-3_Plant_Manual_INT_Nov05_19_AB_WEB.pdf"],verifiedAt:"2026-09-28"};
   }),
   ...([22,32,46,59] as const).map((powerW,index)=>{
     const ranges = [[38,61],[61,85],[91,122],[122,153]] as const;

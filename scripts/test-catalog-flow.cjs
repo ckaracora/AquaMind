@@ -318,12 +318,14 @@ for (const [id,powerW,minLength,maxLength] of fluvalCurrentLights) {
 
 const fluvalPreviousGenerationLights = [
   ["fluval-aquasky-2-12w",12,[38,61]],["fluval-aquasky-2-18w",18,[61,91]],["fluval-aquasky-2-27w",27,[91,122]],["fluval-aquasky-2-35w",35,[122,153]],
-  ["fluval-plant-3-22w",22,[38,61]],["fluval-plant-3-32w",32,[61,85]],["fluval-plant-3-46w",46,[91,115]],["fluval-plant-3-59w",59,[122,153]],
+  ["fluval-plant-3-22w",22,[38,61]],["fluval-plant-3-32w",32,[61,85]],["fluval-plant-3-46w",46,[91,122]],["fluval-plant-3-59w",59,[122,153]],
   ["fluval-marine-3-22w",22,[38,61]],["fluval-marine-3-32w",32,[61,85]],["fluval-marine-3-46w",46,[91,122]],["fluval-marine-3-59w",59,[122,153]],
 ];
 for (const [id,powerW,lengthRange] of fluvalPreviousGenerationLights) {
   const item = equipmentCatalog.find((entry) => entry.id === id);
   assert.deepEqual([item?.category,item?.powerW,item?.recommendedTankLengthCm], ["lighting",powerW,lengthRange], `Fluval ${id} önceki nesil resmî güç ve uzunluk aralığını taşımalı`);
+  // Renk sıcaklığı üreticinin sayfasındaki "Color Temperature": Aquasky 2.0'da beyaz LED 6500 K, Plant 3.0 6500 K (2024 ve 2026 arşiv kopyaları), Marine 3.0 25000 K.
+  assert(item?.specifications.includes(id.includes("marine") ? "25000 K" : "6500 K") && !item.specifications.includes("7500 K"), `Fluval ${id} renk sıcaklığı üreticinin sayfasındaki değer olmalı`);
   assert(item?.specifications.includes("önceki nesil") && item.sourceUrl?.startsWith("https://fluvalaquatics.com/") && item.verifiedAt === "2026-09-28", `Fluval ${id} yeni nesille karışmadan resmî kaynağa bağlı olmalı`);
 }
 const fluvalSpecialLightExpectations = [
@@ -367,6 +369,14 @@ assert(fluvalSpPumps.every((item) => item?.specifications.includes(`${item.rated
 // Fluval U1 ve AquaClear: U serisi sayfası "U1 includes stage 1 only" der; AquaClear debileri Fluval'ın 2026 bakım kılavuzundaki LPH değerleridir.
 const fluvalU1 = equipmentCatalog.find((item) => item.id === "fluval-u1");
 assert(fluvalU1 && !/kademeli|aşamalı/.test(fluvalU1.specifications.replace("aşamasıyla", "")) && fluvalU1.specifications.startsWith("Yalnız mekanik sünger"), "Fluval U1 üç kademeli filtre olarak tanıtılmamalı");
+// Fluval 07 serisi: ürün sayfasının karşılaştırma tablosu (207 sayfası, 2022-12 arşiv kopyası) pompa çıkışı 550/780/1150/1450 LPH ve 230–240 V gücü 10/10/15/20 W.
+const fluval07 = ["fluval-107","fluval-207","fluval-307","fluval-407"].map((id) => equipmentCatalog.find((item) => item.id === id));
+assert.deepEqual(fluval07.map((item) => [item?.ratedFlowLph,item?.powerW,item?.recommendedMinL,item?.recommendedMaxL]), [[550,10,40,130],[780,10,60,220],[1150,15,90,330],[1450,20,150,500]], "Fluval 07 serisi üreticinin debi, 230–240 V güç ve hacim değerlerini taşımalı");
+assert(fluval07.every((item) => item?.additionalSourceUrls?.some((url) => url.endsWith("207-canister-filter-20-45-us-gal-60-220-l"))), "Fluval 07 serisi değerlerinin okunduğu ürün sayfası ek kaynak olmalı");
+assert(fluval07.every((item) => item?.specifications.includes(`${item.ratedFlowLph} L/saat`) && item.specifications.includes(`${item.powerW} W`)), "Fluval 07 serisinin açıklamasındaki debi ve güç sayısal alanlarla aynı olmalı");
+// Plant 3.0 46 W: ürün sayfası "Aquarium Capacity" 91–115, "Size Range" 91–122 cm diyor; üreticinin Plant Spectrum kılavuzu (14522) 91–122 cm.
+const fluvalPlant3 = [22,32,46,59].map((powerW) => equipmentCatalog.find((item) => item.id === `fluval-plant-3-${powerW}w`));
+assert(fluvalPlant3.every((item) => item?.additionalSourceUrls?.some((url) => url.endsWith("14520-3_Plant_Manual_INT_Nov05_19_AB_WEB.pdf")) && item.specifications.includes(`${item.recommendedTankLengthCm?.[0]}–${item.recommendedTankLengthCm?.[1]} cm`)), "Plant 3.0 kılavuzu ek kaynak olmalı, açıklamadaki uzunluk alanla aynı olmalı");
 const fluvalAquaClear = ["fluval-ac20","fluval-ac30","fluval-ac50","fluval-ac70","fluval-ac110"].map((id) => equipmentCatalog.find((item) => item.id === id));
 assert.deepEqual(fluvalAquaClear.map((item) => item?.ratedFlowLph), [379,569,757,1135,1890], "AquaClear debileri bakım kılavuzundaki değerler olmalı");
 assert(fluvalAquaClear.every((item) => item?.specifications.includes(`${item.ratedFlowLph} L/saat`) && item.additionalSourceUrls?.some((url) => url.endsWith("Fluval_Aquarium_Care_Guide_EN.pdf"))), "AquaClear açıklaması debiyle aynı olmalı ve bakım kılavuzu ek kaynak olmalı");
