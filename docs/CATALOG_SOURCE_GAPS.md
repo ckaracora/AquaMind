@@ -108,4 +108,4 @@ Fishipedia'nın taslak sayfaları (2026-10-30): sayfa "hazırlanıyor; metinler 
   - Resun: 172 kayıt, 90'ı hesapta. Sitenin sertifikası kendinden imzalı.
   - Fluval: 87 kayıt, 40'ı hesapta. Cloudflare insan doğrulaması.
   - Haqos: 38 kayıt, 14'ü hesapta. Sertifika başka bir adrese ait.
-- **Kabul edilmeyen kaynak:** Trendyol'a bağlı 24 kayıt; hiçbiri hesaba giren değer taşımıyor.
+- **Kabul edilmeyen kaynak (kapandı, 2026-11-04):** Trendyol'a bağlı 24 kayıt vardı; hiçbiri hesaba giren değer taşımıyordu. Kabul edilen beş mağazada (Akvaryum Express, Atakan, Malawi İzmir, Aquarubi, Betta) aranıp bulunamayan 23'ü (22 Shark armatürü, Meç Turbo Pipo) doğrulanamayanlar listesine girdi: kayıt adıyla kalır, Trendyol'dan gelen lümen, akvaryum uzunluğu ve gövde ölçüsü çekilir, açıklama "değerler doğrulanamadı" der. RS-605 zaten listedeydi. Cikletist (insan doğrulaması) ürün sahibiyle satış adları oturumunda aranacak (`docs/CATALOG_LOG.md` → "2026-11-04 Trendyol'a bağlı ekipman"). Katalog akışı testi Trendyol'a bağlı yeni bir değerin eklenmesini engelliyor.

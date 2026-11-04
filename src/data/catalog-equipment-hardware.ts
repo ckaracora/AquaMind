@@ -1743,7 +1743,7 @@ const mecAirDrivenFilters:EquipmentProfile[]=[
   {id:"mec-pipo-10",model:"Pipo 10",specifications:"Orta boy sünger pipo filtre",sourceUrl:"https://emirakvaryum.com/index.php?path=109&route=product%2Fcategory"},
   {id:"mec-pipo-15",model:"Pipo 15",specifications:"Büyük boy sünger pipo filtre",sourceUrl:"https://emirakvaryum.com/index.php?path=109&route=product%2Fcategory"},
   {id:"mec-hamburg-pipo",model:"Modüler Hamburg Pipo Filtre",specifications:"Modüler biyolojik Hamburg tipi sünger filtre",sourceUrl:"https://cukurovapet.com.tr/marka/mec"},
-  {id:"mec-turbo-pipo",model:"Turbo Pipo Filtre",specifications:"25 cm gövdeli biyolojik sünger pipo filtre",sourceUrl:"https://www.trendyol.com/mec/mec-turbo-pipo-filtre-nostaljik-p-802855493"},
+  {id:"mec-turbo-pipo",model:"Turbo Pipo Filtre",specifications:"Biyolojik sünger pipo filtre · 25 cm gövde",sourceUrl:"https://www.trendyol.com/mec/mec-turbo-pipo-filtre-nostaljik-p-802855493"},
   {id:"mec-f002",model:"F002 Tekli Pipo Filtre",specifications:"Tek süngerli biyolojik pipo filtre",sourceUrl:"https://www.cmticaret.com/filtreler-motorlar-ve-isiticilar/"},
   {id:"mec-f003",model:"F003 Çiftli Pipo Filtre",specifications:"Çift süngerli biyolojik pipo filtre",sourceUrl:"https://www.cmticaret.com/filtreler-motorlar-ve-isiticilar/"},
   {id:"mec-f008",model:"F008 Box Filtre",specifications:"Üretim ve yavru akvaryumları için kutu filtre",sourceUrl:"https://www.cmticaret.com/filtreler-motorlar-ve-isiticilar/"},

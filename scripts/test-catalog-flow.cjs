@@ -30,7 +30,7 @@ require.extensions[".ts"] = (module, filename) => {
   module._compile(output, filename);
 };
 
-const { equipmentBrandsForCategory, equipmentCatalog, equipmentForBrandInCategory, equipmentForCategory, hasStandaloneCapacityData, speciesCatalog, speciesForCatalogExactSearch, speciesForCatalogSearch, speciesForCategoryAndWaterType, speciesForLivestock, speciesGroup, speciesGroupsForCategoryAndWaterType, speciesWaterTypes } = require(path.join(projectRoot, "src/data/catalog.ts"));
+const { equipmentBrandsForCategory, equipmentCatalog, equipmentForBrandInCategory, equipmentForCategory, hasStandaloneCapacityData, technicalDataReady, speciesCatalog, speciesForCatalogExactSearch, speciesForCatalogSearch, speciesForCategoryAndWaterType, speciesForLivestock, speciesGroup, speciesGroupsForCategoryAndWaterType, speciesWaterTypes } = require(path.join(projectRoot, "src/data/catalog.ts"));
 const { unresolvedSpeciesForSearch, unresolvedSpeciesListings } = require(path.join(projectRoot, "src/data/catalog-species-unresolved.ts"));
 const { careCategoryLabels, careProductCatalog } = require(path.join(projectRoot, "src/data/care-product-catalog.ts"));
 const { catalogBrandCoverage } = require(path.join(projectRoot, "src/data/catalog-coverage.ts"));
@@ -49,17 +49,19 @@ const sourced = (item, field, value) => (shopVerified(item) ? shopVerified(item)
 const withdrawableFields = ["ratedFlowLph", "powerW", "recommendedMinL", "recommendedMaxL", "recommendedTankLengthCm", "integratedHeaterW", "integratedUvcW"];
 const acceptedShopHosts = ["akvaryumexpress.com", "atakanpetshop.com", "malawiizmir.com", "aquarubi.com", "bettamarketim.com.tr", "cikletistpetshop.com"];
 // Rakamla ya da yazıyla yazılmış kapasite değeri ("600 L/saat", "60 cm", "üç litre filtre hacimli").
-const numericValueText = /\d[\d.,]*\s*(?:L\/saat|L\/dakika|W\b|litre|L\b|cm\b|kPa|MPa)/;
+const numericValueText = /\d[\d.,]*\s*(?:L\/saat|L\/dakika|W\b|litre|L\b|cm\b|kPa|MPa|lm\b)/;
 const writtenValueText = /(?:^|[\s(])(?:yarım|bir|iki|üç|dört|beş|altı|yedi|sekiz|dokuz|on|yirmi|otuz|kırk|elli|altmış|yetmiş|seksen|doksan|yüz|bin)(?:\s+(?:buçuk|yüz|bin))?\s+(?:litre|watt|santimetre|metre)/iu;
-assert.equal(withdrawnEquipmentIds.size + withdrawnAirFlowIds.size + Object.keys(shopVerifiedEquipment).length, 180, "0019 listeleri 100 (86, 2026-10-30 örnek denetiminin 11 Boyu ısıtıcısı ve JBL paketinin 3 WHITE kaydı) + 4 + 76 kayıt içermeli");
-assert.equal(new Set([...withdrawnEquipmentIds, ...withdrawnAirFlowIds, ...Object.keys(shopVerifiedEquipment)]).size, 180, "0019'daki bir kayıt yalnız bir listede bulunmalı");
+assert.equal(withdrawnEquipmentIds.size + withdrawnAirFlowIds.size + Object.keys(shopVerifiedEquipment).length, 203, "0019 listeleri 123 (86, 2026-10-30 örnek denetiminin 11 Boyu ısıtıcısı, JBL paketinin 3 WHITE kaydı ve 2026-11-04 Trendyol paketinin 23 kaydı) + 4 + 76 kayıt içermeli");
+assert.equal(new Set([...withdrawnEquipmentIds, ...withdrawnAirFlowIds, ...Object.keys(shopVerifiedEquipment)]).size, 203, "0019'daki bir kayıt yalnız bir listede bulunmalı");
 assert.match("Üç litre filtre hacimli askı dış filtre", writtenValueText, "Yazıyla yazılmış kapasite yakalanmalı");
 assert.doesNotMatch("Üç aşamalı kompakt iç filtre · Dört çıkış", writtenValueText, "Yazıyla yazılmış özellik kapasite sayılmamalı");
 for (const id of [...withdrawnEquipmentIds, ...withdrawnAirFlowIds]) {
   const item = equipmentCatalog.find((entry) => entry.id === id);
   assert(item, `Değeri çekilen ekipman katalogda adıyla kalmalı: ${id}`);
   assert(item.sourceUrl && item.verifiedAt, `${id} kaynak bağlantısını ve tarihini korumalı`);
-  assert.equal(hasStandaloneCapacityData(item) && !item.requiresAirPump, false, `${id} doğrulanamayan değerle bağımsız kapasite hesabına girmemeli`);
+  // Kapasite hesabı yalnız filtre, ısıtıcı ve hava motorundadır; öteki türlerde (ör. aydınlatma) hasStandaloneCapacityData her zaman doğrudur.
+  const capacityCategory = ["filter", "heater", "air_pump"].includes(item.category);
+  if (capacityCategory) assert.equal(hasStandaloneCapacityData(item) && !item.requiresAirPump, false, `${id} doğrulanamayan değerle bağımsız kapasite hesabına girmemeli`);
   assert.equal(item.ratedFlowLph, undefined, `${id} doğrulanamayan debiyi taşımamalı`);
   if (withdrawnEquipmentIds.has(id)) {
     for (const field of withdrawableFields) assert.equal(item[field], undefined, `${id} doğrulanamayan ${field} değerini taşımamalı`);
@@ -67,7 +69,9 @@ for (const id of [...withdrawnEquipmentIds, ...withdrawnAirFlowIds]) {
     assert.doesNotMatch(item.specifications, writtenValueText, `${id} açıklamasında yazıyla yazılmış doğrulanamayan değer kalmamalı`);
   }
   assert.match(item.specifications, /doğrulanamadı|yayımlanmamış/, `${id} açıklaması değerin neden olmadığını söylemeli`);
-  if (!item.requiresAirPump) assert.match(item.capacityDataNote ?? "", /Otomatik hesapta kullanılmaz|otomatik/i, `${id} kapasite notu taşımalı`);
+  // Kapasite notu yalnız hesaba giren türde (filtre, ısıtıcı, hava motoru); aydınlatmada açıklamadaki "doğrulanamadı" yeterli.
+  if (!item.requiresAirPump && capacityCategory) assert.match(item.capacityDataNote ?? "", /Otomatik hesapta kullanılmaz|otomatik/i, `${id} kapasite notu taşımalı`);
+  else if (!item.requiresAirPump) assert.equal(item.capacityDataNote, undefined, `${id} hesaba girmeyen türde kapasite notu taşımamalı`);
 }
 // Kabul edilen yerel mağazada doğrulanan değerler (2026-10-17 taraması; docs/CATALOG_LOG.md). Uygulamanın tablosundan
 // (shopVerifiedEquipment) bağımsız beklentidir: iki yerden birinde yapılan yazım hatası (ör. 210 yerine 2100 L/saat) testi düşürür.
@@ -2293,7 +2297,24 @@ assert.deepEqual(
 );
 const sharkFourRow23 = equipmentCatalog.find((item) => item.id === "shark-fs-23-4row");
 assert.equal(sharkFourRow23?.category, "lighting", "Shark ayrı ölçülü armatür modelleri aydınlatma kategorisinde bulunmalı");
-assert.deepEqual(sharkFourRow23?.recommendedTankLengthCm, [30, 35], "Shark 23 cm armatürün doğrulanmış akvaryum uyumu korunmalı");
+// Shark armatürlerinin değerleri yalnız Trendyol'da (2026-11-04, karar 0036): akvaryum uzunluğu ve lümen çekilir, kayıt adıyla kalır.
+assert.equal(sharkFourRow23?.recommendedTankLengthCm, undefined, "Shark 23 cm armatürün Trendyol'dan gelen akvaryum uzunluğu çekilmeli");
+assert.equal(sharkFourRow23?.specifications, "Dört renk full-spectrum, dört sıra Osram LED · değerler doğrulanamadı", "Shark 23 cm armatürün lümeni ve uzunluğu açıklamadan çekilmeli, nedeni yazılmalı");
+assert.equal(equipmentCatalog.find((item) => item.id === "mec-turbo-pipo")?.specifications, "Biyolojik sünger pipo filtre · değerler doğrulanamadı", "Meç Turbo Pipo'nun Trendyol'dan gelen gövde ölçüsü çekilmeli");
+// Ekleme penceresindeki rozet: değeri çekilen aydınlatma "Teknik veri hazır" göstermez ("Model kayıtlı"); hava motoruyla çalışan filtre
+// (Meç Turbo, Xinyou sünger filtreleri) kapasite hesabına hava motoruna bağlı filtre olarak girdiği için hazır kalır; değeri doğrulanmış
+// aydınlatma hazırdır.
+assert.equal(technicalDataReady(sharkFourRow23), false, "Değeri çekilen Shark armatürü 'Teknik veri hazır' göstermemeli");
+assert.equal(technicalDataReady(equipmentCatalog.find((item) => item.id === "mec-turbo-pipo")), true, "Hava motoruyla çalışan Meç Turbo kapasite hesabına girdiği için hazır kalmalı");
+assert.equal(technicalDataReady(equipmentCatalog.find((item) => item.id === "xinyou-xy-168")), true, "Hava motoruyla çalışan Xinyou sünger filtre hazır kalmalı");
+assert.equal(technicalDataReady(equipmentCatalog.find((item) => item.id === "rs-rs605")), false, "Debisi çekilen RS-605 hazır görünmemeli");
+assert.equal(technicalDataReady(equipmentCatalog.find((item) => item.category === "lighting" && !withdrawnEquipmentIds.has(item.id))), true, "Değeri çekilmemiş aydınlatma hazır görünmeli");
+// Kabul edilmeyen pazar yerine (Trendyol) ana kaynağıyla bağlı her kaydın değeri çekilmiş olmalı; yenisi eklenirse test düşer.
+assert.deepEqual(
+  equipmentCatalog.filter((item) => /(^|\.)trendyol\.com$/.test(new URL(item.sourceUrl).hostname) && !withdrawnEquipmentIds.has(item.id)).map((item) => item.id),
+  [],
+  "Trendyol'a bağlı ekipman değeri doğrulanamayanlar listesinde olmalı",
+);
 
 const dophinHSeries = [
   ["H80", 190, 2.7, 25],
@@ -2929,14 +2950,15 @@ assert(!sharkLightModels.has("Full Spectrum 4 Sıra Osram LED (15 uzunluk seçen
 for (const obsoleteModel of ["Full Spectrum 23 cm / 3 Sıra","Full Spectrum 33 cm / 3 Sıra","Full Spectrum 53 cm / 3 Sıra","Full Spectrum 63 cm / 3 Sıra","Full Spectrum 95 cm / 3 Sıra","Full Spectrum 105 cm / 3 Sıra","Full Spectrum 83 cm / 2 Sıra"]) {
   assert(!sharkLightModels.has(obsoleteModel), `Shark güncel satıcı portföyünde görünmeyen ${obsoleteModel} seçeneğini taşımamalı`);
 }
-const sharkFourRow93 = sharkLights.find((entry) => entry.model === "Full Spectrum 93 cm / 4 Sıra");
-assert.deepEqual([sharkFourRow93?.recommendedTankLengthCm, sharkFourRow93?.specifications.includes("5940 lm")], [[100, 105], true], "Shark 93 cm dört sıra modelinin doğrulanmış ölçü ve ışık akısı korunmalı");
-const sharkFourRow75=sharkLights.find((entry)=>entry.model==="Full Spectrum 75 cm / 4 Sıra");
-assert.deepEqual([sharkFourRow75?.recommendedTankLengthCm,/lümen değeri yayımlanmıyor/.test(sharkFourRow75?.specifications || "")],[[80,85],true],"Shark 75 cm dört sıra modelinde yayımlanmayan lümen değeri tahmin edilmemeli");
-for (const [model,range,lumen] of [["Full Spectrum 23 cm / 2 Sıra",[30,35],"660 lm"],["Full Spectrum 33 cm / 2 Sıra",[40,45],"990 lm"],["Full Spectrum 53 cm / 2 Sıra",[60,65],"1650 lm"],["Full Spectrum 93 cm / 3 Sıra",[100,105],"4455 lm"],["Full Spectrum 53 cm / 4 Sıra",[60,65],"3300 lm"],["Full Spectrum 4 Renk Bar LED 100 cm",[100,100],"1650 lm"]]) {
-  const item=sharkLights.find((entry)=>entry.model===model);
-  assert.deepEqual([item?.recommendedTankLengthCm,item?.specifications.includes(lumen)],[range,true],`Shark ${model} doğrulanmış ölçü ve ışık akısını taşımalı`);
+// Shark armatürlerinin ölçü ve ışık akısı yalnız Trendyol'da yayımlanıyordu (kabul edilen kaynak değil; 2026-11-04, karar 0036): 22 modelin
+// hepsi adıyla kalır, akvaryum uzunluğu ve lümen çekilir, açıklama nedenini söyler. 75 cm modelinde kaynağın lümen yazmadığı notu kalır.
+for (const item of sharkLights) {
+  assert(withdrawnEquipmentIds.has(item.id), `Shark ${item.model} doğrulanamayanlar listesinde olmalı`);
+  assert.equal(item.recommendedTankLengthCm, undefined, `Shark ${item.model} Trendyol'dan gelen akvaryum uzunluğunu taşımamalı`);
+  assert.doesNotMatch(item.specifications, /\d\s*lm\b|\d\s*cm\b/, `Shark ${item.model} açıklamasında Trendyol'dan gelen lümen ya da uzunluk kalmamalı`);
+  assert.match(item.specifications, /değerler doğrulanamadı$/, `Shark ${item.model} açıklaması değerin neden olmadığını söylemeli`);
 }
+assert.match(sharkLights.find((entry) => entry.model === "Full Spectrum 75 cm / 4 Sıra")?.specifications ?? "", /lümen değeri yayımlanmıyor/, "Shark 75 cm dört sıra modelinde yayımlanmayan lümen değeri tahmin edilmemeli");
 
 const netlea530 = equipmentCatalog.find((entry) => entry.brand === "Netlea" && entry.model === "530S-AT5");
 assert.equal(netlea530?.powerW, 35, "Netlea 530S-AT5 doğrulanmış 35 W bilgisini taşımalı");

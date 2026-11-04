@@ -3501,3 +3501,22 @@ Güncel alt adım: JBL filtre medyası, bakteri başlangıcı, sorun giderici/pH
 | `salvinia-natans` | Floating Fern | kendi sayfası |
 | `taxiphyllum-barbieri` | Java Moss | kendi sayfası |
 | `vallisneria-americana-var-gigantea` | Giant Vallis | kendi sayfası |
+
+## 2026-11-04 Trendyol'a bağlı ekipman (Claude)
+
+- Veri aşamasının "Gerekenler" kapsamı (karar 0036). Trendyol kabul edilen kaynaklardan değil (`docs/DATA_SOURCES.md` → "Kaynak önceliği"); ana kaynağı Trendyol olan 24 ekipman kaydı vardı (2026-10-30 örnek denetiminin bulgusu). 22'si Shark armatürü; bunların 17'si markanın Trendyol liste sayfasına bağlıydı. Kalan ikisi RS-605 iç filtresi ve Meç Turbo Pipo.
+- Arama (2026-11-03/04, tarayıcıda, ürün sayfası ya da mağazanın kendi araması):
+  - Akvaryum Express (`/arama?urunAra=`): "shark", "shark led", "rs-605", "rs 605", "turbo pipo" sonuç yok; "meç" yalnız başka Meç ürünleri.
+  - Atakan (`/search?s=`): "shark" yalnız canlı balıklar (Silver Shark, Colombian Shark Catfish); "rs-605" sonuç yok. Marka listesinde Shark yok.
+  - Malawi İzmir: "shark" ve "rs-605" sonuç yok; "turbo pipo" → "MEC Turbo Üretim Pipo Filtre" (stokta yok). Sayfa gövdeyi 18 cm, eni 5 cm yazıyor. Kayıttaki Trendyol ürünü ("Mec Turbo Pipo Filtre Nostaljik", 25 cm gövde) ile aynı ürün olduğu doğrulanamadı; Trendyol sayfası 2026-11-04'te 404.
+  - Aquarubi: "shark" yalnız Sicce Shark filtreleri ve JBL Floaty Shark; "rs-605" sonuç yok.
+  - Betta: "shark" yalnız köpek balığı dekoru; "rs-605" sonuç yok. Codex 1. turda (2026-11-04) Betta'da "Pipo Filtre Turbo Üretim Filtresi 18cm" sayfasını buldu (marka MEÇ, açıklama "Meç Plastik Turbo Filtre … hava motoru ile çalıştırılan süngerli filtre … 18x5,5cm"; tarayıcıda açılarak okundu). Kabul edilen iki mağaza Meç'in turbo filtresini 18 cm yazıyor; kayıttaki 25 cm'lik "Nostaljik" Trendyol ürünüyle aynı olduğu yine doğrulanamadı, ölçü bu yüzden kayda yazılmadı.
+  - Cikletist insan doğrulaması istediği için açılmadı; ürün sahibiyle satış adları oturumunda aranacak.
+  - Shark'ın üretici sitesi web aramasında bulunamadı.
+- Sonuç: 23 kayıt (22 Shark, Meç Turbo Pipo) `unverifiedEquipmentIds`'e girdi; RS-605 zaten oradaydı (değerleri hesaptan çekilmişti). Kayıtlar adıyla ve kaynak bağlantısıyla kalır; Trendyol'dan gelen değerler çekilir:
+  - Shark: akvaryum uzunluğu (`recommendedTankLengthCm`) ve açıklamadaki lümen ile uzunluk parçaları. Açıklama "değerler doğrulanamadı" ile biter (ör. "Dört renk full-spectrum, dört sıra Osram LED · değerler doğrulanamadı"). 75 cm modelindeki "kaynak başlığında lümen değeri yayımlanmıyor" notu kalır.
+  - Meç Turbo Pipo: açıklama "Biyolojik sünger pipo filtre · 25 cm gövde" diye iki parçaya ayrıldı (kaynağın yazdığı ölçü dosyada durur); ölçü çekilir, ekranda "Biyolojik sünger pipo filtre · değerler doğrulanamadı".
+  - Hiçbiri hesaba girmiyordu: aydınlatma hesapta yok, akvaryum uzunluğu motorda kullanılmıyor; Meç hava motoruyla çalışan filtre (`requiresAirPump`), değeri yok.
+- Kod: `src/data/catalog-equipment-unverified.ts` — açıklamadan çekilen parçalara lümen ("1320 lm") eklendi; bir değer çekilip mevcut ifadelerden (debi, önerilen hacim, güç) biri uymazsa "değerler doğrulanamadı" yazılır; kapasite notu yalnız hesaba giren türde (filtre, ısıtıcı, hava motoru) yazılır (bütünlük denetimi öteki türde notu yasaklıyor). Listedeki öbür 100 kaydın çıktısı değişmedi (bütün katalog önce ve sonra karşılaştırıldı: yalnız bu 23 kayıt değişti).
+- Çeviri: iki yeni parça ("Biyolojik sünger pipo filtre", "değerler doğrulanamadı") İngilizce ve İspanyolcaya eklendi; kullanılmayan "# cm gövdeli biyolojik sünger pipo filtre" çıkarıldı.
+- Ekleme penceresindeki rozet (Codex 1. tur): değeri çekilen aydınlatma "Teknik veri hazır" değil "Model kayıtlı" gösterir (`technicalDataReady`, `src/data/catalog-equipment.ts`); hesaba girmeyen türde rozet önceden her kayıtta "hazır" diyordu. Hava motoruyla çalışan filtre (Meç Turbo ve listedeki 11 Xinyou sünger filtre) kapasite hesabına hava motoruna bağlı filtre olarak girdiği için "Teknik veri hazır" kalır.

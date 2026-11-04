@@ -2,7 +2,7 @@ import type { Equipment } from "@/types/aquarium";
 import { lightingCatalog } from "./catalog-equipment-lighting";
 import { specializedEquipmentCatalog } from "./catalog-equipment-specialized";
 import { hardwareEquipmentCatalog } from "./catalog-equipment-hardware";
-import { withdrawUnverifiedEquipmentValues } from "./catalog-equipment-unverified";
+import { unverifiedEquipmentIds, withdrawUnverifiedEquipmentValues } from "./catalog-equipment-unverified";
 import { assertUniqueIds, brandModelKey, isVerifiedEquipmentProfile, normalize } from "./catalog-shared";
 
 export interface EquipmentProfile {
@@ -571,6 +571,14 @@ export { isVerifiedEquipmentProfile };
 export const hasStandaloneCapacityData = (profile?: EquipmentProfile) => {
   return profile?hasCapacityData(profile):false;
 };
+const withdrawnEquipmentIds = new Set(unverifiedEquipmentIds);
+/**
+ * Ekipman ekleme penceresindeki "Teknik veri hazır" rozeti. Hesaba giren türde (filtre, ısıtıcı, hava motoru) kapasite hesabına yeten veri
+ * (hava motoruyla çalışan filtre dahil). Hesaba girmeyen türde (ör. aydınlatma) kayıt her zaman hazırdır, değerleri doğrulanamayıp çekilen
+ * kayıt (karar 0019, `unverifiedEquipmentIds`) dışında: onda açıklama "doğrulanamadı" der, rozet "Model kayıtlı" olur.
+ */
+export const technicalDataReady = (profile?: EquipmentProfile) =>
+  hasStandaloneCapacityData(profile) && !(profile && !["filter", "heater", "air_pump"].includes(profile.category) && withdrawnEquipmentIds.has(profile.id));
 // Katalog kimliği yoksa marka ve model adı birlikte eşleşmelidir; ikisinden biri eksikse eşleşme yoktur.
 export const profileForEquipment = (item: Equipment) => {
   const profile = equipmentById(item.catalogId);
