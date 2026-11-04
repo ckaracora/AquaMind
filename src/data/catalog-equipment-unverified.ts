@@ -9,6 +9,15 @@ import type { EquipmentProfile } from "./catalog-equipment";
 
 /** Bütün sayısal değerleri hesaptan çekilen kayıtlar: kabul edilen 5 yerel mağazada bulunamadı ya da mağaza değer vermiyor (marka sırasıyla). */
 export const unverifiedEquipmentIds: readonly string[] = [
+  // Shark (22) ve Meç (1) (2026-11-04, Trendyol'a bağlı kayıtlar, veri aşaması, karar 0036): değerler yalnız Trendyol'da (kabul edilen
+  // kaynaklar arasında değil; 17 Shark kaydı markanın Trendyol liste sayfasına bağlı). Akvaryum Express, Atakan, Malawi İzmir, Aquarubi ve
+  // Betta'nın aramasında bu Shark modelleri ve RS-605 yok; Shark'ın üretici sitesi bulunamadı. Malawi İzmir'deki "MEC Turbo Üretim Pipo
+  // Filtre" gövdeyi 18 cm yazıyor; kayıttaki 25 cm'lik Trendyol ürünüyle aynı olduğu doğrulanamadı. RS-605 aşağıda RS Electrical'da.
+  "shark-fs-23-4row", "shark-fs-33-4row", "shark-fs-43-4row", "shark-fs-53-4row", "shark-fs-63-4row", "shark-fs-75-4row",
+  "shark-fs-83-4row", "shark-fs-93-4row", "shark-fs-73-3row", "shark-fs-93-3row", "shark-fs-113-3row", "shark-fs-23-2row",
+  "shark-fs-33-2row", "shark-fs-53-2row", "shark-bar-full-spectrum-70", "shark-bar-full-spectrum-100", "shark-bar-grolux-60", "shark-bar-grolux-70",
+  "shark-bar-grolux-100", "shark-bar-white-80", "shark-bar-white-90", "shark-bar-white-100",
+  "mec-turbo-pipo",
   // Aquawing (19; AQ-A1000/2000/3000 zaten hesap dışı, güçleri 2026-09-25 denetiminde Türkiye kaynağıyla doğrulandı)
   "aquawing-aq101f", "aquawing-aq101fb", "aquawing-aq102f", "aquawing-aq160", "aquawing-aq600f", "aquawing-aq607f", "aquawing-aq80f",
   "aquawing-wp1000fa", "aquawing-wp1000fb", "aquawing-wp2300a", "aquawing-wp3300a", "aquawing-wp3300b", "aquawing-wp3300c", "aquawing-wp750fa",
@@ -172,7 +181,7 @@ export const shopVerifiedEquipment: Readonly<Record<string, ShopVerification>> =
 
 // Açıklamadaki değer parçaları: "600 L/saat", "2 × 3,5 L/dakika", "15 W", "3,5–28 W", "20–40 litre", "50 litreye kadar", "10–120 L",
 // "9 L filtre malzemesi", "25–60 cm akvaryum", "20 kPa", "0,020 MPa", "3550 mAh / 17,75 Wh", "1,2 m azami basma yüksekliği",
-// "220–240 V", "50–60 Hz" ve yazıyla yazılmış miktar ("üç litre filtre hacimli"). Açıklama " · " ile ayrılmış parçalardan oluşur;
+// "220–240 V", "50–60 Hz", "1320 lm" ve yazıyla yazılmış miktar ("üç litre filtre hacimli"). Açıklama " · " ile ayrılmış parçalardan oluşur;
 // değer taşıyan parça çıkarılır. Ürün kodu, barkod ve "üç aşamalı", "dört çıkış" gibi özellikler kalır.
 const range = String.raw`\d[\d.,]*\s*(?:[–-]\s*\d[\d.,]*\s*)?`;
 const flowPart = /\d[\d.,]*\s*(?:×\s*\d[\d.,]*\s*)?L\s*\/\s*(?:saat|dakika|h|min)\b/i;
@@ -184,6 +193,7 @@ const otherValueParts = [
   new RegExp(`${range}(?:kPa|MPa|bar)\\b`, "i"),
   new RegExp(`${range}(?:mAh|Wh)\\b`),
   new RegExp(`${range}(?:V|Hz)\\b`),
+  new RegExp(`${range}lm\\b`),
   writtenAmount,
 ];
 // Açıklama değerin yayımlanmadığını ya da doğrulanamadığını zaten söylüyorsa ayrıca eklenmez.
@@ -198,22 +208,28 @@ const hostOf = (url?: string) => {
 };
 
 // Açıklamaya eklenen ifade çekilen değere göre seçilir: debi çekildiyse debi, yalnız hacim önerisi çekildiyse hacim, yalnız güç
-// çekildiyse güç (ör. üreticinin gücü yazmadığı ısıtıcı). Açıklama değerin neden olmadığını zaten söylüyorsa eklenmez.
+// çekildiyse güç (ör. üreticinin gücü yazmadığı ısıtıcı). Bunlardan biri değilse ama bir değer ya da açıklamadan değer taşıyan bir parça
+// çekildiyse (ör. aydınlatmanın lümeni ve akvaryum uzunluğu, filtrenin gövde ölçüsü) "değerler doğrulanamadı". Açıklama değerin neden
+// olmadığını zaten söylüyorsa eklenmez.
 const missingText = (item: EquipmentProfile, withdrawn: readonly ValueField[]) =>
   withdrawn.includes("ratedFlowLph") ? (item.category === "air_pump" ? "hava debisi doğrulanamadı" : "debi doğrulanamadı")
     : withdrawn.includes("recommendedMinL") || withdrawn.includes("recommendedMaxL") ? "önerilen hacim doğrulanamadı"
       : withdrawn.includes("powerW") ? "güç doğrulanamadı"
         : undefined;
 
+const capacityCategories: readonly string[] = ["filter", "heater", "air_pump"];
+
 function withdraw(item: EquipmentProfile, fields: readonly ValueField[], parts: readonly RegExp[], note: string) {
   const withdrawn = fields.filter((field) => item[field] !== undefined);
   for (const field of withdrawn) delete item[field];
-  const kept = item.specifications.split(" · ").filter((part) => !parts.some((pattern) => pattern.test(part)));
-  const missing = missingText(item, withdrawn);
+  const all = item.specifications.split(" · ");
+  const kept = all.filter((part) => !parts.some((pattern) => pattern.test(part)));
+  const missing = missingText(item, withdrawn) ?? (withdrawn.length || kept.length < all.length ? "değerler doğrulanamadı" : undefined);
   item.specifications = [...kept, ...(missing && !kept.some((part) => alreadyExplained.test(part)) ? [missing] : [])].join(" · ");
   // Hava motoruyla çalışan sünger filtre hacim önerisi olmadan da "hava motoruna bağlı filtre" olarak değerlendirilir; kapasite notu
-  // yalnızca değeri tümüyle eksik kalan kayıtta tutulur (catalog-equipment.ts bütünlük denetimi).
-  if (!item.requiresAirPump && !item.capacityDataNote) item.capacityDataNote = note;
+  // yalnızca hesaba giren türde (filtre, ısıtıcı, hava motoru) değeri tümüyle eksik kalan kayıtta tutulur (catalog-equipment.ts bütünlük
+  // denetimi). Hesaba girmeyen türde (ör. aydınlatma) açıklamadaki "… doğrulanamadı" yeterlidir.
+  if (capacityCategories.includes(item.category) && !item.requiresAirPump && !item.capacityDataNote) item.capacityDataNote = note;
 }
 
 function applyShopVerification(item: EquipmentProfile, verification: ShopVerification) {

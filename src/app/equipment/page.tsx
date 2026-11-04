@@ -4,7 +4,7 @@ import { ChevronDown, Filter, LampDesk, PencilLine, Plus, Search, SlidersHorizon
 import { AppShell } from "@/components/app-shell";
 import { ModalDialog } from "@/components/modal-dialog";
 import { PageHeader } from "@/components/page-header";
-import { equipmentBrandsForCategory, equipmentById, equipmentForBrandInCategory, equipmentForCategory, hasStandaloneCapacityData, profileForEquipment } from "@/data/catalog-equipment";
+import { equipmentBrandsForCategory, equipmentById, equipmentForBrandInCategory, equipmentForCategory, profileForEquipment, technicalDataReady } from "@/data/catalog-equipment";
 import { equipmentSpecsText, profileSpecsText } from "@/lib/equipment-text";
 import { localIsoDate } from "@/lib/local-date";
 import { useDisplayFormat } from "@/lib/use-display-format";
@@ -152,7 +152,7 @@ function EquipmentForm({ aquarium, initialCategory, close, add }: {
     if (!profile) return;
     add(withUserValue({ ...base, catalogId: profile.id, category: profile.category, brand: profile.brand, model: profile.model, specifications: profile.specifications }, valueField, parsed.value));
   }
-  const capacityReady = hasStandaloneCapacityData(profile);
+  const capacityReady = technicalDataReady(profile);
   const turnover = profile?.category === "filter" && profile.ratedFlowLph ? profile.ratedFlowLph * .65 / aquarium.netVolumeLiters : undefined;
   const mismatch = profile && ((profile.recommendedMinL && aquarium.netVolumeLiters < profile.recommendedMinL) || (profile.recommendedMaxL && aquarium.netVolumeLiters > profile.recommendedMaxL));
   const titleId = useId();
