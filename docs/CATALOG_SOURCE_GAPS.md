@@ -104,8 +104,14 @@ Fishipedia'nın taslak sayfaları (2026-10-30): sayfa "hazırlanıyor; metinler 
   - Kalan: yeni sayfası bulunamayan 68 kayıt (CO₂ 34, Diğer 31, değeri çekilen 3 WHITE filtre), ana kaynağı açılmayan ürün PDF bağlantısı olan 1 kayıt ve ana kaynağı açılan 22 kaydın eski adresteki bir ek kaynağı. Sonraki paket: eski sayfaların internet arşivi kopyaları (web.archive.org; ülke parametreli adreslerde daha çok kopya var), JBL'in 2015 kataloğu ve `?mod=download&id=...` bağlantılarındaki kılavuzlar.
 - **Marka ya da liste sayfası kaynaklı ekipman (kapandı, 2026-10-30):** hesaba giren ve değer taşıyan 1.099 kaydın 54'ü bir mağazanın marka, kategori ya da sayfalı liste sayfasına bağlıydı (Atakan 32, Akvaryum Express 21, Aquarubi 1). Ekipman kaynak bağlantısı paketi 1'de hepsi ürünün kendi sayfasına bağlandı (Boyu WF-2055 üreticinin sayfasına); altı kayıtta alan düzeltildi (`docs/CATALOG_LOG.md`). Katalog akışı testi yenisinin eklenmesini engelliyor.
 - **Başlık ve açıklaması çelişen mağaza değerleri (kapandı, 2026-10-30):** Ejet 3368, 3378, 3388 ve Jingye CD300'ün debisi karar 0019'dan önceki "düşük olanı al" yöntemiyle yazılmıştı; debi kaldırıldı. Ejet 3358'de kabul edilen sayfa tutarlı, değer kaldı.
-- **Bugün açılamayan kaynaklar:** zorlanmadı. Ürün sahibi kendi tarayıcısında açarsa birlikte okunabilir.
+- **Bugün açılamayan kaynaklar:** zorlanmadı. İnternet arşivindeki ham kopyalarla okunuyor; arşivde olmayan sayfaları ürün sahibi kendi tarayıcısında açarsa birlikte okunur. Paket 1 (2026-11-04, `docs/CATALOG_LOG.md` → "Resun, Fluval ve Haqos: arşiv kopyalarıyla doğrulama, paket 1"):
   - Resun: 172 kayıt, 90'ı hesapta. Sitenin sertifikası kendinden imzalı.
-  - Fluval: 87 kayıt, 40'ı hesapta. Cloudflare insan doğrulaması.
-  - Haqos: 38 kayıt, 14'ü hesapta. Sertifika başka bir adrese ait.
+    - 48 sayfadaki 133 kayıt tuttu; hesaba giren 66'sı da bunlardan.
+    - Üreticinin kendi sayfasında iki ad çelişkisi var (Terminator 56/55, U2/UV1205). Kayıtların değeri yok.
+    - Kalan: arşivin sık istek sınırına takılan 8 sayfa (hesapta 15 kayıt). Arşivde olmayan 6 sayfa (EFC, HCB, NLP serileri hesapta, 9 kayıt) ürün sahibinin tarayıcısında okunacak.
+  - Fluval: 87 kayıt, 40'ı hesapta. Cloudflare insan doğrulaması; ürün sayfaları doğrudan istekte 403.
+    - 38 kayıt arşiv kopyası ya da kılavuzla tuttu. SP4 ve SP6'nın kılavuzla çelişen değerleri ve U1'in açıklaması düzeltildi.
+    - 07 serisinin ve AquaClear'ın debisi ve akvaryum aralığı 2026 bakım kılavuzundan; güçleri aranacak.
+    - Kalan 37 kayıt: C ve A serileri hesapta (6 kayıt); öbürleri aydınlatma, UV ve yüzey süpürücü.
+  - Haqos: 38 kayıt, 14'ü hesapta. Sertifika başka bir adrese ait. Ürün açıklamaları resim; resimlerin arşiv kopyaları bekleniyor.
 - **Kabul edilmeyen kaynak (kapandı, 2026-11-04):** Trendyol'a bağlı 24 kayıt vardı; hiçbiri hesaba giren değer taşımıyordu. Kabul edilen beş mağazada (Akvaryum Express, Atakan, Malawi İzmir, Aquarubi, Betta) aranıp bulunamayan 23'ü (22 Shark armatürü, Meç Turbo Pipo) doğrulanamayanlar listesine girdi: kayıt adıyla kalır, Trendyol'dan gelen lümen, akvaryum uzunluğu ve gövde ölçüsü çekilir, açıklama "değerler doğrulanamadı" der. RS-605 zaten listedeydi. Cikletist (insan doğrulaması) ürün sahibiyle satış adları oturumunda aranacak (`docs/CATALOG_LOG.md` → "2026-11-04 Trendyol'a bağlı ekipman"). Katalog akışı testi Trendyol'a bağlı yeni bir değerin eklenmesini engelliyor.

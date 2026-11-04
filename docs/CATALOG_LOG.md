@@ -3520,3 +3520,75 @@ Güncel alt adım: JBL filtre medyası, bakteri başlangıcı, sorun giderici/pH
 - Kod: `src/data/catalog-equipment-unverified.ts` — açıklamadan çekilen parçalara lümen ("1320 lm") eklendi; bir değer çekilip mevcut ifadelerden (debi, önerilen hacim, güç) biri uymazsa "değerler doğrulanamadı" yazılır; kapasite notu yalnız hesaba giren türde (filtre, ısıtıcı, hava motoru) yazılır (bütünlük denetimi öteki türde notu yasaklıyor). Listedeki öbür 100 kaydın çıktısı değişmedi (bütün katalog önce ve sonra karşılaştırıldı: yalnız bu 23 kayıt değişti).
 - Çeviri: iki yeni parça ("Biyolojik sünger pipo filtre", "değerler doğrulanamadı") İngilizce ve İspanyolcaya eklendi; kullanılmayan "# cm gövdeli biyolojik sünger pipo filtre" çıkarıldı.
 - Ekleme penceresindeki rozet (Codex 1. tur): değeri çekilen aydınlatma "Teknik veri hazır" değil "Model kayıtlı" gösterir (`technicalDataReady`, `src/data/catalog-equipment.ts`); hesaba girmeyen türde rozet önceden her kayıtta "hazır" diyordu. Hava motoruyla çalışan filtre (Meç Turbo ve listedeki 11 Xinyou sünger filtre) kapasite hesabına hava motoruna bağlı filtre olarak girdiği için "Teknik veri hazır" kalır.
+
+## 2026-11-04 Resun, Fluval ve Haqos: arşiv kopyalarıyla doğrulama, paket 1 (Claude)
+
+- Veri aşamasının "Gerekenler" kapsamı (karar 0036). 2026-10-30 örnek denetiminde açılamayan üç üretici sitesi: Resun (sertifika kendinden imzalı), Fluval (Cloudflare insan doğrulaması), Haqos (sertifika başka adrese ait). Siteler zorlanmadı. Ürün sayfalarının internet arşivindeki ham kopyaları (`https://web.archive.org/web/<zaman>id_/<adres>`) okundu. Fluval'da ayrıca doğrudan açılan kılavuz PDF'leri ve 2026 bakım kılavuzu kullanıldı. Değer tahmin edilmedi.
+- Resun (172 kayıt, 62 sayfa, 90'ı hesapta):
+  - Arşivde 48 sayfa okundu; bu sayfalarda 133 kayıt var. Sayfa numarası ve kopya tarihi: 86 (2026-01-13), 87 (2026-03-14), 91 (2026-03-14), 94 (2026-05-17), 118 (2026-01-13), 120 (2026-02-07), 121 (2026-06-07), 123 (2026-02-09), 124 (2026-02-07), 125 (2026-02-07), 127 (2026-01-13), 128 (2026-05-17), 129 (2026-06-07), 131 (2026-02-07), 132 (2026-03-14), 133 (2026-02-07), 135 (2026-02-07), 138 (2026-06-07), 140 (2026-05-17), 141 (2026-01-13), 142 (2026-04-21), 144 (2026-01-13), 145 (2026-03-14), 146 (2026-06-15), 148 (2026-02-07), 151 (2026-05-17), 154 (2026-01-13), 155 (2026-02-10), 156 (2026-02-07), 158 (2026-06-07), 161 (2026-02-10), 162 (2025-12-15), 164 (2026-01-13), 166 (2026-01-13), 169 (2026-01-14), 170 (2026-01-13), 171 (2026-06-07), 174 (2026-01-13), 175 (2026-01-13), 179 (2025-07-17), 180 (2026-06-07), 182 (2026-02-09), 283 (2026-02-07), 284 (2026-01-13), 296 (2026-01-13), 299 (2026-01-14), 301 (2026-02-07), 302 (2026-05-17).
+  - Model tabloları sayfada resim ("MODEL PARAMETERS"). Resimler üreticinin görsel sunucusundan (`23628109.s21i.faiusr.com`) indirilip okundu. Tablosuz sayfalar metinden okundu.
+  - Hesaba giren 66 kayıt tuttu (debi, güç, önerilen hacim, UV gücü):
+    - Filtre 27: BC300/450/650, BF80/100/200, CX200/400, GF400/800, CS400/700/1000/1500/2000, MAGI200/380/700/1000, EF1600, EF1600U, EF2800, EF2800U, EVF600/900/1200, HS300.
+    - Hava motoru 13: AP72/108/180/216, PLP40/60/100, DC120/160, QSW70, QSB70, HLP-4000, HLP-8000.
+    - Isıtıcı 26: DT50/100/150/200/300, MH75/150/250, RH9000 25–300 W (8), TM25/50/100/150/200/300, DSH100/150/200/300.
+  - Okuma kuralları:
+    - Hava motoru tablosu L/dk verir; kayıt ×60 taşır (AP72 1,2 L/dk = 72 L/saat). HLP-8000'de 60 L/dk × 2 çıkış = 7200 L/saat.
+    - İki voltajlı satırlarda kayıt 220–240 V değerini taşır: MAGI700 10 W, MAGI1000 20 W, EVF600/900/1200 6,5/10/17,5 W, EF1600U ve EF2800U'da UV 11 W.
+    - DC120/160'ın güç sütunu "/"; kayıtta güç yok.
+    - MH serisindeki sıcaklık artışı notları tabloyla aynı.
+  - Hesaba girmeyen 67 kayıt da tuttu: pompalar (SP, PENGUIN, BDP, FLOW/KING, S, HWM), soğutucular (CL200/280, MINI200/300/650), UV, LED, sifon ve temizleyiciler. Model adları ve açıklamadaki ölçüler sayfayla aynı.
+  - Üreticinin kendi sayfasında çelişki. İki kaydın değeri yok; kayıtlar değişmedi:
+    - Terminator (h-pd-144): sayfadaki ürün başlıkları "TERMINATOR 11/18", "TERMINATOR 36", "TERMINATOR 56"; tablo resmi son modeli "TERMINATOR 55" ve 55 W yazıyor. Kayıt sayfa başlığındaki "Terminator 56".
+    - U2 (h-pd-142): sayfa başlığı "U2" (Mini UV Clarifier); tablo resmindeki model "UV1205" (5 W, en çok 1500 L/saat pompa). Kayıt "U2".
+  - Okunamayan 14 sayfa:
+    - Arşivin sık istek sınırına takılan 8 sayfa: 117, 126, 134 (CY20), 153 (HT10, HT25), 157 (SUNLIKE ×8), 163, 176, 300 (HCA1000–4000). Parantezdekiler hesapta. Kopyaları paket 2'de okunacak.
+    - Arşivde hiç kopyası olmayan 6 sayfa: 395 (EFC300/550), 396 (HCB1000/4000), 397 (NLP20–200; bu üçü hesapta, 9 kayıt), 398 (IceCore), 399 (AST410), 400 (MagBlade). Ürün sahibinin tarayıcısında okunacak.
+- Fluval (87 kayıt, 40'ı hesapta):
+  - Fluval'ın ürün sayfaları doğrudan istekte 403 veriyor (sayfa okuma aracında da). Kılavuz PDF'leri doğrudan açılıyor. Fluval'ın ürün sayfalarını yeni adreslere taşıdığı web aramasında görüldü (ör. `/us/product/a101-air-pump/`).
+  - Arşivde 19 sayfa okundu. AquaClear ve yüzey süpürücü kopyaları bot doğrulama sayfası çıktı. Altı kopya sıkıştırılmış geldi, açıldı.
+  - Tutan 38 kayıt:
+    - Isıtıcı: T50–T300 (`/uk/` sayfası, 2025-01-23), P10/P25/P50 (ısıtıcı listesi, 2026-10-05), E100/200/300 (2026-10-05), M50–M300 (2025-02-13).
+    - Filtre: FX2/4/6 (2025-02-10), U2–U4 (2025-01-24), Nano Aquarium Filter (2025-02-08), SK400 (2025-02-18).
+    - Pompa ve aydınlatma: CP1–CP4, C.O.B. Nano, Prism 2.0, Plant 3.0 Nano (2025-06-11), Marine 3.0 ×4 (2024-11-08), Marine 3.0 Nano (2024-12-03).
+    - Skimmer: PS1 (2025-01-23), PS2 (2024-09-18).
+  - Okuma kuralları:
+    - U serisinde kayıt 230–240 V gücünü taşır: 4,5 / 5 / 7,5 / 10 W.
+    - FX sayfası iki debi veriyor: pompa çıkışı (1800 / 2650 / 3500 LPH) ve filtre dolaşımı (1300 / 1700 / 2130 LPH). Kayıt, öbür markalardaki azami debi gibi pompa çıkışını taşır; değişmedi.
+    - P serisinde güç ve hacim listede var. "24–26 °C ön ayar" ve "kırılmaz polimer gövde" P serisinin kendi sayfasından gelir; o sayfanın kopyası okunmadı.
+  - Kılavuzla doğrulananlar:
+    - PS2'nin 8 W gücü ve 0,19 L toplama kabı kılavuzunda var (kaydın ek kaynağı).
+    - PS1'in ayarlanabilir hava akışı kılavuzunda var ("Airflow Control"); kılavuz ek kaynak oldu.
+  - Düzeltme: SP4 ve SP6 sump pompaları. Hesaba girmiyorlar. Üreticinin SP serisi kılavuzunun tablosu (`https://fluvalaquatics.com/us/manuals/Fluval_14335-14337-14339_SP-Series_Pump_Manual.pdf`, PDF'nin 4. sayfası; Fransızca, İspanyolca ve Almanca tablolar aynı):
+    - SP4 230–240 V: 7500 L/saat, 3,6 m, 90 W; 120 V: 6900 L/saat, 3,6 m, 88 W. Kayıttaki 3,5 m → 3,6 m.
+    - SP6 230–240 V: 12300 L/saat, 3,7 m, 100 W; 120 V: 13000 L/saat, 4 m, 135 W. Kayıt 120 V debisini (13000) 230–240 V'un gücü ve basma yüksekliğiyle karıştırmıştı; debi 12300 L/saat oldu.
+    - Kılavuz iki kaydın ek kaynağı oldu. Türkiye 230 V; AC serisi gibi Avrupa değerleri kullanıldı.
+  - Düzeltme: U1'in açıklaması (Codex 1. tur).
+    - Kayıt "3 kademeli iç filtre" diyordu. U serisi sayfası serinin üç aşamalı olduğunu, ama "U1 includes stage 1 only" (yalnız mekanik sünger pedi) yazıyor.
+    - Açıklama "Yalnız mekanik sünger aşamasıyla gelen iç filtre" oldu; yeni parça İngilizce ve İspanyolcaya çevrildi. Debi (250 L/saat), güç (4,5 W) ve hacim (55 L) sayfayla aynı.
+  - 07 serisi (107/207/307/407, hesapta): kendi sayfalarının arşivde kopyası yok. Fluval'ın 2026 bakım kılavuzu (`https://fluvalaquatics.com/us/wp-content/uploads/2026/08/Fluval_Aquarium_Care_Guide_EN.pdf`, PDF'nin 6. sayfası) debiyi (550 / 780 / 1150 / 1450 L/saat) ve akvaryum aralığını (40–130 / 60–220 / 90–330 / 150–500 L) doğruladı; kılavuz ek kaynak oldu. Güç (10 / 10 / 15 / 20 W) bu belgede yok; paket 2'de aranacak.
+  - AquaClear AC20–AC110 (hesapta 5): arşivdeki sayfa kopyası bot doğrulama sayfası (Codex 1. tur).
+    - 2026 bakım kılavuzu (PDF'nin 5. sayfası) debiyi 379 / 569 / 757 / 1135 / 1890 LPH, akvaryum aralığını 18–76 / 38–114 / 76–190 / 152–265 / 227–416 L yazıyor.
+    - Kayıttaki debi 379 / 568 / 757 / 1136 / 1892 idi; fark galonun litreye çevrilmesindeki yuvarlama. Kılavuz değerleri kullanıldı ve kılavuz ek kaynak oldu.
+    - Güç (5 W 230–240 V, AC110'da 14 W) kılavuzda yok; paket 2'de aranacak.
+    - Sağlık hesabı: 1.077 altın vaka ve 113 senaryo değişmedi. Eşiğe çok yakın kurulumlarda sonuç değişebilir (Codex 2. tur). Örnek: 52,8 L'de bir beta ve AC30. Debi 568 → 569 olunca tahmini çevrim 7'nin üstüne çıkıyor; güçlü akış uyarısı ekleniyor, filtre puanı 95 → 75, genel puan 92 → 89. Bu, mevcut kuralın düzeltilmiş değere uygulanması.
+  - Bekleyen 37 kayıt:
+    - Bot sayfası ya da kopyası alınamayan: C2–C4 (hesapta 3), A101/A202/A402 (hesapta 3), Aquasky 2.0 ×4, Plant 3.0 ×4, Plant Pro ×4, UVC A198 ve A199, yüzey süpürücüler (3).
+    - Kopyası olmayan: Aquasky 3.0 ×4, Plant 4.0 ×4, Plant 4.0 Nano, Reef 4.0 ×4, Reef 4.0 Nano.
+    - AquaClear kılavuzları (`AC20_30_50_70_Manual_English.pdf`, `AC110_Manual_English.pdf`) ve C serisi kılavuzunda değer tablosu metin olarak yok.
+- Haqos (38 kayıt, 14'ü hesapta): arşivde 32 sayfa var. Ürün açıklamaları resim (`p22.qiyeku.cn`); görsel sunucusu buradan zaman aşımına düşüyor. Resimlerin arşiv kopyaları ve sık istek sınırına takılan 6 sayfa (EXPRO-1000 dahil) paket 2'de okunacak.
+- Arşivin sık istek sınırı (429) 2026-11-04 yaklaşık 16:00 UTC'de başladı. Kalan kopyalar 90 saniyede bir istekle indiriliyor.
+- Test (`scripts/test-catalog-flow.cjs`):
+  - SP4/SP6: debi ve güç kılavuzdaki 230–240 V değerleri (7500/90, 12300/100); basma yükseklikleri 3,6 / 3,7 m. Açıklamadaki debi ve güç sayısal alanlarla aynı olmalı.
+  - U1 "kademeli/aşamalı" diye tanıtılmıyor.
+  - AquaClear debileri kılavuz değerleri; açıklama debiyle aynı, bakım kılavuzu ek kaynak.
+- Codex 1. tur (2026-11-04, "bulgu var"):
+  - 1 P2 (a): U1'in açıklaması, düzeltildi (yukarıda).
+  - 2 P3: AquaClear'ın kılavuzla farklı debisi (a), kılavuz değerleri alındı; SP6 açıklamasının eski debiye dönmesini test yakalamıyordu (c), açıklama/alan denetimi eklendi.
+  - Codex ayrıca doğruladı:
+    - 3.541 kaydın yalnız 7'si değişmişti.
+    - SP kılavuzunun sütun ve voltaj eşlemesi doğru.
+    - Resun tablo örneklemi (CS, RH9000, AP, MAGI, EF-U, EVF, HLP-8000) ve iki metin sayfası kayıtlarla aynı.
+    - Fluval örneklemi (FX, U, CP, T ve M ısıtıcıları) U1 dışında aynı.
+    - Sayımlar tutuyor.
+  - Terminator ve U2 adlarının korunmasını makul buldu.
+- Codex 2. tur (2026-11-04): temiz. 1. turun üç bulgusu kapandı. Bozma denemeleriyle doğrulandı: SP6 açıklamasında 13000, U1'de "3 kademeli", AC30'da 568 testleri düşürüyor. AquaClear'ın sağlık hesabına etkisi yukarıya yazıldı.

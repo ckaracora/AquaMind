@@ -2294,6 +2294,7 @@
 {"key": "4b2a603be326ca6d", "fields": ["equipment.specifications"], "tr": "yalnız dik konumda kullanılmalı, güneşten ve ısıdan korunmalı", "en": "use only upright and protect from sun and heat"},
 {"key": "5ae56bd6073e698c", "fields": ["equipment.specifications"], "tr": "yalnız iki küçük balık ya da karidesle # litreye kadar", "en": "up to {1:L} with only two small fish or shrimp"},
 {"key": "5f7f58431b4dcc09", "fields": ["equipment.specifications"], "tr": "yalnız kırmızı-siyah yeni kasa ile uyumlu; gri kasa ile uyumlu değil", "en": "compatible only with the new red-black housing; not compatible with the gray housing"},
+{"key": "6d1ab50bc970fc7d", "fields": ["equipment.specifications"], "tr": "Yalnız mekanik sünger aşamasıyla gelen iç filtre", "en": "Internal filter supplied with the mechanical foam stage only"},
 {"key": "d4dacdfd0cf14bcb", "fields": ["equipment.specifications"], "tr": "Yalnız su altında kullanılan uzaktan kumandalı RGB + beyaz efekt LED'i", "en": "Remote-controlled RGB + white effect LED for underwater use only"},
 {"key": "77cbf51d6da5271b", "fields": ["equipment.specifications"], "tr": "yalnız tabanda besin dolaşımını destekler; suyu ısıtan termostatlı ana ısıtıcının yerine geçmez", "en": "only supports nutrient circulation in the substrate; does not replace the thermostatic main heater that heats the water"},
 {"key": "8868d7d83da42eb2", "fields": ["equipment.specifications"], "tr": "yalnız tatlı su kullanımı", "en": "freshwater use only"},

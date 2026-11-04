@@ -335,12 +335,12 @@ for (const [index,[,powerW,lumens]] of fluvalSpecialLightExpectations.entries())
 
 const fluvalAcSeries = [
   ["fluval-ac20",379,5,18,76],
-  ["fluval-ac30",568,5,38,114],
+  ["fluval-ac30",569,5,38,114],
   ["fluval-ac50",757,5,76,190],
-  ["fluval-ac70",1136,5,152,265],
-  ["fluval-ac110",1892,14,227,416],
+  ["fluval-ac70",1135,5,152,265],
+  ["fluval-ac110",1890,14,227,416],
 ].map(([id]) => equipmentCatalog.find((item) => item.id === id));
-assert.deepEqual(fluvalAcSeries.map((item) => [item?.ratedFlowLph,item?.powerW,item?.recommendedMinL,item?.recommendedMaxL]), [[379,5,18,76],[568,5,38,114],[757,5,76,190],[1136,5,152,265],[1892,14,227,416]], "Fluval AC Series resmî Avrupa güç, debi ve hacim değerlerini taşımalı");
+assert.deepEqual(fluvalAcSeries.map((item) => [item?.ratedFlowLph,item?.powerW,item?.recommendedMinL,item?.recommendedMaxL]), [[379,5,18,76],[569,5,38,114],[757,5,76,190],[1135,5,152,265],[1890,14,227,416]], "Fluval AC Series resmî Avrupa güç, debi (2026 bakım kılavuzu) ve hacim değerlerini taşımalı");
 assert(fluvalAcSeries.every((item) => item?.adjustableFlow === true && item.sourceUrl === "https://fluvalaquatics.com/us/shop/product/aquaclear" && item.verifiedAt === "2026-09-28"), "Fluval AC Series ortak güncel resmî kaynağa bağlı olmalı");
 
 const fluvalCpSeries = [
@@ -361,7 +361,15 @@ const fluvalPassiveSkimmers = ["fluval-surface-skimmer-05-07","fluval-ac-surface
 assert(fluvalPassiveSkimmers.every((item) => item?.category === "other" && item.passiveComponent === true && item.ratedFlowLph === undefined && item.powerW === undefined), "Fluval motorsuz yüzey süpürücüleri bağımsız kapasite cihazı olmamalı");
 
 const fluvalSpPumps = ["fluval-sp4","fluval-sp6"].map((id) => equipmentCatalog.find((item) => item.id === id));
-assert.deepEqual(fluvalSpPumps.map((item) => [item?.category,item?.ratedFlowLph,item?.powerW]), [["other",7500,90],["other",13000,100]], "Fluval SP sump pompaları resmî debi ve güç değerlerini taşımalı");
+assert.deepEqual(fluvalSpPumps.map((item) => [item?.category,item?.ratedFlowLph,item?.powerW]), [["other",7500,90],["other",12300,100]], "Fluval SP sump pompaları kılavuzdaki 230–240 V debi ve güç değerlerini taşımalı (SP6 120 V debisi 13000 değil 12300)");
+assert.deepEqual(fluvalSpPumps.map((item) => item?.specifications.match(/([\d,]+) m azami basma/)?.[1]), ["3,6","3,7"], "Fluval SP pompalarının basma yüksekliği kılavuzdaki 230–240 V değeri olmalı");
+assert(fluvalSpPumps.every((item) => item?.specifications.includes(`${item.ratedFlowLph} L/saat azami debi`) && item.specifications.includes(`${item.powerW} W`)), "Fluval SP pompalarının açıklamasındaki debi ve güç sayısal alanlarla aynı olmalı");
+// Fluval U1 ve AquaClear: U serisi sayfası "U1 includes stage 1 only" der; AquaClear debileri Fluval'ın 2026 bakım kılavuzundaki LPH değerleridir.
+const fluvalU1 = equipmentCatalog.find((item) => item.id === "fluval-u1");
+assert(fluvalU1 && !/kademeli|aşamalı/.test(fluvalU1.specifications.replace("aşamasıyla", "")) && fluvalU1.specifications.startsWith("Yalnız mekanik sünger"), "Fluval U1 üç kademeli filtre olarak tanıtılmamalı");
+const fluvalAquaClear = ["fluval-ac20","fluval-ac30","fluval-ac50","fluval-ac70","fluval-ac110"].map((id) => equipmentCatalog.find((item) => item.id === id));
+assert.deepEqual(fluvalAquaClear.map((item) => item?.ratedFlowLph), [379,569,757,1135,1890], "AquaClear debileri bakım kılavuzundaki değerler olmalı");
+assert(fluvalAquaClear.every((item) => item?.specifications.includes(`${item.ratedFlowLph} L/saat`) && item.additionalSourceUrls?.some((url) => url.endsWith("Fluval_Aquarium_Care_Guide_EN.pdf"))), "AquaClear açıklaması debiyle aynı olmalı ve bakım kılavuzu ek kaynak olmalı");
 assert(fluvalSpPumps.every((item) => item?.specifications.includes("filtrasyon sağlamaz")), "Fluval SP pompaları biyolojik filtre hesabına karışmamalı");
 const fluvalProteinSkimmers = ["fluval-ps1","fluval-ps2"].map((id) => equipmentCatalog.find((item) => item.id === id));
 assert.deepEqual(fluvalProteinSkimmers.map((item) => [item?.category,item?.powerW,item?.recommendedMinL,item?.recommendedMaxL]), [["other",undefined,undefined,170],["other",8,20,80]], "Fluval PS1/PS2 yayımlanmış güç ve hacim sınırlarını taşımalı");
