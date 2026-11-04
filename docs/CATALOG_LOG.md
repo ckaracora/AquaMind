@@ -3560,7 +3560,7 @@ Güncel alt adım: JBL filtre medyası, bakteri başlangıcı, sorun giderici/pH
     - PS1'in ayarlanabilir hava akışı kılavuzunda var ("Airflow Control"); kılavuz ek kaynak oldu.
   - Düzeltme: SP4 ve SP6 sump pompaları. Hesaba girmiyorlar. Üreticinin SP serisi kılavuzunun tablosu (`https://fluvalaquatics.com/us/manuals/Fluval_14335-14337-14339_SP-Series_Pump_Manual.pdf`, PDF'nin 4. sayfası; Fransızca, İspanyolca ve Almanca tablolar aynı):
     - SP4 230–240 V: 7500 L/saat, 3,6 m, 90 W; 120 V: 6900 L/saat, 3,6 m, 88 W. Kayıttaki 3,5 m → 3,6 m.
-    - SP6 230–240 V: 12300 L/saat, 3,7 m, 100 W; 120 V: 13000 L/saat, 4 m, 135 W. Kayıt 120 V debisini (13000) 230–240 V'un gücü ve basma yüksekliğiyle karıştırmıştı; debi 12300 L/saat oldu.
+    - SP6 230–240 V: 12300 L/saat, 3,7 m, 100 W; 120 V: 13000 L/saat, 4 m, 135 W. Kayıttaki 13000 L/saat (230–240 V'un gücü ve basma yüksekliğiyle birlikte) → 12300 L/saat. Paket 2'de görüldü: bu karışık değerler ürün sayfasının tablosunda; kayıt sayfayı izliyordu (aşağıda).
     - Kılavuz iki kaydın ek kaynağı oldu. Türkiye 230 V; AC serisi gibi Avrupa değerleri kullanıldı.
   - Düzeltme: U1'in açıklaması (Codex 1. tur).
     - Kayıt "3 kademeli iç filtre" diyordu. U serisi sayfası serinin üç aşamalı olduğunu, ama "U1 includes stage 1 only" (yalnız mekanik sünger pedi) yazıyor.
@@ -3592,3 +3592,57 @@ Güncel alt adım: JBL filtre medyası, bakteri başlangıcı, sorun giderici/pH
     - Sayımlar tutuyor.
   - Terminator ve U2 adlarının korunmasını makul buldu.
 - Codex 2. tur (2026-11-04): temiz. 1. turun üç bulgusu kapandı. Bozma denemeleriyle doğrulandı: SP6 açıklamasında 13000, U1'de "3 kademeli", AC30'da 568 testleri düşürüyor. AquaClear'ın sağlık hesabına etkisi yukarıya yazıldı.
+
+## 2026-11-04 Resun, Fluval ve Haqos: arşiv kopyalarıyla doğrulama, paket 2 (Claude)
+
+- Paket 1'in devamı. Bu makinenin arşiv istekleri sık istek sınırına (429) takıldığı için sayfalar ürün sahibinin Chrome'unda açıldı (Claude in Chrome, yalnız okuma): arşivin ham kopyası (`/web/<zaman>id_/<adres>`) sayfada okundu. Resun tablo resimleri yine üreticinin görsel sunucusundan indirildi.
+- Resun (paket 1'de okunamayan 8 sayfa, 27 kayıt; kopya tarihi parantezde):
+  - Hesaba giren 15 kayıt tuttu:
+    - CY20 (134, 2026-01-13): 3 W, 200 L/saat, 60 L'ye kadar.
+    - HT10 ve HT25 (153, 2026-01-13): 10 / 25 W; kapaklı sıcaklık artışı notları (10 L'de 6 °C, 20 L'de 4 °C; 20 L'de 8 °C, 40 L'de 5 °C) tabloyla aynı.
+    - SUNLIKE25–300 (157, 2026-01-13): güç ve önerilen hacim.
+    - HCA1000–4000 (300, 2026-04-21): 220–240 V gücü 1,5 / 2,8 / 3,5 / 3,5 W; 60 / 140 / 180 × 2 / 180 × 2 L/saat. Ayarlanabilir akış yalnız HCA4000'de. "Çift katmanlı" ifadesi sayfadaki "Double-layered noise reduction design".
+  - Hesaba girmeyen 12 kaydın model adları tuttu: S3000–S10000 (117, 2026-03-14), FLOW700–2400 / KING (126, 2026-01-13), dış ortam soğutucu serisi (163, 2026-01-13, S2TL1500/2500/3500), BD06B/BD06C ve AS301 (176, 2026-02-07).
+  - Toplam: 56 sayfadaki 160 kayıt tuttu; hesaba giren 90 kaydın 81'i bunların içinde.
+  - Kalan 6 sayfanın (395–400; EFC300/550, HCB1000/4000, NLP20–200, IceCore, AST410, MagBlade; 12 kayıt, 9'u hesapta) arşivde hiç kopyası yok (arşiv dizininde `h-pd-39*` ve `h-pd-40*` boş). Ürün sahibinin tarayıcısında okunacak.
+- Fluval:
+  - Tutanlar:
+    - C2/C3/C4 (2024-12-03): 230–240 V filtre dolaşımı 400 / 480 / 900 LPH, 5 W, 115 / 190 / 265 L. 120 V değerleri 450 / 580 / 900 LPH.
+    - A101/A202/A402 (2026-06-16): 230–240 V 2,8 / 3,8 / 4 W, 90–110 / 180–220 / 330–370 LPH, 190 / 300 / 600 L, tek / çift / çift çıkış, ayarlanabilir.
+    - Aquasky 2.0 ×4 (2026-10-05): 12 / 18 / 27 / 35 W, 38–61 / 61–91 / 91–122 / 122–153 cm, IP67, "6500K white LEDs with tri-colored RGB".
+    - Plant Pro ×4 (2026-06-16): 38 / 60 / 90 / 120 W, 38–60 / 59–88 / 88–124 / 117–154 cm, 7500 K, IP67.
+    - UVC A198 (2026-06-16): 400 L, 930 LPH, 3 W, 16 mm, CCFL, "4–24 hour timer", FX serisiyle kullanılmaz. Kılavuz 06/07 serisi uyumunu ve 3 W lambayı doğruluyor.
+    - FX UVC A199: 1500 L, 2130 LPH, 6 W, 25 → 16 mm adaptör, CCFL, FX2/4/6 (2025-06-11). IP44 ek kaynak sayfasında (2024-06-14).
+    - 07 serisi: eski adreslerin kopyası yok. Ürün sayfası `/us/shop/product/207-canister-filter-20-45-us-gal-60-220-l` (2022-12-09) dört modelin tablosunu veriyor:
+      - Pompa çıkışı 550 / 780 / 1150 / 1450 LPH (filtre dolaşımı 360 / 460 / 780 / 930), 230–240 V gücü 10 / 10 / 15 / 20 W, 40–130 / 60–220 / 90–330 / 150–500 L.
+      - Paket 1'de güç doğrulanamamıştı; artık tuttu. Sayfa dört kaydın ek kaynağı oldu.
+  - Düzeltme: Plant 3.0 ×4. Kayıt "7500 K" diyordu. Sayfanın 2024-12-20 ve 2026-06-16 kopyaları dört modelde de "Color Temperature 6500K" yazıyor; sayfada 7500 geçmiyor. Açıklama "6500 K" oldu. Güç tuttu. Plant 3.0 Nano'nun 7500 K'i kendi sayfasıyla aynı.
+    - Uzunluk (Codex 1. tur): 46 W'ta sayfa "Aquarium Capacity" 91–115, "Size Range" 91–122 cm diyor. Üreticinin Plant Spectrum kılavuzu (`https://fluvalaquatics.com/manuals/14520-3_Plant_Manual_INT_Nov05_19_AB_WEB.pdf`, PDF'nin 3. sayfası) 14520–14523 için 38–61 / 61–85 / 91–122 / 122–153 cm yazıyor. Kayıt 91–115 → 91–122 cm oldu; kılavuz dört kaydın ek kaynağı.
+  - SP4/SP6 notunun düzeltmesi (paket 1):
+    - Ürün sayfasının tablosu (2025-02-09) SP4 için 7500 LPH, 3,5 m, 90 W; SP6 için 13000 LPH, 3,7 m, 100 W yazıyor ve hepsini "120 V" diye etiketliyor.
+    - Kılavuzun 120 V sütunu ise SP4 için 6900 / 3,6 / 88, SP6 için 13000 / 4 / 135.
+    - Yani iki voltajı karıştıran ürün sayfasının kendisi; kayıt sayfayı izliyordu.
+    - Değerler değişmedi: kılavuzun tutarlı 230–240 V sütunu kullanılır.
+  - Bekleyen:
+    - AquaClear AC20–AC110'un gücü: arşivdeki AC20 sayfası (2025-02-12) dört aşamayı ve ayarlanabilir akışı doğruluyor, güç yazmıyor; 2023 seri sayfası eski nesil.
+    - Yüzey süpürücüler (3): tek arşiv kopyası bot doğrulama sayfası.
+    - 4.0 nesli LED'ler (14; Aquasky 3.0 ×4, Plant 4.0 ×4, Plant 4.0 Nano, Reef 4.0 ×4, Reef 4.0 Nano): arşivde kopyası yok (yalnız 2020–2021'in eski nesil sayfaları var).
+    - Bunlar ürün sahibinin tarayıcısında okunacak.
+  - Fluval toplamı: 58 kayıt tuttu, 7'si düzeltildi (SP4, SP6, U1, Plant 3.0 ×4), 5'inde debi ve hacim tuttu ama güç doğrulanmadı (AquaClear), 17'si bekliyor.
+  - Hesaba giren 40 kaydın debisi ve hacmi doğrulandı; yalnız AquaClear'ın gücü (5 kayıt) açık.
+- Haqos (38 kayıt):
+  - Ürün açıklaması resimlerinin (`p22.qiyeku.cn`) arşivde kopyası yok (http ve https).
+  - Görsel sunucusu ürün sahibinin Chrome'unda da açılmadı.
+  - haqos.com'un sertifikası başka adrese ait. Ürün sahibinin tarayıcısında okunacak.
+- Test (`scripts/test-catalog-flow.cjs`):
+  - Plant 3.0 ve Aquasky 2.0'da 6500 K, Marine 3.0'da 25000 K; önceki nesil aydınlatmada "7500 K" yok.
+  - 07 serisinin debi, 230–240 V güç ve hacim değerleri, açıklamadaki debi ve güç ile ek kaynak sayfası denetleniyor.
+  - Plant 3.0: kılavuz ek kaynak; açıklamadaki uzunluk alanla aynı.
+- Codex 1. tur (2026-11-04, "bulgu var"):
+  - 1 P2 (a): Plant 3.0 46 W'ın uzunluk çelişkisi çözülmeden "tuttu" denmişti → kılavuzla 91–122 cm (yukarıda).
+  - 1 P3 (c): 07 serisinin açıklamasındaki güç denetlenmiyordu → eklendi.
+  - Codex ayrıca doğruladı:
+    - Yalnız 8 kayıt değişmişti.
+    - 6500 K düzeltmesi, 07 serisinin sütun seçimi ve SP notunun özü kaynakla tutarlı.
+    - Resun örneklemi (SUNLIKE, HCA, HT, 117/126 model adları) ve Fluval örneklemi (C, A, Aquasky 2.0, Plant Pro, A198/A199) aynı.
+    - Sayımlar tutuyor.
