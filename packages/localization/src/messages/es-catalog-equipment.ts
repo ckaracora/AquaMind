@@ -2297,6 +2297,7 @@ export const esCatalogEquipment: EquipmentTexts = {
   "4b2a603be326ca6d": "solo debe usarse en posición vertical y protegerse del sol y del calor",
   "5ae56bd6073e698c": "hasta {1:L} con solo dos peces pequeños o camarones",
   "5f7f58431b4dcc09": "compatible solo con la nueva carcasa roja y negra; no es compatible con la carcasa gris",
+  "6d1ab50bc970fc7d": "Filtro interno que incluye solo la etapa mecánica de espuma",
   "d4dacdfd0cf14bcb": "LED de efecto RGB + blanco con control remoto, solo para uso bajo el agua",
   "77cbf51d6da5271b": "solo favorece la circulación de nutrientes en el sustrato; no reemplaza al calentador principal termostático que calienta el agua",
   "8868d7d83da42eb2": "solo para uso en agua dulce",

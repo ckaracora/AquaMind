@@ -2297,6 +2297,7 @@ export const enCatalogEquipment: EquipmentTexts = {
   "4b2a603be326ca6d": "use only upright and protect from sun and heat",
   "5ae56bd6073e698c": "up to {1:L} with only two small fish or shrimp",
   "5f7f58431b4dcc09": "compatible only with the new red-black housing; not compatible with the gray housing",
+  "6d1ab50bc970fc7d": "Internal filter supplied with the mechanical foam stage only",
   "d4dacdfd0cf14bcb": "Remote-controlled RGB + white effect LED for underwater use only",
   "77cbf51d6da5271b": "only supports nutrient circulation in the substrate; does not replace the thermostatic main heater that heats the water",
   "8868d7d83da42eb2": "freshwater use only",
