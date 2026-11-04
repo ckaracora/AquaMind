@@ -3447,3 +3447,57 @@ Güncel alt adım: JBL filtre medyası, bakteri başlangıcı, sorun giderici/pH
 - Kullanıcıya etkisi: 186 JBL kaydının kaynak bağlantısı artık çalışan JBL sayfasını açıyor. Sağlık hesabı değişmiyor (bu kayıtların hiçbiri hesaba girmiyor). Bazı ürün adları ve açıklamaları değişti (yukarıda); altın fikstür değişmedi.
 - Kalan JBL eski adresleri: 68 kayıt (CO₂ 34, Diğer 31, değeri çekilmiş 3 WHITE filtre); ayrıca ana kaynağı açılmayan bir ürün PDF bağlantısı olan arşiv silikon hortum makarası. Yeni sayfası bulunamayan eski nesil ve arşiv ürünleri: ProFlora u001/m001/v002 nesilleri, eski Taifun ve Bio-CO₂ setleri, silikon karton makara ve plastik hortum makaraları, eski soğutucular, AUTOFOOD BLACK, Food Clip, AquaEx ve Aqua In Out setleri, Nano-Floaty, Clean A, Desinfekt, Power Clean. Ayrıca ana kaynağı açılan 22 kaydın bir ek kaynağı eski adreste. Sonraki pakette eski sayfaların internet arşivi kopyaları, 2015 kataloğu ve kılavuzlarla bakılacak.
 - Araştırma dosyaları (oturuma özel scratchpad `jbl2/`): arama sonuçları, eşleme, ürün sayfaları, kılavuzlar, SSS bölümleri, uygulama ve test betikleri.
+
+## 2026-11-03 Bitkilerin İngilizce ortak adları (Claude)
+
+- Veri aşamasının "Gerekenler" kapsamı (karar 0036). Bitki kataloğunun ana adı Latince bilimsel addır ve her dilde aynıdır; İngilizce ve İspanyolca ekranda eksik olan, bitkinin bilinen ortak adıyla bulunması ve Türkçe satış adlarının gizlenmesiydi.
+- Kaynak: Fishkeeper'ın bitki sayfaları. Katalogdaki 54 farklı Fishkeeper adresi 2026-11-03'te açıldı. Sayfa başlığı (`page-title-wrapper`) ile altındaki Latince ad karşılaştırıldı; 37 sayfanın başlığı İngilizce ortak ad, öbürlerinin başlığı Latince ad. Kayıtlara eşleme katalog TypeScript'ten yüklenerek yapıldı (dosyayı metin olarak okuyan ilk deneme, istilacı tür etiketi olan *Limnophila sessiliflora* ve *Hygrophila polysperma*'da etiketin kaynak adresini ana kaynak sanıp iki kaydı atlamıştı). Tropica'nın sayfa başlığı bilimsel ad; açıklamalarda yer yer geçen ortak adlar (ör. 'Trident' sayfasında "Java fern") kullanılmadı. Tropica'nın İspanyolca sürümü yok (dil seçenekleri EN, DE, FR, DA; `/es/` adresi 404).
+- 42 kayda `commonNameEn` yazıldı: 35 kaydın ana kaynağı kendi Fishkeeper sayfası; 7 form kaydının kendi Fishkeeper sayfası yok, `additionalSourceUrls`'deki türün sayfasının adı kullanıldı. Ad kaynaktaki yazımla ("Narrow Crinium" Fishkeeper'ın yazımı). Latince başlıklı "Chladoflora aegagropila" ortak ad sayılmadı (kayıtta "Marimo" eş adı zaten var).
+- 6 kayıtta Türkçe satış adı işaretlendi (`turkishAliases`): "Tilki kuyruğu", "Su marulu" ve parantez içinde Türkçe ad taşıyan dört Hygrophila satış adı (Zeytin, Limon, Cüce Limon, Çınar). Eş adlardan çıkarılmadı.
+- Ekranda: Türkçede değişiklik yok (ilk üç eş ad). İngilizcede İngilizce ortak ad önce gelir, Türkçe satış adları gizlenir, aynı ad bir kez yazılır. İspanyolcada Türkçe satış adları gizlenir. Arama İngilizce adı yalnız İngilizce ekranda kullanır. Türkçe dışındaki ekranda Türkçe satış adıyla bulunan bitkinin kayda önerilen adı İngilizcede İngilizce ortak ad (yoksa bilimsel ad), İspanyolcada bilimsel ad. Türkçe ekranda bu adla kaydedilmiş bitki öteki dilde kartta, listedeki aramada ve bitki uyarılarında o dilin adıyla görünür; kayıt değişmez.
+- Kayıt kayıt:
+
+| Kayıt | İngilizce ortak ad | Fishkeeper sayfası |
+|---|---|---|
+| `aponogeton-crispus` | Ruffled Sword Plant | kendi sayfası |
+| `aponogeton-madagascariensis` | Madagascar Lace Plant | kendi sayfası |
+| `bacopa-caroliniana` | Blue Hyssop | kendi sayfası |
+| `bacopa-monnieri` | Water Hyssop | kendi sayfası |
+| `bacopa-monnieri-compact` | Water Hyssop | türün sayfası (Bacopa monnieri) |
+| `barclaya-longifolia` | Orchid Lily | kendi sayfası |
+| `bolbitis-heudelotii` | African Water Fern | kendi sayfası |
+| `cabomba-aquatica` | Fanwort | kendi sayfası |
+| `cardamine-lyrata` | Japanese Cress | kendi sayfası |
+| `ceratophyllum-demersum` | Rigid Hornwort | kendi sayfası |
+| `ceratopteris-thalictroides` | Water Sprite | kendi sayfası |
+| `crinum-calamistratum` | Narrow Crinium | kendi sayfası |
+| `cryptocoryne-beckettii-petchii` | Beckett's Water Trumpet | türün sayfası (Cryptocoryne beckettii) |
+| `cryptocoryne-walkeri` | Walker's Water Trumpet | kendi sayfası |
+| `cryptocoryne-wendtii-brown` | Brown Wendt's Water Trumpet | kendi sayfası |
+| `cryptocoryne-wendtii-green` | Green Wendt's Water Trumpet | kendi sayfası |
+| `echinodorus-ozelot` | Ozelot Sword | kendi sayfası |
+| `egeria-densa` | Common Waterweed | kendi sayfası |
+| `eleocharis-vivipara` | Umbrella Hairgrass | kendi sayfası |
+| `glossostigma-elatinoides` | Small Mud-Mat | kendi sayfası |
+| `helanthium-tenellum-green` | Mudbabies | türün sayfası (Echinodorus tenellus) |
+| `hottonia-palustris` | Water Violet | kendi sayfası |
+| `hygrophila-polysperma` | Indian Swampweed | kendi sayfası |
+| `hygrophila-polysperma-rosanervig` | Indian Swampweed | türün sayfası (Hygrophila polysperma) |
+| `lilaeopsis-brasiliensis` | Micro Sword | kendi sayfası |
+| `limnophila-aromatica` | Rice Paddy Herb | kendi sayfası |
+| `limnophila-sessiliflora` | Asian Marshweed | kendi sayfası |
+| `lysimachia-nummularia` | Creeping Jenny | kendi sayfası |
+| `lysimachia-nummularia-aurea` | Golden Creeping Jenny | kendi sayfası |
+| `mayaca-fluviatilis` | Stream Bogmoss | kendi sayfası |
+| `micranthemum-umbrosum` | Shade Mudflower | kendi sayfası |
+| `microsorum-pteropus` | Java Fern | kendi sayfası |
+| `microsorum-pteropus-narrow` | Java Fern | türün sayfası (Microsorum pteropus) |
+| `microsorum-pteropus-trident` | Java Fern | türün sayfası (Microsorum pteropus) |
+| `microsorum-pteropus-windelov` | Lace Java Fern | kendi sayfası |
+| `pogostemon-stellatus` | Water Star | kendi sayfası |
+| `riccia-fluitans` | Floating Crystalwort | kendi sayfası |
+| `rotala-macrandra` | Giant Red Rotala | kendi sayfası |
+| `rotala-macrandra-japan` | Giant Red Rotala | türün sayfası (Rotala macrandra) |
+| `salvinia-natans` | Floating Fern | kendi sayfası |
+| `taxiphyllum-barbieri` | Java Moss | kendi sayfası |
+| `vallisneria-americana-var-gigantea` | Giant Vallis | kendi sayfası |

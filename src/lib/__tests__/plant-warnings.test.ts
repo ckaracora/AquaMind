@@ -157,6 +157,18 @@ describe("bitki uyarılarının metinleri", () => {
     const marked = checkAquariumPlants(labelled, tank, [pistia], [], []);
     expect(marked.warnings.map((warning) => `${warning.plantId}:${warning.code}`)).toEqual(["p-w:plantNotAquatic", "p-w:plantInvasive"]);
     expect(marked).toMatchObject({ noValues: [pistia], checked: 0 });
+    // Kayıttaki ad katalogdaki Türkçe satış adıysa (karar 0021 → "Bitki adları") öteki dilde uyarıda ve listede o dilin adı kullanılır;
+    // kayıt değişmez. Türkçede ve dil verilmediğinde kayıttaki ad.
+    const turkishNamed = { plantForRecord: (record: Plant) => (record.catalogId === "w" ? { ...profiles.marked, id: "w", warningOnly: true, aliases: ["Su marulu"], turkishAliases: ["Su marulu"] } : undefined) } as unknown as PlantCatalogModule;
+    const english = checkAquariumPlants(turkishNamed, tank, [pistia], [], [], "en");
+    expect(english.warnings.map((warning) => warning.params.name)).toEqual(["Pistia stratiotes", "Pistia stratiotes"]);
+    expect(english.noValues).toEqual([{ ...pistia, name: "Pistia stratiotes" }]);
+    expect(pistia.name).toBe("Su marulu");
+    expect(checkAquariumPlants(turkishNamed, tank, [pistia], [], [], "tr").noValues).toEqual([pistia]);
+    expect(checkAquariumPlants(turkishNamed, tank, [pistia], [], []).warnings.map((warning) => warning.params.name)).toEqual(["Su marulu", "Su marulu"]);
+    // Kullanıcının kendi yazdığı ad öteki dilde de olduğu gibi.
+    const own = { ...pistia, name: "Benim bitkim" };
+    expect(checkAquariumPlants(turkishNamed, tank, [own], [], [], "es").noValues).toEqual([own]);
   });
 
   it("sağlık analizindeki bölüm: hiçbir bitki eşleşmediyse yeşil 'uyarı yok' yerine 'hesaplanamadı' der ve adları yazar", () => {

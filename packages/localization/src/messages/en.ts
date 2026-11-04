@@ -407,7 +407,7 @@ export const en: Messages = {
     catalog: {
       searchLabel: "Search the catalog",
       searchPlaceholder: "Scientific name, sales name or synonym",
-      searchHint: "e.g. anubias nana, java fern, ceratophyllum",
+      searchHint: "e.g. anubias nana, java fern, hornwort",
       resultCount: (count: string) => `${count} ${count === "1" ? "result" : "results"} in the catalog`,
       moreResults: (count: string) => `${count} more ${count === "1" ? "result" : "results"}; narrow your search`,
       noResult: "Not found in the catalog. Search with another name or type the plant yourself.",

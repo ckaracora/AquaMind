@@ -27,14 +27,14 @@ describe("ürün kataloğu kategorileri", () => {
 });
 
 describe("arama örnekleri", () => {
-  it("bitki aramasının örnek adlarının her biri her dilde katalogda sonuç verir", async () => {
+  it("bitki aramasının örnek adlarının her biri her dilde o dilin aramasıyla katalogda sonuç verir", async () => {
     const { searchPlants } = await import("@/data/catalog-plants");
     await loadLocaleBundle("es");
     for (const locale of ["tr", "en", "es"] as const) {
       const hint = messagesFor(locale).plants.catalog.searchHint;
       const examples = hint.replace(/^[^ ]+ /, "").split(", ");
       expect(examples.length, locale).toBeGreaterThan(1);
-      for (const example of examples) expect(searchPlants(example).length, `${locale}: ${example}`).toBeGreaterThan(0);
+      for (const example of examples) expect(searchPlants(example, locale).length, `${locale}: ${example}`).toBeGreaterThan(0);
     }
   });
 });

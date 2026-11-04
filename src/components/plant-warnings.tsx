@@ -113,9 +113,10 @@ export function PlantWarningsBody({ result, failed, retry }: { result?: Aquarium
  */
 export function PlantWarningsSection({ aquarium, plants, equipment, readings }: { aquarium: Aquarium; plants: Plant[]; equipment: Equipment[]; readings: WaterParameters[] }) {
   const { messages } = usePlantWarningTexts();
+  const { locale } = useI18n();
   const hasPlants = plants.some((plant) => plant.aquariumId === aquarium.id);
   const { catalog, failed, retry } = usePlantCatalog(hasPlants);
-  const result = useMemo(() => (catalog ? checkAquariumPlants(catalog, aquarium, plants, equipment, readings) : undefined), [catalog, aquarium, plants, equipment, readings]);
+  const result = useMemo(() => (catalog ? checkAquariumPlants(catalog, aquarium, plants, equipment, readings, locale) : undefined), [catalog, aquarium, plants, equipment, readings, locale]);
   if (!hasPlants) return null;
   return (
     <section className="surface mt-5 overflow-hidden">
