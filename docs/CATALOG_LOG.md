@@ -3646,3 +3646,61 @@ Güncel alt adım: JBL filtre medyası, bakteri başlangıcı, sorun giderici/pH
     - 6500 K düzeltmesi, 07 serisinin sütun seçimi ve SP notunun özü kaynakla tutarlı.
     - Resun örneklemi (SUNLIKE, HCA, HT, 117/126 model adları) ve Fluval örneklemi (C, A, Aquasky 2.0, Plant Pro, A198/A199) aynı.
     - Sayımlar tutuyor.
+
+## 2026-11-08 Ürün sahibiyle Chrome oturumu: Cikletist, Fluval, Resun ve Haqos (Claude)
+
+- Veri aşamasının "Gerekenler" kapsamı (karar 0036). Sayfalar ürün sahibinin Chrome'unda yalnız okunarak açıldı (Claude in Chrome; tıklama, form ve giriş yok). Ürün sahibi Cikletist ve Fluval'da insan doğrulamasını (Cloudflare) kendisi geçti; Resun ve Haqos'ta tarayıcının sertifika uyarısını geçmemeyi seçti. Değer tahmin edilmedi.
+- Cikletist, 68 çözülmemiş satış adı (`src/data/catalog-species-unresolved.ts`):
+  - 67 sayfa açıldı. Başlık, kırıntı, barkod, marka ve "Ürün özellikleri" sekmesi okundu.
+  - Hiçbirinde bilimsel ad, köken, boy, su değeri, hacim, sosyal yapı ya da beslenme yok. Açıklamalar mağazanın standart metni: 52 sayfada gönderi, ödeme ve adres metni; 8 sayfada eski standart metin; 7 sayfada ürün adı dışında birebir aynı pazarlama şablonu.
+  - Bazı başlıklarda Latince cins ya da tür sözcüğü var (ör. "L-069 Peckoltia Ucayalensis", "CHANNA GOLDEN LİMBATA", "GEOPHAGUS HONGDEA"). Bunlar satış adının kendisi; mağaza metni bilimsel kimlik için tek başına kanıt değil (`docs/DATA_SOURCES.md` → "Canlı verisi için özel kaynak kuralı").
+  - Karışık Nerite sayfasındaki tek ürüne özgü satır: "stok durumuna göre benzer canlılar gönderilmektedir".
+  - "PİNTO MELEZ KARİDESLER" (`/pinto-melez-karidesler`) 404; sitenin "pinto" aramasında da çıkmıyor. Kayıt kaldırılmadı (kullanıcı kayıtları bağlı olabilir); kaynak bağlantısı artık açılmıyor.
+  - Sonuç: 68 kayıt kural gereği çözülmemiş kalır. Veri değişmedi.
+- Cikletist, ekipman (2026-11-04 Trendyol paketinin açık araması; sitenin kendi araması):
+  - "shark", "shark led": Shark marka armatür yok (yalnız Silver Shark balığı ve Sicce Shark Mini Skim yüzey emicisi).
+  - "rs-605", "rs 605": RS-605 yok.
+  - "turbo pipo", "meç turbo": Meç Turbo Pipo yok. MEC057 Pipo 5 ve Meç kutu filtre başka ürünler; sayısal değer vermiyorlar.
+  - Sonuç: 22 Shark armatürünün, RS-605'in ve Meç Turbo Pipo'nun değerleri çekili kalır. Veri değişmedi.
+- Fluval (paket 2'de bekleyen 22 kayıt; sayfaların hepsi aynı adreste açıldı, yönlendirme yok):
+  - AquaClear AC20–AC110 (hesapta 5): ürün sayfasının "Compare Models & Specs" tablosu (`/us/shop/product/aquaclear`):
+    - "Max. Flow Rate" 379 / 568 / 757 / 1136 / 1892 LPH; "Wattage (230-240 V / 50 Hz)" 5 / 5 / 5 / 5 / 14 W; hacim 18–76 / 38–114 / 76–190 / 152–265 / 227–416 L.
+    - Paket 1'de bakım kılavuzunun yuvarlamasına göre yapılan değişiklik geri alındı: AC30 569 → 568, AC70 1135 → 1136, AC110 1890 → 1892 L/saat. Ürün sayfası modelin kendi tablosu, daha özel kaynak. Bakım kılavuzu ek kaynak kalır (hacmi doğruluyor).
+    - Güç ve hacim tuttu; paket 2'de açık kalan güç doğrulandı. 120 V gücü (7 W, AC110'da 14 W) kayıtta yok.
+  - Yüzey süpürücüler (3, hesaba girmez):
+    - 05/06/07 (A240): "fits all Fluval 05/06/07 series Canister filters", "draws water from the surface of the aquarium", "contains no metal parts".
+    - AC20/30/50 (19680) ve AC70/110 (19682): uyumluluk, "slides over filter intake stem", "acts as an additional filter intake", "Self-leveling float".
+    - Kayıtlardaki "motorsuz" ve "emiş hattına bağlanan" sayfalarda yazmıyor. Açıklamalar sayfaların yazdıklarıyla yeniden yazıldı (ör. "Fluval AC ve AquaClear AC20/AC30/AC50 askı filtrelerine uyan yüzey süpürücü · filtrenin emiş borusuna geçirilerek takılır · filtrenin ek emişi olarak çalışır · kendinden seviyelenen şamandıra"). Pasif parça işareti kaldı: sayfada güç yok, cihaz filtrenin ek emişi olarak çalışıyor.
+    - AC20/30/50 kaydı 70/110'un sayfasına bağlıydı; kendi sayfasına bağlandı.
+  - 4.0 nesli LED'ler (14; Aquasky 3.0 ×4, Plant 4.0 ×4, Plant 4.0 Nano, Reef 4.0 ×4, Reef 4.0 Nano): güç, lümen, renk sıcaklığı, IP67, bant sayısı ve FluvalConnect ifadeleri tuttu; Nano dışındaki modellerin uzunluk aralıkları da tuttu. Wi-Fi/Bluetooth yalnız Aquasky 3.0 sayfasında var; kayıtlar da yalnız onda diyor.
+    - Reef 4.0 ×4: kaynak 59 W'ın tek ürün sayfasıydı. Dört modelin tablosunu veren seri sayfasına (`/us/shop/product/reef-4-0`) bağlandı; 59 W sayfası o kaydın ek kaynağı. Sayfadaki lümen (1000 / 1550 / 2250 / 2900 lm) ve 25000 K, Plant 4.0 biçiminde açıklamaya eklendi.
+    - Güç sayfalarda yalnız "Wattage (120 V / 60 Hz)" satırıyla veriliyor; aydınlatma hesaba girmez.
+    - Plant 4.0 Nano ve Reef 4.0 Nano: sayfadaki 'Size Range 11.5–20 cm' neyin ölçüsü olduğunu söylemiyor (ışık 15,25 cm kare); akvaryum uzunluğu olarak kullanılmaz, alan ve açıklama parçası kaldırıldı (Codex kontrolü). Teknik sorumlunun 2026-11-08 kararı; güç, lümen, renk sıcaklığı, IP ve diğer ifadeler korundu. Test, iki kayıtta alanın ve açıklama parçasının bulunmadığını ve açıklamanın geri kalanının (güç, lümen, renk sıcaklığı, IP67) eksiksiz olduğunu denetler.
+    - Gözlem: Plant 4.0 32 W ve Aquasky 3.0 12 W'ta LED renk adetlerinin toplamı "Total LEDs" ile tutmuyor (167 / 168, 28 / 35). Kayıtlarda LED adedi yok.
+  - Fluval toplamı: 87 kaydın hepsi üreticinin sayfası, arşiv kopyası ya da kılavuzuyla okundu. Nano'ların belirsiz iki uzunluk alanı ve açıklama parçaları kaldırılarak bulgu kapatıldı.
+- Resun (arşivde kopyası olmayan 6 sayfa, h-pd-395…400; EFC300/550, HCB1000/4000, NLP20–200, IceCore, AST410, MagBlade; 12 kayıt, 9'u hesapta):
+  - Kabul edilen altı mağazada (Cikletist dahil) arandı; bu modeller yok. Mağazalardaki Resun AIR 1000 / AIR 4000, CL-450 soğutucu ve MB/NFMB silecekleri ayrı modeller; eşlenmedi.
+  - Karar (ürün sahibi, 2026-11-08): 12 kayıt değerleriyle kalır. Aynı çekimden 160 kayıt arşiv kopyalarıyla hatasız çıktı. Veri değişmedi.
+- Haqos (48 kayıt; 38'i www.haqos.com'a bağlı, 17'si sayısal değer taşıyordu):
+  - Sitenin sertifikası başka adrese ait. Ürün açıklaması resimlerinin (`p22.qiyeku.cn`) arşivde kopyası yok (paket 2).
+  - Kabul edilen altı mağazada arandı (her mağazanın kendi araması; "haqos", "thermo" ve model kodları): ısıtıcılar, filtreler ve UV'ler yok. Betta'daki Haqos hidrometre, lambalar ve dip süpürgesi model kodsuz ya da başka model; eşlenmedi.
+  - Karar (ürün sahibi, 2026-11-08): www.haqos.com'a dayanan, hiç doğrulanamamış sayısal değerler çekilir. 15 kayıt `unverifiedEquipmentIds`'e girdi:
+    - Filtre 6: EXPRO-500, EX-500AT, EXPRO-230, EXPRO-1000, EX1000AT, EXC-500 ("2 m basma yüksekliği" de çekilir).
+    - Isıtıcı 7: Thermo-Genius 25–300 W ("20–32 °C" ayar aralığı da çekilir).
+    - UV 2: UV 9W, Mini UV 5W. Hesaba girmezler; açıklama "güç doğrulanamadı" der, kapasite notu yok.
+  - İstisna, Thermo-Sprite: karar hiç doğrulanamamış üretici değerleri içindir. Thermo-Sprite'ın 15 W'ı ve 14 × 2,5 cm ölçüsü 2026-09-06'da kabul edilen mağaza Betta'nın ürün sayfasında doğrulanmıştı ("2026-09-06 Haqos Thermo-Sprite kapasite doğrulaması"). O sayfa 2026-11-08'de 404 ve arşivde kopyası yok. Resun'daki gibi değer o tarihteki doğrulamayla kalır; kayıt değişmedi, Betta bağlantısı ek kaynak olarak durur.
+  - İstisna, HEC-600: Malawi İzmir'in ürün sayfası (`https://malawiizmir.com/haqos-hec-600-pilli-dip-supurgesi`) "Max Akış Hacmi: 520 l/h" yazıyor; Atakan'ın sayfası debi vermiyor. Debi kalır, Malawi sayfası ek kaynak oldu. Su seviyesi mağazalarda farklı: Malawi "Normal Su Seviyesi: 40 cm", "Max Su Seviyesi: 52 cm"; Atakan "Maksimum Kullanılabilir Akvaryum Yüksekliği: 40 cm". Kural gereği açıklamadaki "40–52 cm su seviyesi" çıkarıldı.
+  - Sayısal değeri olmayan 21 www.haqos.com kaydı (pompalar, aydınlatma, termometre, hidrometre, TP-L, EXPAD-500, PS-300, EASY-1000AT, Aqua Flow 250) değişmedi.
+  - Ekranda (çekmeden sonra) örnekler: "Dış filtre · debi doğrulanamadı", "Tam daldırılabilir, termostatlı cam ısıtıcı · güç doğrulanamadı", "UV sterilizatör · güç doğrulanamadı". Filtre ve ısıtıcıların kapasite notu: "Değerlerin kaynağı haqos.com; …".
+- Kod (`src/data/catalog-equipment-unverified.ts`):
+  - Açıklamadan çekilen parçalara sıcaklık aralığı ("20–32 °C") eklendi. Thermo-Genius açıklaması "Tam daldırılabilir, termostatlı cam ısıtıcı · 20–32 °C ayar aralığı · …" diye bölündü; kaynağın yazdığı aralık dosyada durur.
+  - Isıtıcıda güç hacimle birlikte çekilince açıklama "güç doğrulanamadı" der ("önerilen hacim doğrulanamadı" değil).
+  - Bütün katalog önce ve sonra karşılaştırıldı: 3.541 kaydın 28'i değişti (AquaClear 3, Reef 4.0 4, yüzey süpürücü 3, Haqos 16, Plant 4.0 Nano ve Reef 4.0 Nano). Listedeki öbür kayıtların çıktısı değişmedi.
+- Çeviri: 9 yeni parça İngilizce ve İspanyolcaya eklendi (yüzey süpürücülerin 7 parçası, "Tam daldırılabilir, termostatlı cam ısıtıcı", haqos.com kapasite notu); kullanılmayan 4 parça çıkarıldı.
+- Test (`scripts/test-catalog-flow.cjs`):
+  - AquaClear debileri ürün sayfasının değerleri.
+  - Yüzey süpürücülerde "motorsuz" ve "emiş hattına" yok; her biri kendi sayfasına bağlı.
+  - Reef 4.0'da lümen, 25000 K ve seri sayfası; eski sayfa yalnız 59 W'ın ek kaynağı.
+  - Plant 4.0 Nano ve Reef 4.0 Nano'da `recommendedTankLengthCm` ve "11,5–20" yok; güç korunur, açıklamanın geri kalanı (güç, lümen, renk sıcaklığı, IP67) birebir aynı kalır.
+  - www.haqos.com'a bağlı kayıtlardan yalnız mağazada doğrulanan HEC-600 (520 L/saat, Malawi ek kaynağı, su seviyesi yok) ve Thermo-Sprite (15 W, Betta ek kaynağı) değer taşır; değeri çekilen Haqos açıklamasında sayı kalmaz; liste sayısı 203 → 218.
+  - Bozma denemeleri testi düşürüyor: AC30 569, açıklamada "motorsuz", 20/30/50'nin eski kaynağı, Reef lümeni, listeden çıkan bir Haqos ısıtıcısı, °C kalıbının kaldırılması, HEC-600'ün ek kaynağı ve su seviyesi; Nano'larda alanın ya da "11,5–20 cm" parçasının geri gelmesi, gücün değişmesi ve lümenin silinmesi (son kapı denetimi, yalnız bellekte).

@@ -21,7 +21,7 @@ Katalogların her bilgisinin yüzde kaçının dolu olduğu ve kaynağının tü
 ## Güncel durum
 
 <!-- kapsam:başla -->
-Ölçüm tarihi: 2026-11-04
+Ölçüm tarihi: 2026-11-08
 
 ### Canlılar (443 kayıt)
 
@@ -40,10 +40,10 @@ Katalogların her bilgisinin yüzde kaçının dolu olduğu ve kaynağının tü
 | Bilgi | Dolu | Oran |
 |---|---|---|
 | Kaynak sayfası | 3541/3541 | %100 |
-| Doğrulanmamışlar listesinde değil | 3418/3541 | %96,5 |
-| Hesap değeri (filtre, ısıtıcı, hava motoru) | 1123/1255 | %89,5 |
-| Güç (W) | 1687/3541 | %47,6 |
-| Önerilen hacim | 727/3541 | %20,5 |
+| Doğrulanmamışlar listesinde değil | 3403/3541 | %96,1 |
+| Hesap değeri (filtre, ısıtıcı, hava motoru) | 1110/1255 | %88,4 |
+| Güç (W) | 1672/3541 | %47,2 |
+| Önerilen hacim | 716/3541 | %20,2 |
 | Son 92 günde doğrulanmış | 3541/3541 | %100 |
 
 ### Bakım ürünleri (1893 kayıt)
@@ -75,6 +75,7 @@ Katalogların her bilgisinin yüzde kaçının dolu olduğu ve kaynağının tü
 
 ## Geçmiş
 
+- 2026-11-08 (ürün sahibiyle Chrome oturumu: Cikletist, Fluval, Resun ve Haqos; veri aşaması): değerleri www.haqos.com'a dayanan 15 Haqos kaydı (6 filtre, 7 ısıtıcı, 2 UV) doğrulanamayanlar listesine girdi (ürün sahibi kararı); Thermo-Sprite 2026-09-06'daki Betta doğrulamasıyla değerini korudu. Doğrulanmamışlar listesinde değil %96,5 → %96,1, hesap değeri %89,5 → %88,4, güç %47,6 → %47,2, önerilen hacim %20,5 → %20,2. AquaClear'ın üç debisi ürün sayfasının değerine döndü, Reef 4.0'a lümen ve renk sıcaklığı eklendi, Plant 4.0 Nano ve Reef 4.0 Nano'nun anlamı belirsiz uzunluk aralığı kaldırıldı; bunlar oranları değiştirmedi.
 - 2026-11-04 (Trendyol'a bağlı ekipman, veri aşaması): değerleri yalnız Trendyol'da yayımlanan 23 kayıt (22 Shark armatürü, Meç Turbo Pipo) doğrulanamayanlar listesine girdi; RS-605 zaten listedeydi. Doğrulanmamışlar listesinde değil %97,2 → %96,5. Hesap değeri ve öbür oranlar değişmedi (aydınlatma ve Meç'in hava motoruyla çalışan filtresi hesaba değer vermiyordu).
 - 2026-11-04 (bitkilerin İngilizce ortak adları, veri aşaması): bitkilere "İngilizce ortak ad (Fishkeeper)" satırı eklendi, 42/141 (%29,8). Değerler ve öbür oranlar değişmedi; ölçüm tarihi yeni satır için 2026-11-04.
 - 2026-10-31 (JBL kaynak bağlantısı paketi 2): hesaba girmeyen 186 JBL kaydı yeni ürün sayfalarına bağlandı. Bu kayıtların 17'si Codex denetiminde 2026-10-31'de yeniden okunduğu için ölçüm tarihi 2026-10-31; oranlar değişmedi.

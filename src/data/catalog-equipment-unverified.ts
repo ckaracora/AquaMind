@@ -36,8 +36,16 @@ export const unverifiedEquipmentIds: readonly string[] = [
   "ejet-905f", "ejet-907f", "ejet-bp3",
   // Eurostar (6)
   "eurostar-ege-2200f", "eurostar-ege-400", "eurostar-ege-500", "eurostar-ege-w550", "eurostar-marmara-double", "eurostar-marmara-single",
-  // Haqos (5)
+  // Haqos (20). İlk 5'in değerleri yabancı ya da kabul edilmemiş mağaza sayfalarında yayımlanmıştı. Kalan 15 (ürün sahibi kararı 2026-11-08):
+  // değerlerin kaynağı www.haqos.com; sitenin sertifikası başka adrese ait (ürün sahibi uyarıyı geçmemeyi seçti), ürün açıklaması resimlerinin
+  // internet arşivinde kopyası yok ve kabul edilen altı mağazada (Çikletist dahil) bu modeller bulunamadı. Karar hiç doğrulanamamış üretici
+  // değerleri içindir. Listede olmayanlar: HEC-600 (debisini Malawi İzmir'in ürün sayfası yazıyor) ve Thermo-Sprite (15 W ve 14 × 2,5 cm
+  // 2026-09-06'da kabul edilen mağaza Betta'nın ürün sayfasında doğrulandı; sayfa 2026-11-08'de 404 ve arşivde yok, değer o tarihteki
+  // doğrulamayla kalır).
   "haqos-ex-1200at", "haqos-ex-1500at", "haqos-exp-500", "haqos-hf-900", "haqos-jular-230",
+  "haqos-expro-500", "haqos-ex500at", "haqos-expro-230", "haqos-expro-1000", "haqos-ex1000at", "haqos-exc-500",
+  "haqos-heater-25", "haqos-heater-50", "haqos-heater-75", "haqos-heater-100", "haqos-heater-150", "haqos-heater-200",
+  "haqos-heater-300", "haqos-uv-9w", "haqos-mini-uv-5w",
   // Netlea (14)
   "netlea-2fl-complete", "netlea-aquatic-time-no1-canister", "netlea-no1-dc-canister", "netlea-no1-sf", "netlea-no2-dc-canister", "netlea-no2-sf",
   "netlea-no2b-air-pump", "netlea-no2s-hang-on", "netlea-no2v-dc-canister", "netlea-no3-sf", "netlea-no3b-air-pump", "netlea-no4-sf",
@@ -181,7 +189,7 @@ export const shopVerifiedEquipment: Readonly<Record<string, ShopVerification>> =
 
 // Açıklamadaki değer parçaları: "600 L/saat", "2 × 3,5 L/dakika", "15 W", "3,5–28 W", "20–40 litre", "50 litreye kadar", "10–120 L",
 // "9 L filtre malzemesi", "25–60 cm akvaryum", "20 kPa", "0,020 MPa", "3550 mAh / 17,75 Wh", "1,2 m azami basma yüksekliği",
-// "220–240 V", "50–60 Hz", "1320 lm" ve yazıyla yazılmış miktar ("üç litre filtre hacimli"). Açıklama " · " ile ayrılmış parçalardan oluşur;
+// "220–240 V", "50–60 Hz", "1320 lm", "20–32 °C" ve yazıyla yazılmış miktar ("üç litre filtre hacimli"). Açıklama " · " ile ayrılmış parçalardan oluşur;
 // değer taşıyan parça çıkarılır. Ürün kodu, barkod ve "üç aşamalı", "dört çıkış" gibi özellikler kalır.
 const range = String.raw`\d[\d.,]*\s*(?:[–-]\s*\d[\d.,]*\s*)?`;
 const flowPart = /\d[\d.,]*\s*(?:×\s*\d[\d.,]*\s*)?L\s*\/\s*(?:saat|dakika|h|min)\b/i;
@@ -194,6 +202,7 @@ const otherValueParts = [
   new RegExp(`${range}(?:mAh|Wh)\\b`),
   new RegExp(`${range}(?:V|Hz)\\b`),
   new RegExp(`${range}lm\\b`),
+  new RegExp(`${range}°C`),
   writtenAmount,
 ];
 // Açıklama değerin yayımlanmadığını ya da doğrulanamadığını zaten söylüyorsa ayrıca eklenmez.
@@ -210,9 +219,10 @@ const hostOf = (url?: string) => {
 // Açıklamaya eklenen ifade çekilen değere göre seçilir: debi çekildiyse debi, yalnız hacim önerisi çekildiyse hacim, yalnız güç
 // çekildiyse güç (ör. üreticinin gücü yazmadığı ısıtıcı). Bunlardan biri değilse ama bir değer ya da açıklamadan değer taşıyan bir parça
 // çekildiyse (ör. aydınlatmanın lümeni ve akvaryum uzunluğu, filtrenin gövde ölçüsü) "değerler doğrulanamadı". Açıklama değerin neden
-// olmadığını zaten söylüyorsa eklenmez.
+// olmadığını zaten söylüyorsa eklenmez. Isıtıcıda güç hacimden önce gelir: ana değeri güçtür (ör. Haqos Thermo-Genius'ta ikisi birlikte çekilir).
 const missingText = (item: EquipmentProfile, withdrawn: readonly ValueField[]) =>
   withdrawn.includes("ratedFlowLph") ? (item.category === "air_pump" ? "hava debisi doğrulanamadı" : "debi doğrulanamadı")
+    : item.category === "heater" && withdrawn.includes("powerW") ? "güç doğrulanamadı"
     : withdrawn.includes("recommendedMinL") || withdrawn.includes("recommendedMaxL") ? "önerilen hacim doğrulanamadı"
       : withdrawn.includes("powerW") ? "güç doğrulanamadı"
         : undefined;
