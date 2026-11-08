@@ -344,15 +344,18 @@ const fluvalCurrentLighting: EquipmentProfile[] = [
     specifications:`FluvalConnect uygulamalı altı bantlı bitki LED'i · ${powerW} W · ${lumens} lm · 7500 K · IP67 · ${minLength}–${maxLength} cm`,
     powerW,recommendedTankLengthCm:[minLength,maxLength] as [number,number],sourceUrl:"https://fluvalaquatics.com/us/shop/product/plant-4-0",verifiedAt:"2026-09-28",
   })),
+  // Reef 4.0: seri sayfasının "Compare Models & Specs" tablosu (2026-11-08) dört modelin gücünü, uzunluğunu, lümenini ve renk sıcaklığını
+  // veriyor. Önceki kaynak yalnız 59 W'ın tek ürün sayfasıydı; 59 W kaydında ek kaynak olarak kalır.
   ...([
-    ["22w",22,38,63],
-    ["32w",32,59,89],
-    ["46w",46,88,126],
-    ["59w",59,117,155],
-  ] as const).map(([id,powerW,minLength,maxLength])=>({
+    ["22w",22,38,63,1000],
+    ["32w",32,59,89,1550],
+    ["46w",46,88,126,2250],
+    ["59w",59,117,155,2900],
+  ] as const).map(([id,powerW,minLength,maxLength,lumens])=>({
     id:`fluval-reef-4-${id}`,category:"lighting" as const,brand:"Fluval",model:`Reef 4.0 LED ${powerW} W`,
-    specifications:`FluvalConnect uygulamalı yedi bantlı resif LED'i · ${powerW} W · IP67 · ${minLength}–${maxLength} cm`,
-    powerW,recommendedTankLengthCm:[minLength,maxLength] as [number,number],sourceUrl:"https://fluvalaquatics.com/us/shop/product/reef-4-0-led-59w-46-25-61-117-155-cm",verifiedAt:"2026-09-28",
+    specifications:`FluvalConnect uygulamalı yedi bantlı resif LED'i · ${powerW} W · ${lumens} lm · 25000 K · IP67 · ${minLength}–${maxLength} cm`,
+    powerW,recommendedTankLengthCm:[minLength,maxLength] as [number,number],sourceUrl:"https://fluvalaquatics.com/us/shop/product/reef-4-0",
+    ...(id==="59w"?{additionalSourceUrls:["https://fluvalaquatics.com/us/shop/product/reef-4-0-led-59w-46-25-61-117-155-cm"]}:{}),verifiedAt:"2026-09-28",
   })),
   ...([
     [60,38,38,60],
@@ -364,8 +367,8 @@ const fluvalCurrentLighting: EquipmentProfile[] = [
     specifications:`FluvalConnect uygulamalı yüksek güçlü bitki LED'i · ${powerW} W · 7500 K · IP67 · ${minLength}–${maxLength} cm`,
     powerW,recommendedTankLengthCm:[minLength,maxLength] as [number,number],sourceUrl:"https://fluvalaquatics.com/us/shop/product/plant-pro",verifiedAt:"2026-09-28",
   })),
-  {id:"fluval-plant-4-nano-20w",category:"lighting",brand:"Fluval",model:"Plant 4.0 LED Nano 20 W",specifications:"FluvalConnect uygulamalı altı bantlı nano bitki LED'i · 20 W · 1300 lm · 7500 K · IP67 · 11,5–20 cm",powerW:20,recommendedTankLengthCm:[11.5,20],sourceUrl:"https://fluvalaquatics.com/us/shop/product/plant-4-0-nano",verifiedAt:"2026-09-28"},
-  {id:"fluval-reef-4-nano-25w",category:"lighting",brand:"Fluval",model:"Reef 4.0 LED Nano 25 W",specifications:"FluvalConnect uygulamalı yedi bantlı nano resif LED'i · 25 W · 1200 lm · 25000 K · IP67 · 11,5–20 cm",powerW:25,recommendedTankLengthCm:[11.5,20],sourceUrl:"https://fluvalaquatics.com/us/shop/product/reef-4-0-nano",verifiedAt:"2026-09-28"},
+  {id:"fluval-plant-4-nano-20w",category:"lighting",brand:"Fluval",model:"Plant 4.0 LED Nano 20 W",specifications:"FluvalConnect uygulamalı altı bantlı nano bitki LED'i · 20 W · 1300 lm · 7500 K · IP67",powerW:20,sourceUrl:"https://fluvalaquatics.com/us/shop/product/plant-4-0-nano",verifiedAt:"2026-09-28"},
+  {id:"fluval-reef-4-nano-25w",category:"lighting",brand:"Fluval",model:"Reef 4.0 LED Nano 25 W",specifications:"FluvalConnect uygulamalı yedi bantlı nano resif LED'i · 25 W · 1200 lm · 25000 K · IP67",powerW:25,sourceUrl:"https://fluvalaquatics.com/us/shop/product/reef-4-0-nano",verifiedAt:"2026-09-28"},
 ];
 
 const fluvalPreviousGenerationLighting: EquipmentProfile[] = [

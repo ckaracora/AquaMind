@@ -49,10 +49,10 @@ const sourced = (item, field, value) => (shopVerified(item) ? shopVerified(item)
 const withdrawableFields = ["ratedFlowLph", "powerW", "recommendedMinL", "recommendedMaxL", "recommendedTankLengthCm", "integratedHeaterW", "integratedUvcW"];
 const acceptedShopHosts = ["akvaryumexpress.com", "atakanpetshop.com", "malawiizmir.com", "aquarubi.com", "bettamarketim.com.tr", "cikletistpetshop.com"];
 // Rakamla ya da yazıyla yazılmış kapasite değeri ("600 L/saat", "60 cm", "üç litre filtre hacimli").
-const numericValueText = /\d[\d.,]*\s*(?:L\/saat|L\/dakika|W\b|litre|L\b|cm\b|kPa|MPa|lm\b)/;
+const numericValueText = /\d[\d.,]*\s*(?:L\/saat|L\/dakika|W\b|litre|L\b|cm\b|kPa|MPa|lm\b|°C)/;
 const writtenValueText = /(?:^|[\s(])(?:yarım|bir|iki|üç|dört|beş|altı|yedi|sekiz|dokuz|on|yirmi|otuz|kırk|elli|altmış|yetmiş|seksen|doksan|yüz|bin)(?:\s+(?:buçuk|yüz|bin))?\s+(?:litre|watt|santimetre|metre)/iu;
-assert.equal(withdrawnEquipmentIds.size + withdrawnAirFlowIds.size + Object.keys(shopVerifiedEquipment).length, 203, "0019 listeleri 123 (86, 2026-10-30 örnek denetiminin 11 Boyu ısıtıcısı, JBL paketinin 3 WHITE kaydı ve 2026-11-04 Trendyol paketinin 23 kaydı) + 4 + 76 kayıt içermeli");
-assert.equal(new Set([...withdrawnEquipmentIds, ...withdrawnAirFlowIds, ...Object.keys(shopVerifiedEquipment)]).size, 203, "0019'daki bir kayıt yalnız bir listede bulunmalı");
+assert.equal(withdrawnEquipmentIds.size + withdrawnAirFlowIds.size + Object.keys(shopVerifiedEquipment).length, 218, "0019 listeleri 138 (86, 2026-10-30 örnek denetiminin 11 Boyu ısıtıcısı, JBL paketinin 3 WHITE kaydı, 2026-11-04 Trendyol paketinin 23 kaydı ve 2026-11-08 Haqos kararının 15 kaydı) + 4 + 76 kayıt içermeli");
+assert.equal(new Set([...withdrawnEquipmentIds, ...withdrawnAirFlowIds, ...Object.keys(shopVerifiedEquipment)]).size, 218, "0019'daki bir kayıt yalnız bir listede bulunmalı");
 assert.match("Üç litre filtre hacimli askı dış filtre", writtenValueText, "Yazıyla yazılmış kapasite yakalanmalı");
 assert.doesNotMatch("Üç aşamalı kompakt iç filtre · Dört çıkış", writtenValueText, "Yazıyla yazılmış özellik kapasite sayılmamalı");
 for (const id of [...withdrawnEquipmentIds, ...withdrawnAirFlowIds]) {
@@ -307,14 +307,25 @@ const fluvalCurrentLights = [
   ["fluval-plant-pro-90",60,59,88],
   ["fluval-plant-pro-120",90,88,124],
   ["fluval-plant-pro-150",120,117,154],
-  ["fluval-plant-4-nano-20w",20,11.5,20],
-  ["fluval-reef-4-nano-25w",25,11.5,20],
 ];
 for (const [id,powerW,minLength,maxLength] of fluvalCurrentLights) {
   const item = equipmentCatalog.find((entry) => entry.id === id);
   assert.deepEqual([item?.category,item?.powerW,item?.recommendedTankLengthCm], ["lighting",powerW,[minLength,maxLength]], `Fluval ${id} resmî güç ve uzunluk aralığını taşımalı`);
   assert(item?.sourceUrl?.startsWith("https://fluvalaquatics.com/") && item.verifiedAt === "2026-09-28", `Fluval ${id} resmî ve güncel kaynaklı olmalı`);
 }
+for (const [id,powerW,specifications] of [
+  ["fluval-plant-4-nano-20w",20,"FluvalConnect uygulamalı altı bantlı nano bitki LED'i · 20 W · 1300 lm · 7500 K · IP67"],
+  ["fluval-reef-4-nano-25w",25,"FluvalConnect uygulamalı yedi bantlı nano resif LED'i · 25 W · 1200 lm · 25000 K · IP67"],
+]) {
+  const item = equipmentCatalog.find((entry) => entry.id === id);
+  assert(item?.category === "lighting" && item.powerW === powerW && !("recommendedTankLengthCm" in item) && !item.specifications.includes("11,5–20"), `Fluval ${id} belirsiz Size Range değerini akvaryum uzunluğu olarak taşımamalı; güç korunmalı`);
+  assert.equal(item?.specifications, specifications, `Fluval ${id} açıklamasında güç, lümen, renk sıcaklığı ve IP sınıfı eksiksiz kalmalı`);
+  assert(item?.sourceUrl?.startsWith("https://fluvalaquatics.com/") && item.verifiedAt === "2026-09-28", `Fluval ${id} resmî ve güncel kaynaklı olmalı`);
+}
+// Reef 4.0: seri sayfasının tablosu (2026-11-08) lümeni ve 25000 K renk sıcaklığını veriyor; eski kaynak yalnız 59 W'ın tek ürün sayfasıydı (59 W'ın ek kaynağı).
+const fluvalReef4 = [["22w",1000],["32w",1550],["46w",2250],["59w",2900]].map(([id,lumens]) => [equipmentCatalog.find((item) => item.id === `fluval-reef-4-${id}`),lumens]);
+assert(fluvalReef4.every(([item,lumens]) => item?.specifications.includes(`· ${lumens} lm · 25000 K ·`) && item.sourceUrl === "https://fluvalaquatics.com/us/shop/product/reef-4-0"), "Fluval Reef 4.0 seri sayfasının lümen ve renk sıcaklığını taşımalı, seri sayfasına bağlı olmalı");
+assert.deepEqual(fluvalReef4.map(([item]) => item?.additionalSourceUrls), [undefined,undefined,undefined,["https://fluvalaquatics.com/us/shop/product/reef-4-0-led-59w-46-25-61-117-155-cm"]], "Fluval Reef 4.0'ın eski tek ürün sayfası yalnız 59 W'ın ek kaynağı olmalı");
 
 const fluvalPreviousGenerationLights = [
   ["fluval-aquasky-2-12w",12,[38,61]],["fluval-aquasky-2-18w",18,[61,91]],["fluval-aquasky-2-27w",27,[91,122]],["fluval-aquasky-2-35w",35,[122,153]],
@@ -335,14 +346,16 @@ const fluvalSpecialLights = fluvalSpecialLightExpectations.map(([id]) => equipme
 assert.deepEqual(fluvalSpecialLights.map((item) => [item?.category,item?.powerW]), [["lighting",15],["lighting",20],["lighting",6.5],["lighting",6.5]], "Fluval nano ve su altı aydınlatmaları resmî güçleriyle ayrı modeller olmalı");
 for (const [index,[,powerW,lumens]] of fluvalSpecialLightExpectations.entries()) assert(fluvalSpecialLights[index]?.powerW === powerW && fluvalSpecialLights[index]?.specifications.includes(lumens), "Fluval özel aydınlatmasının resmî lümen değeri korunmalı");
 
+// AquaClear / AC Series: ürün sayfasının "Compare Models & Specs" tablosu (2026-11-08 okundu) "Max. Flow Rate" 379 / 568 / 757 / 1136 / 1892 LPH,
+// "Wattage (230-240 V / 50 Hz)" 5 / 5 / 5 / 5 / 14 W yazıyor. 2026 bakım kılavuzu debiyi 569 / 1135 / 1890 diye yuvarlıyor; ürün sayfası daha özel kaynaktır.
 const fluvalAcSeries = [
   ["fluval-ac20",379,5,18,76],
-  ["fluval-ac30",569,5,38,114],
+  ["fluval-ac30",568,5,38,114],
   ["fluval-ac50",757,5,76,190],
-  ["fluval-ac70",1135,5,152,265],
-  ["fluval-ac110",1890,14,227,416],
+  ["fluval-ac70",1136,5,152,265],
+  ["fluval-ac110",1892,14,227,416],
 ].map(([id]) => equipmentCatalog.find((item) => item.id === id));
-assert.deepEqual(fluvalAcSeries.map((item) => [item?.ratedFlowLph,item?.powerW,item?.recommendedMinL,item?.recommendedMaxL]), [[379,5,18,76],[569,5,38,114],[757,5,76,190],[1135,5,152,265],[1890,14,227,416]], "Fluval AC Series resmî Avrupa güç, debi (2026 bakım kılavuzu) ve hacim değerlerini taşımalı");
+assert.deepEqual(fluvalAcSeries.map((item) => [item?.ratedFlowLph,item?.powerW,item?.recommendedMinL,item?.recommendedMaxL]), [[379,5,18,76],[568,5,38,114],[757,5,76,190],[1136,5,152,265],[1892,14,227,416]], "Fluval AC Series ürün sayfasının tablosundaki debi, 230–240 V güç ve hacim değerlerini taşımalı");
 assert(fluvalAcSeries.every((item) => item?.adjustableFlow === true && item.sourceUrl === "https://fluvalaquatics.com/us/shop/product/aquaclear" && item.verifiedAt === "2026-09-28"), "Fluval AC Series ortak güncel resmî kaynağa bağlı olmalı");
 
 const fluvalCpSeries = [
@@ -361,12 +374,16 @@ const fluvalSk400 = equipmentCatalog.find((item) => item.id === "fluval-sk400");
 assert.deepEqual([fluvalSk400?.category,fluvalSk400?.powerW,fluvalSk400?.recommendedMaxL,fluvalSk400?.auxiliaryFiltration], ["filter",3.3,400,true], "Fluval SK400 yardımcı yüzey filtrasyonu olarak resmî güç ve hacim değerlerini taşımalı");
 const fluvalPassiveSkimmers = ["fluval-surface-skimmer-05-07","fluval-ac-surface-skimmer-20-50","fluval-ac-surface-skimmer-70-110"].map((id) => equipmentCatalog.find((item) => item.id === id));
 assert(fluvalPassiveSkimmers.every((item) => item?.category === "other" && item.passiveComponent === true && item.ratedFlowLph === undefined && item.powerW === undefined), "Fluval motorsuz yüzey süpürücüleri bağımsız kapasite cihazı olmamalı");
+// Yüzey süpürücülerin sayfaları (2026-11-08) "motorsuz" ya da "emiş hattına bağlanan" demiyor; açıklama sayfanın yazdığıyla sınırlı, her biri kendi sayfasına bağlı.
+assert(fluvalPassiveSkimmers.every((item) => !/motorsuz|emiş hattına/.test(item?.specifications ?? "")), "Fluval yüzey süpürücülerinin açıklaması sayfada yazmayan 'motorsuz' ya da 'emiş hattına bağlanan' ifadesini taşımamalı");
+assert.deepEqual(fluvalPassiveSkimmers.map((item) => item?.sourceUrl), ["surface-skimmer","add-on-surface-skimmer-for-aquaclear-ac20-ac30-ac50-power-filter","add-on-surface-skimmer-for-aquaclear-ac70-ac110-power-filter"].map((slug) => `https://fluvalaquatics.com/us/shop/product/${slug}`), "Fluval yüzey süpürücüleri kendi ürün sayfalarına bağlı olmalı");
+assert(fluvalPassiveSkimmers[0]?.specifications.includes("metal parça içermez") && fluvalPassiveSkimmers.slice(1).every((item) => item?.specifications.includes("kendinden seviyelenen şamandıra")), "Fluval yüzey süpürücülerinin sayfadaki özellikleri açıklamada kalmalı");
 
 const fluvalSpPumps = ["fluval-sp4","fluval-sp6"].map((id) => equipmentCatalog.find((item) => item.id === id));
 assert.deepEqual(fluvalSpPumps.map((item) => [item?.category,item?.ratedFlowLph,item?.powerW]), [["other",7500,90],["other",12300,100]], "Fluval SP sump pompaları kılavuzdaki 230–240 V debi ve güç değerlerini taşımalı (SP6 120 V debisi 13000 değil 12300)");
 assert.deepEqual(fluvalSpPumps.map((item) => item?.specifications.match(/([\d,]+) m azami basma/)?.[1]), ["3,6","3,7"], "Fluval SP pompalarının basma yüksekliği kılavuzdaki 230–240 V değeri olmalı");
 assert(fluvalSpPumps.every((item) => item?.specifications.includes(`${item.ratedFlowLph} L/saat azami debi`) && item.specifications.includes(`${item.powerW} W`)), "Fluval SP pompalarının açıklamasındaki debi ve güç sayısal alanlarla aynı olmalı");
-// Fluval U1 ve AquaClear: U serisi sayfası "U1 includes stage 1 only" der; AquaClear debileri Fluval'ın 2026 bakım kılavuzundaki LPH değerleridir.
+// Fluval U1 ve AquaClear: U serisi sayfası "U1 includes stage 1 only" der; AquaClear debileri ürün sayfasının tablosundaki LPH değerleridir (bakım kılavuzu ek kaynak).
 const fluvalU1 = equipmentCatalog.find((item) => item.id === "fluval-u1");
 assert(fluvalU1 && !/kademeli|aşamalı/.test(fluvalU1.specifications.replace("aşamasıyla", "")) && fluvalU1.specifications.startsWith("Yalnız mekanik sünger"), "Fluval U1 üç kademeli filtre olarak tanıtılmamalı");
 // Fluval 07 serisi: ürün sayfasının karşılaştırma tablosu (207 sayfası, 2022-12 arşiv kopyası) pompa çıkışı 550/780/1150/1450 LPH ve 230–240 V gücü 10/10/15/20 W.
@@ -378,7 +395,7 @@ assert(fluval07.every((item) => item?.specifications.includes(`${item.ratedFlowL
 const fluvalPlant3 = [22,32,46,59].map((powerW) => equipmentCatalog.find((item) => item.id === `fluval-plant-3-${powerW}w`));
 assert(fluvalPlant3.every((item) => item?.additionalSourceUrls?.some((url) => url.endsWith("14520-3_Plant_Manual_INT_Nov05_19_AB_WEB.pdf")) && item.specifications.includes(`${item.recommendedTankLengthCm?.[0]}–${item.recommendedTankLengthCm?.[1]} cm`)), "Plant 3.0 kılavuzu ek kaynak olmalı, açıklamadaki uzunluk alanla aynı olmalı");
 const fluvalAquaClear = ["fluval-ac20","fluval-ac30","fluval-ac50","fluval-ac70","fluval-ac110"].map((id) => equipmentCatalog.find((item) => item.id === id));
-assert.deepEqual(fluvalAquaClear.map((item) => item?.ratedFlowLph), [379,569,757,1135,1890], "AquaClear debileri bakım kılavuzundaki değerler olmalı");
+assert.deepEqual(fluvalAquaClear.map((item) => item?.ratedFlowLph), [379,568,757,1136,1892], "AquaClear debileri ürün sayfasının tablosundaki değerler olmalı (bakım kılavuzunun yuvarlaması 569/1135/1890 değil)");
 assert(fluvalAquaClear.every((item) => item?.specifications.includes(`${item.ratedFlowLph} L/saat`) && item.additionalSourceUrls?.some((url) => url.endsWith("Fluval_Aquarium_Care_Guide_EN.pdf"))), "AquaClear açıklaması debiyle aynı olmalı ve bakım kılavuzu ek kaynak olmalı");
 assert(fluvalSpPumps.every((item) => item?.specifications.includes("filtrasyon sağlamaz")), "Fluval SP pompaları biyolojik filtre hesabına karışmamalı");
 const fluvalProteinSkimmers = ["fluval-ps1","fluval-ps2"].map((id) => equipmentCatalog.find((item) => item.id === id));
@@ -3923,9 +3940,23 @@ for (const [model, page] of [
   assert.equal(item?.ratedFlowLph, undefined, `Haqos ${model} debisi model kodundan tahmin edilmemeli`);
   assert.equal(item?.powerW, undefined, `Haqos ${model} gücü doğrulanmadan kullanılmamalı`);
 }
-for (const [model, power, page] of [["UV 9W", 9, "45495767"], ["Mini UV 5W", 5, "45495768"]]) {
+// Haqos (ürün sahibi kararı 2026-11-08): www.haqos.com'a dayanan sayısal değerler çekilir (sertifika hatası, açıklama resimleri arşivde yok,
+// kabul edilen altı mağazada yok). İstisnalar: HEC-600'ün debisini Malawi İzmir'in ürün sayfası yazıyor (su seviyesi mağazalarda farklı);
+// Thermo-Sprite'ın 15 W'ı 2026-09-06'da Betta'nın ürün sayfasında doğrulandı (sayfa 2026-11-08'de 404, değer o tarihteki doğrulamayla kalır).
+const haqosWithdrawn2026 = ["haqos-expro-500", "haqos-ex500at", "haqos-expro-230", "haqos-expro-1000", "haqos-ex1000at", "haqos-exc-500",
+  ...[25, 50, 75, 100, 150, 200, 300].map((powerW) => `haqos-heater-${powerW}`), "haqos-uv-9w", "haqos-mini-uv-5w"];
+assert(haqosWithdrawn2026.every((id) => withdrawnEquipmentIds.has(id)), "www.haqos.com'a dayanan Haqos değerleri doğrulanamayanlar listesinde olmalı");
+assert(haqosWithdrawn2026.every((id) => !/\d/.test(equipmentCatalog.find((entry) => entry.id === id)?.specifications ?? "1")), "Değeri çekilen Haqos kaydının açıklamasında sayı (güç, debi, ölçü, sıcaklık aralığı) kalmamalı");
+const haqosOfficialWithValue = haqosProfiles.filter((entry) => entry.sourceUrl.startsWith("https://www.haqos.com/") && withdrawableFields.some((field) => entry[field] !== undefined));
+assert.deepEqual(haqosOfficialWithValue.map((entry) => entry.id).sort(), ["haqos-hec-600", "haqos-thermo-sprite"], "www.haqos.com'a bağlı kayıtlardan yalnız kabul edilen mağazada doğrulanan HEC-600 ve Thermo-Sprite değer taşımalı");
+assert(!withdrawnEquipmentIds.has("haqos-thermo-sprite"), "Haqos Thermo-Sprite'ın mağazada doğrulanmış değeri çekilmemeli");
+const haqosHec600 = haqosOfficialWithValue.find((entry) => entry.id === "haqos-hec-600");
+assert.deepEqual([haqosHec600?.category, haqosHec600?.ratedFlowLph, haqosHec600?.additionalSourceUrls], ["other", 520, ["https://malawiizmir.com/haqos-hec-600-pilli-dip-supurgesi"]], "Haqos HEC-600 Malawi İzmir'in yazdığı 520 L/saat debiyi o sayfayı ek kaynak göstererek taşımalı");
+assert(haqosHec600?.specifications.includes("520 L/saat") && !/su seviyesi|cm/.test(haqosHec600.specifications), "Haqos HEC-600 açıklaması mağazaların farklı yazdığı su seviyesini taşımamalı");
+for (const [model, page] of [["UV 9W", "45495767"], ["Mini UV 5W", "45495768"]]) {
   const item = haqosProfiles.find((entry) => entry.model === model);
-  assert.deepEqual([item?.category, item?.powerW], ["uv", power], `Haqos ${model} doğru UV kategorisi ve başlıkta yayımlanan gücü taşımalı`);
+  assert.deepEqual([item?.category, item?.powerW, item?.capacityDataNote], ["uv", undefined, undefined], `Haqos ${model} UV kategorisinde kalmalı; doğrulanamayan gücü taşımamalı (hesaba girmeyen türde kapasite notu yok)`);
+  assert(item?.specifications.endsWith("güç doğrulanamadı"), `Haqos ${model} açıklaması gücün doğrulanamadığını söylemeli`);
   assert.equal(item?.sourceUrl, `https://www.haqos.com/productshow-${page}.html`, `Haqos ${model} resmî UV sayfasına bağlanmalı`);
 }
 for (const [model, page] of [
@@ -3947,7 +3978,9 @@ const haqosOverBox = haqosProfiles.find((entry) => entry.model === "OverBox 5000
 assert.deepEqual([haqosOverBox?.category, haqosOverBox?.ratedFlowLph], ["other", 5000], "Haqos OverBox 5000 başlıkta yayımlanan 5000 L/saat değerini taşımalı fakat filtre sayılmamalı");
 for (const powerW of [25, 50, 75, 100, 150, 200, 300]) {
   const item = haqosProfiles.find((entry) => entry.model === `Thermo-Genius ${powerW} W`);
-  assert.deepEqual([item?.category, item?.powerW, item?.recommendedMaxL], ["heater", powerW, powerW], `Haqos Thermo-Genius ${powerW} W doğrulanmış güç/hacim varyantını taşımalı`);
+  assert.deepEqual([item?.category, item?.powerW, item?.recommendedMaxL], ["heater", undefined, undefined], `Haqos Thermo-Genius ${powerW} W www.haqos.com'daki doğrulanamayan güç/hacim değerini taşımamalı`);
+  assert.equal(item?.specifications, "Tam daldırılabilir, termostatlı cam ısıtıcı · güç doğrulanamadı", `Haqos Thermo-Genius ${powerW} W açıklamasında doğrulanamayan sıcaklık aralığı kalmamalı`);
+  assert(item?.capacityDataNote?.startsWith("Değerlerin kaynağı haqos.com;"), `Haqos Thermo-Genius ${powerW} W kapasite notunda kaynağı söylemeli`);
   assert.equal(item?.sourceUrl, "https://www.haqos.com/productshow-45495754.html", `Haqos Thermo-Genius ${powerW} W resmî seri sayfasına bağlanmalı`);
 }
 const haqosThermoSprite = haqosProfiles.find((entry) => entry.model === "Thermo-Sprite Micro Plastic Heater");
