@@ -1297,7 +1297,7 @@ Son güncelleme: 2026-11-09
 - Codex 1. tur (2026-10-28): temiz. P1–P3 bulgu yok; dört dosyanın SHA-256 değeri anlık görüntüyle eşleşti. Codex `tsc`'yi geçirdi, dışa aktarma adını bellekte sekiz tarih/saat senaryosunda denedi, PR #50'nin kayıtlarını `gh` ile doğruladı; Vitest kendi kum havuzunda `spawn EPERM` ile başlamadı. Görüş (bulgu değil): yedek dosyası adı denetimi metin tabanlı; düğmenin ürettiği `download` değerini sınayan bir davranış testi güvenceyi artırır.
 - Birleştirme: PR #51 (`https://github.com/ckaracora/AquaMind/pull/51`) 2026-10-28 00:31 UTC'de (Türkiye saatiyle 03:31) ürün sahibinin 2026-10-19 yetkisiyle Claude tarafından `main` dalına birleştirildi (`157bb71`). PR'da `Doğrulama` (çalıştırma `40609189645`) ve Vercel önizlemesi, `main` üzerinde `Doğrulama` (çalıştırma `40609340129`) ve Vercel üretim dağıtımı (`7373924382`) başarılı (kayıt `codex/plant-selection` dalında yazıldı).
 
-## Katalog ana entegrasyonu (yerel kapanış tamamlandı, GitHub devri hazırlanıyor)
+## Katalog ana entegrasyonu (GitHub'a devredildi, 2026-11-09)
 
 - Dal: `codex/catalog-main-integration`, taban `main` (`ef729d7`, PR #55 sonrası).
 - Kapsam: 438 seçilebilir canlı, 3877 ekipman, 3105 bakım ürünü ve 141 bitki. Canlıların
@@ -1495,22 +1495,27 @@ Son güncelleme: 2026-11-09
 - Kapanış diff denetiminde kapsam dışı sıfırlama veya silme görülmedi;
   `git diff --check` içerik hatası vermedi (yalnız çalışma kopyasının üç
   dosyasındaki CRLF dönüşüm uyarısını bildirdi).
-- GitHub'a commit/push ve Vercel yayını yapılmadı. Canlı uygulama
+- Katalog entegrasyonu `3be12f4` (`feat: complete verified aquarium catalog
+  integration`) commit'iyle kaydedildi ve `codex/catalog-main-integration`
+  görev dalına gönderildi:
+  `https://github.com/ckaracora/AquaMind/tree/codex/catalog-main-integration`.
+  `main` birleştirilmedi ve Vercel yayını yapılmadı. Canlı uygulama
   `https://aqua-mind-three.vercel.app/` bu değişiklikleri içermiyor.
 - Ürün sahibi 2026-11-09'da `AquaMind'i GitHub'a devret` komutuyla mevcut görev
   dalının commit ve push edilmesine izin verdi. GitHub'ın açık Issue listesinde
   bu uzun katalog entegrasyonuna bağlı bir görev bulunmuyor; açık Issue #7
   Supabase/RLS kapsamındadır, açık #80 ise başka bir hesabın taslak PR'ıdır ve
   bu dala bağlanmadı. Devir bu nedenle mevcut `codex/catalog-main-integration`
-  dalı üzerinden, Issue ilişkilendirilmeden yapılacaktır.
+  dalı üzerinden, Issue ilişkilendirilmeden yapıldı.
 
 ## Sıradaki tek iş
 
 Katalog kapasite araştırması güvenli biçimde kapandı: 95 boşluğun tamamı
 açıklamalı ve regresyonla korunuyor. Dophin AH-1002 kararı, 1.066 vakalık altın
-fikstür, tam `pnpm verify` ve kapanış diff denetimi tamamlandı. Sonraki iş,
-kullanıcı açıkça isterse GitHub devridir. Aşağıdaki eski sıra entegrasyondan
-önceki `main` durumunun kaydıdır.
+fikstür, tam `pnpm verify`, kapanış diff denetimi ve görev dalına GitHub devri
+tamamlandı. Sonraki iş, bu dalın Pull Request üzerinden incelenmesi ve ürün
+sahibinin ayrı onayıyla `main` dalına birleştirilmesidir. Aşağıdaki eski sıra
+entegrasyondan önceki `main` durumunun kaydıdır.
 
 ### Katalog ana entegrasyonu kapanış ölçütleri
 
@@ -1524,7 +1529,7 @@ kullanıcı açıkça isterse GitHub devridir. Aşağıdaki eski sıra entegrasy
 | Sağlık analizi güvenliği | 113 sağlık senaryosu, hedefli ısıtıcı/motor/metin testleri ve açıklamalı güven sınırları; AH-1002 kararı 2026-11-09'da kabul edildi | Tamamlandı |
 | Altın davranış karşılaştırması | Onaylanan 1.066 vaka fikstüre yazıldı; önceki 123 yeni, 90 kaldırılan, 71 değişen ortak vaka sınıflandırması korundu; yeniden denetimde fark sıfır | Tamamlandı |
 | Tam doğrulama | TypeScript, katalog akışı, 113 sağlık senaryosu, hesaplayıcılar, katalog denetimi, 35 dosyada 452 test ve 159 sayfalık üretim derlemesi başarılı | Tamamlandı |
-| GitHub ve Vercel | Bu dal commit/push edilmedi; canlı site bu entegrasyonu içermiyor | Yalnız açık `AquaMind'i GitHub'a devret` izniyle |
+| GitHub ve Vercel | Görev dalı `3be12f4` ile GitHub'a gönderildi; `main` ve Vercel değişmedi, canlı site bu entegrasyonu içermiyor | Görev dalı devredildi; birleştirme/yayın ayrıca onaylanmalı |
 
 Altın fark sınıflandırması artık `pnpm audit:golden` komutuyla fikstüre yazmadan
 yeniden üretilebilir. Komut eklenen/kaldırılan/değişen vakaları, puan, genel
