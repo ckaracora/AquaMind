@@ -170,14 +170,26 @@ const metric = (analysis, key) => analysis.metrics.find(item => item.key === key
 
 {
   const analysis = analyzeAquarium(
+    aquarium({ netVolumeLiters: 20, lengthCm: 35 }),
+    [animal("betta", "Beta balığı")],
+    [device("dophin-ah-1002-10", "heater", "Dophin", "AH-1002 10 W")],
+  );
+  assert.equal(metric(analysis, "heater").score, 35, "Termostatsız AH-1002 tek başına güvenli ısıtıcı kapasitesi sayılmamalı");
+  assert.match(metric(analysis, "heater").detail, /Harici termostatlı sıcaklık kontrolü/, "AH-1002 ısıtıcı metriği harici kontrol gereksinimini açıklamalı");
+  assert(warningTitles(analysis).includes("Harici sıcaklık kontrolü gerekli"), "AH-1002 için açık harici termostat uyarısı verilmeli");
+  assert(warningTitles(analysis).includes("Ekipman kapasite bilgisi eksik"), "AH-1002 güvenli kapasite hesabına hazır gösterilmemeli");
+  assert(metric(analysis, "confidence").score < 100, "AH-1002 harici kontrol doğrulanmadan veri güvenini tamamlamamalı");
+}
+
+{
+  const analysis = analyzeAquarium(
     aquarium({ netVolumeLiters: 100, lengthCm: 80 }),
     [animal("neon-tetra", "Neon tetra", 8)],
     [device("jeneca-gd-320", "filter", "Jeneca", "GD-320")],
   );
-  assert(warningTitles(analysis).includes("Ekipman kapasite bilgisi eksik"));
-  assert(analysis.warnings.some((warning) => warning.message.includes("Jeneca GD-320")), "Eksik kapasite uyarısı kullanıcıya sorunlu marka ve modeli söylemeli");
-  assert(analysis.warnings.some((warning) => warning.message.includes("Jeneca/ALEAS üretici kataloğu")), "Tek eksik ekipman uyarısı katalogdaki doğrulama nedenini göstermeli");
-  assert(metric(analysis, "confidence").score < 100, "Debisi bilinmeyen filtre tam güven vermemeli");
+  assert(warningTitles(analysis).includes("Ekipman kapasite bilgisi eksik"), "GD-320 üretici kaynağıyla doğrulanmayan debiyi kullanmamalı");
+  assert.notEqual(metric(analysis, "filter").detail, "Etiket debisiyle 2,5 çevrim/saat", "GD-320 pazar yeri görselindeki 250 L/saat değerini sağlık hesabına taşımamalı");
+  assert(metric(analysis, "confidence").score < 100, "GD-320 teknik verisi doğrulanmadan ekipman güveni tam olmamalı");
 }
 
 {
@@ -186,10 +198,9 @@ const metric = (analysis, key) => analysis.metrics.find(item => item.key === key
     [animal("neon-tetra", "Neon tetra", 8)],
     [device("jeneca-gd-403", "filter", "Jeneca", "GD-403")],
   );
-  const warning = analysis.warnings.find((item) => item.title === "Ekipman kapasite bilgisi eksik");
-  assert(warning?.message.includes("500 L/saat ve 8 W"), "Çelişkili ekipman uyarısı resmî kaynaktaki değeri açıklamalı");
-  assert(warning?.message.includes("800 L/saat ve 10 W"), "Çelişkili ekipman uyarısı ikincil kaynaktaki farklı değeri açıklamalı");
-  assert(warning?.message.includes("Çelişki çözülene kadar"), "Çelişkili ekipman uyarısı neden hesap dışı kaldığını açıklamalı");
+  assert(warningTitles(analysis).includes("Ekipman kapasite bilgisi eksik"), "GD-403 çelişkili satıcı debileriyle güvenli kapasite hesabı yapmamalı");
+  assert.notEqual(metric(analysis, "filter").detail, "Etiket debisiyle 5,0 çevrim/saat", "GD-403 satıcı görselindeki 500 L/saat değerini sağlık hesabına taşımamalı");
+  assert(metric(analysis, "confidence").score < 100, "GD-403 kaynak çelişkisi çözülmeden ekipman güveni tam olmamalı");
 }
 
 {
@@ -1362,12 +1373,34 @@ const metric = (analysis, key) => analysis.metrics.find(item => item.key === key
 {
   const analysis = analyzeAquarium(
     aquarium({ netVolumeLiters: 100, lengthCm: 80 }),
-    [animal("rummy-nose", "Kırmızı burun tetra", 8)],
+    [animal("rummy-nose", "Bleher kırmızı burun tetra", 8)],
     [],
   );
-  assert(warningTitles(analysis).includes("Kırmızı burun tetra: alan sınırda"), "Kırmızı burun tetra 120 litre/90 cm altındaki akvaryuma önerilmemeli");
-  assert(warningTitles(analysis).includes("Kırmızı burun tetra: grup sayısı düşük"), "Kırmızı burun tetra onlu sürünün altında sosyal uyarı üretmeli");
-  assert(warningTitles(analysis).includes("Kırmızı burun tetra: özel bakım gereksinimi"), "Kırmızı burun tetra olgun tank, kimlik ve haftalık bakım güvenliğini göstermeli");
+  assert(warningTitles(analysis).includes("Bleher kırmızı burun tetra: alan sınırda"), "Bleher kırmızı burun tetra 120 litre/90 cm altındaki akvaryuma önerilmemeli");
+  assert(warningTitles(analysis).includes("Bleher kırmızı burun tetra: grup sayısı düşük"), "Bleher kırmızı burun tetra onlu sürünün altında sosyal uyarı üretmeli");
+  assert(warningTitles(analysis).includes("Bleher kırmızı burun tetra: özel bakım gereksinimi"), "Bleher kırmızı burun tetra olgun tank, kimlik ve haftalık bakım güvenliğini göstermeli");
+}
+
+{
+  const analysis = analyzeAquarium(
+    aquarium({ netVolumeLiters: 100, lengthCm: 90 }),
+    [animal("true-rummy-nose", "Gerçek kırmızı burun tetra", 8)],
+    [],
+  );
+  assert(warningTitles(analysis).includes("Gerçek kırmızı burun tetra: alan sınırda"), "Gerçek kırmızı burun tetra 120 litre/100 cm altındaki akvaryuma önerilmemeli");
+  assert(warningTitles(analysis).includes("Gerçek kırmızı burun tetra: grup sayısı düşük"), "Gerçek kırmızı burun tetra onlu sürünün altında sosyal uyarı üretmeli");
+  assert(warningTitles(analysis).includes("Gerçek kırmızı burun tetra: özel bakım gereksinimi"), "Gerçek kırmızı burun tetra olgun tank, kimlik ve kapak güvenliğini göstermeli");
+}
+
+{
+  const analysis = analyzeAquarium(
+    aquarium({ netVolumeLiters: 100, lengthCm: 80 }),
+    [animal("false-rummy-nose", "Sahte kırmızı burun tetra", 8)],
+    [],
+  );
+  assert(warningTitles(analysis).includes("Sahte kırmızı burun tetra: alan sınırda"), "Sahte kırmızı burun tetra 120 litre/90 cm altındaki akvaryuma önerilmemeli");
+  assert(warningTitles(analysis).includes("Sahte kırmızı burun tetra: grup sayısı düşük"), "Sahte kırmızı burun tetra onlu sürünün altında sosyal uyarı üretmeli");
+  assert(warningTitles(analysis).includes("Sahte kırmızı burun tetra: özel bakım gereksinimi"), "Sahte kırmızı burun tetra kimlik, olgun tank ve yem güvenliğini göstermeli");
 }
 
 {

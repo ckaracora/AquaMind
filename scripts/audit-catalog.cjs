@@ -31,6 +31,12 @@ require.extensions[".ts"] = (module, filename) => {
 
 const { catalogBrandCoverage } = require(path.join(projectRoot, "src/data/catalog-coverage.ts"));
 const { equipmentCatalog, speciesCatalog, speciesGroup } = require(path.join(projectRoot, "src/data/catalog.ts"));
+const { careProductCatalog } = require(path.join(projectRoot, "src/data/care-product-catalog.ts"));
+
+const verifiedDatePattern = /^\d{4}-\d{2}-\d{2}$/;
+const hasValidSourceTrace = (item) => /^https:\/\//.test(item.sourceUrl ?? "")
+  && verifiedDatePattern.test(item.verifiedAt ?? "")
+  && !item.additionalSourceUrls?.some((url) => !/^https:\/\//.test(url));
 
 const normalized = (value) => value
   .normalize("NFKD")
@@ -87,6 +93,15 @@ if (unexplainedCapacityRows.length) throw new Error(`Açıklanmamış kapasite b
 const emptyBrands = rows.filter((row) => row.ekipman + row.urun === 0);
 if (emptyBrands.length) {
   throw new Error(`Boş katalog markaları: ${emptyBrands.map((row) => row.marka).join(", ")}`);
+}
+
+const invalidEquipmentSourceTrace = equipmentCatalog.filter((item) => !hasValidSourceTrace(item));
+const invalidCareProductSourceTrace = careProductCatalog.filter((item) => !hasValidSourceTrace(item));
+if (invalidEquipmentSourceTrace.length) {
+  throw new Error(`Eksik veya geçersiz ekipman kaynak izi: ${invalidEquipmentSourceTrace.map((item) => item.id).join(", ")}`);
+}
+if (invalidCareProductSourceTrace.length) {
+  throw new Error(`Eksik veya geçersiz bakım ürünü kaynak izi: ${invalidCareProductSourceTrace.map((item) => item.id).join(", ")}`);
 }
 
 const speciesRows = [...new Set(speciesCatalog.map(speciesGroup))]

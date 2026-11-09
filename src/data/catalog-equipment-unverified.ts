@@ -9,18 +9,24 @@ import type { EquipmentProfile } from "./catalog-equipment";
 
 /** Bütün sayısal değerleri hesaptan çekilen kayıtlar: kabul edilen 5 yerel mağazada bulunamadı ya da mağaza değer vermiyor (marka sırasıyla). */
 export const unverifiedEquipmentIds: readonly string[] = [
-  // Aquawing (19; AQ-A1000/2000/3000 zaten hesap dışı, güçleri 2026-09-25 denetiminde Türkiye kaynağıyla doğrulandı)
+  // Aquawing (7; AQ-A1000/2000/3000 zaten hesap dışı, güçleri 2026-09-25 denetiminde Türkiye kaynağıyla doğrulandı).
+  // AQ-WP serisinin 12 kaydı 2026-11-03'te Aquawing'in sahibi Bursa Pet'in bölgesel temsilcisi Eksen Pet'in marka
+  // kataloğunda model kodu, barkod, güç ve debiyle yeniden doğrulandı; bu nedenle artık aşağıdaki hesap dışı listede değildir.
   "aquawing-aq101f", "aquawing-aq101fb", "aquawing-aq102f", "aquawing-aq160", "aquawing-aq600f", "aquawing-aq607f", "aquawing-aq80f",
-  "aquawing-wp1000fa", "aquawing-wp1000fb", "aquawing-wp2300a", "aquawing-wp3300a", "aquawing-wp3300b", "aquawing-wp3300c", "aquawing-wp750fa",
-  "aquawing-wp750fb", "aquawing-wp850fa", "aquawing-wp850fb", "aquawing-wp950fa", "aquawing-wp950fb",
-  // Ejet (3; 905F için Malawi İzmir 1000 L/saat yazıyor ama 2026-08-27 Ejet denetimi bu değeri eldeki 470 L/saat kaydıyla çelişkili
-  // bulup kullanmamıştı ve mağaza sayfası güç vermiyor. Değerin hangisinin doğru olduğu kurala uyan bir kaynaktan çözülemediği için
-  // ikisi de kullanılmadı.)
+  // Ejet (3; 3 Kasım 2026 yeniden denetimi): 905F için Malawi İzmir 1000 L/saat yazıyor ama 2026-08-27 Ejet denetimindeki
+  // 470 L/saat kaydıyla çelişiyor; 907F için kurala uyan tam model teknik sayfası bulunamadı. Atakan marka sayfası BP3'ün pilli
+  // yedek hava motoru kimliğini doğruluyor ancak debi vermiyor. Qimei'nin resmî Ejet tablosu yalnız E-JET 168/268'i kapsıyor;
+  // bu değerler BP3'e aktarılmadı. Üç kayıt da kullanıcıya görünür, otomatik kapasite hesabının dışındadır.)
   "ejet-905f", "ejet-907f", "ejet-bp3",
-  // Eurostar (6)
+  // Eurostar (6; 2026-11-05 yeniden denetiminde kabul edilen mağazalarda Ege 400/500/W550/2200F'nin tam model
+  // teknik sayfası bulunmadı. BettaMarketim'deki Marmara AP800 2L ayrı bir ürün olduğundan genel Marmara Tek/Çift
+  // kayıtlarına aktarılmadı; eski zayıf mağaza ve fiyat karşılaştırma değerleri otomatik hesaba alınmaz.)
   "eurostar-ege-2200f", "eurostar-ege-400", "eurostar-ege-500", "eurostar-ege-w550", "eurostar-marmara-double", "eurostar-marmara-single",
-  // Haqos (5)
+  // Haqos (5; 2026-11-05 üretici ürün dizini ve site haritasında bu eski modeller yok. Kabul edilen yerel mağazalarda
+  // tam model teknik sayfası bulunmadı; EXP-500/EXPRO-500 adları ve yabancı mağazalardaki çelişkili sayılar eşleştirilmedi.)
   "haqos-ex-1200at", "haqos-ex-1500at", "haqos-exp-500", "haqos-hf-900", "haqos-jular-230",
+  // Jeneca (3; geri kazanılan görsel/satıcı değerleri üretici kaynağıyla doğrulanamadı ve GD-403/GD-503 için güncel satıcılar çelişiyor)
+  "jeneca-gd-320", "jeneca-gd-403", "jeneca-gd-503",
   // Netlea (14)
   "netlea-2fl-complete", "netlea-aquatic-time-no1-canister", "netlea-no1-dc-canister", "netlea-no1-sf", "netlea-no2-dc-canister", "netlea-no2-sf",
   "netlea-no2b-air-pump", "netlea-no2s-hang-on", "netlea-no2v-dc-canister", "netlea-no3-sf", "netlea-no3b-air-pump", "netlea-no4-sf",
@@ -32,22 +38,23 @@ export const unverifiedEquipmentIds: readonly string[] = [
   "regent-5500", "regent-calm-rc-006",
   // Resun (2)
   "resun-lp300", "resun-sf-400",
-  // RS Electrical (7)
+  // RS Electrical (7; 2026-11-05 kabul edilen mağazaların güncel RS portföyünde başka modeller var, ancak bu yedi
+  // eski modelin tam teknik sayfası yok. Yabancı mağaza değerleri karar 0019 gereği otomatik hesapta kullanılmaz.)
   "rs-118f", "rs-rs-04b", "rs-rs602", "rs-rs604", "rs-rs605", "rs-rs760", "rs-rs800",
-  // Sobo (5; Türkiye distribütörünün sitesine, sobo.com.tr'ye dayanan Sobo kayıtları listede değil. Mağazalardaki WP-190F-UV5 ve
-  // WP-290F-UV7 UV lambalı türler olduğu için bu kayıtlarla eşleştirilmedi; WP-390F sayfası kendi içinde çelişkili.)
-  "sobo-sb-848", "sobo-wp-4001", "sobo-wp190f", "sobo-wp290f", "sobo-wp390f",
-  // SunSun (2; Malawi İzmir sayfaları teknik değer vermiyor, Atakan Petshop'taki 503B ayrı tür)
-  "sunsun-502", "sunsun-503",
-  // Xinyou (11; hava motoruyla çalışan sünger filtre, önerilen hacimleri çekiliyor)
-  "xinyou-xy-168", "xinyou-xy-180", "xinyou-xy-280", "xinyou-xy-2810", "xinyou-xy-2811", "xinyou-xy-2812", "xinyou-xy-2813", "xinyou-xy-2836",
-  "xinyou-xy-2901", "xinyou-xy-2902", "xinyou-xy-380",
+  // Sobo (3; SB-848 ve WP-4001 Türkiye yetkili distribütörünün tam model sayfalarıyla 2026-11-02'de geri kazanıldı.
+  // Mağazalardaki WP-190F-UV5 ve WP-290F-UV7 UV lambalı türler olduğu için bu kayıtlarla eşleştirilmedi;
+  // WP-390F sayfası kendi içinde çelişkili.)
+  "sobo-wp190f", "sobo-wp290f", "sobo-wp390f",
+  // Xinyou (4): üreticinin resmî sayfaları 168/180/280/2810/2811/2812/2813/2870/2880/380 için kesin hacim
+  // yayımladığı için bu on kayıt aşağıdaki doğrulama tablosuyla geri alındı. XY-2836 ve XY-2902'nin üretici sayfası kendi
+  // içinde çelişiyor; XY-2906/2907'nin debi ve gücü üretici kaynağında yayımlanmıyor.
+  "xinyou-xy-2836", "xinyou-xy-2902", "xinyou-xy-2906", "xinyou-xy-2907",
 ];
 
 /** Yalnız hava debisi çekilen kayıtlar: kabul edilen yerel mağazaların ürün sayfaları gücü yayımlıyor, hava debisini yayımlamıyor.
  * Atakan Petshop'un marka sayfasındaki "6500 cc/dk hava akışı" gibi ifadeler ürün sayfası değil ve sayılar model adlarıyla aynı;
  * Akvaryum Express 9500 için birimsiz "900-1600 litre" yazıyor. */
-export const unverifiedAirFlowIds: readonly string[] = ["regent-6500", "regent-7500", "regent-8500", "regent-9500"];
+export const unverifiedAirFlowIds: readonly string[] = ["aquawing-aqa3000", "regent-6500", "regent-7500", "regent-8500", "regent-9500"];
 
 const valueFields = ["ratedFlowLph", "powerW", "recommendedMinL", "recommendedMaxL", "recommendedTankLengthCm", "integratedHeaterW", "integratedUvcW"] as const;
 type ValueField = (typeof valueFields)[number];
@@ -56,8 +63,10 @@ type ValueField = (typeof valueFields)[number];
 export const shopVerifiedAt = "2026-10-17";
 
 export interface ShopVerification {
-  /** Değerleri yayımlayan kabul edilen yerel mağaza sayfası; kaydın kaynak bağlantısı buna geçer. */
+  /** Değerleri yayımlayan kabul edilen kaynak; kaydın kaynak bağlantısı buna geçer. */
   sourceUrl: string;
+  /** Kaynak mağaza denetiminden daha sonra okunduysa gerçek doğrulama günü. */
+  verifiedAt?: string;
   /** Mağazada doğrulanan değerler. Burada olmayan değer hesaptan çekilir. */
   values: Partial<Pick<EquipmentProfile, ValueField>>;
   /** Mağaza sayfasına dayanan açıklama. */
@@ -122,8 +131,7 @@ export const shopVerifiedEquipment: Readonly<Record<string, ShopVerification>> =
   "eurostar-ege-sp200": { sourceUrl: "https://bettamarketim.com.tr/eurostar-ege-sp200-ic-filtre-200-lt-h-2w", values: { ratedFlowLph: 200, powerW: 2 }, specifications: "Kompakt iç filtre · 200 L/saat · 2 W" },
   "eurostar-ege-sp300": { sourceUrl: "https://bettamarketim.com.tr/eurostar-ege-sp300-ic-filtre", values: { ratedFlowLph: 300, powerW: 2 }, specifications: "Ayarlanabilir çıkışlı kompakt iç filtre · 300 L/saat · 2 W · önerilen hacim doğrulanamadı" },
   // Resun (3)
-  "resun-lp20": { sourceUrl: "https://atakanpetshop.com/resun-lp-20-dusuk-sesli-hava-pompasi", values: { powerW: 17 }, specifications: "Düşük sesli üretim tipi hava motoru · 17 W · hava debisi mağazalarda farklı (28 L/dakika / 1500 L/saat)", note: "Kabul edilen yerel mağazalar hava debisini farklı yayımlıyor (28 L/dakika, yani 1680 L/saat; 1500 L/saat). Debi otomatik hesapta kullanılmaz." },
-  "resun-lp200": { sourceUrl: "https://atakanpetshop.com/resun-lp-200-hava-kompresoru", values: { ratedFlowLph: 15000, powerW: 200 }, specifications: "Düşük sesli üretim tipi hava motoru · 250 L/dakika (15.000 L/saat) · 200 W" },
+  "resun-lp20": { sourceUrl: "https://www.resun-china.com/en/h-pd-147.html", verifiedAt: "2026-11-03", values: { ratedFlowLph: 1500, powerW: 17 }, specifications: "Düşük sesli üretim tipi hava motoru · 1500 L/saat · 17 W · 0,028 MPa · 6 çıkış · azami hava taşı derinliği 2,2 m" },
   "resun-lp40": { sourceUrl: "https://malawiizmir.com/resun-lp-40-akvaryum-hava-kompresor", values: { ratedFlowLph: 3000, powerW: 35 }, specifications: "Düşük sesli üretim tipi hava motoru · 3000 L/saat (50 L/dakika) · 35 W" },
   // RS Electrical (6)
   "rs-062a": { sourceUrl: "https://bettamarketim.com.tr/ic-filitre-300l-h-rs-062a", values: { ratedFlowLph: 300, powerW: 2 }, specifications: "İç filtre · 300 L/saat · 2 W" },
@@ -135,7 +143,6 @@ export const shopVerifiedEquipment: Readonly<Record<string, ShopVerification>> =
   // Sobo (7)
   "sobo-aq-500f": { sourceUrl: "https://atakanpetshop.com/sobo-aq-500f-ic-filtre-yeni-nesil-6w-500l-s", values: { ratedFlowLph: 500, powerW: 6 }, specifications: "Kompakt iç filtre · 500 L/saat · 6 W" },
   "sobo-fg-1204": { sourceUrl: "https://www.akvaryumexpress.com/sobo-fg-1204-internal-filter-ic-filtre", values: { ratedFlowLph: 880, powerW: 12 }, specifications: "Dört filtre malzemeli, Venturi çıkışlı iç filtre · 880 L/saat · 12 W" },
-  "sobo-sb-860a": { sourceUrl: "https://malawiizmir.com/sobo-sb-860a-cift-cikisli-hava-motoru", values: { powerW: 5 }, specifications: "Ayarlanabilir çift çıkışlı hava motoru · 5 W · hava debisi doğrulanamadı", note: "Hava debisinin kaynağı pets-lifestyle.com; kabul edilen yerel mağaza (Malawi İzmir) yalnızca gücü yayımlıyor. Debi otomatik hesapta kullanılmaz." },
   "sobo-sf-550f": { sourceUrl: "https://www.akvaryumexpress.com/sobo-sf-550f-askili-dis-filtre", values: { ratedFlowLph: 500 }, specifications: "Askı dış filtre · 500 L/saat · güç mağazalarda farklı (7 W / 8,6 W)" },
   "sobo-wp-303h": { sourceUrl: "https://atakanpetshop.com/sobo-mini-aski-filtre-5w-280lh-745-wp-303h", values: { ratedFlowLph: 280, powerW: 5, recommendedMinL: 10, recommendedMaxL: 50 }, specifications: "Ayarlanabilir, yüzey emişli askı şelale filtre · 280 L/saat · 5 W · 10–50 litre" },
   "sobo-wp-607h": { sourceUrl: "https://malawiizmir.com/sobo-wp-607h-selale-filtre-600-l-h", values: { ratedFlowLph: 600, powerW: 12 }, specifications: "Ayarlanabilir, yüzey emişli askı şelale filtre · 600 L/saat · 12 W" },
@@ -150,12 +157,22 @@ export const shopVerifiedEquipment: Readonly<Record<string, ShopVerification>> =
   "waterbear-q708": { sourceUrl: "https://malawiizmir.com/waterbear-q708-hava-motoru-tek-cikisli-1-l-dak", values: { ratedFlowLph: 60 }, specifications: "Tek çıkış · 1 L/dakika hava motoru · 60 L/saat" },
   "waterbear-q718": { sourceUrl: "https://aquarubi.com/waterbear-wb-q718-tek-cikisli-hava-motoru", values: { ratedFlowLph: 90 }, specifications: "Tek çıkış · 1,5 L/dakika hava motoru · 90 L/saat" },
   "waterbear-wb-1770": { sourceUrl: "https://malawiizmir.com/waterbear-wb-1770-akvaryum-ic-filtre-500l-h", values: { ratedFlowLph: 500 }, specifications: "İç filtre · 500 L/saat · güç mağazalarda farklı (6 W / 8 W)" },
-  "waterbear-wb-2770": { sourceUrl: "https://aquarubi.com/waterbear-wb-2770-akvaryum-ic-filtre", values: { powerW: 12 }, specifications: "İç filtre · 12 W · debi mağazalarda farklı (800 L/saat / 900 L/saat)", note: "Kabul edilen yerel mağazalar debiyi farklı yayımlıyor (ürün başlığında 800 L/saat, açıklamada 900 L/saat). Debi otomatik hesapta kullanılmaz." },
   "waterbear-wb-3770": { sourceUrl: "https://aquarubi.com/waterbear-wb-3770-akvaryum-ic-filtre", values: { ratedFlowLph: 1200, powerW: 18 }, specifications: "İç filtre · 1200 L/saat · 18 W" },
   "waterbear-wb-4770": { sourceUrl: "https://aquarubi.com/waterbear-wb-4770-akvaryum-ic-filtre", values: { ratedFlowLph: 1600, powerW: 25 }, specifications: "İç filtre · 1600 L/saat · 25 W" },
   "waterbear-wb-g800": { sourceUrl: "https://atakanpetshop.com/waterbear-wb-g800-zamanlayicili-uvli-ic-filtre-10w-800ls", values: { ratedFlowLph: 800, powerW: 10 }, specifications: "Zaman ayarlı UV modüllü iç filtre · 800 L/saat · 10 W" },
   "waterbear-wb-g810": { sourceUrl: "https://atakanpetshop.com/waterbear-wb-g810-zamanlayicili-uvli-ic-filtre-15w-900ls", values: { ratedFlowLph: 900 }, specifications: "Zaman ayarlı UV modüllü iç filtre · 900 L/saat · güç mağaza sayfalarında farklı (10 W / 15 W)" },
-  // Xinyou (1)
+  // Xinyou üretici sayfaları (10; eski ikincil mağaza değerleri farklı olsa da birincil kaynak esas alındı)
+  "xinyou-xy-168": { sourceUrl: "https://www.aquariumfiltersponge.com/ProductDetail/1458780652183293952.html", verifiedAt: "2026-11-03", values: { recommendedMaxL: 30 }, specifications: "Harici hava motoruyla çalışan biyolojik sünger filtre · Ø5 × 2 cm sünger · 30 litreye kadar" },
+  "xinyou-xy-180": { sourceUrl: "https://www.aquariumfiltersponge.com/ProductDetail/1458782660437020672.html", verifiedAt: "2026-11-03", values: { recommendedMaxL: 100 }, specifications: "Harici hava motoruyla çalışan biyolojik sünger filtre · Ø7,5 × 6,5 cm sünger · 100 litreye kadar" },
+  "xinyou-xy-280": { sourceUrl: "https://www.aquariumfiltersponge.com/ProductDetail/1467978501336018944.html", verifiedAt: "2026-11-03", values: { recommendedMaxL: 150 }, specifications: "Harici hava motoruyla çalışan biyolojik sünger filtre · Ø12 × 6,5 cm sünger · 150 litreye kadar" },
+  "xinyou-xy-2810": { sourceUrl: "https://www.aquariumfiltersponge.com/ProductDetail/1458778772645871616.html", verifiedAt: "2026-11-03", values: { recommendedMaxL: 100 }, specifications: "Harici hava motoruyla çalışan biyolojik sünger filtre · Ø8,5 × 5 cm sünger · 100 litreye kadar" },
+  "xinyou-xy-2811": { sourceUrl: "https://www.aquariumfiltersponge.com/ProductDetail/1458783331325837312.html", verifiedAt: "2026-11-03", values: { recommendedMaxL: 200 }, specifications: "Harici hava motoruyla çalışan biyolojik sünger filtre · Ø8,5 × 10 cm sünger · 200 litreye kadar" },
+  "xinyou-xy-2812": { sourceUrl: "https://www.aquariumfiltersponge.com/ProductDetail/1458778808543416320.html", verifiedAt: "2026-11-03", values: { recommendedMaxL: 250 }, specifications: "Harici hava motoruyla çalışan biyolojik sünger filtre · Ø11,3 × 5 cm sünger · 250 litreye kadar" },
+  "xinyou-xy-2813": { sourceUrl: "https://www.aquariumfiltersponge.com/ProductDetail/1458782670503350272.html", verifiedAt: "2026-11-03", values: { recommendedMaxL: 250 }, specifications: "Harici hava motoruyla çalışan biyolojik sünger filtre · Ø11,3 × 5 cm sünger · 250 litreye kadar" },
+  "xinyou-xy-2870": { sourceUrl: "https://www.aquariumfiltersponge.com/ProductDetail/1458781961990438912.html", verifiedAt: "2026-11-03", values: { recommendedMaxL: 100 }, specifications: "Harici hava motoruyla çalışan biyolojik sünger filtre · Ø8,5 × 5 cm sünger · 100 litreye kadar" },
+  "xinyou-xy-2880": { sourceUrl: "https://www.aquariumfiltersponge.com/ProductDetail/1467974452251406336.html", verifiedAt: "2026-11-03", values: { recommendedMaxL: 80 }, specifications: "Harici hava motoruyla çalışan, seramik medya hazneli biyolojik sünger filtre · Ø5 × 6 cm sünger · 80 litreye kadar" },
+  "xinyou-xy-380": { sourceUrl: "https://www.aquariumfiltersponge.com/ProductDetail/1458779438804701184.html", verifiedAt: "2026-11-03", values: { recommendedMaxL: 200 }, specifications: "Harici hava motoruyla çalışan biyolojik sünger filtre · Ø12 × 11,3 cm sünger · 200 litreye kadar" },
+  // Xinyou yerel mağaza (1)
   "xinyou-xy-2835": { sourceUrl: "https://bettamarketim.com.tr/pipo-filtre-xy-2835-mini-40lt", values: { recommendedMaxL: 40 }, specifications: "Hava ile çalışan biyolojik sünger filtre · 40 litreye kadar" },
   // XLPro (2)
   "xlpro-230-mini": { sourceUrl: "https://www.akvaryumexpress.com/xl-pro-xlpro-230-mini-dis-filtre-210l-s", values: { ratedFlowLph: 210, powerW: 1.7 }, specifications: "Mini dış filtre · 210 L/saat · 1,7 W" },
@@ -198,9 +215,17 @@ const missingText = (item: EquipmentProfile, withdrawn: readonly ValueField[]) =
 
 function withdraw(item: EquipmentProfile, fields: readonly ValueField[], parts: readonly RegExp[], note: string) {
   const withdrawn = fields.filter((field) => item[field] !== undefined);
+  const specificationParts = item.specifications.split(" · ");
+  const hasWithdrawableText = specificationParts.some((part) => parts.some((pattern) => pattern.test(part)));
+  // Kurtarılan katalog kayıtları önceki dalda aynı güvenlik işleminden geçmiş olabilir. Değer ve temizlenecek
+  // açıklama parçası kalmadıysa metni ikinci kez değiştirme; kapasite notunu gerekiyorsa yine tamamla.
+  if (!withdrawn.length && !hasWithdrawableText) {
+    if (!item.requiresAirPump && !item.capacityDataNote) item.capacityDataNote = note;
+    return;
+  }
   for (const field of withdrawn) delete item[field];
-  const kept = item.specifications.split(" · ").filter((part) => !parts.some((pattern) => pattern.test(part)));
-  const missing = missingText(item, withdrawn);
+  const kept = specificationParts.filter((part) => !parts.some((pattern) => pattern.test(part)));
+  const missing = missingText(item, withdrawn) ?? (!kept.some((part) => alreadyExplained.test(part)) ? "teknik kapasite doğrulanamadı" : undefined);
   item.specifications = [...kept, ...(missing && !kept.some((part) => alreadyExplained.test(part)) ? [missing] : [])].join(" · ");
   // Hava motoruyla çalışan sünger filtre hacim önerisi olmadan da "hava motoruna bağlı filtre" olarak değerlendirilir; kapasite notu
   // yalnızca değeri tümüyle eksik kalan kayıtta tutulur (catalog-equipment.ts bütünlük denetimi).
@@ -211,7 +236,7 @@ function applyShopVerification(item: EquipmentProfile, verification: ShopVerific
   for (const field of valueFields) delete item[field];
   Object.assign(item, verification.values);
   item.sourceUrl = verification.sourceUrl;
-  item.verifiedAt = shopVerifiedAt;
+  item.verifiedAt = verification.verifiedAt ?? shopVerifiedAt;
   item.specifications = verification.specifications;
   if (verification.note) item.capacityDataNote = verification.note;
 }

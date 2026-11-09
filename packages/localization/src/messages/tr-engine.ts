@@ -80,6 +80,7 @@ export const trEngine = {
     powerHigh: fixed("Isıtma gücü bu hacim için yüksek"),
     outOfRange: fixed("Hacim aralığı dışında"),
     heaterUnverified: fixed("Watt veya hacim verisi doğrulanmayı bekliyor"),
+    externalControlRequired: fixed("Harici termostatlı sıcaklık kontrolü olmadan güvenli değil"),
     noHeater: fixed("Katalogdan ısıtıcı bulunamadı"),
     latestReading: fixed("Son ölçüme göre"),
     readingNeeded: fixed("Ölçüm eklenmesi gerekli"),
@@ -109,6 +110,10 @@ export const trEngine = {
       title: fixed("Ekipman kapasite bilgisi eksik"),
       message: (p, f) =>
         `${list(p, "names").join(", ")}${num(p, "remaining") ? ` ve ${f.number(num(p, "remaining"))} ekipman daha` : ""} güvenli kapasite hesabına alınamadı.${str(p, "note") ? ` ${str(p, "note")}` : " Gerekli debi, hacim veya hava motoru bağlantısı doğrulanmalı."}`,
+    },
+    externalTemperatureControlRequired: {
+      title: fixed("Harici sıcaklık kontrolü gerekli"),
+      message: (p) => `${list(p, "names").join(", ")} sabit sıcaklığı kendi kendine düzenlemez. Harici termostatlı kontrol ve ayrı bir termometre olmadan birincil akvaryum ısıtıcısı olarak kullanmayın.`,
     },
     primaryFilterRequired: {
       title: fixed("Ana filtre gerekli"),

@@ -1,6 +1,6 @@
 # AquaMind proje durumu
 
-Son güncelleme: 2026-10-28
+Son güncelleme: 2026-11-09
 
 ## Doğrulanmış temel
 
@@ -1297,7 +1297,246 @@ Son güncelleme: 2026-10-28
 - Codex 1. tur (2026-10-28): temiz. P1–P3 bulgu yok; dört dosyanın SHA-256 değeri anlık görüntüyle eşleşti. Codex `tsc`'yi geçirdi, dışa aktarma adını bellekte sekiz tarih/saat senaryosunda denedi, PR #50'nin kayıtlarını `gh` ile doğruladı; Vitest kendi kum havuzunda `spawn EPERM` ile başlamadı. Görüş (bulgu değil): yedek dosyası adı denetimi metin tabanlı; düğmenin ürettiği `download` değerini sınayan bir davranış testi güvenceyi artırır.
 - Birleştirme: PR #51 (`https://github.com/ckaracora/AquaMind/pull/51`) 2026-10-28 00:31 UTC'de (Türkiye saatiyle 03:31) ürün sahibinin 2026-10-19 yetkisiyle Claude tarafından `main` dalına birleştirildi (`157bb71`). PR'da `Doğrulama` (çalıştırma `40609189645`) ve Vercel önizlemesi, `main` üzerinde `Doğrulama` (çalıştırma `40609340129`) ve Vercel üretim dağıtımı (`7373924382`) başarılı (kayıt `codex/plant-selection` dalında yazıldı).
 
+## Katalog ana entegrasyonu (yerel kapanış tamamlandı, GitHub devri hazırlanıyor)
+
+- Dal: `codex/catalog-main-integration`, taban `main` (`ef729d7`, PR #55 sonrası).
+- Kapsam: 438 seçilebilir canlı, 3877 ekipman, 3105 bakım ürünü ve 141 bitki. Canlıların
+  tamamında kendi kaynak sayfası ve zorunlu bakım verisi var. Ekipmanda güvenlik
+  hesabı gerektiren 1359 kaydın 1251'i (%92,1) hesaplamaya hazır.
+- Kaynakta yayımlanmayan veya çelişkili kapasite değeri tahmin edilmedi: 108
+  ekipman kaydı güvenli biçimde hesap dışı ve açıklamalı kaldı. Bu kayıtların
+  90'ı doğrulanmamış değer listesinde; kalanlar edilgen/yardımcı parça ya da
+  kaynakta kapasite alanı bulunmayan güncel kayıtlardır.
+- Birleştirilen geri kazanım: 396 ekipman kaydı (336 eksik kayıt ve `main`deki
+  kayıttan daha yeni doğrulanmış 60 kayıt) ile 56 seçilebilir canlı kaydı. Genel satış adıyla
+  birden fazla türe gidebilen veya onaylı bakım eşiği bulunmayan 75 canlı adı güvenlik nedeniyle otomatik profile
+  bağlanmıyor.
+- 2026-10-31 kaynak güvenliği denetimi: Aquawing AQ-A3000'ün yalnız liste
+  sayfasında görülen 960 L/saat değeri çekildi, doğrulanan 25 W bilgisi korundu.
+  Jeneca GD-320/GD-403/GD-503 ile Xinyou XY-2870/XY-2880/XY-2906/XY-2907'nin
+  yalnız pazar yeri veya çelişkili satıcı kaynaklarındaki sayısal kapasite
+  değerleri hesaptan çıkarıldı; modeller ve kaynak izi katalogda kaldı. Xinyou
+  XY-2901'in 450 L/saat ve 5 W değeri üreticinin kendi Xinyou/Junyou sayfası ve
+  ikincil ürün sayfalarıyla doğrulandığından korundu. Katalog akışı ve 113 sağlık
+  senaryosu bu güvenli davranışla yeniden başarılı oldu.
+- 2026-11-02 omurgasız kaynak güvenliği denetimi: genel Pinto ve Galaxy
+  Fishbone karides ile `Procambarus clarkii` ve `Procambarus virginalis`
+  kayıtlarının zorunlu bakım eşikleri onaylı omurgasız kaynaklarından değil
+  satıcı/ikincil bakım profillerinden geliyordu. Bu dört kayıt silinmeden
+  karantinaya alındı; seçilebilir 438 profil içinde sağlık hesabına katılmıyor,
+  kullanıcı aramasında neden eşlenmediğini ve kaynak eksikliğini açıklayan
+  güvenlik kaydı olarak bulunuyor. TypeScript, katalog akışı ve 113 sağlık
+  senaryosu bu davranışla başarılı.
+- Tayland mikro yengeci ana kaynağı kabul edilen Practical Fishkeeping tür
+  yazısına taşındı: kaynak 1 cm erişkin kabuk genişliğini, tamamen sucul yaşamı
+  ve 22–28 °C tutma aralığını destekliyor. Kaynağın yayımlamadığı minimum hacim,
+  grup, pH ve akıntı değerlerinin eski kayıttan korunduğu ve bağımsız doğrulanmış
+  eşik sayılmadığı kullanıcı uyarısında açıkça yazıldı; eski bakım sayfaları ek
+  kaynak olarak korundu.
+- Kerevit kaynak denetimi tamamlandı: Meksika cüce kereviti kabul edilen
+  Wirbellose kaynağındaki 5 cm, 10–25 °C, pH 6,5–9 ve çift için 30 cm
+  değerlerine; elektrik mavi kerevit 20–24 °C ve pH 6,5–8 ortak aralığına;
+  kırmızı kıskaçlı kerevit 24–27 °C ve en az 100 cm doğrulanmış alana
+  güncellendi. Kaynakların yayımlamadığı akıntı sınıfları kaldırıldı; eski daha
+  büyük boy/hacim eşikleri korunduğunda bunun kaynakta yayımlanan minimum
+  olmadığı açıkça yazıldı. Kabul edilen tür bakım kaynağı bulunamayan
+  `Cambarellus diminutus` seçilebilir profilden çıkarılıp 75 kayıtlık görünür
+  güvenlik listesine taşındı. TypeScript, katalog akışı ve 113 sağlık senaryosu
+  bu davranışla başarılı.
+- Sobo kapasite denetiminde Türkiye yetkili distribütörünün tam model ürün
+  sayfaları bulundu. SB-848 çift çıkışlı hava motoru 540 L/saat ve 12 W;
+  SB-860A çift çıkışlı hava motoru 720 L/saat ve 10 W; WP-4001 iç filtre
+  2000 L/saat, 30 W ve en fazla 200 litre değerleriyle güvenli kapasite hesabına
+  geri alındı. Aynı markanın WP-190F/WP-290F/WP-390F kayıtları
+  benzer adlı UV modelleriyle eşleştirilmedi ve doğrulanana kadar hesap dışında
+  kaldı. Katalog akışı bu iki geri kazanımla başarılı; hesap değeri kapsamı
+  1248/1359'a (%91,8) çıktı.
+- Sobo geri kazanımından sonra `pnpm verify`: TypeScript, katalog akışı, 113
+  sağlık senaryosu, hesaplayıcılar, katalog denetimi ve kapsam belgesi testi
+  dahil 450 test başarılı. Tam zincir yalnız aşağıda açıklanan, ürün sahibi
+  onayıyla yenilenebilen 1033 vakalık altın fikstürün güncel 1066 vakadan eski
+  olması nedeniyle iki altın karşılaştırmada durdu; yeni Sobo kayıtlarına ait
+  katalog regresyonları başarılı.
+- Resun LP seri denetiminde üreticinin LP60–300 başlıklı resmî sayfasındaki
+  görsel teknik tablo doğrudan okundu. Tablo LP60 için 4200 L/saat ve 50 W,
+  LP100 için 8400 L/saat ve 100 W, LP200 için elektrik varyantına göre
+  14.000/15.000 L/saat ve 230 W yayımlıyor. LP60 ve LP100 resmî kaynağa
+  taşındı. LP200'de kabul edilen yerel mağazanın 200 W değeri üreticiyle
+  çeliştiği için güç alanı kaldırıldı; otomatik hava hesabında üreticinin
+  yayımladığı güvenli alt debi 14.000 L/saat kullanılıyor ve iki kaynak da
+  izlenebilir tutuluyor. Sayfa başlığında LP300 geçse de ürün/parametre
+  tablolarında LP300 satırı yok; bu nedenle LP300'ün eski 18.000 L/saat ve
+  250 W değerleri geri alınmadı. Hesap kapsamı güvenlik nedeniyle değişmedi.
+- WaterBear WB-2770 için kabul edilen Cikletist Petshop tam model sayfasındaki
+  800 L/saat debi ile Aquarubi tam model sayfasındaki 12 W güç birleştirildi.
+  Aquarubi açıklamasındaki çelişkili 900 L/saat ve Cikletist'teki güvenilir
+  olmayan hacim önerisi kullanılmadı. Böylece WaterBear'ın kapasite gerektiren
+  20 kaydının 20'si güvenli hesaba hazır, genel kapsam 1249/1359 (%91,9).
+- SunSun üretici HW seri tablosu eski `502` ve `503` kayıtlarının resmî
+  adlarının HW-502 ve HW-503 olduğunu doğruladı. Kayıtlar sırasıyla
+  320 L/saat–5 W ve 350 L/saat–5 W olarak üretici kaynağına taşındı;
+  HW-502'deki kaynaksız 60 L hacim sınırı kaldırıldı. Türkiye'de 600 L/saat ve
+  6 W ile satılan ayrı 503B kaydı korunarak model kimliği karışıklığı giderildi.
+  SunSun kapasite kapsamı 48/48, genel kapsam 1251/1359 (%92,1).
+- Ejet'in BP3, 905F ve 907F kayıtları 2026-11-03'te yeniden denetlendi. Qimei'nin
+  resmî Ejet hava motoru tablosu yalnız E-JET 168/268'i kapsıyor; bu değerler
+  BP3'e aktarılmadı. Atakan marka sayfası BP3'ün pilli yedek hava motoru
+  kimliğini doğruluyor, fakat debi yayımlamıyor. BP3 güncel kabul edilen kaynağa
+  ve açıklamalı kapasite notuna taşındı. 905F'in kabul edilen kaynakları
+  çelişkili, 907F için tam model teknik kaynağı yok; üç kayıt güvenle hesap
+  dışında kalıyor ve genel kapsam 1251/1359 (%92,1) olarak değişmiyor.
+- Aquawing AQ-WP serisinin 12 eksik kapasite kaydı, Aquawing'in sahibi Bursa
+  Pet'in bölgesel temsilcisi Eksen Pet'in model kodu, barkod, güç ve debiyi
+  birlikte yayımlayan marka/ürün kataloğunda 2026-11-03'te yeniden doğrulandı.
+  AQ-WP750FA/FB, AQ-WP850FA/FB, AQ-WP950FA/FB, AQ-WP1000FA/FB, AQ-WP2300A
+  ve AQ-WP3300A/B/C otomatik kapasite hesabına geri alındı. Aquawing kapsamı
+  77/88'e, genel kapsam 1263/1359'a (%92,9) yükseldi; hedefli katalog testi ve
+  kapsam ölçümü başarılı.
+- Aquawing paketinden sonra tam `pnpm verify`: TypeScript, katalog akışı, 113
+  sağlık senaryosu, hesaplayıcılar, katalog denetimi ve kapsam belgesi testi
+  başarılı; 452 testten 450'si geçti. Yalnız daha önce denetlenmiş 1033/1066
+  altın fikstür farkının iki karşılaştırması bekliyor; altın dosya ürün sahibi
+  onayı olmadan değiştirilmedi. Ayrı üretim derlemesi 159 sayfada başarılı.
+- Resun LP-20'nin resmî üretici teknik tablosu 1500 L/saat, 17 W, 0,028 MPa,
+  6 çıkış ve 2,2 m azami hava taşı derinliğini doğruladı. Mağazalar arasındaki
+  1500/1680 L/saat farkı üretici verisiyle çözüldü; kayıt güvenli kapasite
+  hesabına geri alındı. Genel kapsam 1264/1359'a (%93), kalan kapasite kaydı
+  95'e indi. Hedefli katalog testi ve kapsam ölçümü başarılı.
+- Xinyou/Junyou üreticisinin tam model sayfaları XY-168, XY-180, XY-280,
+  XY-2810, XY-2811, XY-2812, XY-2813, XY-2870, XY-2880 ve XY-380'in hacim
+  sınırlarını ve sünger ölçülerini doğruladı. İkincil mağaza farklılıklarında
+  üretici değeri esas alındı; on kayıt doğrulanmamışlar listesinden çıktı.
+  Doğrulanmamışlar listesinde olmayan ekipman 3811/3877'ye (%98,3), hacim
+  kapsamı 834/3877'ye (%21,5) yükseldi. Harici hava motorlu bu pasif filtrelere
+  bağımsız su debisi atanmadı. Üretici içi çelişkili XY-2836/XY-2902 ile
+  üretici teknik değeri olmayan XY-2906/XY-2907 hesap dışında kaldı.
+- Dophin AH-1002 için üreticinin "sabit sıcaklık kontrolü yok" bilgisi sağlık
+  hesabında güvenli ele alındı; davranış ve sürüm kararı ürün sahibi onayı için
+  `docs/DECISIONS/0027-harici-termostat-gerektiren-isitici.md` içinde önerildi.
+- Nubios'un 10 açık filtre kaydı Türkiye distribütörü Kaya Pet'in güncel portföyü
+  ve kabul edilen altı yerel mağazada yeniden arandı. Tam model teknik sayfası
+  bulunmadı; zayıf satıcı/kutu kanıtı karar 0019 gereği otomatik hesap için
+  yeterli sayılmadı ve kayıtlar güvenli biçimde hesap dışında bırakıldı.
+- Netlea'nın 14 açık kaydı üreticinin resmî sitesi ve filtre sistemi bölümüyle
+  yeniden karşılaştırıldı. Üretici erişilebilir model bazlı sayısal tablo
+  yayımlamadığı, eldeki değerler yabancı mağaza/pazar yerinden geldiği için
+  kayıtlar seçilebilir kalırken otomatik sağlık hesabına geri alınmadı.
+- RS Electrical'ın yedi eski modeli kabul edilen yerel mağazaların güncel RS
+  portföyüyle yeniden karşılaştırıldı. Mağazalarda başka RS modelleri bulunuyor,
+  ancak bu yedi modelin tam teknik sayfası yok; yabancı mağaza değerleri karar
+  0019 gereği reddedildi ve kayıtlar güvenli biçimde hesap dışında bırakıldı.
+- Eurostar'ın altı eski modeli kabul edilen yerel mağazalarda yeniden arandı.
+  Güncel Marmara AP800 2L farklı bir model olduğundan genel Marmara Tek/Çift
+  kayıtlarına aktarılmadı; Ege serisinin zayıf eski kaynakları da otomatik hesap
+  için yeterli sayılmadı.
+- Haqos'un beş açık modeli üreticinin güncel ürün dizini ve site haritasıyla
+  karşılaştırıldı. EX-1200AT, EX-1500AT, EXP-500, HF-900 ve Jular-230 resmî
+  dizinde ve kabul edilen yerel mağazalarda tam teknik sayfaya sahip değil;
+  EXP-500 ayrı EXPRO-500 modeliyle birleştirilmeden hesap dışında tutuldu.
+- Bağımsız kapasite kapanış denetiminde 1.359 kaydın 1.264'ü hesaplamaya hazır;
+  kalan 95 kaydın tamamı kaynakta yayımlanmayan, çelişkili veya yalnız zayıf
+  kaynaktan gelen değer nedeniyle açıklamalı ve güvenli biçimde hesap dışı.
+  Bunlar artık açık araştırma kuyruğu değil; marka dağılımı ve her kaydın
+  `capacityDataNote` taşıması katalog akışı regresyonuna bağlandı.
+- Kullanıcının zorunlu 49 marka başlığının tamamı dolu ve katalog akışı
+  regresyonuyla korunuyor. İlk listedeki `Aquamin` → `Aquamins` (86 bakım
+  ürünü), `Litefech` → `Lifetech` (29 ekipman) eşlemeleri açıkça denetlendi.
+  Kategori → marka → model akışı bütün katalog üzerinde yalnız seçilen kategori
+  ve markaya ait seçenekleri döndürüyor; kategori değişince eski seçimler
+  sıfırlanıyor.
+- Kapanış kaynak izi denetimi 3.877 ekipmanın ve 3.105 bakım ürününün tamamında
+  HTTPS ana kaynak, `YYYY-MM-DD` doğrulama tarihi ve varsa HTTPS ek kaynak
+  bulunmasını zorunlu tutuyor; kaynaksız bir kayıt katalog denetimini düşürür.
+- Kontroller: TypeScript, katalog akışı (7 ekipman kategorisi, 4 canlı sınıfı,
+  3105 bakım ürünü), 113 sağlık senaryosu, hesaplayıcılar, katalog denetimi ve
+  hedefli 24 Vitest testi başarılı. Üretim derlemesi ayrıca başarılı: 159 sayfa.
+- Tam `pnpm verify` (2026-11-02 kerevit kaynak denetiminden sonra):
+  TypeScript, katalog akışı, 113 sağlık senaryosu, hesaplayıcılar ve katalog
+  denetimi başarılı; 450 test başarılı, yalnız altın karşılaştırmanın iki denetimi
+  bekliyor. Kerevit kaynak denetiminden sonra vaka kümesi 1033'ten 1066'ya
+  çıktı. Yazmadan yapılan fark denetiminde 123 yeni ad, 90 kaldırılan ad ve 71
+  değişen mevcut vaka bulundu; genel durum yalnız bir mevcut vakada değişti. Puanı
+  değişen vakalar tek tek çıkarıldı;
+  değişimler kaynaklı erişkin boyu, minimum hacim/uzunluk, grup sayısı ve bakım
+  notu düzeltmelerinden geliyor. Tek durum değişimi `species-tight:ramshorn-snail`
+  için uyarıdan iyiye: doğrudan tür kaynağının 10 litre yayımlaması ve santimetre
+  cinsinden tank uzunluğu yayımlamaması nedeniyle eski 20 litre/25 cm varsayımı
+  kaldırıldı; buna karşılık bakım ve yayımlanmayan uzunluk uyarıları eklendi.
+  Yeni/kaldırılan adların çoğu 25 yeni kesin profil, 5 genel salyangoz profilinin
+  kaldırılması ve kimliğe göre sıralanan çift vakalarının yeniden eşleşmesidir.
+  Altın fikstür ürün sahibi onayı olmadan yenilenmedi. Ayrı üretim derlemesi
+  son kerevit değişikliklerinden sonra 2026-11-02'de 159 sayfanın tamamında
+  başarılı oldu; `git diff --check` yalnız
+  Windows satır sonu uyarıları verdi, içerik hatası vermedi.
+- 2026-11-05 yeniden doğrulaması: TypeScript, katalog akışı, 113 sağlık
+  senaryosu, hesaplayıcılar, katalog denetimi ve 450 Vitest testi başarılı;
+  yalnız aynı onay bekleyen altın fikstür karşılaştırmasının iki testi başarısız
+  (güncel 1066 vaka, kaydedilmiş 1033 vaka). Altın dosya yazılmadı.
+- 2026-11-05 yayın öncesi bağımsız üretim derlemesi başarılı: Next.js 159
+  sayfanın tamamını üretti. Ekipman sayfası 324 kB, canlılar 284 kB, ürün
+  kataloğu 295 kB ve sağlık analizi 172 kB ilk yükleme boyunda; derleme veya
+  tip hatası yok. Bu yalnız yerel kontroldür, Vercel yayını yapılmadı.
+- 2026-11-05 salt okunur altın fark denetimi 123 yeni, 90 kaldırılan ve 71
+  değişen ortak vaka buldu. Ortak vakaların 18'inde puan, 27'sinde uyarı kodu
+  kümesi değişiyor; yalnız `species-tight:ramshorn-snail` genel durumu
+  `warning`dan `good`a dönüyor. Değişiklik kaynaklı 10 litre eşiği ve eski
+  20 litre/25 cm varsayımının kaldırılmasıyla açıklanıyor; fikstür yazılmadı.
+- Ürün sahibi 2026-11-09'da Dophin AH-1002 güvenlik kuralını ve 1.066 vakalık
+  altın test güncellemesini açıkça onayladı. Karar 0027 kabul edildi; motor
+  1.12.0 ve kural seti 1.10.0 olarak sabitlendi. Altın fikstürün SHA-256 özeti
+  `E22A269E4F2F26CE7D25A9C48F6A6FCE3BF115494F600DF442BBE35553F4CA58`
+  değerinden `EF63D495BBDBC67737D04884CBB7B6621548D06365AEE7BFE9543EB0D336F070`
+  değerine değişti. Yenilemeden sonra `pnpm audit:golden` kayıtlı ve güncel
+  1.066 vakanın aynı olduğunu; eklenen, kaldırılan veya değişen vaka kalmadığını
+  doğruladı. Hedefli ısıtıcı/metin testleri (16 test) ve 113 sağlık senaryosu
+  başarılıdır. Tam `pnpm verify` de 2026-11-09'da başarılı oldu: TypeScript,
+  katalog akışı, 113 sağlık senaryosu, hesaplayıcılar, katalog denetimi, 35 test
+  dosyasında 452 test ve 159 sayfalık üretim derlemesi geçti.
+- Kapanış diff denetiminde kapsam dışı sıfırlama veya silme görülmedi;
+  `git diff --check` içerik hatası vermedi (yalnız çalışma kopyasının üç
+  dosyasındaki CRLF dönüşüm uyarısını bildirdi).
+- GitHub'a commit/push ve Vercel yayını yapılmadı. Canlı uygulama
+  `https://aqua-mind-three.vercel.app/` bu değişiklikleri içermiyor.
+- Ürün sahibi 2026-11-09'da `AquaMind'i GitHub'a devret` komutuyla mevcut görev
+  dalının commit ve push edilmesine izin verdi. GitHub'ın açık Issue listesinde
+  bu uzun katalog entegrasyonuna bağlı bir görev bulunmuyor; açık Issue #7
+  Supabase/RLS kapsamındadır, açık #80 ise başka bir hesabın taslak PR'ıdır ve
+  bu dala bağlanmadı. Devir bu nedenle mevcut `codex/catalog-main-integration`
+  dalı üzerinden, Issue ilişkilendirilmeden yapılacaktır.
+
 ## Sıradaki tek iş
+
+Katalog kapasite araştırması güvenli biçimde kapandı: 95 boşluğun tamamı
+açıklamalı ve regresyonla korunuyor. Dophin AH-1002 kararı, 1.066 vakalık altın
+fikstür, tam `pnpm verify` ve kapanış diff denetimi tamamlandı. Sonraki iş,
+kullanıcı açıkça isterse GitHub devridir. Aşağıdaki eski sıra entegrasyondan
+önceki `main` durumunun kaydıdır.
+
+### Katalog ana entegrasyonu kapanış ölçütleri
+
+| Gereksinim | Güncel kanıt | Durum |
+| --- | --- | --- |
+| Kullanıcının verdiği bütün markalar | `src/data/catalog-coverage.ts` içindeki 49 zorunlu marka dolu; `Aquamin` → `Aquamins`, `Litefech` → `Lifetech` eşlemeleri regresyonda | Tamamlandı |
+| Model, kimlik ve kaynak izi | 3.877 ekipman, 3.105 bakım ürünü ve 438 canlıda yinelenen kimlik yok; ekipman ve bakım ürünlerinin tamamında HTTPS ana kaynak ve `YYYY-MM-DD` doğrulama tarihi, ek kaynaklar da HTTPS | Tamamlandı |
+| Kaynaksız teknik değerin hesaba girmemesi | 1.359 bağımsız kapasite kaydının 1.264'ü hesapta; yayımlanmayan/çelişkili 95 kayıt açıklamalı olarak hesap dışında ve marka dağılımı regresyonda | Tamamlandı |
+| Canlı kataloğu | 438 seçilebilir profil, 18 grubun tamamında kaynak ve zorunlu bakım verisi; belirsiz satış adları ayrı güvenlik listesinde | Tamamlandı |
+| Kategori → marka → model akışı | Yedi ekipman kategorisinin tamamında yalnız seçilen kategori ve markanın seçeneklerini döndüren katalog akışı testi | Tamamlandı |
+| Sağlık analizi güvenliği | 113 sağlık senaryosu, hedefli ısıtıcı/motor/metin testleri ve açıklamalı güven sınırları; AH-1002 kararı 2026-11-09'da kabul edildi | Tamamlandı |
+| Altın davranış karşılaştırması | Onaylanan 1.066 vaka fikstüre yazıldı; önceki 123 yeni, 90 kaldırılan, 71 değişen ortak vaka sınıflandırması korundu; yeniden denetimde fark sıfır | Tamamlandı |
+| Tam doğrulama | TypeScript, katalog akışı, 113 sağlık senaryosu, hesaplayıcılar, katalog denetimi, 35 dosyada 452 test ve 159 sayfalık üretim derlemesi başarılı | Tamamlandı |
+| GitHub ve Vercel | Bu dal commit/push edilmedi; canlı site bu entegrasyonu içermiyor | Yalnız açık `AquaMind'i GitHub'a devret` izniyle |
+
+Altın fark sınıflandırması artık `pnpm audit:golden` komutuyla fikstüre yazmadan
+yeniden üretilebilir. Komut eklenen/kaldırılan/değişen vakaları, puan, genel
+durum ve uyarı kodu değişimlerini ayrı sayar; yalnız ayrıca onaylanan
+`AQUAMIND_GOLDEN_CAPTURE=1` komutu fikstürü değiştirebilir.
+
+Yayın öncesi salt-okunur güvenlik taramasında değişen veya izlenmeyen dosya
+adlarında `.env`, parola, token, özel anahtar ya da kimlik bilgisi izi bulunmadı.
+`.codex-temp/netlea/` altındaki altı araştırma görseli yalnız yerel kanıttır ve
+devir kapsamına alınmayacaktır; bunlardan biri 1 MB üzerindedir. Klasör
+`.gitignore` ile kalıcı olarak dışlandı; dosyalar silinmedi. Devir komutunda
+yalnız kaynak, test ve belge dosyaları açık dosya listesiyle sahnelenecektir.
 
 Bitki kataloğu 3'ün (`codex/plant-catalog-3`, yalnız uyarı kayıtları, karar 0026, yukarıda) doğrulaması, Codex denetimi, commit'i, PR'ı ve birleştirilmesi; ardından Practical Fishkeeping'in tür kutuları (`docs/DECISIONS/0023-bitki-katalogu.md` → "Sonraki paketler"). Bitki uyarıları (PR #54, motor 1.11.0) 2026-10-28'de (UTC) birleştirildi ve canlıda doğrulandı. Veri kapsamı raporu (PR #53) 2026-10-28'de (UTC) birleştirildi ve canlıda doğrulandı. Bitki sayfasında katalogdan seçme (PR #52) 2026-10-28'de (UTC) birleştirildi ve canlıda doğrulandı. Tasarım, ürün sahibinin 2026-10-28 kararıyla yol haritasındaki yerinde kalır (hesaplar ve buluttan sonra). Yedek dosyasının adı (PR #51) ve tarih alanlarının varsayılanı (PR #50) 2026-10-28'de (UTC) birleştirildi ve canlıda doğrulandı. Bitki kataloğu 2 (PR #49) 2026-10-27'de (UTC), bitki kataloğu 1 (PR #48) 2026-10-25'te (UTC) birleştirildi ve canlıda doğrulandı. Hastalık ve tedavi sayfası (PR #47) 2026-10-25'te (UTC) birleştirildi ve canlıda doğrulandı. Omurgasız kaynak yenilemesi 3 (PR #46) 2026-10-22'de (UTC), omurgasız kaynak yenilemesi 2 (PR #45) 2026-10-21'de (UTC), omurgasız kaynak yenilemesi 1 (PR #44), dil altyapısı 3b (PR #43), 3 (PR #42), ürün sahibinin 2026-10-20 kararlarının kaydı (PR #41) ve kimlik paketi 4 (PR #40) 2026-10-20'de (UTC), tür kaynak yenilemesi 3 (PR #39), 2 (PR #38) ve 1 (PR #37) 2026-10-19'da (UTC) birleştirildi ve canlıda doğrulandı. Dil altyapısı 2d (PR #36), 2c (PR #35), 2b (PR #34), 2a (PR #33), 1 (PR #32) ve yol haritası kaydı (PR #31) 2026-10-19'da birleştirildi ve canlıda doğrulandı. Ekipman kaynak yenilemesi 3 (PR #30) 2026-10-19'da, telefon kullanılabilirlik paketi 4 (PR #29) 2026-10-16'da, paketi 3 (PR #28) ve paketi 2 (PR #27) 2026-10-14'te, paketi 1 (PR #26) 2026-10-13'te, pencerelerde klavye odağı ve eşleşmeyen ekipman uyarısı (motor 1.9.0, PR #25) 2026-10-12'de (UTC) `main` dalına birleştirildi ve canlıda doğrulandı. Sonra yol haritasındaki sırayla (yukarıda): 133 türün kaynağı, hastalık yönlendirme sayfası, bitki kataloğu, tuzlu su başlangıç paketi, kalan veri işleri (örnek denetim, 68 satış adı ürün sahibiyle birlikte, bakım ürünleri), hesaplar ve bulut.
 

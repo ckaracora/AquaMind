@@ -13,6 +13,7 @@ const devices: Record<string, EquipmentProfileInput> = {
   // JBL PROTEMP b10 III gibi: üretici hacim aralığı var ama suyu ısıtan ana ısıtıcının yerine geçmez.
   substrate: { id: "substrate", category: "heater", brand: "Stub", model: "Taban 10", powerW: 10, recommendedMinL: 40, recommendedMaxL: 120, passiveComponent: true },
   heater: { id: "heater", category: "heater", brand: "Stub", model: "H100", powerW: 100, recommendedMinL: 50, recommendedMaxL: 250 },
+  unregulated: { id: "unregulated", category: "heater", brand: "Stub", model: "Kontrolsüz 10", powerW: 10, recommendedMaxL: 20, requiresExternalTemperatureControl: true },
 };
 
 const resolver: KnowledgeResolver = {
@@ -37,5 +38,23 @@ describe("ısıtıcı: taban ısıtma kablosu", () => {
   it("gerçek ısıtıcının yanında hesabı değiştirmez", () => {
     expect(heaterMetric(["substrate", "heater"])).toEqual(heaterMetric(["heater"]));
     expect(heaterMetric(["heater"]).detail).toBe("Üretici hacim aralığı uygun");
+  });
+});
+
+describe("ısıtıcı: harici sıcaklık kontrolü", () => {
+  it("kendi sıcaklığını düzenlemeyen cihazı kapasite hesabına almaz ve tehlike uyarısı verir", () => {
+    const result = analyze(tank, [fish], [device("unregulated")]);
+    expect(result.metrics.find((item) => item.key === "heater")).toMatchObject({
+      score: 35,
+      detailCode: "externalControlRequired",
+    });
+    expect(result.warnings).toEqual(expect.arrayContaining([
+      expect.objectContaining({ level: "danger", code: "externalTemperatureControlRequired" }),
+    ]));
+    expect(result.metrics.find((item) => item.key === "confidence")?.detailParams).toMatchObject({ ready: 1, total: 2 });
+  });
+
+  it("düzenlemeli bir ısıtıcı yanında kontrolsüz cihaz kapasiteyi veya uygunluğu değiştirmez", () => {
+    expect(heaterMetric(["heater", "unregulated"])).toEqual(heaterMetric(["heater"]));
   });
 });

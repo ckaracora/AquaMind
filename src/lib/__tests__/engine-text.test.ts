@@ -1,6 +1,6 @@
 // Dil altyapısı 3 ve 3b (karar 0021): dil dosyasının motor kodlarından kurduğu Türkçe metnin sözcükleri motorun kendi Türkçe metniyle
 // birebir aynı olmalıdır; dil dosyasının yazdığı her sayı biçimleyiciden geçer ve değeri motorun metnindeki sayıyla aynıdır. Veri:
-// altın fikstürün 1.033 vakası ve fikstürde geçmeyen kodları tetikleyen küçük senaryolar. Ayrıca motor kaynağındaki her kodun dil
+// altın fikstürün 1.066 vakası ve fikstürde geçmeyen kodları tetikleyen küçük senaryolar. Ayrıca motor kaynağındaki her kodun dil
 // dosyasında karşılığı olduğu, dil dosyasında kullanılmayan kod kalmadığı ve her kodun en az bir kez sınandığı denetlenir. 3b'nin sayı
 // ve birim yazımı (dilin ayırıcıları, galon tercihi) örnek cümlelerle ayrıca sınanır.
 import { readFileSync } from "node:fs";
@@ -96,6 +96,8 @@ const species: Record<string, SpeciesProfileInput> = {
   unverified: { id: "unverified", commonName: "Doğrulanmamış tür", adultSizeCm: 4, minVolumeL: 40, minGroup: 1, temperature: [22, 27], ph: [6, 7.5], wasteFactor: 0.5 },
   nipper: { id: "nipper", commonName: "Isıran tür", adultSizeCm: 6, minVolumeL: 60, minGroup: 1, temperature: [22, 27], ph: [6, 7.5], wasteFactor: 0.8, behavior: { finNipper: { source: "Seriously Fish", condition: "Küçük gruplarda belirgin" } } },
   target: { id: "target", commonName: "Uzun yüzgeçli tür", adultSizeCm: 6, minVolumeL: 60, minGroup: 1, temperature: [22, 27], ph: [6, 7.5], wasteFactor: 0.8, behavior: { finNipTarget: { source: "Seriously Fish" } } },
+  shrimpEater: { id: "shrimpEater", commonName: "Karides yiyen tür", adultSizeCm: 8, minVolumeL: 80, minGroup: 1, temperature: [22, 27], ph: [6, 7.5], wasteFactor: 0.8, behavior: { eatsShrimp: { source: "Practical Fishkeeping", condition: "Cüce karidesler risk altındadır" } } },
+  dwarfShrimp: { id: "dwarfShrimp", commonName: "Cüce karides", adultSizeCm: 2.5, minVolumeL: 10, minGroup: 1, temperature: [20, 27], ph: [6.5, 8], wasteFactor: 0.2 },
   snailEater: { id: "snailEater", commonName: "Salyangoz yiyen tür", adultSizeCm: 10, minVolumeL: 100, minGroup: 1, temperature: [22, 27], ph: [6, 7.5], wasteFactor: 1, behavior: { eatsSnails: { source: "Fishkeeper", condition: "Küçük salyangozları kabuğundan çeker" } } },
   snail: { id: "snail", commonName: "Salyangoz türü", adultSizeCm: 2, minVolumeL: 10, minGroup: 1, temperature: [20, 28], ph: [6.5, 8], wasteFactor: 0.2 },
   halfCm: { id: "halfCm", commonName: "Buçuklu tür", adultSizeCm: 4.5, minVolumeL: 40, minTankLengthCm: 45, minGroup: 1, temperature: [22, 27], ph: [6, 7.5], wasteFactor: 0.5 },
@@ -110,6 +112,7 @@ const devices: Record<string, EquipmentProfileInput> = {
   rangeHeaterA: { id: "rangeHeaterA", category: "heater", brand: "Stub", model: "Aralıklı A", recommendedMinL: 50, recommendedMaxL: 100 },
   rangeHeaterB: { id: "rangeHeaterB", category: "heater", brand: "Stub", model: "Aralıklı B", recommendedMinL: 50, recommendedMaxL: 100 },
   bareHeater: { id: "bareHeater", category: "heater", brand: "Stub", model: "Verisiz" },
+  unregulatedHeater: { id: "unregulatedHeater", category: "heater", brand: "Stub", model: "Kontrolsüz", powerW: 10, recommendedMaxL: 20, requiresExternalTemperatureControl: true },
   strong: { id: "strong", category: "filter", brand: "Stub", model: "Güçlü", ratedFlowLph: 2000 },
   big: { id: "big", category: "filter", brand: "Stub", model: "Büyük", recommendedMaxL: 600 },
   sized2: { id: "sized2", category: "filter", brand: "Stub", model: "Önerili 2", recommendedMaxL: 60 },
@@ -147,6 +150,7 @@ const scenarios: Array<[string, HealthAnalysis]> = [
   ["düşük amonyak ve nitrit", analyze(tank(), [animal("plain")], [], reading({ ammonia: 0.05, ph: 6.5, temperature: 24, nitrite: 0.1, nitrate: 60 }))],
   ["deniz akvaryumunda yüksek nitrat", analyze(tank({ type: "saltwater" }), [animal("marine")], [], reading({ nitrate: 150, specificGravity: 1.024 }))],
   ["yüzgeç ısırma", analyze(tank(), [animal("nipper"), animal("target")], [])],
+  ["karides yiyen balık", analyze(tank(), [animal("shrimpEater"), animal("dwarfShrimp", "shrimp", 5)], [])],
   ["salyangoz yiyen balık", analyze(tank(), [animal("snailEater"), animal("snail", "snail", 3)], [])],
   ["güçlü akıntı", analyze(tank({ netVolumeLiters: 100 }), [animal("plain")], [device("strong")])],
   ["1.000 litrenin üstünde küçük filtre", analyze(tank({ netVolumeLiters: 1200 }), [animal("plain")], [device("big")])],
@@ -160,6 +164,7 @@ const scenarios: Array<[string, HealthAnalysis]> = [
   // Örneklerde başka türlü açılmayan dallar: "ve N ekipman daha", kaynağın kapasite notu, elle girilen değer, acı su, birden çok önerili filtre.
   ["kapasitesi eksik beş cihaz", analyze(tank(), [animal("plain")], ["bareFilter1", "bareFilter2", "bareFilter3", "bareFilter4", "bareHeater"].map((id) => device(id)))],
   ["notlu tek cihaz", analyze(tank(), [animal("plain")], [device("notedFilter")])],
+  ["harici termostat isteyen ısıtıcı", analyze(tank(), [animal("plain")], [device("unregulatedHeater")])],
   ["elle girilen debi", analyze(tank(), [animal("plain")], [{ id: "e-manual", aquariumId: "a", category: "filter", brand: "Listede", model: "Yok", installedAt: "2026-01-01", userRatedFlowLph: 800 }])],
   ["acı su akvaryumunda tatlı su türü", analyze(tank({ type: "brackish" }), [animal("plain")], [])],
   ["iki önerili filtrenin toplamının üstünde", analyze(tank({ netVolumeLiters: 150 }), [animal("plain")], [device("sized"), device("sized2")])],
@@ -172,15 +177,15 @@ describe("motor metinleri dil dosyasından (karar 0021, 3. paket)", () => {
   it("altın fikstürün her vakasında Türkçe metnin sözcükleri ve sayıların değeri motorunkiyle aynı", () => {
     expect(fixture.length).toBeGreaterThan(1000);
     for (const { name, result } of fixture) expectSameText(result, name);
-  }, 30_000); // 1.033 vaka, iki biçimleyiciyle: sıcak çalıştırmada ~2 sn, soğuk ve paralel çalıştırmada 5 sn'yi aşabilir.
+  }, 30_000); // 1.066 vaka, iki biçimleyiciyle: sıcak çalıştırmada ~2 sn, soğuk ve paralel çalıştırmada 5 sn'yi aşabilir.
 
   it("fikstürde geçmeyen kodları tetikleyen senaryolarda da aynı", () => {
     for (const [name, analysis] of scenarios) expectSameText(analysis, name);
   });
 
   it("motorun her kodu dil dosyasında var, dil dosyasında kullanılmayan kod yok, her kod en az bir kez sınandı", () => {
-    expect(sourceWarningCodes.size).toBe(48);
-    expect(sourceDetailCodes.size).toBe(38);
+    expect(sourceWarningCodes.size).toBe(49);
+    expect(sourceDetailCodes.size).toBe(39);
     expect(new Set(Object.keys(tr.warnings))).toEqual(sourceWarningCodes);
     expect(new Set(Object.keys(tr.metricDetails))).toEqual(sourceDetailCodes);
     expect(new Set(Object.keys(tr.metricLabels))).toEqual(new Set(fixture[0].result.metrics.map((metric) => metric.key)));

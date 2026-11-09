@@ -20,11 +20,23 @@
    - Değer, tam modelin kendi ürün sayfasında (başlık, açıklama ya da teknik tablo) yazar. Marka ya da liste sayfasındaki genel metin yetmez; model kodu farklı tür (ör. Sobo WP-190F için mağazadaki WP-190F-UV5) eşleştirilmez.
    - Yalnızca kayıtta önceden olan alanlar geri gelir; kayda yeni alan (ör. mağazanın yazdığı ama kayıtta olmayan akvaryum hacmi) eklenmez.
    - Mağazanın değeri eski kaynaktan farklıysa mağazanınki kullanılır (ör. WaterBear Q serisi, Resun LP-200, Sobo SB-860A gücü, Sobo WP-303H hacmi).
-   - Kabul edilen mağazalar ya da aynı sayfanın başlığı ile açıklaması aynı alanı farklı yayımlıyorsa o alan kullanılmaz ve açıklamada farkı söyler (ör. Aquawing AQ1300F gücü 25 W / 30 W, AQ680 önerilen hacmi 80 L / 350 L, WaterBear WB-2770 debisi 800 / 900 L/saat, Resun LP-20 hava debisi 28 L/dakika / 1500 L/saat).
+   - Kabul edilen mağazalar ya da aynı sayfanın başlığı ile açıklaması aynı alanı farklı yayımlıyorsa o alan kullanılmaz ve açıklamada farkı söyler (ör. Aquawing AQ1300F gücü 25 W / 30 W, AQ680 önerilen hacmi 80 L / 350 L, WaterBear WB-2770 debisi 800 / 900 L/saat).
    - Ejet 905F için Malawi İzmir'in 1000 L/saat değeri, 2026-08-27 Ejet denetiminde eldeki 470 L/saat kaydıyla çelişkili bulunup kullanılmamıştı; mağaza sayfası güç de vermiyor. Hangisinin doğru olduğu kurala uyan bir kaynaktan çözülemediği için ikisi de kullanılmaz.
    - Hava debisi L/dakika yazıldıysa L/saate çevrilir (×60); çok çıkışlı motorda çıkışlar toplanır.
 4. **Sonuç.** 166 kaydın:
    - 76'sı kabul edilen mağazada doğrulandı (`shopVerifiedEquipment`): kaynak bağlantısı mağaza sayfasına geçer, doğrulama tarihi 2026-10-17 olur, açıklama mağaza sayfasına göre yeniden yazılır, doğrulanmayan alan çekilir. 71'i bağımsız kapasite hesabına girer. Dördünde (Aquawing AQ312, Resun LP-20, Sobo SB-860A, WaterBear WB-2770) yalnız güç doğrulandığı için kapasite notu kalır; Xinyou XY-2835 sünger filtredir ve 40 litre hacim sınırı geri gelir.
+
+2026-11-03 ek denetimi: Resun LP-20 için üreticinin resmî LP20/LP40 teknik
+tablosu 1500 L/saat ve 17 W yayımladı. Bu birincil kaynak, mağazalardaki
+1500/1680 L/saat farkını çözdüğü için LP-20 artık kapasite notu taşımaz ve
+otomatik hesapta kullanılır.
+
+2026-11-03 Xinyou ek denetimi: üreticinin tam model teknik tabloları on pasif
+sünger filtrenin hacim sınırını yayımladı. İkincil kaynak farklılıklarında
+birincil üretici değeri esas alındı; bu on kayıt doğrulanmamışlar listesinden
+çıktı. Güncel dağılım 66 bütün-değeri çekilmiş kayıt, 5 yalnız-debisi çekilmiş
+kayıt ve kabul edilen kaynakla geri yazılan 83 kayıttır. Üretici sayfası kendi
+içinde çelişen ya da teknik değer yayımlamayan dört Xinyou kaydı dışarıda kaldı.
    - 86'sının bütün sayısal değerleri çekilir (`unverifiedEquipmentIds`): mağazalarda bulunamadı, mağaza değer vermiyor ya da değer kullanılamadı.
    - Regent 6500, 7500, 8500 ve 9500'te yalnız hava debisi çekilir (`unverifiedAirFlowIds`): mağazaların ürün sayfaları gücü yayımlıyor, debiyi yayımlamıyor. Atakan Petshop'un marka sayfasındaki "6500 cc/dk hava akışı" gibi ifadeler ürün sayfası değil ve sayılar model adlarıyla aynı; Akvaryum Express 9500 için birimsiz "900-1600 litre" yazıyor.
    - Bilinçli istisna: Regent güçleri bu pakette yeniden değerlendirilmedi; önceki denetimde belirlenen değerler kalır (6500, 8500 ve 9500'te Türkiye ürün etiketi). 9500 için Atakan Petshop ve Akvaryum Express 4 W, Malawi İzmir 5 W yazıyor; bu fark kaydın açıklamasında zaten belirtiliyor ve hava motorunda güç otomatik hesaba girmiyor. Bu yüzden çelişki kuralı (3. madde) Regent gücüne uygulanmadı.

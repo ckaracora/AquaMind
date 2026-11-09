@@ -3057,3 +3057,270 @@ Güncel alt adım: JBL filtre medyası, bakteri başlangıcı, sorun giderici/pH
   - `pistia-stratiotes`: AB listesi ve FISC kategori 1; ana kaynak EUR-Lex; satış adı "Su marulu" (ürün başlığı).
 - Girmeyenler: *Fittonia albivenis*, *Selaginella kraussiana* 'Mini', *Homalomena* türleri (Aquarubi'de satılıyor; hiçbir kabul edilen kaynakta etiketi yok).
 - 1. ve 2. paketin kayıtları değişmedi.
+
+## 2026-11-03 Resun LP seri kaynak denetimi (Codex)
+
+- Resun'un resmî `LP LOW NOISE AIR PUMP (LP60~300)` ürün sayfası ve sayfadaki
+  `MODEL PARAMETERS` görsel tablosu doğrudan okundu:
+  `https://www.resun-china.com/h-pd-149.html`.
+- Görsel tablo yalnız üç model satırı yayımlıyor:
+  - LP60: 4200 L/saat, 50 W;
+  - LP100: 8400 L/saat, 100 W;
+  - LP200: 14.000/15.000 L/saat, 230 W (elektrik varyantına göre iki debi).
+- LP60 ve LP100 aynı değerlerle resmî üretici kaynağına taşındı.
+- LP200 için kabul edilen Atakan Petshop sayfası 15.000 L/saat ve 200 W
+  yayımlıyor. Debi üretici aralığının içinde; otomatik havalandırma hesabında
+  üreticinin yayımladığı güvenli alt değer olan 14.000 L/saat kullanıldı.
+  200 W / 230 W güç çelişkisi kesin alan yapılmadı; iki kaynak ve fark ürünün
+  kullanıcıya gösterilen teknik açıklamasında açık bırakıldı.
+- Resmî sayfanın başlığında LP300 geçmesine rağmen ürün görsellerinde ve teknik
+  tabloda LP300 satırı yok. Bu nedenle eski ikincil kaynaktaki 18.000 L/saat ve
+  250 W geri alınmadı; LP300 otomatik kapasite hesabı dışında kaldı.
+
+## 2026-11-03 WaterBear WB-2770 kapasite doğrulaması (Codex)
+
+- Kullanıcının kabul ettiği Cikletist Petshop tam model sayfası model, barkod ve
+  800 L/saat debiyi yayımlıyor:
+  `https://www.cikletistpetshop.com/waterbear-wb-2770-akvaryum-ic-filtre-800lh-7408`.
+- Aquarubi'nin tam model sayfası 12 W gücü yayımlıyor; aynı sayfanın başlığı
+  800 L/saat, açıklaması 900 L/saat dediği için debi bu kaynaktan alınmadı:
+  `https://aquarubi.com/waterbear-wb-2770-akvaryum-ic-filtre`.
+- Katalog 800 L/saat ve 12 W değerini kullanıyor. Cikletist sayfasındaki
+  "800 L akvaryum" ifadesi teknik olarak güvenilir bir üretici hacim önerisi
+  olmadığından `recommendedMaxL` alanına aktarılmadı.
+
+## 2026-11-03 SunSun HW-502/HW-503 kimlik ve kapasite düzeltmesi (Codex)
+
+- SunSun/Sensen üreticisinin resmî HW seri tablosu doğrudan okundu:
+  `https://www.sunsun-china.com/product/aquarium-equipment/hw-series-out-side-filter-2.html`.
+- Eski `502` kaydı resmî HW-502 adına, 320 L/saat ve 5 W değerlerine taşındı.
+  Üretici tabloda akvaryum hacmi yayımlamadığı için eski 60 L sınırı kaldırıldı.
+- Eski `503` kaydı resmî HW-503 adına, 350 L/saat ve 5 W değerlerine taşındı.
+- Türkiye'de 600 L/saat ve 6 W ile satılan ürün ayrı `503B` kaydıdır; HW-503'e
+  aktarılmadı. Böylece iki farklı modelin teknik değerleri birbirine karışmıyor.
+
+## 2026-11-03 Ejet BP3/905F/907F güvenli kaynak denetimi (Codex)
+
+- Qimei'nin resmî Ejet hava motoru sayfası doğrudan okundu:
+  `https://www.qimeigroup.com/Products_detail/ejet-aquarium-air-pump-ejet168.html`.
+  Teknik tablo yalnız E-JET 168 (2,0 L/dakika, 2,1 W, 40–80 L) ve E-JET 268
+  modellerini kapsıyor; BP3 tabloda yer almıyor. Bu değerler BP3'e aktarılmadı.
+- Kullanıcının kabul ettiği Atakan Petshop Ejet marka sayfası BP3'ü pilli,
+  elektrik kesintisi ve taşıma desteğine yönelik hava motoru olarak listeliyor,
+  fakat debi veya akvaryum hacmi yayımlamıyor: `https://atakanpetshop.com/ejet`.
+  BP3'ün eski, kabul edilmeyen mağaza kaynağındaki 120 L/saat değeri geri
+  alınmadı; kayıt güncel kabul edilen kaynağa ve açıklamalı kapasite notuna taşındı.
+- 905F için kabul edilen kaynaklardaki 470 L/saat ve 1000 L/saat değerleri
+  çelişkili kalıyor; 907F için kurala uyan tam model teknik sayfası bulunamadı.
+  Arama sonuçlarındaki fiyat karşılaştırma, forum ve yabancı satıcı değerleri
+  otomatik hesaba alınmadı. Üç model de seçilebilir, ancak kullanıcı etiket
+  değerini girmedikçe otomatik kapasite hesabının dışındadır.
+
+## 2026-11-03 Aquawing AQ-WP seri distribütör doğrulaması (Codex)
+
+- Eksen Pet'in hakkımızda sayfası şirketin, Aquawing'in sahibi Bursa Pet'in
+  Marmara ve Akdeniz bölgesindeki tek bayisi ve temsilcisi olduğunu açıkça
+  yayımlıyor: `https://eksenpet.com/sayfa/hakkimizda`.
+- Eksen Pet Aquawing marka ve iç filtre katalogları tam model kodu, barkod,
+  güç ve debiyi birlikte yayımlıyor:
+  `https://eksenpet.com/markalar/aquawing` ve
+  `https://eksenpet.com/akvaryum/akvaryum-filtreleri/ic-filtreler`.
+- Bu distribütör/marka kataloğu kanıtıyla AQ-WP750FA, AQ-WP750FB,
+  AQ-WP850FA, AQ-WP850FB, AQ-WP950FA, AQ-WP950FB, AQ-WP1000FA,
+  AQ-WP1000FB, AQ-WP2300A, AQ-WP3300A, AQ-WP3300B ve AQ-WP3300C yeniden
+  doğrulandı. On iki kaydın mevcut debi, güç ve barkodları kaynakla birebir
+  eşleşti; doğrulama tarihi 2026-11-03 oldu.
+- Bu 12 kayıt otomatik kapasite hesabına geri alındı. Aquawing hesap kapsamı
+  65/88'den 77/88'e, genel ekipman kapsamı 1251/1359'dan 1263/1359'a
+  (%92,9) çıktı. Kaynak bulunamayan yedi eski Aquawing modelinin ve debi
+  yayımlanmayan hava motorlarının güvenlik dışlaması değişmedi.
+- Hedefli katalog akışı testi geçti; kapsam raporu 2026-11-03 ölçümüyle
+  yenilendi.
+- Tam `pnpm verify` zincirinde TypeScript, katalog akışı, 113 sağlık senaryosu,
+  hesaplayıcılar, katalog denetimi ve kapsam testi geçti; 452 testten 450'si
+  başarılı. Yalnız önceden denetlenmiş 1033/1066 altın fikstür farkının iki
+  karşılaştırması bekliyor. Altın dosya ürün sahibi onayı olmadan yazılmadı.
+  Ayrı `next build` 159 sayfanın tamamını başarıyla üretti.
+
+## 2026-11-03 Resun LP-20 resmî kapasite doğrulaması (Codex)
+
+- Resun üreticisinin LP20/LP40 resmî ürün sayfasındaki `MODEL PARAMETERS`
+  görsel tablosu doğrudan okundu:
+  `https://www.resun-china.com/en/h-pd-147.html`.
+- LP-20 satırı 1500 L/saat hava debisi, 17 W güç, 0,028 MPa basınç, 6 hava
+  dağıtıcı çıkışı, 2,2 m azami hava taşı derinliği ve 215 × 145 × 170 mm ürün
+  ölçüsü yayımlıyor.
+- Kabul edilen mağazalardaki 28 L/dakika (1680 L/saat) / 1500 L/saat farkı,
+  daha güçlü birincil kaynak olan üretici tablosuyla çözüldü. Katalog 1500
+  L/saat ve 17 W kullanıyor; eski kapasite belirsizliği kaldırıldı.
+- Genel ekipman hesap kapsamı 1263/1359'dan 1264/1359'a (%93) yükseldi.
+  Hedefli katalog akışı testi ve kapsam ölçümü başarılı.
+
+## 2026-11-03 Xinyou resmî hacim doğrulaması (Codex)
+
+- Xinyou markasının üreticisi Foshan Shunde Junyou Aquarium Product Factory'nin
+  resmî ürün sayfaları ve site haritası tarandı. Tam model sayfalarındaki teknik
+  tablolar XY-168 (30 L), XY-180 (100 L), XY-280 (150 L), XY-2810 (100 L),
+  XY-2811 (200 L), XY-2812 (250 L), XY-2813 (250 L), XY-2870 (100 L),
+  XY-2880 (80 L) ve XY-380 (200 L) sınırlarını doğrudan yayımlıyor.
+- Aynı sayfalar sırasıyla Ø5 × 2; Ø7,5 × 6,5; Ø12 × 6,5; Ø8,5 × 5;
+  Ø8,5 × 10; Ø11,3 × 5; Ø11,3 × 5; Ø8,5 × 5; Ø5 × 6 ve Ø12 × 11,3 cm
+  sünger ölçülerini yayımlıyor. Kayıtlar bu üretici sayfalarına ve 2026-11-03
+  doğrulama tarihine taşındı.
+- Önceki ikincil kaynakların farklı hacim değerleri, birincil üretici kaynağını
+  geçersiz kılmadığı için bu on modelde üretici değeri esas alındı. XY-2836 ve
+  XY-2902'nin üretici sayfası kendi içinde farklı hacimler yayımladığı,
+  XY-2906/XY-2907 için üretici debi ve güç vermediği için dört kayıt güvenli
+  hesap dışında kaldı.
+- Bu ürünler harici hava motoruyla çalışan pasif sünger filtrelerdir; hacim
+  sınırları kullanıcıya gösterilir fakat bağımsız filtre debisi atanmaz.
+  Doğrulanmamışlar listesinde olmayan ekipman 3801/3877'den 3811/3877'ye,
+  hacim kapsamı 824/3877'den 834/3877'ye yükseldi. Hedefli katalog akışı ve
+  kapsam ölçümü başarılı.
+
+## 2026-11-05 Nubios resmî distribütör portföy denetimi (Codex)
+
+- Nubios'un Türkiye distribütörü Kaya Pet'in güncel marka sayfası ve akvaryum
+  kategorileri doğrudan okundu: `https://www.kayapet.com.tr/marka/158/nubios-marka-urunler.html`.
+  Marka ilişkisi, Nubios'u Kaya Pet ürün grubu içinde gösteren bağımsız yetkili
+  satıcı belgeleriyle de doğrulandı.
+- Distribütörün güncel portföyünde N-201, akvaryum setleri ve yardımcı ürünler
+  bulunuyor; MY03/MY05/MY07/MY10, NB-800F/NB-1500F ve
+  NW-450F/NW-600F/NW-800F/NW-1500F için tam model teknik sayfası yayımlanmıyor.
+  Kabul edilen altı yerel mağazanın güncel marka ve filtre sayfalarında da bu
+  modellerin teknik tablosu bulunmadı.
+- Başka perakendecilerdeki ürün başlığı ve kutu görselleri mevcut değerleri
+  desteklese de karar 0019'un kaynak eşiğini karşılamıyor. On kayıt seçilebilir
+  kalıyor; kullanıcı etiket değerini girebilir, ancak otomatik sağlık hesabına
+  geri alınmadı. Tahmini veya başka modele ait değer kullanılmadı.
+
+## 2026-11-05 Netlea resmî kaynak yeniden denetimi (Codex)
+
+- Netlea üreticisinin resmî sitesi ve filtre sistemi bölümü doğrudan tarandı:
+  `https://www.netlea.com/`. Site markanın üretici kimliğini doğruluyor, ancak
+  erişilebilir filtre bölümü güncel model tablosu yerine filtre medyası ve görsel
+  içerik yayımlıyor; No.1/No.2/No.2V dış filtreler, No.2S askı filtre,
+  No.2B/No.3B/No.4B hava motorları ve No.1–No.4 SF serisi için model bazlı
+  sayısal tablo bulunamadı.
+- Mevcut teknik değerler yabancı mağaza ve pazar yeri sayfalarından geldiği için
+  karar 0019'a göre otomatik sağlık hesabına geri alınmadı. Resmî mağaza bağlantısı
+  dinamik ve açık model kanıtı sağlamadığından ürün ailesi değerleri birbirine
+  kopyalanmadı. On dört kayıt seçilebilir ve kaynak izi korunmuş olarak hesap
+  dışında kalıyor.
+
+## 2026-11-05 RS Electrical yerel kaynak yeniden denetimi (Codex)
+
+- RS-118F, RS-04B, RS-602, RS-604, RS-605, RS-760 ve RS-800 kabul edilen
+  Türkiye mağazalarının güncel marka ve kategori sayfalarında tam model koduyla
+  yeniden arandı. Malawi İzmir'in güncel portföyünde RS-99, RS-613, RS-712 ve
+  RS-399 gibi başka RS modelleri bulunuyor; bu yedi eski kayıt için model bazlı
+  teknik sayfa yayımlanmıyor.
+- Yabancı mağazalarda görülen debi, güç ve hacim değerleri üretici, Türkiye
+  distribütörü veya karar 0019'da kabul edilen yerel mağazayla doğrulanamadı.
+  Benzer model numaraları birbirine aktarılmadı. Yedi kayıt seçilebilir kalırken
+  otomatik kapasite hesabına geri alınmadı.
+
+## 2026-11-05 Eurostar eski model yeniden denetimi (Codex)
+
+- Ege 400, Ege 500, Ege W550 ve Ege 2200F; kabul edilen altı yerel mağazanın
+  güncel marka, iç filtre ve arama sayfalarında tam model teknik sayfasıyla
+  bulunamadı. Mevcut değerlerin kaynağı karar 0019 eşiğinin altındaki eski bir
+  mağaza veya fiyat karşılaştırma sayfası olarak kaldı.
+- BettaMarketim'deki güncel `Eurostar Marmara Pilli Hava Motoru AP800 2L`,
+  katalogdaki genel `Marmara Tek Çıkış` ve `Marmara Çift Çıkış` kayıtlarıyla aynı
+  model değildir. AP800 değerleri bu iki eski kayda kopyalanmadı. Altı kayıt
+  seçilebilir kalırken otomatik kapasite hesabına geri alınmadı.
+
+## 2026-11-05 Haqos resmî portföy ve eski model denetimi (Codex)
+
+- Haqos üreticisi Zhongshan Hailong'un güncel resmî ürün dizini ve 2026-07-14
+  tarihli site haritası doğrudan tarandı: `https://www.haqos.com/product.html`
+  ve `https://www.haqos.com/sitemap.xml`. Güncel filtre dizini EXPRO-500,
+  EX500AT, EXPRO-230, EXPRO-1000, EX1000AT, EASY-1000AT, Aqua Flow 250,
+  EXPAD-500 ve EXC-500 gibi ürünleri içeriyor; EX-1200AT, EX-1500AT, EXP-500,
+  HF-900 ve Jular-230 bu resmî dizinde yer almıyor.
+- Kabul edilen altı Türkiye mağazasında da bu beş model için tam teknik sayfa
+  bulunmadı. EXP-500 ile üreticinin ayrı EXPRO-500 modeli birleştirilmedi;
+  yabancı mağazalardaki 500/510/522 L/saat ve 5/7/8,1 W gibi çelişkili değerler
+  karar 0019 gereği reddedildi. Beş kayıt seçilebilir kalırken otomatik kapasite
+  hesabına geri alınmadı.
+
+## 2026-11-05 bağımsız kapasite boşlukları kapanış denetimi (Codex)
+
+- Katalogdaki filtre, ısıtıcı ve hava motorları aynı kapsam ölçümüyle yeniden
+  sayıldı. 1.359 bağımsız kapasite kaydının 1.264'ünde güvenli hesap değeri var;
+  kalan 95 kaydın tamamı kullanıcıya nedenini açıklayan `capacityDataNote`
+  taşıyor. Marka dağılımı: Aquawing 11, Boyu 11, Ejet 3, Eurostar 8, Haqos 5,
+  Jeneca 11, Netlea 14, Nubios 12, Regent 6, Resun 2, RS Electrical 7, Sobo 3
+  ve Xinyou 2.
+- Bu 95 kayıt açık araştırma kuyruğu değildir. Üreticinin değer yayımlamaması,
+  modelin güncel resmî portföyde bulunmaması, kabul edilen kaynakların birbiriyle
+  çelişmesi veya yalnız zayıf kaynak bulunması nedeniyle karar 0019 uyarınca
+  güvenli biçimde kapatılmıştır. Kullanıcı ürünü seçebilir ve etiketteki değeri
+  elle girebilir; kaynakta olmayan sayı otomatik sağlık hesabına katılmaz.
+- `scripts/test-catalog-flow.cjs` artık 95 kaydın tamamında açıklama bulunmasını
+  ve marka dağılımını sabitler. Yeni bir kapasite boşluğu eklenirse ya da bir
+  kayıt kaynak kanıtı olmadan hesaba sokulursa katalog akışı testi başarısız olur.
+
+## 2026-11-05 altın fikstür salt okunur fark denetimi (Codex)
+
+- Kayıtlı 1.033 altın vaka ile güncel 1.066 vaka, fikstür dosyasına yazmadan
+  ad ve çıktı düzeyinde karşılaştırıldı. 123 yeni ad, 90 kaldırılan ad ve 71
+  değişen ortak vaka var. Yeni/kaldırılan adlar kaynaklı 21 yeni kesin tür
+  profilinin ikili vakaları ve güvenli olmayan genel salyangoz/kerevit
+  profillerinin kaldırılmasıyla deterministik sıralamanın değişmesinden geliyor.
+- Ortak vakaların 18'inde toplam puan, 27'sinde uyarı kodu kümesi değişiyor.
+  Değişiklikler kaynaklı yetişkin boyu, en az hacim/uzunluk, grup sayısı,
+  doğrudan bakım notu ve yayımlanmayan uzunluk uyarısı düzeltmeleriyle sınırlı.
+  Yalnız `species-tight:ramshorn-snail` genel durumu `warning`dan `good`a
+  dönüyor; doğrudan tür kaynağının 10 litre yayımlaması ve santimetre cinsinden
+  tank uzunluğu yayımlamaması nedeniyle eski 20 litre/25 cm varsayımının
+  kaldırılması bu sonucu açıklıyor. Altın dosya ürün sahibi onayı olmadan
+  değiştirilmedi.
+- Aynı sınıflandırma kalıcı `pnpm audit:golden` komutuna taşındı. Komut öncesi
+  ve sonrası `golden-v1.json` SHA-256 özeti
+  `E22A269E4F2F26CE7D25A9C48F6A6FCE3BF115494F600DF442BBE35553F4CA58`
+  olarak aynı kaldı; denetimin fikstüre yazmadığı doğrulandı. Fikstür yazımı
+  yalnız ayrıca onaylanan `AQUAMIND_GOLDEN_CAPTURE=1` akışında mümkündür.
+
+## 2026-11-05 zorunlu marka ve kategori akışı kapanış denetimi (Codex)
+
+- Kullanıcının ilk verdiği marka listesi, katalog kapsamının tek gerçek listesi
+  olan `src/data/catalog-coverage.ts` ile yeniden karşılaştırıldı. Katalogdaki
+  49 zorunlu başlığın tamamı en az bir ekipman veya bakım ürünü taşıyor; boş
+  marka başlığı yok. İlk istekteki `Aquamin`, markanın katalogdaki yerleşik adı
+  `Aquamins` (86 bakım ürünü); `Litefech` ise `Lifetech` (29 ekipman) olarak
+  eşleniyor. Bu iki yazım artık katalog akışı regresyonunda açıkça korunuyor.
+- Ekipman seçicisinin kategori → marka → model akışı yeniden denetlendi. Yedi
+  kategorinin her biri dolu; kategori seçimi yalnız o kategorinin markalarını,
+  marka seçimi de yalnız aynı kategori ve markaya ait modelleri döndürüyor.
+  Kategori veya marka değiştiğinde önceki model seçimi sıfırlanıyor. Bu davranış
+  katalogdaki bütün kayıtlar üzerinde çalışan regresyonla korunuyor; filtre
+  seçildiğinde ısıtıcıların veya ısıtıcı seçildiğinde filtrelerin görünmesi
+  mümkün değil.
+- Katalog denetimi yalnız başlık saymakla kalmıyor: 3.877 ekipmanın ve 3.105
+  bakım ürününün tamamında HTTPS ana kaynak, `YYYY-MM-DD` doğrulama tarihi ve
+  varsa yalnız HTTPS ek kaynak bulunmasını artık zorunlu tutuyor. Böylece 49
+  marka dolu görünürken kaynaksız kayıt saklanması da kapanış testini düşürür.
+
+## 2026-11-09 Dophin AH-1002 ve altın fikstür onayı (Codex)
+
+- Ürün sahibi, Dophin AH-1002'nin sabit sıcaklık kontrolü bulunmadığına ilişkin
+  güvenlik kuralını açıkça onayladı. Karar 0027 kabul edildi; cihaz harici
+  termostatlı kontrol ve ayrı termometre olmadan normal ısıtıcı kapasitesine
+  katılmıyor, tehlike uyarısı veriyor ve veri güveninde hazır sayılmıyor.
+- Aynı onayla altın fikstür 1.033 vakadan 1.066 vakaya yenilendi. Yenilemeden
+  önce sınıflandırılan fark 123 yeni ad, 90 kaldırılan ad, 71 değişen ortak vaka,
+  18 puan değişimi, 27 uyarı kodu değişimi ve tek genel durum değişimiydi
+  (`species-tight:ramshorn-snail`, `warning` → `good`). Açıklanamayan davranış
+  değişimi bulunmadı.
+- Fikstür SHA-256 özeti
+  `E22A269E4F2F26CE7D25A9C48F6A6FCE3BF115494F600DF442BBE35553F4CA58`
+  değerinden `EF63D495BBDBC67737D04884CBB7B6621548D06365AEE7BFE9543EB0D336F070`
+  değerine değişti. Yenileme sonrasında `pnpm audit:golden` 1.066 kayıtlı ve
+  1.066 güncel vaka ile eklenen/kaldırılan/değişen farkların tamamında sıfır
+  verdi. Hedefli ısıtıcı/metin testleri ve 113 sağlık senaryosu başarılıdır.
+- Tam `pnpm verify` başarılıdır: TypeScript, yedi ekipman kategorili ve 3.105
+  bakım ürünlü katalog akışı, 113 sağlık senaryosu, hacim/su değişimi/beş kum
+  türü hesaplayıcıları, katalog denetimi, 35 dosyada 452 Vitest testi ve 159
+  sayfalık Next.js üretim derlemesi geçti.

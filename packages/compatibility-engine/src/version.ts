@@ -48,5 +48,10 @@
 // (uyarı); bitkinin kaynaktaki boyu akvaryumun yüksekliğinden büyük (bilgi). Yeni sayısal eşik yok; `analyzeAquarium`ın puanı, uyarıları
 // ve çıktısı değişmez. Bitki kuralları puan cezası ve gömülü eşik içermez (yalnız kayıttaki değerler), bu yüzden kural seti sürümü
 // aynı kalır (bkz. docs/DECISIONS/0025-bitki-uyarilari.md).
-export const ENGINE_VERSION = "1.11.0";
-export const RULESET_VERSION = "1.9.0";
+//
+// 1.12.0: üretici tarafından sabit sıcaklık kontrolü bulunmadığı açıklanan
+// ısıtıcılar tek başına güvenli ısıtma kapasitesine katılmaz; harici termostat ve
+// ayrı termometre gereksinimi tehlike uyarısı olarak gösterilir. Yeni güvenlik
+// davranışı kural seti 1.10.0'dır (bkz. docs/DECISIONS/0027-harici-termostat-gerektiren-isitici.md).
+export const ENGINE_VERSION = "1.12.0";
+export const RULESET_VERSION = "1.10.0";

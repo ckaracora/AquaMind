@@ -20,6 +20,11 @@ Arama sonucu özeti, yapay zekâ cevabı, forum yorumu veya ilgisiz kategori say
 
 Bu liste otomatik doğruluk garantisi değildir. Her bağlantı doğru marka, model ve varyanta ait olmalıdır.
 
+## Doğrulanmış Türkiye distribütörü ve marka kataloğu kaynakları
+
+- `https://eksenpet.com/`: Eksen Pet, Bursa Pet'in Marmara ve Akdeniz bölgesindeki tek bayisi ve temsilcisi olduğunu; Aquawing'in de Bursa Pet markası olduğunu kendi hakkımızda sayfasında yayımlar. Aquawing için yalnız tam model kodunu, güç/debiyi ve barkodu birlikte veren Eksen Pet ürün veya marka kataloğu satırları kaynak önceliğinin 2. sırasında kabul edilir. Bu kabul, Eksen Pet'teki başka markalara otomatik olarak genişletilmez.
+- `https://www.kayapet.com.tr/`: Kaya Pet'in kendi marka ve ürün sayfaları Nubios'u şirketin portföyünde listeler; bağımsız yetkili satıcı belgeleri de Kaya Pet'i Nubios'un Türkiye distribütörü olarak gösterir. Yalnız Kaya Pet'in tam model sayfasında yayımlanan alanlar kaynak önceliğinin 2. sırasında kabul edilir; marka listesi tek başına teknik değer kanıtı sayılmaz.
+
 ## Ekipman değerleri için özel kural
 
 - Ürün sahibi kararı 2026-10-11 (`docs/DECISIONS/0019-dogrulanamayan-ekipman-degerleri.md`): sağlık hesabında kullanılan ekipman değeri (debi, güç, önerilen hacim, akvaryum uzunluğu) yalnızca yukarıdaki önceliğin ilk üç sırasından, yani üretici, Türkiye distribütörü ya da kabul edilen yerel mağaza sayfasından doğrulanabiliyorsa kullanılır. "Birbirini doğrulayan iki ikincil kaynak" (4. sıra) ekipman değeri için yeterli sayılmaz.

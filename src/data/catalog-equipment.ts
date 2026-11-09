@@ -2,6 +2,7 @@ import type { Equipment } from "@/types/aquarium";
 import { lightingCatalog } from "./catalog-equipment-lighting";
 import { specializedEquipmentCatalog } from "./catalog-equipment-specialized";
 import { hardwareEquipmentCatalog } from "./catalog-equipment-hardware";
+import { recoveredEquipmentCatalog } from "./catalog-equipment-recovered";
 import { withdrawUnverifiedEquipmentValues } from "./catalog-equipment-unverified";
 import { assertUniqueIds, brandModelKey, isVerifiedEquipmentProfile, normalize } from "./catalog-shared";
 
@@ -11,6 +12,7 @@ export interface EquipmentProfile {
   requiresAirPump?: boolean;
   recommendedTankLengthCm?: [number,number];
   integratedHeaterW?: number;
+  requiresExternalTemperatureControl?: boolean;
   integratedUvcW?: number;
   passiveComponent?: boolean;
   auxiliaryFiltration?: boolean;
@@ -18,7 +20,7 @@ export interface EquipmentProfile {
   sourceUrl?: string; additionalSourceUrls?: string[]; verifiedAt?: string;
 }
 
-export const equipmentCatalog: EquipmentProfile[] = [
+const baseEquipmentCatalog: EquipmentProfile[] = [
   { id:"oase-biomaster-350", category:"filter", brand:"Oase", model:"BioMaster 350", specifications:"Dış filtre · 1100 L/saat · 18 W", ratedFlowLph:1100, powerW:18, recommendedMaxL:350, adjustableFlow:true, sourceUrl:"https://www.oase.com/en/products-a-z/family/f/biomaster2.1001508935.html", verifiedAt:"2026-08-17" },
   { id:"eheim-classic-250", category:"filter", brand:"Eheim", model:"Classic 250 (2213)", specifications:"Dış filtre · 440 L/saat · 8 W", ratedFlowLph:440, powerW:8, recommendedMaxL:250, sourceUrl:"https://eheim.com/en_GB/aquatics/technology/external-filters/classic/classic-250", verifiedAt:"2026-08-17" },
   { id:"fluval-107", category:"filter", brand:"Fluval", model:"107", specifications:"Dış filtre · 550 L/saat · 10 W", ratedFlowLph:550, powerW:10, recommendedMinL:40, recommendedMaxL:130, sourceUrl:"https://fluvalaquatics.com/us/shop/product/07-series-performance-canister-filter-107-up-to-30-us-gal-130-l", verifiedAt:"2026-08-17" },
@@ -502,16 +504,12 @@ export const equipmentCatalog: EquipmentProfile[] = [
   ...hardwareEquipmentCatalog,
 ];
 
-const documentedCapacityGaps = new Set([
-  "aquawing-aqa3000",
-  "haqos-easy-1000at","haqos-aqua-flow-250",
-  "nubios-yu118c","nubios-yu119c",
-]);
-for(const item of equipmentCatalog){
-  if(documentedCapacityGaps.has(item.id)&&!item.capacityDataNote)item.capacityDataNote="Üretici ve incelenen güvenilir satıcı kaynaklarında kapasite/debi değeri yayımlanmamış; tahmini değer kullanılmıyor.";
-}
-// Değeri yalnızca kural dışı kaynaklarda yayımlanmış kayıtların değerleri hesaptan çekilir (docs/DECISIONS/0019-dogrulanamayan-ekipman-degerleri.md).
-const unknownUnverifiedIds = withdrawUnverifiedEquipmentValues(equipmentCatalog);
+const recoveredEquipmentById = new Map(recoveredEquipmentCatalog.map((item) => [item.id, item]));
+const baseEquipmentIds = new Set(baseEquipmentCatalog.map((item) => item.id));
+export const equipmentCatalog: EquipmentProfile[] = [
+  ...baseEquipmentCatalog.map((item) => recoveredEquipmentById.get(item.id) ?? item),
+  ...recoveredEquipmentCatalog.filter((item) => !baseEquipmentIds.has(item.id)),
+];
 
 const hasCapacityData = (profile:EquipmentProfile) => {
   if(profile.category==="heater")return Boolean(profile.powerW||profile.recommendedMinL||profile.recommendedMaxL);
@@ -519,6 +517,17 @@ const hasCapacityData = (profile:EquipmentProfile) => {
   if(profile.category==="air_pump")return Boolean(profile.ratedFlowLph);
   return true;
 };
+
+const documentedCapacityGaps = new Set([
+  "aquawing-aqa3000",
+  "haqos-easy-1000at","haqos-aqua-flow-250",
+  "nubios-yu118c","nubios-yu119c",
+]);
+for(const item of equipmentCatalog){
+  if(documentedCapacityGaps.has(item.id)&&!hasCapacityData(item)&&!item.capacityDataNote)item.capacityDataNote="Üretici ve incelenen güvenilir satıcı kaynaklarında kapasite/debi değeri yayımlanmamış; tahmini değer kullanılmıyor.";
+}
+// Değeri yalnızca kural dışı kaynaklarda yayımlanmış kayıtların değerleri hesaptan çekilir (docs/DECISIONS/0019-dogrulanamayan-ekipman-degerleri.md).
+const unknownUnverifiedIds = withdrawUnverifiedEquipmentValues(equipmentCatalog);
 
 function assertUniqueEquipmentModels(items:EquipmentProfile[]){const seen=new Set<string>();for(const item of items){const key=[item.category,item.brand,item.model].map(value=>value.trim().toLocaleLowerCase("tr-TR")).join("|");if(seen.has(key))throw new Error(`Ekipman kataloğunda yinelenen kategori/marka/model: ${item.category} / ${item.brand} / ${item.model}`);seen.add(key)}}
 // Bütünlük denetimi geliştirmede, testlerde ve CI'da (`pnpm verify`) çalışır; üretim derlemesinde kullanıcının tarayıcısında çalışmaz (docs/DECISIONS/0015-katalog-modulleri-ve-sayfa-hizi.md).
@@ -531,7 +540,7 @@ function assertEquipmentCatalogIntegrity(){
     if(item.recommendedMinL&&item.recommendedMaxL&&item.recommendedMinL>item.recommendedMaxL)throw new Error(`Ters ekipman hacim aralığı: ${item.id}`);
     if(item.recommendedTankLengthCm&&(item.recommendedTankLengthCm[0]<=0||item.recommendedTankLengthCm[0]>item.recommendedTankLengthCm[1]))throw new Error(`Geçersiz ekipman uzunluk aralığı: ${item.id}`);
     if(Boolean(item.sourceUrl)!==Boolean(item.verifiedAt))throw new Error(`Eksik ekipman kaynak/tarih çifti: ${item.id}`);
-    if(!hasCapacityData(item)&&!item.capacityDataNote)throw new Error(`Açıklanmamış ekipman kapasite boşluğu: ${item.id}`);
+    if(!hasCapacityData(item)&&!item.capacityDataNote&&!item.passiveComponent&&!item.auxiliaryFiltration)throw new Error(`Açıklanmamış ekipman kapasite boşluğu: ${item.id}`);
     if(hasCapacityData(item)&&item.capacityDataNote)throw new Error(`Teknik verisi bulunan ekipmanda gereksiz kapasite notu: ${item.id}`);
     if(!item.sourceUrl||!item.verifiedAt||item.specifications.toLocaleLowerCase("tr-TR").includes("doğrulama bekliyor"))unverifiedEquipmentIds.push(item.id);
   }
