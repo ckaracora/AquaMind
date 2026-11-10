@@ -31,6 +31,13 @@ const spaceReference = (p: EngineTextParams, f: EngineTextFormat) =>
     ? `For the recorded number, a minimum of ${f.volume(num(p, "volume"))} and a length of ${f.length(num(p, "length"))} were used as the reference.`
     : `For the recorded number, a minimum of ${f.volume(num(p, "volume"))} was used as the reference; the source publishes no tank length.`;
 const fixed = (text: string): Text => () => text;
+/** The animals whose range the latest reading is above (`above`) or below (`below`) (engine 1.14.0). */
+const outsideRange = (p: EngineTextParams) =>
+  list(p, "above").length && list(p, "below").length
+    ? `above the source range for ${nameList(list(p, "above"))} and below it for ${nameList(list(p, "below"))}.`
+    : list(p, "above").length
+      ? `above the source range for ${nameList(list(p, "above"))}.`
+      : `below the source range for ${nameList(list(p, "below"))}.`;
 const marineTarget = (p: EngineTextParams) => (str(p, "profile") === "fishOnly" ? "fish-only aquarium" : "aquarium with invertebrates");
 const marineRange = (p: EngineTextParams, f: EngineTextFormat) => `${f.measurement(num(p, "min"), 3)}–${f.measurement(num(p, "max"), 3)}`;
 
@@ -62,7 +69,6 @@ export const enEngine: EngineMessages = {
     shrimpEaten: fixed("Shrimp may be eaten"),
     snailEaten: fixed("Snails may be eaten"),
     flowConflict: fixed("Flow needs differ"),
-    communityCaution: fixed("Tankmate choice needs care"),
     shrimpUnverified: fixed("Shrimp compatibility not confirmed"),
     compatible: fixed("Shared living ranges exist"),
     manufacturerMax: (p, f) => `Manufacturer recommends at most ${f.volume(num(p, "liters"))}`,
@@ -73,6 +79,7 @@ export const enEngine: EngineMessages = {
     flowUnverified: fixed("Flow data awaiting confirmation"),
     auxiliaryOnly: fixed("Only an auxiliary surface skimmer recorded; a main filter is needed"),
     noFilter: fixed("No filter found in the catalog"),
+    filterNotRecorded: fixed("No filter recorded"),
     estimatedOk: (p, f) => `Estimated volume suitable for a total of ${f.number(num(p, "watts"))} W`,
     manufacturerOk: fixed("Within the manufacturer's volume range"),
     powerLow: fixed("Heating power is low for this volume"),
@@ -80,6 +87,7 @@ export const enEngine: EngineMessages = {
     outOfRange: fixed("Outside the volume range"),
     heaterUnverified: fixed("Wattage or volume data awaiting confirmation"),
     noHeater: fixed("No heater found in the catalog"),
+    heaterNotRecorded: fixed("No heater recorded"),
     latestReading: fixed("Based on the latest reading"),
     readingNeeded: fixed("A reading needs to be added"),
     recordsReady: (p, f) =>
@@ -115,6 +123,15 @@ export const enEngine: EngineMessages = {
     airPumpRequired: {
       title: fixed("Sponge filter needs an air pump"),
       message: fixed("The selected sponge filter does not move water on its own. Add a suitable air pump from the catalog."),
+    },
+    filterMissing: {
+      title: fixed("No filter recorded"),
+      message: fixed("No filter is recorded for this aquarium; every aquarium with livestock needs a filter. If you have one, add it on the equipment page; if not, install a suitable filter for the aquarium."),
+    },
+    heaterMissing: {
+      title: fixed("No heater recorded"),
+      message: (p, f) =>
+        `No heater that warms the water is recorded for this aquarium.${flag(p, "passive") ? " An undergravel heating cable is not meant to heat the water." : ""} According to the sources, ${nameList(list(p, "tropical"))} ${plural(list(p, "tropical").length, "needs", "need")} water of at least ${f.temperature(num(p, "min"))}. If you have a heater, add it on the equipment page; if not, install a suitable heater for the aquarium.`,
     },
     highLoad: {
       title: fixed("Bioload may be high"),
@@ -245,9 +262,45 @@ export const enEngine: EngineMessages = {
       message: (p, f) =>
         `Nitrate ${f.measurement(num(p, "value"), 3, NITRATE_ABOVE_TAP_LIMIT_PPM)} ppm. The recommended limit is at most ${f.measurement(NITRATE_ABOVE_TAP_LIMIT_PPM)} ppm above tap water; measure your tap water's nitrate too and increase water changes.`,
     },
+    speciesTemperatureOutOfRange: {
+      title: fixed("Temperature outside the animals' range"),
+      message: (p, f) =>
+        `Latest reading ${f.temperature(num(p, "value"), flag(p, "hasRange") ? (num(p, "value") > num(p, "max") ? num(p, "max") : num(p, "min")) : undefined)}; this is ${outsideRange(p)}${
+          !flag(p, "hasRange")
+            ? ""
+            : num(p, "min") === num(p, "max")
+              ? ` The selected animals share only ${f.temperature(num(p, "min"), num(p, "value"))}; bring the temperature to this value slowly.`
+              : ` The selected animals share a range of ${f.temperatureNumber(num(p, "min"), num(p, "value"))}–${f.temperature(num(p, "max"), num(p, "value"))}; bring the temperature into this range slowly.`
+        }`,
+    },
+    speciesPhOutOfRange: {
+      title: fixed("pH outside the animals' range"),
+      message: (p, f) =>
+        `Latest reading pH ${f.measurement(num(p, "value"), 2, flag(p, "hasRange") ? (num(p, "value") > num(p, "max") ? num(p, "max") : num(p, "min")) : undefined)}; this is ${outsideRange(p)}${
+          !flag(p, "hasRange")
+            ? ""
+            : num(p, "min") === num(p, "max")
+              ? ` The selected animals share only pH ${f.measurement(num(p, "min"), 2, num(p, "value"))}; bring the pH to this value slowly.`
+              : ` The selected animals share a pH range of ${f.measurement(num(p, "min"), 2, num(p, "value"))}–${f.measurement(num(p, "max"), 2, num(p, "value"))}; bring the pH into this range slowly.`
+        }`,
+    },
     temperatureConflict: {
       title: fixed("The species' temperature needs do not match"),
       message: fixed("No shared, safe temperature range was found for the selected animals."),
+    },
+    coldwaterWithTropical: {
+      title: fixed("Coldwater species kept with tropical fish"),
+      message: (p, f) =>
+        `${nameList(list(p, "coldwater"))} ${plural(list(p, "coldwater").length, "is a coldwater species", "are coldwater species")}, while ${nameList(list(p, "tropical"))} ${plural(list(p, "tropical").length, "is a tropical fish", "are tropical fish")}.${
+          num(p, "min") === num(p, "max")
+            ? ` The selected animals share only one temperature: ${f.temperature(num(p, "min"))}.`
+            : ` The selected animals share a temperature range of only ${f.temperatureNumber(num(p, "min"), num(p, "max"))}–${f.temperature(num(p, "max"), num(p, "min"))}.`
+        } Consider keeping coldwater species in a separate aquarium from tropical fish.`,
+    },
+    temperatureRangeNarrow: {
+      title: fixed("The species' temperature needs meet at a single value"),
+      message: (p, f) =>
+        `The source temperature ranges of the selected animals share only one point: ${f.temperature(num(p, "value"))}. If the temperature moves even slightly away from it, at least one animal is outside its range; measure the temperature often or review the species choice.`,
     },
     phConflict: {
       title: fixed("The species' pH needs do not match"),
@@ -321,10 +374,15 @@ export const enEngine: EngineMessages = {
       title: (p) => `${str(p, "name")}: space is borderline`,
       message: spaceReference,
     },
+    spaceNarrow: {
+      title: (p) => `${str(p, "name")}: aquarium is narrow for this species`,
+      message: (p, f) =>
+        `${spaceReference(p, f)} The aquarium's width (${f.length(num(p, "width"))}) is less than twice the catalog's adult size of ${f.length(num(p, "size"))}. AquaMind adapts this recommendation from the size rule of the Swiss Animal Welfare Ordinance (width 2× body length); the ordinance uses body length without the tail fin, while AquaMind uses total length for most species. An aquarium at least ${f.length(num(p, "minWidth"))} wide is more suitable.`,
+    },
     spaceSevere: {
       title: (p) => `${str(p, "name")}: aquarium too small`,
       message: (p, f) =>
-        `${spaceReference(p, f)} The aquarium is also below the AquaMind limit adapted from the size rule of the Swiss Animal Welfare Ordinance (length 3×, width 2×, water depth 1× body length). The ordinance uses body length without the tail fin; AquaMind is stricter and uses the catalog's adult size of ${f.length(num(p, "size"))} (total length for most species): length at least ${f.length(num(p, "minLength"))}, width at least ${f.length(num(p, "minWidth"))}, water depth at least ${f.length(num(p, "minDepth"))}.`,
+        `${spaceReference(p, f)} The aquarium is also below the AquaMind limit adapted from the length (3×) and water depth (1× body length) limits in the size rule of the Swiss Animal Welfare Ordinance. The ordinance uses body length without the tail fin; AquaMind is stricter and uses the catalog's adult size of ${f.length(num(p, "size"))} (total length for most species): length at least ${f.length(num(p, "minLength"))}, water depth at least ${f.length(num(p, "minDepth"))}.`,
     },
   },
 };

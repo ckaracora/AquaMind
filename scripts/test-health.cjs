@@ -155,8 +155,9 @@ const metric = (analysis, key) => analysis.metrics.find(item => item.key === key
     animals,
     [device("jbl-protemp-b-20-iii", "heater", "JBL", "PROTEMP b20 III")],
   );
-  assert.deepEqual(metric(analysis, "heater"), metric(withoutHeater, "heater"), "Taban ısıtma kablosu ana su ısıtıcısı gibi değerlendirilmemeli");
+  assert.deepEqual({ ...metric(analysis, "heater"), detail: "", detailCode: "" }, { ...metric(withoutHeater, "heater"), detail: "", detailCode: "" }, "Taban ısıtma kablosu ana su ısıtıcısı gibi değerlendirilmemeli");
   assert.match(metric(analysis, "heater").detail, /Katalogdan ısıtıcı bulunamadı/, "Taban ısıtıcısı tek başına ana ısıtıcı sayılmamalı");
+  assert.equal(metric(withoutHeater, "heater").detail, "Isıtıcı kayıtlı değil", "Hiç ısıtıcı kaydı olmayan akvaryumda açıklama ısıtıcının kayıtlı olmadığını söylemeli (motor 1.14.0)");
 }
 
 {
@@ -243,7 +244,9 @@ const metric = (analysis, key) => analysis.metrics.find(item => item.key === key
     [],
   );
   assert(warningTitles(analysis).includes("Çin yosun yiyici: tank arkadaşı seçimine dikkat"), "Bölgeci ve yavaş balıkları taciz edebilen türler uyarılmalı");
-  assert.equal(metric(analysis, "compatibility").status, "warning", "Topluluk ve akıntı riskleri birlikte uyarı seviyesinde gösterilmeli");
+  // Motor 1.14.0 (karar 0037): topluluk notu sarı uyarı olarak kalır, puanı düşürmez; ölçütü aynı tür kavgasının cezası (30) dikkatte tutar.
+  assert.equal(analysis.warnings.find((warning) => warning.title === "Çin yosun yiyici: tank arkadaşı seçimine dikkat")?.level, "warning");
+  assert.deepEqual([metric(analysis, "compatibility").score, metric(analysis, "compatibility").status, metric(analysis, "compatibility").detailCode], [70, "warning", "conspecific"], "Topluluk notu cezasız; aynı tür kavgası riski uyarı seviyesinde gösterilmeli");
 }
 
 {
@@ -357,7 +360,7 @@ const metric = (analysis, key) => analysis.metrics.find(item => item.key === key
     [],
   );
   assert(warningTitles(analysis).includes("Cüce zincir loach: grup sayısı düşük"), "Cüce zincir loach küçük grupla girildiğinde sosyal ihtiyaç uyarısı vermeli");
-  assert.equal(metric(analysis, "social").status, "danger");
+  assert.deepEqual([metric(analysis, "social").score, metric(analysis, "social").status], [60, "warning"], "Tek türde düşük grup sosyal ölçütü 60'ın altına düşürmemeli (motor 1.14.0)");
 }
 
 {
@@ -400,7 +403,8 @@ const metric = (analysis, key) => analysis.metrics.find(item => item.key === key
     [],
   );
   assert(warningTitles(analysis).includes("Green Terror: tank arkadaşı seçimine dikkat"), "Green Terror başka türlerle seçildiğinde bölgecilik uyarısı vermeli");
-  assert.equal(metric(analysis, "compatibility").status, "warning");
+  // Motor 1.14.0 (karar 0037): topluluk notu sarı uyarıdır, tür uyumunu düşürmez.
+  assert.deepEqual([metric(analysis, "compatibility").score, metric(analysis, "compatibility").status, metric(analysis, "compatibility").detailCode], [100, "good", "compatible"], "Topluluk notu tür uyumu puanını düşürmemeli");
 }
 
 {
@@ -411,7 +415,7 @@ const metric = (analysis, key) => analysis.metrics.find(item => item.key === key
   );
   assert(warningTitles(analysis).includes("Red Head Tapajos: grup sayısı düşük"), "Tapajos üçlü girildiğinde altılı grup gereksinimi uyarılmalı");
   assert(warningTitles(analysis).includes("Red Head Tapajos: özel bakım gereksinimi"), "Tapajos için ince kum ve oturmuş tank uyarısı görünmeli");
-  assert.equal(metric(analysis, "social").status, "danger");
+  assert.deepEqual([metric(analysis, "social").score, metric(analysis, "social").status], [60, "warning"], "Tek türde düşük grup sosyal ölçütü 60'ın altına düşürmemeli (motor 1.14.0)");
 }
 
 {
@@ -422,7 +426,7 @@ const metric = (analysis, key) => analysis.metrics.find(item => item.key === key
   );
   assert(warningTitles(analysis).includes("Moorii Tropheus: grup sayısı düşük"), "Moorii Tropheus küçük koloniyle girildiğinde en az 15 birey uyarısı vermeli");
   assert(warningTitles(analysis).includes("Moorii Tropheus: özel bakım gereksinimi"), "Moorii Tropheus için kayalık kurulum, oksijen ve bitkisel diyet uyarısı görünmeli");
-  assert.equal(metric(analysis, "social").status, "danger");
+  assert.deepEqual([metric(analysis, "social").score, metric(analysis, "social").status], [60, "warning"], "Tek türde düşük grup sosyal ölçütü 60'ın altına düşürmemeli (motor 1.14.0)");
 }
 
 {
@@ -441,10 +445,12 @@ const metric = (analysis, key) => analysis.metrics.find(item => item.key === key
     [animal("bala-shark", "Bala Shark", 3)],
     [],
   );
-  assert.equal(analysis.warnings.find((warning) => warning.title === "Bala Shark: akvaryum çok küçük")?.level, "danger", "Bala Shark yetişkin sürüsü küçük hacim ve kısa akvaryuma önerilmemeli");
+  // Motor 1.14.0 (karar 0037): 150 × 35 × 40 cm'de yalnız genişlik (2 × 35 cm) yetmiyor; alan uyarısı sarı "akvaryum bu tür için dar".
+  assert.equal(analysis.warnings.find((warning) => warning.title === "Bala Shark: akvaryum bu tür için dar")?.level, "warning", "Bala Shark yetişkin sürüsü küçük hacim ve dar akvaryuma önerilmemeli");
+  assert(!warningTitles(analysis).includes("Bala Shark: akvaryum çok küçük"), "Yalnız genişlik yetmediğinde kırmızı alan uyarısı çıkmamalı");
   assert(warningTitles(analysis).includes("Bala Shark: grup sayısı düşük"), "Bala Shark üçlü girildiğinde altılı sürü gereksinimi uyarılmalı");
   assert(warningTitles(analysis).includes("Bala Shark: özel bakım gereksinimi"), "Bala Shark için büyüme, kapak ve oksijen uyarısı görünmeli");
-  assert.equal(metric(analysis, "social").status, "danger");
+  assert.deepEqual([metric(analysis, "social").score, metric(analysis, "social").status], [60, "warning"], "Tek türde düşük grup sosyal ölçütü 60'ın altına düşürmemeli (motor 1.14.0)");
 }
 
 {
@@ -660,8 +666,9 @@ for (const [specificGravity, expected] of [[1.018, "none"], [1.025, "warning"], 
     [animal("winemillers-eartheater", "Winemiller toprak yiyen ciklet", 4)],
     [],
   );
-  const spaceWarning = analysis.warnings.find((warning) => warning.title === "Winemiller toprak yiyen ciklet: akvaryum çok küçük");
-  assert(spaceWarning, "Geophagus winemilleri 648 litre/180 cm altındaki akvaryuma önerilmemeli");
+  // Motor 1.14.0 (karar 0037): 150 × 35 × 40 cm'de yalnız genişlik yetmiyor; sarı "akvaryum bu tür için dar".
+  const spaceWarning = analysis.warnings.find((warning) => warning.title === "Winemiller toprak yiyen ciklet: akvaryum bu tür için dar");
+  assert.equal(spaceWarning?.level, "warning", "Geophagus winemilleri 648 litre/180 cm altındaki akvaryuma önerilmemeli");
   assert(spaceWarning.message.includes("648 L") && spaceWarning.message.includes("180 cm"), "Geophagus winemilleri alan uyarısı kaynaklı hacim ve uzunluğu göstermeli");
   assert(warningTitles(analysis).includes("Winemiller toprak yiyen ciklet: grup sayısı düşük"), "Geophagus winemilleri altılı grubun altında önerilmemeli");
   assert(warningTitles(analysis).includes("Winemiller toprak yiyen ciklet: özel bakım gereksinimi"), "Geophagus winemilleri kum ve su kalitesi uyarısını göstermeli");
@@ -673,8 +680,9 @@ for (const [specificGravity, expected] of [[1.018, "none"], [1.025, "warning"], 
     [animal("threadfin-acara", "Threadfin acara")],
     [],
   );
-  const spaceWarning = analysis.warnings.find((warning) => warning.title === "Threadfin acara: akvaryum çok küçük");
-  assert(spaceWarning, "Acarichthys heckelii 150 cm altındaki akvaryuma önerilmemeli");
+  // Motor 1.14.0 (karar 0037): 120 × 35 × 40 cm'de yalnız genişlik yetmiyor; sarı "akvaryum bu tür için dar".
+  const spaceWarning = analysis.warnings.find((warning) => warning.title === "Threadfin acara: akvaryum bu tür için dar");
+  assert.equal(spaceWarning?.level, "warning", "Acarichthys heckelii 150 cm altındaki akvaryuma önerilmemeli");
   assert(spaceWarning.message.includes("150 cm"), "Acarichthys heckelii alan uyarısı kaynaklı çift taban uzunluğunu göstermeli");
   assert(warningTitles(analysis).includes("Threadfin acara: özel bakım gereksinimi"), "Acarichthys heckelii su kalitesi ve saldırganlık uyarısını göstermeli");
 }
@@ -1156,8 +1164,9 @@ for (const [specificGravity, expected] of [[1.018, "none"], [1.025, "warning"], 
     [animal("goldfish", "Japon balığı", 2)],
     [],
   );
-  const spaceWarning = analysis.warnings.find((warning) => warning.title === "Japon balığı: akvaryum çok küçük");
-  assert(spaceWarning, "İki yetişkin Japon balığı 150 litreden küçük akvaryuma önerilmemeli");
+  // Motor 1.14.0 (karar 0037): 100 × 35 × 40 cm'de yalnız genişlik yetmiyor; sarı "akvaryum bu tür için dar".
+  const spaceWarning = analysis.warnings.find((warning) => warning.title === "Japon balığı: akvaryum bu tür için dar");
+  assert.equal(spaceWarning?.level, "warning", "İki yetişkin Japon balığı 150 litreden küçük akvaryuma önerilmemeli");
   assert(spaceWarning.message.includes("150 L"), "Japon balığı alan uyarısı kayıtlı adede göre gereken hacmi göstermeli");
   assert(warningTitles(analysis).includes("Japon balığı: özel bakım gereksinimi"), "Japon balığı filtrasyon, oksijen ve bakım uyarılarını göstermeli");
 }
@@ -1301,7 +1310,11 @@ for (const [specificGravity, expected] of [[1.018, "none"], [1.025, "warning"], 
     [animal("clown-loach", "Makrakanta", 3)],
     [],
   );
-  assert.equal(analysis.warnings.find((warning) => warning.title === "Makrakanta: akvaryum çok küçük")?.level, "danger", "Makrakanta 648 litre/180 cm altındaki akvaryuma önerilmemeli");
+  // Motor 1.14.0 (karar 0037): 150 × 35 × 40 cm'de yalnız genişlik yetmiyor; sarı "akvaryum bu tür için dar".
+  const spaceWarning = analysis.warnings.find((warning) => warning.title === "Makrakanta: akvaryum bu tür için dar");
+  assert.equal(spaceWarning?.level, "warning", "Makrakanta 648 litre/180 cm altındaki akvaryuma önerilmemeli");
+  assert(spaceWarning.message.includes("648 L") && spaceWarning.message.includes("180 cm"), "Makrakanta alan uyarısı kaynaklı hacim ve uzunluğu göstermeli");
+  assert(!warningTitles(analysis).includes("Makrakanta: akvaryum çok küçük"), "Yalnız genişlik yetmediğinde kırmızı alan uyarısı çıkmamalı");
   assert(warningTitles(analysis).includes("Makrakanta: grup sayısı düşük"), "Makrakanta beşli grubun altında sosyal uyarı üretmeli");
   assert(warningTitles(analysis).includes("Makrakanta: özel bakım gereksinimi"), "Makrakanta olgun tank, oksijen, kapak ve uzun ömür güvenliğini göstermeli");
 }
@@ -1405,4 +1418,7 @@ for (const [specificGravity, expected] of [[1.018, "none"], [1.025, "warning"], 
   assert(warningTitles(analysis).includes("Harlequin rasbora: özel bakım gereksinimi"), "Harlequin rasbora kimlik, düşük akıntı ve bitki güvenliğini göstermeli");
 }
 
+// 1.14.0 kontrolü: ölçüm ve sınır aynı hassasiyetle yazılmalı (TR/EN/ES).
+require("../packages/compatibility-engine/test/warning-format-checks.ts").assertWarningFormatting();
 console.log("Sağlık analizi: 113 senaryo başarıyla doğrulandı.");
+console.log("Uyarı biçimlemesi: 3 dilde 18 sınır kontrolü başarıyla doğrulandı.");

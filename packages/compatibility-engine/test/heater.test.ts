@@ -30,8 +30,13 @@ const heaterMetric = (ids: string[]) => analyze(tank, [fish], ids.map(device)).m
 
 describe("ısıtıcı: taban ısıtma kablosu", () => {
   it("tek başına ısıtıcı sayılmaz; sonuç hiç ısıtıcı seçilmemiş gibidir", () => {
-    expect(heaterMetric(["substrate"])).toEqual(heaterMetric([]));
-    expect(heaterMetric(["substrate"]).detail).toBe("Katalogdan ısıtıcı bulunamadı");
+    const substrateOnly = heaterMetric(["substrate"]);
+    const none = heaterMetric([]);
+    expect({ ...substrateOnly, detail: "", detailCode: "" }).toEqual({ ...none, detail: "", detailCode: "" });
+    expect([substrateOnly.score, substrateOnly.status]).toEqual([35, "danger"]);
+    // 1.14.0 (karar 0037): listede hiç ısıtıcı kaydı yoksa açıklama "Isıtıcı kayıtlı değil"; yalnız taban kablosu kayıtlıysa bugünkü açıklama kalır.
+    expect([substrateOnly.detailCode, substrateOnly.detail]).toEqual(["noHeater", "Katalogdan ısıtıcı bulunamadı"]);
+    expect([none.detailCode, none.detail]).toEqual(["heaterNotRecorded", "Isıtıcı kayıtlı değil"]);
   });
 
   it("gerçek ısıtıcının yanında hesabı değiştirmez", () => {

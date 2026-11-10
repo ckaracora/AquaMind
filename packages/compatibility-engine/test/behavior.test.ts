@@ -26,7 +26,8 @@ const species: Record<string, SpeciesProfileInput & { category: Livestock["categ
   loner: { id: "loner", commonName: "Yalnız", adultSizeCm: 20, category: "fish", ...base, minVolumeL: 10, behavior: { conspecificAggression: { source: "Seriously Fish", value: "all" } } },
   disputedFighter: { id: "disputedFighter", commonName: "Tartışmalı kavgacı", adultSizeCm: 5, category: "fish", ...base, behavior: { conspecificAggression: { source: "Seriously Fish", value: "males", conflict: true } } },
   cold: { id: "cold", commonName: "Soğuk su", adultSizeCm: 5, category: "fish", ...base, temperature: [10, 18] },
-  // Alan, grup, filtre, ısıtıcı ve su ölçütleri zayıf: davranış cezası olmadan genel puan 53.
+  // Alan ve grup sarı (1.14.0'dan beri en az 60), filtre, ısıtıcı ve su ölçütleri tehlikede; iki tanınmayan canlı kaydıyla veri güveni 1/3:
+  // davranış cezası olmadan genel puan 53.
   strained: { id: "strained", commonName: "Zorlanan", adultSizeCm: 6, category: "fish", ...base, minVolumeL: 1000, minGroup: 20, temperature: [24, 28], behavior: { conspecificAggression: { source: "Fishkeeper", value: "males" } } },
 };
 
@@ -122,9 +123,13 @@ describe("tür uyumu ölçütü", () => {
 
   it("davranış uyarısı, onsuz tehlikede olmayan akvaryumu tek başına tehlikeye çekmez", () => {
     const coldWater = { id: "w", aquariumId: "a", measuredAt: "2026-09-29", temperature: 10 };
-    const single = analyze(tank, [animal("strained", 1)], [], coldWater);
+    // Katalogda olmayan iki kayıt (çözümleyici tanımaz): yalnız veri güvenini düşürür (1/3 = 33).
+    const unknown = (id: string): Livestock => ({ id, aquariumId: "a", catalogId: id, commonName: "Tanınmayan", category: "fish", quantity: 1, addedAt: "2026-01-01" });
+    const unknowns = [unknown("unknown-1"), unknown("unknown-2")];
+    const single = analyze(tank, [animal("strained", 1), ...unknowns], [], coldWater);
+    expect(single.metrics.map((metric) => [metric.key, metric.score])).toEqual([["load", 100], ["space", 60], ["social", 60], ["compatibility", 100], ["filter", 35], ["heater", 35], ["water", 0], ["confidence", 33]]);
     expect(single).toMatchObject({ score: 53, status: "warning" });
-    const pair = analyze(tank, [animal("strained", 2)], [], coldWater);
+    const pair = analyze(tank, [animal("strained", 2), ...unknowns], [], coldWater);
     expect(titles(pair)).toContain("Zorlanan: erkekler kavga eder");
     expect(Math.round(pair.metrics.reduce((sum, item) => sum + item.score, 0) / pair.metrics.length)).toBe(49);
     expect(pair).toMatchObject({ score: 50, status: "warning" });

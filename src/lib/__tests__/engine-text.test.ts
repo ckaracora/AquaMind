@@ -39,7 +39,8 @@ const seenDetailCodes = new Set<string>();
 /**
  * Sınama biçimleyicisi: dil dosyasının biçimlediği her sayıyı değeri ve iki yuvarlama payıyla işaretler ("⟦13.04~0.05~0.05⟧"). İlk pay
  * motorun yazımı içindir (hacim ve adet motorda yuvarlanmadan yazılır, çevrim/saat ve santimetre bir ondalıkla, su ölçümü `digits`
- * ondalıkla), ikincisi gerçek Türkçe biçimleyicinin yazımı içindir (adet ve hacim en çok bir ondalık; su ölçümü en az `digits` ondalık).
+ * ondalıkla, sıcaklık iki ondalıkla), ikincisi gerçek Türkçe biçimleyicinin yazımı içindir (adet ve hacim en çok bir ondalık; su ölçümü en az
+ * `digits` ondalık; sıcaklık °C olarak en az iki ondalık hassasiyetle, motor 1.14.0).
  */
 const mark = (value: number, engineTolerance: number, shownTolerance: number) => `⟦${value}~${engineTolerance}~${shownTolerance}⟧`;
 const probe: EngineTextFormat = {
@@ -48,6 +49,8 @@ const probe: EngineTextFormat = {
   measurement: (value, digits = 3) => mark(value, 0.5 * 10 ** -digits, 0.5 * 10 ** -digits),
   volume: (liters) => `${mark(liters, 0, 0.05)} L`,
   length: (cm) => `${mark(cm, 0.05, 0.05)} cm`,
+  temperature: (celsius) => `${mark(celsius, 0.005, 0.005)} °C`,
+  temperatureNumber: (celsius) => mark(celsius, 0.005, 0.005),
 };
 const MARK = /⟦([^⟧]*)⟧/;
 /** Motorun sayı yazımı: ondalık nokta ya da virgül, binlik ayırıcı yok, çok büyük ya da küçük değerde üslü yazım. */
@@ -109,6 +112,14 @@ const species: Record<string, SpeciesProfileInput> = {
   dwarfShrimp: { id: "dwarfShrimp", commonName: "Cüce karides türü", adultSizeCm: 3, minVolumeL: 20, minGroup: 1, temperature: [20, 28], ph: [6.5, 8], wasteFactor: 0.15 },
   hunter: { id: "hunter", commonName: "Fırsatçı avcı tür", adultSizeCm: 15, minVolumeL: 100, minTankLengthCm: 80, minGroup: 1, temperature: [22, 27], ph: [6, 7.5], wasteFactor: 1, behavior: { eatsSmallFish: { source: "Seriously Fish" } } },
   marine: { id: "marine", commonName: "Deniz türü", waterTypes: ["saltwater"], adultSizeCm: 5, minVolumeL: 100, minGroup: 1, temperature: [24, 27], ph: [8, 8.4], wasteFactor: 0.5, specificGravity: [1.02, 1.026] },
+  // Motor 1.14.0 (karar 0037): ölçülen değer (iki yön, ortak aralığın yokluğu, tek nokta), soğuk su, ısıtıcı ve genişlik senaryoları.
+  coldRange: { id: "coldRange", commonName: "Serin su türü", adultSizeCm: 4, minVolumeL: 40, minGroup: 1, temperature: [10, 18], ph: [7.8, 8.5], wasteFactor: 0.5 },
+  warmEdge: { id: "warmEdge", commonName: "Ilık uçlu tür", adultSizeCm: 4, minVolumeL: 40, minGroup: 1, temperature: [27, 30], ph: [7.5, 8], wasteFactor: 0.5 },
+  goldfishStub: { id: "goldfishStub", commonName: "Soğuk su balığı", group: "coldwater", adultSizeCm: 10, minVolumeL: 100, minGroup: 1, temperature: [4, 25], ph: [6, 8], wasteFactor: 1 },
+  tropicalStub: { id: "tropicalStub", commonName: "Tropikal tür", group: "tetra", adultSizeCm: 4, minVolumeL: 40, minGroup: 1, temperature: [23, 28], ph: [6, 7.5], wasteFactor: 0.5 },
+  hotStub: { id: "hotStub", commonName: "Sıcak su türü", adultSizeCm: 4, minVolumeL: 40, minGroup: 1, temperature: [25, 30], ph: [6, 7.5], wasteFactor: 0.5 },
+  wide: { id: "wide", commonName: "Geniş isteyen tür", adultSizeCm: 20, minVolumeL: 200, minTankLengthCm: 100, minGroup: 1, temperature: [22, 27], ph: [6, 7.5], wasteFactor: 1 },
+  wideNoLength: { id: "wideNoLength", commonName: "Uzunluksuz geniş tür", adultSizeCm: 20, minVolumeL: 200, minGroup: 1, temperature: [22, 27], ph: [6, 7.5], wasteFactor: 1 },
 };
 const devices: Record<string, EquipmentProfileInput> = {
   skimmer: { id: "skimmer", category: "filter", brand: "Stub", model: "Skimmer", auxiliaryFiltration: true },
@@ -128,6 +139,7 @@ const devices: Record<string, EquipmentProfileInput> = {
   bareFilter3: { id: "bareFilter3", category: "filter", brand: "Stub", model: "Verisiz 3" },
   bareFilter4: { id: "bareFilter4", category: "filter", brand: "Stub", model: "Verisiz 4" },
   notedFilter: { id: "notedFilter", category: "filter", brand: "Stub", model: "Notlu", capacityDataNote: "Üretici debi yayımlamıyor." },
+  substrateHeater: { id: "substrateHeater", category: "heater", brand: "Stub", model: "Taban kablosu", powerW: 10, recommendedMinL: 40, recommendedMaxL: 120, passiveComponent: true },
 };
 const resolver: KnowledgeResolver = {
   speciesForLivestock: (item) => (item.catalogId ? species[item.catalogId] : undefined),
@@ -181,6 +193,16 @@ const scenarios: Array<[string, HealthAnalysis]> = [
   ["karides yiyen balık ve cüce karides", analyze(tank({ netVolumeLiters: 150 }), [animal("shrimpEater"), animal("dwarfShrimp", "shrimp", 5)], [])],
   ["fırsatçı avcı ve küçük balık", analyze(tank({ netVolumeLiters: 150 }), [animal("hunter"), animal("plain")], [])],
   ["deniz: omurgasızlı, düşük KH ve pH", analyze(tank({ type: "saltwater" }), [animal("marine"), animal("snail", "snail")], [], reading({ specificGravity: 1.022, ph: 7.9, kh: 6.5, temperature: 25 }))],
+  // Motor 1.14.0 (karar 0037): yeni uyarıların bütün dalları (ölçüm uyarısında üç yön, ortak aralığın yokluğu ve tek nokta; soğuk su uyarısında
+  // aralık ve tek nokta; ısıtıcı uyarısında taban kablosu; genişlik uyarısında kaynağın uzunluğu olan ve olmayan tür).
+  ["ölçüm aralığın üstünde", analyze(tank(), [animal("plain")], [], reading({ temperature: 28, ph: 8 }))],
+  ["ölçüm aralığın altında", analyze(tank(), [animal("plain")], [], reading({ temperature: 20, ph: 5.5 }))],
+  ["ölçüm iki yönde, ortak aralık yok", analyze(tank(), [animal("plain"), animal("coldRange")], [], reading({ temperature: 20, ph: 7.6 }))],
+  ["ortak sıcaklık ve pH tek nokta", analyze(tank(), [animal("plain"), animal("warmEdge")], [], reading({ temperature: 28, ph: 7.8 }))],
+  ["soğuk su türü ve tropikal balık", analyze(tank({ netVolumeLiters: 200 }), [animal("goldfishStub"), animal("tropicalStub")], [])],
+  ["soğuk su türü ve tropikal balık, tek nokta", analyze(tank({ netVolumeLiters: 200 }), [animal("goldfishStub"), animal("hotStub")], [])],
+  ["yalnız taban ısıtma kablosu", analyze(tank(), [animal("tropicalStub")], [device("substrateHeater")])],
+  ["yalnız genişliği yetmeyen balıklar", analyze(tank({ lengthCm: 80, widthCm: 35, heightCm: 40, netVolumeLiters: 150 }), [animal("wide"), animal("wideNoLength")], [])],
 ];
 const scenario = (name: string) => scenarios.find(([label]) => label === name)![1];
 const warningOf = (analysis: HealthAnalysis, code: string) => analysis.warnings.find((warning) => warning.code === code)!;
@@ -197,9 +219,10 @@ describe("motor metinleri dil dosyasından (karar 0021, 3. paket)", () => {
   });
 
   it("motorun her kodu dil dosyasında var, dil dosyasında kullanılmayan kod yok, her kod en az bir kez sınandı", () => {
-    // 1.13.0: beş deniz suyu kodu (karar 0030).
-    expect(sourceWarningCodes.size).toBe(53);
-    expect(sourceDetailCodes.size).toBe(38);
+    // 1.13.0: beş deniz suyu kodu (karar 0030). 1.14.0 (karar 0037): yedi yeni uyarı kodu; ölçüt kodlarından `communityCaution` çıktı,
+    // `filterNotRecorded` ve `heaterNotRecorded` geldi.
+    expect(sourceWarningCodes.size).toBe(60);
+    expect(sourceDetailCodes.size).toBe(39);
     expect(new Set(Object.keys(tr.warnings))).toEqual(sourceWarningCodes);
     expect(new Set(Object.keys(tr.metricDetails))).toEqual(sourceDetailCodes);
     expect(new Set(Object.keys(tr.metricLabels))).toEqual(new Set(fixture[0].result.metrics.map((metric) => metric.key)));
@@ -225,7 +248,25 @@ describe("motor metinleri dil dosyasından (karar 0021, 3. paket)", () => {
       "Akvaryumun net hacmi (1.200 L), filtrenin üreticisinin önerdiği en büyük hacmin (600 L) %50'den fazla üstünde. Akvaryuma uygun bir filtre ekleyin.",
     );
     expect(engineWarningText(tr, liters, warningOf(scenario("buçuklu boyda çok küçük akvaryum"), "spaceSevere")).message).toMatch(
-      /^Kayıtlı adet için minimum 40 L ve 45 cm uzunluk referansı kullanıldı\. .* katalogdaki 4,5 cm yetişkin boyu .*: uzunluk en az 13,5 cm, genişlik en az 9 cm, su derinliği en az 4,5 cm\.$/,
+      /^Kayıtlı adet için minimum 40 L ve 45 cm uzunluk referansı kullanıldı\. .* katalogdaki 4,5 cm yetişkin boyu .*: uzunluk en az 13,5 cm, su derinliği en az 4,5 cm\.$/,
+    );
+  });
+
+  it("1.14.0: sıcaklık kullanıcının biriminde yazılır (°F); yuvarlama aşılan sınırı gizlemez", () => {
+    const fahrenheit = engineTextFormat(createDisplayFormat("tr", { temperature: "fahrenheit", volume: "liters", dateFormat: "day-first" }));
+    const above = warningOf(scenario("ölçüm aralığın üstünde"), "speciesTemperatureOutOfRange");
+    expect(engineWarningText(tr, liters, above).message).toBe("Son ölçüm 28 °C; bu değer Sakin tür için kaynaktaki aralığın üstünde. Seçilen canlıların ortak aralığı 22–27 °C; sıcaklığı yavaşça bu aralığa getirin.");
+    expect(engineWarningText(tr, fahrenheit, above).message).toBe("Son ölçüm 82,4 °F; bu değer Sakin tür için kaynaktaki aralığın üstünde. Seçilen canlıların ortak aralığı 71,6–80,6 °F; sıcaklığı yavaşça bu aralığa getirin.");
+    const edge = analyze(tank(), [animal("plain")], [], reading({ temperature: 27.004, ph: 7.501 }));
+    expect(engineWarningText(tr, liters, warningOf(edge, "speciesTemperatureOutOfRange")).message).toMatch(/^Son ölçüm 27,004 °C; /);
+    expect(engineWarningText(tr, liters, warningOf(edge, "speciesPhOutOfRange")).message).toMatch(/^Son ölçüm pH 7,501; .* ortak pH aralığı 6–7,5; /);
+    const heater = warningOf(scenario("yalnız taban ısıtma kablosu"), "heaterMissing");
+    expect(engineWarningText(tr, liters, heater).message).toBe(
+      "Akvaryumda suyu ısıtan kayıtlı bir ısıtıcı yok. Taban ısıtma kablosu suyu ısıtmak için değildir. Kaynaklara göre Tropikal tür için su en az 23 °C olmalı. Isıtıcınız varsa ekipman sayfasından ekleyin; yoksa akvaryuma uygun bir ısıtıcı kurun.",
+    );
+    expect(engineWarningText(tr, fahrenheit, heater).message).toContain("Tropikal tür için su en az 73,4 °F olmalı.");
+    expect(engineWarningText(tr, fahrenheit, warningOf(scenario("soğuk su türü ve tropikal balık, tek nokta"), "coldwaterWithTropical")).message).toBe(
+      "Soğuk su balığı soğuk su türü, Sıcak su türü tropikal balık. Seçilen canlıların ortak sıcaklığı yalnız 77 °F. Soğuk su türlerini tropikal balıklardan ayrı bir akvaryumda tutmayı düşünün.",
     );
   });
 
@@ -419,6 +460,8 @@ describe("motor metinleri dil dosyasından (karar 0021, 3. paket)", () => {
         measurement: (value, digits = 3) => note(`measurement(${digits})`, value),
         volume: (value) => note("volume", value),
         length: (value) => note("length", value),
+        temperature: (value) => note("temperature", value),
+        temperatureNumber: (value) => note("temperatureNumber", value),
       });
       return list;
     };
@@ -449,7 +492,7 @@ describe("motor metinleri dil dosyasından (karar 0021, 3. paket)", () => {
     return { unexplained, table };
   };
 
-  it("3b: her kod sayısını doğru türde yazar (adet, çevrim/saat, su ölçümü, hacim, uzunluk)", () => {
+  it("3b: her kod sayısını doğru türde yazar (adet, çevrim/saat, su ölçümü, hacim, uzunluk, sıcaklık)", () => {
     const { unexplained, table } = formatCalls(tr);
     expect(unexplained).toEqual([]);
     expect(table).toEqual({
@@ -465,6 +508,7 @@ describe("motor metinleri dil dosyasından (karar 0021, 3. paket)", () => {
       "uyarı ammoniaDetected": "measurement(3):total",
       "uyarı ammoniaToxic": "measurement(4):free measurement(3):limit",
       "uyarı ammoniaWorstCase": "measurement(3):total measurement(3):limit",
+      "uyarı coldwaterWithTropical": "temperatureNumber:min temperature:max",
       "uyarı conspecificMales": "number:count",
       "uyarı filterCapacityLow": "volume:volume volume:liters",
       "uyarı filterFlowInsufficient": "cycles:turnover",
@@ -473,6 +517,7 @@ describe("motor metinleri dil dosyasından (karar 0021, 3. paket)", () => {
       "uyarı filterTooSmallManufacturer": "volume:volume volume:liters",
       "uyarı filterTooSmallMixed": "volume:volume volume:liters",
       "uyarı groupLow": "number:count number:min",
+      "uyarı heaterMissing": "temperature:min",
       "uyarı marineKh": "measurement(3):min measurement(3):max measurement(2):value",
       "uyarı marineNitrate": "measurement(3):max measurement(2):value",
       "uyarı marinePh": "measurement(3):min measurement(3):max measurement(2):value",
@@ -486,8 +531,12 @@ describe("motor metinleri dil dosyasından (karar 0021, 3. paket)", () => {
       "uyarı nitriteHigh": "measurement(3):value measurement(3):limit",
       "uyarı salinityOutOfRange": "number:count",
       "uyarı spaceLimited": "volume:volume | volume:volume length:length",
-      "uyarı spaceSevere": "volume:volume length:length length:size length:minLength length:minWidth length:minDepth | volume:volume length:size length:minLength length:minWidth length:minDepth",
+      "uyarı spaceNarrow": "volume:volume length:length length:width length:size length:minWidth | volume:volume length:width length:size length:minWidth",
+      "uyarı spaceSevere": "volume:volume length:length length:size length:minLength length:minDepth | volume:volume length:size length:minLength length:minDepth",
+      "uyarı speciesPhOutOfRange": "measurement(2):value | measurement(2):value measurement(2):min measurement(2):max",
+      "uyarı speciesTemperatureOutOfRange": "temperature:value | temperature:value temperatureNumber:min temperature:max",
       "uyarı strongFlow": "cycles:turnover",
+      "uyarı temperatureRangeNarrow": "temperature:value",
       "uyarı unmatchedAnimals": "number:count",
       "uyarı unmatchedEquipment": "number:count",
       "uyarı unverifiedAnimals": "number:count",
