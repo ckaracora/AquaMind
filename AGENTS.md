@@ -128,8 +128,13 @@ talebi, sonra bu dosya, sonra ilgili belge geçerlidir.
   `packages/domain` içinde tek yerde tanımlanır; uygulamalar içe aktarır,
   kopyalamaz.
 - Kaynak bilgisini kaybetme. Mevcut `sourceUrl` ve `verifiedAt` değerleri
-  değiştirilmez, silinmez ve yeniden üretilmez. Güven veya doğrulama durumu
-  uydurulmaz; bilinmiyorsa boş bırakılır.
+  değiştirilmez, silinmez ve yeniden üretilmez. Tek istisna kaynaklı yeniden
+  doğrulamadır: kayıt kaynağa karşı yeniden okunup doğrulandığında kaynak ve
+  tarih yenilenebilir; eski kaynak izi `additionalSourceUrls` içinde, eski adres
+  artık açılmıyor ya da başka sayfaya yönleniyorsa `docs/CATALOG_LOG.md`'de
+  korunur. Kaynak okunmadan yapılan taşıma, biçim dönüşümü veya toplu üretim bu
+  istisnaya girmez. Güven veya doğrulama durumu uydurulmaz; bilinmiyorsa boş
+  bırakılır.
 
 ### Her zaman
 

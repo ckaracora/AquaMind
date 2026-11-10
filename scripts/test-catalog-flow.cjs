@@ -7197,7 +7197,7 @@ assert(d3ElectricBlueHap?.communityCaution?.includes("Fishkeeper tek başına") 
 const d3RainbowSnakehead = speciesCatalog.find((item) => item.id === "rainbow-snakehead");
 assert(d3RainbowSnakehead?.speciesOnly === undefined && d3RainbowSnakehead.predatory === true && d3RainbowSnakehead.communityCaution?.includes("topluluk akvaryumunda da tutulabilir") && !d3RainbowSnakehead.communityCaution.includes("Yalnızca uyumlu çift, tür akvaryumunda"), "Gökkuşağı yılanbaş Seriously Fish'e göre dikkatle seçilmiş toplulukta tutulabilmeli; avcı işareti kalmalı");
 const d3DwarfFrog = speciesCatalog.find((item) => item.id === "african-dwarf-frog");
-assert(d3DwarfFrog?.predatory === true && d3DwarfFrog.speciesOnly === undefined, "Afrika cüce kurbağası Fishkeeper'a göre çok küçük balıkları ve yavruları yer (avcı işareti), tür akvaryumu istemez");
+assert(d3DwarfFrog?.predatory === undefined && d3DwarfFrog.speciesOnly === undefined && d3DwarfFrog.communityCaution?.includes("erişkinler çok küçük balıkları ve yavruları yiyebilir"), "Afrika cüce kurbağası avcı işareti taşımamalı (Codex PR #87 denetimi: motorun 2,8 cm kuralı salyangoz ve karidesi de kapsıyordu); Fishkeeper'ın çok küçük balık ve yavru riski bakım metninde kalmalı, tür akvaryumu istemez");
 // 2026-11-10 ek tur (B1 adayları, docs/CATALOG_LOG.md).
 for (const id of ["silver-mono", "spotted-scat"]) { const profile = speciesCatalog.find((item) => item.id === id); assert.deepEqual([profile?.waterTypes, profile?.specificGravity, profile?.ph], [["brackish","saltwater"], [1.005,1.026], [7.5,8.5]], `${id} OATA'ya göre orta-yüksek acı sudan tam deniz suyuna uzanan profil taşımalı`); }
 const d3BumblebeeGoby = speciesCatalog.find((item) => item.id === "freshwater-bumblebee-goby");
