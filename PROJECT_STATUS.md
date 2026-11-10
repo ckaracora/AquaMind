@@ -25,8 +25,10 @@ Son güncelleme: 2026-11-10
   sağlık senaryosu; hacim, su değişimi ve 5 kum türü hesaplayıcısı; katalog
   denetimi; 57 dosyada 699 test; 160 statik/dinamik sayfanın üretim derlemesi ve
   dil paketi sınırı geçti. Geçici çeviri ve denetim dosyaları kaldırıldı.
-- Sıradaki işlem: bu doğrulanmış birleşimi yalnız görev dalına commit edip
-  GitHub'a göndermek. `main` birleştirmesi ve Vercel yayını ayrıca onay ister.
+- Doğrulanmış birleşim `codex/catalog-main-integration` görev dalına commit
+  edilip GitHub'a gönderildi. Çalışma alanı temizdir. Sıradaki işlem bağımsız
+  inceleme ve ancak ayrıca onaylanırsa Pull Request/`main` birleştirmesidir;
+  Vercel yayını da ayrıca onay ister.
 - Canlı uygulama: `https://aqua-mind-three.vercel.app/`. Bu üretim yayını bu
   görev dalındaki katalog entegrasyonunu içermez. Bu devir sözü Vercel yayınına
   veya `main` birleştirmesine izin vermez.
