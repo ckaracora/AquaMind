@@ -3948,6 +3948,7 @@ Güncel alt adım: JBL filtre medyası, bakteri başlangıcı, sorun giderici/pH
   - Düzeltilen: canlıların İngilizce çevirisinde bir İngiliz yazımı, "towards" → "toward" (`species.communityCaution`, anahtar `6e1d854fb26bf385`).
   - Değiştirilmeyen gözlem: `7943b4b8e61195ca` anahtarındaki "Bicolour Blenny" ortak adı kaynağın (Fishkeeper, İngiltere) yazımı; talimat gereği yalnız raporlandı.
   - Açık: JBL PROTEMP S ailesinin öbür beş modelinde (S 26/51/151/201/301 ile eski adlı `jbl-protemp-s25 … s300` kayıtları) aynı ad çakışması; altın fikstürün yeniden üretilmesi.
+- Birleştirme öncesi denetim (Codex, PR #87, P2): `african-dwarf-frog` (Afrika cüce kurbağası), `predatory`: true → kaldırıldı; işaret bu kayıtta PR'dan önce de yoktu. Kaynak (Fishkeeper) yalnız çok küçük balık ve yavru riskini söylüyor; motorun genel kuralı (7 cm'nin %40'ı, 2,8 cm) salyangoz ve karidesleri de (ör. 2,5 cm Ramshorn) kesin tehlikeye sokuyordu. Kaynaklı topluluk metni (`communityCaution`) ve doğrulama tarihi (2026-11-09) kaldı; akış testi işaretin olmadığını ve metnin kaldığını bekliyor. Balık dışı canlılarda fırsatçı avcılık ayrı motor işi.
 
 ## 2026-11-10 Veri testi: doğrulama tarihlerinin yenilenmesi (Claude)
 
