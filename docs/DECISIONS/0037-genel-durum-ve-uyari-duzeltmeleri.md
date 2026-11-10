@@ -1,7 +1,7 @@
 # 0037 — Genel durum ve uyarı düzeltmeleri (veri testi B)
 
 - Tarih: 2026-11-10
-- Durum: Kabul edildi. Ürün sahibi (`buraksenfx`) 2026-11-10'da veri testi B bulgularından çıkan yedi motor değişikliğini sohbette onayladı. Teknik kararlar Claude'un (lider). Yeni uyarıların Türkçe metinleri kodlamadan önce ürün sahibine taslak olarak gösterildi ve onaylandı; İngilizce (ABD) ve İspanyolca (Latin Amerika) metinler taslaktaki gibi, İspanyolcada "estrecho". Örnek akvaryum kararı ürün sahibinin: son ölçüm 25,4 °C → 24,5 °C. Kontrol: Codex, 2026-11-11 (aşağıda "Kontrol"). Kod ve belgeler [commit sonrası], altın fikstür ayrı commit [commit sonrası]; PR [commit sonrası].
+- Durum: Kabul edildi. Ürün sahibi (`buraksenfx`) 2026-11-10'da veri testi B bulgularından çıkan yedi motor değişikliğini sohbette onayladı. Teknik kararlar Claude'un (lider). Yeni uyarıların Türkçe metinleri kodlamadan önce ürün sahibine taslak olarak gösterildi ve onaylandı; İngilizce (ABD) ve İspanyolca (Latin Amerika) metinler taslaktaki gibi, İspanyolcada "estrecho". Örnek akvaryum kararı ürün sahibinin: son ölçüm 25,4 °C → 24,5 °C. Kontrol: Codex, 2026-11-11 (aşağıda "Kontrol"). Kod ve belgeler `fc4440c`, altın fikstür ayrı commit `41f987f`; PR henüz açılmadı.
 
 ## Bağlam
 
@@ -114,7 +114,7 @@ Kaynaklar:
 - `heater.test.ts`: yalnız taban kablosu ısıtıcısızla aynı puan ve durum (35, tehlike); açıklama kayıt varken "Katalogdan ısıtıcı bulunamadı", hiç kayıt yokken "Isıtıcı kayıtlı değil". `filter-load.test.ts` değişmeden geçti.
 - `src/lib/__tests__/engine-text.test.ts`: 60 uyarı ve 39 ölçüt kodu; yeni kodların metni motorun Türkçesiyle aynı; her kodun biçimleyici yöntem tablosu (sıcaklık dahil); 8 yeni stub senaryo (ölçüm uyarısının üç yönü, ortak aralığın yokluğu, tek nokta; soğuk su aralık ve tek nokta; taban kablosu; uzunluğu olan ve olmayan genişlik uyarısı); °F yazımı ve yuvarlamanın aşılan sınırı gizlememesi.
 - `scripts/test-health.cjs`: 113 senaryo (sayı değişmedi). Yeni kurala göre güncellenen 11 blok: taban kablosu (açıklama); Çin yosun yiyici + inci gurami (tür uyumu 70, "aynı tür kavgası"); Green Terror + neon (tür uyumu 100); cüce zincir loach, Red Head Tapajos, Moorii Tropheus, Bala Shark (sosyal 60, dikkat); Bala Shark, Winemiller toprak yiyen ciklet, Threadfin acara, iki Japon balığı, Makrakanta (varsayılan 35 cm genişlikte yalnız genişlik yetmiyor: sarı "akvaryum bu tür için dar", kaynağın hacmi ve uzunluğu mesajda). Beklentiler yeni kuralın ürettiği somut değerlerdir.
-- Altın fikstür: kod değişikliğinden sonra ayrı commit'te yeniden üretilecek [commit sonrası]. Her adımdan sonra altın vakalar depo dışına döküldü ve fark o adıma atandı (1077 vaka):
+- Altın fikstür: kod değişikliğinden sonra ayrı commit'te yeniden üretildi (`41f987f`); adım adım dökümün sonuncusuyla bayt bayt aynı. Her adımdan sonra altın vakalar depo dışına döküldü ve fark o adıma atandı (1077 vaka):
   - D3 + D7: 471 vaka değişti, durum değişmedi; alan ölçütü 404 vakada, sosyal ölçüt 282 vakada tehlikeden uyarıya; 62 `spaceSevere` → `spaceNarrow`.
   - D2: 54 vaka; 8'i dikkat → uygun; tür uyumu açıklaması 22 vakada değişti.
   - D1: 505 vaka uygun → dikkat. 443 tür "sığar" vakası, 35 tür çifti ve 20 ısıtıcı vakası filtresiz (filtre ölçütü 35; 6 ısıtıcı vakasında ısıtıcı da güçlü, 45). 7 filtre vakasında filtre ölçütü güçlü akış yüzünden tehlikede (0–41; ikisinde ısıtıcılı filtrenin ısıtıcısı da güçlü). Boş akvaryum değişmedi.
@@ -127,7 +127,7 @@ Kaynaklar:
 
 ## Kontrol
 
-Codex 2026-11-11'de değişikliği kontrol etti. D1–D7'de uygulama hatası, testlerde de beklenti gevşetmesi bulmadı. Bir gösterim hatasını düzeltti: ölçüm aşılan sınıra çok yakınken ikisi aynı sayıya yuvarlanabiliyordu (24,39 °C ile 24,4 °C sınırı ikisi de 75,9 °F). Artık ölçüm ile karşılaştırılan sınır üç dilde birlikte biçimlenir (sıcaklık, pH ve soğuk su aralığı); sözcükler, eşikler ve puanlar değişmedi. Bu sınır `test/warning-format-checks.ts` içinde TR/EN/ES için 18 örnekle sınanır; kontrolü hem `warnings-1-14.test.ts` hem `scripts/test-health.cjs` çalıştırır. Codex ayrıca iki belge tutarsızlığını düzeltti (canlısız akvaryum istisnası yalnız filtre ve ısıtıcı ölçütünde; pasif ısıtıcının açıklaması). Codex'in ortamında Vitest başlamadığı için testler son kapıda koşuldu: altın test hariç motor testleri 164/164 geçti; altın test ve `engine-text.test.ts`'in fikstüre bağlı 4 testi fikstür yeniden üretilene kadar beklendiği gibi kırmızıydı. Fikstürden sonra: [son kapı sonrası].
+Codex 2026-11-11'de değişikliği kontrol etti. D1–D7'de uygulama hatası, testlerde de beklenti gevşetmesi bulmadı. Bir gösterim hatasını düzeltti: ölçüm aşılan sınıra çok yakınken ikisi aynı sayıya yuvarlanabiliyordu (24,39 °C ile 24,4 °C sınırı ikisi de 75,9 °F). Artık ölçüm ile karşılaştırılan sınır üç dilde birlikte biçimlenir (sıcaklık, pH ve soğuk su aralığı); sözcükler, eşikler ve puanlar değişmedi. Bu sınır `test/warning-format-checks.ts` içinde TR/EN/ES için 18 örnekle sınanır; kontrolü hem `warnings-1-14.test.ts` hem `scripts/test-health.cjs` çalıştırır. Codex ayrıca iki belge tutarsızlığını düzeltti (canlısız akvaryum istisnası yalnız filtre ve ısıtıcı ölçütünde; pasif ısıtıcının açıklaması). Codex'in ortamında Vitest başlamadığı için testler son kapıda koşuldu: altın test hariç motor testleri 164/164 geçti; altın test ve `engine-text.test.ts`'in fikstüre bağlı 4 testi fikstür yeniden üretilene kadar beklendiği gibi kırmızıydı. Fikstür yeniden üretildikten sonra (`41f987f`) `pnpm verify` tamamen yeşil: 58 Vitest dosyasında 732 test, 113 sağlık senaryosu, tip denetimi ve üretim derlemesi.
 
 ## Sonuçlar
 
@@ -155,4 +155,4 @@ Codex 2026-11-11'de değişikliği kontrol etti. D1–D7'de uygulama hatası, te
 
 ## Geri alma
 
-Kod ve belge değişikliği tek commit'tir [commit sonrası], altın fikstür ayrı commit'tir [commit sonrası]. Kod commit'i geri alındığında motor 1.13.0 davranışına döner; o durumda fikstür commit'i de geri alınmalıdır. Kullanıcı verisi ve depolama biçimi etkilenmez.
+Kod ve belge değişikliği tek commit'tir (`fc4440c`), altın fikstür ayrı commit'tir (`41f987f`). Kod commit'i geri alındığında motor 1.13.0 davranışına döner; o durumda fikstür commit'i de geri alınmalıdır. Kullanıcı verisi ve depolama biçimi etkilenmez.
