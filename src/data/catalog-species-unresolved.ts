@@ -1,4 +1,5 @@
 import type { AquariumType, Livestock } from "@/types/aquarium";
+import { speciesForOtherWaterExactSearch } from "./catalog-species";
 
 export interface UnresolvedSpeciesListing {
   name: string;
@@ -372,5 +373,11 @@ export function unresolvedSpeciesForSearch(value: string, category: Livestock["c
   if (query.length < 3) return undefined;
   const compatible = unresolvedSpeciesListings.filter((item) => item.category === category && item.waterTypes.includes(waterType));
   const names = (item: UnresolvedSpeciesListing) => [item.name, ...(item.aliases ?? [])].map(normalizeSearch);
-  return compatible.find((item) => names(item).includes(query)) ?? compatible.find((item) => names(item).some((name) => name.includes(query)));
+  const exact = compatible.find((item) => names(item).includes(query));
+  if (exact) return exact;
+  // Aranan ad başka su türündeki doğrulanmış bir türün tam adıysa daha uzun satış adının içindeki alt metin kabul edilmez (veri testi,
+  // 2026-11-10): tatlı suda "ARGUS BALIKLARI" acı/tuzlu su türü Benekli Argus'tur, Silver Argus'un kimlik belirsizliği değil. Ekleme
+  // penceresi bu durumda türün akvaryum türüne uygun olmadığını söyler. Satış adının kendisi (tam eşleşme) yine güvenlik kaydını bulur.
+  if (speciesForOtherWaterExactSearch(value, category, waterType)) return undefined;
+  return compatible.find((item) => names(item).some((name) => name.includes(query)));
 }

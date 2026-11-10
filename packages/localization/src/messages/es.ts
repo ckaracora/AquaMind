@@ -357,6 +357,11 @@ export const es: Messages = {
       unresolvedBadge: "En espera por seguridad",
       unresolvedBlocked: "Para no dar un cálculo de volumen y compatibilidad incorrecto, todavía no se puede agregar este animal.",
       unresolvedSource: "Abrir la fuente del nombre comercial",
+      otherWaterTitle: "Especie encontrada, no apta para este tipo de acuario",
+      otherWaterText: (aquariumType: "freshwater" | "brackish" | "saltwater", required: ReadonlyArray<"freshwater" | "brackish" | "saltwater">) => {
+        const water = { freshwater: "agua dulce", brackish: "agua salobre", saltwater: "agua salada" };
+        return `Esta especie no es apta para un acuario de ${water[aquariumType]}; necesita un acuario de ${required.map((type) => water[type]).join(" o ")}.`;
+      },
       species: "3. Especie",
       chooseSpecies: "Elegir especie",
       awaitingIdentity: "Esperando confirmación de identidad",

@@ -88,6 +88,9 @@ describe("bitki kataloğu bütünlüğü", () => {
     expect(() => assertPlantCatalogIntegrity(withChange("ceratophyllum-demersum", (item) => { item.turkishAliases = ["Boynuz otu"]; }))).toThrow("Türkçe satış adı eş adlarda yok");
   });
 
+  // Veri testinin A örnekleminde (2026-11-09) bütün dolu alanları kaynakla aynı ya da yazılı kural sonucu çıkan 25 bitki (docs/CATALOG_LOG.md).
+  const dataTestPlants = new Set(["aegagropila-linnaei","aponogeton-longiplumulosus","aponogeton-madagascariensis","bacopa-australis","bolbitis-heudelotii","ceratopteris-thalictroides","cryptocoryne-wendtii-mi-oya","eleocharis-parvula","eriocaulon-vietnam","helanthium-bolivianum-quadricostatus","hygrophila-lancea-araguaia","hygrophila-odora","lagenandra-meeboldii-red","lilaeopsis-brasiliensis","limnophila-aromatica","ludwigia-glandulosa","ludwigia-repens-rubin","lysimachia-nummularia-aurea","mayaca-fluviatilis","microsorum-pteropus-windelov","riccardia-chamedryfolia","rotala-rotundifolia","rotala-wallichii","schismatoglottis-prietoi","staurogyne-repens"]);
+
   it("katalog, kaynaktan üretilen kayıtlarla alan alan aynı", () => {
     const expected = JSON.parse(readFileSync("src/lib/__tests__/plant-catalog.expected.json", "utf8")) as PlantProfile[];
     expect(sourced).toEqual(expected);
@@ -121,7 +124,8 @@ describe("bitki kataloğu bütünlüğü", () => {
       expect(item.shopUrls.length, item.id).toBeGreaterThan(0);
       for (const url of item.shopUrls) expect(["aquarubi.com", "www.akvaryumexpress.com"], `${item.id}: ${url}`).toContain(new URL(url).host);
       // Practical Fishkeeping'in kutusu 4. pakette (2026-10-29) okundu.
-      expect(item.verifiedAt, item.id).toBe(hasPfk(item) ? "2026-10-29" : "2026-10-25");
+      // Veri testi (2026-11-09, A örneklemi): bütün dolu alanları kaynakla aynı ya da yazılı kural sonucu çıkan bitkiler o gün yeniden okundu.
+      expect(item.verifiedAt, item.id).toBe(dataTestPlants.has(item.id) ? "2026-11-09" : hasPfk(item) ? "2026-10-29" : "2026-10-25");
     }
     expect(() => assertPlantCatalogIntegrity()).not.toThrow();
   });

@@ -139,7 +139,7 @@ const orionBSeriesCatalog:EquipmentProfile[] = [
 const orionCRgbwCatalog:EquipmentProfile[] = [
   [30,24,30,45],[45,34,45,60],[60,40,60,75],[75,48,75,90],
   [90,55,90,100],[100,63,100,115],[115,70,115,125],
-].map(([model,powerW,minLength,maxLength])=>({id:"orionled-c-rgbw-"+model,category:"lighting",brand:"OrionLED",model:"C RGB-W "+model,specifications:"Kumandalı RGB-W bitkili akvaryum LED'i · "+powerW+" W · "+minLength+"–"+maxLength+" cm akvaryum",powerW,recommendedTankLengthCm:[minLength,maxLength] as [number,number],sourceUrl:"https://orionled.com.tr/urun/orionled-c-serisi-rgb-w-kumandali/",verifiedAt:ORION_VERIFIED_AT}));
+].map(([model,powerW,minLength,maxLength])=>({id:"orionled-c-rgbw-"+model,category:"lighting",brand:"OrionLED",model:"C RGB-W "+model,specifications:"Kumandalı RGB-W bitkili akvaryum LED'i · "+powerW+" W · "+minLength+"–"+maxLength+" cm akvaryum",powerW,recommendedTankLengthCm:[minLength,maxLength] as [number,number],sourceUrl:"https://orionled.com.tr/urun/orionled-c-serisi-rgb-w-kumandali/",verifiedAt:String(model) === "75" ? "2026-11-09" : ORION_VERIFIED_AT}));
 
 const orionBluetoothRgbCatalog:EquipmentProfile[] = [
   [20,30,35],[30,40,45],[40,50,55],[50,60,65],[60,70,75],[70,80,85],[80,90,95],

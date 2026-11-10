@@ -21,7 +21,7 @@ Katalogların her bilgisinin yüzde kaçının dolu olduğu ve kaynağının tü
 ## Güncel durum
 
 <!-- kapsam:başla -->
-Ölçüm tarihi: 2026-11-08
+Ölçüm tarihi: 2026-11-10
 
 ### Canlılar (443 kayıt)
 
@@ -31,7 +31,7 @@ Katalogların her bilgisinin yüzde kaçının dolu olduğu ve kaynağının tü
 | Yalnız otomatik kaynak bağlantısı | 0/443 | %0 |
 | En az tank uzunluğu | 403/443 | %91 |
 | Akıntı | 398/443 | %89,8 |
-| Davranış ya da bakım notu | 334/443 | %75,4 |
+| Davranış ya da bakım notu | 337/443 | %76,1 |
 | Eş ad ya da satış adı | 383/443 | %86,5 |
 | Son 92 günde doğrulanmış | 443/443 | %100 |
 
@@ -40,9 +40,9 @@ Katalogların her bilgisinin yüzde kaçının dolu olduğu ve kaynağının tü
 | Bilgi | Dolu | Oran |
 |---|---|---|
 | Kaynak sayfası | 3541/3541 | %100 |
-| Doğrulanmamışlar listesinde değil | 3403/3541 | %96,1 |
-| Hesap değeri (filtre, ısıtıcı, hava motoru) | 1110/1255 | %88,4 |
-| Güç (W) | 1672/3541 | %47,2 |
+| Doğrulanmamışlar listesinde değil | 3419/3541 | %96,6 |
+| Hesap değeri (filtre, ısıtıcı, hava motoru) | 1126/1255 | %89,7 |
+| Güç (W) | 1689/3541 | %47,7 |
 | Önerilen hacim | 716/3541 | %20,2 |
 | Son 92 günde doğrulanmış | 3541/3541 | %100 |
 
@@ -75,6 +75,7 @@ Katalogların her bilgisinin yüzde kaçının dolu olduğu ve kaynağının tü
 
 ## Geçmiş
 
+- 2026-11-10 (veri testi düzeltmeleri, veri aşaması): Aquawing'in 16 filtresi eksenpet.com'un ürün sayfalarıyla doğrulandı (ürün sahibi kararı: eksenpet yalnız Aquawing için kaynak) ve doğrulanamayanlar listesinden çıktı; Sobo SB-8808'in gücü (10 W) distribütör sayfasından geldi. Doğrulanmamışlar listesinde değil %96,1 → %96,6, hesap değeri %88,4 → %89,7, güç %47,2 → %47,7. Canlılarda Afrika cüce kurbağasına avcı işareti, Maingano ile üç benekli guramiye kaynak farklarını anlatan bakım notu eklendi: davranış ya da bakım notu %75,4 → %76,1 (334 → 337). 142 kaydın doğrulama tarihi kaynağın okunduğu güne (2026-11-09 ya da 2026-11-10) yenilendi; "son 92 günde doğrulanmış" satırları %100 kaldı. ADA Super Jet ES'in 50 Hz değerleri, Tetra HT, ADA makas ve bakım ürünlerindeki metin düzeltmeleri oranları değiştirmedi.
 - 2026-11-08 (ürün sahibiyle Chrome oturumu: Cikletist, Fluval, Resun ve Haqos; veri aşaması): değerleri www.haqos.com'a dayanan 15 Haqos kaydı (6 filtre, 7 ısıtıcı, 2 UV) doğrulanamayanlar listesine girdi (ürün sahibi kararı); Thermo-Sprite 2026-09-06'daki Betta doğrulamasıyla değerini korudu. Doğrulanmamışlar listesinde değil %96,5 → %96,1, hesap değeri %89,5 → %88,4, güç %47,6 → %47,2, önerilen hacim %20,5 → %20,2. AquaClear'ın üç debisi ürün sayfasının değerine döndü, Reef 4.0'a lümen ve renk sıcaklığı eklendi, Plant 4.0 Nano ve Reef 4.0 Nano'nun anlamı belirsiz uzunluk aralığı kaldırıldı; bunlar oranları değiştirmedi.
 - 2026-11-04 (Trendyol'a bağlı ekipman, veri aşaması): değerleri yalnız Trendyol'da yayımlanan 23 kayıt (22 Shark armatürü, Meç Turbo Pipo) doğrulanamayanlar listesine girdi; RS-605 zaten listedeydi. Doğrulanmamışlar listesinde değil %97,2 → %96,5. Hesap değeri ve öbür oranlar değişmedi (aydınlatma ve Meç'in hava motoruyla çalışan filtresi hesaba değer vermiyordu).
 - 2026-11-04 (bitkilerin İngilizce ortak adları, veri aşaması): bitkilere "İngilizce ortak ad (Fishkeeper)" satırı eklendi, 42/141 (%29,8). Değerler ve öbür oranlar değişmedi; ölçüm tarihi yeni satır için 2026-11-04.
