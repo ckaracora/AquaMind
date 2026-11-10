@@ -373,6 +373,12 @@ export const tr = {
       unresolvedBadge: "Güvenli beklemede",
       unresolvedBlocked: "Yanlış hacim ve uyumluluk hesabı vermemek için bu canlı henüz eklenemez.",
       unresolvedSource: "Satış adı kaynağını aç",
+      /** Aranan ad başka su türündeki doğrulanmış bir türün tam adı; tür seçilmez (veri testi, 2026-11-10). Su türleri kod olarak gelir. */
+      otherWaterTitle: "Tür bulundu, bu akvaryum türüne uygun değil",
+      otherWaterText: (aquariumType: "freshwater" | "brackish" | "saltwater", required: ReadonlyArray<"freshwater" | "brackish" | "saltwater">) => {
+        const water = { freshwater: "tatlı su", brackish: "acı su", saltwater: "tuzlu su" };
+        return `Bu tür ${water[aquariumType]} akvaryumuna uygun değildir; ${required.map((type) => water[type]).join(" veya ")} akvaryumu gerekir.`;
+      },
       species: "3. Tür",
       chooseSpecies: "Tür seç",
       awaitingIdentity: "Kimlik doğrulaması bekleniyor",

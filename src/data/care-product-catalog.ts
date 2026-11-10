@@ -72,7 +72,7 @@ const aquariumProducts = (
   entries:Array<[string,number,[number,number,number],string,string[]?]>,
 ): CareProductProfile[] => entries.map(([model,volumeL,dimensionsCm,description,includedEquipmentModels]) => ({
   id:catalogSlug(`Aquael-${model}`), brand:"Aquael", model, category, description, volumeL, dimensionsCm,
-  includedEquipmentModels, sourceUrl, verifiedAt:"2026-09-12",
+  includedEquipmentModels, sourceUrl, verifiedAt:model === "NanoReef Duo 35 White" ? "2026-11-09" : "2026-09-12",
 }));
 
 const dimensionProducts = (
@@ -91,7 +91,7 @@ const habitatProducts = (
   entries:Array<[string,[number,number,number],string,string[]?]>,
 ): CareProductProfile[] => entries.map(([model,dimensionsCm,description,includedEquipmentModels]) => ({
   id:catalogSlug(`Aquael-${model}`), brand:"Aquael", model, category, description, dimensionsCm,
-  includedEquipmentModels, sourceUrl, verifiedAt:"2026-09-12",
+  includedEquipmentModels, sourceUrl, verifiedAt:model === "Selva Mini Terrarium" ? "2026-11-09" : "2026-09-12",
 }));
 
 const volumeProducts = (
@@ -1613,7 +1613,7 @@ export const careProductCatalog: CareProductProfile[] = [
   ],"2026-09-18"),
   ...products("JBL","filter_media","https://www.jbl.de/en-au/productsv2/detail/25211093",[
     ["PhosEx ultra 340 g","Tatlı ve deniz suyunda toplam 18000 mg fosfatı kalıcı bağlayan 340 g çözünmez demir bileşiği · ağ torba ve klips içerir · fosfat testiyle etkinliği izlenmelidir"],
-  ],"2026-09-18"),
+  ],"2026-11-09"),
   ...products("JBL","filter_media","https://www.jbl.de/en-us/productsv2/detail/25165953",[
     ["ClearMec plus 600 ml / 450 g","Tatlı suda 150–300 L için iki hazır torbada toplam 600 ml/450 g nitrit, nitrat ve fosfat giderici medya · son ince filtre katmanından hemen önce yerleştirilir · yaklaşık üç ay sonra veya değerler yeniden yükseldiğinde yenilenir"],
   ],"2026-09-18"),
@@ -1725,9 +1725,9 @@ export const careProductCatalog: CareProductProfile[] = [
   ...products("JBL","bacteria","https://www.jbl.de/en/products/detail/2321/jbl-filterstart?country=de",[
     ["FilterStart 10 ml","Yeni veya temizlenmiş filtre medyasını biyolojik olarak başlatan, amonyum/amonyak ve nitriti parçalayan canlı bakteri kültürü · şişe çalkalanır ve 10 ml ürün 3 L filtre malzemesine uygulanır · 35 °C üzerinde saklanmaz · ürün kodu 2518200"],
   ],"2026-09-18"),
-  ...products("JBL","bacteria","https://www.jbl.de/en/products/detail/3614/jbl-filterstart-red?country=es",[
-    ["FilterStart Red 10 ml","Japon balığı ve tül kuyruk gibi serin su varyetelerinin filtreleri için uyarlanmış sekiz canlı bakteri kültürü · amonyum/amonyak ve nitrit parçalanmasını başlatır · 10 ml ürün 3 L filtre malzemesine yeter · şişe çalkalanır ve 35 °C üzerinde saklanmaz · ürün kodu 2518400"],
-  ],"2026-09-18"),
+  ...products("JBL","bacteria","https://www.jbl.de/en-dz/productsv2/detail/25167264",[
+    ["FilterStart Red 10 ml","Japon balığı akvaryumlarında filtre temizliğinden sonra ya da yeni filtre veya filtre malzemesi ilk kez kullanılırken filtreye canlı bakteri ekler · amonyum/amonyak ve nitrit parçalanmasını başlatır · 10 ml ürün 3 L filtre malzemesine yeter · şişe çalkalanır ve 35 °C üzerinde saklanmaz · ürün kodu 2518480"],
+  ],"2026-11-10"),
   ...products("JBL","bacteria","https://www.jbl.de/en/products/detail/2322/jbl-filterboost?country=dz",[
     ["FilterBoost 25 g","Tatlı/deniz suyu, karides ve su kaplumbağası sistemlerinde çok katmanlı filtrelerin ilk katına yerleştirilen bakteri etkin mineralli granül · organik tortuyu parçalayarak tıkanmayı geciktirir · 25 g ürün 5–6 L filtre hacmine yeter · tek sünger kartuşlu iç filtrelere uygun değildir · ürün kodu 2518500"],
   ],"2026-09-18"),
@@ -1744,9 +1744,9 @@ export const careProductCatalog: CareProductProfile[] = [
     ["Biotopol Refill 500+125 ml","Toplam 625 ml çevre dostu yedek paket · 2500 L su için tatlı su ve su kaplumbağası su düzenleyicisi · doz 40 L suya 10 ml · omurgasız bulunan akvaryumlarda ayrı kova yöntemi kullanılmalıdır"],
     ["Biotopol 5 L","20000 L su için büyük ambalaj tatlı su ve su kaplumbağası su düzenleyicisi · doz 40 L suya 10 ml · omurgasız bulunan akvaryumlarda ayrı kova yöntemi kullanılmalıdır"],
   ],"2026-09-18"),
-  ...products("JBL","water_conditioner","https://www.jbl.de/en/products/detail/2318/jbl-biotopol-r?country=hu&cpref=998",[
-    ["Biotopol R 100 ml","Özellikle Japon balığı akvaryumları için su düzenleyici · klor, kloramin, bakır, kurşun ve çinkoyu nötralize eder · aloe vera, B vitaminleri ve hassas gözler için gözotu (Euphrasia) özü · doz 20 L suya 10 ml · bakteri başlangıç ürününden bir saat önce kullanılır"],
-  ],"2026-09-18"),
+  ...products("JBL","water_conditioner","https://www.jbl.de/en-us/productsv2/detail/25174319",[
+    ["Biotopol R 100 ml","Özellikle Japon balığı akvaryumları için su düzenleyici · klor, kloramin, bakır, kurşun ve çinkoyu nötralize eder · aloe vera, B vitaminleri ve hassas gözler için gözotu (Euphrasia) özü · doz 20 L suya 10 ml"],
+  ],"2026-11-10"),
   ...products("JBL","water_conditioner","https://www.jbl.de/en-us/productsv2/detail/25201655",[
     ["Nano-Biotopol Betta 15 ml","Betta akvaryumlarında yeni kurulum ve su değişimi için tropikal badem yaprağı özlü su düzenleyici · bakır, çinko, kurşun ve kloru nötralize eder · 180 L'ye kadar kullanım · doz 1 L suya 2 damla"],
   ],"2026-09-18"),
@@ -1842,9 +1842,9 @@ export const careProductCatalog: CareProductProfile[] = [
     description:`Ürün kodu ${itemNumber} · ${aquariumRange} tatlı su akvaryumları için yıkanmış üst tabanın altına serilen hazır uzun süreli besin katmanı · demir ve besin depolayan kil içerir · ürün sayfası beş yıllık etkiyi, 2026 üretici duyurusu ise ilk 4–6 hafta sonrası yaklaşık 2–3 yıllık yeniden şarj edilebilir tampon evresini açıklar`,
     sourceUrl,additionalSourceUrls:["https://www.jbl.de/en/press/detail/973/jbl-proflora-aquabasis-plus-improved-once-again?country=gb"],verifiedAt:"2026-09-18",
   })),
-  ...products("JBL","fertilizer","https://www.jbl.de/en/products/detail/8338/jbl-proscape-plant-start?country=sk",[
+  ...products("JBL","fertilizer","https://www.jbl.de/en-bg/productsv2/detail/25188639",[
     ["PROSCAPE PLANT START 2 × 8 g","20–100 L yeni kurulan bitkili akvaryumlar için ayrı metalize poşetlerde iki adet 8 g canlı bakteri kültürlü mineral granül · besin tabanı veya ilk taban katmanına eşit yayılıp kum/çakıl/soil ile tamamen örtülür · kök oluşumunu ve taban mineral dönüşümünü destekler; istenmeyen bakteri ve siyanobakteri yerleşimini azaltır · kurulu akvaryuma tabanın üstünden sonradan eklenmez · ürün kodu 2302500"],
-  ],"2026-09-18"),
+  ],"2026-11-10"),
   ...products("JBL","fertilizer","https://www.jbl.de/en/products/detail/6452/jbl-proscape-fe-microelements?country=ro&cpref=578",[
     ["PROSCAPE Fe +MICROELEMENTS 250 ml","Ürün kodu 2111100 · aquascape için demir ve iz element temel gübresi · güçlü ışık ve CO₂ ile 100 L'ye günlük 10 ml; zayıf ışık ve CO₂ olmadan haftalık 2 ml · N, P, K ve Mg ihtiyaca göre ayrı tamamlanır"],
     ["PROSCAPE Fe +MICROELEMENTS 500 ml","Ürün kodu 2111200 · aquascape için demir ve iz element temel gübresi · güçlü ışık ve CO₂ ile 100 L'ye günlük 10 ml; zayıf ışık ve CO₂ olmadan haftalık 2 ml · N, P, K ve Mg ihtiyaca göre ayrı tamamlanır"],
@@ -2343,17 +2343,21 @@ export const careProductCatalog: CareProductProfile[] = [
     ["Krill 100 ml","Arşiv ürün · 3–20 cm tatlı ve deniz suyu balıkları için orta ve üst su katmanlarında tüketilen, protein, doymamış yağ asitleri ve karotenoid bakımından zengin ince öğütülmüş krill pul yemi · 100 ml / 16 g · ürün kodu 4058100 · ham protein %49, yağ %10, lif %1,8, kül %7, nem %8"],
     ["Krill 250 ml","Arşiv ürün · 3–20 cm tatlı ve deniz suyu balıkları için orta ve üst su katmanlarında tüketilen, protein, doymamış yağ asitleri ve karotenoid bakımından zengin ince öğütülmüş krill pul yemi · 250 ml / 40 g · ürün kodu 4058200 · ham protein %49, yağ %10, lif %1,8, kül %7, nem %8"],
   ],"2026-09-18"),
-  ...products("JBL","food","https://www.jbl.de/en/products/detail/4494/jbl-granadiscus-click?country=hk",[
-    ["GranaDiscus CLICK 250 ml","Arşiv ürün · seçici discus balıkları için bağışıklığı ve renk gelişimini destekleyen, yarı yüzen granül ana yem · Click dozaj kapağında bir basış yaklaşık 5 balık içindir · 250 ml / 110 g · ürün kodu 4065100 · ham protein %46, yağ %6, lif %1,8, kül %9,5, nem %8"],
-  ],"2026-09-18"),
+  ...products("JBL","food","https://www.jbl.de/en-fi/productsv2/detail/25208458",[
+    ["GranaDiscus CLICK 250 ml","Arşiv ürün · seçici discus balıkları için bağışıklığı ve renk gelişimini destekleyen, yarı yüzen granül ana yem · Click dozaj kapağıyla bir basış beş balık içindir · 250 ml · ürün kodu 4065100 · ham protein %46, yağ %6, lif %1,8, kül %9,5, nem %8"],
+  ],"2026-11-10"),
+  ...products("JBL","food","https://www.jbl.de/en-us/productsv2/detail/25199632",[
+    ["GranaDiscus 250 ml REFILL","Arşiv ürün · seçici discus balıkları için bağışıklığı ve renk gelişimini destekleyen, yarı yüzen granül ana yem refill paketi · 250 ml · ürün kodu 4052000 · ham protein %46, yağ %6, lif %1,8, kül %9,5, nem %8"],
+  ],"2026-11-10"),
   ...products("JBL","food","https://www.jbl.de/en/products/detail/2310/jbl-granadiscus?country=dk",[
-    ["GranaDiscus 250 ml REFILL","Arşiv ürün · seçici discus balıkları için bağışıklığı ve renk gelişimini destekleyen, yarı yüzen granül ana yem refill paketi · 250 ml / 110 g · ürün kodu 4052000 · ham protein %46, yağ %6, lif %1,8, kül %9,5, nem %8"],
     ["GranaDiscus 1000 ml","Arşiv ürün · seçici discus balıkları için bağışıklığı ve renk gelişimini destekleyen, yarı yüzen granül ana yem · 1000 ml / 440 g · ürün kodu 4052100 · ham protein %46, yağ %6, lif %1,8, kül %9,5, nem %8"],
   ],"2026-09-18"),
   ...products("JBL","food","https://www.jbl.de/en/products/detail/4493/jbl-granacichlid-click?country=gb",[
     ["GranaCichlid CLICK 100 ml","Arşiv ürün · 5–15 cm etçil cikletler için balık proteini ağırlıklı, yarı yüzen granül ana yem · Click dozaj kapağında bir basış yaklaşık 5 balık içindir · 100 ml / 44 g · ürün kodu 4065500 · ham protein %45, yağ %6, lif %5, kül %9,5, nem %8"],
-    ["GranaCichlid CLICK 250 ml","Arşiv ürün · 5–15 cm etçil cikletler için balık proteini ağırlıklı, yarı yüzen granül ana yem · Click dozaj kapağında bir basış yaklaşık 5 balık içindir · 250 ml / 110 g · ürün kodu 4065600 · ham protein %45, yağ %6, lif %5, kül %9,5, nem %8"],
   ],"2026-09-18"),
+  ...products("JBL","food","https://www.jbl.de/en-dz/productsv2/detail/25185060",[
+    ["GranaCichlid CLICK 250 ml","Arşiv ürün · 5–15 cm etçil cikletler için balık proteini ağırlıklı, yarı yüzen granül ana yem · Click dozaj kapağıyla bir basış beş balık içindir · 250 ml · ürün kodu 4065600 · ham protein %45, yağ %6, lif %5, kül %9,5, nem %8"],
+  ],"2026-11-10"),
   ...products("JBL","food","https://www.jbl.de/en/products/detail/2311/jbl-grana-cichlid?country=bg",[
     ["GranaCichlid 250 ml REFILL","Arşiv ürün · 5–15 cm etçil cikletler için balık proteini ağırlıklı, yarı yüzen granül ana yem refill paketi · 250 ml / 105 g · ürün kodu 4056200 · ham protein %45, yağ %6, lif %5, kül %9,5, nem %8"],
   ],"2026-09-18"),

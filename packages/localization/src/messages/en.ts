@@ -357,6 +357,11 @@ export const en: Messages = {
       unresolvedBadge: "Safely on hold",
       unresolvedBlocked: "To avoid a wrong volume and compatibility calculation, this animal cannot be added yet.",
       unresolvedSource: "Open the sales name source",
+      otherWaterTitle: "Species found, not suitable for this aquarium type",
+      otherWaterText: (aquariumType: "freshwater" | "brackish" | "saltwater", required: ReadonlyArray<"freshwater" | "brackish" | "saltwater">) => {
+        const water = { freshwater: "freshwater", brackish: "brackish", saltwater: "saltwater" };
+        return `This species is not suitable for a ${water[aquariumType]} aquarium; it needs a ${required.map((type) => water[type]).join(" or ")} aquarium.`;
+      },
       species: "3. Species",
       chooseSpecies: "Choose species",
       awaitingIdentity: "Awaiting identity confirmation",

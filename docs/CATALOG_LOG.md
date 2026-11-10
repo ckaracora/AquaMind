@@ -3704,3 +3704,267 @@ Güncel alt adım: JBL filtre medyası, bakteri başlangıcı, sorun giderici/pH
   - Plant 4.0 Nano ve Reef 4.0 Nano'da `recommendedTankLengthCm` ve "11,5–20" yok; güç korunur, açıklamanın geri kalanı (güç, lümen, renk sıcaklığı, IP67) birebir aynı kalır.
   - www.haqos.com'a bağlı kayıtlardan yalnız mağazada doğrulanan HEC-600 (520 L/saat, Malawi ek kaynağı, su seviyesi yok) ve Thermo-Sprite (15 W, Betta ek kaynağı) değer taşır; değeri çekilen Haqos açıklamasında sayı kalmaz; liste sayısı 203 → 218.
   - Bozma denemeleri testi düşürüyor: AC30 569, açıklamada "motorsuz", 20/30/50'nin eski kaynağı, Reef lümeni, listeden çıkan bir Haqos ısıtıcısı, °C kalıbının kaldırılması, HEC-600'ün ek kaynağı ve su seviyesi; Nano'larda alanın ya da "11,5–20 cm" parçasının geri gelmesi, gücün değişmesi ve lümenin silinmesi (son kapı denetimi, yalnız bellekte).
+
+## 2026-11-10 Veri testi düzeltmesi: dört JBL bakım ürünü (Claude)
+
+- Veri testi A'nın bakım örnekleminde (2026-11-09, rastgele 25 bakım ürünü; bulgular ikinci denetçinin onayından geçti) bulunan dört kayıt. Dördünün kaynağı JBL'in eski ürün adresiydi; eski adresler JBL'in ürün listesine yönleniyor. Yeni ürün sayfaları (`productsv2`) 2026-11-10'da (UTC) doğrudan açılıp okundu. Kaynakta bulunmayan ifadeler için aynı ürünün sayfadaki dil bağlantılarından (`hreflang`) açılan başka dil sayfalarına da bakıldı. Değer tahmin edilmedi. Doğrulama tarihleri (`verifiedAt`, 2026-09-18) değişmedi.
+- `jbl-filterstart-red-10-ml` (FilterStart Red 10 ml):
+  - `sourceUrl`: `https://www.jbl.de/en/products/detail/3614/jbl-filterstart-red?country=es` → `https://www.jbl.de/en-dz/productsv2/detail/25167264`.
+  - `description`, ürün kodu: "ürün kodu 2518400" → "ürün kodu 2518480". Kaynak: yeni sayfanın "Item no. 2518480" satırı ve yapılandırılmış verisi (mpn, sku). Almanca (`https://www.jbl.de/de-ch/productsv2/detail/25167292`) ve Fransızca (`https://www.jbl.de/fr-fr/productsv2/detail/25167303`) sayfalar da 2518480 yazıyor.
+  - `description`, ilk parça: "Japon balığı ve tül kuyruk gibi serin su varyetelerinin filtreleri için uyarlanmış sekiz canlı bakteri kültürü" → "Japon balığı akvaryumlarında filtre temizliğinden sonra ya da yeni filtre veya filtre malzemesi ilk kez kullanılırken filtreye canlı bakteri ekler". Kaynak: yeni sayfanın ürün özellikleri ("after filter cleaning in goldfish aquariums or when using new filters/filter material for the first time", "live bacteria"). Sekiz kültür, tül kuyruk ve serin suya uyarlama İngilizce, Almanca ve Fransızca sayfada yazmıyor; çıkarıldı. Yapılandırılmış verideki bileşim (1 Bacillus suşu, Nitrosomonas, Nitrobacter) kültür sayısı vermiyor; sayı bundan çıkarılmadı.
+  - Öbür parçalar (amonyum/amonyak ve nitrit, 10 ml ile 3 L filtre malzemesi, çalkalama, 35 °C) yeni sayfayla aynı.
+- `jbl-biotopol-r-100-ml` (Biotopol R 100 ml):
+  - `sourceUrl`: `https://www.jbl.de/en/products/detail/2318/jbl-biotopol-r?country=hu&cpref=998` → `https://www.jbl.de/en-us/productsv2/detail/25174319`.
+  - `description`: "bakteri başlangıç ürününden bir saat önce kullanılır" parçası çıkarıldı. Yeni sayfada, sayfanın SSS'sinde ve aynı ürünün Almanca (`https://www.jbl.de/de-de/productsv2/detail/25174529`), Türkçe (`https://www.jbl.de/tr-tr/productsv2/detail/25174425`) ve İngiltere (`https://www.jbl.de/en-gb/productsv2/detail/25174527`) sayfalarında yok. SSS'deki 30–60 dakika ilaç eklemek içindir. Öbür parçalar (Japon balığı akvaryumları, klor, kloramin, bakır, kurşun, çinko, aloe vera, B vitaminleri, gözotu, 20 L suya 10 ml) yeni sayfayla aynı.
+- `jbl-granadiscus-click-250-ml` (GranaDiscus CLICK 250 ml):
+  - `sourceUrl`: `https://www.jbl.de/en/products/detail/4494/jbl-granadiscus-click?country=hk` → `https://www.jbl.de/en-fi/productsv2/detail/25208458` (arşiv sayfası, "Archived").
+  - `description`: "250 ml / 110 g" → "250 ml". 110 g sayfada yazmıyor; yalnız kilogram başı fiyattan hesaplanabiliyor. Yapılandırılmış verideki 154 g net ya da brüt olduğunu söylemiyor; kullanılmadı. Aynı ürünün `https://www.jbl.de/en-bg/productsv2/detail/25208500` sayfası aynı metni taşıyor; `https://www.jbl.de/pt-br/productsv2/detail/25069064` hata sayfası. Sayfada başka dil bağlantısı yok. Öbür değerler (arşiv, Click'te bir basış 5 balık, ürün kodu 4065100, ham protein %46, yağ %6, lif %1,8, kül %9,5, nem %8) yeni sayfayla aynı.
+  - Gözlem: "250 ml / 110 g" GranaDiscus 250 ml REFILL ve GranaCichlid CLICK 250 ml kayıtlarında da var. Bu kayıtlar örneklemde değildi; bakılmadı, değişmedi.
+- `jbl-proscape-plant-start-2-8-g` (PROSCAPE PLANT START 2 × 8 g):
+  - `sourceUrl`: `https://www.jbl.de/en/products/detail/8338/jbl-proscape-plant-start?country=sk` → `https://www.jbl.de/en-bg/productsv2/detail/25188639`.
+  - Açıklama yeni sayfayla ve sayfanın SSS'siyle aynı (20–100 L, iki adet 8 g metalize poşet, ilk kurulumda tabanın altına, sonradan eklenmez, ürün kodu 2302500); değişmedi. Kategori (`fertilizer`) değişmedi.
+- Çeviri: FilterStart Red'in yeni ilk parçası İngilizce ve İspanyolcaya eklendi; artık kullanılmayan iki parça (eski ilk parça ve "bir saat önce") çıkarıldı. Yalnız bakım tabloları yeniden üretildi.
+- Test: `scripts/test-catalog-flow.cjs`'te eski veriye bağlı iki beklenti yeni veriye göre güncellenmeli: FilterStart Red'de "serin su" araması ve PLANT START'ta `/detail/8338/` adres araması. Bu düzeltmede test dosyasına dokunulmadı.
+- Kalan JBL eski adresleri (bakım ürünleri, ana kaynak, bu düzeltmeden sonra): 444 kayıt. Bunların 433'ü `/products/` ve `/produkte/` yolunda (2026-11-09 sayımının kuralı yalnız bunları sayıyordu); 1'i `/fr/produits/`, 1'i `/es/productos/`, 8'i `?mod=productpdf`, 1'i `?mod=products`. `/fr/produits/`, `/es/productos/`, `productpdf` ve `mod=products` biçimlerinden birer adres 2026-11-10'da açıldı: iki yol ürün listesine yönleniyor, `productpdf` HTTP 404, `mod=products` JBL'in hata sayfası. `/products/` yolunun yönlendiği 2026-11-09 veri testinde görülmüştü; `/produkte/` yolu bakımda denenmedi. Ayrıca `/qr/` kısa bağlantılı 1 kayıt da `mod=products` hata sayfasına gidiyor.
+- Ek tur (aynı gün, teknik sorumlunun kararıyla):
+  - Örneklem dışında aynı "250 ml / 110 g" ifadesini taşıyan iki kayda kendi JBL sayfalarında bakıldı. İki kayıt da eski adresteydi, yeni arşiv sayfalarına bağlandı. Gram değeri yeni sayfalarda yok, çıkarıldı. Öbür değerler sayfayla aynı.
+  - `jbl-granadiscus-250-ml-refill` (GranaDiscus 250 ml REFILL):
+    - `sourceUrl`: `https://www.jbl.de/en/products/detail/2310/jbl-granadiscus?country=dk` → `https://www.jbl.de/en-us/productsv2/detail/25199632`.
+    - `description`: "250 ml / 110 g" → "250 ml". 110 g sayfada yazmıyor. Yapılandırılmış verideki 137,3 g net ya da brüt olduğunu söylemiyor; kullanılmadı. Sayfada başka dil bağlantısı yok.
+    - Kayıt GranaDiscus 1000 ml ile aynı kaynak grubundaydı; kendi grubuna alındı. 1000 ml'nin kaynağı ve değerleri değişmedi.
+  - `jbl-granacichlid-click-250-ml` (GranaCichlid CLICK 250 ml):
+    - `sourceUrl`: `https://www.jbl.de/en/products/detail/4493/jbl-granacichlid-click?country=gb` → `https://www.jbl.de/en-dz/productsv2/detail/25185060`.
+    - `description`: "250 ml / 110 g" → "250 ml". 110 g, en-dz sayfasında ve Portekizce sayfada (`https://www.jbl.de/pt-pt/productsv2/detail/25184658`) yazmıyor. Yapılandırılmış veri 154 g; net ya da brüt olduğunu söylemiyor, kullanılmadı. Ürünün Çekçe eski adresi de ürün listesine yönleniyor.
+    - Kayıt CLICK 100 ml ile aynı gruptaydı; kendi grubuna alındı. 100 ml değişmedi.
+  - Çeviri değişmedi; "# ml" parçasının çevirisi zaten var.
+  - Doğrulama tarihi:
+    - Bu altı kaydın tarihini 2026-11-10 yapmak istendi ve denendi.
+    - `docs/DATA_COVERAGE.md`'nin ölçüm tarihi 2026-11-08. Ölçüm gününden sonraki tarih "son 92 günde doğrulanmış" satırına girmiyor. Bakım ürünlerinde bu satır 1893/1893'ten 1889/1893'e düştü ve `src/lib/__tests__/data-coverage.test.ts` kırıldı.
+    - Belge bu işte değişmediği için tarih değişikliği geri alındı. Altı kaydın tarihi 2026-09-18 kaldı.
+  - Test (`scripts/test-catalog-flow.cjs`): yukarıdaki "güncellenmeli" notundaki iki beklenti güncellendi. Biotopol R ve üç 250 ml Grana ambalajı için beklenti eklendi.
+    - FilterStart Red: yeni sayfa ve 2518480 bulunmalı; "serin su", "sekiz", "tül kuyruk" ve 2518400 bulunmamalı.
+    - PLANT START: yeni adrese bağlı olmalı.
+    - Biotopol R: yeni adrese bağlı olmalı; "bir saat" ifadesi bulunmamalı.
+    - GranaDiscus CLICK ve REFILL ile GranaCichlid CLICK 250 ml: yeni adreslere bağlı olmalı; "110 g" bulunmamalı.
+    - 2026-09-18 tarihini sabitleyen beklentiler değişmedi.
+  - Kalan JBL eski adresleri (bakım, ana kaynak, ek turdan sonra): 442 kayıt. 431'i `/products/` ve `/produkte/` yolunda; 1'i `/fr/produits/`, 1'i `/es/productos/`, 8'i `?mod=productpdf`, 1'i `?mod=products`. Ayrıca 1 kaydın `/qr/` kısa bağlantısı var.
+- Düzeltme notu: İlk turun “verifiedAt değişmedi” ve “test güncellenmeli” ifadeleri o turun durumunu anlatır. Ek turda ilk dört kaydın tarihi 2026-11-10 olarak denenmiş, veri kapsamı testi başarısız olunca geri alınmıştır; sonradan eklenen iki kaydın tarihi değiştirilmemiştir. Altı kayıt da bilinçli olarak 2026-09-18’de tutulmaktadır; tarihler veri testinin sonunda topluca yenilenecektir. İki eski test beklentisi güncellenmiş, Biotopol ve üç Grana ambalajı için kontroller eklenmiştir. Kontrolcü ayrıca iki CLICK açıklamasındaki kaynaksız “yaklaşık” ifadesini kaldırmıştır. Son kontrolde çeviri kontrolü geçmiş; katalog akışı kapsam dışı ekipman sayımı beklentisinde, 54. satırda 202/218 farkıyla durmuştur.
+
+## 2026-11-10 Veri testi düzeltmesi: canlı örneklemi (Claude)
+
+- Veri testi A'nın canlı örneklemi (2026-11-09, rastgele 40 canlı; sınıflar ikinci denetçinin 2026-11-10 kontrolünden geçti). Son sınıfı "yanlış" olan 11 alan ele alındı: 9'u düzeltildi, 2'si değişmedi (aşağıda). Değerler 2026-11-09'da (UTC) kaydedilen kaynak sayfalarından okundu (Seriously Fish, Fishkeeper, Fishipedia); bu düzeltme için yeni sayfa açılmadı. Değer tahmin edilmedi. Doğrulama tarihleri (`verifiedAt`) değişmedi; veri testinin sonunda toplu yenilenecek.
+- `denison-barb` (Denison barb), `flow`: yüksek → orta.
+  - Kaynak: Seriously Fish "does best if there is a high proportion of dissolved oxygen and moderate water movement".
+  - Kural: kaynağın açıkça çeliştiği akıntı düzeltilir (2273. satır); "moderate water movement" orta akıntıdır (Mascara barb ve Çin yosun yiyicisi: 2328, 2344 ve 2355. satırlar). 2043. satırdaki tabloda bu kayda özel akıntı kararı yok.
+- `apisto-commbrae` (Corumba cüce cichlid), `communityCaution`:
+  - Eski: "Çift halinde yaşayan bölgeci bir cüce ciklettir; iri veya saldırgan bölgeci balıklarla, büyük balıklarla ve avlayabileceği kabuklularla birleştirilmemelidir."
+  - Yeni: "Çift halinde yaşayan bölgeci bir cüce ciklettir; iri veya saldırgan bölgeci balıklarla birleştirilmemelidir. Büyük kabuklular ve iri balıklar onu avlayabileceği için onlarla da tutulmamalıdır."
+  - Kaynak: Fishipedia (taslak sayfa) "ne doit pas cohabiter avec des crustacés ou poissons de grande taille car elle deviendrait de fait une proie de prédilection". Eski metin avcı ile avı ters çeviriyordu.
+  - Kural: kayıtta yalnız kaynakta açıkça yayımlanan bakım bilgisi bulunur (`docs/DATA_SOURCES.md`, "Zorunlu kayıt alanları").
+- `rainbow-snakehead` (Gökkuşağı yılanbaş):
+  - `speciesOnly`: true → kaldırıldı.
+    - Kaynak: Seriously Fish "In general Channa are best-maintained in species-specific aquaria, although C. bleheri can be kept in a well-chosen community arrangement alongside peaceful, non-territorial tankmates that are too large to be viewed as prey".
+    - Kural: kaynağın açıkça çeliştiği tür akvaryumu işareti kaldırılır (2273. satır, Red-striped killifish; 2327. satır, Panda Loach).
+    - Avcı işareti (`predatory`) kaldı. "Too large to be viewed as prey" koşulu için motor genel %40 av boyu kuralını uygular; kaynak türe özgü sayısal av sınırı vermez.
+    - Not: 2273. satır Pantano, Johanni ve Elongatus'ta işareti tuttu ("kaynak yalnız iri balık topluluğunu ya da Mbuna topluluğunu uygun görüyor"). Gökkuşağı yılanbaşında topluluk koşulu av boyuna bağlı. Bu ayrım yazılı bir kural değil, teknik yorumdur; teknik sorumlu ayrıca bakmalı.
+  - `communityCaution`:
+    - Eski: "Ağzına sığan balık ve omurgasızları avlar; eşleşmemiş erişkinler birbirine ağır zarar verebilir. Yalnızca uyumlu çift, tür akvaryumunda düşünülmelidir."
+    - Yeni: "Ağzına sığan balık ve omurgasızları avlar; eşleşmemiş erişkinler birbirine ağır zarar verebilir. Yılanbaşlar genelde en iyi tür akvaryumunda tutulur; bu tür ise barışçıl, bölgeci olmayan ve av olamayacak kadar iri tank arkadaşlarıyla dikkatle seçilmiş bir topluluk akvaryumunda da tutulabilir."
+    - Kaynak: yukarıdaki Seriously Fish cümlesi.
+- `calvus-cichlid` (Calvus), `minTankLengthCm`: 150 → 152.
+  - Kaynak: Fishkeeper "The aquarium that houses this species should be at least 5ft long".
+  - Kural: "5 or 6ft" → en az 152 cm (2376 ve 2384. satırlar); 5 fit → 152 cm (1435. satır).
+  - Hacim (350 L) değişmedi: Fishkeeper hacim yazmıyor. Bu alan veri testinde "kaynakta yok" sınıfında; bu işin kapsamında değil.
+- `red-tailed-rasbora` (Kırmızı kuyruk rasbora), `minGroup`: 8 → 6.
+  - Kaynak: Fishkeeper "should be maintained in groups of 6 or more".
+  - Kural: kaynağın verdiği en az sayı (2015, 2269 ve 3291. satırlar). Günlükte bu kayda özel 8 kararı yok.
+- `electric-blue-hap` (Electric Blue Ahli):
+  - `minVolumeL`: 350 → 304.
+    - Kaynak: Seriously Fish "150 ∗ 45 ∗ 45 cm ... ~304 litres". Fishkeeper ve FishBase hacim yazmıyor; 350 L hiçbir kaynakta yok.
+    - Kural: hacim kaynağın yazdığı litre (2269 ve 3290. satırlar). Kaynaksız 350 L yerine uzman kaynağın 150 × 45 × 45 cm / yaklaşık 304 L ölçüsü (Benekli Silver Dollar emsali, 1435. satır).
+  - `additionalSourceUrls`: hacmin kaynağı olan Seriously Fish sayfası eklendi (`https://www.seriouslyfish.com/species/sciaenochromis-fryeri/`). Sayfa daha önce yalnız davranış kaydında (`src/data/species-behavior.ts`) bağlıydı. `sourceUrl` (FishBase) değişmedi.
+  - `communityCaution`:
+    - Eski: "Bir erkek ve birkaç dişiyle tutulmalı; küçük balıklar av olabilir. Benzer mavi Malawi haplarıyla erkek rekabeti ve melezleşme riski vardır."
+    - Yeni: "Fishkeeper tek başına ya da bir erkek ve birkaç dişiden oluşan bir haremle tutulabileceğini yazar; Seriously Fish erkeğin tacizini azaltmak için erkek başına birkaç dişi ve akvaryum çok büyük değilse tek erkek önerir. Küçük balıklar av olabilir. Benzer mavi Malawi haplarıyla erkek rekabeti ve melezleşme riski vardır."
+    - Kaynaklar: Fishkeeper "can be kept singly in the aquarium, or one male with a harem of several females"; Seriously Fish "Several females should be kept per male in order to reduce harassment by the male, and only one male should be kept unless the tank is very large".
+    - Kural: iki kaynak çelişiyorsa fark kullanıcıdan saklanmaz (`docs/DATA_SOURCES.md`, "Çelişki ve eksiklik").
+  - `minGroup` (4) değişmedi; karar bekliyor.
+    - Fishkeeper tek tutmaya izin veriyor; bu kaynağa göre değer 1 olurdu (2325, 2347, 2364 ve 3291. satırlar).
+    - Seriously Fish "one male with several females" diyor; bu kaynağa göre değer 4 olurdu (Johanni, 2300. satır).
+    - Bu kayıtta hangi kaynağın ana kaynak sayılacağını belirleyen yazılı kural yok. Kayıt 2026-08-29'dan. 3287. satırdaki "Seriously Fish sayfası varsa o" kuralı açık liste paketinindir; uygulanırsa boy, sıcaklık ve pH da değişir. Değer seçilmedi.
+- `goldfish` (Japon balığı), `minGroup` (1) değişmedi.
+  - Kaynaklar: OATA sayı vermiyor. Fishkeeper (fantail) "should be kept in groups" diyor, sayı vermiyor. FishBase "in groups of 5 or more individuals" diyor.
+  - Kural: kaynak grup gerektiğini söyleyip sayı vermiyorsa kayıttaki değer korunur (2271 ve 3291. satırlar; Çin ejderi 1; Afrika cüce kurbağası, 3344. satır). FishBase'in grup sayısı bakım kaynağı olarak kullanılmıyor (melek balığı, 2292. satır).
+  - Yeni bir sayı seçmeyi sağlayan yazılı kural yok.
+- `african-dwarf-frog` (Afrika cüce kurbağası), `predatory`: yok → true.
+  - Kaynak: Fishkeeper "They are generally peaceful towards fish of similar size, but tankmates must be chosen carefully as adults will take very small fish and fry".
+  - Kural: amfibilerde değer kuralı omurgasızlardakiyle aynı; kaynakla doğrudan çelişen avcılık niteliği düzeltilir (`docs/DATA_SOURCES.md`, "Omurgasızlar … Değer kuralı → Nitelikler" ve "Amfibiler"). Tür akvaryumu işareti eklenmedi (Fishkeeper: "Specialist community").
+  - Motor: avcı bilgisi katalog kaydının `predatory` alanından, bütün canlı sınıflarında okunuyor (`packages/compatibility-engine/src/index.ts:213`). Davranış kaydındaki `eatsSmallFish` (fırsatçı avcı, yalnız uyarı) yalnız balıklarda çalışıyor (`index.ts:218` ve `:220`). Kurbağa "other" sınıfında; davranış kaydı eklemek uyarı üretmezdi. Bu yüzden düzeltme katalog kaydında yapıldı; motor kodu değişmedi.
+  - Etki: kurbağa ile yetişkin boyu 2,8 cm ya da altındaki her canlı (7 cm'nin %40'ı; balık ya da karides) "avlanma riski" tehlikesi alır. Kaynak yalnız çok küçük balık ve yavrudan söz ediyor. Motorda balık dışı canlılar için fırsatçı avcı ile asıl avcı ayrımı yok.
+- Çeviri: üç bakım metninin (`apisto-commbrae`, `rainbow-snakehead`, `electric-blue-hap`) İngilizce ve İspanyolca çevirisi yenilendi; eski metinlerin çevirileri çıkarıldı. Yalnız canlı tabloları yeniden üretildi.
+- Test (`scripts/test-catalog-flow.cjs`):
+  - Gökkuşağı yılanbaşının tür akvaryumu beklentisi (true → false) ve Calvus'un uzunluk beklentisi (150 → 152) güncellendi.
+  - Bu düzeltmeleri sabitleyen satırlar eklendi: akıntı, grup, hacim ve ek kaynak, iki işaret, üç metin.
+- Altın fikstür yeniden üretilmedi; karar bekliyor. 1.077 vakadan 6'sı değişiyor; hiçbirinin puanı ve durumu değişmiyor.
+  - `species-tight:calvus-cichlid`: alan uyarısının metninde 150 → 152 cm.
+  - `species-fit:electric-blue-hap` ve `species-tight:electric-blue-hap`: yük ölçütü (yük oranı %40 → %46 ve %50 → %58; ölçüt 96 → 95 ve 95 → 94). Dar vakada alan uyarısının metninde 350 → 304 L.
+  - `species-fit:red-tailed-rasbora` ve `species-tight:red-tailed-rasbora`: yük ölçütü (%65 → %49 ve %95 → %68; ölçüt 93 → 95 ve 90 → 93). Dar vakada grup uyarısı "adet 7; en az 8" → "adet 5; en az 6".
+  - `pair:rainbow-snakehead+ramirezi`: "tür akvaryumu önerilir" tehlikesi kalktı. Tür uyumu ölçütünün açıklaması "Tür akvaryumu önerilen canlı var" → "Küçük canlılar için avlanma riski var" (ramirezi 7 cm; yılanbaşın %40'ı 8 cm). Topluluk uyarısında yeni metin. Puan 49 ve durum tehlike, aynı.
+  - Denison barb, Corumba ve kurbağada değişen vaka yok.
+- Veri kapsamı: `docs/DATA_COVERAGE.md`'de canlıların "Davranış ya da bakım notu" satırı 334/443'ten 335/443'e çıkmalı (kurbağa artık avcı işareti taşıyor). Belge bu işte değişmedi; `src/lib/__tests__/data-coverage.test.ts` belge yenilenene kadar kırmızı.
+- Sağlık senaryoları (`scripts/test-health.cjs`, 113) değişmeden geçiyor.
+- Ek tur (aynı gün, teknik sorumlunun kararıyla): veri testi B1'in adayları.
+  - Kaynaklar ikinci bir doğrulayıcının 2026-11-10'da (UTC) indirdiği sayfalardan okundu; bu düzeltme için yeni sayfa açılmadı. Doğrulama tarihleri değişmedi.
+  - Önceki maddelerden iki kayıt için teknik sorumlunun kararı: `electric-blue-hap`'in grubu 4, `goldfish`'in grubu 1 olarak kalıyor (electric'in bakım metni iki kaynağı gösteriyor). Gökkuşağı yılanbaşındaki yorum kabul edildi (lider kararı, 2026-11-10).
+  - `silver-mono` (Gümüş Mono) ve `spotted-scat` (Benekli Argus):
+    - `waterTypes`: yok (tatlı su) → `["brackish","saltwater"]`.
+    - `specificGravity`: yok → 1,005–1,026. pH 7,5–8,5 değişmedi.
+    - Kaynak: kayıtların ek kaynağı OATA "How to look after monos, scats and archerfish": "monos and scats will be better kept in medium or high-end brackish conditions"; ikisi için ayrı ayrı "Juveniles can be kept in brackish water, but adults do best in full strength sea water". Ölçek: "medium brackish between 1.005 and 1.015 S.G, and high-end brackish between 1.015 S.G. and full seawater (approximately 1.026)". Fishkeeper'ın scat ve mono sayfaları da aynı şeyi söylüyor ("adults do best in full marine conditions").
+    - Kural: acı ya da deniz canlısı tuzluluk modellenmeden tatlı su profiline bağlanmaz; kaynak acı ya da deniz suyu istiyorsa kayıt o su türüne bağlanır (`docs/DATA_SOURCES.md`, "Canlı verisi için özel kaynak kuralı" ve "Omurgasızlar … Su türü"). Emsal: aynı OATA sayfasıyla Selenotoca multifasciata (2026-09-08 girdisi, 1155–1156. satırlar).
+    - Etki: tatlı su akvaryumunda bu iki tür yaşam ortamı tehlikesi alır. Tatlı su seçicisinde ve aramasında çıkmazlar. Tatlı su aramasında "ARGUS BALIKLARI" artık çözülmemiş Silver Argus güvenlik kaydını gösteriyor.
+  - `freshwater-bumblebee-goby` (Tatlı su arı goby):
+    - `adultSizeCm`: 2 → 4,4. Kaynak: Seriously Fish "Max size 44mm SL" (FishBase de 4,4 cm SL). Fishkeeper 2 cm yazıyor. Kural: boy katalogla kaynakların büyüğü (2013, 2375 ve 3288. satırlar); öncelik Seriously Fish'te (`docs/CATALOG_SOURCE_GAPS.md`, "Düzeltme kuralı").
+    - `minVolumeL`: 45 → 41; `minTankLengthCm`: 50 → 45. Kaynak: Seriously Fish "Aquarium base 45 × 30cm", "~41 litres", "Base dimensions of 45 ∗ 30 cm … should be the minimum considered". Fishkeeper ve FishBase akvaryum ölçüsü yazmıyor; 45 L ve 50 cm hiçbir kaynakta yok. Kural: uzunluk kaynağın tabanı, hacim taban × genişlik × genişlik ya da kaynağın yazdığı litre (2012 ve 2269. satırlar; 45 × 30 × 30 cm → 41 L, kaynağın litresiyle aynı). Kayıttaki değer yalnız kaynak ölçü yayımlamıyorsa korunur (2270 ve 3290. satırlar). Kaynaksız değerin uzman kaynağın ölçüsüyle değiştirilmesi: 1435. satır.
+    - `additionalSourceUrls`: Seriously Fish sayfası eklendi (`https://www.seriouslyfish.com/species/brachygobius-aggregatus/`).
+  - `maingano-cichlid` (Maingano), `minVolumeL`: 240 → 154.
+    - Kaynak: Seriously Fish "90 ∗ 45 ∗ 38 cm … ~154 litres". Fishkeeper yalnız uzunluk yazıyor ("at least 4ft long"); 240 L hiçbir kaynakta yok.
+    - Kural: 2012. satırdaki taban kuralı (90 × 45 × 45 → 182 L; sarı prenses) bu kaydı kapsamıyor. O kural "2026-10-04 Kaynağı yalnızca FishBase olan 42 türün kaynak yenilemesi" paketinin; sarı prenses o paketin tablosunda (2051. satır), Maingano yok. Kaydın kaynağı Fishkeeper, `docs/CATALOG_SOURCE_GAPS.md`'deki listede de yok. Bu yüzden kaynağın yazdığı litre kullanıldı (2269 ve 3290. satırlar).
+    - Uzunluk 120 cm kaldı (teknik sorumlunun kararı). Fishkeeper'ın 4 fiti 121,9 cm, Seriously Fish 90 cm.
+    - `additionalSourceUrls`: Seriously Fish sayfası eklendi (`https://www.seriouslyfish.com/species/melanochromis-cyaneorhabdos/`).
+  - `three-spot-gourami` (Üç benekli gurami): `minVolumeL` 200 → 243, `minTankLengthCm` 100 → 120.
+    - Kaynak: Practical Fishkeeping "A Gourami Overview", üç benekli guraminin bilgi kutusu: "Tank size: 120 x 45 x 45 cm (48 x 18 x 18 in)" (120 × 45 × 45 cm → 243 L). Seriously Fish 90 × 30 cm ve yaklaşık 81 L; Fishkeeper yalnız uzunluk ("over 90cm/36" in length").
+    - Kural: iki kabul edilen kaynak farklı ölçü veriyorsa büyüğü (3290 ve 3373. satırlar). Practical Fishkeeping canlılarda kabul edilen kaynak (`docs/DATA_SOURCES.md`, "Canlı verisi için özel kaynak kuralı").
+    - `additionalSourceUrls`: Practical Fishkeeping yazısı ve Seriously Fish sayfası eklendi.
+  - `oscar` (Astronot), `husbandryCaution`: sona "Sıcaklık ve pH Seriously Fish'in aralığıdır (Fishkeeper 23–27 °C ve pH 6,0–8,0 verir)." eklendi.
+    - Kaynak: kaydın ek kaynağı Fishkeeper "Temperature 23-27°C", "pH: 6.0-8.0". Kayıt Seriously Fish'in 20–28 °C ve 6,0–7,5'ini taşıyor; değerler değişmedi.
+    - Kural: iki kaynak çelişiyorsa fark kullanıcıdan saklanmaz (`docs/DATA_SOURCES.md`, "Çelişki ve eksiklik"). Biçim `orange-venezuela-cory`'nin bakım metniyle aynı. pH farkı da aynı kuralla yazıldı.
+  - Değişmeyenler (doğrulayıcının hükmü, kural sonucu): betta, sarı prenses, kardinal ve harlequin'in sıcaklığı; ocellaris'in 100 L'si; üç benekli guraminin karides davranışı (kaynak tür düzeyinde değil, karar 0010).
+  - Açık not: 2026-08'in Fishkeeper ciklet kayıtları "4ft" için 120 cm taşıyor; 2026-10-19'dan sonraki paketler fiti tam çeviriyor (5 ft → 152 cm). Değişmedi.
+  - Çeviri: astronotun bakım metninin İngilizce ve İspanyolca çevirisi yenilendi. Yalnız canlı tabloları yeniden üretildi.
+  - Test (`scripts/test-catalog-flow.cjs`):
+    - "ARGUS BALIKLARI" tam araması tatlı sudan acı suya taşındı.
+    - Cikletist Tetra ana kategorisi sayımı 99/30 → 98/31: "ARGUS BALIKLARI" tatlı suda artık çözülmemiş Silver Argus kaydına düşüyor.
+    - Üç benekli guraminin hacim beklentisi 200 → 243.
+    - Ek turun düzeltmelerini sabitleyen satırlar eklendi.
+  - Altın fikstür yeniden üretilmedi. Bu bölümün bütün düzeltmeleriyle 1.077 vakadan 19'u değişiyor (D3 aşamasının ölçümü; sonraki düzeltmelerden sonra yeniden sayılmadı); yalnız `species-tight:freshwater-bumblebee-goby`'nin puanı 58 → 57 (yük ölçütü 98 → 94; ortalamada yuvarlama). Hiçbir vakanın durumu değişmiyor.
+    - Ek turun 13 vakası: mono ve scat'in dört vakası (acı su akvaryumuna geçti, "Özgül ağırlık ölçümü gerekli" eklendi); goby'nin iki vakası ve goby ile tatlı su iğne balığı çifti (yük; dar vakada alan uyarısı 41 L ve 45 cm); Maingano'nun iki vakası (yük; alan uyarısı 154 L); üç benekli guraminin iki vakası (yük; alan uyarısı 243 L ve 120 cm); astronotun iki vakası (bakım metni).
+    - İlk düzeltmelerin 6 vakası yukarıda.
+  - Veri kapsamı tablosu bu turda değişmedi; tek fark yine kurbağanın satırı (334 → 335).
+
+## 2026-11-10 Veri testi düzeltmesi: ekipman örneklemi (Claude)
+
+- Veri testi A'nın ekipman örneklemi (2026-11-09, rastgele 65 ekipman; sınıflar ikinci denetçinin 2026-11-10 kontrolünden geçti). Son sınıfı "yanlış" olan 8 alan ve "kaynakta yok" olan 13 alan ele alındı; teknik sorumlunun ve ürün sahibinin aynı günkü kararlarıyla iki tur daha yapıldı. Değerler 2026-11-09'da (UTC) kaydedilen kaynak sayfalarından ve 2026-11-10'da (UTC) doğrudan açılan sayfalardan okundu. Kaynakta olmayan ifadeler için aynı ürünün sayfadaki dil bağlantılarından açılan başka dil sayfalarına da bakıldı. Değer tahmin edilmedi. Doğrulama tarihleri (`verifiedAt`) değişmedi; veri testinin sonunda toplu yenilenecek.
+- `ada-super-jet-*` (ADA Super Jet Filter, altı kayıt; örneklemde ES-900):
+  - Kaynak (`https://www.adana.co.jp/jp/contents/products/na_filter/detail01.html`) ES-600/900/1200/2400 için 50 ve 60 Hz değerlerini ayrı yazıyor; kayıtlar 60 Hz değerini taşıyordu. Kural: yeni şebeke değeri kuralı (`docs/DATA_SOURCES.md` → "Ekipman değerleri için özel kural"): 50 ve 60 Hz ayrıysa Türkiye şebekesinin 50 Hz değeri.
+  - ES-600: 360 L/saat, 16 W → 330 L/saat (5,5 L/dakika), 13 W.
+  - ES-900: 720 L/saat, 15 W → 660 L/saat (11 L/dakika), 13 W.
+  - ES-1200: 1140 L/saat, 31 W → 960 L/saat (16 L/dakika), 26 W.
+  - ES-2400: 1860 L/saat, 50 W → 1620 L/saat (27 L/dakika), 40 W.
+  - Açıklamalardaki "(60 Hz)" → "(50 Hz)".
+  - ES-150 Ver.2 ve ES-300 Ver.2: 12 V DC pompa, tek değer ("作動周波数：50/60Hz(共用)"; 3,5 ve 6,0 L/dakika, 3 ve 6 W). Değerler aynı; açıklamadaki yanlış "(60 Hz)" etiketi kaldırıldı.
+  - Gözlem: cihazlar AC100V (Japonya) yazıyor.
+- `aquawing-aq950` (Aquawing AQ950):
+  - `recommendedMinL` 70 → 50, `recommendedMaxL` 100 → 200, açıklama "70–100 litre" → "50–200 litre".
+  - Kaynak (`https://malawiizmir.com/aquawing-aq950-cift-cikisli-akvaryum-hava-motoru-2x5-5-l-dak-5-w`): "50-200 litrelik tatlı su veya tuzlu su akvaryumu sahipleri". Debi (2 × 5,5 L/dakika = 660 L/saat) ve güç (5 W) aynı.
+  - Kural: mağazanın değeri eskisinden farklıysa mağazanınki kullanılır (karar 0019, 3. madde). Eksenpet'in AQ950 ürün sayfası (`https://eksenpet.com/akvaryum/hava-motorlari/hava-motorlari/prd-aq950-aquawing-cift-cikisli-hava-motoru-5w`) yalnız 5 W yazıyor; hacimle çelişmiyor.
+- `sobo-sb-8808` (Sobo SB-8808):
+  - `powerW` boş → 10; açıklamadaki "güç değeri kaynaklarda 5,8/10 W çelişkili" → "10 W".
+  - Kaynak (Türkiye distribütörü, `https://www.sobo.com.tr/sobo-ayarlanabilir-cift-cikisli-akvaryum-sessiz-hava-motoru-sb-8808`): başlık "SB-8808 10W 12 Lt/dk", açıklama "POWER: 10W MAX.". 5,8 W yalnız ürün görselinin dosya adında ("…58w-12-lt…") geçiyor.
+  - Kural: değer de çelişki de yalnız ürün başlığında, açıklamasında ya da teknik tablosunda yazandan çıkar (karar 0019, 3. madde; `docs/DATA_SOURCES.md` → "Çelişki ve eksiklik", bu düzeltmede eklendi).
+- `jbl-protemp-s-101` (JBL PROTEMP S 101):
+  - Açıklamanın ilk parçası "Üreticinin önceki S 100 URL/adlandırmasıyla aynı ürün kaydı" → "JBL'in ABD sayfasında S 101, Almanca sayfasında, Türkiye sayfasında ve kılavuzunda S 100 adıyla geçen aynı 6042300 ürün kaydı". Ad (PROTEMP S 101) ve kimlik değişmedi.
+  - Kaynaklar: kaydın Almanca sayfası (`https://www.jbl.de/de-de/productsv2/detail/25207631`) ve Türkiye sayfası (`https://www.jbl.de/tr-tr/productsv2/detail/25207653`) başlıkta ve ürün verisinde "JBL PROTEMP S 100", kılavuz "S100" yazıyor; ABD sayfasının (`https://www.jbl.de/en-us/productsv2/detail/25207620`) başlığı "JBL PROTEMP S 101". Ürün numarası hepsinde 6042300. ABD ve Türkiye sayfaları ek kaynak oldu.
+  - Kural: iki kaynak çelişiyorsa fark kullanıcıdan saklanmaz (`docs/DATA_SOURCES.md` → "Çelişki ve eksiklik"). Ad "PROTEMP S 100" yapılamadı: katalogda `jbl-protemp-s100` ("ProTemp S 100", 2026-08-17, 90–150 L) var ve bütünlük denetimi aynı kategori, marka ve adı kabul etmiyor.
+  - Açık iş: aynı ailenin Almanca sayfaları bugün S 25, S 50, S 150, S 200 ve S 300 yazıyor (kayıtlarda S 26/51/151/201/301); eski adlı `jbl-protemp-s25 … s300` kayıtları da katalogda. Bu kayıtlar değişmedi.
+- `tetra-ht-25` … `tetra-ht-300` (Tetra HT Electronic, yedi kayıt; örneklemde HT 150 ve HT 300):
+  - Açıklamadaki "susuz çalışma ve aşırı ısınma güvenlik kapaması" → "susuz çalışma güvenlik kapaması".
+  - Kaynak: kılavuz (`https://www.tetra.net/fileadmin/pictures/TH53436_9074.pdf`) güvenlik işlevini yalnız sudan çıkarınca ve susuz çalıştırınca kapanma olarak yazıyor (İngilizce ve Almanca bölüm). Ürün sayfası İngilizce "extra safety shut off", Almanca (`https://www.tetra.net/de-de/produkte/tetra-ht-heater-electronic`) "zusätzliche Sicherheitsabschaltung", Türkçe (`https://www.tetra.net/tr-tr/ueruen/tetra-ht-elektronik-isitici`) "ekstra emniyet kapatması" diyor. Aşırı ısınma hiçbirinde yok.
+  - Yedi kayıt aynı kaynaktan aynı kalıpla üretiliyor; ifade yedisinde de çıkarıldı.
+- `ada-pro-scissors-*` (ADA Pro-Scissors, on kayıt; örneklemde Short Straight):
+  - Açıklamadaki "Paslanmaz profesyonel akvaryum bitkisi budama makası" → "Profesyonel akvaryum bitkisi budama makası". Boylar (160–355 mm) değişmedi.
+  - Kaynak: İngilizce sayfa (`https://www.adana.co.jp/en/contents/products/na_layout/detail01.html`) ve Japonca sayfa (`https://www.adana.co.jp/jp/contents/products/na_layout/detail01.html`) malzeme yazmıyor ("stainless", "steel", "ステンレス" geçmiyor).
+  - On kayıt aynı kaynaktan aynı kalıpla üretiliyor; ifade onunda da çıkarıldı.
+- `tropica-tweezers-25` (Tropica cımbız): `model` "Tweezers 25 cm" → "Tweezers". Kaynak sayfa (`https://tropica.com/en/plant-care/scissors-and-tweezers/tweezers/`) ve Danca, Almanca, Fransızca sayfaları boy yazmıyor. Paslanmaz çelik ve besin kapsülü yerleştirme kaynakta var; açıklama değişmedi. Kullanıcı kayıtları bağlı olabileceği için kimlik değişmedi.
+- `sobo-wp-4000-pump` (Sobo WP-4000): `sourceUrl` Atakan'ın Sobo marka sayfası (`https://atakanpetshop.com/sobo`) → ürün sayfası (`https://atakanpetshop.com/sobo-wp-4000-sump-motoru-40w-2000lh-2-m`). Ürün sayfası mağazanın site haritasında bulundu. Başlık "Sobo WP-4000 Sump Motoru 40W 2000L/H 2 M"; açıklama 40 W, 2000 L/S debi, "2 metreye kadar su basma yüksekliği". Kayıttaki değerlerin hepsi ürün sayfasında var; değerler ve açıklama değişmedi. Sayfanın yazdığı "Uygun Akvaryum Hacmi 400 Litre" kayıtta yoktu, eklenmedi.
+- `mec-hamburg-pipo` değişmedi: kaynak (`https://cukurovapet.com.tr/marka/mec`, kabul edilen kaynak değil) markanın liste sayfası; bugün yalnız "Meç Pipo 5" listeleniyor. Kaydın başka bir kabul edilen kaynağı yok; Atakan'ın site haritasında da ürün yok. Kural gereği kayıttan alan çıkarılmadı.
+- eksenpet.com (ürün sahibi kararı, 2026-11-10): yalnız Aquawing için kabul edilen kaynak oldu (`docs/DATA_SOURCES.md` → "Ekipman değerleri için özel kural"). Gerekçe: Aquawing Bursa Pet'in markası; Eksen Pet, "Hakkımızda" sayfasına göre Bursa Pet'in Marmara ve Akdeniz bölgesindeki tek bayisi ve temsilcisi.
+  - Karar 0019 ile bütün değerleri çekilen 19 Aquawing kaydının modeli eksenpet'in site haritasında (`https://eksenpet.com/products_1.xml`) arandı; ürün sayfası olanlar açıldı. 16 kaydın ürün sayfasının başlığında debi ve güç yazıyor; değerler kayıttaki eski değerlerle aynı, barkodlar da aynı. Sayfaların açıklama bölümü boş; çelişki yok. Bu 16 kayıt çekilenler listesinden (`unverifiedEquipmentIds`) çıktı:
+    - AQ101F 550 L/saat 12 W, AQ101FB 880 / 15, AQ102F 1400 / 20, AQ600F 550 / 12;
+    - AQ-WP750FA ve AQ-WP750FB 400 / 4, AQ-WP850FA ve AQ-WP850FB 500 / 6, AQ-WP950FA ve AQ-WP950FB 880 / 12;
+    - AQ-WP1000FA, AQ-WP1000FB ve AQ-WP2300A 1000 / 15, AQ-WP3300A 1500 / 20, AQ-WP3300B 2000 / 30, AQ-WP3300C 2800 / 40.
+    - Marka sayfasına bağlı beş kaydın (AQ-WP750FA, AQ-WP750FB, AQ-WP850FA, AQ-WP3300B, AQ-WP3300C) ve kabul edilmeyen mağazaya bağlı AQ600F'nin `sourceUrl`'i eksenpet ürün sayfasına geçti.
+  - Eksenpet'te ürün sayfası olmayan AQ160, AQ607F ve AQ80F çekili kaldı.
+  - Mağazada kısmen doğrulanan üç Aquawing kaydı değişmedi: AQ312'nin eksenpet sayfası yalnız 3 W yazıyor (debi yok); AQ1300F'nin gücü kabul edilen mağazalarda 25 W / 30 W çelişkili, eksenpet'in 25 W'ı çelişkiyi çözmüyor; AQ680 eksenpet'te yok.
+  - Karar 0019 listeleri: 122 çekilen + 4 yalnız hava debisi çekilen + 76 mağazada doğrulanan = 202 tekil kayıt.
+- Jeneca (ürün sahibi onayı, 2026-11-10): teknik tablosu yalnız resimde olan dört kaydın ürün sayfası resimleri üreticinin sitesinden (`www.aleas.cn`) indirilip okundu (30 resim, ürün sayfası Referer'ıyla). Tabloda birden çok model olduğunda yalnız kaydın modelinin satırı kullanıldı.
+  - `aleas.cn` Jeneca'nın üreticisinin sitesi: Çince "公司简介" sayfası (`https://gb.aleas.cn/Aboutus.html`) 饶平县金利佳机电有限公司'nin markalarını "公司品牌JENECA, ALEAS" ve "金利佳旗下金利佳 JENECA、佳力仕 ALEAS两大品牌" diye yazıyor; İngilizce "About us" (`https://www.aleas.cn/Aboutus.html`) Jin Li Jia Electromechanical Co., Ltd'nin 2005'te kurulmuş bir üretici olduğunu yazıyor; ürün sayfaları "JENECA reserves the right to revise this product" diyor. `docs/DATA_SOURCES.md`'ye Jeneca'nın üretici kaynağı olarak eklendi.
+  - `jeneca-tgd-19` (`https://www.aleas.cn/product/712.html`): TGD-19 "Power: 6W, Qmax: 400L/H"; kayıtla aynı. "Upgradeable drip box to increase the filtering effect (to be ordered separately)" açıklamayla aynı.
+  - `jeneca-xp-36-ultra` (`https://www.aleas.cn/product/717.html`): XP-36 Ultra "Dry Wet Depart Type, Power: 15W, Qmax: 1500L/H"; kayıtla aynı. Ayar vanası ("Water Flow Regulating Valve: Adjustable") ve yüzey emişi ("draws in surface scum") resimlerde var.
+  - `jeneca-ae-800` (`https://www.aleas.cn/product/478.html`): AE-800 satırı 220–240 V/50 Hz "9.3/20W" (UV'siz / UV'li), 750 L/Hr, "Suitable for tank size 70L/18G"; kayıtla (750 L/saat, 9,3 W, 70 litreye kadar) aynı.
+  - `jeneca-db-31` (`https://www.aleas.cn/product/701.html`): DB-31 satırı "16W, ≥0.030Mpa, 30L/min"; kayıtla (30 L/dakika = 1800 L/saat, 16 W, ≥0,030 MPa) aynı. Model adı DB-31 tabloda görünüyor.
+  - `jeneca-tgd-15` … `jeneca-tgd-19`: `adjustableFlow` boş → true. Aynı ürün sayfasının TGD serisi resmi pompada "Flow Adjustment Knob" gösteriyor; beş kayıt aynı sayfaya ve aynı kalıba bağlı.
+- Çeviri (İngilizce ve İspanyolca; yalnız ekipman tabloları yeniden üretildi):
+  - Eklenen parçalar: "susuz çalışma güvenlik kapaması", "Profesyonel akvaryum bitkisi budama makası" ve JBL PROTEMP S 101'in yeni ilk parçası.
+  - Artık kullanılmadığı için çıkarılanlar: eski Tetra ve ADA parçaları, Sobo'nun "güç değeri kaynaklarda #/# W çelişkili" parçası ve "Değerlerin kaynağı eksenpet.com; …" kapasite notu.
+- Belge (`docs/DATA_SOURCES.md`, yalnız ekleme):
+  - "Ekipman değerleri için özel kural"a eklenenler: eksenpet istisnası, şebeke değeri kuralı, Resun'un üretici kaynakları (`resun-china.com`, `rissee.com`) ve Jeneca'nın üretici kaynağı (`aleas.cn`).
+  - "Çelişki ve eksiklik"e karar 0019'un 3. maddesine göre değerin ve çelişkinin nereden okunduğu eklendi (Sobo SB-8808 örneğiyle).
+- Test (`scripts/test-catalog-flow.cjs`):
+  - Güncellenen beklentiler: 0019 listelerinin toplamı 218 → 202; eski açıklama kartı örneği AQ101F → hâlâ çekili AQ80F; Sobo SB-8808'in gücü 10 W; JBL PROTEMP S ailesinin "önceki S" beklentisinde S 101 istisnası.
+  - Bu düzeltmenin bütün kayıtları için beklenti eklendi.
+- Altın fikstür: ekipmandan 7 vaka farklı. Fikstür yeniden üretilmedi.
+  - `filter:ada-super-jet-es-600`, `-900`, `-1200`, `-2400`: çevrim değişti. ES-2400'ün puanı 87 → 89.
+  - `filter:aquawing-aq101f`, `filter:aquawing-aq101fb` ve `filter:aquawing-aq102f`: karar 0019 öncesine döner. Puan 81 → 92, "Ekipman kapasite bilgisi eksik" uyarısı yok.
+- Veri kapsamı (`docs/DATA_COVERAGE.md`, ölçüm 2026-11-08) bu değişikliklerle yenilenmeli; belge bu işte değişmedi:
+  - "Doğrulanmamışlar listesinde değil" 3403 → 3419;
+  - "Hesap değeri" 1110 → 1126;
+  - "Güç (W)" 1672 → 1689 (16 Aquawing ve Sobo SB-8808).
+
+## 2026-11-10 Veri testi D5: başka su türündeki tür adı yanlış güvenlik kaydına düşmüyor
+
+- Sorun: Benekli Argus (`spotted-scat`) yalnız acı ve tuzlu su profili olunca, tatlı su akvaryumunda "ARGUS BALIKLARI" araması daha uzun "SİLVER ARGUS BALIKLARI" güvenlik kaydını buluyordu. Kayıt yine engelleniyordu, ama Selenotoca/Scatophagus kimlik belirsizliği gibi yanlış bir gerekçeyle. Asıl sorun türün tatlı suya uygun olmamasıydı.
+- Değişiklik:
+  - Yeni arama `speciesForOtherWaterExactSearch` (`src/data/catalog-species.ts`): aranan ad bu su türünde hiçbir doğrulanmış türün tam adı değilse ama başka su türündeki bir türün tam adıysa o türü döndürür.
+  - `unresolvedSpeciesForSearch`: böyle bir adı daha uzun satış adının içinden (kısmi) eşleştirmez. Satış adının kendisi (tam eşleşme) güvenlik kaydını bulmaya devam eder; "SİLVER ARGUS" yine Silver Argus kaydını gösterir.
+  - Ekleme penceresi: türün adını, bilimsel adını ve "Bu tür tatlı su akvaryumuna uygun değildir; acı su veya tuzlu su akvaryumu gerekir." bilgisini gösterir. Yeni metinler TR/EN/ES `livestock.form.otherWaterTitle` ve `otherWaterText`. Katalog verisi değişmedi.
+- Aynı tuzağa düşen adlar (4): tatlı suda "Argus Balıkları" (Silver Argus kaydına düşüyordu) ve "Neon Goby" (BLUE NEON GOBBY GOBİ'ye); acı suda "Plati" (PLATİNİUM HALF BEAK CÜCE ZARGANA'ya) ve "Nerite salyangoz" (Karışık Nerite paketine). Dördü de artık doğru türü ve gereken su türünü gösteriyor. "Blue Neon Goby" tatlı suda mağaza adının tam eşleşmesi olduğu için kendi güvenlik kaydını göstermeye devam ediyor.
+- Açık: bu su türündeki bir türün adının içinde geçtiği için başka bir türün kendiliğinden seçildiği 6 ad bu işte değişmedi. Bunlar: tatlı suda "Mavi neon gobi", acı suda "Koi" (Lepistes seçiliyor) ve "Angelfish", tuzlu suda "Melek balığı", "Angelfish" ve "Turbo salyangoz". Karar bekliyor.
+- Test: `src/lib/__tests__/catalog-lookup.test.ts` içinde "başka su türündeki doğrulanmış tam ad" bölümü. Bölüm bütün katalog adlarını tarar ve kısmi eşleşmeye düşen ad kalmadığını denetler. `scripts/test-catalog-flow.cjs` içinde Tetra ana kategori sayımı 98/31'den 99/30'a döner.
+- Kontrol (Gemini, 2026-11-10; Codex limiti dolduğu için): tam ada önce bakıldığı için "SİLVER ARGUS" ve "SİLVER ARGUS BALIKLARI" yine Silver Argus güvenlik kaydına düşüyor; TR, EN ve ES metinleri aynı anlamda. Önerdiği tek değişiklik Tetra sayımıydı; uygulandı. Akış testine D5'in ve Codex'in D3 kontrolünün önerdiği arama beklentileri de eklendi: tatlı suda "ARGUS BALIKLARI" ne doğrulanmış tür ne güvenlik kaydı, başka su türündeki Benekli Argus olarak bildiriliyor; tuzlu suda Benekli Argus seçiliyor; Silver Argus, Plati, Neon Goby, Nerite salyangoz ve "Blue Neon Goby" durumları korunuyor.
+
+## 2026-11-10 Veri testi: kontrol notları (Codex ve Gemini)
+
+- Canlı örneklemi (Codex, D3 kontrolü). Kaynaklar arasındaki fark kullanıcıdan saklanmasın diye (`docs/DATA_SOURCES.md`, "Çelişki ve eksiklik") beş kaydın açıklaması genişletildi. Sayısal değer, işaret, kaynak bağlantısı ve tarih bu kontrolde değişmedi.
+  - `electric-blue-hap`: bakım metnine boy, sıcaklık, pH ve uzunluk farkları (Seriously Fish ve Fishkeeper; A1'in ham sayfaları).
+  - `freshwater-bumblebee-goby`: bakım metnine boy farkı (Seriously Fish 4,4 cm, Fishkeeper 2 cm) ve 41 L'nin kaynağı; topluluk metnine Seriously Fish'in tür akvaryumu önerisi.
+  - `maingano-cichlid`: bakım metni eklendi: iki kaynağın ölçü ve su değeri farkları.
+  - `three-spot-gourami`: bakım metni eklendi: üç kaynağın ölçüleri, seçilen büyük ölçü ve su değeri farkları.
+  - `african-dwarf-frog`: avcı işaretinin yanına topluluk metni: erişkinler çok küçük balıkları ve yavruları yer; benzer boydaki balıklara genelde barışçıldır (Fishkeeper).
+  - İngilizce ve İspanyolca çevirileri eklendi.
+  - Son kapsam: canlıların "davranış ya da bakım notu" satırı 337/443 (%76,1). D3 bölümündeki 335, Codex'in eklemelerinden önceki durumdur; fark kurbağanın işareti ile Maingano ve guraminin yeni bakım metni.
+  - Açık bulgu: kurbağanın avcı işareti motorun genel %40 kuralıyla 2,8 cm'ye kadar her canlıda, karidesler dahil, kesin tehlike üretiyor; kaynak yalnız çok küçük balık ve yavru diyor. Fırsatçı avcı yolu motorda yalnız balıklarda açık; motor değişikliği gerekir, yapılmadı.
+- Ekipman örneklemi ve arama düzeltmesi (Gemini, D4 ve D5 kontrolü; Codex limiti dolduğu için).
+  - Doğru bulunanlar: ADA Super Jet ES'in 50 Hz değerleri ve 12 V DC modellerde frekans etiketinin kalkması; Jeneca'nın dört kaydının resim tabloları ve TGD serisinin debi ayar düğmesi; eksenpet'in 16 Aquawing kaydı (eksenpet'te sayfası olmayan üç kayıt çekili kaldı); Tetra HT'de "aşırı ısınma" ve ADA makaslarda "paslanmaz" ifadesinin kaynakta olmaması; JBL PROTEMP S 101'in adı ve açıklaması; Sobo SB-8808'in 10 W'ı; WP-4000'in ürün sayfası; AQ950'nin 50–200 litresi; Tropica cımbızın adı; `docs/DATA_SOURCES.md`'ye eklenen şebeke değeri, Resun, Jeneca ve eksenpet maddeleri ile görsel dosya adı kuralı.
+  - Düzeltilen: canlıların İngilizce çevirisinde bir İngiliz yazımı, "towards" → "toward" (`species.communityCaution`, anahtar `6e1d854fb26bf385`).
+  - Değiştirilmeyen gözlem: `7943b4b8e61195ca` anahtarındaki "Bicolour Blenny" ortak adı kaynağın (Fishkeeper, İngiltere) yazımı; talimat gereği yalnız raporlandı.
+  - Açık: JBL PROTEMP S ailesinin öbür beş modelinde (S 26/51/151/201/301 ile eski adlı `jbl-protemp-s25 … s300` kayıtları) aynı ad çakışması; altın fikstürün yeniden üretilmesi.
+- Birleştirme öncesi denetim (Codex, PR #87, P2): `african-dwarf-frog` (Afrika cüce kurbağası), `predatory`: true → kaldırıldı; işaret bu kayıtta PR'dan önce de yoktu. Kaynak (Fishkeeper) yalnız çok küçük balık ve yavru riskini söylüyor; motorun genel kuralı (7 cm'nin %40'ı, 2,8 cm) salyangoz ve karidesleri de (ör. 2,5 cm Ramshorn) kesin tehlikeye sokuyordu. Kaynaklı topluluk metni (`communityCaution`) ve doğrulama tarihi (2026-11-09) kaldı; akış testi işaretin olmadığını ve metnin kaldığını bekliyor. Balık dışı canlılarda fırsatçı avcılık ayrı motor işi.
+
+## 2026-11-10 Veri testi: doğrulama tarihlerinin yenilenmesi (Claude)
+
+- `verifiedAt` kaydın değerlerinin kaynağa karşı doğrulandığı gündür (`docs/DATA_SOURCES.md`, "Zorunlu kayıt alanları"). Bu bölüm D1, D3 ve D4 bölümlerindeki "tarih değişmedi" notlarının yerini alır.
+- Kural (teknik sorumlu):
+  - Bu işte değeri değişen kayıt: değişikliğin dayandığı kaynağın okunduğu gün; birden çok kaynak okunduysa en geç gün. Gün indirme günlüğünden ya da kanıt dosyasındaki açılış zamanından alındı.
+  - A örnekleminde olup değeri değişmeyen kayıt: dolu bütün alanları "aynı" ya da "kural sonucu", hiçbir alanı "kaynak açılmıyor" ya da "yanlış" değilse A testinin okuma günü (2026-11-09).
+  - Öbür kayıtlar değişmedi. Mevcut tarih yeniyse geri alınmayacaktı; hiçbir hedefte böyle bir durum yoktu.
+- Sonuç: 142 kayıt (değeri değişen 68, örneklemde değerleri doğrulanan 74). 2026-11-10: 54 kayıt; 2026-11-09: 88 kayıt.
+  - Bakım ürünleri (9): D1'in altı JBL kaydı 2026-11-10 (sayfalar 07:53–08:12 UTC). Örneklemden PhosEx ultra 340 g, Aquael NanoReef Duo 35 White ve Selva Mini Terrarium 2026-11-09.
+  - Canlılar (27): D3'ün ilk yedi kaydı (`denison-barb`, `apisto-commbrae`, `rainbow-snakehead`, `calvus-cichlid`, `red-tailed-rasbora`, `electric-blue-hap`, `african-dwarf-frog`) 2026-11-09; değerler A1'in o gün açtığı sayfalardan. Ek turun altı kaydı (`silver-mono`, `spotted-scat`, `freshwater-bumblebee-goby`, `maingano-cichlid`, `three-spot-gourami`, `oscar`) 2026-11-10; ikinci doğrulayıcının o gün indirdiği sayfalardan. Örneklemden 14 tür 2026-11-09.
+  - Ekipman (81): ADA Super Jet ES ×6 ve Sobo SB-8808 2026-11-09 (değerler A3'ün o gün açtığı sayfadan; D4'te yeniden açılmadı). Tetra HT ×7, ADA Pro-Scissors ×10, eksenpet'le doğrulanan 16 Aquawing kaydı ve AQ950, Jeneca TGD-15…19, JBL PROTEMP S 101, Sobo WP-4000 ve Tropica Tweezers 2026-11-10. Örneklemden 32 kayıt 2026-11-09.
+  - Bitkiler (25): örneklemden 25 bitki 2026-11-09.
+- Uygulanmayan: `waterbear-wb-3770` kural b'yi karşılıyor, ama mağaza doğrulaması listesinde (`src/data/catalog-equipment-unverified.ts`); tarihi listenin ortak `shopVerifiedAt` değeri. Tek kayda ayrı tarih vermek listenin biçimine yeni alan ister; yapılmadı.
+- Kural c'de kalanlar: örneklemdeki 58 kayıt kural b'yi karşılamadı ("kaynak açılmıyor", "kaynakta yok" ya da "yanlış" alanı var); tarihleri değişmedi. Jeneca XP-36 Ultra, AE-800 ve DB-31 de bunların içinde: D4'te resim tabloları 2026-11-10'da okundu ve değerler aynı çıktı, ama değer değişmediği ve A3'te "kaynak açılmıyor" alanları olduğu için kural gereği eski tarihte kaldılar.
+- Biçim: kayıtta tarih yazılıysa o tarih değişti. Dosya varsayılanını kullanan beş canlıya (`red-tailed-rasbora`, `calvus-cichlid`, `maingano-cichlid`, `three-spot-gourami`, `freshwater-bumblebee-goby`) kendi `verifiedAt` alanı eklendi. Ortak sabit kullanan kayıtta tarih kaydın satırına yazıldı. Kalıpla üretilen ailenin hepsi hedefse kalıbın tarihi değişti (ADA ES, ADA makas, Tetra HT, Jeneca TGD); bir kısmıysa kalıpta modele göre koşullu tarih yazıldı (JBL PROTEMP S 101'deki biçim; ör. Dophin, SunSun, WaterBear, Aquael FZN Pro 400, Leddy Slim BT 960 White, OrionLED C-RGBW 75). Önce ve sonra katalog dökümü: 142 kaydın yalnız `verifiedAt`'ı farklı, başka alan değişmedi.
+- Test: `scripts/test-catalog-flow.cjs`'te eski tarihleri sabitleyen 38 beklenti bu kayıtlarda yeni günü bekliyor (`dataTestVerifiedAt`); 142 kaydın günü ayrıca tek tek denetleniyor. `src/lib/__tests__/plant-catalog.test.ts` ve `plant-catalog.expected.json`: 25 bitkinin günü.
+- Veri kapsamı: `docs/DATA_COVERAGE.md` 2026-11-10 ölçümüyle yenilendi; "son 92 günde doğrulanmış" satırları %100.
+- Kaynak izi (son kapı; `AGENTS.md`: kaynak bilgisi kaybolmaz): bu işte `sourceUrl`'i değişen 13 kayıt 2026-11-09 dökümüyle karşılaştırıldı. Yedi ekipman kaydının eski ana kaynağı bugün hâlâ açılıyor ve `additionalSourceUrls` içine alındı (tür kaynak paketlerindeki gibi): Sobo WP-4000'e Atakan'ın Sobo marka sayfası (`https://atakanpetshop.com/sobo`), AQ600F'ye canlipetshop'un iç filtre sayfası (`https://www.canlipetshop.com/ic-filtreler`), AQ-WP750FA, AQ-WP750FB, AQ-WP850FA, AQ-WP3300B ve AQ-WP3300C'ye eksenpet'in Aquawing marka sayfası (`https://eksenpet.com/markalar/aquawing`). Bunlar değerin kaynağı değil, yalnız eski kaynağın izi; değerler ürün sayfasından (2026-10-30 ekipman kaynak bağlantısı paketi 1 eski liste sayfalarını ek kaynağa almamıştı). D1'in altı JBL bakım kaydının eski adresleri (`/en/products/detail/...`) bugün JBL'in genel ürün listesine yönleniyor; JBL kaynak bağlantısı paketlerindeki gibi (2026-10-30, paket 1 ve 2) ek kaynağa alınmadı, eski ve yeni adresler bu günlüğün D1 bölümünde yazılı. Değer, tarih ve hesap değişmedi.

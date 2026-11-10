@@ -1,9 +1,11 @@
 import { readdirSync, readFileSync, statSync } from "node:fs";
 import { join } from "node:path";
-import { describe, expect, it } from "vitest";
+import { beforeAll, describe, expect, it } from "vitest";
+import { loadLocaleBundle, messagesFor } from "@aquamind/localization";
 import { equipmentCatalog, profileForEquipment } from "@/data/catalog-equipment";
 import { normalize } from "@/data/catalog-shared";
-import { speciesCatalog, speciesForCatalogExactSearch, speciesForCatalogSearch, speciesForLivestock, speciesWaterTypes } from "@/data/catalog-species";
+import { speciesCatalog, speciesForCatalogExactSearch, speciesForCatalogSearch, speciesForLivestock, speciesForOtherWaterExactSearch, speciesWaterTypes } from "@/data/catalog-species";
+import { unresolvedSpeciesForSearch, unresolvedSpeciesListings } from "@/data/catalog-species-unresolved";
 import type { Equipment, Livestock } from "@/types/aquarium";
 
 // Dizinli aramaların (docs/DECISIONS/0015-katalog-modulleri-ve-sayfa-hizi.md) eski doğrusal aramalarla aynı sonucu verdiğini sınar.
@@ -62,6 +64,69 @@ describe("katalog arama dizinleri", () => {
     ];
     for (const item of cases) expect(profileForEquipment(item)?.id, `${item.brand} / ${item.model}`).toBe(referenceProfileForEquipment(item)?.id);
   }, 60_000);
+});
+
+// Veri testi (2026-11-10): Benekli Argus (spotted-scat) yalnız acı ve tuzlu su türü oldu. Tatlı suda "ARGUS BALIKLARI" yazan kullanıcı,
+// adı daha uzun olan çözülmemiş "SİLVER ARGUS BALIKLARI" kaydının kimlik belirsizliği gerekçesini görüyordu; asıl sorun türün tatlı suya
+// uygun olmamasıdır. Başka su türündeki doğrulanmış tam ad artık kısmi çözülmemiş eşleşmeye düşmez; ekleme penceresi uygunsuzluğu söyler.
+describe("başka su türündeki doğrulanmış tam ad", () => {
+  const waterTypes = ["freshwater", "brackish", "saltwater"] as const;
+
+  it("tatlı suda Argus Balıkları güvenlik kaydı değil, tuzlu ve acı suda Benekli Argus", () => {
+    expect(speciesForCatalogExactSearch("ARGUS BALIKLARI", "fish", "freshwater")).toBeUndefined();
+    expect(unresolvedSpeciesForSearch("ARGUS BALIKLARI", "fish", "freshwater")).toBeUndefined();
+    expect(speciesForOtherWaterExactSearch("ARGUS BALIKLARI", "fish", "freshwater")?.id).toBe("spotted-scat");
+    expect(speciesForCatalogExactSearch("ARGUS BALIKLARI", "fish", "saltwater")?.id).toBe("spotted-scat");
+    expect(speciesForCatalogExactSearch("ARGUS BALIKLARI", "fish", "brackish")?.id).toBe("spotted-scat");
+    // Türün kendi su türünde uygunsuzluk bilgisi yoktur.
+    expect(speciesForOtherWaterExactSearch("ARGUS BALIKLARI", "fish", "saltwater")).toBeUndefined();
+    expect(speciesForOtherWaterExactSearch("", "fish", "freshwater")).toBeUndefined();
+  });
+
+  it("Silver Argus'un kendi satış adı kimlik belirsizliği kaydını bulmaya devam eder", () => {
+    for (const query of ["SİLVER ARGUS", "SİLVER ARGUS BALIKLARI", "silver argus", "silver arg"]) {
+      expect(unresolvedSpeciesForSearch(query, "fish", "freshwater")?.name, query).toBe("SİLVER ARGUS BALIKLARI");
+    }
+  });
+
+  it("aynı tuzağa düşen öbür adlar da başka su türündeki türü gösterir", () => {
+    // Düzeltmeden önce: Plati → PLATİNİUM HALF BEAK CÜCE ZARGANA, Neon Goby → BLUE NEON GOBBY GOBİ, Nerite salyangoz → Karışık Nerite paketi.
+    const cases = [["Plati", "fish", "brackish", "platy"], ["Neon Goby", "fish", "freshwater", "blue-neon-goby"], ["Nerite salyangoz", "snail", "brackish", "nerite-snail"]] as const;
+    for (const [query, category, waterType, id] of cases) {
+      expect(unresolvedSpeciesForSearch(query, category, waterType), `${query} / ${waterType}`).toBeUndefined();
+      expect(speciesForOtherWaterExactSearch(query, category, waterType)?.id, `${query} / ${waterType}`).toBe(id);
+    }
+  });
+
+  it("çözülmemiş satış adının tam eşleşmesi başka su türündeki tam adın önüne geçer", () => {
+    // "Blue Neon Goby" deniz türü Elacatinus oceanops'un da eş adıdır; tatlı suda mağaza adının kimlik belirsizliği gösterilir.
+    expect(unresolvedSpeciesForSearch("Blue Neon Goby", "fish", "freshwater")?.name).toBe("BLUE NEON GOBBY GOBİ");
+  });
+
+  it("hiçbir doğrulanmış tür adı kendi su türü dışında daha uzun çözülmemiş satış adının içinden bulunmaz", () => {
+    const exactUnresolved = new Set(unresolvedSpeciesListings.flatMap((item) => item.waterTypes.flatMap((waterType) =>
+      [item.name, ...(item.aliases ?? [])].map((name) => `${normalize(name)}|${item.category}|${waterType}`))));
+    const offenders = new Set<string>();
+    for (const profile of speciesCatalog) for (const name of [profile.commonName, profile.scientificName, ...(profile.aliases ?? [])]) {
+      for (const waterType of waterTypes) {
+        if (speciesWaterTypes(profile).includes(waterType) || speciesForCatalogExactSearch(name, profile.category, waterType)) continue;
+        if (exactUnresolved.has(`${normalize(name)}|${profile.category}|${waterType}`)) continue;
+        const unresolved = unresolvedSpeciesForSearch(name, profile.category, waterType);
+        if (unresolved) offenders.add(`${name} / ${waterType} → ${unresolved.name}`);
+      }
+    }
+    expect([...offenders]).toEqual([]);
+  }, 60_000);
+
+  describe("ekleme penceresinin metni", () => {
+    beforeAll(() => Promise.all([loadLocaleBundle("en"), loadLocaleBundle("es")]));
+    it("akvaryumun su türünü ve türün istediği su türlerini her dilde yazar", () => {
+      expect(messagesFor("tr").livestock.form.otherWaterText("freshwater", ["brackish", "saltwater"])).toBe("Bu tür tatlı su akvaryumuna uygun değildir; acı su veya tuzlu su akvaryumu gerekir.");
+      expect(messagesFor("tr").livestock.form.otherWaterText("brackish", ["freshwater"])).toBe("Bu tür acı su akvaryumuna uygun değildir; tatlı su akvaryumu gerekir.");
+      expect(messagesFor("en").livestock.form.otherWaterText("freshwater", ["brackish", "saltwater"])).toBe("This species is not suitable for a freshwater aquarium; it needs a brackish or saltwater aquarium.");
+      expect(messagesFor("es").livestock.form.otherWaterText("freshwater", ["brackish", "saltwater"])).toBe("Esta especie no es apta para un acuario de agua dulce; necesita un acuario de agua salobre o agua salada.");
+    });
+  });
 });
 
 describe("katalog modülleri", () => {

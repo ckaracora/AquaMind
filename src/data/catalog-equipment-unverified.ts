@@ -18,10 +18,10 @@ export const unverifiedEquipmentIds: readonly string[] = [
   "shark-fs-33-2row", "shark-fs-53-2row", "shark-bar-full-spectrum-70", "shark-bar-full-spectrum-100", "shark-bar-grolux-60", "shark-bar-grolux-70",
   "shark-bar-grolux-100", "shark-bar-white-80", "shark-bar-white-90", "shark-bar-white-100",
   "mec-turbo-pipo",
-  // Aquawing (19; AQ-A1000/2000/3000 zaten hesap dışı, güçleri 2026-09-25 denetiminde Türkiye kaynağıyla doğrulandı)
-  "aquawing-aq101f", "aquawing-aq101fb", "aquawing-aq102f", "aquawing-aq160", "aquawing-aq600f", "aquawing-aq607f", "aquawing-aq80f",
-  "aquawing-wp1000fa", "aquawing-wp1000fb", "aquawing-wp2300a", "aquawing-wp3300a", "aquawing-wp3300b", "aquawing-wp3300c", "aquawing-wp750fa",
-  "aquawing-wp750fb", "aquawing-wp850fa", "aquawing-wp850fb", "aquawing-wp950fa", "aquawing-wp950fb",
+  // Aquawing (3; AQ-A1000/2000/3000 zaten hesap dışı, güçleri 2026-09-25 denetiminde Türkiye kaynağıyla doğrulandı). Ürün sahibi kararı
+  // 2026-11-10 (docs/DATA_SOURCES.md): eksenpet.com yalnız Aquawing için kabul edilen kaynaktır. Eksenpet'in ürün sayfasının başlığında
+  // değeri yazan 16 kayıt (AQ101F, AQ101FB, AQ102F, AQ600F ve AQ-WP750FA…AQ-WP3300C) listeden çıktı; bu üçü eksenpet'te yok.
+  "aquawing-aq160", "aquawing-aq607f", "aquawing-aq80f",
   // JBL (3; 2026-10-30 JBL kaynak bağlantısı paketi: WHITE kayıtları değerleri eşdeğer greenline modelden almıştı; eski ürün sayfaları
   // JBL'in ana sayfasına yönleniyor ve WHITE'ı adıyla yazan açık bir JBL sayfası ya da belgesi bulunamadı.)
   "jbl-cristalprofi-e401-white-archive", "jbl-cristalprofi-e701-white-archive", "jbl-cristalprofi-e901-white-archive",
