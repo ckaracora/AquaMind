@@ -40,12 +40,12 @@ AquaMind, akvaryum hobisindeki günlük yönetimi tek yerde toplayan mobil önce
 
 ## Planlanan mimari
 
-- Supabase Auth ile kullanıcı hesapları
-- Supabase PostgreSQL ile akvaryum ve günlük verileri
-- Row Level Security ile kullanıcı verisi ayrımı
+- Kendi giriş sistemimizle kullanıcı hesapları: e-posta, Google, Apple ve Facebook (karar 0036; giriş kütüphanesi ve sunucu 4. aşamada seçilir)
+- Kendi PostgreSQL veritabanımızda akvaryum ve günlük verileri (barındırma yeri 4. aşamada)
+- Veritabanı düzeyinde yetkiyle (Row Level Security) kullanıcı verisi ayrımı
 - Onaylı katalog verisi için kontrollü içe aktarma süreci; katalog sunucuda sürümlü veri olur, çeviriler ve 3 aylık güncellemeler mağaza sürümü beklemeden ulaşır
 - Çok dil: arayüz metinleri dil dosyalarında, motor uyarıları kod ve değişken olarak, katalog adları ve açıklamaları dile göre
-- Expo ile iOS ve Android uygulaması; App Store ve Google Play ödeme sistemleri; e-posta, Google ve Apple ile giriş
+- Expo ile iOS ve Android uygulaması; App Store ve Google Play ödeme sistemleri; e-posta, Google, Apple ve Facebook ile giriş
 - Sosyal içerik için şikâyet, engelleme ve içerik süzme
 - Görseller için hakları doğrulanmış depolama veya kaynak bağlantısı
 - Ayrıntılı hedef mimari, veritabanı evrimi, güvenlik sınırları ve motor sözleşmesi: `docs/ARCHITECTURE.md`, `docs/DATABASE.md`, `docs/SECURITY.md`, `docs/COMPATIBILITY.md`; kararlar `docs/DECISIONS/`

@@ -12,11 +12,13 @@
     "test:health": "node scripts/test-health.cjs",
     "test:catalog-flow": "node scripts/test-catalog-flow.cjs",
     "test:calculators": "node scripts/test-calculators.cjs",
+    "check:locale-bundle": "node scripts/check-locale-bundle.cjs",
     "audit:catalog": "node scripts/audit-catalog.cjs",
     "audit:golden": "node scripts/audit-golden-diff.cjs",
     "data:coverage": "node scripts/data-coverage.cjs",
     "test": "vitest run",
-    "verify": "tsc --noEmit && node scripts/test-catalog-flow.cjs && node scripts/test-health.cjs && node scripts/test-calculators.cjs && node scripts/audit-catalog.cjs && vitest run && next build"
+    "test:staging": "vitest run --config vitest.staging.config.mts",
+    "verify": "tsc --noEmit && node scripts/test-catalog-flow.cjs && node scripts/test-health.cjs && node scripts/test-calculators.cjs && node scripts/audit-catalog.cjs && vitest run && next build && node scripts/check-locale-bundle.cjs"
   },
   "dependencies": {
     "@aquamind/compatibility-engine": "workspace:*",
@@ -29,6 +31,8 @@
     "react-dom": "^19.0.0"
   },
   "devDependencies": {
+    "@electric-sql/pglite": "0.5.8",
+    "@supabase/supabase-js": "2.118.0",
     "@types/node": "^22.10.2",
     "@types/react": "^19.0.3",
     "@types/react-dom": "^19.0.2",

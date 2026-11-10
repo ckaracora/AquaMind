@@ -37,7 +37,7 @@ Teknik kararlar (Claude):
 ## Sonuçlar
 
 - Kullanıcı bu üç bitkiyi katalogda bulur ve uyarısını görür; elle yazınca uyarı görmezdi.
-- "Su bitkisi değil" ve istilacı tür etiketleri sağlık analizine girmez; yalnız seçerken ve bitki kartında görünür. Sağlık analizinde de gösterilmeleri ayrı bir ürün kararıdır.
+- "Su bitkisi değil" ve istilacı tür etiketleri sağlık analizine girmez; yalnız seçerken ve bitki kartında görünür. Sağlık analizinde de gösterilmeleri ayrı bir ürün kararıdır. (2026-10-29: ürün sahibi sarı uyarı olarak gösterilmesini seçti, `docs/DECISIONS/0028-bitki-etiketleri-saglik-analizinde.md`.)
 - Practical Fishkeeping'in tür kutuları (sıcaklık ve pH) bu pakette taranmadı; 0023'teki sıra gereği sonraki iştir.
 
 ## Doğrulama

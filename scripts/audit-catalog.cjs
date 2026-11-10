@@ -104,6 +104,9 @@ if (invalidCareProductSourceTrace.length) {
   throw new Error(`Eksik veya geçersiz bakım ürünü kaynak izi: ${invalidCareProductSourceTrace.map((item) => item.id).join(", ")}`);
 }
 
+// Su türü yalnız tuzlu su olan kayıtlarda pH yoktur: deniz akvaryumunda pH akvaryum düzeyinde değerlendirilir (karar 0029, 0030).
+const marineOnlySpecies = (item) => item.waterTypes?.length === 1 && item.waterTypes[0] === "saltwater";
+const speciesPhReady = (item) => (marineOnlySpecies(item) ? item.ph === undefined : item.ph?.length === 2);
 const speciesRows = [...new Set(speciesCatalog.map(speciesGroup))]
   .map((group) => {
     const species = speciesCatalog.filter((item) => speciesGroup(item) === group);
@@ -113,7 +116,7 @@ const speciesRows = [...new Set(speciesCatalog.map(speciesGroup))]
       kaynakli: species.filter((item) => item.sourceUrl && item.verifiedAt).length,
       bakimVerisiTam: species.filter((item) =>
         item.adultSizeCm > 0 && item.minVolumeL > 0 && (item.category !== "fish" || item.minTankLengthCm > 0 || item.tankLengthDataNote) && item.minGroup > 0
-        && item.temperature?.length === 2 && item.ph?.length === 2 && item.wasteFactor > 0
+        && item.temperature?.length === 2 && speciesPhReady(item) && item.wasteFactor > 0
       ).length,
     };
   })
@@ -127,7 +130,7 @@ const incompleteSpecies = speciesCatalog.filter((item) =>
   !item.sourceUrl || !item.verifiedAt || item.adultSizeCm <= 0 || item.minVolumeL <= 0
   || (item.category === "fish" && !(item.minTankLengthCm > 0) && !item.tankLengthDataNote)
   || (item.minTankLengthCm !== undefined && item.minTankLengthCm <= 0) || item.minGroup <= 0 || item.temperature?.length !== 2
-  || item.ph?.length !== 2 || item.wasteFactor <= 0
+  || !speciesPhReady(item) || item.wasteFactor <= 0
 );
 const invalidAdditionalSpeciesSources = speciesCatalog.filter((item) =>
   item.additionalSourceUrls?.some((url) => !/^https:\/\//.test(url))

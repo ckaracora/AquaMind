@@ -1,7 +1,7 @@
 # 0003 — Arka uç adayı olarak Supabase üzerinde PostgreSQL
 
 - Tarih: 2026-09-02
-- Durum: Önerildi (uygulama Phase 1'de; Phase 0B'de proje oluşturulmadı veya bağlanmadı)
+- Durum: Bırakıldı (2026-11-03, karar 0036: ürün sahibi giriş sistemini ve veritabanını kendimizin kurmasını istedi). Önceki durum: önerildi (uygulama Phase 1'de; Phase 0B'de proje oluşturulmadı veya bağlanmadı).
 
 ## Bağlam
 

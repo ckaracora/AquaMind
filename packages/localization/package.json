@@ -14,6 +14,22 @@
       "types": "./src/engine.ts",
       "default": "./src/engine.ts"
     },
+    "./catalog": {
+      "types": "./src/catalog.ts",
+      "default": "./src/catalog.ts"
+    },
+    "./catalog-segments": {
+      "types": "./src/catalog-segments.ts",
+      "default": "./src/catalog-segments.ts"
+    },
+    "./care": {
+      "types": "./src/care.ts",
+      "default": "./src/care.ts"
+    },
+    "./equipment": {
+      "types": "./src/equipment.ts",
+      "default": "./src/equipment.ts"
+    },
     "./diseases": {
       "types": "./src/diseases.ts",
       "default": "./src/diseases.ts"
@@ -21,6 +37,10 @@
     "./plant-warnings": {
       "types": "./src/plant-warnings.ts",
       "default": "./src/plant-warnings.ts"
+    },
+    "./privacy": {
+      "types": "./src/privacy.ts",
+      "default": "./src/privacy.ts"
     }
   },
   "sideEffects": false

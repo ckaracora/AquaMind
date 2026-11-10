@@ -15,36 +15,37 @@ const orionDrgbwSource = "https://orionled.com.tr/urun/orionled-d-rgbw-black-wi-
 const orionDrgbwGraySource = "https://orionled.com.tr/urun/orionled-d-rgbw-wi-fi-telefon-app-kontrollu-yeni-d-serisi/";
 const orionESeriesSource = "https://orionled.com.tr/urun/orionled-e-serisi-5-sira-led-aydinlatma/";
 const ORION_VERIFIED_AT = "2026-09-14";
-const JBL_VERIFIED_AT = "2026-09-14";
+const JBL_VERIFIED_AT = "2026-10-30";
 
+// JBL'in yeni ürün sayfaları (productsv2, Almanya) gücü başlıkta verir; akvaryum uzunluğu kılavuzun teknik veri tablosundadır (s. 100–101).
 const jblLedSolarGen2Catalog:EquipmentProfile[] = [
   ...([
-    [16,"438",45,70],
-    [20,"549/590",55,80],
-    [28,"742",75,100],
-    [31,"849/895",85,110],
-    [47,"1047",105,130],
-    [48,"1149/1200",115,140],
-    [53,"1449/1500",145,170],
-  ] as const).map(([powerW,retrofitMm,minLength,maxLength])=>({
+    [16,"438",45,70,25143678],
+    [20,"549/590",55,80,25143765],
+    [28,"742",75,100,25144135],
+    [31,"849/895",85,110,25144940],
+    [47,"1047",105,130,25138943],
+    [48,"1149/1200",115,140,25144993],
+    [53,"1449/1500",145,170,25148310],
+  ] as const).map(([powerW,retrofitMm,minLength,maxLength,productId])=>({
     id:`jbl-led-solar-natur-gen2-${powerW}w`,category:"lighting" as const,brand:"JBL",model:`LED SOLAR NATUR ${powerW} W — ${retrofitMm} mm (Gen 2)`,
     specifications:`IP68 tam spektrum bitki LED'i · ${powerW} W lamba gücü · 2700/4000/6700 K · ${minLength}–${maxLength} cm akvaryum`,
     powerW,recommendedTankLengthCm:[minLength,maxLength] as [number,number],
-    sourceUrl:"https://www.jbl.de/en/products/detail/9480/jbl-led-solar-natur-gen-2",verifiedAt:JBL_VERIFIED_AT,
+    sourceUrl:`https://www.jbl.de/de-de/productsv2/detail/${productId}`,additionalSourceUrls:["https://www.jbl.de/de-de/productsv2/download_instruction_manual_pdf/25049062"],verifiedAt:JBL_VERIFIED_AT,
   })),
   ...([
-    [8,"438",45,70],
-    [9,"549/590",55,80],
-    [14,"742",75,100],
-    [17,"849/895",85,110],
-    [20,"1047",105,130],
-    [21,"1149/1200",115,140],
-    [22,"1449/1500",145,170],
-  ] as const).map(([powerW,retrofitMm,minLength,maxLength])=>({
-    id:`jbl-led-solar-effect-gen2-${powerW}w`,category:"lighting" as const,brand:"JBL",model:`LED SOLAR EFFECT ${powerW} W — ${retrofitMm} mm (Gen 2)`,
-    specifications:`NATUR Gen 2 ile aynı uzunlukta kullanılması gereken IP68 RGB efekt LED'i · ${powerW} W · ${minLength}–${maxLength} cm akvaryum · kendi güç kaynağı yoktur`,
+    [8,"438",45,70,25143287,true],
+    [9,"549/590",55,80,25154331,false],
+    [14,"742",75,100,25141736,true],
+    [17,"849/895",85,110,25149913,false],
+    [20,"1047",105,130,25153387,true],
+    [21,"1149/1200",115,140,25142490,false],
+    [22,"1449/1500",145,170,25152070,true],
+  ] as const).map(([powerW,retrofitMm,minLength,maxLength,productId,archived])=>({
+    id:`jbl-led-solar-effect-gen2-${powerW}w`,category:"lighting" as const,brand:"JBL",model:`LED SOLAR EFFECT ${powerW} W — ${retrofitMm} mm (Gen 2${archived ? ", Arşiv" : ""})`,
+    specifications:`${archived ? "Arşiv ürün; JBL artık satmıyor · " : ""}NATUR Gen 2 ile aynı uzunlukta kullanılması gereken IP68 RGB efekt LED'i · ${powerW} W · ${minLength}–${maxLength} cm akvaryum · kendi güç kaynağı yoktur`,
     powerW,recommendedTankLengthCm:[minLength,maxLength] as [number,number],
-    sourceUrl:"https://www.jbl.de/en/products/detail/9488/jbl-led-solar-effect-gen-2",verifiedAt:JBL_VERIFIED_AT,
+    sourceUrl:`https://www.jbl.de/de-de/productsv2/detail/${productId}`,additionalSourceUrls:["https://www.jbl.de/de-de/productsv2/download_instruction_manual_pdf/25048232"],verifiedAt:JBL_VERIFIED_AT,
   })),
 ];
 
@@ -343,15 +344,18 @@ const fluvalCurrentLighting: EquipmentProfile[] = [
     specifications:`FluvalConnect uygulamalı altı bantlı bitki LED'i · ${powerW} W · ${lumens} lm · 7500 K · IP67 · ${minLength}–${maxLength} cm`,
     powerW,recommendedTankLengthCm:[minLength,maxLength] as [number,number],sourceUrl:"https://fluvalaquatics.com/us/shop/product/plant-4-0",verifiedAt:"2026-09-28",
   })),
+  // Reef 4.0: seri sayfasının "Compare Models & Specs" tablosu (2026-11-08) dört modelin gücünü, uzunluğunu, lümenini ve renk sıcaklığını
+  // veriyor. Önceki kaynak yalnız 59 W'ın tek ürün sayfasıydı; 59 W kaydında ek kaynak olarak kalır.
   ...([
-    ["22w",22,38,63],
-    ["32w",32,59,89],
-    ["46w",46,88,126],
-    ["59w",59,117,155],
-  ] as const).map(([id,powerW,minLength,maxLength])=>({
+    ["22w",22,38,63,1000],
+    ["32w",32,59,89,1550],
+    ["46w",46,88,126,2250],
+    ["59w",59,117,155,2900],
+  ] as const).map(([id,powerW,minLength,maxLength,lumens])=>({
     id:`fluval-reef-4-${id}`,category:"lighting" as const,brand:"Fluval",model:`Reef 4.0 LED ${powerW} W`,
-    specifications:`FluvalConnect uygulamalı yedi bantlı resif LED'i · ${powerW} W · IP67 · ${minLength}–${maxLength} cm`,
-    powerW,recommendedTankLengthCm:[minLength,maxLength] as [number,number],sourceUrl:"https://fluvalaquatics.com/us/shop/product/reef-4-0-led-59w-46-25-61-117-155-cm",verifiedAt:"2026-09-28",
+    specifications:`FluvalConnect uygulamalı yedi bantlı resif LED'i · ${powerW} W · ${lumens} lm · 25000 K · IP67 · ${minLength}–${maxLength} cm`,
+    powerW,recommendedTankLengthCm:[minLength,maxLength] as [number,number],sourceUrl:"https://fluvalaquatics.com/us/shop/product/reef-4-0",
+    ...(id==="59w"?{additionalSourceUrls:["https://fluvalaquatics.com/us/shop/product/reef-4-0-led-59w-46-25-61-117-155-cm"]}:{}),verifiedAt:"2026-09-28",
   })),
   ...([
     [60,38,38,60],
@@ -363,8 +367,8 @@ const fluvalCurrentLighting: EquipmentProfile[] = [
     specifications:`FluvalConnect uygulamalı yüksek güçlü bitki LED'i · ${powerW} W · 7500 K · IP67 · ${minLength}–${maxLength} cm`,
     powerW,recommendedTankLengthCm:[minLength,maxLength] as [number,number],sourceUrl:"https://fluvalaquatics.com/us/shop/product/plant-pro",verifiedAt:"2026-09-28",
   })),
-  {id:"fluval-plant-4-nano-20w",category:"lighting",brand:"Fluval",model:"Plant 4.0 LED Nano 20 W",specifications:"FluvalConnect uygulamalı altı bantlı nano bitki LED'i · 20 W · 1300 lm · 7500 K · IP67 · 11,5–20 cm",powerW:20,recommendedTankLengthCm:[11.5,20],sourceUrl:"https://fluvalaquatics.com/us/shop/product/plant-4-0-nano",verifiedAt:"2026-09-28"},
-  {id:"fluval-reef-4-nano-25w",category:"lighting",brand:"Fluval",model:"Reef 4.0 LED Nano 25 W",specifications:"FluvalConnect uygulamalı yedi bantlı nano resif LED'i · 25 W · 1200 lm · 25000 K · IP67 · 11,5–20 cm",powerW:25,recommendedTankLengthCm:[11.5,20],sourceUrl:"https://fluvalaquatics.com/us/shop/product/reef-4-0-nano",verifiedAt:"2026-09-28"},
+  {id:"fluval-plant-4-nano-20w",category:"lighting",brand:"Fluval",model:"Plant 4.0 LED Nano 20 W",specifications:"FluvalConnect uygulamalı altı bantlı nano bitki LED'i · 20 W · 1300 lm · 7500 K · IP67",powerW:20,sourceUrl:"https://fluvalaquatics.com/us/shop/product/plant-4-0-nano",verifiedAt:"2026-09-28"},
+  {id:"fluval-reef-4-nano-25w",category:"lighting",brand:"Fluval",model:"Reef 4.0 LED Nano 25 W",specifications:"FluvalConnect uygulamalı yedi bantlı nano resif LED'i · 25 W · 1200 lm · 25000 K · IP67",powerW:25,sourceUrl:"https://fluvalaquatics.com/us/shop/product/reef-4-0-nano",verifiedAt:"2026-09-28"},
 ];
 
 const fluvalPreviousGenerationLighting: EquipmentProfile[] = [
@@ -374,9 +378,9 @@ const fluvalPreviousGenerationLighting: EquipmentProfile[] = [
     return {id:`fluval-aquasky-2-${powerW}w`,category:"lighting" as const,brand:"Fluval",model:`Aquasky 2.0 Bluetooth LED ${powerW} W`,specifications:`FluvalSmart uygulamalı önceki nesil RGB + 6500 K beyaz LED · ${powerW} W · IP67 · ${minLength}–${maxLength} cm`,powerW,recommendedTankLengthCm:[minLength,maxLength] as [number,number],sourceUrl:"https://fluvalaquatics.com/us/shop/product/aquasky-2-0",verifiedAt:"2026-09-28"};
   }),
   ...([22,32,46,59] as const).map((powerW,index)=>{
-    const ranges = [[38,61],[61,85],[91,115],[122,153]] as const;
+    const ranges = [[38,61],[61,85],[91,122],[122,153]] as const;
     const [minLength,maxLength] = ranges[index];
-    return {id:`fluval-plant-3-${powerW}w`,category:"lighting" as const,brand:"Fluval",model:`Plant 3.0 Bluetooth LED ${powerW} W`,specifications:`FluvalSmart uygulamalı önceki nesil altı bantlı bitki LED'i · ${powerW} W · 7500 K · IP67 · ${minLength}–${maxLength} cm`,powerW,recommendedTankLengthCm:[minLength,maxLength] as [number,number],sourceUrl:"https://fluvalaquatics.com/us/shop/product/plant-3-0",verifiedAt:"2026-09-28"};
+    return {id:`fluval-plant-3-${powerW}w`,category:"lighting" as const,brand:"Fluval",model:`Plant 3.0 Bluetooth LED ${powerW} W`,specifications:`FluvalSmart uygulamalı önceki nesil altı bantlı bitki LED'i · ${powerW} W · 6500 K · IP67 · ${minLength}–${maxLength} cm`,powerW,recommendedTankLengthCm:[minLength,maxLength] as [number,number],sourceUrl:"https://fluvalaquatics.com/us/shop/product/plant-3-0",additionalSourceUrls:["https://fluvalaquatics.com/manuals/14520-3_Plant_Manual_INT_Nov05_19_AB_WEB.pdf"],verifiedAt:"2026-09-28"};
   }),
   ...([22,32,46,59] as const).map((powerW,index)=>{
     const ranges = [[38,61],[61,85],[91,122],[122,153]] as const;

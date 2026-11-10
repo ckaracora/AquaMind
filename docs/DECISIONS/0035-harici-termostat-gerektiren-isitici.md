@@ -1,4 +1,4 @@
-# 0027 — Harici termostat gerektiren ısıtıcı
+# 0035 — Harici termostat gerektiren ısıtıcı
 
 - Tarih: 2026-10-31
 - Durum: Kabul edildi. Ürün sahibi 2026-11-09 tarihinde Dophin AH-1002

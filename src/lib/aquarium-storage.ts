@@ -1,10 +1,12 @@
 import {
+  BACKUP_REMINDER_DAYS,
   DEFAULT_PREFERENCES,
   DELETED_AQUARIUM_RETENTION_DAYS,
   EMPTY_JOURNAL_STEPS,
   QUARANTINE_SUFFIX,
   STORAGE_KEYS,
   aquariumSchema,
+  backupStatusSchema,
   deleteAquariumJournalSchema,
   deletedAquariumEntrySchema,
   equipmentSchema,
@@ -12,7 +14,9 @@ import {
   maintenanceTaskSchema,
   plantSchema,
   preferencesSchema,
+  restoreBackupJournalSchema,
   waterParametersSchema,
+  type BackupStatus,
   type DeleteAquariumJournal,
   type DeletedAquariumEntry,
   type JournalSteps,
@@ -20,6 +24,7 @@ import {
   type OrphanRecords,
   type Preferences,
   type QuarantineEntry,
+  type RestoreBackupJournal,
 } from "@aquamind/domain";
 import type { Aquarium, Equipment, Livestock, MaintenanceTask, Plant, WaterParameters } from "@/types/aquarium";
 
@@ -96,7 +101,8 @@ export type StorageIssueKind =
   | "journal-quarantined"
   | "journal-recovered"
   | "delete-refused"
-  | "delete-incomplete";
+  | "delete-incomplete"
+  | "restore-incomplete";
 
 export interface StorageIssue {
   key: string;
@@ -778,6 +784,8 @@ export type JournalRecoveryResult =
   | { status: "none" }
   | { status: "recovered"; aquariumId: string }
   | { status: "incomplete"; aquariumId: string }
+  | { status: "restore-recovered" }
+  | { status: "restore-incomplete" }
   | { status: "quarantined"; quarantineKey?: string };
 
 /**
@@ -788,6 +796,12 @@ export type JournalRecoveryResult =
 export function recoverPendingJournal(): JournalRecoveryResult {
   const store = area();
   if (!store) return { status: "none" };
+  // Geri yüklemenin yer sınaması bir kesintiyle yarıda kaldıysa geçici anahtar yer kaplamaya devam etmesin.
+  try {
+    store.removeItem(RESTORE_PROBE_KEY);
+  } catch {
+    // Kaldırılamazsa sonraki açılışta yeniden denenir.
+  }
 
   let raw: string | null;
   try {
@@ -802,6 +816,16 @@ export function recoverPendingJournal(): JournalRecoveryResult {
     parsed = JSON.parse(raw);
   } catch {
     return quarantineJournal(store, raw);
+  }
+  if (restoreBackupJournalSchema.safeParse(parsed).success) {
+    // Yarıda kalmış yedekten geri yükleme: yazmalar yinelenebilir, baştan uygulanır.
+    const restore = parsed as RestoreBackupJournal;
+    if (!applyRestoreWrites(store, restore) || !removeJournal(store)) {
+      recordIssue({ key: STORAGE_KEYS.journal, kind: "restore-incomplete" });
+      return { status: "restore-incomplete" };
+    }
+    recordIssue({ key: STORAGE_KEYS.journal, kind: "journal-recovered" });
+    return { status: "restore-recovered" };
   }
   if (!deleteAquariumJournalSchema.safeParse(parsed).success) {
     return quarantineJournal(store, raw);
@@ -837,6 +861,273 @@ function quarantineJournal(store: StorageArea, raw: string): JournalRecoveryResu
     // Birincil anahtar kalırsa bir sonraki açılışta yeniden denenir.
   }
   return { status: "quarantined", quarantineKey };
+}
+
+// --- Yedekten geri yükleme (docs/DECISIONS/0027-yedekten-geri-yukleme.md) ---
+
+/**
+ * Geri yüklenecek, doğrulanmış yedek içeriği (src/lib/backup-restore.ts üretir). Satırlar yedekteki ORİJİNAL
+ * nesnelerdir; bilinmeyen ek alanlar korunur. Yetim kayıtlar ait oldukları koleksiyona geri konur.
+ */
+export interface RestorePayload {
+  collections: Record<CollectionName, unknown[]>;
+  /** Yedekte tercih yoksa `undefined`: tercih anahtarı kaldırılır, varsayılanlar kullanılır. */
+  preferences?: unknown;
+  deletedAquariums: DeletedAquariumEntry[];
+  quarantine: QuarantineEntry[];
+}
+
+export type RestoreResult =
+  | { status: "unavailable" }
+  /** Hiçbir şey değişmedi. */
+  | { status: "refused"; reason: "journal-pending" | "journal-write-failed" | "not-enough-space" | "trash-unreadable" | "unserializable" }
+  | { status: "completed" }
+  /** Günlük duruyor; uygulama sonraki açılışta geri yüklemeyi tamamlar. */
+  | { status: "incomplete" };
+
+/** Yedekten geri gelebilecek karantina anahtarı: bilinen bir anahtar + `:corrupt:` + ISO zaman (`quarantine` ile aynı biçim). */
+const QUARANTINE_KEY_PATTERN = new RegExp(
+  `^(${Object.values(STORAGE_KEYS).filter((key) => key !== STORAGE_KEYS.backupStatus).join("|")}):${QUARANTINE_SUFFIX}:\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}(\\.\\d{3})?Z$`,
+);
+
+/** Yer sınaması için geçici anahtar; sınamadan hemen sonra silinir. */
+const RESTORE_PROBE_KEY = "aquamind:restore-probe:v1";
+
+/** Geri yüklemenin yazabileceği anahtarlar; günlükte başka bir anahtar olsa bile ona dokunulmaz. */
+const RESTORE_KEYS = new Set<string>([
+  ...Object.values(COLLECTION_KEYS),
+  STORAGE_KEYS.preferences,
+  STORAGE_KEYS.deletedAquariums,
+]);
+
+function isRestorableKey(key: string): boolean {
+  return RESTORE_KEYS.has(key) || QUARANTINE_KEY_PATTERN.test(key);
+}
+
+/** Dizi tutan anahtarlar boşaltılırken `[]` yazılır; anahtar yok olursa açılışta örnek (demo) veri gösterilirdi. */
+const ARRAY_KEYS = new Set<string>([...Object.values(COLLECTION_KEYS), STORAGE_KEYS.deletedAquariums]);
+
+/**
+ * Günlükteki yazmaları uygular. Aynı veri depoda iki kez durmasın diye (günlükte ve anahtarda) önce hedef anahtarlar
+ * boşaltılır, sonra her yazmadan sonra günlük o yazma çıkarılarak küçültülür. Eski değerler kaybolmaz: yerine geçecek
+ * değerler günlükte durur ve kullanıcı değiştirmeyi onaylamıştır. Yinelenebilir: yarıda kalırsa açılışta kalan
+ * yazmalar aynı sırayla yeniden uygulanır. Günlükte izin verilmeyen bir anahtar varsa ona dokunulmaz.
+ */
+function applyRestoreWrites(store: StorageArea, journal: RestoreBackupJournal): boolean {
+  const pending = journal.writes.filter((write) => isRestorableKey(write.key));
+  for (const write of pending) {
+    if (!hasStoredKey(store, write.key)) continue;
+    try {
+      if (ARRAY_KEYS.has(write.key)) store.setItem(write.key, "[]");
+      else store.removeItem(write.key);
+    } catch {
+      return false;
+    }
+  }
+  for (let index = 0; index < pending.length; index += 1) {
+    const write = pending[index];
+    try {
+      if (write.value === null) store.removeItem(write.key);
+      else store.setItem(write.key, write.value);
+    } catch {
+      return false;
+    }
+    try {
+      writeControlled(store, STORAGE_KEYS.journal, { ...journal, writes: pending.slice(index + 1) });
+    } catch {
+      // Küçültme yazılamazsa günlük büyük kalır; yazmalar yinelenebilir olduğu için sonuç değişmez.
+    }
+  }
+  return true;
+}
+
+/** En büyük değer: karakter sayısına ve UTF-8 bayt sayısına göre ayrı ayrı (tarayıcılar boyutu farklı sayabilir). */
+function largestValues(journal: RestoreBackupJournal): string[] {
+  const encoder = new TextEncoder();
+  let byChars = "";
+  let byBytes = "";
+  let maxBytes = 0;
+  for (const write of journal.writes) {
+    if (write.value === null) continue;
+    if (write.value.length > byChars.length) byChars = write.value;
+    const bytes = encoder.encode(write.value).length;
+    if (bytes > maxBytes) {
+      maxBytes = bytes;
+      byBytes = write.value;
+    }
+  }
+  return byChars === byBytes ? [byChars] : [byChars, byBytes];
+}
+
+/**
+ * Günlük yazılmadan ÖNCE: günlük ile en büyük değer birlikte sığıyor mu? Geçici anahtara günlüğün metni ile en büyük
+ * değerin kendisi yazılıp hemen silinir; karakter ve bayt ölçüsüne göre seçilen değerler farklıysa her biri ayrı ayrı
+ * sınanır (toplamları değil: aynı anda depoda yalnız biri fazladan durur). Uygulama
+ * sırasında depo en çok "günlük + en büyük değer" kadar dolar (hedefler önce boşaltılır, günlük her yazmada küçülür);
+ * bu, sınama anındaki doluluğu aşmaz. Sınama günlükten önce yapıldığı için yarıda kalırsa ortada günlük yoktur: hiçbir
+ * şey değişmemiştir ve açılış geçici anahtarı siler (`recoverPendingJournal`).
+ */
+function hasRoomForRestore(store: StorageArea, journalText: string, journal: RestoreBackupJournal): boolean {
+  for (const largest of largestValues(journal)) {
+    try {
+      store.setItem(RESTORE_PROBE_KEY, journalText + largest);
+    } catch {
+      try {
+        store.removeItem(RESTORE_PROBE_KEY);
+      } catch {
+        // Açılış yeniden silmeyi dener.
+      }
+      return false;
+    }
+  }
+  try {
+    store.removeItem(RESTORE_PROBE_KEY);
+    return true;
+  } catch {
+    // Kaldırılamadıysa yer kaplıyor demektir; geri yükleme başlamaz, açılış anahtarı yeniden silmeyi dener.
+    return false;
+  }
+}
+
+/**
+ * Silinen akvaryum arşivini HİÇBİR ŞEY YAZMADAN okur (geri yükleme reddedilirse "hiçbir şey değiştirilmedi" doğru
+ * kalsın). Arşiv bozuksa okunamadı döner; normal yükleme (`loadDeletedAquariums`) onu karantinaya alıp onarır.
+ */
+function readEntriesWithoutRepair(store: StorageArea): ReadOutcome<DeletedAquariumEntry> {
+  try {
+    const raw = store.getItem(STORAGE_KEYS.deletedAquariums);
+    if (raw === null) return { ok: true, rows: [] };
+    const parsed: unknown = JSON.parse(raw);
+    if (!Array.isArray(parsed) || !parsed.every((entry) => deletedAquariumEntrySchema.safeParse(entry).success)) return { ok: false };
+    return { ok: true, rows: parsed as DeletedAquariumEntry[] };
+  } catch {
+    return { ok: false };
+  }
+}
+
+function removeJournal(store: StorageArea): boolean {
+  try {
+    store.removeItem(STORAGE_KEYS.journal);
+    return true;
+  } catch {
+    return false;
+  }
+}
+
+const RESTORE_ORDER: CollectionName[] = ["aquariums", "waterReadings", "maintenanceTasks", "livestock", "plants", "equipment"];
+
+/**
+ * Bu cihazdaki altı koleksiyonun ve tercihlerin yerine yedektekileri koyar.
+ *
+ * Silinen akvaryum arşivi değiştirilmez, birleştirilir: cihazdaki paketler korunur, yedekteki eksik paketler eklenir.
+ * Cihazdaki karantina kayıtları korunur; yedekteki karantina kayıtları yalnız cihazda yoksa eklenir.
+ *
+ * Sıra: yer sınaması (günlük + en büyük değer) → günlük (yazılacak her değerin tamamı) → hedef anahtarlar boşaltılır →
+ * yazmalar (günlük her adımda küçülür) → günlük silinir. Yer yetmezse ya da günlük yazılamazsa hiçbir şey değişmez;
+ * arşiv okuması da yazmaz. Yarıda kalırsa (çökme, geçici hata) günlük durur; normal kaydetmeler yazamaz ve uygulama
+ * sonraki açılışta kalan yazmaları uygular.
+ * Çağıran taraf, başarıdan sonra sayfayı yeniden yükler; bellekteki eski veri depoya geri yazılmamalıdır.
+ */
+export function restoreFromBackup(payload: RestorePayload, now: Date = new Date()): RestoreResult {
+  const store = area();
+  if (!store) return { status: "unavailable" };
+  if (hasPendingJournal()) return { status: "refused", reason: "journal-pending" };
+
+  const trash = readEntriesWithoutRepair(store);
+  if (!trash.ok) return { status: "refused", reason: "trash-unreadable" };
+  const mergedTrash = [...trash.rows];
+  for (const entry of payload.deletedAquariums) {
+    if (!mergedTrash.some((kept) => sameEntry(kept, entry))) mergedTrash.push(entry);
+  }
+
+  let journal: RestoreBackupJournal;
+  let journalText: string;
+  try {
+    const writes: RestoreBackupJournal["writes"] = [
+      ...RESTORE_ORDER.map((name) => ({ key: COLLECTION_KEYS[name], value: JSON.stringify(payload.collections[name]) })),
+      { key: STORAGE_KEYS.preferences, value: payload.preferences === undefined ? null : JSON.stringify(payload.preferences) },
+      { key: STORAGE_KEYS.deletedAquariums, value: JSON.stringify(mergedTrash) },
+      ...payload.quarantine
+        .filter((entry) => QUARANTINE_KEY_PATTERN.test(entry.key) && !hasStoredKey(store, entry.key))
+        .map((entry) => ({ key: entry.key, value: entry.raw })),
+    ];
+    journal = { op: "restore-backup", startedAt: now.toISOString(), writes };
+    journalText = JSON.stringify(journal);
+  } catch {
+    // Yazıya dökülemeyen içerik (ör. aşırı iç içe değer): depoya hiçbir şey yazılmadı.
+    return { status: "refused", reason: "unserializable" };
+  }
+
+  // Yıkıcı hiçbir yazma, yer yettiği anlaşılmadan ve yazılacak değerlerin tamamı günlükte durmadan önce yapılmaz.
+  if (!hasRoomForRestore(store, journalText, journal)) return { status: "refused", reason: "not-enough-space" };
+  try {
+    store.setItem(STORAGE_KEYS.journal, journalText);
+  } catch {
+    return { status: "refused", reason: "journal-write-failed" };
+  }
+
+  if (!applyRestoreWrites(store, journal) || !removeJournal(store)) {
+    recordIssue({ key: STORAGE_KEYS.journal, kind: "restore-incomplete" });
+    return { status: "incomplete" };
+  }
+  return { status: "completed" };
+}
+
+// --- Yedek durumu ve hatırlatma --------------------------------------------
+
+const DAY_MS = 24 * 60 * 60 * 1000;
+
+/** Son yedeğin zamanı ve hatırlatmanın ertelenmesi. Kayıt yoksa ya da okunamıyorsa boş durum döner (kullanıcı verisi değildir). */
+export function loadBackupStatus(): BackupStatus {
+  const store = area();
+  if (!store) return {};
+  try {
+    const raw = store.getItem(STORAGE_KEYS.backupStatus);
+    if (raw === null) return {};
+    const parsed = backupStatusSchema.safeParse(JSON.parse(raw));
+    return parsed.success ? parsed.data : {};
+  } catch {
+    return {};
+  }
+}
+
+/** Yedek indirildiğinde çağrılır; ertelemeyi de kaldırır. */
+export function recordBackupExport(now: Date = new Date()): boolean {
+  const status: BackupStatus = { lastExportAt: now.toISOString() };
+  return writeGuarded(STORAGE_KEYS.backupStatus, status);
+}
+
+/** "Sonra hatırlat": hatırlatma `BACKUP_REMINDER_DAYS` gün gösterilmez. */
+export function snoozeBackupReminder(now: Date = new Date()): boolean {
+  const status: BackupStatus = { ...loadBackupStatus(), remindAfter: new Date(now.getTime() + BACKUP_REMINDER_DAYS * DAY_MS).toISOString() };
+  return writeGuarded(STORAGE_KEYS.backupStatus, status);
+}
+
+/** Son yedekten bu yana geçen tam gün; hiç yedek alınmadıysa ya da zaman okunamıyorsa `undefined`. */
+export function daysSinceBackup(status: BackupStatus, now: Date = new Date()): number | undefined {
+  if (!status.lastExportAt) return undefined;
+  const last = new Date(status.lastExportAt).getTime();
+  if (Number.isNaN(last)) return undefined;
+  return Math.max(0, Math.floor((now.getTime() - last) / DAY_MS));
+}
+
+/**
+ * Yedek hatırlatması gösterilsin mi? Yalnızca bu cihazda kalıcı kullanıcı verisi varken; hiç yedek alınmadıysa ya da son
+ * yedekten bu yana `BACKUP_REMINDER_DAYS` gün geçtiyse. "Sonra hatırlat" denmişse o süre dolana kadar gösterilmez.
+ */
+export function shouldRemindBackup(hasData: boolean, status: BackupStatus, now: Date = new Date()): boolean {
+  if (!hasData) return false;
+  if (status.remindAfter) {
+    const until = new Date(status.remindAfter).getTime();
+    if (!Number.isNaN(until) && now.getTime() < until) return false;
+  }
+  const days = daysSinceBackup(status, now);
+  return days === undefined || days >= BACKUP_REMINDER_DAYS;
+}
+
+/** Kalıcı kullanıcı verisi var mı? Demo koleksiyonlar `persistedOnly` ile zaten boşaltılmıştır. */
+export function hasUserData(snapshot: AquariumDataSnapshot): boolean {
+  return Object.values(snapshot).some((rows) => rows.length > 0);
 }
 
 // --- Yetim kayıtlar ve dışa aktarma ----------------------------------------

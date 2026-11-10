@@ -40,5 +40,5 @@ Claude altı kaynağın sayfalarını açarak inceledi ve ürün sahibine artı 
 - Sonraki paketler (resmî listedeki satılan bitkiler ve *Ophiopogon* 2026-10-28'de yalnız uyarı kaydı olarak eklendi; `docs/DECISIONS/0026-bitki-uyari-kayitlari.md`):
   - resmî listedeki satılan bitkiler: Aquarubi'de *Pistia stratiotes* (AB listesi) ve *Azolla filiculoides* (İngiltere'nin satış yasağı) var;
   - su bitkisi olup olmadığı kaynakla kontrol edilecek bitkiler: Aquarubi'de *Ophiopogon japonicus*, *Fittonia albivenis*, *Selaginella* ve *Homalomena* satılıyor. Practical Fishkeeping'in "akvaryumda kaçınılacak 21 bitki" listesinde *Ophiopogon japonica* var; ötekiler için ayrı kaynak aranacak.
-  - Practical Fishkeeping'in tür kutuları da bu paketlerde taranır.
+  - Practical Fishkeeping'in tür kutuları 2026-10-29'da 4. pakette tarandı: 22 kaydın sıcaklık ve pH aralığına girdi (`docs/CATALOG_LOG.md` → "Bitki kataloğu 4").
 - Bitki adları: bilimsel ad dilden bağımsız anahtardır. İlk pakette yalnız eş adlar ve Türk mağazalarındaki satış adları var (ör. "Tilki kuyruğu"). İngilizce yaygın adlar İngilizce dil paketinde kaynaktan alınır. Fishkeeper'ın yaygın adlarından biri ("Fanwort") başka bir istilacı türün de adı olduğu için yanıltabilir.

@@ -59,7 +59,7 @@ if (jsonPath) {
     species: speciesCatalog.map(({ id, commonName, scientificName, category, temperature, ph, adultSizeCm, minVolumeL, sourceUrl, verifiedAt }) => ({ id, commonName, scientificName, category, temperature, ph, adultSizeCm, minVolumeL, sourceUrl, verifiedAt })),
     equipment: equipmentCatalog.map(({ id, category, brand, model, ratedFlowLph, powerW, recommendedMinL, recommendedMaxL, sourceUrl, verifiedAt }) => ({ id, category, brand, model, ratedFlowLph, powerW, recommendedMinL, recommendedMaxL, sourceUrl, verifiedAt, unverified: unverifiedEquipmentIds.includes(id) })),
     care: careProductCatalog.map(({ id, category, brand, model, volumeL, sourceUrl, verifiedAt }) => ({ id, category, brand, model, volumeL, sourceUrl, verifiedAt })),
-    plants: plantCatalog.map(({ id, scientificName, aliases, light, co2, growth, heightCm, temperature, ph, placements, invasiveListings, sourceUrl, verifiedAt }) => ({ id, scientificName, aliases, light, co2, growth, heightCm, temperature, ph, placements, invasive: Boolean(invasiveListings?.length), sourceUrl, verifiedAt })),
+    plants: plantCatalog.map(({ id, scientificName, aliases, light, co2, growth, heightCm, temperature, ph, placements, invasiveListings, notAquatic, warningOnly, sourceUrl, verifiedAt }) => ({ id, scientificName, aliases, light, co2, growth, heightCm, temperature, ph, placements, invasive: Boolean(invasiveListings?.length), notAquatic: Boolean(notAquatic), warningOnly: Boolean(warningOnly), sourceUrl, verifiedAt })),
   };
   fs.writeFileSync(jsonPath, `${JSON.stringify({ report, rows })}\n`, "utf8");
 }

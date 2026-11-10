@@ -4,7 +4,7 @@ import { describe, expect, it } from "vitest";
 import type { Aquarium, Equipment, Plant, WaterParameters } from "@aquamind/domain";
 import { assessPlants, type PlantProfileInput } from "../src/plants";
 
-// Motor 1.11.0: bitki uyarıları (docs/DECISIONS/0025-bitki-uyarilari.md). Stub kayıtlarla sınanır.
+// Motor 1.11.0 ve 1.12.0: bitki uyarıları (docs/DECISIONS/0025-bitki-uyarilari.md, 0028-bitki-etiketleri-saglik-analizinde.md). Stub kayıtlarla sınanır.
 
 const tank: Aquarium = { id: "a", name: "Stub", type: "freshwater", lengthCm: 60, widthCm: 30, heightCm: 36, netVolumeLiters: 54, setupDate: "2026-01-01" };
 const profiles: Record<string, PlantProfileInput> = {
@@ -98,6 +98,42 @@ describe("bitki uyarıları", () => {
       "p-carpet:plantLight:warning",
       "p-carpet:plantTemperature:warning",
       "p-carpet:plantPh:warning",
+    ]);
+  });
+
+  // 1.12.0: katalogdaki kaynaklı etiketler (docs/DECISIONS/0028-bitki-etiketleri-saglik-analizinde.md).
+  it("su bitkisi değil: etiketli bitkide uyarı; değerleri olmayan kayıtta da çıkar, etiketsiz bitkide çıkmaz", () => {
+    const house: PlantProfileInput = { id: "house", scientificName: "Ophiopogon japonicus", notAquatic: { sourceUrl: "https://www.practicalfishkeeping.co.uk/features/21-plants-to-avoid-in-the-aquarium/" } };
+    const warnings = assessPlants(tank, [{ plant: plant("carpet", "Ophiopogon"), profile: house }], []);
+    expect(codes(warnings)).toEqual(["p-carpet:plantNotAquatic:warning"]);
+    expect(warnings[0]).toMatchObject({ params: { name: "Ophiopogon" }, title: "Ophiopogon su bitkisi değil",
+      message: "Practical Fishkeeping bu bitkiyi akvaryumda kaçınılacak ev bitkileri arasında sayıyor: su altında kısa süre dayanır." });
+    expect(assessPlants(tank, [entry("easy")], [device("lighting")])).toEqual([]);
+  });
+
+  it("istilacı tür: listeler sabit sırayla ve bir kez; UF/IFAS'ın listeleri kaynağıyla birlikte, Türkiye'de yasak anlamına gelmediği yazılır", () => {
+    const listed = (lists: PlantProfileInput["invasiveListings"]): PlantProfileInput => ({ id: "inv", scientificName: "Pistia stratiotes", invasiveListings: lists });
+    const run = (lists: PlantProfileInput["invasiveListings"]) => assessPlants(tank, [{ plant: plant("carpet", "Su marulu"), profile: listed(lists) }], [])[0];
+    // Kayıttaki sıra ters ve bir liste iki kez: yine sabit sıra, her biri bir kez.
+    const pistia = run([{ list: "fisc-invasive" }, { list: "eu-union-list" }, { list: "fisc-invasive" }]);
+    expect(pistia).toMatchObject({ code: "plantInvasive", level: "warning", params: { name: "Su marulu", lists: "fisc-invasive,eu-union-list" }, title: "Su marulu istilacı tür listesinde" });
+    expect(pistia.message).toBe("Doğaya bırakmayın. Bu bitki Florida İstilacı Türler Konseyi'nin listesinde (UF/IFAS) ve Avrupa Birliği'nin istilacı yabancı türler listesinde. Bu, Türkiye'de yasak olduğu anlamına gelmez.");
+    expect(run([{ list: "fisc-invasive" }, { list: "us-federal-noxious-weed" }]).message).toBe(
+      "Doğaya bırakmayın. Bu bitki ABD'de federal zararlı ot listesinde ve Florida İstilacı Türler Konseyi'nin listesinde (UF/IFAS). Bu, Türkiye'de yasak olduğu anlamına gelmez.");
+    expect(run([{ list: "england-sale-ban" }])).toMatchObject({ params: { lists: "england-sale-ban" }, message: "Doğaya bırakmayın. Bu bitki İngiltere'de satışı yasak bitkiler arasında. Bu, Türkiye'de yasak olduğu anlamına gelmez." });
+    expect(run([{ list: "england-sale-ban" }, { list: "eu-union-list" }, { list: "fisc-invasive" }, { list: "us-federal-noxious-weed" }]).params.lists).toBe("us-federal-noxious-weed,fisc-invasive,eu-union-list,england-sale-ban");
+    expect(assessPlants(tank, [{ plant: plant("carpet"), profile: listed([]) }], [])).toEqual([]);
+  });
+
+  it("etiketler her bitkide değer kurallarından önce gelir", () => {
+    const marked: PlantProfileInput = { ...profiles.carpet, invasiveListings: [{ list: "fisc-invasive" }], notAquatic: { sourceUrl: "https://example.org/" } };
+    expect(codes(assessPlants(tank, [entry("tall"), { plant: plant("carpet"), profile: marked }], [], reading({ temperature: 30 })))).toEqual([
+      "p-tall:plantHeight:info",
+      "p-carpet:plantNotAquatic:warning",
+      "p-carpet:plantInvasive:warning",
+      "p-carpet:plantCo2:warning",
+      "p-carpet:plantLight:warning",
+      "p-carpet:plantTemperature:warning",
     ]);
   });
 

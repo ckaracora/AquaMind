@@ -4,6 +4,27 @@ Bu dosya, Canberk'in `codex/catalog-capacity-batch` dalındaki `PROJECT_STATUS.m
 
 Yeni katalog notları bu dosyaya eklenir.
 
+## 2026-11-10 Katalog ana dal entegrasyonu (Codex)
+
+- `codex/catalog-main-integration` dalındaki doğrulanmış kataloglar güncel `main`
+  ile birleştirildi. Sonuç: 459 canlı, 3.877 ekipman, 3.105 bakım ürünü ve 141
+  bitki. Yedi ekipman kategorisi ile dört canlı sınıfının seçim akışı geçti.
+- İki dalın güvenlik kapıları birleştirildi. Kaynakta yayımlanmayan ya da çelişkili
+  kapasite değeri sağlık hesabına alınmıyor; 130 kayıt bağımsız kapasite boşluğu
+  olarak denetleniyor. Daha sonra doğrulanan Aquawing, Sobo, SunSun ve Xinyou
+  kayıtları korunurken Haqos'un doğrulanamayan resim tabanlı değerleri ile
+  Trendyol'a bağlı XY-2881 hesap dışında kaldı.
+- Canlı kayıtlarında güncel ve daha güçlü kaynaklı sürüm seçildi; eş adlar ve ek
+  kaynaklar kaybedilmedi. Genel satış adları kesin türe otomatik bağlanmıyor.
+- Dophin AH-1002 için üreticinin sabit sıcaklık kontrolü bulunmadığı açıklaması
+  motor 1.14.0 güvenlik kuralına bağlandı. Karar 0035; harici termostatlı kontrol
+  doğrulanmadan cihaz güvenli ısıtma kapasitesine katılmıyor.
+- Hedefli doğrulamalar: TypeScript, katalog akışı, 113 sağlık senaryosu,
+  hesaplayıcılar ve katalog denetimi başarılı. Ürün sahibi 2026-11-10'da
+  Google Translate aktarımını ve 1.112 vakalık altın kaydı açıkça onayladı.
+  İngilizce ve İspanyolca katalog metinlerinin güvenlik denetimleri 39/39 geçti;
+  altın fikstür yakalama sonrası normal kipte 1.112/1.112 vaka olarak doğrulandı.
+
 ## Katalog çalışmasında sıradaki iş (b1fb27d itibarıyla)
 
 `codex/catalog-capacity-batch` dalında Creaqua'nın güncel resmî altı sayfalık ürün dizinindeki 70 ailenin tamamı katalog ve regresyon testleriyle kapsandı. OrionLED'in resmî mağaza API'sindeki güncel 27 akvaryum aydınlatma ailesinin tamamı aile ve seçilebilir varyasyon düzeyinde kataloglandı; marka 164 ayrı aydınlatma seçeneğine ulaştı. JBL'nin resmî teknik cihaz, otomatik yemleme, yemleme aksesuarı, Artemio üretim sistemi, bakım/temizlik ve zararlı tuzakları 351 ekipmana; filtre medyası, bakteri, su düzenleyici, gübre, alg kontrolü, taban malzemesi, güncel/eski test, vitamin, Artemio hazırlığı, güncel/eski yem, deniz bakım ve arşiv ilaçları 515 bakım ürününe ulaştı. JBL'nin eski su testleri, temizlik ürünleri, dört benzersiz eski Bio-CO₂ modeli, iki nesilde 14 basınçlı PROFLORA seti, u201 mini seti, yedi eski tüp seçeneği, güncel yedi CYLINDER/tutucu ürünü, on pH kontrol/kalibrasyon ürünü, sekiz arşiv regülatör/valf/adaptör, sekiz duo regülatör/CO₂ yardımcısı, 12 arşiv Taifun/Direct, 14 güncel TAIFUN model/varyantı, 13 güncel/arşiv CRISTALPROFI dış filtre, altı güncel/altı arşiv iç filtre, dokuz güncel PROTEMP su ısıtıcısı, dört güncel/altı arşiv taban ısıtıcısı, üç güncel/altı arşiv soğutma ürünü, beş güncel/on arşiv hava motoru ve 61 güncel/arşiv havalandırma-hortum aksesuarı güncel ailelerden ve resmî arşiv durumlarından açıkça ayrıldı. JBL AquaPad ailesinin güncel yedi ölçüsü ve PROSCAPE bakım araçlarının 12 seçeneği tamamlandı; Sansibar'ın 14 paket seçeneği, iki Volcano Mineral hacmi, yeni nesil Mount Aso Soil'in dört renk/hacim seçeneği, eski Manado'nun beş hacmi, iki nesil Manado DARK'ın altı seçeneği ve eski PROSCAPE Plant/Shrimps Soil'in sekiz renk-hacim seçeneği eklendi. PROFLORA kök/tablet ürünlerinin gerçek paketleri, AquaBasis plus'ın 2,5/5 L seçenekleri ve Volcano Powder 250 g ayrıştırıldı. Ferropol/Ferropol 24 eski seri yedi paket, güncel PROSCAPE sıvıları sekiz gerçek şişe seçeneği olarak dozlarıyla tamamlandı. Biotopol, Biotopol R/C, Nano-Biotopol Betta, Acclimol, Tropol ve Catappa aileleri 18 gerçek paket seçeneğine ayrıldı; R/C hedef canlı sınıflandırma hataları giderildi. JBL'nin resmî ilaç arşivindeki 14 aile gerçek paket, doz ve prospektüs güvenliği düzeyinde tamamlandı. Sıradaki iş, açıklamalı güvenlik kaydı olarak kalan canlı satış adlarından bilimsel kimliği açıkça doğrulanabilenleri güvenilir taksonomi ve bakım kaynaklarıyla küçük gruplar halinde çözmektir.
@@ -3058,269 +3079,649 @@ Güncel alt adım: JBL filtre medyası, bakteri başlangıcı, sorun giderici/pH
 - Girmeyenler: *Fittonia albivenis*, *Selaginella kraussiana* 'Mini', *Homalomena* türleri (Aquarubi'de satılıyor; hiçbir kabul edilen kaynakta etiketi yok).
 - 1. ve 2. paketin kayıtları değişmedi.
 
-## 2026-11-03 Resun LP seri kaynak denetimi (Codex)
+## 2026-10-29 Bitki kataloğu 4: Practical Fishkeeping'in tür kutuları (Claude)
 
-- Resun'un resmî `LP LOW NOISE AIR PUMP (LP60~300)` ürün sayfası ve sayfadaki
-  `MODEL PARAMETERS` görsel tablosu doğrudan okundu:
-  `https://www.resun-china.com/h-pd-149.html`.
-- Görsel tablo yalnız üç model satırı yayımlıyor:
-  - LP60: 4200 L/saat, 50 W;
-  - LP100: 8400 L/saat, 100 W;
-  - LP200: 14.000/15.000 L/saat, 230 W (elektrik varyantına göre iki debi).
-- LP60 ve LP100 aynı değerlerle resmî üretici kaynağına taşındı.
-- LP200 için kabul edilen Atakan Petshop sayfası 15.000 L/saat ve 200 W
-  yayımlıyor. Debi üretici aralığının içinde; otomatik havalandırma hesabında
-  üreticinin yayımladığı güvenli alt değer olan 14.000 L/saat kullanıldı.
-  200 W / 230 W güç çelişkisi kesin alan yapılmadı; iki kaynak ve fark ürünün
-  kullanıcıya gösterilen teknik açıklamasında açık bırakıldı.
-- Resmî sayfanın başlığında LP300 geçmesine rağmen ürün görsellerinde ve teknik
-  tabloda LP300 satırı yok. Bu nedenle eski ikincil kaynaktaki 18.000 L/saat ve
-  250 W geri alınmadı; LP300 otomatik kapasite hesabı dışında kaldı.
+- Kural `docs/DATA_SOURCES.md` → "Bitkiler" (Practical Fishkeeping 0023'te onaylanan destekleyici kaynak: tür kutuları sıcaklık ve pH aralığı verdiğinde ortak aralığa girer). Bu pakette kurala, neyin tür kutusu sayıldığı ve Tropica'ya dayanan kayıtta sıcaklık ile pH'ın nereden geldiği yazıldı.
+- Tarama (2026-10-29, UTC; bütün sayfalar HTTP 200):
+  - Sitenin kendi araması, `/features/?Query=` ve `/fishkeeping-answers/?Query=`, bütün sonuç sayfaları. Arama yalnız başlık ve özette eşleşir.
+  - 1. tur (80 sorgu): plant, plants, planted, aquascape, aquascaping, moss, fern, carpet, floating, stem, bulb, sword, hornwort, duckweed, lily, lotus, crypt, java, weed; katalogdaki cins adları; Elodea, Nymphaea, Hemianthus, Monte Carlo, marimo. 127 yazı.
+  - 2. tur (36 sorgu, kurulum yazılarındaki kutular için): grow, how to grow, nano, iwagumi, shrimpscape, staples, biotope, Dutch, jungle, paludarium, riparium, easy, beginner, best, foreground, background, midground, CO2, fertiliser, fertilizer, substrate, lighting, algae, green, red, tropica, Staurogyne, Amazon, Monte, Cuba, Christmas, Flame, Weeping, Bolbitis, Hygro, Ammannia. 489 yeni yazı.
+  - 3. tur: ilk turda eksik kalan cinsler (*Schismatoglottis*, *Monosolenium*, *Riccardia*, *Leptodictyum*, *Gratiola*) ve Pellia, liverwort; sonuç yok.
+  - Alan adıyla sınırlı genel web araması: 38 adres; hepsi yukarıdaki yazıların içinde.
+  - Açılan 616 yazının metninde sıcaklık ve pH satırları, katalogdaki bitki adlarıyla birlikte tarandı; değer veren her kutu sayfada okundu.
+- Değer veren kutular (8 yazı):
 
-## 2026-11-03 WaterBear WB-2770 kapasite doğrulaması (Codex)
+| Yazı | Bitki (kutudaki ad) | Kutu |
+|---|---|---|
+| [How to grow: Cryptocoryne parva](https://www.practicalfishkeeping.co.uk/features/how-to-grow-cryptocoryne-parva/) (güncelleme 2025-02-07) | *Cryptocoryne parva* | "Temperature: 20-29°C", "pH: 5.5 to 8" |
+| [How to grow: Green rotala](https://www.practicalfishkeeping.co.uk/features/how-to-grow-green-rotala/) (George Farmer) | *Rotala* sp. 'Green' | "Temperature: 18-30C, pH 5-8" |
+| [How to grow Hemianthus callitrichoides 'Cuba'](https://www.practicalfishkeeping.co.uk/features/how-to-grow-hemianthus-callitrichoides-cuba/) (George Farmer) | *Hemianthus callitrichoides* 'Cuba' | "Temperature: 18-28°C", "pH: 5 to 7.5" |
+| [The Lovely Ludwigia](https://www.practicalfishkeeping.co.uk/features/the-lovely-ludwigia-a-staple-stem-plant-for-every-planted-aquarium/) (2026-07-07) | *Ludwigia palustris* 'Super Red'; *L. repens* 'Rubin'; *L. glandulosa* | 18–28 °C, pH 5,5–7,5; 20–28 °C, pH 6,0–7,5; 22–28 °C, pH 5,5–7,0 ("Quick facts") |
+| [Five of the best aquarium mosses](https://www.practicalfishkeeping.co.uk/features/five-of-the-best-aquarium-mosses/) (güncelleme 2020-07-30) | *Fissidens fontanus*; *Taxiphyllum barbieri*; *Vesicularia montagnei* 'Christmas'; *Monosolenium tenerum*; *Riccia fluitans* | 22–28 °C, pH 5–7,5; 14–30 °C, pH 6–8; 20–28 °C, pH 5,5–8,0; 5–30 °C, pH 5,5–8,0; 15–30 °C, pH 6–7,0 |
+| [How to set up a simple — but stunning — planted tank](https://www.practicalfishkeeping.co.uk/features/how-to-set-up-a-simple-a-but-stunning-a-planted-tank/) | *Microsorum pteropus* (Java fern) | "Water conditions: 18-30°C/64-86°F and not fussy about water chemistry" (pH sayısı yok) |
+| [Are there any easier carpeting plants?](https://www.practicalfishkeeping.co.uk/fishkeeping-answers/are-there-any-easier-carpeting-plants/) (George Farmer'ın yanıtı, 2025-08) | *Marsilea hirsuta*; *Helanthium tenellum* 'Green'; *Eleocharis parvula*; *Lilaeopsis brasiliensis* | yalnız sıcaklık: 18–28, 20–28, 18–27, 4–26 °C |
+| [How to set up a MicroHabitat nano aquarium](https://www.practicalfishkeeping.co.uk/features/how-to-set-up-a-microhabitat-nano-aquarium/) (George Farmer, "Plant profiles") | *Cryptocoryne wendtii* 'green'; *Staurogyne repens*; *Pogostemon helferi* | 20–30 °C, pH 5,5–8; 20–28 °C, pH 6–8; 20–30 °C, pH 6–7,5 |
 
-- Kullanıcının kabul ettiği Cikletist Petshop tam model sayfası model, barkod ve
-  800 L/saat debiyi yayımlıyor:
-  `https://www.cikletistpetshop.com/waterbear-wb-2770-akvaryum-ic-filtre-800lh-7408`.
-- Aquarubi'nin tam model sayfası 12 W gücü yayımlıyor; aynı sayfanın başlığı
-  800 L/saat, açıklaması 900 L/saat dediği için debi bu kaynaktan alınmadı:
-  `https://aquarubi.com/waterbear-wb-2770-akvaryum-ic-filtre`.
-- Katalog 800 L/saat ve 12 W değerini kullanıyor. Cikletist sayfasındaki
-  "800 L akvaryum" ifadesi teknik olarak güvenilir bir üretici hacim önerisi
-  olmadığından `recommendedMaxL` alanına aktarılmadı.
+- Sayılmayanlar:
+  - "All you need to know about bulb plants" (bir satıcının yanıtları): *Aponogeton* ve *Nymphaea* için cins geneli aralıklar ("generally the Aponogeton listed here will survive in water with a pH of 6.5-7.5"). *Barclaya longifolia* için "22-32°C ... pH acid to neutral" bir kutu değil; Fishkeeper'ın 23–30 °C aralığını da daraltmıyor.
+  - Kutusu olan ama katalogda kaydı olmayan bitkiler: *Ludwigia arcuata*, *L. palustris* 'Green', *L. inclinata* 'Cuba'.
+  - Yalnız ışık, CO₂, boy ve yerleşim veren kutular (ör. "5 easy and beautiful stem plants", "Aquascaping staples"): Practical Fishkeeping'den yalnız sıcaklık ve pH alınır.
+  - Kurulum yazılarında yazarın kendi akvaryumunun değerleri (ör. Afrika biyotopu pH 7,0 ve 25–26 °C, Amano tarzı ve Dutch tarzı akvaryum 25 °C), doğal yaşam alanının değerleri (Rio Negro, Inlé Gölü, Amazon'daki lagün) ve okur akvaryumları ("Your tanks").
+  - Aynı yazıdaki balık ve karides kutuları.
+  - Arama özetleri: genel aramanın özeti *Pogostemon helferi* için "16-28°C (ideally 22-26°C), pH 6.5-7.5" diyordu. Sayfada bu değer aynı yazıdaki kiraz karidesin kutusu; bitkinin kutusu 20–30 °C ve pH 6–7,5.
+- Kayıtlardaki değişiklikler (22 kayıt; yazı ek kaynak olarak eklendi, doğrulama 2026-10-29):
+  - İlk kez sıcaklık ve pH (Tropica'ya dayanan 11 kayıt, değer kutudan): *C. parva* 20–29 °C, pH 5,5–8; *Rotala* sp. 'Green' 18–30 °C, pH 5–8; *Micranthemum callitrichoides* 'Cuba' 18–28 °C, pH 5–7,5; *L. palustris* 'Super Red' 18–28 °C, pH 5,5–7,5; *L. repens* 'Rubin' 20–28 °C, pH 6–7,5; *L. glandulosa* 22–28 °C, pH 5,5–7; *Fissidens fontanus* 22–28 °C, pH 5–7,5; Christmas moss 20–28 °C, pH 5,5–8; *Monosolenium tenerum* 5–30 °C, pH 5,5–8; *Staurogyne repens* 20–28 °C, pH 6–8; *Pogostemon helferi* 20–30 °C, pH 6–7,5.
+  - İlk kez yalnız sıcaklık (pH kaynakta yok): *Marsilea hirsuta* 18–28 °C, *Eleocharis parvula* 18–27 °C.
+  - Ortak aralıkla daralan (Fishkeeper ∩ kutu): *Taxiphyllum barbieri* pH 5–9 → 6–8 (sıcaklık 15–28 °C kaldı); *Riccia fluitans* 10–28 → 15–28 °C, pH 5–8 → 6–7; *C. wendtii* 'Green' pH 5,5–9 → 5,5–8 (sıcaklık 20–30 °C kaldı); *Helanthium tenellum* 'Green' 20–30 → 20–28 °C (Fishkeeper'daki türün sayfası ∩ formun kutusu).
+  - Değişmeyen (kutu Fishkeeper'ın aralığıyla aynı ya da daha geniş): *Microsorum pteropus* ve formları 'Windeløv', 'Narrow', 'Trident' (18–30 °C; formların kutusu yok, türün kutusu girer); *Lilaeopsis brasiliensis* (15–26 °C).
+- Kullanıcıya etkisi: 13 bitkide sıcaklık, 11'inde pH artık görünüyor; bitki uyarıları (karar 0025) bu bitkilerde de son ölçümü aralıkla karşılaştırıyor. Dört bitkinin aralığı daraldı. Kapsam: sıcaklık %44 → %53,2, pH %43,3 → %51,1 (`docs/DATA_COVERAGE.md`).
 
-## 2026-11-03 SunSun HW-502/HW-503 kimlik ve kapasite düzeltmesi (Codex)
+## 2026-10-30 Deniz kataloğu: 11 kaydın yenilenmesi ve 20 başlangıç türü (Claude)
 
-- SunSun/Sensen üreticisinin resmî HW seri tablosu doğrudan okundu:
-  `https://www.sunsun-china.com/product/aquarium-equipment/hw-series-out-side-filter-2.html`.
-- Eski `502` kaydı resmî HW-502 adına, 320 L/saat ve 5 W değerlerine taşındı.
-  Üretici tabloda akvaryum hacmi yayımlamadığı için eski 60 L sınırı kaldırıldı.
-- Eski `503` kaydı resmî HW-503 adına, 350 L/saat ve 5 W değerlerine taşındı.
-- Türkiye'de 600 L/saat ve 6 W ile satılan ürün ayrı `503B` kaydıdır; HW-503'e
-  aktarılmadı. Böylece iki farklı modelin teknik değerleri birbirine karışmıyor.
+- Kural: `docs/DATA_SOURCES.md` → "Deniz canlıları"; kararlar 0029 ve 0031 (ürün sahibi 2026-10-30). Sayfalar 2026-10-30'da (UTC) açılarak okundu; bütün değerler aşağıdaki sayfalardan.
+- Tür seçimi: Fishkeeper'ın "Caring for your Marine Fish and Invertebrates" yazısının ve Practical Fishkeeping'in "Which fish are best for a beginner to marines?" (Jeremy Gay) ile "Marine starter fish to avoid" (Dave Wolfenden) yazılarının yeni başlayana adıyla önerdiği türlerden Fishkeeper'da sayfası olanlar. Fishkeeper'ın aranması sitenin kendi arama sayfasındaki "Fish" sekmesiyle yapıldı; deniz omurgasızları listesi (99 kayıt) 5 sayfa okundu.
+- Alınmayanlar: yeşil kromis (PFK "not a great beginner's fish"), Springer ve Allen damseli, turuncu skunk palyaço (Fishkeeper'da sayfa yok), Meksika turbo salyangozu (Fishkeeper 20–24 °C, "sub-tropical"), kum eleyen denizyıldızı (Fishkeeper "only suitable for extremely voluminous systems"), "Bubble Tip" adlı ikinci Fishkeeper sayfası (bilimsel ad yok; mercan kartı biçiminde, 24–26 °C).
+- OATA grup kartlarının hacimleri: palyaço küçük çift 60 L, iri türler 120 L ("grow larger than 10cm"); basslet ve dottyback tek 60 L; horozbina küçük 40 L, iri (yosun horozbinası "up to 15cm") 80 L; damsel tek 60 L, grup 200 L; cüce melek küçük tek 120 L; gobi küçük (7–8 cm altı) 40 L; dartfish tek 60 L; tang 20 cm altı tek 300 L; lapin küçük 150 L; anemon "most anemones" 80 L; küçük karides ve yengeç 40 L; küçük yumuşakça 40 L; küçük denizyıldızı 60 L. Kardinaller için kart yok.
+- Practical Fishkeeping: ocellaris bilgi kutusu 10 cm, 60×35×30 cm akvaryum ve "absolute minimum ... 60cm"; percula yazısı bir çift için en az 100 L. Öbür deniz türlerinde tür kutusu bulunamadı (royal gramma ve sarı tang için alan adıyla sınırlı arama).
+- WoRMS: uzun dokunaçlı anemonun geçerli adı *Radianthus doreensis* (*Macrodactyla doreensis* geçersiz); maroon palyaçonun *Amphiprion biaculeatus* (*Premnas* geçersiz); alev cüce meleğin *Centropyge loriculus* (FishBase *C. loricula* yazıyor). Öbür 28 ad geçerli.
+- Tablo: Fishkeeper sıcaklık · boy; Fishipedia'nın akvaryum önerileri; FishBase/SeaLifeBase en büyük boy; Meerwasser-Lexikon sıcaklık · akvaryum; kaydın yeni değerleri. Sıcaklık Fishkeeper ile Fishipedia'nın ortak aralığı; boy Fishkeeper, Practical Fishkeeping ve FishBase/SeaLifeBase'in büyüğü (SeaLifeBase'in karapaks ölçüleri, CL ve CW, tam boy olmadığı için kullanılmadı); hacim karar 0031'e göre.
 
-## 2026-11-03 Ejet BP3/905F/907F güvenli kaynak denetimi (Codex)
+| Kimlik | Ad | Bilimsel ad | Fishkeeper | Fishipedia | FishBase/SeaLifeBase | Meerwasser-Lexikon | Kayıt |
+|---|---|---|---|---|---|---|---|
+| `ocellaris-clownfish` | (bugünkü ad) | *Amphiprion ocellaris* | Tropical: 23-27°C · 9cm (3.5") | Volume min 100 litres Population min 2 Température 22 - 28 °C pH (acidité) 8.2 - 8.4 | 11.0 cm TL male/unsexed | 24°C - 27°C · ~ 120 Liter | 23–27 °C · 11 cm · 100 L · uzunluk 60 cm · grup 2 · atık 1,2 |
+| `percula-clownfish` | (bugünkü ad) | *Amphiprion percula* | Tropical: 23-27°C · 11cm (4.3") | Volume min 200 litres Population min 2 Température 26 - 28 °C pH (acidité) 8.2 - 8.4 | 11.0 cm TL male/unsexed | 24°C - 27°C · ~ 150 Liter | 26–27 °C · 11 cm · 200 L · uzunluk not · grup 2 · atık 1,2 |
+| `pink-skunk-clownfish` | (bugünkü ad) | *Amphiprion perideraion* | Tropical: 23-27°C · 10cm (3.9") | Volume min 100 litres Population min 2 Température 22 - 28 °C pH (acidité) 8.2 - 8.4 | 10.0 cm TL male/unsexed | 25,2°C - 29°C · ~ 150 Liter | 23–27 °C · 10 cm · 100 L · uzunluk not · grup 2 · atık 1,2 |
+| `tomato-clownfish` | (bugünkü ad) | *Amphiprion frenatus* | Tropical: 23-27°C · 14cm (5.5") | Volume min 100 litres Population min non renseigné Température 22 - 26 °C pH (acidité) 8.2 - 8.4 | 14.0 cm TL male/unsexed | 25,4°C - 29,1°C · ~ 150 Liter | 23–26 °C · 14 cm · 120 L · uzunluk not · grup 2 · atık 1,6 |
+| `saddleback-clownfish` | (bugünkü ad) | *Amphiprion polymnus* | Tropical: 23-27°C · 13cm (5.1") | Volume min 100 litres Population min 2 Température 22 - 26 °C pH (acidité) 8.2 - 8.4 | 13.0 cm TL male/unsexed | 25.4°C - 29.3°C · ~ 300 Liter | 23–26 °C · 13 cm · 120 L · uzunluk not · grup 2 · atık 1,5 |
+| `maroon-clownfish` | (bugünkü ad) | *Amphiprion biaculeatus* | Tropical: 23-27°C · 16cm (6.3") | Volume min 200 litres Population min 1 Température 22 - 26 °C pH (acidité) 8.2 - 8.4 | 17.0 cm TL male/unsexed | 26,7°C - 29,3°C · ~ 500 Liter | 23–26 °C · 17 cm · 200 L · uzunluk not · grup 1 · atık 2 |
+| `long-tentacle-anemone` | (bugünkü ad) | *Radianthus doreensis* | — · — | — | — | 22°C - 27°C · ~ 1000 Liter (boy 40 cm - 50 cm) | 22–27 °C · 50 cm · 80 L · uzunluk — · grup 1 · atık 0,3 |
+| `tiled-sea-star` | (bugünkü ad) | *Fromia monilis* | — · — | — | — | 21,6°C - 29°C · ~ 500 Liter | 21,6–29 °C · 10 cm · 60 L · uzunluk — · grup 1 · atık 0,2 |
+| `bubble-tip-anemone` | (bugünkü ad) | *Entacmaea quadricolor* | Tropical: 25-27°C · Disc up to 30cm (12") in diameter. | — | 40.0 cm WD male/unsexed | 21,4°C - 28,5°C · ~ 200 Liter | 25–27 °C · 40 cm · 80 L · uzunluk — · grup 1 · atık 0,3 |
+| `blue-striped-sea-slug` | Mavi kadife deniz salyangozu | *Chelidonura varians* | Tropical: 23-27°C · 7cm (2.8") | — | 3.0 cm TL male/unsexed | 24°C - 28°C · ~ 50 Liter | 23–27 °C · 7 cm · 40 L · uzunluk — · grup 1 · atık 0,1 |
+| `purple-antenna-nudibranch` | (bugünkü ad) | *Hypselodoris bullockii* | — · — | — | 4.0 cm TL male/unsexed | 22°C - 28°C · — | 22–28 °C · 4 cm · 40 L · uzunluk — · grup 1 · atık 0,1 |
+| `royal-gramma` | Kraliyet gramması | *Gramma loreto* | Tropical: 23-27°C · 8cm (3.2") | — | 8.0 cm TL male/unsexed | 25.1°C - 28°C · ~ 160 Liter | 23–27 °C · 8 cm · 60 L · uzunluk not · grup 1 · atık 0,9 |
+| `orchid-dottyback` | Orkide dottyback | *Pseudochromis fridmani* | Tropical: 24-27°C · 7cm (2.8") | Volume min 60 litres Population min non renseigné Température 22 - 26 °C pH (acidité) 8.2 - 8.4 | 6.3 cm TL male/unsexed | 23.7°C - 29.3°C · ~ 150 Liter | 24–26 °C · 7 cm · 60 L · uzunluk not · grup 1 · atık 0,9 |
+| `firefish` | Ateş gobisi | *Nemateleotris magnifica* | Tropical: 22-28°C · 8cm (3.1") | Volume min 200 litres Population min 2 Température 23 - 27 °C pH (acidité) 8.2 - 8.4 | 9.0 cm TL male/unsexed | 24.7°C - 28.8,°C · ~ 250 Liter | 23–27 °C · 9 cm · 200 L · uzunluk not · grup 2 · atık 1,3 |
+| `blue-neon-goby` | Mavi neon gobi | *Elacatinus oceanops* | Tropical: 22-28°C · 5cm (2") | — | 5.0 cm TL male/unsexed | 22°C - 27°C · ~ 100 Liter | 22–28 °C · 5 cm · 40 L · uzunluk not · grup 1 · atık 0,6 |
+| `bicolour-blenny` | İki renkli horozbina | *Ecsenius bicolor* | Tropical: 23-27°C · 10cm (3.9") | — | 11.0 cm TL male/unsexed | 22°C - 28°C · ~ 500 Liter | 23–27 °C · 11 cm · 40 L · uzunluk not · grup 1 · atık 1,3 |
+| `algae-blenny` | Yosun horozbinası | *Salarias fasciatus* | Tropical: 23-27°C · 13cm (5.1") | Volume min 200 litres Population min 1 Température 25 - 27 °C pH (acidité) 8.2 - 8.4 | 14.0 cm TL male/unsexed | 25,4°C - 29,3°C · ~ 400 Liter | 25–27 °C · 14 cm · 200 L · uzunluk not · grup 1 · atık 1,6 |
+| `banggai-cardinalfish` | Banggai kardinal balığı | *Pterapogon kauderni* | Tropical: 22-28°C · 7.5cm (3") | Volume min 150 litres Population min non renseigné Température 25 - 28 °C pH (acidité) 8.2 - 8.4 | 8.6 cm TL (female) | 24°C - 26°C · ~ 300 Liter | 25–28 °C · 8,6 cm · 150 L · uzunluk not · grup 2 · atık 1,3 |
+| `yellowtail-damsel` | Sarı kuyruklu damsel | *Chrysiptera parasema* | Tropical: 23-27°C · 7cm (2.8") | Volume min 200 litres Population min 2 Température 22 - 26 °C pH (acidité) 8.2 - 8.4 | 7.0 cm TL male/unsexed | 27,3°C - 29,3°C · ~ 250 Liter | 23–26 °C · 7 cm · 200 L · uzunluk 100 cm · grup 1 · atık 0,9 |
+| `azure-damsel` | Gök mavisi damsel | *Chrysiptera hemicyanea* | Tropical: 23-27°C · 7cm (2.8") | Volume min 100 litres Population min 5 Température 23 - 29 °C | 7.0 cm TL male/unsexed | 23°C - 29°C · ~ 250 Liter | 23–27 °C · 7 cm · 100 L · uzunluk not · grup 1 · atık 0,9 |
+| `yellow-tang` | Sarı tang | *Zebrasoma flavescens* | Tropical: 24-28°C · 20cm (7.9") | Volume min 600 litres Population min 1 Température 23 - 27 °C pH (acidité) 8.2 - 8.4 | 20.0 cm TL male/unsexed | 23°C - 27°C · ~ 600 Liter | 24–27 °C · 20 cm · 600 L · uzunluk not · grup 1 · atık 2 |
+| `yellow-wrasse` | Sarı lapin | *Halichoeres chrysus* | Tropical: 24-28°C · 12cm (4.7") | — | 12.0 cm TL male/unsexed | 25,2°C - 28,9°C · ~ 800 Liter | 24–28 °C · 12 cm · 150 L · uzunluk not · grup 1 · atık 1,3 |
+| `flame-angelfish` | Alev cüce melek balığı | *Centropyge loriculus* | Tropical: 23-27°C · 12cm (4.7") | Volume min 300 litres Population min non renseigné Température 22 - 26 °C pH (acidité) 8.2 - 8.4 | 15.0 cm TL male/unsexed | 25,4°C - 28,7°C · ~ 500 Liter | 23–26 °C · 15 cm · 300 L · uzunluk 100 cm · grup 1 · atık 1,6 |
+| `cleaner-shrimp` | Temizlikçi karides | *Lysmata amboinensis* | Tropical: 23-27°C · 5cm (2") | — | — | 21,9°C - 28,8°C · ~ 112 Liter | 23–27 °C · 5 cm · 40 L · uzunluk — · grup 1 · atık 0,15 |
+| `peppermint-shrimp` | Nane karidesi | *Lysmata wurdemanni* | Tropical: 23-27°C · 4cm (1.6") | — | 0.7 cm CL male/unsexed | 24°C - 27°C · ~ 50 Liter | 23–27 °C · 4 cm · 40 L · uzunluk — · grup 1 · atık 0,15 |
+| `sexy-shrimp` | Seksi karides | *Thor amboinensis* | Tropical: 23-27°C · 2cm (0.8") | — | — | 21,8°C - 28,8°C · ~ 50 Liter | 23–27 °C · 2 cm · 40 L · uzunluk — · grup 3 · atık 0,15 |
+| `emerald-crab` | Zümrüt yengeç | *Mithraculus sculptus* | Tropical: 22-28°C · 6.5cm (2.6") across the leg span. | — | 1.2 cm CW male/unsexed | 24°C - 30°C · ~ 100 Liter | 22–28 °C · 6,5 cm · 40 L · uzunluk — · grup 1 · atık 0,45 |
+| `blue-legged-hermit-crab` | Mavi bacaklı keşiş yengeci | *Clibanarius tricolor* | Tropical: 23-27°C · Leg span 2cm (0.8") | — | — | 23°C - 29°C · ~ 100 Liter | 23–27 °C · 2 cm · 40 L + 35 L/birey · uzunluk — · grup 1 · atık 0,45 |
+| `red-legged-hermit-crab` | Kırmızı bacaklı keşiş yengeci | *Paguristes cadenati* | Tropical: 23-27°C · Leg span 3.8cm (1.5") | — | — | 23°C - 28°C · ~ 50 Liter | 23–27 °C · 3,8 cm · 40 L + 35 L/birey · uzunluk — · grup 1 · atık 0,45 |
+| `marine-turbo-snail` | Deniz turbo salyangozu | *Astraea sp.* | Tropical: 23-27°C · Up to 10cm (3.9"), but usually much smaller. | — | — | — · — | 23–27 °C · 10 cm · 100 L + 100 L/birey · uzunluk — · grup 1 · atık 0,4 |
+| `nassarius-snail` | Nassarius salyangozu | *Nassarius sp.* | Tropical: 23-27°C · Up to 2.5cm (1"), most smaller. | — | — | — · — | 23–27 °C · 2,5 cm · 40 L · uzunluk — · grup 1 · atık 0,4 |
 
-- Qimei'nin resmî Ejet hava motoru sayfası doğrudan okundu:
-  `https://www.qimeigroup.com/Products_detail/ejet-aquarium-air-pump-ejet168.html`.
-  Teknik tablo yalnız E-JET 168 (2,0 L/dakika, 2,1 W, 40–80 L) ve E-JET 268
-  modellerini kapsıyor; BP3 tabloda yer almıyor. Bu değerler BP3'e aktarılmadı.
-- Kullanıcının kabul ettiği Atakan Petshop Ejet marka sayfası BP3'ü pilli,
-  elektrik kesintisi ve taşıma desteğine yönelik hava motoru olarak listeliyor,
-  fakat debi veya akvaryum hacmi yayımlamıyor: `https://atakanpetshop.com/ejet`.
-  BP3'ün eski, kabul edilmeyen mağaza kaynağındaki 120 L/saat değeri geri
-  alınmadı; kayıt güncel kabul edilen kaynağa ve açıklamalı kapasite notuna taşındı.
-- 905F için kabul edilen kaynaklardaki 470 L/saat ve 1000 L/saat değerleri
-  çelişkili kalıyor; 907F için kurala uyan tam model teknik sayfası bulunamadı.
-  Arama sonuçlarındaki fiyat karşılaştırma, forum ve yabancı satıcı değerleri
-  otomatik hesaba alınmadı. Üç model de seçilebilir, ancak kullanıcı etiket
-  değerini girmedikçe otomatik kapasite hesabının dışındadır.
+- Grup ayrıntıları: palyaçolar 2 (Fishkeeper "one known pair", OATA "kept in pairs"); maroon 1 (Fishkeeper "singly or in known pairs", Fishipedia 1); ateş gobisi 2 (Fishkeeper "best stocked in self-selected pairs", Fishipedia 2); Banggai 2 (Fishkeeper 8 ve üstü grup ya da küçük akvaryumda çift); damseller 1 (Fishkeeper tek, çift ya da 9 ve üstü; Fishipedia sarı kuyruklu 2, gök mavisi 5 diyor, bakım notunda); seksi karides 3 (Fishkeeper "groups of 3 or more"; OATA "at least four", bakım notunda); öbürleri 1.
+- Fishkeeper'ın birey başına hacmi: turbo salyangoz "around 100 litres of water per snail" (en az 100 L ve birey başına 100 L); keşiş yengeçleri "no more than 1 per 35 litres" (birey başına 35 L).
+- Davranış kayıtları (`src/data/species-behavior.ts`): karides yer: orkide dottyback, sarı lapin, Banggai kardinal (iri bireyler), ocellaris (PFK: iri yetişkinler çok küçük süs karideslerini ara sıra); salyangoz yer: sarı lapin; kendi türüyle tek: iki renkli horozbina (eşleşmiş çift hariç), yosun horozbinası.
+- Nitelik düzeltmeleri: mavi kadife deniz salyangozunun tür akvaryumu işareti kalktı (Fishkeeper resif uyumu "Excellent, but requires an ongoing source of flatworms"; eski Türkçe adı eş ad olarak kaldı); mor antenli nudibranchın tür akvaryumu işareti kalktı (Meerwasser-Lexikon "Für Aquarienhaltung nicht geeignet" ve sünger beslenmesi yazıyor, birlikte tutmayı tehlikeli saymıyor); uzun dokunaçlı anemonun akıntısı kaldırıldı (kabul edilen kaynakta yok); palyaçoların ve maroon'un eski tank uzunlukları kaldırıldı (kabul edilen kaynakta yok; ocellaris'in 60 cm'si artık PFK'den); maroon'un grubu 2 → 1.
+- Kaldırılan ek kaynaklar (karar 0029'da kabul edilmeyen satıcılar ve hobi siteleri): Quality Marine, LiveAquaria, De Jong Marinelife, LiveStock USA, aquario.gr, WhiteCorals, ReefTrak, Aquarium Glaser (importstation), SaltCorner, ITIS. Çikletist bağlantıları satış adlarının kaynağı olarak kaldı.
+## 2026-10-30 Örnek denetim: 40 canlı ve 40 ekipman (Claude)
 
-## 2026-11-03 Aquawing AQ-WP seri distribütör doğrulaması (Codex)
+- Yol haritasının veri işlerindeki sıra (2026-10-09): örnek denetim, satış adları, bakım ürünleri en sona. Amaç, kataloğun bütününde değerlerin kaynağıyla ne sıklıkla uyuştuğunu ölçmek ve bulunan hataları düzeltmek.
+- Seçim: sabit tohumla (20261030) rastgele, yeniden üretilebilir. Canlılardan 40 kayıt (deniz kayıtları hariç, çünkü 2026-10-30'da yenilendiler; havuz 412). Hesaba giren ekipmandan 40 kayıt (filtre, ısıtıcı, hava motoru; doğrulanmamışlar listesindekiler hariç; havuz 1.184).
+- Yöntem: her kaydın ana kaynağı, gerekiyorsa ek kaynakları açılıp okundu; değerler kayıtla karşılaştırıldı. Boyu'nun teknik tabloları resim içinde olduğu için resimler indirilip kırpılarak okundu. Açılmayan siteler zorlanmadı (sertifika hatası, Cloudflare insan doğrulaması). Codex'in 1. denetim turu, benim "uyumlu" saydığım iki ekipmanda sorun buldu (Sera X-Edge 300, Boyu HT-650) ve taramanın iki eksiğini gösterdi; 2. turu DR-50'nin gücünün ürün resmindeki etikette yazdığını gösterdi. Aşağıdaki sayılar düzeltilmiş hâlidir.
+- Canlı sonuçları (40):
+  - 35 kayıt kaynağıyla uyumlu. Bir kısmı doğrudan aynı, bir kısmı bu günlükte yazılı kuralların sonucu: ortak aralık, taban × genişlik × genişlik hacmi, büyük boy, Apistogramma'da korunan pH.
+  - 1 bilinen açık: `owroewefi-guianacara` (açık listede).
+  - 4 bulgu (ilk üçü bu pakette düzeltildi):
+    - `glowlight-danio`: kayıt Seriously Fish'e bağlıydı, ama değerler sayfanın bugünkü değerlerinden farklıydı (sayfa 2026'da yenilenmiş). Değişiklikler: 60 → 72 L, 60 → 80 cm, 20–25 → 16–26 °C, pH 6–7,5 → 6–8. Grup (8–10'lu, en az 8) ve boy (30 mm SL) aynı. FishBase özet sayfası ek kaynak oldu; FishBase akvaryum uzunluğu yazmıyor.
+    - `apisto-macmasteri`: ana kaynak FishBase'ti. 75 L ve pH 5–7 kabul edilen bir kaynağa dayanmıyordu; Fishkeeper 23–29 °C ve pH 5,5–6,5 yazıyor. Seriously Fish: bir çift için 45 × 30 cm (yaklaşık 41 L) yeterli, grup daha büyük akvaryum ister; 24–28 °C, pH 5,5–7,0; "best in a pair". FishBase: "minimum aquarium size 60 cm". Tür kaynak yenilemesinin yöntemiyle işlendi (FishBase daha uzun bir akvaryum yazıyorsa o): 75 → 41 L, uzunluk 60 cm (aynı), pH 5–7 → 5,5–7. Sıcaklık, boy (FishBase 7 cm TL) ve grup (2) aynı. Bakım notu yeni ölçüyle ve iki kaynağın farkıyla yazıldı. FishBase, Fishkeeper ve eski ek kaynaklar ek kaynak olarak kaldı.
+    - `endlicheri-bichir`: ana kaynak kabul listesinde olmayan bir Alman sitesiydi (einrichtungsbeispiele.de). Seriously Fish: 750 mm SL, 210 × 120 cm taban, 210 × 120 × 90 cm için yaklaşık 2.268 L, 22–27 °C, pH 6,0–8,0, sosyal yapı yayımlanmamış. Fishipedia: yalnız yaşar ("solitario"), klasik akvaryumda bakımı önerilmez. FishBase akvaryum uzunluğu yazmıyor. Değişiklikler: 70 → 75 cm, 2.000 → 2.268 L, 300 → 210 cm, 26–28 → 22–27 °C, pH 6,5–7,5 → 6–8. Grup (1) ve tür akvaryumu işareti aynı (Seriously Fish yalnız iri tank arkadaşlarını uygun görüyor). Bakım notu Seriously Fish ve Fishipedia'ya göre yeniden yazıldı; eski kaynak ek kaynak olarak kaldı.
+    - `electric-blue-crayfish`: ana kaynak bir mağazanın blog yazısı (aquariumcoop.com). Uzman kaynağı olmayan "diğer" kayıtlardan biri (kerevit, yengeç, kurbağa, aksolotl); o paketle kaynaklanacak, açık listeye yazıldı.
+- Ekipman sonuçları (40): değer taşıyan 34 kayıttan 26'sının kaynağı okunabildi. 24'ünün değeri doğru; 1'inde değer yanlış aktarılmış, 1'inin değeri kaynakta yazmıyor.
+  - 20 kayıt kaynağıyla aynı:
+    - 10'u sayfa metninden.
+    - Jeneca AP-8801: dakikada 2,1 L = 126 L/saat.
+    - Aquawing AQX1 ve RS-99 UV: mağazanın ürün sayfasından.
+    - Boyu DGN-120, EFU-10 ve SP-2300B: üreticinin resim tablolarından.
+    - Eheim Thermocontrol 250 W: kılavuzdaki tablodan (3618: 400–600 L).
+    - Oase HeatUp 150: ürün sayfasından (150 W, 150 L'ye kadar).
+    - Tetra FilterJet 600: bu günlükte yazılı çelişkiyle (sayfa 600, kılavuz 550 L/saat; hesapta 550).
+    - Ejet 3388: değerler mağaza sayfasında. Başlık 2000, açıklama 1910 L/saat yazıyor; kayıt, karar 0019'dan önceki yöntemle düşük olanı kullanıyor. Güncel kural çelişen alanı kullanmıyor; aynı durumdaki Ejet kayıtları açık listede. Filtre kapasitesi aynı sayfadaki hacim değerinden (350–450 L) geldiği için hesap sonucunu değiştirmiyor.
+  - 1 kayıtta değer yanlış aktarılmıştı (düzeltildi): Sera X-Edge 300. Sera'nın tablosu hacmi stok yoğunluğuna göre veriyor: "several small fish / shrimps" 50 L, "two small fish / shrimps" 100 L. Kayıt bunu koşulsuz 50–100 L aralığına çevirmişti; motor üst sınırı kapasite saydığı için filtre olağan stokta iki kat büyük görünüyordu. Aynı tablo X-Edge 450 (80/200 L) ve 700 (100/300 L) için de geçerli. Üçünde kapasite olağan stokun değeri oldu (50, 80, 100 L); iki balıklı üst değer açıklamada koşuluyla yazıyor. Kaynakta olmayan en az hacim kaldırıldı.
+  - 1 kaydın değeri kaynakta yazmıyor (hesaptan çekildi): Boyu HT-650. Kaynak Boyu'nun ısıtıcı listesiydi. HT serisinin ürün sayfası yalnız model adlarını ve boyları veriyor, gücü yazmıyor; değer model adından (HT-650 → 50 W) çıkarılmıştı. DR serisinin sayfası da güç tablosu vermiyor. Boyu'nun kılavuzları arasında ısıtıcı yok; kabul edilen yerel mağazalarda bu modeller bulunmadı. Karar 0019'a göre HT serisinin 6 ve DR serisinin 5 kaydı adıyla listede kalır, gücü hesaptan çekilir, kullanıcı etiket değerini kendisi girebilir. DR-50 hesapta kaldı: seri sayfasındaki ürün resminde cihazın etiketi "DR-50 220V 50Hz 50W" yazıyor; bu etiket öbür DR modellerinin gücünü göstermez. On iki kaydın kaynağı kendi seri sayfasına bağlandı.
+  - 4 kayıt değer taşımıyor; kayıt ve kaynak doğru: Boyu SF-101, Aquawing AQ255, Boyu EFU-10000A, Jeneca BX-22 500 W (sayfada bu güç yok; notu kayıtta).
+  - 4 kayıtta değer doğruydu, ama kaynak bir marka ya da liste sayfasıydı. Kurala göre değer ürünün kendi sayfasında yazmalı. Ürün sayfalarına bağlandılar:
+    - Boyu CJY-1000: Akvaryum Express'in Boyu sayfası kaymıştı, ürün artık 4. sayfada değil.
+    - Jingye 611: Atakan'ın marka sayfası.
+    - WaterBear SD-01: Atakan'ın kategori sayfası.
+    - Boyu GR-200: üreticinin ısıtıcı listesi.
+    - Aynı liste sayfasını paylaşan kayıtlar da düzeltildi: WaterBear SD-02 (200 L/saat ve 2 W ürün sayfasında); Boyu GR-100, GR-150, GR-250 ve GR-300 (GR tablosu beşini birden veriyor); Boyu TR-100A…300A (TR tablosu beşini birden veriyor).
+  - 8 kaydın değeri bugün yeniden doğrulanamadı; değerler değiştirilmedi:
+    - JBL PROTEMP b40 II: ana ve ek kaynak JBL'in ana sayfasına yönleniyor (JBL ürün adreslerini değiştirmiş).
+    - JBL ProSilent S200: ana kaynak olan kılavuz açılıyor, ama sayı vermiyor. Ek kaynaklardan biri JBL'in ana sayfasına yönleniyor, öbürünün sitesine güvenli bağlantı kurulamıyor.
+    - Haqos 2 kayıt: sertifika başka adrese ait.
+    - Resun 2 kayıt: kendinden imzalı sertifika.
+    - Fluval 2 kayıt: Cloudflare insan doğrulaması; geçilmedi.
+  - JBL PROAIR a50: ana kaynak JBL'in ana sayfasına yönleniyor, ama ek kaynaktaki kılavuz 50 L/saat ve 10–50 L'yi doğruluyor (yukarıdaki 24 doğru değerin içinde).
+  - 1 kaydın kaynağı kabul edilmeyen bir pazar yeri (Meç Turbo Pipo, Trendyol); değer taşımıyor.
+- Oranlar:
+  - Canlı: değeri kaynağıyla uyuşmayan 2/40 (%5); ana kaynağı kabul listesinde olmayan 2/40 (%5).
+  - Ekipman, okunabilen 26 değerli kayıtta: yanlış aktarılan 1 (%3,8), kaynakta yazmayan 1 (%3,8).
+  - Ekipman, örneklemin tamamında: kural dışı liste sayfası kaynağı 5/40 (%12,5; HT-650 dahil); değeri bugün yeniden doğrulanamayan 8/40 (%20).
+- Bütün katalog taraması (aynı gün, örneklemin dışında; bu paketin düzeltmelerinden sonra). Ayrıntılar `docs/CATALOG_SOURCE_GAPS.md`'de:
+  - Ana kaynağı kabul listesinde olmayan 38 canlı kaydı var; 20'si açık listedeydi, 18'i eklendi. Fishipedia'nın İngilizce sitesi (fishi-pedia.com) aynı ISSN'i (2270-7247) taşıyor, kabul edilen kaynak sayıldı.
+  - Hesaba giren ve değer taşıyan 1.099 ekipmandan 54'ünün kaynağı bir mağazanın marka ya da liste sayfası.
+  - 351 JBL kaydının 298'inin ana kaynağı JBL'in eski adresi; bunların 48'i hesaba giriyor.
+  - Bugün açılamayan alan adları: Resun 172 kayıt (90'ı hesapta), Fluval 87 (40), Haqos 38 (14).
+- Değerlendirme:
+  - Canlıda bulunan değer hataları, kaynağı sonradan yenilenen ya da hiç kabul edilen kaynağa bağlanmamış kayıtlarda.
+  - Ekipmanda iki tür hata var: kaynağın koşullu yazdığı değerin koşulsuz aktarılması (X-Edge) ve model adından çıkarılan değer (Boyu HT ve DR).
+  - Kaynak bağlantılarının eskimesi daha yaygın: JBL'in adres değişikliği, kayan liste sayfaları, açılamayan siteler.
+- Altın fikstür: motor değişmedi; 1.077 vakadan 13'ü değişti, hiçbirinin genel durumu değişmedi. Puanı değişenler Endlicheri biçirin iki vakası ve beş Boyu DR ısıtıcısı vakası; ayrıntı `docs/COMPATIBILITY.md`'de.
+- Araştırma dosyaları (oturuma özel scratchpad `ornek/`): seçim betiği ve seçilen kayıtlar, indirilen sayfalar, Boyu'nun kırpılmış tabloları, uygulama ve tarama betikleri.
 
-- Eksen Pet'in hakkımızda sayfası şirketin, Aquawing'in sahibi Bursa Pet'in
-  Marmara ve Akdeniz bölgesindeki tek bayisi ve temsilcisi olduğunu açıkça
-  yayımlıyor: `https://eksenpet.com/sayfa/hakkimizda`.
-- Eksen Pet Aquawing marka ve iç filtre katalogları tam model kodu, barkod,
-  güç ve debiyi birlikte yayımlıyor:
-  `https://eksenpet.com/markalar/aquawing` ve
-  `https://eksenpet.com/akvaryum/akvaryum-filtreleri/ic-filtreler`.
-- Bu distribütör/marka kataloğu kanıtıyla AQ-WP750FA, AQ-WP750FB,
-  AQ-WP850FA, AQ-WP850FB, AQ-WP950FA, AQ-WP950FB, AQ-WP1000FA,
-  AQ-WP1000FB, AQ-WP2300A, AQ-WP3300A, AQ-WP3300B ve AQ-WP3300C yeniden
-  doğrulandı. On iki kaydın mevcut debi, güç ve barkodları kaynakla birebir
-  eşleşti; doğrulama tarihi 2026-11-03 oldu.
-- Bu 12 kayıt otomatik kapasite hesabına geri alındı. Aquawing hesap kapsamı
-  65/88'den 77/88'e, genel ekipman kapsamı 1251/1359'dan 1263/1359'a
-  (%92,9) çıktı. Kaynak bulunamayan yedi eski Aquawing modelinin ve debi
-  yayımlanmayan hava motorlarının güvenlik dışlaması değişmedi.
-- Hedefli katalog akışı testi geçti; kapsam raporu 2026-11-03 ölçümüyle
-  yenilendi.
-- Tam `pnpm verify` zincirinde TypeScript, katalog akışı, 113 sağlık senaryosu,
-  hesaplayıcılar, katalog denetimi ve kapsam testi geçti; 452 testten 450'si
-  başarılı. Yalnız önceden denetlenmiş 1033/1066 altın fikstür farkının iki
-  karşılaştırması bekliyor. Altın dosya ürün sahibi onayı olmadan yazılmadı.
-  Ayrı `next build` 159 sayfanın tamamını başarıyla üretti.
+## 2026-10-30 Ekipman kaynak bağlantısı paketi 1: liste sayfası kaynakları (Claude)
 
-## 2026-11-03 Resun LP-20 resmî kapasite doğrulaması (Codex)
+- Örnek denetiminin bütün katalog taramasında hesaba giren ve değer taşıyan ekipmanın 54'ü bir mağazanın marka, kategori ya da sayfalı liste sayfasına bağlıydı (Atakan 32, Akvaryum Express 21, Aquarubi 1). Kural (`docs/DATA_SOURCES.md`, karar 0019): kabul edilen mağazada değer tam modelin kendi ürün sayfasında yazmalı; marka ya da liste sayfası yetmez.
+- Yöntem:
+  - Mağazaların marka ve kategori sayfalarındaki ürün bağlantıları toplandı. Akvaryum Express'in sayfalı listeleri sonuna kadar gezildi.
+  - Atakan'ın sayfaları ürünleri kaydırdıkça yüklüyor. Orada bulunamayan 9 model mağazanın kendi aramasıyla (tarayıcıda) bulundu.
+  - Her ürün sayfası açılıp başlığı ve açıklaması okundu (Atakan'da ürün açıklaması, Akvaryum Express'te "Açıklama" bölümü; benzer ürünler sayılmadı). Debi, güç ve hacim kayıtla alan alan karşılaştırıldı.
+  - Karar 0019'un alan kuralları uygulandı: değer ürün sayfasında yazmalı; mağazanın değeri eskisinden farklıysa mağazanınki kullanılır; aynı sayfa bir alanı iki farklı değerle yazıyorsa o alan kullanılmaz; kayda yeni alan eklenmez.
+- Sonuç:
+  - 54 kaydın hepsinin kaynağı ürünün kendi sayfasına bağlandı: 53'ü mağazanın ürün sayfası, Boyu WF-2055 üreticinin seri sayfası. `verifiedAt` 2026-10-30.
+  - 47 kaydın değerleri mağazanın ürün sayfasıyla aynı.
+  - Boyu WF-2055: Atakan'ın sayfası başlıkta 720 L/saat, açıklamada saatte 300 litre yazıyor. Üreticinin tablosu (öncelikli) 720 L/h ve 8,6 W; kaynak üretici sayfası oldu, değerler aynı.
+  - 6 kayıtta alan düzeltildi:
+    - Boyu SES-20: başlık 15 W, açıklamadaki teknik tablo "POWER: 25W". Güç kullanılmaz; debi (20 L/dakika) tutarlı. Boyu'nun kendi sitesi SES serisini yayımlamıyor.
+    - WaterBear 880F, 1880F ve 2880F: başlık ve teknik tablo 15/25/30 W, açıklamadaki ortak cümle "Güçlü 40W motoruyla". Güç kullanılmaz; debiler tutarlı. 3880F'te 40 W her yerde aynı, kaldı.
+    - Resun Mini: ürün sayfası saatte 200 litre ve 60 litrelik akvaryum yazıyor; gücü yazmıyor. Debi 400 → 200 L/saat (mağazanınki); güç kaldırıldı. Hacim kayıtta olmadığı için eklenmedi.
+    - Jingye YE-22: başlık 2 × 4 L/dakika, açıklama her çıkıştan 2 L/dakika. Hava debisi kaldırıldı, gücü (5 W) kaldı; kapasite notu nedeni açıklıyor.
+  - Değeri olmayan alanlar eklenmedi. Örneğin Jingye T640/T650'nin 15/18 W'ı, Dophin FB serisinin gücü, Sobo WP-300F'in 150 L/saat debisi ve birçok sayfadaki akvaryum hacmi.
+- Başlığı ile açıklaması çelişen eski kayıtlar (örnek denetiminin açık listesi):
+  - Ejet 3368, 3378 ve 3388: Atakan'ın ürün sayfası başlıkta 1650/1850/2000, açıklamada 1400/1750/1910 L/saat yazıyor. Kayıtlar karar 0019'dan önceki "düşük olanı al" yöntemiyle yazılmıştı. Debi kaldırıldı. Aynı sayfadaki tutarlı hacim (200–250, 300–400, 350–450 L) kaldı; filtre kapasitesi zaten bu hacimden hesaplanıyor.
+  - Ejet 3358: kabul edilen tek kaynak olan Atakan'ın sayfası tutarlı (750 L/saat). Çelişki kabul edilmeyen bir satıcının başlığıydı; açıklamadaki not kaldı, değer değişmedi.
+  - Jingye CD300 (aynı yöntemi kullanan son kayıt): başlık 2 × 1,5 L/dakika, açıklama toplam 2 L/dakika. Hava debisi kaldırıldı, gücü (3 W) kaldı; kapasite notu nedeni açıklıyor.
+- Düzeltme: örnek denetimi raporunda Ejet 3388 için "kapasite üreticinin hacim değerinden" yazılmıştı. Hacim üreticiden değil, Atakan'ın ürün sayfasından geliyor.
+- Test: hesaba giren ekipmanda mağazanın marka ya da liste sayfasına bağlı kayıt kalmamalı (ölçüt: mağaza ana sayfası, tek parçalı ve rakamsız yol ya da "/sayfa/N"; adında model numarası olmayan Resun Mini ürün sayfası istisna). Dört alan düzeltmesi, Ejet ve CD300 ayrıca sabitlendi.
+- Kullanıcıya etkisi:
+  - Ekipmanın kaynak bağlantısı artık ürünün kendi sayfasını açıyor.
+  - Resun Mini'nin debisi yarıya indi; filtre kapasitesi debiden hesaplandığı için bu filtre artık daha küçük akvaryuma yeter.
+  - Jingye CD300 ve YE-22'nin hava debisi "değer bekliyor" görünür. Hava motoruyla çalışan bir sünger filtrenin tek hava motoruysa filtre artık çalışan filtre sayılmaz: filtrasyon "tehlike"ye düşer, "Ekipman kapasite bilgisi eksik" ve "Sünger filtre için hava motoru gerekli" uyarıları çıkar (40 L, XY-2835 ve CD300 örneğinde 95 → 45). Kullanıcı etiketteki debiyi girince düzelir.
+  - Güç kaldırılan filtre ve hava motorlarında hesap değişmez, çünkü filtre ve hava motoru gücü hesapta kullanılmıyor.
+  - Ejet'lerin kapasitesi hacimden hesaplandığı için değişmedi. Debi yalnız önerilen hacmin altındaki akvaryumda "Filtre akışı güçlü olabilir" uyarısında kullanılıyordu; bu uyarı artık çıkmaz (100 L ve Ejet 3388 örneğinde filtrasyon 56 → 95).
+- Altın fikstür değişmedi (bu kayıtların hiçbiri fikstürde değil).
+- Codex'in 1. turu WF-2055 ve YE-22'deki çelişkiyi, CD300'ün sünger filtreye etkisinin anlatılmadığını, testin mağaza ana sayfasını kaçırdığını ve sayıların yanlış olduğunu buldu; hepsi düzeltildi.
+- Araştırma dosyaları (oturuma özel scratchpad `baglanti/`): toplama, eşleştirme, okuma ve uygulama betikleri, indirilen ürün sayfaları.
 
-- Resun üreticisinin LP20/LP40 resmî ürün sayfasındaki `MODEL PARAMETERS`
-  görsel tablosu doğrudan okundu:
-  `https://www.resun-china.com/en/h-pd-147.html`.
-- LP-20 satırı 1500 L/saat hava debisi, 17 W güç, 0,028 MPa basınç, 6 hava
-  dağıtıcı çıkışı, 2,2 m azami hava taşı derinliği ve 215 × 145 × 170 mm ürün
-  ölçüsü yayımlıyor.
-- Kabul edilen mağazalardaki 28 L/dakika (1680 L/saat) / 1500 L/saat farkı,
-  daha güçlü birincil kaynak olan üretici tablosuyla çözüldü. Katalog 1500
-  L/saat ve 17 W kullanıyor; eski kapasite belirsizliği kaldırıldı.
-- Genel ekipman hesap kapsamı 1263/1359'dan 1264/1359'a (%93) yükseldi.
-  Hedefli katalog akışı testi ve kapsam ölçümü başarılı.
+## 2026-10-30 JBL kaynak bağlantısı paketi: hesaba giren 49 kayıt (Claude)
 
-## 2026-11-03 Xinyou resmî hacim doğrulaması (Codex)
+- Örnek denetiminin taramasında 351 JBL kaydının 298'inin ana kaynağı JBL'in eski ürün adresiydi (`/products/detail/...`, `/products/group/...`, `/products/<sayı>/...`); bu adresler artık JBL'in ana sayfasına yönleniyor. Bu paketin taramasında Almanca biçim (`/de/produkte/...`) de eklendi; CristalProfi i80 greenline bu biçimdeydi. Bu paket bunlardan hesaba giren 49 kaydı (filtre, ısıtıcı, hava motoru) kapsıyor; öbür 250 kayıt (CO₂, aydınlatma, aksesuar) hesaba girmiyor ve açık listede kaldı.
+- Yöntem:
+  - JBL ürün sayfalarını yeni adreslere (`productsv2`) taşımış; her ülkenin ayrı ürün numarası var ve site haritası eski adresleri listeliyor.
+  - Yeni sayfalar JBL'in ürün listesinde (Almanya, "Alle", yani güncel ve arşiv) sitenin kendi arama kutusuyla bulundu. Listeyi getiren isteği doğrudan çağırma denemesini otomatik izin denetimi reddetti, istek gönderilmedi; arama normal kullanıcı gibi yapıldı.
+  - Almanca ürün sayfaları ve sayfalardaki kullanım kılavuzları açılıp okundu.
+  - Yeni sayfası olmayan arşiv modelleri için hâlâ açılan JBL belgeleri kullanıldı: CristalProfi e701 greenline kılavuzu (tablosu e401…e1901'i kapsıyor), JBL Aqua-Terra 2015 Fransızca kataloğu, ProScape rehberi ve JBL'in indirme bağlantılarındaki kılavuzlar. İndirme bağlantılarını Codex'in 1. denetim turu buldu.
+  - Karar 0019 uygulandı: değer üreticinin sayfasında ya da belgesinde yazmalı; iki resmî kaynak bir alanı farklı yazıyorsa o alan otomatik hesaba alınmaz ve fark açıklamada kalır.
+- Sonuç (49 kayıt):
+  - 23 güncel model yeni Almanca ürün sayfasına bağlandı: CRISTALPROFI e402/e702/e902/e1502/e1902, ProCristal i30, CristalProfi i60/i80/i100/i200 greenline, CristalProfi m greenline, PROTEMP e300/e500, PROTEMP S 25…300, PROTEMP b10…b60 III. Değerler sayfayla ya da sayfanın kılavuzuyla aynı. İki düzeltme:
+    - PROTEMP b60 III: kılavuzun tablosu 300–600 L (60 W, 120–200 cm) yazıyor; kayıtta 160–600 L vardı. 300–600 L oldu.
+    - CristalProfi m greenline: ürün sayfası 20–80 L, kılavuzun tablosu 20–112 L yazıyor. Hacim kaldırıldı, fark açıklamada; debi (200 L/saat) kılavuzda ve kaldı.
+  - 5 arşiv modelin yeni arşiv sayfası var ve bağlandı: PROAIR a50 ile PROSILENT a100/a200/a300/a400. Değerler aynı; bir düzeltme:
+    - PROSILENT a100: arşiv sayfası 60–200 L ve 2,5 W, 2015 kataloğu 40–150 L ve 2,9 W, kılavuz 40–150 L ve 3 W yazıyor. Kayıtta 40–150 L vardı; hacim kaldırıldı (güç zaten çekiliydi), farklar açıklamada.
+  - 12 arşiv model hâlâ açılan JBL belgelerine bağlandı:
+    - CristalProfi e401/e701/e901/e1901/e1501 greenline: e701 greenline kılavuzu. e1501'in debisi kılavuzda ve 2015 kataloğunda 1400, 2011 duyurusunda 1500 L/saat; önceki gibi kullanılmıyor.
+    - ProSilent a50 ve TekAir: 2015 kataloğu.
+    - PROTEMP b10/b20/b40/b60 (ilk nesil): 2015 kataloğu güç ve hacim (10 W 50–120 L … 60 W 300–600 L); ProScape rehberi güç.
+    - CristalProfi i40: 2015 kataloğu ve i40 kılavuzu 3 W ve 80 L/saat hava motoru yazıyor, akvaryum hacmi yazmıyor. Kayıttaki 10–40 L kaldırıldı; kapasite notu nedeni açıklıyor.
+  - 6 arşiv model JBL'in indirme bağlantılarındaki kılavuzlara bağlandı (`?mod=download&id=...`):
+    - Klasik CristalProfi i60/i80/i100/i200 (JBL dosyayı `JBL_CristalProfi_i60.pdf` adıyla veriyor; kılavuz dördünü kapsıyor): tablo dördü için 800 L/saat ve 11 W yazıyor, kayıtla aynı. Akvaryum hacmini de yazıyor; kayıtta "üretici hacim yayımlamadı" yazıyordu. Kılavuzun 15 dil bölümü i60, i100 ve i200 için aynı hacmi yazıyor (40–80, 90–160, 130–200 L); bunlar eklendi. i80'i ise Almanca, Lehçe ve Çince bölümler 60–110 L, öbür bölümler 60–100 L yazıyor; karar 0019 gereği i80'in hacmi hesaba alınmadı, fark açıklamada.
+    - PROTEMP b40 II ve b60 II: JBL dosyaları `JBL_ProTemp_b40_II.pdf` ve `JBL_ProTemp_b60_II.pdf` adıyla veriyor; ikisi aynı ProTemp b kılavuzu. Tablosu 40 W ve 200–400 L, 60 W ve 300–600 L yazıyor. Kablo uzunlukları ve vantuz sayıları da kayıtla aynı.
+  - 3 arşiv modelin değerleri hesaptan çekildi (karar 0019), kayıtlar adıyla listede: CristalProfi e401/e701/e901 WHITE. Kayıtlar değerleri eşdeğer greenline modelden almıştı; WHITE'ı adıyla yazan açık bir kaynak bulunamadı. JBL'de WHITE adını taşıyan yedek parça ve video sayfaları var, ama bunlar filtrenin debisini, gücünü ve hacmini vermiyor.
+- Test: hesaba giren JBL ekipmanı eski ürün adreslerine (`/products/...`, `/produkte/...`) bağlı olamaz. JBL beklentileri yeni kaynaklara ve değerlere göre güncellendi; 0019 listelerinin sayısı 177 → 180.
+- Kullanıcıya etkisi:
+  - JBL ekipmanının kaynak bağlantısı artık çalışan bir JBL sayfasını ya da belgesini açıyor.
+  - Üç WHITE filtre "değer bekliyor" görünür; kullanıcı etiket değerini girebilir.
+  - Klasik CristalProfi i60, i100 ve i200 artık üreticinin hacmiyle değerlendiriliyor. Önce debiden (800 L/saat) 200 L'ye kadar uygun sayılıyordu; şimdi i60 80 L'ye, i100 160 L'ye, i200 200 L'ye kadar uygun. Örneğin i60 ile 100 L'de filtrasyon 95 → 60 ("Filtre üretici önerisinin üstünde"), 130 L ve üstünde 95 → 35 ("Filtre bu akvaryum için küçük"). i200'de 200 L'ye kadar sonuç değişmiyor. i80 eskisi gibi debiden değerlendiriliyor.
+  - CristalProfi m'in kapasitesi artık debiden hesaplanıyor: 50 L'ye kadar uygun. Önce 80 L'lik hacimden hesaplanıyordu; 60–80 L'de filtrasyon 95 → 60 ("Filtre debisi düşük olabilir").
+  - CristalProfi i40'ın hacmi kaldırıldığı için kapasitesi artık bilinmiyor. "Ekipman kapasite bilgisi eksik" uyarısı çıkar, veri güveni 100 → 50; 40 L'ye kadar filtrasyon 95 → 60. Önceki 40 L'lik sınırın verdiği uyarılar da kalkar (80 L'de 35 → 60).
+  - PROSILENT a100 ve b60 III'teki değişiklik hesabı değiştirmez: hava motorunda yalnız debi kullanılıyor, taban ısıtıcısı ana ısıtıcı sayılmıyor.
+- Altın fikstür değişmedi (bu kayıtların hiçbiri fikstürde değil).
+- Kalan JBL eski adresleri: 253 kayıt (doğrusu 254; JBL kaynak bağlantısı paketi 2'de sayılırken görüldü). 250'si hesaba girmeyen CO₂, aydınlatma ve aksesuar kaydı, 3'ü değeri çekilen WHITE filtre. Açık listede.
+- Codex'in 1. turu klasik i ve b II kılavuzlarını JBL'in indirme bağlantılarında buldu (değerler gereksiz yere çekilmişti) ve i40'ın etkisinin yanlış anlatıldığını gösterdi; düzeltildi. Klasik i kılavuzunun bütün dil bölümleri sonra tek tek karşılaştırıldı; i80'in farklı hacmi böyle bulundu.
+- Araştırma dosyaları (oturuma özel scratchpad `jbl/`): ürün sayfaları, kılavuz ve katalog PDF'leri, katalog metni, eşleme, uygulama ve test betikleri.
 
-- Xinyou markasının üreticisi Foshan Shunde Junyou Aquarium Product Factory'nin
-  resmî ürün sayfaları ve site haritası tarandı. Tam model sayfalarındaki teknik
-  tablolar XY-168 (30 L), XY-180 (100 L), XY-280 (150 L), XY-2810 (100 L),
-  XY-2811 (200 L), XY-2812 (250 L), XY-2813 (250 L), XY-2870 (100 L),
-  XY-2880 (80 L) ve XY-380 (200 L) sınırlarını doğrudan yayımlıyor.
-- Aynı sayfalar sırasıyla Ø5 × 2; Ø7,5 × 6,5; Ø12 × 6,5; Ø8,5 × 5;
-  Ø8,5 × 10; Ø11,3 × 5; Ø11,3 × 5; Ø8,5 × 5; Ø5 × 6 ve Ø12 × 11,3 cm
-  sünger ölçülerini yayımlıyor. Kayıtlar bu üretici sayfalarına ve 2026-11-03
-  doğrulama tarihine taşındı.
-- Önceki ikincil kaynakların farklı hacim değerleri, birincil üretici kaynağını
-  geçersiz kılmadığı için bu on modelde üretici değeri esas alındı. XY-2836 ve
-  XY-2902'nin üretici sayfası kendi içinde farklı hacimler yayımladığı,
-  XY-2906/XY-2907 için üretici debi ve güç vermediği için dört kayıt güvenli
-  hesap dışında kaldı.
-- Bu ürünler harici hava motoruyla çalışan pasif sünger filtrelerdir; hacim
-  sınırları kullanıcıya gösterilir fakat bağımsız filtre debisi atanmaz.
-  Doğrulanmamışlar listesinde olmayan ekipman 3801/3877'den 3811/3877'ye,
-  hacim kapsamı 824/3877'den 834/3877'ye yükseldi. Hedefli katalog akışı ve
-  kapsam ölçümü başarılı.
+## 2026-10-30 Açık listedeki canlılar, paket 1: 10 balık (Claude)
 
-## 2026-11-05 Nubios resmî distribütör portföy denetimi (Codex)
+- Örnek denetiminin bütün katalog taramasında ana kaynağı `docs/DATA_SOURCES.md`'nin uzman kaynaklarından biri olmayan 18 canlı bulunmuştu (`docs/CATALOG_SOURCE_GAPS.md`). Bu paket 11 balığı kapsıyor: 10'u kabul edilen kaynağa bağlandı; Kiriza Tropheus değişmedi (kabul edilen kaynaklardan yalnız Fishipedia'da taslak bir sayfası var ve temel alanları hatalı; aşağıda). 7 "diğer" kayıt (kerevit, yengeç, kurbağa, aksolotl) sonraki pakette.
+- Yöntem: her türün Seriously Fish sayfası, yoksa Fishkeeper sayfası açılıp okundu; Fishkeeper'ın sayfaları sitenin kendi arama sayfasıyla bulundu. Practical Fishkeeping, Goodeid Working Group, Parosphromenus Project, Fishes of Australia ve FishBase sayfaları da okundu. Sayfalar 2026-10-30'da (UTC) okundu; kaynak cümleleri araştırma kayıtlarında. FishBase'in bu türler için en küçük akvaryum uzunluğu yok.
+- Kaynak kararı (teknik yöntem, Claude):
+  - Goodeid Working Group (goodeid'lerin koruma ve bakım uzmanları) ve Parosphromenus Project (cinse adanmış uzman ağı) kabul edilen uzman kaynaklara eklendi; ScotCat'in kedi balıklarındaki yeri gibi. `docs/DATA_SOURCES.md` güncellendi.
+  - Fishes of Australia bir müze veri tabanıdır; kimlik ve boy verir, bakım değeri vermez. Ek kaynak olarak kaldı.
+  - Fishipedia'nın Tropheus sp. Black 'Ikola' ve 'Kiriza' sayfaları kendilerini "hazırlanıyor; metinler veri modelinden geliyor" diye işaretleyen taslaklar. Taslak alan alan değerlendirildi: sayfada tutarlı olan alan kullanıldı, aynı sayfada çelişen ya da açıkça hatalı alan kullanılmadı.
+    - Ikola: boy 13 cm ve "150 cm cephe için en az 700 L" sayfada tutarlı (tabloda ve metinde aynı; aynı sayfa olduğu için bağımsız doğrulama sayılmaz) → kullanıldı. Sıcaklık 23–28 °C (Fishkeeper'la ortak aralık 23–26 °C). Önerilen pH 7,2–8 aynı sayfadaki doğal ortam pH'ıyla (7,8–8,8) çelişiyor → kullanılmadı; Fishkeeper'ın 8–9'u kaldı. Grup alanı "en az 0 birey" (şablon hatası) → kullanılmadı.
+    - Kiriza: Lake Tanganyika türü için 8–23 °C, doğal ortam pH'ı "28–8,8" ve "en az 0 birey" yazıyor. Boy (14 cm) ve hacim (140 cm cephe için 800 L) sayfada tutarlı olsa da sıcaklık ve pH gibi temel alanları bozuk olan taslak sayfa düzeyinde değer kaynağı sayılmadı (Ikola'da yalnız bir alan çelişiyor, temel alanlar sağlam). Kiriza değişmedi.
+    - Katalogdaki 31 Fishipedia bağlantısının hepsi açıldı: Ikola dışında 12 kayıt daha taslak sayfalara bağlı (İngilizce, Fransızca, İspanyolca ve İtalyanca sürümler); açık listeye eklendi (`docs/CATALOG_SOURCE_GAPS.md`).
+  - Goodeid Working Group'un kayıtta bağlı bakım PDF'si bir bakıcının kendi kayıt formu (koloni 5 erkek ve 10 dişi); önerilen en az sayı değil, grup için kullanılmadı.
+- Kurallar (önceki tür paketleriyle aynı ilke):
+  - Ana kaynak: Seriously Fish sayfası varsa o; yoksa Fishkeeper'ın tür sayfası. Koyu kenarlı Splitfin'in ana kaynağı Goodeid Working Group olarak kaldı (artık kabul edilen kaynak).
+  - Yetişkin boy: katalog ile bakım kaynaklarının en büyüğü (FishBase boyu kullanılmadı).
+  - Sıcaklık ve pH: Seriously Fish'in aralığı. Seriously Fish sayfası yoksa ya da yalnız tek değer veriyorsa kabul edilen kaynakların aralığı; iki kaynak aralık veriyorsa ortak aralık. Yalnız aileye ait genel bir aralık (ör. "halfbeak'ler genel olarak 23–27 °C") türe uygulanmadı.
+  - Uzunluk ve hacim: Seriously Fish tabanı ve hacmi, ya da kaynağın yazdığı ölçü. İki kabul edilen kaynak farklı hacim veriyorsa büyüğü (koruyucu). Kaynak yayımlamıyorsa kayıttaki değer korundu.
+  - Grup: ana kaynağın açık en az sayısı; yoksa başka kabul edilen kaynağın açık sayısı. Kaynak grup gerektiğini söyleyip sayı vermiyorsa kayıttaki değer korundu. Kaynak türün tek tutulmasını söylüyorsa 1.
+  - Kaynak alanları: `sourceUrl` ana kaynak; eski ana kaynak, FishBase (tanımlanmış türlerde) ve öbür kaynaklar `additionalSourceUrls` içinde; `verifiedAt` 2026-10-30. Akıntı, avcılık ve tür akvaryumu nitelikleri kaynakla çelişmediği için değişmedi.
+  - Eski sayıları taşıyan bakım metinleri yeniden yazıldı (Celebes halfbeak'in sıcaklık ve pH açıklaması, iki goodeid'in grup ve uzunluk cümlesi, carpintis'in akvaryum cümlesi, Ikola'nın koloni cümlesi). İki goodeid'in "santimetre yayımlanmıyor" notu, uzunluk artık Seriously Fish tabanından geldiği için kaldırıldı.
+- Kaynak farkları:
+  - Carpintis: Seriously Fish pH'ı yalnız tek değer (7,0) veriyor; Fishkeeper 7,5–8,5 ve "hard, alkaline water essential" diyor. Aralık veren kaynak Fishkeeper olduğu için onun aralığı kullanıldı.
+  - Kelebek ve kırmızı kuyruklu goodeid: Seriously Fish tabanı 81 L ve 54 L; Goodeid Working Group ikisi için de en az 250 L öneriyor. Büyük olan kullanıldı (hacim değişmedi). Kırmızı kuyruklu goodeid'de Seriously Fish ve Fishkeeper 15–30 °C diyor; Goodeid Working Group sürekli 25 °C'nin üstünü sağlık riski sayıyor (bakım metninde zaten var).
+  - Celebes halfbeak: Practical Fishkeeping'in yazısı Nomorhamphus cinsi için pH 6,5–7,5 veriyor; sıcaklığı yalnız bütün halfbeak'ler için 23–27 °C diye yazıyor. pH ortak aralık, sıcaklık Fishkeeper'ın 20–25 °C'si.
+- Kullanıcıya etkisi:
+  - Flowerhorn için en az 648 L ve 180 cm gerekiyor (önce 400 L, 150 cm); yetişkin boy 40 cm.
+  - Carpintis için gereken akvaryum küçüldü (400 → 213 L, 150 → 120 cm); tek tutulduğunda grup uyarısı almıyor (önce çift isteniyordu).
+  - Ikola Tropheus en az 15 bireylik koloni, 150 cm ve 700 L istiyor (önce 10 birey, 120 cm, 400 L); dikenli yılan balığı en az 5'li grup istiyor. Tek ya da az sayıda tutulursa "grup sayısı düşük" uyarısı çıkar. Dikenli yılan balığının 5 bireyi kaydın 215 L'sinde tahmini yük %109 (kabul edilen kaynak hacim yayımlamadığı için 215 L korundu). Motor bunu uyarı saymıyor: yük uyarısı %250'nin üstünde çıkıyor, %109'da yük puanı 89 (iyi).
+  - Kelebek goodeid en az 8'li grup istiyor (önce 6). İki goodeid'in en az uzunluğu artık biliniyor (90 ve 60 cm); "tank uzunluğu verisi sınırlı" uyarısı kalktı.
+  - Sıcaklık aralıkları değişti: Celebes halfbeak 24–27 → 20–25 °C (26 °C ve üstünü isteyen türlerle seçilince sıcaklık uyuşmazlığı çıkabilir), kelebek goodeid 17–25 → 20–25 °C, kırmızı kuyruklu goodeid 17–25 → 15–30 °C, Ikola 25–28 → 23–26 °C.
+- Altın fikstür: motor değişmedi; 1.077 vakadan 23'ü değişti (10 "sığar", 10 "dar", 3 tür çifti), hepsi bu türlerin değerlerinden. Değişen ölçütler: yük 19, ısıtıcı 2, sosyal 2, alan 1. Durum geçişi yok. "Uzunluk verisi sınırlı" uyarısı iki goodeid'in dört vakasında kalktı; dikenli yılan balığının dar vakasına grup uyarısı geldi, carpintis'in dar vakasından kalktı; inci gurami ile carpintis çiftinde "akvaryum çok küçük" uyarısı kalktı (213 L). Fikstür yeniden üretildi; veri değişikliğinden ayrı bir commit'te kaydedilir.
+- Sağlık senaryoları: iki goodeid senaryosu artık "tank uzunluğu verisi sınırlı" uyarısını beklemiyor; kelebek goodeid'in grup beklentisi sekizli.
+- Kalan açık liste: Kiriza Tropheus (Fishipedia taslağı hatalı), 7 "diğer" kayıt ve Fishipedia taslaklarına bağlı 12 kayıt.
+- Codex 1. turu Fishipedia'nın Ikola ve Kiriza sayfalarını buldu (taramamda eksikti), dikenli yılan balığının yük etkisinin yanlış anlatıldığını ve fikstür ifadesinin erken yazıldığını gösterdi; 2. turu taslak listesinde İspanyolca ve İtalyanca dört sayfayı buldu (ilk taramam yalnız İngilizce ve Fransızca taslak ibaresini arıyordu). Hepsi düzeltildi.
+- Değişiklik tablosu ("eski → yeni"; değişmeyen değer tek yazıldı):
 
-- Nubios'un Türkiye distribütörü Kaya Pet'in güncel marka sayfası ve akvaryum
-  kategorileri doğrudan okundu: `https://www.kayapet.com.tr/marka/158/nubios-marka-urunler.html`.
-  Marka ilişkisi, Nubios'u Kaya Pet ürün grubu içinde gösteren bağımsız yetkili
-  satıcı belgeleriyle de doğrulandı.
-- Distribütörün güncel portföyünde N-201, akvaryum setleri ve yardımcı ürünler
-  bulunuyor; MY03/MY05/MY07/MY10, NB-800F/NB-1500F ve
-  NW-450F/NW-600F/NW-800F/NW-1500F için tam model teknik sayfası yayımlanmıyor.
-  Kabul edilen altı yerel mağazanın güncel marka ve filtre sayfalarında da bu
-  modellerin teknik tablosu bulunmadı.
-- Başka perakendecilerdeki ürün başlığı ve kutu görselleri mevcut değerleri
-  desteklese de karar 0019'un kaynak eşiğini karşılamıyor. On kayıt seçilebilir
-  kalıyor; kullanıcı etiket değerini girebilir, ancak otomatik sağlık hesabına
-  geri alınmadı. Tahmini veya başka modele ait değer kullanılmadı.
+| Kimlik | Boy | Hacim (L) | Uzunluk (cm) | Grup | Sıcaklık | pH | Not |
+|---|---|---|---|---|---|---|---|
+| `flowerhorn` | 30 → 40 | 400 → 648 | 150 → 180 | 1 | 25–29 | 6–7,5 → 6,5–7,8 | Melez; Seriously Fish'te sayfası yok. Fishkeeper 40 cm, 24–29 °C, pH 6,5–7,8; Practical Fishkeeping yaklaşık 30 cm, 25–30 °C, "a 180x60x60cm aquarium", tek balık; sıcaklık ortak aralık; eski ana kaynak (fishkeeping.co.uk, Fishkeeper değil) ek kaynak oldu |
+| `celebes-halfbeak` | 10 | 132 | 91 | 5 (Fishkeeper "best kept in groups" diyor, sayı vermiyor; kayıttaki değer korundu) | 24–27 → 20–25 | 6,5–8 → 6,5–7,5 | Seriously Fish'te sayfası yok. Fishkeeper 9 cm, 20–25 °C, pH 6,5–7,8; Practical Fishkeeping Nomorhamphus cinsi için pH 6,5–7,5 (sıcaklığı yalnız bütün halfbeak'ler için 23–27 °C diye veriyor, kullanılmadı); pH ortak aralık; akvaryum ölçüsü yayımlanmıyor, kayıttaki değer korundu |
+| `butterfly-goodeid` | 9 | 250 | — → 90 | 6 → 8 (Seriously Fish grup gerektiğini söylüyor, sayı vermiyor; Fishkeeper "a shoal of at least 8-10 fish is preferable") | 17–25 → 20–25 | 7–8 | SF 90 mm SL, taban 90 × 30 cm (yaklaşık 81 L), 20–25 °C, pH 7–8; Goodeid Working Group en az 250 L ve en büyük 90 mm SL; hacim için büyük olan (GWG) korundu; uzunluk SF tabanı |
+| `red-tailed-goodeid` | 7,5 | 250 | — → 60 | 6 (Seriously Fish sosyal yapıyı yayımlamıyor; Fishkeeper "keep as large a group as is possible" diyor, sayı vermiyor; kayıttaki değer korundu) | 17–25 → 15–30 | 6–8 | SF 60 mm SL, taban 60 × 30 cm (yaklaşık 54 L), 15–30 °C, pH 6–8; Fishkeeper 7 cm, 15–30 °C, pH 6,5–8; GWG en az 250 L ve en büyük 75 mm SL; hacim için büyük olan (GWG) korundu; uzunluk SF tabanı |
+| `dark-edged-splitfin` | 5 → 5,5 | 80 | — | 6 | 10–22 | 7,5–8,5 | Seriously Fish'te sayfası yok; ana kaynak Goodeid Working Group (kabul edildi): en az 80 L, en büyük 55 mm SL; Fishkeeper 5 cm, 10–22 °C, pH 7,5–8,5, "a shoal of at least 6-8 fish is preferable"; uzunluk yayımlanmıyor |
+| `pearlscale-cichlid` | 30,5 → 35 | 400 → 213 | 150 → 120 | 2 → 1 (Seriously Fish sosyal yapıyı yayımlamıyor; Fishkeeper "more often than not, these fish do best on their own") | 24–25 → 24–26 | 7–7,5 → 7,5–8,5 | SF 305 mm SL, 120 cm taban, "120cm x 45cm x 37.5cm - 213 litres", 24–26 °C, pH yalnız tek değer (7,0); pH Fishkeeper'ın aralığı (7,5–8,5, "hard, alkaline water essential"); Fishkeeper 35 cm, 23–28 °C |
+| `tropheus-ikola` | 12 → 13 | 400 → 700 | 120 → 150 | 10 → 15 (Fishkeeper: "Housing 15 or more of these feisty fishes requires a large aquarium and this should be 1.5m or more in length") | 25–28 → 23–26 | 7,3–9,2 → 8–9 | Seriously Fish'te Tropheus sp. 'Ikola' sayfası yok (T. moorii ayrı takson); Fishkeeper'ın Tropheus sp. 'Ikola' sayfası 12,5 cm, 23–26 °C, pH 8–9; Fishipedia taslağı 13 cm, 150 cm cephe için 700 L, 23–28 °C (pH alanı sayfa içinde çelişiyor, kullanılmadı) |
+| `southern-purple-spotted-gudgeon` | 14 → 15 | 108 | 120 | 1 | 16–24 | 7–7,5 | SF 140 mm SL, taban 120 × 30 cm (yaklaşık 108 L), 16–24 °C, pH 7–7,5, sosyal yapı yayımlanmıyor; Practical Fishkeeping en fazla 15 cm; Fishes of Australia (müze, kimlik ve boy) 12 cm SL; eski ana kaynak ek kaynak oldu |
+| `deissners-licorice-gourami` | 4 → 5 | 25 | 40 | 2 | 22–28 | 3–6,5 | SF 40 mm SL, taban 40 × 20 cm (yaklaşık 16 L), 22–28 °C, pH 3–6,5, "best in a pair"; Parosphromenus Project (kabul edildi) en fazla 5 cm ve "a 25-liter tank would be the minimum"; hacim için büyük olan (25 L) korundu |
+| `half-banded-spiny-eel` | 20 | 215 | 90 | 1 → 5 (Fishkeeper: "Spiny Eels are fairly sociable and are best kept in groups of 5 or more") | 24–27 | 6–7,5 → 6–7 | Seriously Fish'te sayfası yok; Fishkeeper 20 cm, 24–27 °C, pH 6–7; akvaryum ölçüsü yayımlanmıyor, kayıttaki değer korundu |
 
-## 2026-11-05 Netlea resmî kaynak yeniden denetimi (Codex)
+## 2026-10-30 Açık listedeki canlılar, paket 2: kerevit, yengeç ve amfibiler (Claude)
 
-- Netlea üreticisinin resmî sitesi ve filtre sistemi bölümü doğrudan tarandı:
-  `https://www.netlea.com/`. Site markanın üretici kimliğini doğruluyor, ancak
-  erişilebilir filtre bölümü güncel model tablosu yerine filtre medyası ve görsel
-  içerik yayımlıyor; No.1/No.2/No.2V dış filtreler, No.2S askı filtre,
-  No.2B/No.3B/No.4B hava motorları ve No.1–No.4 SF serisi için model bazlı
-  sayısal tablo bulunamadı.
-- Mevcut teknik değerler yabancı mağaza ve pazar yeri sayfalarından geldiği için
-  karar 0019'a göre otomatik sağlık hesabına geri alınmadı. Resmî mağaza bağlantısı
-  dinamik ve açık model kanıtı sağlamadığından ürün ailesi değerleri birbirine
-  kopyalanmadı. On dört kayıt seçilebilir ve kaynak izi korunmuş olarak hesap
-  dışında kalıyor.
+- Açık listenin 7 "diğer" kaydı: Tayland mikro yengeci, üç kerevit, iki kurbağa ve aksolotl. 7'si de kabul edilen kaynağa bağlandı.
+- Yöntem:
+  - Fishkeeper'ın sayfaları sitenin kendi arama sayfasıyla ("Fish" sekmesi) bulundu: aksolotl, Afrika cüce kurbağası (*Hymenochirus* spp.), Afrika pençeli kurbağası, Tayland mikro yengeci. Fishkeeper'da ve Practical Fishkeeping'de kerevit sayfası yok.
+  - wirbellose.de'nin arama kutusu tür veri tabanını kapsamadığı için kerevit listesi (`/kategorie/krebse/`, 134 kayıt) sayfa sayfa tarandı.
+  - Fishipedia'nın amfibi (`/amphibians/`) ve kabuklular (`/crustacea/`, Fransızca `/fr/crustacea/`) bölümleri açıldı: aksolotl, *C. patzcuarensis* ve *C. diminutus*'un Fransızca sayfaları tamamlanmış; pençeli kurbağa ve *P. alleni* sayfaları taslak; *Hymenochirus* ve *Limnopilos* sayfası yok. Kabuklular bölümünü ilk taramamda kaçırmıştım; Codex'in 1. turu buldu.
+  - Practical Fishkeeping'in aramasında aksolotl rehberi, Tayland mikro yengeci yazısı ve pençeli kurbağa için bir okur cevabı bulundu. Sayfalar 2026-10-30'da (UTC) okundu.
+- Kurallar: `docs/DATA_SOURCES.md`'deki omurgasız değer kuralı kerevit ve yengeçte, aynı ilkeyle amfibilerde uygulandı (amfibiler için kaynak bölümü eklendi; Fishipedia kabuklular bölümü kerevit notuna eklendi):
+  - Ana kaynak Fishkeeper'ın tür ya da cins sayfası; yoksa wirbellose.de'nin satılan form sayfası (turuncu CPO) ya da Fishipedia'nın tamamlanmış sayfası.
+  - Sıcaklık ve pH: aralık veren kaynakların ortak aralığı. "İdeal" aralıklar ve yazarın kendi akvaryumundan gözlemi kullanılmadı.
+  - Boy: katalog ile kaynakların büyüğü. Akvaryum: kaynağın yayımladığı hacim ve uzunluk; iki kaynak farklı hacim veriyorsa büyüğü; yayımlanmıyorsa kayıttaki değer. Grup: kaynağın açık sayısı; sayısız "grup halinde" denirse kayıttaki değer.
+- Kararlar:
+  - Fishipedia'nın öneri pH'ı (7,2–8) dört ayrı türde (Ikola, Kiriza, CPO, *P. alleni*) aynı ve her birinin aynı sayfadaki doğal ortam pH'ından farklı; veri modeli varsayılanı olduğundan şüphelenildi ve kullanılmadı (bu bir kanıt değil, kaynak güvenilirliği değerlendirmesi; doğal ortamla bakım önerisinin farklı olması tek başına hata sayılmaz). Öneri ve doğal ortam aynıysa (*C. diminutus*, 6–8,5) kullanıldı; aynı sayfadaki iki bölüm bağımsız doğrulama sayılmaz.
+  - Aksolotl sıcaklığı: Fishkeeper 10–22 °C ve Fishipedia 6–20 °C; ortak aralık 10–20 °C. Practical Fishkeeping yalnız "ideal" aralık veriyor (16–20 °C; tür kutusunda 16–18 °C), ama aynı yazı 20 °C'nin üstünde uzun sürenin stres yaratıp ömrü kısalttığını söylüyor; ortak aralıkla uyumlu.
+  - Aksolotl akvaryumu: Fishipedia "Min volume 200 liters"; Practical Fishkeeping "A 90-litre tank should be considered the absolute minimum for an adult" ve tür kutusunda "Tank size: 100x45x30cm". Hacim için büyüğü (200 L), uzunluk için uzunluk veren tek kaynak (100 cm). Boy: Fishkeeper 30 cm, Fishipedia 15–33 cm, Practical Fishkeeping "To 45cm (rare), usually tops out at 25cm"; kural gereği büyüğü (45 cm, nadir azami boy).
+  - Pençeli kurbağa: Practical Fishkeeping "a singleton in a 30-40 l tank will be perfectly happy"; aralığın büyüğü (40 L). Fishipedia'nın sayfası taslak (boy 7–12 cm, doğal ortam sıcaklığı "25 - 15 °C" ters yazılmış, öneri bölümü yok); değer değiştirmedi.
+  - Tayland mikro yengecinde Practical Fishkeeping yazarının "22–25 °C'de sorun yaşamadılar" gözlemi aralık sayılmadı; Fishkeeper'ın 22–26 °C'si kullanıldı.
+  - Meksika cüce kereviti (CPO): wirbellose.de 10–25 °C ve Fishipedia 15–30 °C; ortak aralık 15–25 °C. Fishipedia en az 2 birey ve 30 cm cephe için 30 L (kayıtla aynı).
+  - Minik cüce kerevit (*C. diminutus*): ana kaynak Fishipedia'nın tamamlanmış Fransızca sayfası: en az 2 birey, 20 cm cephe için 20 L, 18–30 °C, pH 6–8,5, en büyük 3 cm (kayıttaki 4 cm kaldı). Bakım metnindeki eski "tek birey 20 L, birden fazla 40–60 L" ifadesi kabul edilen bir kaynağa dayanmıyordu, yeniden yazıldı.
+  - Elektrik mavi kerevit: wirbellose.de "ab 60x30 cm für ein Paar" → uzunluk 60 cm; Fishipedia taslağı en az 120 L (sayfada tutarlı) → hacim 120 L (kayıttaki 115'ten büyük). Sıcaklık wirbellose.de 20–24 ∩ Fishipedia 18–30 = 20–24 °C.
+  - Afrika cüce kurbağası: Fishkeeper "should be kept in small groups" diyor, sayı vermiyor; sayı uydurulmadı, kayıttaki 1 kaldı.
+- Kullanıcıya etkisi:
+  - Tayland mikro yengeci en az 5'li koloni, iki cüce kerevit en az 2 birey istiyor; tek ya da az tutulursa "grup sayısı düşük" uyarısı çıkar.
+  - Aksolotl için en az 200 L ve 100 cm (önce 76 L, 60 cm); yetişkin boy 45 cm. Sıcaklık 10–20 °C; tropik balıklarla seçilince sıcaklık uyuşmazlığı uyarısı sürüyor.
+  - Pençeli kurbağa 10–28 °C ve pH 6,8–7,8; Afrika cüce kurbağası 22–25 °C ve pH 7–7,8.
+  - Kerevitler: Meksika cüce kereviti 15–25 °C, pH 6,5–9; minik cüce kerevit 18–30 °C, pH 6–8,5, 20 cm; elektrik mavi kerevit 20–24 °C, pH 6,5–8, 60 cm ve 120 L (117 L'lik akvaryumda artık "alan sınırda" uyarısı).
+- Altın fikstür: motor değişmedi; 1.077 vakadan 16'sı değişti (7 "sığar", 7 "dar", 2 tür çifti), hepsi bu türlerin değerlerinden. Değişen ölçütler: yük 11, ısıtıcı 2, sosyal 3. Durum geçişi yok. Tayland mikro yengeci ile iki cüce kerevitin dar vakalarına grup uyarısı geldi. Fikstür yeniden üretildi; veri değişikliğinden ayrı bir commit'te kaydedilir.
+- Testler: paketin 7 kaydını değer, ana kaynak, tarih ve ek kaynakla sabitleyen yeni blok; kerevitlerin Fishipedia bağlantıları; amfibi testindeki en yüksek sıcaklık beklentileri (aksolotl 20, pençeli kurbağa 28); minik cüce kerevitin eski beklentisi yeni değerlere göre.
+- Kalan açık liste: Kiriza Tropheus ve Fishipedia taslaklarına bağlı 12 kayıt.
+- Codex'in 1. turu Fishipedia'nın kabuklular bölümündeki üç kerevit sayfasını buldu (C. diminutus'un "kabul edilen kaynakta sayfası yok" sonucu yanlıştı); düzeltildi.
+- Değişiklik tablosu ("eski → yeni"; değişmeyen değer tek yazıldı):
 
-## 2026-11-05 RS Electrical yerel kaynak yeniden denetimi (Codex)
+| Kimlik | Boy | Hacim (L) | Uzunluk (cm) | Grup | Sıcaklık | pH | Ana kaynak |
+|---|---|---|---|---|---|---|---|
+| `thai-micro-crab` | 1 | 20 | 30 | 1 → 5 | 22–28 → 22–26 | 7–8 → 6,5–7 | Fishkeeper (eski: mağaza) |
+| `mexican-dwarf-crayfish` | 5 | 30 | 40 → 30 | 1 → 2 | 18–26 → 15–25 | 6,5–8 → 6,5–9 | wirbellose.de (CPO); Fishipedia |
+| `least-dwarf-crayfish` | 4 | 20 | 30 → 20 | 1 → 2 | 20–26 → 18–30 | 6,5–8 → 6–8,5 | Fishipedia (eski: aquascapedia.com) |
+| `electric-blue-crayfish` | 12 | 115 → 120 | 90 → 60 | 1 | 18–24 → 20–24 | 7–8,5 → 6,5–8 | wirbellose.de; Fishipedia (taslak) |
+| `african-dwarf-frog` | 7 | 50 | 45 | 1 | 24–26 → 22–25 | 7,2–7,6 → 7–7,8 | Fishkeeper (*Hymenochirus* spp.) |
+| `axolotl` | 30 → 45 | 76 → 200 | 60 → 100 | 1 | 15–18 → 10–20 | 6,5–8 → 7–8 | Fishkeeper; Fishipedia; Practical Fishkeeping |
+| `african-clawed-frog` | 15 | 38 → 40 | 50 | 1 | 18–22 → 10–28 | 6,5–8,5 → 6,8–7,8 | Fishkeeper; Practical Fishkeeping |
 
-- RS-118F, RS-04B, RS-602, RS-604, RS-605, RS-760 ve RS-800 kabul edilen
-  Türkiye mağazalarının güncel marka ve kategori sayfalarında tam model koduyla
-  yeniden arandı. Malawi İzmir'in güncel portföyünde RS-99, RS-613, RS-712 ve
-  RS-399 gibi başka RS modelleri bulunuyor; bu yedi eski kayıt için model bazlı
-  teknik sayfa yayımlanmıyor.
-- Yabancı mağazalarda görülen debi, güç ve hacim değerleri üretici, Türkiye
-  distribütörü veya karar 0019'da kabul edilen yerel mağazayla doğrulanamadı.
-  Benzer model numaraları birbirine aktarılmadı. Yedi kayıt seçilebilir kalırken
-  otomatik kapasite hesabına geri alınmadı.
+## 2026-10-30 Açık listedeki canlılar, paket 3: Fishipedia taslaklarına bağlı 12 kayıt (Claude)
 
-## 2026-11-05 Eurostar eski model yeniden denetimi (Codex)
+- Paket 1'de bulunan madde: kaynaklarından biri Fishipedia'nın taslak sayfası olan 12 kayıt ("hazırlanıyor; metinler veri modelinden geliyor"). Her taslak alan alan yeniden okundu. Fishipedia'nın dört dil sürümü (İngilizce, Fransızca, İspanyolca, İtalyanca), Seriously Fish sayfaları (davranış metniyle birlikte) ve Fishkeeper sayfaları da okundu; Fishkeeper'da bilimsel adın yanında ortak adla da arandı. Practical Fishkeeping'in aramasında bu türlere özel bakım yazısı çıkmadı; bir okur akvaryumu yazısında C. stewartii 'violet blue' için tür kutusu var (aşağıda). Sayfalar 2026-10-30'da (UTC) okundu.
+- Taslak alanlarının değerlendirmesi (paket 1 ve 2 ile aynı kural): sayfada tutarlı alan kullanılır; öneri ile doğal ortam bölümü farklıysa o alan kullanılmaz; Fishipedia'nın birçok türde aynı olan öneri pH'ı (7,2–8) şüpheli varsayılan sayılır. Aynı sayfadaki tekrar bağımsız doğrulama sayılmaz.
+  - Üç türün tamamlanmış sürümü var: Cichla piquiti ve Hyphessobrycon pyrrhonotus (Fransızca), Cichla ocellaris (Fransızca ve İspanyolca). Değerleri taslaklarla aynı; yalnız piquiti'nin tamamlanmış Fransızca sayfası 300 cm cepheyi yazmıyor, bu ölçü İngilizce taslakta. Bağlantılar tamamlanmış Fransızca sürüme çevrildi; piquiti'nin İngilizce taslağı 300 cm'nin kaynağı olarak ek kaynakta kaldı. Öbür 9 türün bütün sürümleri taslak.
+  - Çelişen pH alanları: blackbelt (öneri 6,8–7,2, doğal ortam 6,5–8,5) ve smudge-spot (öneri 6,8–7,2, doğal ortam 5,6–7). Kayıttaki pH Fishipedia'nın öneri alanından gelmişti; SF'nin aralığı alındı.
+  - Fishipedia'nın grup cümlesi ("Étant un poisson vivant en banc/colonies, il convient d'installer au moins N individus …") taslaklarda bir şablondan geliyor (Tropheus'ta "en az 0 birey"). Ana kaynak açık bir grup önerisi veriyorsa o kullanıldı.
+- Kurallar (paket 1): Seriously Fish sayfası varsa ana kaynak ve sıcaklık/pH SF; boy kaynakların en büyüğü (FishBase boyu kullanılmaz); uzunluk ve hacim iki kabul edilen kaynaktan büyüğü; grup ana kaynağın davranış metnindeki açık öneri (sayı aralığında alt sınır; "tek tutulabilir" 1), yoksa öbür kabul edilen kaynağın açık sayısı.
+- Değişmeyen kayıtlar:
+  - Deniz kayıtları (flame-angelfish, algae-blenny): kuralları karar 0031. Bazı değerler Fishipedia taslağından geliyor ve taslağın o alanları tutarlı: flame-angelfish'in 300 L ve 100 cm'si ile sıcaklığın 26 °C üst sınırı, algae-blenny'nin 200 L'si ile sıcaklığın 25 °C alt sınırı (bakım metinleri bunu yazıyor). Değişiklik yok.
+  - Common pleco (karar 0014 çok adaylı profil): Fishipedia'nın P. pardalis taslağındaki "en az 3 birey" şablon cümlesi kullanılmadı; Fishkeeper birden fazla bireyde küçük kavgalar olabileceğini yazıyor, grup şartı koymuyor. 400 L Fishipedia taslağının tutarlı alanından.
+  - Cichla piquiti: Seriously Fish'te sayfası yok; değerler aynı, tarih yenilendi. Fishkeeper'ın Peacock Bass sayfası eş adı ve dağılımıyla *C. ocellaris*'i anlatıyor; piquiti'ye uygulanmadı.
+- Değişen kayıtlar ve kararlar:
+  - Grup (SF davranış metni): S. insignis "aggressive towards its own kind when kept in small numbers, but can be maintained in groups of six or more in larger tanks. Otherwise it's best kept as a single specimen" → 1 (bakım metni 2–5 bireyin önerilmediğini ve en az altılı grubu yazıyor); C. stewartii "best kept singly or as a pair" (Fishkeeper de) → 1; Hoplisoma simile "A group of at least six is best" → 6; H. pyrrhonotus "at least 8-10" → 8 (önceki paketlerdeki gibi alt sınır); P. milomo SF "fine alone", Fishkeeper "can be kept singly … or one male with a harem" → 1; C. ocellaris SF grubu zorunlu tutmuyor ("can be kept in species groups or with other large species"), Fishkeeper "best maintained singly or as a known mated pair. Do not attempt to house more than one male" → 1 (Fishipedia'nın 5'i bakım metninde grup için).
+  - Hacim: iki kabul edilen kaynaktan büyüğü korundu (koruyucu). S. insignis'te 1.500 L ve C. ocellaris'te 5.000 L Fishipedia'nın grup değerleri; SF tek erişkin için 150 × 60 × 60 cm ve 10 ft yazıyor. Bakım metinleri ikisini de gösteriyor.
+  - Uzunluk: S. insignis artık tek erişkin profili olduğu için SF'nin 150 cm'si (önceki "uzunluk tahmin edilmedi" notu kalktı); C. ocellaris SF "10'x3'x4' for an adult fish" → 305 cm; P. milomo Fishkeeper "at least 6ft" → 183 cm. Blackbelt ve smudge-spot'un eski 180 ve 60 cm'si kabul edilen bir kaynağa dayanmıyordu; SF tabanı 120 ve 45 cm. Fishkeeper'ın Black Belt sayfası erişkin akvaryumunu birim hatasıyla yazıyor (6" x2" x 2"); kullanılmadı.
+  - Boy: P. milomo Fishipedia "I maschi dominanti possono raggiungere 28 cm" → 28 cm. C. stewartii: SF 297 mm TL, Fishkeeper 25 cm; Practical Fishkeeping'in okur akvaryumu yazısındaki tür kutusu "Channa stewartii 'violet blue' … Size: 25.4-33cm" diyor ve bu formu yaygın bir ova tipi olarak tanımlıyor; boy kuralı gereği büyüğü (33 cm). H. pyrrhonotus: Fishkeeper'ın "Redback Bleeding Heart Tetra" sayfası (eş ad H. pyrrhonotus; "Flameback" adıyla da satılır) 6 cm, Fishipedia'nın Fransızca sayfası akvaryumda 5–6 cm bildirimi → 6 cm.
+  - Tür akvaryumu işareti: H. pyrrhonotus'ta kaynaklarla çelişiyordu (SF uygun arkadaşlar sayıyor; Fishkeeper "Community with no long-finned fish"); kaldırıldı. Grup SF'nin "8-10"unun alt sınırı 8 (Fishkeeper "six specimens … absolute minimum").
+  - Fishkeeper'ın Peacock Bass (ocellaris), Assamese Snakehead, Black Belt ve Redback Bleeding Heart Tetra sayfaları ile Practical Fishkeeping'in yılanbaşı yazısı ek kaynak oldu.
+- Kullanıcıya etkisi:
+  - S. insignis, C. ocellaris ve VC-10 tek tutulabiliyor (önce 5, 5 ve 4 isteniyordu); bakım metinleri küçük grubun ve birden fazla erkeğin riskini anlatıyor. Similis çöpçü en az 6 (önce 8), alev sırtlı tetra en az 8 (önce 10).
+  - Alev sırtlı tetra artık barışçıl balıklarla seçilince tür akvaryumu tehlikesi almıyor (ör. 300 L'de sekiz tetra ve altı similis çöpçü: önce tehlike, şimdi iyi).
+  - Sıcaklık ve pH aralıkları SF'ye göre değişti: commbrae 15–27 °C ve pH 6–7,4; insignis 23–29 °C; blackbelt 22–27 °C ve pH 6–8; VC-10 24–28 °C ve pH 7,6–8,8; yılanbaşı 16–25 °C ve pH 6–8; ocellaris pH 6,5–7; smudge-spot pH 5,6–7.
+  - Uzunluklar: commbrae 60 cm ve insignis 150 cm (önce yok), blackbelt 120 cm (önce 180), smudge-spot 45 cm (önce 60), ocellaris 305 cm.
+- Altın fikstür: motor değişmedi; 1.077 vakadan 18'i değişti (8 "sığar", 8 "dar", 2 tür çifti), hepsi bu türlerin değerlerinden. Değişen ölçütler: yük 18, ısıtıcı 5, uyumluluk 4, sosyal 3. Durum geçişi yok. Tek tutulabilen üç türün vakalarında grup ve "aynı tür bireyleri kavga edebilir" uyarıları kalktı. Fikstür yeniden üretildi; veri değişikliğinden ayrı bir commit'te kaydedilir.
+- Testler: paketin 9 kaydını sabitleyen blok; eski beklentiler yeni değer ve kaynaklara göre; ocellaris sağlık senaryosu tek bireyde grup uyarısı beklemiyor.
+- Kalan açık liste: yalnız Kiriza Tropheus.
+- Codex'in 1. turu SF'nin davranış metnindeki grup önerilerini, ortak adla bulunan üç Fishkeeper sayfasını, VC-10'un 28 cm'sini ve piquiti'nin 300 cm kaynağını gösterdi; 2. turu alev sırtlı tetranın Fishkeeper sayfasını ve yanlış tür akvaryumu işaretini, yılanbaşı boyunu dışlama gerekçemin yanlış olduğunu gösterdi (okur değerleri kuralı yalnız sıcaklık ve pH içindi). Düzeltildi.
+- Değişiklik tablosu ("eski → yeni"; değişmeyen değer tek yazıldı):
 
-- Ege 400, Ege 500, Ege W550 ve Ege 2200F; kabul edilen altı yerel mağazanın
-  güncel marka, iç filtre ve arama sayfalarında tam model teknik sayfasıyla
-  bulunamadı. Mevcut değerlerin kaynağı karar 0019 eşiğinin altındaki eski bir
-  mağaza veya fiyat karşılaştırma sayfası olarak kaldı.
-- BettaMarketim'deki güncel `Eurostar Marmara Pilli Hava Motoru AP800 2L`,
-  katalogdaki genel `Marmara Tek Çıkış` ve `Marmara Çift Çıkış` kayıtlarıyla aynı
-  model değildir. AP800 değerleri bu iki eski kayda kopyalanmadı. Altı kayıt
-  seçilebilir kalırken otomatik kapasite hesabına geri alınmadı.
+| Kimlik | Boy | Hacim (L) | Uzunluk (cm) | Grup | Sıcaklık | pH | Ana kaynak |
+|---|---|---|---|---|---|---|---|
+| `piquiti-peacock-bass` | 80 | 5000 | 300 | 1 | 21–32 | 5,8–7,3 | Fishipedia (tamamlanmış Fransızca; 300 cm İngilizce taslakta) |
+| `flameback-bleeding-heart-tetra` | 4,5 → 6 | 100 | 100 | 10 → 8 | 20–28 | 4–7 | Seriously Fish (tür akvaryumu işareti kalktı) |
+| `apisto-commbrae` | 4 → 5 | 50 → 54 | — → 60 | 2 | 23–28 → 15–27 | 5–7 → 6–7,4 | Seriously Fish (eski: Fishipedia taslağı) |
+| `smudge-spot-cory` | 5,5 → 6 | 100 | 60 → 45 | 8 → 6 | 21–27 | 6,8–7,2 → 5,6–7 | Seriously Fish (eski: Fishipedia taslağı) |
+| `insignis-flagtail-prochilodus` | 35 | 1500 | — → 150 | 5 → 1 | 18–29 → 23–29 | 5,5–7,2 | Seriously Fish (eski: Fishipedia taslağı) |
+| `blackbelt-cichlid` | 30 → 36 | 600 | 180 → 120 | 1 | 22–28 → 22–27 | 6,8–7,2 → 6–8 | Seriously Fish (eski: FishBase) |
+| `super-vc10-milomo` | 25 → 28 | 1000 | 183 | 4 → 1 | 23–28 → 24–28 | 7,5–8,5 → 7,6–8,8 | Seriously Fish (eski: FishBase) |
+| `assamese-snakehead` | 25 → 33 | 300 | 120 | 1 | 18–25 → 16–25 | 6–7 → 6–8 | Seriously Fish (eski: Fishipedia taslağı) |
+| `ocellaris-peacock-bass` | 74 → 75 | 5000 | 300 → 305 | 5 → 1 | 24–27 | 6,5–7,5 → 6,5–7 | Seriously Fish (eski: Fishipedia taslağı) |
 
-## 2026-11-05 Haqos resmî portföy ve eski model denetimi (Codex)
+## 2026-10-30 JBL kaynak bağlantısı paketi 2: hesaba girmeyen 186 kayıt (Claude)
 
-- Haqos üreticisi Zhongshan Hailong'un güncel resmî ürün dizini ve 2026-07-14
-  tarihli site haritası doğrudan tarandı: `https://www.haqos.com/product.html`
-  ve `https://www.haqos.com/sitemap.xml`. Güncel filtre dizini EXPRO-500,
-  EX500AT, EXPRO-230, EXPRO-1000, EX1000AT, EASY-1000AT, Aqua Flow 250,
-  EXPAD-500 ve EXC-500 gibi ürünleri içeriyor; EX-1200AT, EX-1500AT, EXP-500,
-  HF-900 ve Jular-230 bu resmî dizinde yer almıyor.
-- Kabul edilen altı Türkiye mağazasında da bu beş model için tam teknik sayfa
-  bulunmadı. EXP-500 ile üreticinin ayrı EXPRO-500 modeli birleştirilmedi;
-  yabancı mağazalardaki 500/510/522 L/saat ve 5/7/8,1 W gibi çelişkili değerler
-  karar 0019 gereği reddedildi. Beş kayıt seçilebilir kalırken otomatik kapasite
-  hesabına geri alınmadı.
+- JBL kaynak bağlantısı paketinden sonra eski JBL adresinde 254 kayıt kalmıştı (hesaba girmeyen CO₂, aydınlatma, UV ve aksesuar kayıtları ile 3 WHITE filtre). Bu paket bunların yeni sayfası bulunan 186'sını kapsıyor: Diğer 117, CO₂ 51, aydınlatma 14, UV 4. Hiçbiri sağlık hesabına girmiyor.
+- Yöntem:
+  - Yeni sayfalar JBL'in ürün listesinde (Almanya, "Alle") sitenin kendi arama kutusuyla bulundu; liste isteği doğrudan çağrılmadı. 186 Almanca ürün sayfası (`/de-de/productsv2/detail/...`) indirilip okundu; ürün adları kayıtlarla tek tek karşılaştırıldı.
+  - Her kaydın açıklaması yeni sayfayla yan yana okundu. Sayfanın altındaki SSS bölümü, sayfadaki kılavuz, JBL'in indirme bağlantısındaki kılavuzlar, 2015 kataloğu ve ProScape rehberi de okundu.
+  - Yeni sayfada yazmayan bir değer ya da ayrıntı için JBL'in eski ürün sayfasının internet arşivi (web.archive.org) kopyasına da bakıldı; açıkça yazıyorsa kopya ek kaynak oldu (`docs/DATA_SOURCES.md`).
+  - Hiçbir açık kaynakta yazmayan ayrıntı kayıttan çıkarıldı.
+- Değer taşıyan 46 kaydın değerleri kaynaklarla aynı:
+  - LED SOLAR NATUR ve EFFECT Gen 2: güç yeni sayfanın başlığında. Akvaryum uzunluğu sayfada yok; kılavuzun teknik veri tablosunda (s. 100–101) aynı yazıyor. Kılavuz ek kaynak.
+  - PROFLORA CO₂ setleri, TAIFUN SPIRAL ve GLASS, arşiv Taifun P ve M, ProFlow pompaları, UV-C cihazları, BabyHome Oxygen: değerler yeni sayfada aynı.
+  - TAIFUN INLINE: hacim sayfada yok; ortak kılavuzun çiziminde ölçüye göre (40–300, 160–600, 200–800 L). Kılavuz ek kaynak.
+  - Arşiv ProFlora Direct: hacim yeni arşiv sayfasında yok; JBL'in indirme bağlantısındaki Direct kılavuzunda aynı. Önerilen 1,0–1,5 bar çalışma basıncı JBL'in SSS sayfasında (576). Kılavuz ve SSS ek kaynak.
+  - PROTEMP Cooler x200 ve x300 Gen 2: güç sayfada ve kılavuzda. Hacim (60–200 ve 90–300 L) yeni sayfada yok; JBL'in ürün listesindeki ürün adında ve eski sayfanın 2025 arşiv kopyasında yazıyor. Kopya ek kaynak. Arşiv kopyaları kendi içinde tutarsız: iki kopyanın başlığı 60–200 ve 90–300 L, teknik tablosu ise ikisinde de 80–200 L yazıyor. Kayıt, JBL'in güncel ürün listesiyle aynı olan başlık değerini taşıyor.
+  - Karton makaralı yeşil ve gri hortum (8 kayıt): JBL'in yeni metre başı sayfaları karton makaralı hortumu anlatıyor, makara uzunluğunu yazmıyor. 180, 60, 40 ve 18 m eski sayfaların arşiv kopyalarında (yeşil 2025, gri 2020); kopyalar ek kaynak. Yeşil hortumun ağır metal içermediği de arşiv kopyasında ("Product information" sekmesi); gri hortumda yeni sayfa da yazıyor. Codex denetiminden önce bu kayıtlar "yeni sayfası bulunamayan" sayılmıştı.
+- Düzeltmeler:
+  - Gri hortum 19/27: JBL'in yeni sayfası ve ürün adı 19/25 yazıyor; kayıt 19/25 oldu, eski etiket açıklamada.
+  - AquaPad: JBL'in yeni ürün adları 80x40, 60x30 ve 150x50; kayıtlar 80x41, 60x31 ve 150x51 yazıyordu. Adlar yeni sayfaya göre, eski ölçü açıklamada. Kimlikler değişmedi.
+  - JBL'in arşive aldığı ürünler artık arşiv olarak görünüyor: LED SOLAR EFFECT 8, 14, 20 ve 22 W, tekli pH 4,0 tamponu, hidrometre, tek bedenli PROSCAPE eldiveni (yerini S/M ve L/XL aldı), PRONOVO AUTOFOOD WHITE.
+  - DigiScan Alarm: yeni sayfada yeniden satışta; "Arşiv" kalktı (kimlik değişmedi). Sayfa pilin pakette olmadığını yazıyor; kayıt "pil dahil" diyordu, düzeltildi. 18 °C altı ve 28 °C üstü alarm kılavuzda.
+  - pH 4,0 tamponu: JBL'in arşiv sayfası başlıkta pH 4,0, ürün metninde pH 7,0 yazıyor; sayfa hatası açıklamada. Sarımsı renk kodu JBL'in SSS'sinde, SSS ek kaynak.
+  - PROSCAPE S30: yeni S30 sayfalarının metni S20'nin 20 cm ve ağırlık değerlerini tekrarlıyor; 30 cm ürün adında ve ProScape rehberinde. Fark açıklamada.
+  - Artemio 1: kılavuzun ürün tanıtımı "istenen sayıda uzatma" diyor, kurulum adımı (Almanca s. 7, İngilizce s. 12) ise ek hava motoru gerekmeden en çok beş uzatma yazıyor. Kayıt kurulum adımındaki beş sınırını taşıyor (Codex denetiminden önce yanlışlıkla "istenen sayıda" yazılmıştı).
+  - PROFLORA CO₂ ADAPT U-u201 ve U-Dennerle: eski açıklamalar bağlantı yönünü belirsiz ya da ters anlatıyordu. Ürün sayfalarına göre U-u201, 5/8 inç UNF bağlantılı basınç düşürücüyü (ör. u201); U-Dennerle, M10×1,25 bağlantılı Dennerle basınç düşürücüsünü M10×1 tek kullanımlık tüplere uyarlar. Düzeltildi.
+  - PROCLEAN AQUA: kayıt yalnız dış cam diyordu; sayfanın SSS'si camın iç yüzünde de kullanılabileceğini yazıyor. Düzeltildi.
+  - 12 mm delikli vantuz: "11–12 mm" yerine sayfadaki 12 mm.
+- Açık kaynakta bulunamadığı için çıkarılan ayrıntılar: TAIFUN GLASS MINI ve MAXI için "uzatılamaz" (MIDI için kılavuzda var, aşağıda); ProSilent Control için "metal"; Thermometer Float için 11 cm ve tatlı/deniz suyu; DigiScan Alarm için AG10 pil adı; CYLINDER 2000 M için "yetkili dolum noktasında doldurulmalı"; eldiven için "hassas silikon bölgeler".
+- Başka kaynakta bulunduğu için kalan ayrıntılar:
+  - Sayfanın SSS bölümünde: Adapt u-m'nin başka adaptörle birleştirilemeyeceği, CYLINDER 1200 U'nun eski u regülatörlerine uyduğu, PlaCollect'in 45° yerleşimi ve kıl kurtlarına uygun olmadığı, INLINE membranının 24 saat ıslatılması, PROSCAPE aletlerinin kurutulması, çift muslukta farklı çap birleştirmenin sızıntı riski.
+  - Algenmagnet S/M/L'nin 6, 10 ve 15 mm cam sınırları: yeni sayfa aile için 6–15 mm yazıyor; boy başına değer eski sayfanın arşiv kopyasında. Kopya ek kaynak.
+  - Aeras Marin'in kayın ağacı ve 65 mm boyu: 2015 kataloğunda.
+  - Tek çek valf uyarısı: JBL'in SSS sayfasında (819). Direct ve Count Safe'in entegre çek valfi varken ayrıca SafeStop eklenirse çek valfler açılmayabilir; gece kapatmasından sonra CO₂ akışı yeniden başlamayabilir; her CO₂ hattında yalnız bir çek valf kullanılmalı. Count Safe, TAIFUN SAFESTOP, SafeStop (2016) ve üç Direct kaydında; SSS ek kaynak.
+  - Thermometer Mini'nin 60 mm uzunluğu ve Ø 5 mm çapı: JBL'in termometre yazısında (2024); yazı ek kaynak.
+  - Thermometer Float'ın renkli alkol dolgulu ve cıvasız olması: JBL'in aynı ürünün (6140500) İngilizce sayfasındaki SSS'de (25153887); sayfa ek kaynak. Almanca sayfada bu SSS yok.
+  - TAIFUN GLASS MIDI'nin uzatılamadığı: PROFLORA CO₂ setlerinin kılavuzunda (25000523, 5.5: "kann nicht erweitert werden"); kılavuz ek kaynak.
+  - CO₂ CONTROL'ün 12 V'u: kılavuzda; kılavuz ek kaynak.
+- Açılmayan eski ek kaynaklar (JBL'in eski grup sayfaları, `mod=productpdf` bağlantıları) yeni sayfaya bağlanan kayıtlardan kaldırıldı.
+- Test: eski JBL adresinde ya da açılmayan ürün PDF bağlantısında yalnız sonraki pakete bırakılan 69 kayıt kalabilir (açık liste); yeni sayfaya taşınan kayıtlarda açılmayan eski ek kaynak olamaz. Kılavuz, SSS ve arşiv kopyası kanıtları ile arşiv durumu değişiklikleri sabitlendi; eski adres ve tarih beklentileri yeni kaynaklara göre güncellendi.
+- Codex denetimi (1. tur, 2026-10-31): 5 P2 ve 1 P3 bulgu (Artemio 1, iki adaptörün yönü, tek çek valf uyarısı, Direct'in çalışma basıncı, karton makaralı hortumlar, Thermometer Mini). Hepsi kaynakta doğrulandı ve yukarıdaki gibi düzeltildi. 2. tur (2026-10-31): 2 P3 bulgu; yeşil hortumun ağır metal bilgisi ve GLASS MIDI'nin uzatılamaması kaynakta bulundu, geri geldi. 3. tur (2026-10-31): 1 P3 bulgu; Float'ın alkol dolgusu aynı ürünün İngilizce sayfasındaki SSS'de bulundu, geri geldi. Bu turlarda yeniden okunan 17 kaydın doğrulama tarihi 2026-10-31.
+- Kullanıcıya etkisi: 186 JBL kaydının kaynak bağlantısı artık çalışan JBL sayfasını açıyor. Sağlık hesabı değişmiyor (bu kayıtların hiçbiri hesaba girmiyor). Bazı ürün adları ve açıklamaları değişti (yukarıda); altın fikstür değişmedi.
+- Kalan JBL eski adresleri: 68 kayıt (CO₂ 34, Diğer 31, değeri çekilmiş 3 WHITE filtre); ayrıca ana kaynağı açılmayan bir ürün PDF bağlantısı olan arşiv silikon hortum makarası. Yeni sayfası bulunamayan eski nesil ve arşiv ürünleri: ProFlora u001/m001/v002 nesilleri, eski Taifun ve Bio-CO₂ setleri, silikon karton makara ve plastik hortum makaraları, eski soğutucular, AUTOFOOD BLACK, Food Clip, AquaEx ve Aqua In Out setleri, Nano-Floaty, Clean A, Desinfekt, Power Clean. Ayrıca ana kaynağı açılan 22 kaydın bir ek kaynağı eski adreste. Sonraki pakette eski sayfaların internet arşivi kopyaları, 2015 kataloğu ve kılavuzlarla bakılacak.
+- Araştırma dosyaları (oturuma özel scratchpad `jbl2/`): arama sonuçları, eşleme, ürün sayfaları, kılavuzlar, SSS bölümleri, uygulama ve test betikleri.
 
-## 2026-11-05 bağımsız kapasite boşlukları kapanış denetimi (Codex)
+## 2026-11-03 Bitkilerin İngilizce ortak adları (Claude)
 
-- Katalogdaki filtre, ısıtıcı ve hava motorları aynı kapsam ölçümüyle yeniden
-  sayıldı. 1.359 bağımsız kapasite kaydının 1.264'ünde güvenli hesap değeri var;
-  kalan 95 kaydın tamamı kullanıcıya nedenini açıklayan `capacityDataNote`
-  taşıyor. Marka dağılımı: Aquawing 11, Boyu 11, Ejet 3, Eurostar 8, Haqos 5,
-  Jeneca 11, Netlea 14, Nubios 12, Regent 6, Resun 2, RS Electrical 7, Sobo 3
-  ve Xinyou 2.
-- Bu 95 kayıt açık araştırma kuyruğu değildir. Üreticinin değer yayımlamaması,
-  modelin güncel resmî portföyde bulunmaması, kabul edilen kaynakların birbiriyle
-  çelişmesi veya yalnız zayıf kaynak bulunması nedeniyle karar 0019 uyarınca
-  güvenli biçimde kapatılmıştır. Kullanıcı ürünü seçebilir ve etiketteki değeri
-  elle girebilir; kaynakta olmayan sayı otomatik sağlık hesabına katılmaz.
-- `scripts/test-catalog-flow.cjs` artık 95 kaydın tamamında açıklama bulunmasını
-  ve marka dağılımını sabitler. Yeni bir kapasite boşluğu eklenirse ya da bir
-  kayıt kaynak kanıtı olmadan hesaba sokulursa katalog akışı testi başarısız olur.
+- Veri aşamasının "Gerekenler" kapsamı (karar 0036). Bitki kataloğunun ana adı Latince bilimsel addır ve her dilde aynıdır; İngilizce ve İspanyolca ekranda eksik olan, bitkinin bilinen ortak adıyla bulunması ve Türkçe satış adlarının gizlenmesiydi.
+- Kaynak: Fishkeeper'ın bitki sayfaları. Katalogdaki 54 farklı Fishkeeper adresi 2026-11-03'te açıldı. Sayfa başlığı (`page-title-wrapper`) ile altındaki Latince ad karşılaştırıldı; 37 sayfanın başlığı İngilizce ortak ad, öbürlerinin başlığı Latince ad. Kayıtlara eşleme katalog TypeScript'ten yüklenerek yapıldı (dosyayı metin olarak okuyan ilk deneme, istilacı tür etiketi olan *Limnophila sessiliflora* ve *Hygrophila polysperma*'da etiketin kaynak adresini ana kaynak sanıp iki kaydı atlamıştı). Tropica'nın sayfa başlığı bilimsel ad; açıklamalarda yer yer geçen ortak adlar (ör. 'Trident' sayfasında "Java fern") kullanılmadı. Tropica'nın İspanyolca sürümü yok (dil seçenekleri EN, DE, FR, DA; `/es/` adresi 404).
+- 42 kayda `commonNameEn` yazıldı: 35 kaydın ana kaynağı kendi Fishkeeper sayfası; 7 form kaydının kendi Fishkeeper sayfası yok, `additionalSourceUrls`'deki türün sayfasının adı kullanıldı. Ad kaynaktaki yazımla ("Narrow Crinium" Fishkeeper'ın yazımı). Latince başlıklı "Chladoflora aegagropila" ortak ad sayılmadı (kayıtta "Marimo" eş adı zaten var).
+- 6 kayıtta Türkçe satış adı işaretlendi (`turkishAliases`): "Tilki kuyruğu", "Su marulu" ve parantez içinde Türkçe ad taşıyan dört Hygrophila satış adı (Zeytin, Limon, Cüce Limon, Çınar). Eş adlardan çıkarılmadı.
+- Ekranda: Türkçede değişiklik yok (ilk üç eş ad). İngilizcede İngilizce ortak ad önce gelir, Türkçe satış adları gizlenir, aynı ad bir kez yazılır. İspanyolcada Türkçe satış adları gizlenir. Arama İngilizce adı yalnız İngilizce ekranda kullanır. Türkçe dışındaki ekranda Türkçe satış adıyla bulunan bitkinin kayda önerilen adı İngilizcede İngilizce ortak ad (yoksa bilimsel ad), İspanyolcada bilimsel ad. Türkçe ekranda bu adla kaydedilmiş bitki öteki dilde kartta, listedeki aramada ve bitki uyarılarında o dilin adıyla görünür; kayıt değişmez.
+- Kayıt kayıt:
 
-## 2026-11-05 altın fikstür salt okunur fark denetimi (Codex)
+| Kayıt | İngilizce ortak ad | Fishkeeper sayfası |
+|---|---|---|
+| `aponogeton-crispus` | Ruffled Sword Plant | kendi sayfası |
+| `aponogeton-madagascariensis` | Madagascar Lace Plant | kendi sayfası |
+| `bacopa-caroliniana` | Blue Hyssop | kendi sayfası |
+| `bacopa-monnieri` | Water Hyssop | kendi sayfası |
+| `bacopa-monnieri-compact` | Water Hyssop | türün sayfası (Bacopa monnieri) |
+| `barclaya-longifolia` | Orchid Lily | kendi sayfası |
+| `bolbitis-heudelotii` | African Water Fern | kendi sayfası |
+| `cabomba-aquatica` | Fanwort | kendi sayfası |
+| `cardamine-lyrata` | Japanese Cress | kendi sayfası |
+| `ceratophyllum-demersum` | Rigid Hornwort | kendi sayfası |
+| `ceratopteris-thalictroides` | Water Sprite | kendi sayfası |
+| `crinum-calamistratum` | Narrow Crinium | kendi sayfası |
+| `cryptocoryne-beckettii-petchii` | Beckett's Water Trumpet | türün sayfası (Cryptocoryne beckettii) |
+| `cryptocoryne-walkeri` | Walker's Water Trumpet | kendi sayfası |
+| `cryptocoryne-wendtii-brown` | Brown Wendt's Water Trumpet | kendi sayfası |
+| `cryptocoryne-wendtii-green` | Green Wendt's Water Trumpet | kendi sayfası |
+| `echinodorus-ozelot` | Ozelot Sword | kendi sayfası |
+| `egeria-densa` | Common Waterweed | kendi sayfası |
+| `eleocharis-vivipara` | Umbrella Hairgrass | kendi sayfası |
+| `glossostigma-elatinoides` | Small Mud-Mat | kendi sayfası |
+| `helanthium-tenellum-green` | Mudbabies | türün sayfası (Echinodorus tenellus) |
+| `hottonia-palustris` | Water Violet | kendi sayfası |
+| `hygrophila-polysperma` | Indian Swampweed | kendi sayfası |
+| `hygrophila-polysperma-rosanervig` | Indian Swampweed | türün sayfası (Hygrophila polysperma) |
+| `lilaeopsis-brasiliensis` | Micro Sword | kendi sayfası |
+| `limnophila-aromatica` | Rice Paddy Herb | kendi sayfası |
+| `limnophila-sessiliflora` | Asian Marshweed | kendi sayfası |
+| `lysimachia-nummularia` | Creeping Jenny | kendi sayfası |
+| `lysimachia-nummularia-aurea` | Golden Creeping Jenny | kendi sayfası |
+| `mayaca-fluviatilis` | Stream Bogmoss | kendi sayfası |
+| `micranthemum-umbrosum` | Shade Mudflower | kendi sayfası |
+| `microsorum-pteropus` | Java Fern | kendi sayfası |
+| `microsorum-pteropus-narrow` | Java Fern | türün sayfası (Microsorum pteropus) |
+| `microsorum-pteropus-trident` | Java Fern | türün sayfası (Microsorum pteropus) |
+| `microsorum-pteropus-windelov` | Lace Java Fern | kendi sayfası |
+| `pogostemon-stellatus` | Water Star | kendi sayfası |
+| `riccia-fluitans` | Floating Crystalwort | kendi sayfası |
+| `rotala-macrandra` | Giant Red Rotala | kendi sayfası |
+| `rotala-macrandra-japan` | Giant Red Rotala | türün sayfası (Rotala macrandra) |
+| `salvinia-natans` | Floating Fern | kendi sayfası |
+| `taxiphyllum-barbieri` | Java Moss | kendi sayfası |
+| `vallisneria-americana-var-gigantea` | Giant Vallis | kendi sayfası |
 
-- Kayıtlı 1.033 altın vaka ile güncel 1.066 vaka, fikstür dosyasına yazmadan
-  ad ve çıktı düzeyinde karşılaştırıldı. 123 yeni ad, 90 kaldırılan ad ve 71
-  değişen ortak vaka var. Yeni/kaldırılan adlar kaynaklı 21 yeni kesin tür
-  profilinin ikili vakaları ve güvenli olmayan genel salyangoz/kerevit
-  profillerinin kaldırılmasıyla deterministik sıralamanın değişmesinden geliyor.
-- Ortak vakaların 18'inde toplam puan, 27'sinde uyarı kodu kümesi değişiyor.
-  Değişiklikler kaynaklı yetişkin boyu, en az hacim/uzunluk, grup sayısı,
-  doğrudan bakım notu ve yayımlanmayan uzunluk uyarısı düzeltmeleriyle sınırlı.
-  Yalnız `species-tight:ramshorn-snail` genel durumu `warning`dan `good`a
-  dönüyor; doğrudan tür kaynağının 10 litre yayımlaması ve santimetre cinsinden
-  tank uzunluğu yayımlamaması nedeniyle eski 20 litre/25 cm varsayımının
-  kaldırılması bu sonucu açıklıyor. Altın dosya ürün sahibi onayı olmadan
-  değiştirilmedi.
-- Aynı sınıflandırma kalıcı `pnpm audit:golden` komutuna taşındı. Komut öncesi
-  ve sonrası `golden-v1.json` SHA-256 özeti
-  `E22A269E4F2F26CE7D25A9C48F6A6FCE3BF115494F600DF442BBE35553F4CA58`
-  olarak aynı kaldı; denetimin fikstüre yazmadığı doğrulandı. Fikstür yazımı
-  yalnız ayrıca onaylanan `AQUAMIND_GOLDEN_CAPTURE=1` akışında mümkündür.
+## 2026-11-04 Trendyol'a bağlı ekipman (Claude)
 
-## 2026-11-05 zorunlu marka ve kategori akışı kapanış denetimi (Codex)
+- Veri aşamasının "Gerekenler" kapsamı (karar 0036). Trendyol kabul edilen kaynaklardan değil (`docs/DATA_SOURCES.md` → "Kaynak önceliği"); ana kaynağı Trendyol olan 24 ekipman kaydı vardı (2026-10-30 örnek denetiminin bulgusu). 22'si Shark armatürü; bunların 17'si markanın Trendyol liste sayfasına bağlıydı. Kalan ikisi RS-605 iç filtresi ve Meç Turbo Pipo.
+- Arama (2026-11-03/04, tarayıcıda, ürün sayfası ya da mağazanın kendi araması):
+  - Akvaryum Express (`/arama?urunAra=`): "shark", "shark led", "rs-605", "rs 605", "turbo pipo" sonuç yok; "meç" yalnız başka Meç ürünleri.
+  - Atakan (`/search?s=`): "shark" yalnız canlı balıklar (Silver Shark, Colombian Shark Catfish); "rs-605" sonuç yok. Marka listesinde Shark yok.
+  - Malawi İzmir: "shark" ve "rs-605" sonuç yok; "turbo pipo" → "MEC Turbo Üretim Pipo Filtre" (stokta yok). Sayfa gövdeyi 18 cm, eni 5 cm yazıyor. Kayıttaki Trendyol ürünü ("Mec Turbo Pipo Filtre Nostaljik", 25 cm gövde) ile aynı ürün olduğu doğrulanamadı; Trendyol sayfası 2026-11-04'te 404.
+  - Aquarubi: "shark" yalnız Sicce Shark filtreleri ve JBL Floaty Shark; "rs-605" sonuç yok.
+  - Betta: "shark" yalnız köpek balığı dekoru; "rs-605" sonuç yok. Codex 1. turda (2026-11-04) Betta'da "Pipo Filtre Turbo Üretim Filtresi 18cm" sayfasını buldu (marka MEÇ, açıklama "Meç Plastik Turbo Filtre … hava motoru ile çalıştırılan süngerli filtre … 18x5,5cm"; tarayıcıda açılarak okundu). Kabul edilen iki mağaza Meç'in turbo filtresini 18 cm yazıyor; kayıttaki 25 cm'lik "Nostaljik" Trendyol ürünüyle aynı olduğu yine doğrulanamadı, ölçü bu yüzden kayda yazılmadı.
+  - Cikletist insan doğrulaması istediği için açılmadı; ürün sahibiyle satış adları oturumunda aranacak.
+  - Shark'ın üretici sitesi web aramasında bulunamadı.
+- Sonuç: 23 kayıt (22 Shark, Meç Turbo Pipo) `unverifiedEquipmentIds`'e girdi; RS-605 zaten oradaydı (değerleri hesaptan çekilmişti). Kayıtlar adıyla ve kaynak bağlantısıyla kalır; Trendyol'dan gelen değerler çekilir:
+  - Shark: akvaryum uzunluğu (`recommendedTankLengthCm`) ve açıklamadaki lümen ile uzunluk parçaları. Açıklama "değerler doğrulanamadı" ile biter (ör. "Dört renk full-spectrum, dört sıra Osram LED · değerler doğrulanamadı"). 75 cm modelindeki "kaynak başlığında lümen değeri yayımlanmıyor" notu kalır.
+  - Meç Turbo Pipo: açıklama "Biyolojik sünger pipo filtre · 25 cm gövde" diye iki parçaya ayrıldı (kaynağın yazdığı ölçü dosyada durur); ölçü çekilir, ekranda "Biyolojik sünger pipo filtre · değerler doğrulanamadı".
+  - Hiçbiri hesaba girmiyordu: aydınlatma hesapta yok, akvaryum uzunluğu motorda kullanılmıyor; Meç hava motoruyla çalışan filtre (`requiresAirPump`), değeri yok.
+- Kod: `src/data/catalog-equipment-unverified.ts` — açıklamadan çekilen parçalara lümen ("1320 lm") eklendi; bir değer çekilip mevcut ifadelerden (debi, önerilen hacim, güç) biri uymazsa "değerler doğrulanamadı" yazılır; kapasite notu yalnız hesaba giren türde (filtre, ısıtıcı, hava motoru) yazılır (bütünlük denetimi öteki türde notu yasaklıyor). Listedeki öbür 100 kaydın çıktısı değişmedi (bütün katalog önce ve sonra karşılaştırıldı: yalnız bu 23 kayıt değişti).
+- Çeviri: iki yeni parça ("Biyolojik sünger pipo filtre", "değerler doğrulanamadı") İngilizce ve İspanyolcaya eklendi; kullanılmayan "# cm gövdeli biyolojik sünger pipo filtre" çıkarıldı.
+- Ekleme penceresindeki rozet (Codex 1. tur): değeri çekilen aydınlatma "Teknik veri hazır" değil "Model kayıtlı" gösterir (`technicalDataReady`, `src/data/catalog-equipment.ts`); hesaba girmeyen türde rozet önceden her kayıtta "hazır" diyordu. Hava motoruyla çalışan filtre (Meç Turbo ve listedeki 11 Xinyou sünger filtre) kapasite hesabına hava motoruna bağlı filtre olarak girdiği için "Teknik veri hazır" kalır.
 
-- Kullanıcının ilk verdiği marka listesi, katalog kapsamının tek gerçek listesi
-  olan `src/data/catalog-coverage.ts` ile yeniden karşılaştırıldı. Katalogdaki
-  49 zorunlu başlığın tamamı en az bir ekipman veya bakım ürünü taşıyor; boş
-  marka başlığı yok. İlk istekteki `Aquamin`, markanın katalogdaki yerleşik adı
-  `Aquamins` (86 bakım ürünü); `Litefech` ise `Lifetech` (29 ekipman) olarak
-  eşleniyor. Bu iki yazım artık katalog akışı regresyonunda açıkça korunuyor.
-- Ekipman seçicisinin kategori → marka → model akışı yeniden denetlendi. Yedi
-  kategorinin her biri dolu; kategori seçimi yalnız o kategorinin markalarını,
-  marka seçimi de yalnız aynı kategori ve markaya ait modelleri döndürüyor.
-  Kategori veya marka değiştiğinde önceki model seçimi sıfırlanıyor. Bu davranış
-  katalogdaki bütün kayıtlar üzerinde çalışan regresyonla korunuyor; filtre
-  seçildiğinde ısıtıcıların veya ısıtıcı seçildiğinde filtrelerin görünmesi
-  mümkün değil.
-- Katalog denetimi yalnız başlık saymakla kalmıyor: 3.877 ekipmanın ve 3.105
-  bakım ürününün tamamında HTTPS ana kaynak, `YYYY-MM-DD` doğrulama tarihi ve
-  varsa yalnız HTTPS ek kaynak bulunmasını artık zorunlu tutuyor. Böylece 49
-  marka dolu görünürken kaynaksız kayıt saklanması da kapanış testini düşürür.
+## 2026-11-04 Resun, Fluval ve Haqos: arşiv kopyalarıyla doğrulama, paket 1 (Claude)
 
-## 2026-11-09 Dophin AH-1002 ve altın fikstür onayı (Codex)
+- Veri aşamasının "Gerekenler" kapsamı (karar 0036). 2026-10-30 örnek denetiminde açılamayan üç üretici sitesi: Resun (sertifika kendinden imzalı), Fluval (Cloudflare insan doğrulaması), Haqos (sertifika başka adrese ait). Siteler zorlanmadı. Ürün sayfalarının internet arşivindeki ham kopyaları (`https://web.archive.org/web/<zaman>id_/<adres>`) okundu. Fluval'da ayrıca doğrudan açılan kılavuz PDF'leri ve 2026 bakım kılavuzu kullanıldı. Değer tahmin edilmedi.
+- Resun (172 kayıt, 62 sayfa, 90'ı hesapta):
+  - Arşivde 48 sayfa okundu; bu sayfalarda 133 kayıt var. Sayfa numarası ve kopya tarihi: 86 (2026-01-13), 87 (2026-03-14), 91 (2026-03-14), 94 (2026-05-17), 118 (2026-01-13), 120 (2026-02-07), 121 (2026-06-07), 123 (2026-02-09), 124 (2026-02-07), 125 (2026-02-07), 127 (2026-01-13), 128 (2026-05-17), 129 (2026-06-07), 131 (2026-02-07), 132 (2026-03-14), 133 (2026-02-07), 135 (2026-02-07), 138 (2026-06-07), 140 (2026-05-17), 141 (2026-01-13), 142 (2026-04-21), 144 (2026-01-13), 145 (2026-03-14), 146 (2026-06-15), 148 (2026-02-07), 151 (2026-05-17), 154 (2026-01-13), 155 (2026-02-10), 156 (2026-02-07), 158 (2026-06-07), 161 (2026-02-10), 162 (2025-12-15), 164 (2026-01-13), 166 (2026-01-13), 169 (2026-01-14), 170 (2026-01-13), 171 (2026-06-07), 174 (2026-01-13), 175 (2026-01-13), 179 (2025-07-17), 180 (2026-06-07), 182 (2026-02-09), 283 (2026-02-07), 284 (2026-01-13), 296 (2026-01-13), 299 (2026-01-14), 301 (2026-02-07), 302 (2026-05-17).
+  - Model tabloları sayfada resim ("MODEL PARAMETERS"). Resimler üreticinin görsel sunucusundan (`23628109.s21i.faiusr.com`) indirilip okundu. Tablosuz sayfalar metinden okundu.
+  - Hesaba giren 66 kayıt tuttu (debi, güç, önerilen hacim, UV gücü):
+    - Filtre 27: BC300/450/650, BF80/100/200, CX200/400, GF400/800, CS400/700/1000/1500/2000, MAGI200/380/700/1000, EF1600, EF1600U, EF2800, EF2800U, EVF600/900/1200, HS300.
+    - Hava motoru 13: AP72/108/180/216, PLP40/60/100, DC120/160, QSW70, QSB70, HLP-4000, HLP-8000.
+    - Isıtıcı 26: DT50/100/150/200/300, MH75/150/250, RH9000 25–300 W (8), TM25/50/100/150/200/300, DSH100/150/200/300.
+  - Okuma kuralları:
+    - Hava motoru tablosu L/dk verir; kayıt ×60 taşır (AP72 1,2 L/dk = 72 L/saat). HLP-8000'de 60 L/dk × 2 çıkış = 7200 L/saat.
+    - İki voltajlı satırlarda kayıt 220–240 V değerini taşır: MAGI700 10 W, MAGI1000 20 W, EVF600/900/1200 6,5/10/17,5 W, EF1600U ve EF2800U'da UV 11 W.
+    - DC120/160'ın güç sütunu "/"; kayıtta güç yok.
+    - MH serisindeki sıcaklık artışı notları tabloyla aynı.
+  - Hesaba girmeyen 67 kayıt da tuttu: pompalar (SP, PENGUIN, BDP, FLOW/KING, S, HWM), soğutucular (CL200/280, MINI200/300/650), UV, LED, sifon ve temizleyiciler. Model adları ve açıklamadaki ölçüler sayfayla aynı.
+  - Üreticinin kendi sayfasında çelişki. İki kaydın değeri yok; kayıtlar değişmedi:
+    - Terminator (h-pd-144): sayfadaki ürün başlıkları "TERMINATOR 11/18", "TERMINATOR 36", "TERMINATOR 56"; tablo resmi son modeli "TERMINATOR 55" ve 55 W yazıyor. Kayıt sayfa başlığındaki "Terminator 56".
+    - U2 (h-pd-142): sayfa başlığı "U2" (Mini UV Clarifier); tablo resmindeki model "UV1205" (5 W, en çok 1500 L/saat pompa). Kayıt "U2".
+  - Okunamayan 14 sayfa:
+    - Arşivin sık istek sınırına takılan 8 sayfa: 117, 126, 134 (CY20), 153 (HT10, HT25), 157 (SUNLIKE ×8), 163, 176, 300 (HCA1000–4000). Parantezdekiler hesapta. Kopyaları paket 2'de okunacak.
+    - Arşivde hiç kopyası olmayan 6 sayfa: 395 (EFC300/550), 396 (HCB1000/4000), 397 (NLP20–200; bu üçü hesapta, 9 kayıt), 398 (IceCore), 399 (AST410), 400 (MagBlade). Ürün sahibinin tarayıcısında okunacak.
+- Fluval (87 kayıt, 40'ı hesapta):
+  - Fluval'ın ürün sayfaları doğrudan istekte 403 veriyor (sayfa okuma aracında da). Kılavuz PDF'leri doğrudan açılıyor. Fluval'ın ürün sayfalarını yeni adreslere taşıdığı web aramasında görüldü (ör. `/us/product/a101-air-pump/`).
+  - Arşivde 19 sayfa okundu. AquaClear ve yüzey süpürücü kopyaları bot doğrulama sayfası çıktı. Altı kopya sıkıştırılmış geldi, açıldı.
+  - Tutan 38 kayıt:
+    - Isıtıcı: T50–T300 (`/uk/` sayfası, 2025-01-23), P10/P25/P50 (ısıtıcı listesi, 2026-10-05), E100/200/300 (2026-10-05), M50–M300 (2025-02-13).
+    - Filtre: FX2/4/6 (2025-02-10), U2–U4 (2025-01-24), Nano Aquarium Filter (2025-02-08), SK400 (2025-02-18).
+    - Pompa ve aydınlatma: CP1–CP4, C.O.B. Nano, Prism 2.0, Plant 3.0 Nano (2025-06-11), Marine 3.0 ×4 (2024-11-08), Marine 3.0 Nano (2024-12-03).
+    - Skimmer: PS1 (2025-01-23), PS2 (2024-09-18).
+  - Okuma kuralları:
+    - U serisinde kayıt 230–240 V gücünü taşır: 4,5 / 5 / 7,5 / 10 W.
+    - FX sayfası iki debi veriyor: pompa çıkışı (1800 / 2650 / 3500 LPH) ve filtre dolaşımı (1300 / 1700 / 2130 LPH). Kayıt, öbür markalardaki azami debi gibi pompa çıkışını taşır; değişmedi.
+    - P serisinde güç ve hacim listede var. "24–26 °C ön ayar" ve "kırılmaz polimer gövde" P serisinin kendi sayfasından gelir; o sayfanın kopyası okunmadı.
+  - Kılavuzla doğrulananlar:
+    - PS2'nin 8 W gücü ve 0,19 L toplama kabı kılavuzunda var (kaydın ek kaynağı).
+    - PS1'in ayarlanabilir hava akışı kılavuzunda var ("Airflow Control"); kılavuz ek kaynak oldu.
+  - Düzeltme: SP4 ve SP6 sump pompaları. Hesaba girmiyorlar. Üreticinin SP serisi kılavuzunun tablosu (`https://fluvalaquatics.com/us/manuals/Fluval_14335-14337-14339_SP-Series_Pump_Manual.pdf`, PDF'nin 4. sayfası; Fransızca, İspanyolca ve Almanca tablolar aynı):
+    - SP4 230–240 V: 7500 L/saat, 3,6 m, 90 W; 120 V: 6900 L/saat, 3,6 m, 88 W. Kayıttaki 3,5 m → 3,6 m.
+    - SP6 230–240 V: 12300 L/saat, 3,7 m, 100 W; 120 V: 13000 L/saat, 4 m, 135 W. Kayıttaki 13000 L/saat (230–240 V'un gücü ve basma yüksekliğiyle birlikte) → 12300 L/saat. Paket 2'de görüldü: bu karışık değerler ürün sayfasının tablosunda; kayıt sayfayı izliyordu (aşağıda).
+    - Kılavuz iki kaydın ek kaynağı oldu. Türkiye 230 V; AC serisi gibi Avrupa değerleri kullanıldı.
+  - Düzeltme: U1'in açıklaması (Codex 1. tur).
+    - Kayıt "3 kademeli iç filtre" diyordu. U serisi sayfası serinin üç aşamalı olduğunu, ama "U1 includes stage 1 only" (yalnız mekanik sünger pedi) yazıyor.
+    - Açıklama "Yalnız mekanik sünger aşamasıyla gelen iç filtre" oldu; yeni parça İngilizce ve İspanyolcaya çevrildi. Debi (250 L/saat), güç (4,5 W) ve hacim (55 L) sayfayla aynı.
+  - 07 serisi (107/207/307/407, hesapta): kendi sayfalarının arşivde kopyası yok. Fluval'ın 2026 bakım kılavuzu (`https://fluvalaquatics.com/us/wp-content/uploads/2026/08/Fluval_Aquarium_Care_Guide_EN.pdf`, PDF'nin 6. sayfası) debiyi (550 / 780 / 1150 / 1450 L/saat) ve akvaryum aralığını (40–130 / 60–220 / 90–330 / 150–500 L) doğruladı; kılavuz ek kaynak oldu. Güç (10 / 10 / 15 / 20 W) bu belgede yok; paket 2'de aranacak.
+  - AquaClear AC20–AC110 (hesapta 5): arşivdeki sayfa kopyası bot doğrulama sayfası (Codex 1. tur).
+    - 2026 bakım kılavuzu (PDF'nin 5. sayfası) debiyi 379 / 569 / 757 / 1135 / 1890 LPH, akvaryum aralığını 18–76 / 38–114 / 76–190 / 152–265 / 227–416 L yazıyor.
+    - Kayıttaki debi 379 / 568 / 757 / 1136 / 1892 idi; fark galonun litreye çevrilmesindeki yuvarlama. Kılavuz değerleri kullanıldı ve kılavuz ek kaynak oldu.
+    - Güç (5 W 230–240 V, AC110'da 14 W) kılavuzda yok; paket 2'de aranacak.
+    - Sağlık hesabı: 1.077 altın vaka ve 113 senaryo değişmedi. Eşiğe çok yakın kurulumlarda sonuç değişebilir (Codex 2. tur). Örnek: 52,8 L'de bir beta ve AC30. Debi 568 → 569 olunca tahmini çevrim 7'nin üstüne çıkıyor; güçlü akış uyarısı ekleniyor, filtre puanı 95 → 75, genel puan 92 → 89. Bu, mevcut kuralın düzeltilmiş değere uygulanması.
+  - Bekleyen 37 kayıt:
+    - Bot sayfası ya da kopyası alınamayan: C2–C4 (hesapta 3), A101/A202/A402 (hesapta 3), Aquasky 2.0 ×4, Plant 3.0 ×4, Plant Pro ×4, UVC A198 ve A199, yüzey süpürücüler (3).
+    - Kopyası olmayan: Aquasky 3.0 ×4, Plant 4.0 ×4, Plant 4.0 Nano, Reef 4.0 ×4, Reef 4.0 Nano.
+    - AquaClear kılavuzları (`AC20_30_50_70_Manual_English.pdf`, `AC110_Manual_English.pdf`) ve C serisi kılavuzunda değer tablosu metin olarak yok.
+- Haqos (38 kayıt, 14'ü hesapta): arşivde 32 sayfa var. Ürün açıklamaları resim (`p22.qiyeku.cn`); görsel sunucusu buradan zaman aşımına düşüyor. Resimlerin arşiv kopyaları ve sık istek sınırına takılan 6 sayfa (EXPRO-1000 dahil) paket 2'de okunacak.
+- Arşivin sık istek sınırı (429) 2026-11-04 yaklaşık 16:00 UTC'de başladı. Kalan kopyalar 90 saniyede bir istekle indiriliyor.
+- Test (`scripts/test-catalog-flow.cjs`):
+  - SP4/SP6: debi ve güç kılavuzdaki 230–240 V değerleri (7500/90, 12300/100); basma yükseklikleri 3,6 / 3,7 m. Açıklamadaki debi ve güç sayısal alanlarla aynı olmalı.
+  - U1 "kademeli/aşamalı" diye tanıtılmıyor.
+  - AquaClear debileri kılavuz değerleri; açıklama debiyle aynı, bakım kılavuzu ek kaynak.
+- Codex 1. tur (2026-11-04, "bulgu var"):
+  - 1 P2 (a): U1'in açıklaması, düzeltildi (yukarıda).
+  - 2 P3: AquaClear'ın kılavuzla farklı debisi (a), kılavuz değerleri alındı; SP6 açıklamasının eski debiye dönmesini test yakalamıyordu (c), açıklama/alan denetimi eklendi.
+  - Codex ayrıca doğruladı:
+    - 3.541 kaydın yalnız 7'si değişmişti.
+    - SP kılavuzunun sütun ve voltaj eşlemesi doğru.
+    - Resun tablo örneklemi (CS, RH9000, AP, MAGI, EF-U, EVF, HLP-8000) ve iki metin sayfası kayıtlarla aynı.
+    - Fluval örneklemi (FX, U, CP, T ve M ısıtıcıları) U1 dışında aynı.
+    - Sayımlar tutuyor.
+  - Terminator ve U2 adlarının korunmasını makul buldu.
+- Codex 2. tur (2026-11-04): temiz. 1. turun üç bulgusu kapandı. Bozma denemeleriyle doğrulandı: SP6 açıklamasında 13000, U1'de "3 kademeli", AC30'da 568 testleri düşürüyor. AquaClear'ın sağlık hesabına etkisi yukarıya yazıldı.
 
-- Ürün sahibi, Dophin AH-1002'nin sabit sıcaklık kontrolü bulunmadığına ilişkin
-  güvenlik kuralını açıkça onayladı. Karar 0027 kabul edildi; cihaz harici
-  termostatlı kontrol ve ayrı termometre olmadan normal ısıtıcı kapasitesine
-  katılmıyor, tehlike uyarısı veriyor ve veri güveninde hazır sayılmıyor.
-- Aynı onayla altın fikstür 1.033 vakadan 1.066 vakaya yenilendi. Yenilemeden
-  önce sınıflandırılan fark 123 yeni ad, 90 kaldırılan ad, 71 değişen ortak vaka,
-  18 puan değişimi, 27 uyarı kodu değişimi ve tek genel durum değişimiydi
-  (`species-tight:ramshorn-snail`, `warning` → `good`). Açıklanamayan davranış
-  değişimi bulunmadı.
-- Fikstür SHA-256 özeti
-  `E22A269E4F2F26CE7D25A9C48F6A6FCE3BF115494F600DF442BBE35553F4CA58`
-  değerinden `EF63D495BBDBC67737D04884CBB7B6621548D06365AEE7BFE9543EB0D336F070`
-  değerine değişti. Yenileme sonrasında `pnpm audit:golden` 1.066 kayıtlı ve
-  1.066 güncel vaka ile eklenen/kaldırılan/değişen farkların tamamında sıfır
-  verdi. Hedefli ısıtıcı/metin testleri ve 113 sağlık senaryosu başarılıdır.
-- Tam `pnpm verify` başarılıdır: TypeScript, yedi ekipman kategorili ve 3.105
-  bakım ürünlü katalog akışı, 113 sağlık senaryosu, hacim/su değişimi/beş kum
-  türü hesaplayıcıları, katalog denetimi, 35 dosyada 452 Vitest testi ve 159
-  sayfalık Next.js üretim derlemesi geçti.
+## 2026-11-04 Resun, Fluval ve Haqos: arşiv kopyalarıyla doğrulama, paket 2 (Claude)
+
+- Paket 1'in devamı. Bu makinenin arşiv istekleri sık istek sınırına (429) takıldığı için sayfalar ürün sahibinin Chrome'unda açıldı (Claude in Chrome, yalnız okuma): arşivin ham kopyası (`/web/<zaman>id_/<adres>`) sayfada okundu. Resun tablo resimleri yine üreticinin görsel sunucusundan indirildi.
+- Resun (paket 1'de okunamayan 8 sayfa, 27 kayıt; kopya tarihi parantezde):
+  - Hesaba giren 15 kayıt tuttu:
+    - CY20 (134, 2026-01-13): 3 W, 200 L/saat, 60 L'ye kadar.
+    - HT10 ve HT25 (153, 2026-01-13): 10 / 25 W; kapaklı sıcaklık artışı notları (10 L'de 6 °C, 20 L'de 4 °C; 20 L'de 8 °C, 40 L'de 5 °C) tabloyla aynı.
+    - SUNLIKE25–300 (157, 2026-01-13): güç ve önerilen hacim.
+    - HCA1000–4000 (300, 2026-04-21): 220–240 V gücü 1,5 / 2,8 / 3,5 / 3,5 W; 60 / 140 / 180 × 2 / 180 × 2 L/saat. Ayarlanabilir akış yalnız HCA4000'de. "Çift katmanlı" ifadesi sayfadaki "Double-layered noise reduction design".
+  - Hesaba girmeyen 12 kaydın model adları tuttu: S3000–S10000 (117, 2026-03-14), FLOW700–2400 / KING (126, 2026-01-13), dış ortam soğutucu serisi (163, 2026-01-13, S2TL1500/2500/3500), BD06B/BD06C ve AS301 (176, 2026-02-07).
+  - Toplam: 56 sayfadaki 160 kayıt tuttu; hesaba giren 90 kaydın 81'i bunların içinde.
+  - Kalan 6 sayfanın (395–400; EFC300/550, HCB1000/4000, NLP20–200, IceCore, AST410, MagBlade; 12 kayıt, 9'u hesapta) arşivde hiç kopyası yok (arşiv dizininde `h-pd-39*` ve `h-pd-40*` boş). Ürün sahibinin tarayıcısında okunacak.
+- Fluval:
+  - Tutanlar:
+    - C2/C3/C4 (2024-12-03): 230–240 V filtre dolaşımı 400 / 480 / 900 LPH, 5 W, 115 / 190 / 265 L. 120 V değerleri 450 / 580 / 900 LPH.
+    - A101/A202/A402 (2026-06-16): 230–240 V 2,8 / 3,8 / 4 W, 90–110 / 180–220 / 330–370 LPH, 190 / 300 / 600 L, tek / çift / çift çıkış, ayarlanabilir.
+    - Aquasky 2.0 ×4 (2026-10-05): 12 / 18 / 27 / 35 W, 38–61 / 61–91 / 91–122 / 122–153 cm, IP67, "6500K white LEDs with tri-colored RGB".
+    - Plant Pro ×4 (2026-06-16): 38 / 60 / 90 / 120 W, 38–60 / 59–88 / 88–124 / 117–154 cm, 7500 K, IP67.
+    - UVC A198 (2026-06-16): 400 L, 930 LPH, 3 W, 16 mm, CCFL, "4–24 hour timer", FX serisiyle kullanılmaz. Kılavuz 06/07 serisi uyumunu ve 3 W lambayı doğruluyor.
+    - FX UVC A199: 1500 L, 2130 LPH, 6 W, 25 → 16 mm adaptör, CCFL, FX2/4/6 (2025-06-11). IP44 ek kaynak sayfasında (2024-06-14).
+    - 07 serisi: eski adreslerin kopyası yok. Ürün sayfası `/us/shop/product/207-canister-filter-20-45-us-gal-60-220-l` (2022-12-09) dört modelin tablosunu veriyor:
+      - Pompa çıkışı 550 / 780 / 1150 / 1450 LPH (filtre dolaşımı 360 / 460 / 780 / 930), 230–240 V gücü 10 / 10 / 15 / 20 W, 40–130 / 60–220 / 90–330 / 150–500 L.
+      - Paket 1'de güç doğrulanamamıştı; artık tuttu. Sayfa dört kaydın ek kaynağı oldu.
+  - Düzeltme: Plant 3.0 ×4. Kayıt "7500 K" diyordu. Sayfanın 2024-12-20 ve 2026-06-16 kopyaları dört modelde de "Color Temperature 6500K" yazıyor; sayfada 7500 geçmiyor. Açıklama "6500 K" oldu. Güç tuttu. Plant 3.0 Nano'nun 7500 K'i kendi sayfasıyla aynı.
+    - Uzunluk (Codex 1. tur): 46 W'ta sayfa "Aquarium Capacity" 91–115, "Size Range" 91–122 cm diyor. Üreticinin Plant Spectrum kılavuzu (`https://fluvalaquatics.com/manuals/14520-3_Plant_Manual_INT_Nov05_19_AB_WEB.pdf`, PDF'nin 3. sayfası) 14520–14523 için 38–61 / 61–85 / 91–122 / 122–153 cm yazıyor. Kayıt 91–115 → 91–122 cm oldu; kılavuz dört kaydın ek kaynağı.
+  - SP4/SP6 notunun düzeltmesi (paket 1):
+    - Ürün sayfasının tablosu (2025-02-09) SP4 için 7500 LPH, 3,5 m, 90 W; SP6 için 13000 LPH, 3,7 m, 100 W yazıyor ve hepsini "120 V" diye etiketliyor.
+    - Kılavuzun 120 V sütunu ise SP4 için 6900 / 3,6 / 88, SP6 için 13000 / 4 / 135.
+    - Yani iki voltajı karıştıran ürün sayfasının kendisi; kayıt sayfayı izliyordu.
+    - Değerler değişmedi: kılavuzun tutarlı 230–240 V sütunu kullanılır.
+  - Bekleyen:
+    - AquaClear AC20–AC110'un gücü: arşivdeki AC20 sayfası (2025-02-12) dört aşamayı ve ayarlanabilir akışı doğruluyor, güç yazmıyor; 2023 seri sayfası eski nesil.
+    - Yüzey süpürücüler (3): tek arşiv kopyası bot doğrulama sayfası.
+    - 4.0 nesli LED'ler (14; Aquasky 3.0 ×4, Plant 4.0 ×4, Plant 4.0 Nano, Reef 4.0 ×4, Reef 4.0 Nano): arşivde kopyası yok (yalnız 2020–2021'in eski nesil sayfaları var).
+    - Bunlar ürün sahibinin tarayıcısında okunacak.
+  - Fluval toplamı: 58 kayıt tuttu, 7'si düzeltildi (SP4, SP6, U1, Plant 3.0 ×4), 5'inde debi ve hacim tuttu ama güç doğrulanmadı (AquaClear), 17'si bekliyor.
+  - Hesaba giren 40 kaydın debisi ve hacmi doğrulandı; yalnız AquaClear'ın gücü (5 kayıt) açık.
+- Haqos (38 kayıt):
+  - Ürün açıklaması resimlerinin (`p22.qiyeku.cn`) arşivde kopyası yok (http ve https).
+  - Görsel sunucusu ürün sahibinin Chrome'unda da açılmadı.
+  - haqos.com'un sertifikası başka adrese ait. Ürün sahibinin tarayıcısında okunacak.
+- Test (`scripts/test-catalog-flow.cjs`):
+  - Plant 3.0 ve Aquasky 2.0'da 6500 K, Marine 3.0'da 25000 K; önceki nesil aydınlatmada "7500 K" yok.
+  - 07 serisinin debi, 230–240 V güç ve hacim değerleri, açıklamadaki debi ve güç ile ek kaynak sayfası denetleniyor.
+  - Plant 3.0: kılavuz ek kaynak; açıklamadaki uzunluk alanla aynı.
+- Codex 1. tur (2026-11-04, "bulgu var"):
+  - 1 P2 (a): Plant 3.0 46 W'ın uzunluk çelişkisi çözülmeden "tuttu" denmişti → kılavuzla 91–122 cm (yukarıda).
+  - 1 P3 (c): 07 serisinin açıklamasındaki güç denetlenmiyordu → eklendi.
+  - Codex ayrıca doğruladı:
+    - Yalnız 8 kayıt değişmişti.
+    - 6500 K düzeltmesi, 07 serisinin sütun seçimi ve SP notunun özü kaynakla tutarlı.
+    - Resun örneklemi (SUNLIKE, HCA, HT, 117/126 model adları) ve Fluval örneklemi (C, A, Aquasky 2.0, Plant Pro, A198/A199) aynı.
+    - Sayımlar tutuyor.
+
+## 2026-11-08 Ürün sahibiyle Chrome oturumu: Cikletist, Fluval, Resun ve Haqos (Claude)
+
+- Veri aşamasının "Gerekenler" kapsamı (karar 0036). Sayfalar ürün sahibinin Chrome'unda yalnız okunarak açıldı (Claude in Chrome; tıklama, form ve giriş yok). Ürün sahibi Cikletist ve Fluval'da insan doğrulamasını (Cloudflare) kendisi geçti; Resun ve Haqos'ta tarayıcının sertifika uyarısını geçmemeyi seçti. Değer tahmin edilmedi.
+- Cikletist, 68 çözülmemiş satış adı (`src/data/catalog-species-unresolved.ts`):
+  - 67 sayfa açıldı. Başlık, kırıntı, barkod, marka ve "Ürün özellikleri" sekmesi okundu.
+  - Hiçbirinde bilimsel ad, köken, boy, su değeri, hacim, sosyal yapı ya da beslenme yok. Açıklamalar mağazanın standart metni: 52 sayfada gönderi, ödeme ve adres metni; 8 sayfada eski standart metin; 7 sayfada ürün adı dışında birebir aynı pazarlama şablonu.
+  - Bazı başlıklarda Latince cins ya da tür sözcüğü var (ör. "L-069 Peckoltia Ucayalensis", "CHANNA GOLDEN LİMBATA", "GEOPHAGUS HONGDEA"). Bunlar satış adının kendisi; mağaza metni bilimsel kimlik için tek başına kanıt değil (`docs/DATA_SOURCES.md` → "Canlı verisi için özel kaynak kuralı").
+  - Karışık Nerite sayfasındaki tek ürüne özgü satır: "stok durumuna göre benzer canlılar gönderilmektedir".
+  - "PİNTO MELEZ KARİDESLER" (`/pinto-melez-karidesler`) 404; sitenin "pinto" aramasında da çıkmıyor. Kayıt kaldırılmadı (kullanıcı kayıtları bağlı olabilir); kaynak bağlantısı artık açılmıyor.
+  - Sonuç: 68 kayıt kural gereği çözülmemiş kalır. Veri değişmedi.
+- Cikletist, ekipman (2026-11-04 Trendyol paketinin açık araması; sitenin kendi araması):
+  - "shark", "shark led": Shark marka armatür yok (yalnız Silver Shark balığı ve Sicce Shark Mini Skim yüzey emicisi).
+  - "rs-605", "rs 605": RS-605 yok.
+  - "turbo pipo", "meç turbo": Meç Turbo Pipo yok. MEC057 Pipo 5 ve Meç kutu filtre başka ürünler; sayısal değer vermiyorlar.
+  - Sonuç: 22 Shark armatürünün, RS-605'in ve Meç Turbo Pipo'nun değerleri çekili kalır. Veri değişmedi.
+- Fluval (paket 2'de bekleyen 22 kayıt; sayfaların hepsi aynı adreste açıldı, yönlendirme yok):
+  - AquaClear AC20–AC110 (hesapta 5): ürün sayfasının "Compare Models & Specs" tablosu (`/us/shop/product/aquaclear`):
+    - "Max. Flow Rate" 379 / 568 / 757 / 1136 / 1892 LPH; "Wattage (230-240 V / 50 Hz)" 5 / 5 / 5 / 5 / 14 W; hacim 18–76 / 38–114 / 76–190 / 152–265 / 227–416 L.
+    - Paket 1'de bakım kılavuzunun yuvarlamasına göre yapılan değişiklik geri alındı: AC30 569 → 568, AC70 1135 → 1136, AC110 1890 → 1892 L/saat. Ürün sayfası modelin kendi tablosu, daha özel kaynak. Bakım kılavuzu ek kaynak kalır (hacmi doğruluyor).
+    - Güç ve hacim tuttu; paket 2'de açık kalan güç doğrulandı. 120 V gücü (7 W, AC110'da 14 W) kayıtta yok.
+  - Yüzey süpürücüler (3, hesaba girmez):
+    - 05/06/07 (A240): "fits all Fluval 05/06/07 series Canister filters", "draws water from the surface of the aquarium", "contains no metal parts".
+    - AC20/30/50 (19680) ve AC70/110 (19682): uyumluluk, "slides over filter intake stem", "acts as an additional filter intake", "Self-leveling float".
+    - Kayıtlardaki "motorsuz" ve "emiş hattına bağlanan" sayfalarda yazmıyor. Açıklamalar sayfaların yazdıklarıyla yeniden yazıldı (ör. "Fluval AC ve AquaClear AC20/AC30/AC50 askı filtrelerine uyan yüzey süpürücü · filtrenin emiş borusuna geçirilerek takılır · filtrenin ek emişi olarak çalışır · kendinden seviyelenen şamandıra"). Pasif parça işareti kaldı: sayfada güç yok, cihaz filtrenin ek emişi olarak çalışıyor.
+    - AC20/30/50 kaydı 70/110'un sayfasına bağlıydı; kendi sayfasına bağlandı.
+  - 4.0 nesli LED'ler (14; Aquasky 3.0 ×4, Plant 4.0 ×4, Plant 4.0 Nano, Reef 4.0 ×4, Reef 4.0 Nano): güç, lümen, renk sıcaklığı, IP67, bant sayısı ve FluvalConnect ifadeleri tuttu; Nano dışındaki modellerin uzunluk aralıkları da tuttu. Wi-Fi/Bluetooth yalnız Aquasky 3.0 sayfasında var; kayıtlar da yalnız onda diyor.
+    - Reef 4.0 ×4: kaynak 59 W'ın tek ürün sayfasıydı. Dört modelin tablosunu veren seri sayfasına (`/us/shop/product/reef-4-0`) bağlandı; 59 W sayfası o kaydın ek kaynağı. Sayfadaki lümen (1000 / 1550 / 2250 / 2900 lm) ve 25000 K, Plant 4.0 biçiminde açıklamaya eklendi.
+    - Güç sayfalarda yalnız "Wattage (120 V / 60 Hz)" satırıyla veriliyor; aydınlatma hesaba girmez.
+    - Plant 4.0 Nano ve Reef 4.0 Nano: sayfadaki 'Size Range 11.5–20 cm' neyin ölçüsü olduğunu söylemiyor (ışık 15,25 cm kare); akvaryum uzunluğu olarak kullanılmaz, alan ve açıklama parçası kaldırıldı (Codex kontrolü). Teknik sorumlunun 2026-11-08 kararı; güç, lümen, renk sıcaklığı, IP ve diğer ifadeler korundu. Test, iki kayıtta alanın ve açıklama parçasının bulunmadığını ve açıklamanın geri kalanının (güç, lümen, renk sıcaklığı, IP67) eksiksiz olduğunu denetler.
+    - Gözlem: Plant 4.0 32 W ve Aquasky 3.0 12 W'ta LED renk adetlerinin toplamı "Total LEDs" ile tutmuyor (167 / 168, 28 / 35). Kayıtlarda LED adedi yok.
+  - Fluval toplamı: 87 kaydın hepsi üreticinin sayfası, arşiv kopyası ya da kılavuzuyla okundu. Nano'ların belirsiz iki uzunluk alanı ve açıklama parçaları kaldırılarak bulgu kapatıldı.
+- Resun (arşivde kopyası olmayan 6 sayfa, h-pd-395…400; EFC300/550, HCB1000/4000, NLP20–200, IceCore, AST410, MagBlade; 12 kayıt, 9'u hesapta):
+  - Kabul edilen altı mağazada (Cikletist dahil) arandı; bu modeller yok. Mağazalardaki Resun AIR 1000 / AIR 4000, CL-450 soğutucu ve MB/NFMB silecekleri ayrı modeller; eşlenmedi.
+  - Karar (ürün sahibi, 2026-11-08): 12 kayıt değerleriyle kalır. Aynı çekimden 160 kayıt arşiv kopyalarıyla hatasız çıktı. Veri değişmedi.
+- Haqos (48 kayıt; 38'i www.haqos.com'a bağlı, 17'si sayısal değer taşıyordu):
+  - Sitenin sertifikası başka adrese ait. Ürün açıklaması resimlerinin (`p22.qiyeku.cn`) arşivde kopyası yok (paket 2).
+  - Kabul edilen altı mağazada arandı (her mağazanın kendi araması; "haqos", "thermo" ve model kodları): ısıtıcılar, filtreler ve UV'ler yok. Betta'daki Haqos hidrometre, lambalar ve dip süpürgesi model kodsuz ya da başka model; eşlenmedi.
+  - Karar (ürün sahibi, 2026-11-08): www.haqos.com'a dayanan, hiç doğrulanamamış sayısal değerler çekilir. 15 kayıt `unverifiedEquipmentIds`'e girdi:
+    - Filtre 6: EXPRO-500, EX-500AT, EXPRO-230, EXPRO-1000, EX1000AT, EXC-500 ("2 m basma yüksekliği" de çekilir).
+    - Isıtıcı 7: Thermo-Genius 25–300 W ("20–32 °C" ayar aralığı da çekilir).
+    - UV 2: UV 9W, Mini UV 5W. Hesaba girmezler; açıklama "güç doğrulanamadı" der, kapasite notu yok.
+  - İstisna, Thermo-Sprite: karar hiç doğrulanamamış üretici değerleri içindir. Thermo-Sprite'ın 15 W'ı ve 14 × 2,5 cm ölçüsü 2026-09-06'da kabul edilen mağaza Betta'nın ürün sayfasında doğrulanmıştı ("2026-09-06 Haqos Thermo-Sprite kapasite doğrulaması"). O sayfa 2026-11-08'de 404 ve arşivde kopyası yok. Resun'daki gibi değer o tarihteki doğrulamayla kalır; kayıt değişmedi, Betta bağlantısı ek kaynak olarak durur.
+  - İstisna, HEC-600: Malawi İzmir'in ürün sayfası (`https://malawiizmir.com/haqos-hec-600-pilli-dip-supurgesi`) "Max Akış Hacmi: 520 l/h" yazıyor; Atakan'ın sayfası debi vermiyor. Debi kalır, Malawi sayfası ek kaynak oldu. Su seviyesi mağazalarda farklı: Malawi "Normal Su Seviyesi: 40 cm", "Max Su Seviyesi: 52 cm"; Atakan "Maksimum Kullanılabilir Akvaryum Yüksekliği: 40 cm". Kural gereği açıklamadaki "40–52 cm su seviyesi" çıkarıldı.
+  - Sayısal değeri olmayan 21 www.haqos.com kaydı (pompalar, aydınlatma, termometre, hidrometre, TP-L, EXPAD-500, PS-300, EASY-1000AT, Aqua Flow 250) değişmedi.
+  - Ekranda (çekmeden sonra) örnekler: "Dış filtre · debi doğrulanamadı", "Tam daldırılabilir, termostatlı cam ısıtıcı · güç doğrulanamadı", "UV sterilizatör · güç doğrulanamadı". Filtre ve ısıtıcıların kapasite notu: "Değerlerin kaynağı haqos.com; …".
+- Kod (`src/data/catalog-equipment-unverified.ts`):
+  - Açıklamadan çekilen parçalara sıcaklık aralığı ("20–32 °C") eklendi. Thermo-Genius açıklaması "Tam daldırılabilir, termostatlı cam ısıtıcı · 20–32 °C ayar aralığı · …" diye bölündü; kaynağın yazdığı aralık dosyada durur.
+  - Isıtıcıda güç hacimle birlikte çekilince açıklama "güç doğrulanamadı" der ("önerilen hacim doğrulanamadı" değil).
+  - Bütün katalog önce ve sonra karşılaştırıldı: 3.541 kaydın 28'i değişti (AquaClear 3, Reef 4.0 4, yüzey süpürücü 3, Haqos 16, Plant 4.0 Nano ve Reef 4.0 Nano). Listedeki öbür kayıtların çıktısı değişmedi.
+- Çeviri: 9 yeni parça İngilizce ve İspanyolcaya eklendi (yüzey süpürücülerin 7 parçası, "Tam daldırılabilir, termostatlı cam ısıtıcı", haqos.com kapasite notu); kullanılmayan 4 parça çıkarıldı.
+- Test (`scripts/test-catalog-flow.cjs`):
+  - AquaClear debileri ürün sayfasının değerleri.
+  - Yüzey süpürücülerde "motorsuz" ve "emiş hattına" yok; her biri kendi sayfasına bağlı.
+  - Reef 4.0'da lümen, 25000 K ve seri sayfası; eski sayfa yalnız 59 W'ın ek kaynağı.
+  - Plant 4.0 Nano ve Reef 4.0 Nano'da `recommendedTankLengthCm` ve "11,5–20" yok; güç korunur, açıklamanın geri kalanı (güç, lümen, renk sıcaklığı, IP67) birebir aynı kalır.
+  - www.haqos.com'a bağlı kayıtlardan yalnız mağazada doğrulanan HEC-600 (520 L/saat, Malawi ek kaynağı, su seviyesi yok) ve Thermo-Sprite (15 W, Betta ek kaynağı) değer taşır; değeri çekilen Haqos açıklamasında sayı kalmaz; liste sayısı 203 → 218.
+  - Bozma denemeleri testi düşürüyor: AC30 569, açıklamada "motorsuz", 20/30/50'nin eski kaynağı, Reef lümeni, listeden çıkan bir Haqos ısıtıcısı, °C kalıbının kaldırılması, HEC-600'ün ek kaynağı ve su seviyesi; Nano'larda alanın ya da "11,5–20 cm" parçasının geri gelmesi, gücün değişmesi ve lümenin silinmesi (son kapı denetimi, yalnız bellekte).

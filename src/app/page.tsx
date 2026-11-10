@@ -2,6 +2,7 @@
 
 import { Activity, CalendarDays, ChevronRight, CircleGauge, Droplets, FlaskConical, Plus, Thermometer, Waves } from "lucide-react";
 import { useEffect, useMemo, useState } from "react";
+import { BackupReminder } from "@/components/backup-reminder";
 import { MobileNav } from "@/components/mobile-nav";
 import { ParameterCard, statusTones } from "@/components/parameter-card";
 import { Sidebar } from "@/components/sidebar";
@@ -44,6 +45,7 @@ export default function Dashboard() {
   const phStatus = status?.ph ?? pendingStatus;
   const nitrate = status?.nitrate ?? pendingStatus;
   const tds = status?.tds ?? pendingStatus;
+  const specificGravity = status?.specificGravity ?? pendingStatus;
   const upcomingTasks = maintenanceTasks.filter((item) => item.aquariumId === aquarium.id && !item.completedAt).slice(0, 3);
   // "Akvaryumum" kartı seçili akvaryumun kendi kayıtlarından yazılır (eskiden sabit örnek değerler gösteriyordu).
   const animalCount = animals.reduce((sum, item) => sum + item.quantity, 0);
@@ -55,6 +57,7 @@ export default function Dashboard() {
         <div className="flex items-center gap-3 lg:hidden"><span className="grid size-9 place-items-center rounded-xl bg-aqua text-ink"><Waves size={20}/></span><span className="font-extrabold">{t.app.name}</span></div>
         <div className="hidden items-center gap-2 text-xs text-[#647981] lg:flex"><span>{t.navigation.dashboard}</span><ChevronRight size={13}/><span className="text-[#aab9be]">{t.navigation.items.overview}</span></div>
       </header>
+      <BackupReminder />
       <div className="mx-auto max-w-[1440px] px-5 py-7 sm:px-8 lg:px-10 lg:py-10">
         <section className="mb-8 flex flex-col justify-between gap-4 sm:flex-row sm:items-end">
           <div><p className="eyebrow mb-2 text-aqua">{fmt.date(new Date(),{day:"numeric",month:"long",weekday:"long"})}</p><h1 className="text-2xl font-extrabold tracking-tight sm:text-3xl">{greeting ? t.greeting[greeting] : t.greeting.fallback}</h1><p className={`mt-2 text-sm ${summaryTones[summary.tone]}`}>{summary.text} <a href={`/aquariums/${aquarium.id}/health`} className="-my-3.5 inline-block py-3.5 font-bold text-aqua hover:underline">{t.dashboard.openHealth}</a></p></div>
@@ -64,7 +67,9 @@ export default function Dashboard() {
         <section className="mb-5 grid grid-cols-2 gap-3 xl:grid-cols-4">
           <ParameterCard icon={Thermometer} label={t.common.temperature} value={latest?.temperature !== undefined ? fmt.temperature(latest.temperature) : "—"} status={t.waterStatus[temperatureStatus.key]} statusTone={temperatureStatus.tone} />
           <ParameterCard icon={FlaskConical} label={t.dashboard.phValue} value={latest?.ph !== undefined ? fmt.measurement(latest.ph) : "—"} status={t.waterStatus[phStatus.key]} statusTone={phStatus.tone} tone="green" />
-          <ParameterCard icon={CircleGauge} label="TDS" value={latest?.tds !== undefined ? `${fmt.measurement(latest.tds)} ppm` : "—"} status={t.waterStatus[tds.key]} statusTone={tds.tone} />
+          {/* Su değerleri sayfasıyla aynı: tatlı suda TDS, deniz ve acı suda özgül ağırlık. */}
+          {aquarium.type === "freshwater" ? <ParameterCard icon={CircleGauge} label="TDS" value={latest?.tds !== undefined ? `${fmt.measurement(latest.tds)} ppm` : "—"} status={t.waterStatus[tds.key]} statusTone={tds.tone} />
+            : <ParameterCard icon={CircleGauge} label={t.water.fields.specificGravity} value={latest?.specificGravity !== undefined ? fmt.measurement(latest.specificGravity) : "—"} status={t.waterStatus[specificGravity.key]} statusTone={specificGravity.tone} />}
           <ParameterCard icon={Activity} label={t.dashboard.nitrate} value={latest?.nitrate !== undefined ? `${fmt.measurement(latest.nitrate)} ppm` : "—"} status={t.waterStatus[nitrate.key]} statusTone={nitrate.tone} tone="green" />
         </section>
 

@@ -19,6 +19,22 @@ export class FakeLocalStorage {
   /** Ayarlanırsa her `setItem` öncesi çağrılır; `Error` dönerse yazma o hatayla başarısız olur. */
   failOnSet: SetItemFailure | undefined;
 
+  /** Ayarlanırsa depo kotası (anahtar + değer karakter sayısı); aşan yazma tarayıcıdaki gibi hata verir ve depoyu değiştirmez. */
+  quota: number | undefined;
+
+  /** Kota ayarlıyken ulaşılan en yüksek doluluk. */
+  peakUsage = 0;
+
+  /** Kota ayarlıyken her başarılı `setItem` sonrasındaki doluluk, sırasıyla. */
+  readonly usageLog: { key: string; usage: number }[] = [];
+
+  /** Depodaki anahtar ve değerlerin toplam karakter sayısı. */
+  usage(): number {
+    let total = 0;
+    for (const [key, value] of this.store) total += key.length + value.length;
+    return total;
+  }
+
   get length(): number {
     return this.store.size;
   }
@@ -39,6 +55,13 @@ export class FakeLocalStorage {
       throw failure;
     }
     this.setItemCalls.push({ key, value });
+    if (this.quota !== undefined) {
+      const previous = this.store.get(key);
+      const next = this.usage() - (previous === undefined ? 0 : key.length + previous.length) + key.length + value.length;
+      if (next > this.quota) throw new Error("QuotaExceededError");
+      this.peakUsage = Math.max(this.peakUsage, next);
+      this.usageLog.push({ key, usage: next });
+    }
     this.store.set(key, value);
   }
 

@@ -49,9 +49,19 @@
 // ve çıktısı değişmez. Bitki kuralları puan cezası ve gömülü eşik içermez (yalnız kayıttaki değerler), bu yüzden kural seti sürümü
 // aynı kalır (bkz. docs/DECISIONS/0025-bitki-uyarilari.md).
 //
-// 1.12.0: üretici tarafından sabit sıcaklık kontrolü bulunmadığı açıklanan
+// 1.12.0: bitki uyarılarına katalogdaki kaynaklı etiketler girer: "su bitkisi değil" ve istilacı tür listesi (sarı uyarı). Değerleri kaynakta
+// olmayan yalnız uyarı kayıtlarında da çıkar. Sağlık puanı, `analyzeAquarium` ve kural seti değişmez
+// (bkz. docs/DECISIONS/0028-bitki-etiketleri-saglik-analizinde.md).
+//
+// 1.13.0: deniz akvaryumunun su hedefleri akvaryum düzeyinde (src/marine.ts). Son ölçümün özgül ağırlığı, pH'ı, (omurgasızlı akvaryumda)
+// KH'si ve (yalnız balıklı akvaryumda) nitratı OATA'nın ev akvaryumu kurulum rehberindeki hedeflerle karşılaştırılır; hedef dışı sarı uyarıdır.
+// Özgül ağırlık iki hedefin de dışındaysa (1,017–1,026) kesin tehlikedir. Deniz canlılarının kayıtlarında pH ve özgül ağırlık yoktur;
+// pH aralığı olmayan canlı pH kesişimine girmez. Yeni gömülü eşikler (OATA hedefleri) eklendiği için kural seti 1.10.0
+// (bkz. docs/DECISIONS/0029-tuzlu-su-baslangic-paketi.md, 0030-deniz-suyu-hedefleri.md).
+//
+// 1.14.0: üretici tarafından sabit sıcaklık kontrolü bulunmadığı açıklanan
 // ısıtıcılar tek başına güvenli ısıtma kapasitesine katılmaz; harici termostat ve
 // ayrı termometre gereksinimi tehlike uyarısı olarak gösterilir. Yeni güvenlik
-// davranışı kural seti 1.10.0'dır (bkz. docs/DECISIONS/0027-harici-termostat-gerektiren-isitici.md).
-export const ENGINE_VERSION = "1.12.0";
+// davranışı kural seti 1.10.0'dır (bkz. docs/DECISIONS/0035-harici-termostat-gerektiren-isitici.md).
+export const ENGINE_VERSION = "1.14.0";
 export const RULESET_VERSION = "1.10.0";

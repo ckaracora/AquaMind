@@ -51,11 +51,19 @@ export const tr = {
       plants: "bitkiler",
       equipment: "ekipmanlar",
     },
-    deletePending: "Tamamlanmamış bir silme işlemi sürüyor. Bu sırada yeni değişiklikler kaydedilemez ve denenen işlem uygulanmaz. Sayfayı yenileyin; işlem otomatik tamamlanmaya çalışılacak.",
+    deletePending: "Tamamlanmamış bir veri işlemi (silme ya da yedekten geri yükleme) sürüyor. Bu sırada yeni değişiklikler kaydedilemez ve denenen işlem uygulanmaz. Sayfayı yenileyin; işlem otomatik tamamlanmaya çalışılacak.",
     unsaved: (collections: string) => `Değişiklikleriniz bu cihazda saklanamadı (${collections}).`,
     unsavedHelpBefore: "Sayfayı yenilerseniz bu değişiklikler kaybolur. Depolama alanı dolu olabilir. Kaybetmemek için",
     unsavedHelpLink: "Ayarlar → Verileri dışa aktar",
     unsavedHelpAfter: "ile yedek alın.",
+  },
+  /** Yedek hatırlatması (docs/DECISIONS/0027-yedekten-geri-yukleme.md): yalnız bu cihazda kalıcı veri varken gösterilir. */
+  backupReminder: {
+    never: "Verilerin yalnızca bu cihazda duruyor ve henüz yedek almadın.",
+    old: (days: number) => `Verilerin yalnızca bu cihazda duruyor. Son yedeğin ${days} gün önce alındı.`,
+    help: "Tarayıcı verileri silerse ya da cihaz değiştirirsen, yedek dosyasıyla hepsini Ayarlar'dan geri yükleyebilirsin.",
+    backupNow: "Şimdi yedek al",
+    later: "Sonra hatırlat",
   },
   /** Birden çok ekranda aynı anlamla geçen sözcükler. Kimyasal ve ölçü simgeleri (pH, TDS, NO₃, ppm, cm) koda yazılı kalır. */
   common: {
@@ -117,6 +125,9 @@ export const tr = {
     veryHigh: "Çok yüksek",
     mayBeHigh: "Yüksek olabilir",
     informational: "Bilgi amaçlı",
+    /** Deniz akvaryumu: OATA'nın akvaryum hedefi (türe özgü değil). */
+    inTarget: "Hedefte",
+    outOfTarget: "Hedefin dışında",
     pending: "…",
     unavailable: "Yüklenemedi",
   },
@@ -213,6 +224,29 @@ export const tr = {
   },
   health: {
     pageTitle: "Sağlık Analizi",
+    /** Deniz akvaryumunun su hedefleri bölümü (motor 1.13.0, karar 0030). */
+    marine: {
+      eyebrow: "Deniz suyu",
+      title: { fishOnly: "Yalnız balıklı akvaryum hedefi", invertebrates: "Omurgasızlı akvaryum hedefi" },
+      reason: { fishOnly: "Akvaryumda deniz omurgasızı kayıtlı değil.", invertebrates: "Akvaryumda deniz omurgasızı (karides, salyangoz, anemon gibi) kayıtlı." },
+      source: "Kaynak: OATA, deniz akvaryumu kurulum rehberi (2022).",
+      parameters: { specificGravity: "Özgül ağırlık", ph: "pH", kh: "KH", nitrate: "Nitrat", phosphate: "Fosfat", temperature: "Sıcaklık" },
+      /** Değerin birimi; özgül ağırlık ve pH birimsiz. Sıcaklık kullanıcının birimiyle ayrıca yazılır. */
+      units: { kh: "dKH", nitrate: "mg/L", phosphate: "mg/L" },
+      status: {
+        ok: "Hedefte",
+        missing: "Ölçüm yok",
+        temperatureInfo: "Canlılara göre",
+        speciesDependent: "Türe bağlı",
+        outOfTarget: (target: string) => `Hedef ${target}`,
+      },
+      atMost: (value: string) => `en çok ${value}`,
+      targetLabel: (value: string) => `Hedef ${value}`,
+      /** Yalnız bilgi olarak gösterilen OATA aralığı (sıcaklık; omurgasızlı akvaryumda nitrat ve fosfat). */
+      oataLabel: (value: string) => `OATA'nın aralığı ${value}`,
+      noReading: "—",
+      note: "Bu hedef türe özgü değildir; deniz akvaryumu için genel hedeftir. Sıcaklık her canlının kendi aralığıyla değerlendirilir. Omurgasızlı akvaryumda nitrat ve fosfatı OATA türe bağlı yazıyor; bu yüzden yalnız bilgi olarak gösterilir.",
+    },
     overall: { good: "İyi", warning: "Dikkat", danger: "Yüksek risk" },
     loadFailed: "Analiz yüklenemedi.",
     loadFailedHelp: "Bağlantınızı kontrol edip yeniden deneyin.",
@@ -319,7 +353,15 @@ export const tr = {
     remove: "Canlıyı sil",
     emptyTitle: "Canlı bulunamadı",
     emptyText: "İlk canlı kaydını ekleyebilirsin.",
-    /** Katalogdan canlı ekleme penceresi. Tür ve grup adları katalogdan gelir (4. paket). */
+    /** Canlı grupları (katalogdaki `group` kimliği); her kimliğin adı olduğu test edilir. */
+    speciesGroups: {
+      livebearer: "Canlı doğuranlar", tetra: "Tetralar", rasbora: "Rasboralar", danio: "Daniolar", barb: "Barblar",
+      rainbowfish: "Gökkuşağı balıkları", killifish: "Killifishler", cichlid: "Cichlidler", labyrinth: "Labirentliler",
+      bottom: "Dip balıkları ve vatozlar", goby: "Goby ve kaya balıkları", puffer: "Puffer / balon balıkları",
+      monster: "Monster / büyük türler", coldwater: "Soğuk su balıkları", shrimp: "Karidesler", snail: "Salyangozlar",
+      crayfish: "Kerevitler", other: "Diğer canlılar",
+    },
+    /** Katalogdan canlı ekleme penceresi. Tür adları ve türün notları katalogdan gelir ve katalog çevirmeninden geçer (4. paket). */
     form: {
       title: "Canlı seç",
       help: "Ana sınıf → canlı grubu → tür sırasıyla ilerle.",
@@ -457,6 +499,16 @@ export const tr = {
     noModel: "Model belirtilmemiş",
     specs: "Teknik bilgiler",
     noSpecs: "Bilgi eklenmemiş",
+    /**
+     * Katalogdaki teknik bilgi satırı çevrilmemiş bir dilde gösterilmez; yerine kaydın sayılarından kurulan özet yazılır
+     * (`src/lib/equipment-text.ts`). Türkçede katalogdaki satır gösterildiği için bu özet kullanılmaz.
+     */
+    specSummary: {
+      flow: (value: string) => `${value} L/saat`,
+      power: (value: string) => `${value} W`,
+      volumeUpTo: (volume: string) => `en çok ${volume}`,
+      volumeRange: (min: string, max: string) => `${min}–${max}`,
+    },
     installedOn: (date: string) => `Kurulum: ${date}`,
     remove: "Ekipmanı sil",
     emptyTitle: "Ekipman bulunamadı",
@@ -532,6 +584,13 @@ export const tr = {
     allBrands: "Tüm markalar",
     count: (count: number) => `${count} ürün`,
     empty: "Aramana uygun ürün bulunamadı.",
+    /** Kategori adları; sıra filtre düğmelerinin sırasıdır. Türkçe adlar katalogdaki `careCategoryLabels` ile aynı olmalı (test). */
+    categories: {
+      food: "Yem", fertilizer: "Gübre", water_conditioner: "Su düzenleyici", bacteria: "Bakteri kültürü",
+      test: "Test", filter_media: "Filtre medyası", substrate: "Taban malzemesi", plant_seed: "Bitki tohumu", treatment: "Tedavi", decoration: "Dekorasyon", cleaning: "Temizlik", accessory: "Aksesuar",
+      aquarium_set: "Akvaryum seti", aquaterrarium: "Aquaterrarium", terrarium: "Terrarium", tank: "Boş akvaryum",
+      cover: "Akvaryum kapağı", cabinet: "Akvaryum dolabı",
+    },
   },
   calculators: {
     eyebrow: "Araç kutusu",
@@ -602,7 +661,10 @@ export const tr = {
     },
     units: {
       title: "Birimler ve bölge",
-      description: "Hesaplamalarda kullanılacak ölçü biçimleri",
+      description: "Arayüz dili ve hesaplamalarda kullanılacak ölçü biçimleri",
+      language: "Dil",
+      /** Dil seçimi hemen uygulanır; paketi yüklenemezse dil değişmez. */
+      languageLoadFailed: "Dil yüklenemedi; bağlantını kontrol edip tekrar dene.",
       temperature: "Sıcaklık",
       celsius: "Santigrat (°C)",
       fahrenheit: "Fahrenheit (°F)",
@@ -633,9 +695,67 @@ export const tr = {
     },
     data: {
       title: "Veri yönetimi",
-      description: "Yerel kayıtlarını yedekle veya temizle",
+      description: "Yerel kayıtlarını yedekle, geri yükle veya temizle",
       export: "Verileri dışa aktar",
       exportHelp: "JSON yedeği indir",
+      restore: "Yedekten geri yükle",
+      restoreHelp: "JSON yedeğini bu cihaza yükle",
+      /** `date`: son yedeğin tarihi, ayarlardaki tarih biçimiyle. */
+      lastBackup: (date: string) => `Son yedek: ${date}`,
+      noBackup: "Bu cihazda henüz yedek alınmadı.",
+      fileNote: "Yedek dosyası şifresizdir ve tüm kayıtlarını içerir; güvendiğin bir yerde sakla.",
+      restored: "Yedek geri yüklendi.",
+      restoreErrors: {
+        "too-large": "Bu dosya çok büyük; bir AquaMind yedeği olamaz. Hiçbir şey değiştirilmedi.",
+        "not-json": "Bu dosya okunamadı. AquaMind'dan indirdiğin .json yedeğini seç. Hiçbir şey değiştirilmedi.",
+        "not-backup": "Bu dosya bir AquaMind yedeği değil. Hiçbir şey değiştirilmedi.",
+        "newer-version": "Bu yedek AquaMind'ın daha yeni bir sürümüyle alınmış. Sayfayı yenileyip tekrar dene. Hiçbir şey değiştirilmedi.",
+        invalid: "Yedekte okunamayan kayıtlar var; yarım yükleme olmasın diye hiçbir şey değiştirilmedi.",
+        "read-failed": "Dosya okunamadı; tekrar dene. Hiçbir şey değiştirilmedi.",
+      },
+      restoreRefused: {
+        "journal-pending": "Tamamlanmamış bir veri işlemi sürüyor. Sayfayı yenile, sonra tekrar dene. Hiçbir şey değiştirilmedi.",
+        "journal-write-failed": "Yedek yüklenemedi: bu cihazda yeterli depolama alanı yok. Hiçbir şey değiştirilmedi.",
+        "not-enough-space": "Yedek yüklenemedi: bu cihazda yeterli depolama alanı yok. Hiçbir şey değiştirilmedi.",
+        unserializable: "Yedekte okunamayan kayıtlar var; yarım yükleme olmasın diye hiçbir şey değiştirilmedi.",
+        "trash-unreadable": "Silinen akvaryumların kaydı okunamadığı için yedek yüklenmedi. Hiçbir şey değiştirilmedi. Sayfayı yenileyip tekrar dene; uygulama bozuk kaydı açılışta onarır.",
+        unavailable: "Bu tarayıcıda depolama kullanılamıyor. Hiçbir şey değiştirilmedi.",
+      },
+      restoreIncomplete: "Geri yükleme yarıda kaldı. Sayfayı yenile; uygulama kalan kısmı tamamlayacak.",
+      restoreUnexpected: "Geri yükleme sırasında beklenmeyen bir hata oldu. Sayfayı yenile; yarım kalan bir işlem varsa uygulama onu tamamlar.",
+      restoreDialog: {
+        title: "Yedek geri yüklensin mi?",
+        /** `date`: yedeğin alındığı gün. */
+        backupDate: (date: string) => `Yedeğin tarihi: ${date}`,
+        backupContains: "Yedekte olanlar",
+        emptyBackup: "Yedekte kayıt yok.",
+        deletedInBackup: (count: number) => `${count} silinmiş akvaryum (30 günlük kurtarma kaydı)`,
+        replaceWarning: "Bu cihazdaki şu kayıtların yerini yedektekiler alacak:",
+        nothingOnDevice: "Bu cihazda kayıtlı veri yok; yedek olduğu gibi yüklenecek.",
+        keptNote: "Ayarların da yedektekilerle değişir. Silinen akvaryumlar ve kurtarma kayıtları silinmez, yedektekilerle birleştirilir.",
+        downloadCurrent: "Önce şu anki verilerimi indir",
+        confirm: "Yedeği geri yükle",
+        cancel: "Vazgeç",
+        /** `count`: kayıt sayısı; Türkçede ad sayının yanında tekil yazılır ("3 akvaryum"). Başka dil çoğulu sayıya göre seçer. */
+        units: {
+          aquariums: (_count: number) => "akvaryum",
+          waterReadings: (_count: number) => "su ölçümü",
+          maintenanceTasks: (_count: number) => "bakım kaydı",
+          livestock: (_count: number) => "canlı",
+          plants: (_count: number) => "bitki",
+          equipment: (_count: number) => "ekipman",
+        },
+      },
+      persistence: {
+        title: "Tarayıcı verilerimi silmesin",
+        checking: "Denetleniyor…",
+        persisted: "Açık. Tarayıcı bu verileri kendiliğinden silmez; yalnız sen silersen silinir.",
+        bestEffort: "Kapalı. Cihazda yer azalırsa tarayıcı bu verileri kendiliğinden silebilir.",
+        denied: "Tarayıcı bu isteği kabul etmedi. Bu kararı tarayıcı kendi ölçütleriyle verir; düzenli yedek almak en güvenli yol.",
+        unsupported: "Bu tarayıcı bu isteği desteklemiyor. Düzenli yedek almak en güvenli yol.",
+        request: "Kalıcı depolamayı iste",
+        safariNote: "iPhone, iPad ve Mac'te Safari, bu sitede hiç dokunmadan ya da tıklamadan geçen 7 Safari kullanım gününden sonra verileri silebilir. Siteyi ana ekrana eklemek ve düzenli yedek almak bu riski azaltır.",
+      },
       /** İndirilen yedek dosyasının adı. */
       exportFileName: (date: string) => `aquamind-yedek-${date}.json`,
       reset: "Tüm verileri sıfırla",
@@ -648,15 +768,18 @@ export const tr = {
       quarantined: (count: number, keys: string) => `• ${count} anahtar karantinaya alındı. Ham içerik korunuyor ve JSON yedeğine dahil ediliyor: ${keys}`,
       quarantineFailed: "• Bir bozuk değer karantinaya alınamadı; depolama alanı dolu olabilir. İlgili anahtara dokunulmadı.",
       deleteIncomplete: "• Bir silme işlemi tamamlanamadı. Kayıtlar korunuyor; uygulama bir sonraki açılışta işlemi tamamlar.",
+      restoreIncomplete: "• Bir yedekten geri yükleme tamamlanamadı. Yedekteki değerler korunuyor; uygulama bir sonraki açılışta işlemi tamamlar.",
       orphans: (count: number) => `• ${count} kayıt artık var olmayan bir akvaryuma bağlı. Silinmediler; yedekte ayrı bölümde yer alıyorlar.`,
       deleted: (count: number) => `• ${count} silinmiş akvaryum 30 gün boyunca saklanıyor.`,
       contentHidden: "Kayıt içerikleri burada gösterilmez.",
     },
     storedLocally: "Verilerin bu cihazda saklanıyor",
     cloudLater: "Bulut senkronizasyonu hesap sistemiyle eklenecek.",
-    saveFailed: "Ayarlar kaydedilemedi; bu cihazda henüz saklanmıyor. Depolama alanı dolu olabilir veya tamamlanmamış bir silme işlemi sürüyor olabilir. Sayfayı yenileyip tekrar deneyin.",
+    saveFailed: "Ayarlar kaydedilemedi; bu cihazda henüz saklanmıyor. Depolama alanı dolu olabilir veya tamamlanmamış bir veri işlemi (silme ya da geri yükleme) sürüyor olabilir. Sayfayı yenileyip tekrar deneyin.",
     saved: "Kaydedildi",
     save: "Ayarları kaydet",
+    /** Gizlilik sayfasının bağlantısı; ürün sahibinin 2026-10-30 kararıyla iletişim bilgisi eklenene kadar ekranda gösterilmez (0027). */
+    privacyLink: "Gizlilik: verilerin nerede ve nasıl saklanıyor",
     /** Sayfanın altındaki sürüm satırı; dil adı seçili dili gösterir. */
     footer: "AquaMind MVP · Türkçe · v0.1",
   },

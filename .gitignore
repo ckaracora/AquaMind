@@ -6,5 +6,8 @@ out
 !.env.example
 *.log
 *.tsbuildinfo
+# Supabase CLI'nin bağlantı ve dal bilgisi (yalnız hazırlık iş akışında oluşur)
+supabase/.temp/
+supabase/.branches/
 .DS_Store
 .codex-temp/

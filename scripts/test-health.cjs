@@ -559,15 +559,21 @@ const metric = (analysis, key) => analysis.metrics.find(item => item.key === key
   assert(!warningTitles(analysis).includes("Ocellaris palyaço balığı: akvaryum türü uyumsuz"), "Ocellaris tuzlu su akvaryumunda yaşam ortamı uyarısı üretmemeli");
 }
 
-{
+// Motor 1.13.0 (karar 0029, 0030): deniz akvaryumunda özgül ağırlık OATA'nın ev akvaryumu hedefiyle karşılaştırılır. Akvaryumda deniz
+// omurgasızı yoksa yalnız balık hedefi 1,017–1,023; hedef dışı sarı uyarı, 1,017–1,026 dışı kesin tehlike.
+for (const [specificGravity, expected] of [[1.018, "none"], [1.025, "warning"], [1.016, "danger"]]) {
   const analysis = analyzeAquarium(
     aquarium({ type: "saltwater", netVolumeLiters: 100, lengthCm: 60 }),
     [animal("ocellaris-clownfish", "Ocellaris palyaço balığı", 2)],
     [],
-    { id: "marine-water-low-sg", aquariumId: "test-aquarium", measuredAt: "2026-08-31", temperature: 25, ph: 8.1, specificGravity: 1.018 },
+    { id: "marine-water-sg", aquariumId: "test-aquarium", measuredAt: "2026-08-31", temperature: 25, ph: 8.1, specificGravity },
   );
-  assert(warningTitles(analysis).includes("Özgül ağırlık canlı aralığı dışında"), "Düşük özgül ağırlık deniz canlısı için tehlike üretmeli");
-  assert.equal(metric(analysis, "water").status, "warning", "Tek uygunsuz deniz suyu parametresi su metriğini uyarı seviyesine düşürmeli");
+  const titles = warningTitles(analysis);
+  assert.equal(titles.includes("Özgül ağırlık hedefin dışında"), expected === "warning", `${specificGravity}: yalnız balıklı akvaryum hedefinin dışı sarı uyarı olmalı`);
+  assert.equal(titles.includes("Özgül ağırlık güvenli aralığın dışında"), expected === "danger", `${specificGravity}: iki hedefin de dışı tehlike olmalı`);
+  assert(!titles.includes("Özgül ağırlık canlı aralığı dışında"), "Deniz canlısının kaydında artık özgül ağırlık aralığı yok");
+  if (expected === "danger") assert(analysis.score <= 49, "Güvenli aralığın dışındaki tuzluluk genel puanı en çok 49'a çekmeli");
+  if (expected === "warning") assert.equal(metric(analysis, "water").status, "warning", "Tek hedef dışı deniz suyu değeri su metriğini uyarı seviyesine düşürmeli");
 }
 
 {
@@ -577,22 +583,22 @@ const metric = (analysis, key) => analysis.metrics.find(item => item.key === key
     [],
     { id: "marine-water-maroon", aquariumId: "test-aquarium", measuredAt: "2026-08-31", temperature: 25, ph: 8.2, specificGravity: 1.023 },
   );
-  assert(warningTitles(analysis).includes("Maroon palyaço balığı: alan sınırda"), "Maroon palyaço balığı 120 litre ve 100 cm altındaki akvaryumda alan uyarısı üretmeli");
+  assert(warningTitles(analysis).includes("Maroon palyaço balığı: alan sınırda"), "Maroon palyaço balığı 200 litrenin altındaki akvaryumda alan uyarısı üretmeli (Fishipedia, karar 0031)");
   assert(warningTitles(analysis).includes("Maroon palyaço balığı: tank arkadaşı seçimine dikkat"), "Maroon palyaço balığının yüksek bölgeciliği kullanıcıya açıklanmalı");
   assert(!warningTitles(analysis).includes("Özgül ağırlık canlı aralığı dışında"), "Geçerli deniz suyu ölçümü Maroon profili için tuzluluk tehlikesi üretmemeli");
 }
 
 {
   const analysis = analyzeAquarium(
-    aquarium({ type: "saltwater", netVolumeLiters: 250, lengthCm: 150 }),
+    aquarium({ type: "saltwater", netVolumeLiters: 60, lengthCm: 150 }),
     // Anemon katalogda "other" kategorisindedir; alan uyarısının tehlike basamağı yalnızca balıklar için geçerlidir (kural seti 1.6.0).
     [{ ...animal("long-tentacle-anemone", "Uzun tentaküllü anemon"), category: "other" }, animal("ocellaris-clownfish", "Ocellaris palyaço balığı", 2)],
     [],
     { id: "marine-water-anemone", aquariumId: "test-aquarium", measuredAt: "2026-08-31", temperature: 25, ph: 8.2, specificGravity: 1.024 },
   );
-  assert(warningTitles(analysis).includes("Uzun tentaküllü anemon: alan sınırda"), "Uzun tentaküllü anemon 300 litrenin altında hacim uyarısı üretmeli");
+  assert(warningTitles(analysis).includes("Uzun tentaküllü anemon: alan sınırda"), "Uzun tentaküllü anemon OATA'nın 80 litresinin altında hacim uyarısı üretmeli (karar 0031)");
   assert(warningTitles(analysis).includes("Uzun tentaküllü anemon: tank arkadaşı seçimine dikkat"), "Hareketli ve sokucu anemon karma akvaryumda uyumluluk uyarısı üretmeli");
-  assert(warningTitles(analysis).includes("Uzun tentaküllü anemon: özel bakım gereksinimi"), "Anemon için kum, ışık, pompa koruması ve bakır uyarıları görünmeli");
+  assert(warningTitles(analysis).includes("Uzun tentaküllü anemon: özel bakım gereksinimi"), "Anemon için kum, olgun akvaryum ve bakır uyarıları görünmeli");
 }
 
 {
@@ -608,24 +614,42 @@ const metric = (analysis, key) => analysis.metrics.find(item => item.key === key
 {
   const analysis = analyzeAquarium(
     aquarium({ type: "saltwater", netVolumeLiters: 120, lengthCm: 60 }),
-    [animal("blue-striped-sea-slug", "Mavi çizgili deniz tavşanı"), animal("ocellaris-clownfish", "Ocellaris palyaço balığı", 2)],
+    [animal("blue-striped-sea-slug", "Mavi kadife deniz salyangozu"), animal("ocellaris-clownfish", "Ocellaris palyaço balığı", 2)],
     [],
     { id: "marine-water-specialist-slug", aquariumId: "test-aquarium", measuredAt: "2026-08-31", temperature: 25, ph: 8.2, specificGravity: 1.024 },
   );
-  assert(warningTitles(analysis).includes("Mavi çizgili deniz tavşanı için tür akvaryumu önerilir"), "Yalnız planarya yiyen deniz tavşanı sıradan topluluk canlısı gibi gösterilmemeli");
-  assert(warningTitles(analysis).includes("Mavi çizgili deniz tavşanı: özel bakım gereksinimi"), "Uzman yem ve pompa koruması uyarısı kullanıcıya gösterilmeli");
-  assert(!warningTitles(analysis).includes("Mavi çizgili deniz tavşanı: alan sınırda"), "Kaynak tank uzunluğu yayımlamıyorsa nudibranch için uydurma santimetre uyarısı verilmemeli");
+  // Karar 0031: Fishkeeper resif uyumunu "Excellent" yazıyor; tür akvaryumu işareti eski, kabul edilmeyen kaynaktandı.
+  assert(!warningTitles(analysis).includes("Mavi kadife deniz salyangozu için tür akvaryumu önerilir"), "Fishkeeper'a göre resife uygun salyangoz tür akvaryumu uyarısı üretmemeli");
+  assert(warningTitles(analysis).includes("Mavi kadife deniz salyangozu: özel bakım gereksinimi"), "Yassı kurt kaynağı gereksinimi kullanıcıya gösterilmeli");
+  assert(!warningTitles(analysis).includes("Mavi kadife deniz salyangozu: alan sınırda"), "OATA'nın 40 litresini aşan akvaryumda alan uyarısı verilmemeli");
 }
 
 {
   const analysis = analyzeAquarium(
-    aquarium({ type: "saltwater", netVolumeLiters: 100, lengthCm: 40 }),
+    aquarium({ type: "saltwater", netVolumeLiters: 200, lengthCm: 40 }),
     [animal("percula-clownfish", "Percula palyaço balığı", 2)],
     [],
     { id: "marine-water-percula-no-length", aquariumId: "test-aquarium", measuredAt: "2026-08-31", temperature: 25, ph: 8.2, specificGravity: 1.023 },
   );
   assert(warningTitles(analysis).includes("Percula palyaço balığı: tank uzunluğu verisi sınırlı"), "Percula kaynağında santimetre eşiği yoksa veri sınırı kullanıcıya açıklanmalı");
   assert(!warningTitles(analysis).includes("Percula palyaço balığı: alan sınırda"), "Percula için kaynaksız tank uzunluğu uyarısı üretilmemeli");
+}
+
+// Deniz kataloğu (karar 0031): kaynaklı davranış kayıtları gerçek deniz kayıtlarıyla.
+{
+  const marineReading = { id: "marine-water-behavior", aquariumId: "test-aquarium", measuredAt: "2026-10-30", temperature: 25, ph: 8.1, specificGravity: 1.025 };
+  const tank = aquarium({ type: "saltwater", netVolumeLiters: 300, lengthCm: 120 });
+  let analysis = analyzeAquarium(tank, [animal("orchid-dottyback", "Orkide dottyback"), { ...animal("sexy-shrimp", "Seksi karides", 3), category: "shrimp" }], [], marineReading);
+  assert(analysis.warnings.some((item) => item.title === "Karidesler yenebilir" && item.message.includes("Orkide dottyback") && item.message.includes("Fishkeeper")), "Fishkeeper'a göre süs karideslerini avlayan orkide dottyback seksi karidesle uyarı üretmeli");
+  analysis = analyzeAquarium(tank, [animal("ocellaris-clownfish", "Ocellaris palyaço balığı", 2), { ...animal("peppermint-shrimp", "Nane karidesi", 2), category: "shrimp" }], [], marineReading);
+  assert(analysis.warnings.some((item) => item.title === "Karidesler yenebilir" && item.message.includes("Practical Fishkeeping")), "Ocellaris ile nane karidesi Practical Fishkeeping'in notuyla uyarı üretmeli");
+  analysis = analyzeAquarium(tank, [animal("yellow-wrasse", "Sarı lapin"), { ...animal("nassarius-snail", "Nassarius salyangozu", 3), category: "snail" }], [], marineReading);
+  assert(warningTitles(analysis).includes("Salyangozlar yenebilir"), "Fishkeeper'a göre küçük salyangozlar için tehdit olan sarı lapin salyangozla uyarı üretmeli");
+  analysis = analyzeAquarium(tank, [animal("algae-blenny", "Yosun horozbinası", 2)], [], marineReading);
+  assert(warningTitles(analysis).includes("Yosun horozbinası: tek tutulmalı"), "Fishkeeper'a göre tek tutulması gereken yosun horozbinası çift olunca uyarı üretmeli");
+  analysis = analyzeAquarium(tank, [{ ...animal("purple-antenna-nudibranch", "Mor antenli nudibranch"), category: "other" }, animal("ocellaris-clownfish", "Ocellaris palyaço balığı", 2)], [], marineReading);
+  assert(!warningTitles(analysis).includes("Mor antenli nudibranch için tür akvaryumu önerilir"), "Kabul edilen kaynaklar tür akvaryumu demediği için nudibranch tehlike üretmemeli");
+  assert(warningTitles(analysis).includes("Mor antenli nudibranch: özel bakım gereksinimi"), "Akvaryuma uygun olmadığı bakım notunda görünmeli");
 }
 
 {
@@ -635,7 +659,7 @@ const metric = (analysis, key) => analysis.metrics.find(item => item.key === key
     [],
   );
   assert.equal(analysis.warnings.find((warning) => warning.title === "Ocellaris peacock bass: akvaryum çok küçük")?.level, "danger", "Cichla ocellaris 5.000 litre ve 300 cm altındaki akvaryuma önerilmemeli");
-  assert(warningTitles(analysis).includes("Ocellaris peacock bass: grup sayısı düşük"), "Cichla ocellaris tek birey yerine doğrulanmış beşli grup gereksinimini göstermeli");
+  assert(!warningTitles(analysis).includes("Ocellaris peacock bass: grup sayısı düşük"), "Cichla ocellaris tek tutulabilir (Seriously Fish, Fishkeeper); tek birey grup uyarısı almamalı");
   assert(warningTitles(analysis).includes("Neon tetra için avlanma riski"), "Cichla ocellaris küçük balıklarla seçildiğinde avlanma uyarısı vermeli");
   assert(warningTitles(analysis).includes("Ocellaris peacock bass için tür akvaryumu önerilir"), "Cichla ocellaris topluluk akvaryumunda tehlike üretmeli");
   assert.equal(metric(analysis, "compatibility").status, "danger");
@@ -736,8 +760,8 @@ const metric = (analysis, key) => analysis.metrics.find(item => item.key === key
     [],
   );
   assert(warningTitles(analysis).includes("Kelebek Goodeid: alan sınırda"), "Kelebek Goodeid 250 litrenin altında hacim uyarısı üretmeli");
-  assert(warningTitles(analysis).includes("Kelebek Goodeid: grup sayısı düşük"), "Kelebek Goodeid altılı grubun altında sosyal uyarı üretmeli");
-  assert(warningTitles(analysis).includes("Kelebek Goodeid: tank uzunluğu verisi sınırlı"), "Kelebek Goodeid için yayımlanmayan santimetre eşiği açıkça belirtilmeli");
+  assert(warningTitles(analysis).includes("Kelebek Goodeid: grup sayısı düşük"), "Kelebek Goodeid sekizli grubun altında sosyal uyarı üretmeli");
+  assert(!warningTitles(analysis).includes("Kelebek Goodeid: tank uzunluğu verisi sınırlı"), "Kelebek Goodeid uzunluğu Seriously Fish tabanından (90 cm) geldiği için veri sınırlı uyarısı almamalı");
   assert(warningTitles(analysis).includes("Kelebek Goodeid için tür akvaryumu önerilir"), "Kelebek Goodeid sıradan topluluk akvaryumunda tehlike üretmeli");
   assert(warningTitles(analysis).includes("Akıntı ihtiyaçları farklı"), "Kelebek Goodeid düşük akıntı isteyen Betta ile seçildiğinde akıntı çatışması vermeli");
   assert(warningTitles(analysis).includes("Kelebek Goodeid: özel bakım gereksinimi"), "Kelebek Goodeid sıcaklık, oksijen ve yüksek su değişimi uyarılarını göstermeli");
@@ -752,7 +776,7 @@ const metric = (analysis, key) => analysis.metrics.find(item => item.key === key
   );
   assert(warningTitles(analysis).includes("Kırmızı kuyruklu Goodeid: alan sınırda"), "Kırmızı kuyruklu Goodeid 250 litrenin altında hacim uyarısı üretmeli");
   assert(warningTitles(analysis).includes("Kırmızı kuyruklu Goodeid: grup sayısı düşük"), "Kırmızı kuyruklu Goodeid altılı grubun altında sosyal uyarı üretmeli");
-  assert(warningTitles(analysis).includes("Kırmızı kuyruklu Goodeid: tank uzunluğu verisi sınırlı"), "Kırmızı kuyruklu Goodeid için yayımlanmayan santimetre eşiği açıkça belirtilmeli");
+  assert(!warningTitles(analysis).includes("Kırmızı kuyruklu Goodeid: tank uzunluğu verisi sınırlı"), "Kırmızı kuyruklu Goodeid uzunluğu Seriously Fish tabanından (60 cm) geldiği için veri sınırlı uyarısı almamalı");
   assert(warningTitles(analysis).includes("Kırmızı kuyruklu Goodeid için tür akvaryumu önerilir"), "Kırmızı kuyruklu Goodeid sıradan topluluk akvaryumunda tehlike üretmeli");
   assert(warningTitles(analysis).includes("Akıntı ihtiyaçları farklı"), "Kırmızı kuyruklu Goodeid düşük akıntı isteyen Betta ile seçildiğinde akıntı çatışması vermeli");
   assert(warningTitles(analysis).includes("Kırmızı kuyruklu Goodeid: özel bakım gereksinimi"), "Kırmızı kuyruklu Goodeid sıcaklık, oksijen, su değişimi ve soy uyarılarını göstermeli");
@@ -999,7 +1023,7 @@ const metric = (analysis, key) => analysis.metrics.find(item => item.key === key
     [animal("endlicheri-bichir", "Endlicheri bichir", 1), animal("neon-tetra", "Neon tetra", 10)],
     [],
   );
-  assert.equal(analysis.warnings.find((warning) => warning.title === "Endlicheri bichir: akvaryum çok küçük")?.level, "danger", "Polypterus endlicherii 2000 litre/300 cm altındaki akvaryuma önerilmemeli");
+  assert.equal(analysis.warnings.find((warning) => warning.title === "Endlicheri bichir: akvaryum çok küçük")?.level, "danger", "Polypterus endlicherii 2268 litre/210 cm altındaki akvaryuma önerilmemeli");
   assert(warningTitles(analysis).includes("Endlicheri bichir için tür akvaryumu önerilir"), "Polypterus endlicherii uzman tür akvaryumu güvenliğini göstermeli");
   assert(warningTitles(analysis).includes("Endlicheri bichir: özel bakım gereksinimi"), "Polypterus endlicherii yüzey havası, kaçış kapağı, alan ve sosyal kaynak farkını göstermeli");
 }

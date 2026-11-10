@@ -31,20 +31,25 @@ export { DEFAULT_PREFERENCES, preferencesSchema } from "./preferences";
 export type { Preferences } from "./preferences";
 
 export {
+  BACKUP_REMINDER_DAYS,
   DELETED_AQUARIUM_RETENTION_DAYS,
   EMPTY_JOURNAL_STEPS,
   QUARANTINE_SUFFIX,
   STORAGE_KEYS,
   aquariumChildrenSchema,
+  backupStatusSchema,
   deleteAquariumJournalSchema,
   deletedAquariumEntrySchema,
   journalStepsSchema,
+  restoreBackupJournalSchema,
 } from "./local-storage";
 export type {
   AquariumChildren,
+  BackupStatus,
   DeleteAquariumJournal,
   DeletedAquariumEntry,
   JournalSteps,
+  RestoreBackupJournal,
   StorageKey,
 } from "./local-storage";
 

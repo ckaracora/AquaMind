@@ -3,6 +3,7 @@
 // paketine girer.
 import { distinct } from "./engine-format";
 import type { DisplayFormat } from "./format";
+import { localeBundle } from "./bundles";
 import { DEFAULT_LOCALE, type Locale } from "./locales";
 import { trPlantWarnings, type PlantWarningMessages } from "./messages/tr-plant-warnings";
 
@@ -37,9 +38,7 @@ export function plantWarningFormat(display: DisplayFormat): PlantWarningFormat {
   };
 }
 
-const catalogs: Record<Locale, PlantWarningMessages> = { tr: trPlantWarnings };
-
-/** Dilin bitki uyarısı metinleri; bilinmeyen dil varsayılan dile düşer. */
+/** Dilin bitki uyarısı metinleri; bilinmeyen ya da paketi henüz yüklenmemiş dil varsayılan dile düşer. */
 export function plantWarningMessagesFor(locale: Locale): PlantWarningMessages {
-  return catalogs[locale] ?? catalogs[DEFAULT_LOCALE];
+  return locale === DEFAULT_LOCALE ? trPlantWarnings : localeBundle(locale)?.plantWarnings ?? trPlantWarnings;
 }

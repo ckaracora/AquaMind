@@ -13,7 +13,7 @@ Katalogların her bilgisinin yüzde kaçının dolu olduğu ve kaynağının tü
 - **Kendi kaynak sayfası var (otomatik bağlantı değil):** kaydın kendi kaynak bağlantısı var. Bu, her değerin o sayfadan okunduğunu tek başına kanıtlamaz; değerlerin hangi sayfadan nasıl okunduğu `docs/CATALOG_LOG.md`'dedir.
 - **Yalnız otomatik kaynak bağlantısı:** kendi kaynağı olmayan canlı kaydına katalog bilimsel addan bir FishBase ya da Seriously Fish bağlantısı ekler (`generatedSourceSpeciesIds`, `src/data/catalog-species.ts`). Bu bağlantı değerlerin o sayfadan okunduğunu göstermez.
 - **Son 92 günde doğrulanmış:** kaydın doğrulama tarihi ölçüm günü ya da ölçüm gününden en çok 92 gün önce (ölçüm gününden sonraki tarih sayılmaz). Kaynaklar 3 ayda bir yeniden araştırılır (karar 0020); bu oran düştükçe sıradaki araştırma turu yaklaşır.
-- Canlılarda sıcaklık, pH, yetişkin boy ve en az hacim zorunludur, her kayıtta vardır; tabloda gösterilmez.
+- Canlılarda sıcaklık, yetişkin boy ve en az hacim zorunludur, her kayıtta vardır; pH, su türü yalnız tuzlu su olan kayıtlar dışında zorunludur. Deniz canlılarının kaydında pH ve tuzluluk yoktur, çünkü bu değerler akvaryum düzeyindedir (karar 0029 ve 0030). Bu bilgiler tabloda gösterilmez.
 - **Kaynak sayfası (ekipman ve bakım ürünleri):** kayıtta bir kaynak bağlantısı var. Bağlantının kime ait olduğu bu sayıda ayrılmaz: üreticinin ve kabul edilen mağazaların sayfalarının yanında eski, artık kabul edilmeyen bağlantılar da dahildir (ör. doğrulanmamışlar listesindeki bazı kayıtlar). Sitelere göre dağılım ürün sahibinin veri sayfasında görünür. **Doğrulanmamışlar listesi** (`src/data/catalog-equipment-unverified.ts`): değeri kaynakta bulunamayıp hesaptan çekilen kayıtlar. **Hesap değeri:** motorun kapasite hesabında kullandığı alanlar (filtrede debi ya da önerilen hacim veya hava motoruyla çalışma, ısıtıcıda güç ya da önerilen hacim); edilgen parçalar sayılmaz.
 - **Bakım ürünleri, hacim:** yalnız hacmi olan ürünlerde sayılır (tank, akvaryum seti, akvateraryum, teraryum).
 - **Bitkiler:** değer kuralı `docs/DATA_SOURCES.md` → "Bitkiler". Tropica sıcaklık ve pH yazmadığı için bu iki bilgi bitkilerin yaklaşık yarısında yok. "Bütün değerler dolu" ışık, CO₂, büyüme, boy, sıcaklık, pH ve yerleşimin hepsidir. "Yalnız uyarı kaydı", Fishkeeper'da ve Tropica'da sayfası olmayan, yalnız kaynaklı bir uyarısı (istilacı tür listesi ya da "su bitkisi değil") için katalogda olan bitkilerdir (karar 0026); bu kayıtların değeri yoktur ve değer satırlarının paydasına girer. "Su bitkisi değil etiketi" Practical Fishkeeping'in akvaryumda kaçınılacak ev bitkileri listesindeki bitkilerdir.
@@ -21,29 +21,29 @@ Katalogların her bilgisinin yüzde kaçının dolu olduğu ve kaynağının tü
 ## Güncel durum
 
 <!-- kapsam:başla -->
-Ölçüm tarihi: 2026-11-03
+Ölçüm tarihi: 2026-11-10
 
-### Canlılar (438 kayıt)
+### Canlılar (459 kayıt)
 
 | Bilgi | Dolu | Oran |
 |---|---|---|
-| Kendi kaynak sayfası var (otomatik bağlantı değil) | 438/438 | %100 |
-| Yalnız otomatik kaynak bağlantısı | 0/438 | %0 |
-| En az tank uzunluğu | 409/438 | %93,4 |
-| Akıntı | 396/438 | %90,4 |
-| Davranış ya da bakım notu | 338/438 | %77,2 |
-| Eş ad ya da satış adı | 389/438 | %88,8 |
-| Son 92 günde doğrulanmış | 438/438 | %100 |
+| Kendi kaynak sayfası var (otomatik bağlantı değil) | 459/459 | %100 |
+| Yalnız otomatik kaynak bağlantısı | 0/459 | %0 |
+| En az tank uzunluğu | 412/459 | %89,8 |
+| Akıntı | 397/459 | %86,5 |
+| Davranış ya da bakım notu | 358/459 | %78 |
+| Eş ad ya da satış adı | 410/459 | %89,3 |
+| Son 92 günde doğrulanmış | 459/459 | %100 |
 
 ### Ekipman (3877 kayıt)
 
 | Bilgi | Dolu | Oran |
 |---|---|---|
 | Kaynak sayfası | 3877/3877 | %100 |
-| Doğrulanmamışlar listesinde değil | 3811/3877 | %98,3 |
-| Hesap değeri (filtre, ısıtıcı, hava motoru) | 1264/1359 | %93 |
-| Güç (W) | 1862/3877 | %48 |
-| Önerilen hacim | 834/3877 | %21,5 |
+| Doğrulanmamışlar listesinde değil | 3753/3877 | %96,8 |
+| Hesap değeri (filtre, ısıtıcı, hava motoru) | 1229/1359 | %90,4 |
+| Güç (W) | 1823/3877 | %47 |
+| Önerilen hacim | 820/3877 | %21,2 |
 | Son 92 günde doğrulanmış | 3877/3877 | %100 |
 
 ### Bakım ürünleri (3105 kayıt)
@@ -62,27 +62,31 @@ Katalogların her bilgisinin yüzde kaçının dolu olduğu ve kaynağının tü
 | CO₂ | 119/141 | %84,4 |
 | Büyüme hızı | 123/141 | %87,2 |
 | Boy | 138/141 | %97,9 |
-| Sıcaklık | 62/141 | %44 |
-| pH | 61/141 | %43,3 |
+| Sıcaklık | 75/141 | %53,2 |
+| pH | 72/141 | %51,1 |
 | Yerleşim | 72/141 | %51,1 |
-| Bütün değerler dolu | 30/141 | %21,3 |
+| Bütün değerler dolu | 36/141 | %25,5 |
 | İstilacı tür etiketi | 7/141 | %5 |
 | Su bitkisi değil etiketi | 1/141 | %0,7 |
+| İngilizce ortak ad (Fishkeeper) | 42/141 | %29,8 |
 | Yalnız uyarı kaydı (değer kaynağı yok) | 3/141 | %2,1 |
 | Son 92 günde doğrulanmış | 141/141 | %100 |
 <!-- kapsam:bitir -->
 
 ## Geçmiş
 
-- 2026-11-03 (Xinyou üretici hacim doğrulaması): Xinyou/Junyou üreticisinin tam model sayfalarında XY-168, XY-180, XY-280, XY-2810, XY-2811, XY-2812, XY-2813, XY-2870, XY-2880 ve XY-380 için yayımlanan hacim sınırları ile sünger ölçüleri doğrudan okundu. İkincil kaynak farklılıklarında üretici değeri esas alındı; doğrulanmamışlar dışında kalan ekipman 3811/3877'ye, önerilen hacim kapsamı 834/3877'ye yükseldi. Bu cihazlar harici hava motoruyla çalıştığı için bağımsız filtre debisi uydurulmadı. Üretici sayfası kendi içinde çelişen XY-2836/XY-2902 ile üretici teknik değeri bulunmayan XY-2906/XY-2907 hesap dışında kaldı.
-- 2026-11-03 (Resun LP-20 resmî teknik tablo): üreticinin LP20/LP40 sayfasındaki model tablosu LP-20 için 1500 L/saat, 17 W, 0,028 MPa, 6 çıkış ve 2,2 m azami hava taşı derinliği yayımlıyor. Mağazalar arasındaki 1500/1680 L/saat farkı üretici verisiyle çözüldü; kayıt otomatik kapasite hesabına geri alındı ve genel hesap değeri 1264/1359 ile %93'e yükseldi.
-- 2026-11-03 (Aquawing AQ-WP distribütör doğrulaması): Aquawing'in sahibi Bursa Pet'in bölgesel temsilcisi Eksen Pet'in marka/ürün kataloğunda 12 AQ-WP modeli tam model kodu, barkod, debi ve güçle yeniden doğrulandı; Aquawing kapasite kapsamı 65/88'den 77/88'e, genel hesap değeri 1263/1359 ile %92,9'a yükseldi.
-- 2026-11-03 (SunSun HW-502/HW-503 kimlik ve kapasite düzeltmesi): üreticinin resmî HW seri tablosuyla eski `502` ve `503` kayıtları HW-502 (320 L/saat, 5 W) ve HW-503 (350 L/saat, 5 W) olarak düzeltildi. Türkiye'de 600 L/saat ve 6 W ile satılan ayrı 503B kaydıyla karışıklık giderildi; kaynaksız 60 L hacim sınırı kaldırıldı. SunSun kapasite kapsamı 48/48'e, genel hesap değeri 1251/1359 ile %92,1'e yükseldi.
-- 2026-11-03 (WaterBear WB-2770): Cikletist Petshop'un tam model sayfasındaki 800 L/saat debi ile Aquarubi'nin tam model sayfasındaki 12 W güç birleştirildi; çelişkili mağaza açıklamasındaki 900 L/saat ve güvenilir olmayan hacim önerileri kullanılmadı. WaterBear hesap kapsamı 20/20'ye, genel ekipman hesap değeri 1249/1359 ile %91,9'a yükseldi.
-- 2026-11-03 (Resun LP seri kaynak denetimi): üreticinin resmî LP60–300 başlıklı sayfasındaki teknik tablo yalnız LP60, LP100 ve LP200 satırlarını yayımlıyor. LP60 (4200 L/saat, 50 W) ve LP100 (8400 L/saat, 100 W) resmî kaynağa taşındı. LP200 için üreticinin 14.000/15.000 L/saat ve 230 W değerleri ile kabul edilen yerel mağazanın 15.000 L/saat ve 200 W değeri karşılaştırıldı; otomatik hesapta yayımlanmış güvenli alt debi 14.000 L/saat kullanıldı, çelişkili güç alanı kaldırıldı. LP300 sayısal satırı resmî tabloda bulunmadığından hesap dışında kaldı; kapsam oranı değişmedi.
-- 2026-11-02 (Sobo distribütör doğrulaması): Türkiye yetkili distribütörünün tam model sayfalarıyla SB-848 (540 L/saat, 12 W), SB-860A (720 L/saat, 10 W) ve WP-4001 (2000 L/saat, 30 W, 200 L) güvenli kapasite hesabına geri alındı; ekipman hesap değeri kapsamı 1248/1359 ile %91,8'e yükseldi.
-- 2026-11-02 (kerevit kaynak denetimi): canlılar 438 seçilebilir kayıt; Meksika cüce kereviti, elektrik mavi kerevit ve kırmızı kıskaçlı kerevit kabul edilen Wirbellose/Fishkeeper kaynaklarıyla yenilendi; onaylı tür bakım eşiği bulunamayan minik cüce kerevit otomatik sağlık hesabından çıkarılıp açıklamalı güvenlik listesine alındı.
-- 2026-11-02 (omurgasız kaynak güvenliği): canlılar 439 seçilebilir kayıt; zorunlu bakım eşikleri yalnız satıcı/ikincil profilden gelen genel Pinto, Galaxy Fishbone, kırmızı bataklık kereviti ve mermer kerevit otomatik sağlık hesabından çıkarılıp açıklamalı güvenlik listesine alındı.
-- 2026-10-31 (katalog ana entegrasyonu): canlılar 443, ekipman 3877, bakım ürünleri 3105 kayıt; ekipman hesap değeri kapsamı %91,6; bitkiler 141 kayıt.
+- 2026-11-10 (katalog ana dal entegrasyonu): canlılar 443 → 459, ekipman 3541 → 3877, bakım ürünleri 1893 → 3105 kayıt oldu. Yeni kaynaklı kayıtlarla canlı bakım notu %75,4 → %78 ve eş ad/satış adı %86,5 → %89,3; ekipmanda hesap değeri %88,4 → %90,4 ve önerilen hacim %20,2 → %21,2 oldu. Kaynaksız teknik değer eklenmedi; güvenlik listeleri birleşen katalogla yeniden denetlendi.
+- 2026-11-08 (ürün sahibiyle Chrome oturumu: Cikletist, Fluval, Resun ve Haqos; veri aşaması): değerleri www.haqos.com'a dayanan 15 Haqos kaydı (6 filtre, 7 ısıtıcı, 2 UV) doğrulanamayanlar listesine girdi (ürün sahibi kararı); Thermo-Sprite 2026-09-06'daki Betta doğrulamasıyla değerini korudu. Doğrulanmamışlar listesinde değil %96,5 → %96,1, hesap değeri %89,5 → %88,4, güç %47,6 → %47,2, önerilen hacim %20,5 → %20,2. AquaClear'ın üç debisi ürün sayfasının değerine döndü, Reef 4.0'a lümen ve renk sıcaklığı eklendi, Plant 4.0 Nano ve Reef 4.0 Nano'nun anlamı belirsiz uzunluk aralığı kaldırıldı; bunlar oranları değiştirmedi.
+- 2026-11-04 (Trendyol'a bağlı ekipman, veri aşaması): değerleri yalnız Trendyol'da yayımlanan 23 kayıt (22 Shark armatürü, Meç Turbo Pipo) doğrulanamayanlar listesine girdi; RS-605 zaten listedeydi. Doğrulanmamışlar listesinde değil %97,2 → %96,5. Hesap değeri ve öbür oranlar değişmedi (aydınlatma ve Meç'in hava motoruyla çalışan filtresi hesaba değer vermiyordu).
+- 2026-11-04 (bitkilerin İngilizce ortak adları, veri aşaması): bitkilere "İngilizce ortak ad (Fishkeeper)" satırı eklendi, 42/141 (%29,8). Değerler ve öbür oranlar değişmedi; ölçüm tarihi yeni satır için 2026-11-04.
+- 2026-10-31 (JBL kaynak bağlantısı paketi 2): hesaba girmeyen 186 JBL kaydı yeni ürün sayfalarına bağlandı. Bu kayıtların 17'si Codex denetiminde 2026-10-31'de yeniden okunduğu için ölçüm tarihi 2026-10-31; oranlar değişmedi.
+- 2026-10-30 (açık listedeki canlılar, paket 3): Fishipedia taslaklarına bağlı 12 kayıt yeniden okundu; Apistogramma commbrae ve Semaprochilodus insignis'in en az tank uzunluğu Seriously Fish tabanından geldi. En az tank uzunluğu %90,5 → %91.
+- 2026-10-30 (açık listedeki canlılar, paket 2): 7 "diğer" kayıt kabul edilen kaynaklara bağlandı; ölçülen alanların hepsi zaten doluydu, tablo değişmedi.
+- 2026-10-30 (açık listedeki canlılar, paket 1): 10 balık kabul edilen kaynaklara bağlandı; iki goodeid'in en az tank uzunluğu Seriously Fish tabanından geldi. En az tank uzunluğu %90,1 → %90,5.
+- 2026-10-30 (JBL kaynak bağlantısı paketi): eski adresli 49 hesaplı JBL kaydı yeni sayfalara ya da açık belgelere bağlandı. 3 WHITE filtrenin değeri çekildi; üç kayıtta çelişen ya da kaynaksız hacim kaldırıldı, klasik i60, i100 ve i200'e kılavuzdaki hacim eklendi. Doğrulanmamışlar listesinde değil %97,3 → %97,2, hesap değeri %89,8 → %89,5, güç %47,7 → %47,6, önerilen hacim %20,6 → %20,5.
+- 2026-10-30 (ekipman kaynak bağlantısı paketi 1): liste sayfasına bağlı 54 ekipman ürün sayfasına bağlandı. Aynı sayfada çelişen ya da sayfada olmayan güç beş kayıttan kaldırıldı (güç %47,9 → %47,7). Jingye CD300 ve YE-22'nin çelişkili hava debisi kaldırıldı (hesap değeri %90 → %89,8).
+- 2026-10-30 (örnek denetimi): Boyu HT ve DR serilerinin 11 ısıtıcısının (HT 6, DR 5) gücü üretici sayfasında yazmadığı için hesaptan çekildi (karar 0019). Doğrulanmamışlar listesinde değil %97,6 → %97,3, hesap değeri %90,8 → %90, güç %48,2 → %47,9. Canlıların oranları değişmedi.
+- 2026-10-30 (deniz kataloğu, karar 0031): canlılar 443 kayıt; 20 deniz başlangıç türü eklendi, 11 deniz kaydı kabul edilen kaynaklarla yenilendi. En az tank uzunluğu %94,8 → %90,1, akıntı %94,3 → %89,8: deniz kayıtlarının eski uzunluk ve akıntı değerleri kabul edilmeyen kaynaklardandı, kabul edilen kaynaklar çoğu türde bunları yazmıyor. Davranış ya da bakım notu %74,2 → %75,4.
+- 2026-10-29 (bitki kataloğu 4): Practical Fishkeeping'in tür kutuları 22 bitki kaydına girdi; 13 kayıt sıcaklığı, 11 kayıt pH'ı ilk kez aldı, 4 kayıtta aralık daraldı. Sıcaklık %44 → %53,2, pH %43,3 → %51,1, bütün değerler dolu %21,3 → %25,5.
 - 2026-10-28 (bitki kataloğu 3): bitkiler 141 kayıt; üç yalnız uyarı kaydı eklendi (*Azolla filiculoides*, *Ophiopogon japonicus*, *Pistia stratiotes*), değerleri olmadığı için değer satırlarının oranı biraz düştü (sıcaklık %44, pH %43,3, bütün değerler dolu %21,3); istilacı tür etiketi 7, su bitkisi değil etiketi 1.
 - 2026-10-28 (ilk ölçüm): canlılar 423 kaydın hepsinde kendi kaynak sayfası; ekipman 3541 kayıt, hesap değeri %90,8; bakım ürünleri 1893 kayıt; bitkiler 138 kayıt, bütün değerler dolu %21,7 (sıcaklık %44,9, pH %44,2).

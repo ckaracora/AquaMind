@@ -3,6 +3,7 @@
 import { FormEvent, useId, useState } from "react";
 import { AlertTriangle, ChevronDown, ImagePlus, Leaf, Search, X } from "lucide-react";
 import { ModalDialog } from "@/components/modal-dialog";
+import type { Locale } from "@aquamind/localization";
 import type { PlantInvasiveListing, PlantProfile, PlantSearchResult } from "@/data/catalog-plants";
 import { localIsoDate } from "@/lib/local-date";
 import type { usePlantCatalog } from "@/lib/use-plant-catalog";
@@ -24,6 +25,19 @@ const sourceNames: Record<string, string> = {
   "www.fishkeeper.co.uk": "Fishkeeper", "tropica.com": "Tropica", "plant-directory.ifas.ufl.edu": "UF/IFAS", "eur-lex.europa.eu": "EUR-Lex",
   "www.legislation.gov.uk": "legislation.gov.uk", "www.practicalfishkeeping.co.uk": "Practical Fishkeeping",
 };
+
+/**
+ * Bilimsel adın altında gösterilen öteki adlar (en çok üç). Türkçede eş adlar olduğu gibi. Öteki dillerde Türkçe satış adları
+ * (`turkishAliases`) gösterilmez; İngilizcede İngilizce ortak ad (`commonNameEn`) önce gelir, aynı ad bir kez yazılır.
+ */
+export function plantOtherNames(item: Pick<PlantProfile, "aliases" | "commonNameEn" | "turkishAliases">, locale: Locale): string[] {
+  if (locale === "tr") return (item.aliases ?? []).slice(0, 3);
+  const turkish = new Set(item.turkishAliases ?? []);
+  const seen = new Set<string>();
+  return [...(locale === "en" && item.commonNameEn ? [item.commonNameEn] : []), ...(item.aliases ?? []).filter((name) => !turkish.has(name))]
+    .filter((name) => { const key = name.toLocaleLowerCase("en"); if (seen.has(key)) return false; seen.add(key); return true; })
+    .slice(0, 3);
+}
 
 /** Kaynağın önerdiği yerleşimler, kayıttaki konum değeriyle (ilki pencerede seçili gelir). */
 export const suggestedPositions = (item: PlantProfile) => (item.placements ?? []).map((key) => positionValue.get(key)).filter((value): value is string => Boolean(value));
@@ -144,11 +158,11 @@ export function PlantSources({ item }: { item: PlantProfile }) {
 
 /** Arama sonuçları: en çok sekiz sonuç; fazlası için aramanın daraltılması önerilir. */
 export function PlantSearchResults({ results, select }: { results: PlantSearchResult[]; select: (result: PlantSearchResult) => void }) {
-  const { t } = useI18n();
+  const { t, locale } = useI18n();
   const fmt = useDisplayFormat();
   const c = t.plants.catalog;
   if (!results.length) return <p className="rounded-xl bg-white/[.025] p-4 text-[11px] sm:text-[10px] text-[#91a3aa]">{c.noResult}</p>;
-  return <div><p className="mb-2 text-[11px] sm:text-[10px] font-bold text-[#647981]" aria-live="polite">{c.resultCount(fmt.number(results.length))}</p><ul className="grid gap-2">{results.slice(0, visibleResults).map((result) => <li key={result.item.id}><button type="button" onClick={() => select(result)} className="min-h-11 min-w-11 w-full rounded-xl border border-white/[.06] bg-white/[.025] p-3 text-left hover:border-aqua/40 sm:min-h-0 sm:min-w-0"><span className="block text-sm font-extrabold italic">{result.item.scientificName}</span>{result.item.aliases?.length ? <span className="mt-0.5 block text-[11px] sm:text-[10px] text-[#71858d]">{result.item.aliases.slice(0, 3).join(" · ")}</span> : null}<span className="mt-2 block"><PlantShortFacts item={result.item}/></span></button></li>)}</ul>{results.length > visibleResults && <p className="mt-2 text-[11px] sm:text-[10px] text-[#647981]">{c.moreResults(fmt.number(results.length - visibleResults))}</p>}</div>;
+  return <div><p className="mb-2 text-[11px] sm:text-[10px] font-bold text-[#647981]" aria-live="polite">{c.resultCount(fmt.number(results.length))}</p><ul className="grid gap-2">{results.slice(0, visibleResults).map((result) => <li key={result.item.id}><button type="button" onClick={() => select(result)} className="min-h-11 min-w-11 w-full rounded-xl border border-white/[.06] bg-white/[.025] p-3 text-left hover:border-aqua/40 sm:min-h-0 sm:min-w-0"><span className="block text-sm font-extrabold italic">{result.item.scientificName}</span>{plantOtherNames(result.item, locale).length ? <span className="mt-0.5 block text-[11px] sm:text-[10px] text-[#71858d]">{plantOtherNames(result.item, locale).join(" · ")}</span> : null}<span className="mt-2 block"><PlantShortFacts item={result.item}/></span></button></li>)}</ul>{results.length > visibleResults && <p className="mt-2 text-[11px] sm:text-[10px] text-[#647981]">{c.moreResults(fmt.number(results.length - visibleResults))}</p>}</div>;
 }
 
 /** Bitki listesindeki kartın katalog bilgisi: kısa bilgi, istilacı türde ve su bitkisi olmayanda kısa uyarı, açılan ayrıntı. */
@@ -175,10 +189,11 @@ function PlantEntryFields({ suggested, fromCatalog }: { suggested: string[]; fro
 
 /** Katalogdan seçilen bitki: bilgi kartı, uyarılar (istilacı tür, su bitkisi değil), kaynaklar ve kayıt alanları (ad aramaya uyan adla gelir). */
 export function PlantSelectedFields({ selected, change }: { selected: PlantSearchResult; change: () => void }) {
-  const { t } = useI18n();
+  const { t, locale } = useI18n();
+  const otherNames = plantOtherNames(selected.item, locale);
   const c = t.plants.catalog;
   return <div className="grid gap-4">
-    <div className="flex items-start justify-between gap-3"><div><p className="text-base font-extrabold italic">{selected.item.scientificName}</p>{selected.item.aliases?.length ? <p className="mt-0.5 text-[11px] sm:text-[10px] text-[#71858d]">{selected.item.aliases.slice(0, 3).join(" · ")}</p> : null}</div><button type="button" onClick={change} className="min-h-11 min-w-11 shrink-0 rounded-xl border border-white/[.08] px-3 text-[11px] sm:text-[10px] font-bold text-[#91a3aa] sm:min-h-0 sm:min-w-0 sm:py-2">{c.changePlant}</button></div>
+    <div className="flex items-start justify-between gap-3"><div><p className="text-base font-extrabold italic">{selected.item.scientificName}</p>{otherNames.length ? <p className="mt-0.5 text-[11px] sm:text-[10px] text-[#71858d]">{otherNames.join(" · ")}</p> : null}</div><button type="button" onClick={change} className="min-h-11 min-w-11 shrink-0 rounded-xl border border-white/[.08] px-3 text-[11px] sm:text-[10px] font-bold text-[#91a3aa] sm:min-h-0 sm:min-w-0 sm:py-2">{c.changePlant}</button></div>
     <PlantWarningOnlyNote item={selected.item}/>
     <PlantFacts item={selected.item}/>
     <PlantInvasiveNotice item={selected.item}/>
@@ -194,12 +209,12 @@ export function PlantSelectedFields({ selected, change }: { selected: PlantSearc
 /** Bitki ekleme penceresi: önce katalogda arama; "Katalogda yok" ile elle yazma (bugünkü form). */
 export function PlantForm({ aquariumId, aquariumName, catalog, close, save }: { aquariumId: string; aquariumName: string; catalog: CatalogState; close: () => void; save: (plant: Plant) => void }) {
   const titleId = useId();
-  const { t } = useI18n();
+  const { t, locale } = useI18n();
   const c = t.plants.catalog;
   const [manual, setManual] = useState(false);
   const [query, setQuery] = useState("");
   const [selected, setSelected] = useState<PlantSearchResult>();
-  const results = catalog.catalog && query.trim() ? catalog.catalog.searchPlants(query) : [];
+  const results = catalog.catalog && query.trim() ? catalog.catalog.searchPlants(query, locale) : [];
   function submit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
     const plant = plantFromForm(new FormData(e.currentTarget), { aquariumId, manual, selected: selected?.item });

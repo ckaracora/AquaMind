@@ -240,15 +240,6 @@ export const unresolvedSpeciesListings: UnresolvedSpeciesListing[] = [
     verifiedAt: "2026-10-31",
   },
   {
-    name: "Minik cüce kerevit",
-    aliases: ["Least Dwarf Crayfish", "Least Crayfish", "Mini Lobster", "Cambarellus diminutus", "DİMİNİTUS CÜCE KEREVİT 3 ADET"],
-    category: "other", group: "crayfish", waterTypes: ["freshwater"],
-    reason: "Cambarellus diminutus kimliği USFWS ve yerel satış kaydıyla doğrulanıyor; ancak kabul edilen omurgasız bakım kaynaklarında tür düzeyinde minimum hacim, tam su aralığı ve güvenli akvaryum eşiği bulunamadı. Tankbud ve eski ikincil profildeki 20 litre, 18–26 °C ve pH 6,5–8 değerleri otomatik sağlık hesabına taşınamaz. Güvenilir tür bakım kaynağı bulunana kadar yalnız açıklamalı güvenlik kaydı olarak kalır.",
-    sourceUrl: "https://www.fws.gov/sites/default/files/documents/Ecological-Risk-Screening-Summary-Least-Crayfish.pdf",
-    additionalSourceUrls: ["https://www.cikletistpetshop.com/diminitus-cuce-kerevit-3-adet-1460", "https://tankbud.com/species/least-dwarf-crayfish"],
-    verifiedAt: "2026-11-02",
-  },
-  {
     name: "Kırmızı bataklık kereviti",
     aliases: ["Red Swamp Crayfish", "Red Swamp Crawfish", "Louisiana Crayfish", "Procambarus clarkii"],
     category: "other", group: "crayfish", waterTypes: ["freshwater"],
