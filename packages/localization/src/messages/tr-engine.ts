@@ -35,6 +35,13 @@ const spaceReference = (p: EngineTextParams, f: EngineTextFormat) =>
     ? `Kayıtlı adet için minimum ${f.volume(num(p, "volume"))} ve ${f.length(num(p, "length"))} uzunluk referansı kullanıldı.`
     : `Kayıtlı adet için minimum ${f.volume(num(p, "volume"))} referansı kullanıldı; kaynak tank uzunluğu yayımlamıyor.`;
 const fixed = (text: string): Text => () => text;
+/** Son ölçümün, aralığının üstünde (`above`) ve altında (`below`) kaldığı canlılar (motor 1.14.0). */
+const outsideRange = (p: EngineTextParams) =>
+  list(p, "above").length && list(p, "below").length
+    ? `${nameList(list(p, "above"))} için kaynaktaki aralığın üstünde, ${nameList(list(p, "below"))} için altında.`
+    : list(p, "above").length
+      ? `${nameList(list(p, "above"))} için kaynaktaki aralığın üstünde.`
+      : `${nameList(list(p, "below"))} için kaynaktaki aralığın altında.`;
 /** Deniz akvaryumunun hedefinin adı (motor 1.13.0, `MarineProfile`). */
 const marineTarget = (p: EngineTextParams) => (str(p, "profile") === "fishOnly" ? "yalnız balıklı akvaryum" : "omurgasızlı akvaryum");
 const marineRange = (p: EngineTextParams, f: EngineTextFormat) => `${f.measurement(num(p, "min"), 3)}–${f.measurement(num(p, "max"), 3)}`;
@@ -69,7 +76,6 @@ export const trEngine = {
     shrimpEaten: fixed("Karidesler yenebilir"),
     snailEaten: fixed("Salyangozlar yenebilir"),
     flowConflict: fixed("Akıntı ihtiyaçları farklı"),
-    communityCaution: fixed("Tank arkadaşı seçimi dikkat gerektiriyor"),
     shrimpUnverified: fixed("Karides uyumu doğrulanmadı"),
     compatible: fixed("Ortak yaşam aralıkları mevcut"),
     manufacturerMax: (p, f) => `Üretici önerisi en fazla ${f.volume(num(p, "liters"))}`,
@@ -80,6 +86,7 @@ export const trEngine = {
     flowUnverified: fixed("Debi bilgisi doğrulanmayı bekliyor"),
     auxiliaryOnly: fixed("Yalnız yardımcı yüzey skimmeri kayıtlı; ana filtre gerekli"),
     noFilter: fixed("Katalogdan filtre bulunamadı"),
+    filterNotRecorded: fixed("Filtre kayıtlı değil"),
     estimatedOk: (p, f) => `Toplam ${f.number(num(p, "watts"))} W için tahmini hacim uygun`,
     manufacturerOk: fixed("Üretici hacim aralığı uygun"),
     powerLow: fixed("Isıtma gücü bu hacim için düşük"),
@@ -87,6 +94,7 @@ export const trEngine = {
     outOfRange: fixed("Hacim aralığı dışında"),
     heaterUnverified: fixed("Watt veya hacim verisi doğrulanmayı bekliyor"),
     noHeater: fixed("Katalogdan ısıtıcı bulunamadı"),
+    heaterNotRecorded: fixed("Isıtıcı kayıtlı değil"),
     latestReading: fixed("Son ölçüme göre"),
     readingNeeded: fixed("Ölçüm eklenmesi gerekli"),
     recordsReady: (p, f) =>
@@ -123,6 +131,15 @@ export const trEngine = {
     airPumpRequired: {
       title: fixed("Sünger filtre için hava motoru gerekli"),
       message: fixed("Seçilen pipo/sünger filtre kendi başına su çevirmez. Katalogdan uygun bir hava motoru ekleyin."),
+    },
+    filterMissing: {
+      title: fixed("Filtre kayıtlı değil"),
+      message: fixed("Akvaryumda kayıtlı bir filtre yok; canlı bulunan her akvaryumda filtre gerekir. Filtreniz varsa ekipman sayfasından ekleyin; yoksa akvaryuma uygun bir filtre kurun."),
+    },
+    heaterMissing: {
+      title: fixed("Isıtıcı kayıtlı değil"),
+      message: (p, f) =>
+        `Akvaryumda suyu ısıtan kayıtlı bir ısıtıcı yok.${flag(p, "passive") ? " Taban ısıtma kablosu suyu ısıtmak için değildir." : ""} Kaynaklara göre ${nameList(list(p, "tropical"))} için su en az ${f.temperature(num(p, "min"))} olmalı. Isıtıcınız varsa ekipman sayfasından ekleyin; yoksa akvaryuma uygun bir ısıtıcı kurun.`,
     },
     highLoad: {
       title: fixed("Biyolojik yük yüksek olabilir"),
@@ -253,9 +270,45 @@ export const trEngine = {
       message: (p, f) =>
         `Nitrat ${f.measurement(num(p, "value"), 3, NITRATE_ABOVE_TAP_LIMIT_PPM)} ppm. Önerilen sınır musluk suyunun en fazla ${f.measurement(NITRATE_ABOVE_TAP_LIMIT_PPM)} ppm üstüdür; musluk suyunun nitratını da ölçün ve su değişimini artırın.`,
     },
+    speciesTemperatureOutOfRange: {
+      title: fixed("Sıcaklık canlı aralığı dışında"),
+      message: (p, f) =>
+        `Son ölçüm ${f.temperature(num(p, "value"), flag(p, "hasRange") ? (num(p, "value") > num(p, "max") ? num(p, "max") : num(p, "min")) : undefined)}; bu değer ${outsideRange(p)}${
+          !flag(p, "hasRange")
+            ? ""
+            : num(p, "min") === num(p, "max")
+              ? ` Seçilen canlıların ortak sıcaklığı yalnız ${f.temperature(num(p, "min"), num(p, "value"))}; sıcaklığı yavaşça bu değere getirin.`
+              : ` Seçilen canlıların ortak aralığı ${f.temperatureNumber(num(p, "min"), num(p, "value"))}–${f.temperature(num(p, "max"), num(p, "value"))}; sıcaklığı yavaşça bu aralığa getirin.`
+        }`,
+    },
+    speciesPhOutOfRange: {
+      title: fixed("pH canlı aralığı dışında"),
+      message: (p, f) =>
+        `Son ölçüm pH ${f.measurement(num(p, "value"), 2, flag(p, "hasRange") ? (num(p, "value") > num(p, "max") ? num(p, "max") : num(p, "min")) : undefined)}; bu değer ${outsideRange(p)}${
+          !flag(p, "hasRange")
+            ? ""
+            : num(p, "min") === num(p, "max")
+              ? ` Seçilen canlıların ortak pH değeri yalnız ${f.measurement(num(p, "min"), 2, num(p, "value"))}; pH'ı yavaşça bu değere getirin.`
+              : ` Seçilen canlıların ortak pH aralığı ${f.measurement(num(p, "min"), 2, num(p, "value"))}–${f.measurement(num(p, "max"), 2, num(p, "value"))}; pH'ı yavaşça bu aralığa getirin.`
+        }`,
+    },
     temperatureConflict: {
       title: fixed("Türlerin sıcaklık ihtiyaçları uyuşmuyor"),
       message: fixed("Seçilen canlılar için ortak ve güvenli bir sıcaklık aralığı bulunamadı."),
+    },
+    coldwaterWithTropical: {
+      title: fixed("Soğuk su türü ile tropikal balık bir arada"),
+      message: (p, f) =>
+        `${nameList(list(p, "coldwater"))} soğuk su türü, ${nameList(list(p, "tropical"))} tropikal balık.${
+          num(p, "min") === num(p, "max")
+            ? ` Seçilen canlıların ortak sıcaklığı yalnız ${f.temperature(num(p, "min"))}.`
+            : ` Seçilen canlıların ortak sıcaklık aralığı yalnız ${f.temperatureNumber(num(p, "min"), num(p, "max"))}–${f.temperature(num(p, "max"), num(p, "min"))}.`
+        } Soğuk su türlerini tropikal balıklardan ayrı bir akvaryumda tutmayı düşünün.`,
+    },
+    temperatureRangeNarrow: {
+      title: fixed("Türlerin sıcaklık ihtiyaçları tek bir değerde uyuşuyor"),
+      message: (p, f) =>
+        `Seçilen canlıların kaynaktaki sıcaklık aralıklarının ortak noktası yalnız ${f.temperature(num(p, "value"))}. Sıcaklık bu değerden biraz bile saparsa en az bir canlı kendi aralığının dışında kalır; sıcaklığı sık ölçün ya da tür seçimini gözden geçirin.`,
     },
     phConflict: {
       title: fixed("Türlerin pH ihtiyaçları uyuşmuyor"),
@@ -329,10 +382,15 @@ export const trEngine = {
       title: (p) => `${str(p, "name")}: alan sınırda`,
       message: spaceReference,
     },
+    spaceNarrow: {
+      title: (p) => `${str(p, "name")}: akvaryum bu tür için dar`,
+      message: (p, f) =>
+        `${spaceReference(p, f)} Akvaryumun genişliği (${f.length(num(p, "width"))}), katalogdaki ${f.length(num(p, "size"))} yetişkin boyun iki katından az. AquaMind bu öneriyi İsviçre Hayvan Koruma Yönetmeliği'nin ölçü kuralından (genişlik 2× vücut boyu) uyarlar; yönetmelik kuyruk yüzgeci hariç boyu, AquaMind çoğu türde toplam boyu kullanır. Genişliği en az ${f.length(num(p, "minWidth"))} olan bir akvaryum daha uygundur.`,
+    },
     spaceSevere: {
       title: (p) => `${str(p, "name")}: akvaryum çok küçük`,
       message: (p, f) =>
-        `${spaceReference(p, f)} Akvaryum ayrıca İsviçre Hayvan Koruma Yönetmeliği'nin ölçü kuralından (uzunluk 3×, genişlik 2×, su derinliği 1× vücut boyu) uyarlanan AquaMind sınırının altında. Yönetmelik kuyruk yüzgeci hariç boyu kullanır; AquaMind daha sıkı davranıp katalogdaki ${f.length(num(p, "size"))} yetişkin boyu (çoğu türde toplam boy) kullanır: uzunluk en az ${f.length(num(p, "minLength"))}, genişlik en az ${f.length(num(p, "minWidth"))}, su derinliği en az ${f.length(num(p, "minDepth"))}.`,
+        `${spaceReference(p, f)} Akvaryum ayrıca İsviçre Hayvan Koruma Yönetmeliği'nin ölçü kuralındaki uzunluk (3×) ve su derinliği (1× vücut boyu) sınırlarından uyarlanan AquaMind sınırının altında. Yönetmelik kuyruk yüzgeci hariç boyu kullanır; AquaMind daha sıkı davranıp katalogdaki ${f.length(num(p, "size"))} yetişkin boyu (çoğu türde toplam boy) kullanır: uzunluk en az ${f.length(num(p, "minLength"))}, su derinliği en az ${f.length(num(p, "minDepth"))}.`,
     },
   } satisfies Record<string, { title: Text; message: Text }>,
 };

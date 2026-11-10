@@ -6,7 +6,7 @@
 // kod değişikliğinde yükseltilir.
 // RULESET_VERSION: motorun içine gömülü eşik ve ceza sabitlerinin sürümü
 // (0,85 etkin hacim, 0,65 filtre verimi, 0,5–1,5 W/L ısıtıcı bandı, 80 yaşam ortamı ve
-// 55/55/20/60/60/30 uyum cezaları, %40 avlanma oranı). Bir sabit değişince yükseltilir.
+// 55/55/20/60/60 uyum cezaları, %40 avlanma oranı, 60 sarı alan ve grup tabanı, 23 °C tropikal eşiği). Bir sabit değişince yükseltilir.
 //
 // 1.1.0: katalog entegrasyonuyla yaşam ortamı, tuzluluk, birey başına ek hacim ve
 // yardımcı filtre kuralları eklendi (bkz. docs/DECISIONS/0007-katalog-entegrasyonu-motor-kurallari.md).
@@ -58,5 +58,13 @@
 // Özgül ağırlık iki hedefin de dışındaysa (1,017–1,026) kesin tehlikedir. Deniz canlılarının kayıtlarında pH ve özgül ağırlık yoktur;
 // pH aralığı olmayan canlı pH kesişimine girmez. Yeni gömülü eşikler (OATA hedefleri) eklendiği için kural seti 1.10.0
 // (bkz. docs/DECISIONS/0029-tuzlu-su-baslangic-paketi.md, 0030-deniz-suyu-hedefleri.md).
-export const ENGINE_VERSION = "1.13.0";
-export const RULESET_VERSION = "1.10.0";
+//
+// 1.14.0: veri testi B'nin bulgularından yedi değişiklik (bkz. docs/DECISIONS/0037-genel-durum-ve-uyari-duzeltmeleri.md). Tehlikedeki bir ölçüt
+// (veri güveni hariç; canlısı olmayan akvaryumda filtre ve ısıtıcı hariç) genel puanı en fazla 74 yapar. Topluluk notu sarı uyarı olarak kalır,
+// tür uyumu cezası (30) kalkar. Yalnız sarı alan ya da grup uyarısı ölçütü 60'ın altına düşürmez. Son ölçümün sıcaklığı ya da pH'ı bir canlının
+// aralığı dışındaysa, soğuk su türü tropikal balıkla birlikteyse, türlerin ortak sıcaklığı tek bir değerse, canlısı olan akvaryumda filtre
+// kayıtlı değilse ve tropikal canlı varken ısıtıcı kayıtlı değilse sarı uyarı çıkar (tropikal: soğuk su türü değil, en düşük sıcaklığı ≥ 23 °C;
+// ısıtıcı ölçütündeki mevcut eşik). İsviçre genişlik kuralı tehlikeden sarı "akvaryum bu tür için dar" uyarısına iner. Bir ceza sabiti kalktığı,
+// taban sabiti geldiği, tavan kuralı ve kırmızı alan koşulu değiştiği için kural seti 1.11.0. Sonuç nesnesinin biçimi değişmez.
+export const ENGINE_VERSION = "1.14.0";
+export const RULESET_VERSION = "1.11.0";

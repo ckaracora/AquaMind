@@ -32,6 +32,13 @@ const spaceReference = (p: EngineTextParams, f: EngineTextFormat) =>
     ? `Para la cantidad registrada se tomó como referencia un mínimo de ${f.volume(num(p, "volume"))} y una longitud de ${f.length(num(p, "length"))}.`
     : `Para la cantidad registrada se tomó como referencia un mínimo de ${f.volume(num(p, "volume"))}; la fuente no publica una longitud de acuario.`;
 const fixed = (text: string): Text => () => text;
+/** Los animales para los que la última medición queda por encima (`above`) o por debajo (`below`) de su rango (motor 1.14.0). */
+const outsideRange = (p: EngineTextParams) =>
+  list(p, "above").length && list(p, "below").length
+    ? `por encima del rango de ${nameList(list(p, "above"))} y por debajo del de ${nameList(list(p, "below"))}, según la fuente.`
+    : list(p, "above").length
+      ? `por encima del rango de ${nameList(list(p, "above"))} según la fuente.`
+      : `por debajo del rango de ${nameList(list(p, "below"))} según la fuente.`;
 const marineTarget = (p: EngineTextParams) => (str(p, "profile") === "fishOnly" ? "acuario solo con peces" : "acuario con invertebrados");
 const marineRange = (p: EngineTextParams, f: EngineTextFormat) => `${f.measurement(num(p, "min"), 3)}–${f.measurement(num(p, "max"), 3)}`;
 
@@ -63,7 +70,6 @@ export const esEngine: EngineMessages = {
     shrimpEaten: fixed("Los camarones pueden ser comidos"),
     snailEaten: fixed("Los caracoles pueden ser comidos"),
     flowConflict: fixed("Las necesidades de corriente son distintas"),
-    communityCaution: fixed("La elección de compañeros de acuario requiere cuidado"),
     shrimpUnverified: fixed("Compatibilidad con camarones sin confirmar"),
     compatible: fixed("Existen rangos de condiciones en común"),
     manufacturerMax: (p, f) => `El fabricante recomienda como máximo ${f.volume(num(p, "liters"))}`,
@@ -74,6 +80,7 @@ export const esEngine: EngineMessages = {
     flowUnverified: fixed("Datos de caudal pendientes de confirmación"),
     auxiliaryOnly: fixed("Solo hay un limpiador de superficie auxiliar registrado; se necesita un filtro principal"),
     noFilter: fixed("No se encontró ningún filtro en el catálogo"),
+    filterNotRecorded: fixed("No hay ningún filtro registrado"),
     estimatedOk: (p, f) => `Volumen estimado adecuado para un total de ${f.number(num(p, "watts"))} W`,
     manufacturerOk: fixed("Dentro del rango de volumen del fabricante"),
     powerLow: fixed("La potencia de calefacción es baja para este volumen"),
@@ -81,6 +88,7 @@ export const esEngine: EngineMessages = {
     outOfRange: fixed("Fuera del rango de volumen"),
     heaterUnverified: fixed("Datos de potencia o volumen pendientes de confirmación"),
     noHeater: fixed("No se encontró ningún calentador en el catálogo"),
+    heaterNotRecorded: fixed("No hay ningún calentador registrado"),
     latestReading: fixed("Según la última medición"),
     readingNeeded: fixed("Hay que agregar una medición"),
     recordsReady: (p, f) =>
@@ -116,6 +124,15 @@ export const esEngine: EngineMessages = {
     airPumpRequired: {
       title: fixed("El filtro de esponja necesita una bomba de aire"),
       message: fixed("El filtro de esponja seleccionado no mueve el agua por sí solo. Agrega del catálogo una bomba de aire adecuada."),
+    },
+    filterMissing: {
+      title: fixed("No hay ningún filtro registrado"),
+      message: fixed("Este acuario no tiene ningún filtro registrado; todo acuario con animales necesita un filtro. Si tienes uno, agrégalo en la página de equipos; si no, instala un filtro adecuado para el acuario."),
+    },
+    heaterMissing: {
+      title: fixed("No hay ningún calentador registrado"),
+      message: (p, f) =>
+        `Este acuario no tiene registrado ningún calentador que caliente el agua.${flag(p, "passive") ? " Un cable calefactor de sustrato no está hecho para calentar el agua." : ""} Según las fuentes, ${nameList(list(p, "tropical"))} ${plural(list(p, "tropical").length, "necesita", "necesitan")} agua de al menos ${f.temperature(num(p, "min"))}. Si tienes un calentador, agrégalo en la página de equipos; si no, instala un calentador adecuado para el acuario.`,
     },
     highLoad: {
       title: fixed("La carga biológica puede ser alta"),
@@ -246,9 +263,45 @@ export const esEngine: EngineMessages = {
       message: (p, f) =>
         `Nitrato: ${f.measurement(num(p, "value"), 3, NITRATE_ABOVE_TAP_LIMIT_PPM)} ppm. El límite recomendado es, como máximo, ${f.measurement(NITRATE_ABOVE_TAP_LIMIT_PPM)} ppm por encima del agua de la llave; mide también el nitrato de tu agua de la llave y aumenta los cambios de agua.`,
     },
+    speciesTemperatureOutOfRange: {
+      title: fixed("Temperatura fuera del rango de los animales"),
+      message: (p, f) =>
+        `Última medición: ${f.temperature(num(p, "value"), flag(p, "hasRange") ? (num(p, "value") > num(p, "max") ? num(p, "max") : num(p, "min")) : undefined)}; este valor está ${outsideRange(p)}${
+          !flag(p, "hasRange")
+            ? ""
+            : num(p, "min") === num(p, "max")
+              ? ` Los animales seleccionados solo tienen en común ${f.temperature(num(p, "min"), num(p, "value"))}; lleva la temperatura a este valor poco a poco.`
+              : ` El rango común de los animales seleccionados es ${f.temperatureNumber(num(p, "min"), num(p, "value"))}–${f.temperature(num(p, "max"), num(p, "value"))}; lleva la temperatura a este rango poco a poco.`
+        }`,
+    },
+    speciesPhOutOfRange: {
+      title: fixed("pH fuera del rango de los animales"),
+      message: (p, f) =>
+        `Última medición: pH ${f.measurement(num(p, "value"), 2, flag(p, "hasRange") ? (num(p, "value") > num(p, "max") ? num(p, "max") : num(p, "min")) : undefined)}; este valor está ${outsideRange(p)}${
+          !flag(p, "hasRange")
+            ? ""
+            : num(p, "min") === num(p, "max")
+              ? ` Los animales seleccionados solo tienen en común el pH ${f.measurement(num(p, "min"), 2, num(p, "value"))}; lleva el pH a este valor poco a poco.`
+              : ` El rango de pH común de los animales seleccionados es ${f.measurement(num(p, "min"), 2, num(p, "value"))}–${f.measurement(num(p, "max"), 2, num(p, "value"))}; lleva el pH a este rango poco a poco.`
+        }`,
+    },
     temperatureConflict: {
       title: fixed("Las necesidades de temperatura de las especies no coinciden"),
       message: fixed("No se encontró un rango de temperatura común y seguro para los animales seleccionados."),
+    },
+    coldwaterWithTropical: {
+      title: fixed("Especie de agua fría junto con peces tropicales"),
+      message: (p, f) =>
+        `${nameList(list(p, "coldwater"))} ${plural(list(p, "coldwater").length, "es una especie de agua fría", "son especies de agua fría")} y ${nameList(list(p, "tropical"))} ${plural(list(p, "tropical").length, "es un pez tropical", "son peces tropicales")}.${
+          num(p, "min") === num(p, "max")
+            ? ` Los animales seleccionados solo tienen en común una temperatura: ${f.temperature(num(p, "min"))}.`
+            : ` El rango de temperatura común de los animales seleccionados es solo ${f.temperatureNumber(num(p, "min"), num(p, "max"))}–${f.temperature(num(p, "max"), num(p, "min"))}.`
+        } Considera mantener las especies de agua fría en un acuario separado de los peces tropicales.`,
+    },
+    temperatureRangeNarrow: {
+      title: fixed("Las necesidades de temperatura de las especies coinciden en un solo valor"),
+      message: (p, f) =>
+        `Los rangos de temperatura de la fuente de los animales seleccionados solo tienen un punto en común: ${f.temperature(num(p, "value"))}. Si la temperatura se aleja aunque sea un poco de este valor, al menos un animal queda fuera de su rango; mide la temperatura con frecuencia o revisa la elección de especies.`,
     },
     phConflict: {
       title: fixed("Las necesidades de pH de las especies no coinciden"),
@@ -322,10 +375,15 @@ export const esEngine: EngineMessages = {
       title: (p) => `${str(p, "name")}: espacio al límite`,
       message: spaceReference,
     },
+    spaceNarrow: {
+      title: (p) => `${str(p, "name")}: acuario estrecho para esta especie`,
+      message: (p, f) =>
+        `${spaceReference(p, f)} El ancho del acuario (${f.length(num(p, "width"))}) es menor que el doble del tamaño adulto del catálogo, ${f.length(num(p, "size"))}. AquaMind adapta esta recomendación de la regla de dimensiones de la Ordenanza de Protección de los Animales de Suiza (ancho 2× la longitud del cuerpo); la ordenanza usa la longitud del cuerpo sin la aleta caudal, mientras que AquaMind usa la longitud total en la mayoría de las especies. Es más adecuado un acuario de al menos ${f.length(num(p, "minWidth"))} de ancho.`,
+    },
     spaceSevere: {
       title: (p) => `${str(p, "name")}: acuario demasiado pequeño`,
       message: (p, f) =>
-        `${spaceReference(p, f)} Además, el acuario está por debajo del límite de AquaMind adaptado de la regla de dimensiones de la Ordenanza de Protección de los Animales de Suiza (largo 3×, ancho 2×, profundidad del agua 1× la longitud del cuerpo). La ordenanza usa la longitud del cuerpo sin la aleta caudal; AquaMind aplica un criterio más estricto y usa el tamaño adulto del catálogo, ${f.length(num(p, "size"))} (longitud total en la mayoría de las especies): largo de al menos ${f.length(num(p, "minLength"))}, ancho de al menos ${f.length(num(p, "minWidth"))}, profundidad del agua de al menos ${f.length(num(p, "minDepth"))}.`,
+        `${spaceReference(p, f)} Además, el acuario está por debajo del límite de AquaMind adaptado de los límites de largo (3×) y de profundidad del agua (1× la longitud del cuerpo) de la regla de dimensiones de la Ordenanza de Protección de los Animales de Suiza. La ordenanza usa la longitud del cuerpo sin la aleta caudal; AquaMind aplica un criterio más estricto y usa el tamaño adulto del catálogo, ${f.length(num(p, "size"))} (longitud total en la mayoría de las especies): largo de al menos ${f.length(num(p, "minLength"))}, profundidad del agua de al menos ${f.length(num(p, "minDepth"))}.`,
     },
   },
 };

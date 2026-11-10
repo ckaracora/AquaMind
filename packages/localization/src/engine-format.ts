@@ -16,6 +16,14 @@ export interface EngineTextFormat {
   volume(liters: number, other?: number): string;
   /** Uzunluk, santimetre (uzunluk birimi tercihi yok): "13,5 cm". */
   length(cm: number): string;
+  /**
+   * Sıcaklık, tercih edilen birimde ve simgesiyle (motor 1.14.0): "25,4 °C", "77,7 °F". °C en çok iki, °F en çok bir ondalıkla yazılır;
+   * `other` ile karşılaştırılan değer (ör. aşılan sınır) ondan farklıyken aynı görünmesin diye gerektiğinde daha çok ondalık yazılır.
+   * Bitki uyarılarının biçimiyle aynıdır (`plant-warnings.ts`).
+   */
+  temperature(celsius: number, other?: number): string;
+  /** Birimsiz sıcaklık (aralığın ilk ucu: "21–25 °C"); karşılaştırılan uçla birlikte aynı hassasiyette yazılır. */
+  temperatureNumber(celsius: number, other?: number): string;
 }
 
 /** Önce denenecek en çok ondalık. */
@@ -48,11 +56,16 @@ export function distinct(write: (value: number, options: Intl.NumberFormatOption
 export function engineTextFormat(display: DisplayFormat): EngineTextFormat {
   const decimal = (value: number, options: Intl.NumberFormatOptions) => display.number(value, options);
   const volume = (liters: number, options: Intl.NumberFormatOptions) => display.volume(liters, options);
+  // Ekranın sıcaklık yazımıyla aynı hassasiyet: °C iki ondalık, °F (çevrilmiş değer) bir ondalık.
+  const temperatureDigits = display.temperatureUnit === "fahrenheit" ? 1 : 2;
+  const temperatureNumber = (celsius: number, other?: number) => distinct((value, options) => display.temperatureNumber(value, options), celsius, temperatureDigits, other);
   return {
     number: (value) => display.number(value),
     cycles: (value) => display.number(value, { minimumFractionDigits: 1, maximumFractionDigits: 1 }),
     measurement: (value, digits = 3, other) => distinct(decimal, value, digits, other),
     volume: (liters, other) => distinct(volume, liters, 1, other),
     length: (cm) => `${display.number(cm)} cm`,
+    temperature: (celsius, other) => `${temperatureNumber(celsius, other)} ${display.temperatureSymbol}`,
+    temperatureNumber: (celsius, other) => temperatureNumber(celsius, other),
   };
 }

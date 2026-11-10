@@ -33,6 +33,7 @@
 
 - Kesin tehlike (0008) genel puanı en fazla 49 yapar.
 - Bunun dışında herhangi bir tehlike uyarısı varsa genel puan en fazla 74 olur ("dikkat"). Böylece kırmızı uyarı varken ana sayfa "sorun görünmüyor" demez.
+- **Sonra değişti (2026-11-10, motor 1.14.0, kural seti 1.11.0, `docs/DECISIONS/0037-genel-durum-ve-uyari-duzeltmeleri.md`):** 74 sınırını artık tehlike uyarısının yanında tehlikedeki bir ölçüt de koyar. Veri güveni bu kurala girmez; canlısı olmayan akvaryumda filtre ve ısıtıcı ölçütü de girmez. Böylece filtresi kayıtlı olmayan ya da ısıtıcısı akvaryuma göre çok güçlü akvaryum "iyi" görünmez. Filtre kaydı hiç olmayan ve canlısı olan akvaryumda ayrıca sarı "Filtre kayıtlı değil" uyarısı çıkar.
 
 Eşikler `packages/compatibility-engine/src/index.ts` başındaki adlandırılmış sabitlerdedir. `ENGINE_VERSION` ve `RULESET_VERSION` 1.3.0'a yükseltilir. Sonuç nesnesinin biçimi değişmez.
 

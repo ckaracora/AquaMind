@@ -41,6 +41,11 @@
 
 Eşikler `packages/compatibility-engine/src/index.ts` içindeki adlandırılmış sabitlerdedir: `SWISS_MIN_LENGTH_RATIO`, `SWISS_MIN_WIDTH_RATIO`, `SWISS_MIN_DEPTH_RATIO`, `SEVERE_SPACE_SCORE`. `ENGINE_VERSION` ve `RULESET_VERSION` 1.6.0'a yükseltildi. Sonuç nesnesinin biçimi değişmedi.
 
+- **Sonra değişti (2026-11-10, motor 1.14.0, kural seti 1.11.0, `docs/DECISIONS/0037-genel-durum-ve-uyari-duzeltmeleri.md`):**
+  - Genişlik koşulu kırmızı basamaktan çıkarıldı (madde 2). Kaynağın önerisinin altında kalan ve yalnız genişliği yetmeyen balık sarı "<tür>: akvaryum bu tür için dar" uyarısı alır (`spaceNarrow`). Kırmızı "akvaryum çok küçük" yalnız uzunluk (3×) ya da yükseklik (1×) sınırı aşılınca çıkar ve mesajı genişliği saymaz.
+  - Yalnız sarı alan uyarısı varken yüzme alanı ölçütü en az 60 olur, tehlikeye düşmez (madde 5; `SPACE_WARNING_FLOOR`). Kırmızı uyarıda en fazla 35 kuralı değişmedi.
+  - Genel puanı en fazla 74 yapan artık yalnız tehlike uyarısı değil, tehlikedeki herhangi bir ölçüttür (madde 6; veri güveni hariç).
+
 ### Ölçü farkı
 
 Yönetmelik standart boyu (kuyruk yüzgeci hariç) kullanır. Katalogdaki yetişkin boy ise çoğu türde toplam boydur; örneğin astronot için 45,7 cm. Bu yüzden kural yönetmelikten biraz daha katı uygulanır. Kural yalnızca kaynağın önerisinin zaten altında kalan akvaryumlarda devreye girdiği için bu fark kabul edildi. Uyarı mesajı da bunu kullanıcıya söyler.

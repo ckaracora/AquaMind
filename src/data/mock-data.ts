@@ -14,7 +14,7 @@ export const aquariums: Aquarium[] = [{
 }];
 
 export const waterReadings: WaterParameters[] = [
-  { id: "w1", aquariumId: "aqua-1", measuredAt: "2026-08-17T09:30:00+03:00", temperature: 25.4, ph: 6.8, gh: 7, kh: 4, tds: 182, nitrate: 12 },
+  { id: "w1", aquariumId: "aqua-1", measuredAt: "2026-08-17T09:30:00+03:00", temperature: 24.5, ph: 6.8, gh: 7, kh: 4, tds: 182, nitrate: 12 },
   { id: "w2", aquariumId: "aqua-1", measuredAt: "2026-08-10T10:00:00+03:00", temperature: 25.1, ph: 6.9, gh: 7, kh: 4, tds: 176, nitrate: 10 },
   { id: "w3", aquariumId: "aqua-1", measuredAt: "2026-08-03T09:45:00+03:00", temperature: 25.6, ph: 6.7, gh: 8, kh: 4, tds: 188, nitrate: 15 },
 ];
