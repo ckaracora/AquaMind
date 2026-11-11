@@ -186,6 +186,31 @@ export const speciesForOtherWaterExactSearch = (value: string, category: Livesto
   const { searchNames } = speciesLookup();
   return speciesCatalog.find((profile, index) => profile.category === category && !speciesWaterTypes(profile).includes(waterType) && searchNames[index].includes(query));
 };
+/**
+ * Ekranın dilindeki tür adı, aramayla aynı biçimde (`normalize`) yazılmış. Ekleme penceresi verir; Türkçede ya da çevirisi olmayan
+ * türde `undefined` döner. Katalog modülü dil paketini bilmez; çeviri bu yüzden çağırandan gelir.
+ */
+export type SpeciesSearchName = (profile: SpeciesProfile) => string | undefined;
+// Arama önerisi (ürün sahibi kararı 2026-11-11): `speciesForOtherWaterExactSearch` ile aynı kural, ekranın dilindeki tür adlarıyla birlikte.
+// İngilizce ya da İspanyolca ekranda başka su türündeki bir türün çeviri adını tam yazan da uyarıyı görür. Ad bu akvaryum türünde bir
+// türün tam adıysa (çeviri dahil) bir şey dönmez. `translatedName` verilmezse sonuç `speciesForOtherWaterExactSearch` ile aynıdır.
+export const speciesForOtherWaterExactName = (value: string, category: Livestock["category"], waterType: AquariumType, translatedName?: SpeciesSearchName) => {
+  const query = normalize(value);
+  if (!query) return undefined;
+  const { searchNames } = speciesLookup();
+  const named = (profile: SpeciesProfile, index: number) => searchNames[index].includes(query) || (translatedName !== undefined && translatedName(profile) === query);
+  if (speciesCatalog.some((profile, index) => profile.category === category && speciesWaterTypes(profile).includes(waterType) && named(profile, index))) return undefined;
+  return speciesCatalog.find((profile, index) => profile.category === category && !speciesWaterTypes(profile).includes(waterType) && named(profile, index));
+};
+// Arama önerisinin listesi (2026-11-11): bu sınıf ve su türünde, adlarından biri (Türkçe ad, bilimsel ad, eş ad ya da ekranın dilindeki
+// ad) aranan metni içeren bütün türler, katalog sırasıyla ve her tür bir kez. Kendiliğinden seçim yapmaz; ekleme penceresi düğme gösterir.
+export const speciesMatchesForCatalogSearch = (value: string, category: Livestock["category"], waterType: AquariumType, translatedName?: SpeciesSearchName): SpeciesProfile[] => {
+  const query = normalize(value);
+  if (!query) return [];
+  const { searchNames } = speciesLookup();
+  return speciesCatalog.filter((profile, index) => profile.category === category && speciesWaterTypes(profile).includes(waterType)
+    && (searchNames[index].some((name) => name.includes(query)) || Boolean(translatedName?.(profile)?.includes(query))));
+};
 // Katalog kimliği yoksa eski kayıtlar bilimsel ada ya da ortak ada/eş ada göre eşlenir; birden fazla eşleşmede katalogda önce gelen kazanır.
 export const speciesForLivestock = (item: Livestock) => {
   const profile = speciesById(item.catalogId);

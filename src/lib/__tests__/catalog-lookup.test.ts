@@ -4,7 +4,7 @@ import { beforeAll, describe, expect, it } from "vitest";
 import { loadLocaleBundle, messagesFor } from "@aquamind/localization";
 import { equipmentCatalog, profileForEquipment } from "@/data/catalog-equipment";
 import { normalize } from "@/data/catalog-shared";
-import { speciesCatalog, speciesForCatalogExactSearch, speciesForCatalogSearch, speciesForLivestock, speciesForOtherWaterExactSearch, speciesWaterTypes } from "@/data/catalog-species";
+import { speciesCatalog, speciesForCatalogExactSearch, speciesForCatalogSearch, speciesForLivestock, speciesForOtherWaterExactName, speciesForOtherWaterExactSearch, speciesMatchesForCatalogSearch, speciesWaterTypes } from "@/data/catalog-species";
 import { unresolvedSpeciesForSearch, unresolvedSpeciesListings } from "@/data/catalog-species-unresolved";
 import type { Equipment, Livestock } from "@/types/aquarium";
 
@@ -126,6 +126,56 @@ describe("başka su türündeki doğrulanmış tam ad", () => {
       expect(messagesFor("en").livestock.form.otherWaterText("freshwater", ["brackish", "saltwater"])).toBe("This species is not suitable for a freshwater aquarium; it needs a brackish or saltwater aquarium.");
       expect(messagesFor("es").livestock.form.otherWaterText("freshwater", ["brackish", "saltwater"])).toBe("Esta especie no es apta para un acuario de agua dulce; necesita un acuario de agua salobre o agua salada.");
     });
+  });
+});
+
+// Arama önerisi (ürün sahibi kararı 2026-11-11): ekleme penceresi başka su türündeki tam adı ekranın dilindeki adlarla da arar ve bu
+// akvaryum türündeki bütün kısmi eşleşmeleri öneri olarak listeler. Pencerenin davranışı `livestock-search.test.ts` içinde sınanır.
+describe("arama önerisinin katalog aramaları", () => {
+  const waterTypes = ["freshwater", "brackish", "saltwater"] as const;
+  const referenceMatches = (value: string, category: Livestock["category"], waterType: "freshwater" | "brackish" | "saltwater") => {
+    const query = n(value);
+    if (!query) return [];
+    return speciesCatalog.filter((profile) => profile.category === category && speciesWaterTypes(profile).includes(waterType) && [profile.commonName, profile.scientificName, ...(profile.aliases ?? [])].some((name) => n(name)?.includes(query))).map((profile) => profile.id);
+  };
+
+  it("çeviri adı verilmezse başka su türündeki tam ad araması eski aramayla aynıdır", () => {
+    let checked = 0;
+    for (const profile of speciesCatalog) for (const name of [profile.commonName, profile.scientificName, ...(profile.aliases ?? [])]) for (const waterType of waterTypes) {
+      checked += 1;
+      expect(speciesForOtherWaterExactName(name, profile.category, waterType)?.id, `${name} / ${waterType}`).toBe(speciesForOtherWaterExactSearch(name, profile.category, waterType)?.id);
+    }
+    expect(checked).toBeGreaterThan(5000);
+    expect(speciesForOtherWaterExactName("", "fish", "freshwater")).toBeUndefined();
+  }, 60_000);
+
+  it("çeviri adıyla: başka su türündeki türün tam çeviri adı bulunur; ad bu su türünde bir türün çeviri adıysa bir şey dönmez", () => {
+    const translated = (names: Record<string, string>) => (profile: { id: string }) => names[profile.id];
+    expect(speciesForOtherWaterExactName("Sınama sazanı", "fish", "brackish")).toBeUndefined();
+    expect(speciesForOtherWaterExactName("Sınama sazanı", "fish", "brackish", translated({ "koi-carp": "sinama sazani" }))?.id).toBe("koi-carp");
+    // Koi sazanı tatlı su türüdür: kendi su türünde uyarı yoktur.
+    expect(speciesForOtherWaterExactName("Sınama sazanı", "fish", "freshwater", translated({ "koi-carp": "sinama sazani" }))).toBeUndefined();
+    // Aynı çeviri adı acı sudaki bir türün de adıysa (Lepistes) o tür seçilir; uyarı çıkmaz.
+    expect(speciesForOtherWaterExactName("Sınama sazanı", "fish", "brackish", translated({ "koi-carp": "sinama sazani", guppy: "sinama sazani" }))).toBeUndefined();
+  });
+
+  it("kısmi eşleşme listesi: bu sınıf ve su türünde adlarından biri aranan metni içeren bütün türler, katalog sırasıyla ve birer kez", () => {
+    const queries = ["Koi", "Angelfish", "Melek balığı", "Turbo salyangoz", "Mavi neon gobi", "neon", "TETRA", "lepistes", "  ", "böyle bir ad yok"];
+    const combos = [["fish", "freshwater"], ["fish", "brackish"], ["fish", "saltwater"], ["shrimp", "freshwater"], ["snail", "saltwater"], ["other", "saltwater"]] as const;
+    const order = new Map(speciesCatalog.map((profile, index) => [profile.id, index]));
+    for (const query of queries) for (const [category, waterType] of combos) {
+      const ids = speciesMatchesForCatalogSearch(query, category, waterType).map((profile) => profile.id);
+      expect(ids, `${query} / ${category} / ${waterType}`).toEqual(referenceMatches(query, category, waterType));
+      expect(new Set(ids).size).toBe(ids.length);
+      expect(ids.map((id) => order.get(id)!)).toEqual([...ids.map((id) => order.get(id)!)].sort((a, b) => a - b));
+      // Tam adı olmayan aramada listenin ilki, bugünkü kısmi aramanın seçtiği türdür.
+      if (!speciesForCatalogExactSearch(query, category, waterType)) expect(ids[0], query).toBe(speciesForCatalogSearch(query, category, waterType)?.id);
+    }
+    expect(speciesMatchesForCatalogSearch("Koi", "fish", "brackish").map((profile) => profile.id)).toEqual(["guppy", "swordtail"]);
+    // Ekranın dilindeki adın kısmi eşleşmesi de listeye girer; tür bir kez yazılır.
+    const translated = (profile: { id: string }) => (profile.id === "guppy" ? "koi sinama" : profile.id === "betta" ? "koi sinama" : undefined);
+    expect(speciesMatchesForCatalogSearch("koi sı", "fish", "brackish", translated).map((profile) => profile.id)).toEqual(["guppy"]);
+    expect(speciesMatchesForCatalogSearch("Koi", "fish", "brackish", translated).map((profile) => profile.id)).toEqual(["guppy", "swordtail"]);
   });
 });
 

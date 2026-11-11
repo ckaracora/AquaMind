@@ -379,6 +379,18 @@ export const tr = {
         const water = { freshwater: "tatlı su", brackish: "acı su", saltwater: "tuzlu su" };
         return `Bu tür ${water[aquariumType]} akvaryumuna uygun değildir; ${required.map((type) => water[type]).join(" veya ")} akvaryumu gerekir.`;
       },
+      /** Arama önerisi (ürün sahibi kararı 2026-11-11): uyarının altında bu akvaryuma uygun, adı benzeyen türler düğme olarak çıkar; tür
+       *  kendiliğinden seçilmez. Başlık öneri sayısına göre tekil ya da çoğuldur. En çok üç öneri görünür, fazlası "Tümünü göster" ile açılır. */
+      otherWaterSuggestions: (count: number): string => (count === 1 ? "Bu akvaryuma uygun benzer adlı tür" : "Bu akvaryuma uygun benzer adlı türler"),
+      otherWaterSuggestionHint: "Seçersen hacim ve uyumluluk hesabı bu türe göre yapılır.",
+      otherWaterSuggestionChoose: "Seç",
+      otherWaterSuggestionChosen: "Seçildi",
+      /** `count` bütün önerilerin sayısıdır. */
+      otherWaterSuggestionsShowAll: (count: number) => `Tümünü göster (${count})`,
+      /** Ekranda görünmez; ekran okuyucu öneri seçilince okur. */
+      otherWaterSuggestionPicked: (name: string) => `${name} seçildi.`,
+      /** Tür kartının altında, tür öneriden seçildiyse. `query` kullanıcının arama kutusuna yazdığıdır. */
+      chosenFromSuggestion: (query: string) => `Bu türü öneriden sen seçtin. Aradığın ad: ${query}`,
       species: "3. Tür",
       chooseSpecies: "Tür seç",
       awaitingIdentity: "Kimlik doğrulaması bekleniyor",

@@ -362,6 +362,13 @@ export const en: Messages = {
         const water = { freshwater: "freshwater", brackish: "brackish", saltwater: "saltwater" };
         return `This species is not suitable for a ${water[aquariumType]} aquarium; it needs a ${required.map((type) => water[type]).join(" or ")} aquarium.`;
       },
+      otherWaterSuggestions: (count: number) => (count === 1 ? "Similarly named species that suits this aquarium" : "Similarly named species that suit this aquarium"),
+      otherWaterSuggestionHint: "If you choose one, volume and compatibility are calculated for that species.",
+      otherWaterSuggestionChoose: "Select",
+      otherWaterSuggestionChosen: "Selected",
+      otherWaterSuggestionsShowAll: (count: number) => `Show all (${count})`,
+      otherWaterSuggestionPicked: (name: string) => `${name} selected.`,
+      chosenFromSuggestion: (query: string) => `You chose this species from a suggestion. You searched for: ${query}`,
       species: "3. Species",
       chooseSpecies: "Choose species",
       awaitingIdentity: "Awaiting identity confirmation",
