@@ -2,7 +2,7 @@
 // derleme anında (src/app/catalog-data/**) ve testlerde çalışır; tarayıcı paketine girmez. Ad ve model dizinleri, katalog
 // modüllerinin kendi aramalarında kullandığı dizinlerdir; böylece tarayıcıdaki yükleyici aynı sonucu verir.
 import { catalogBucketCounts, catalogBucketOf, type CatalogBucketKind, type EquipmentBucket, type EquipmentModelBucket, type SpeciesBucket, type SpeciesNameBucket } from "./catalog-buckets";
-import { equipmentCatalog, equipmentModelIndex } from "./catalog-equipment";
+import { equipmentIdIndex, equipmentModelIndex } from "./catalog-equipment";
 import { speciesCatalog, speciesNameIndex } from "./catalog-species";
 import { speciesBehavior } from "./species-behavior";
 
@@ -13,8 +13,10 @@ export function buildSpeciesBucket(bucket: number): SpeciesBucket {
     .map((profile) => [profile.id, profile, Object.hasOwn(speciesBehavior, profile.id) ? speciesBehavior[profile.id] : null]);
 }
 
+// Kimlik dizininden: katalog sırasıyla her kayıt, ardından birleştirilen kayıtların eski kimlikleri (`formerIds`, 2026-11-11). Eski kimlik kendi
+// parçasında birleştirildiği kaydın profiliyle durur; yükleyici eski kimlikli kullanıcı kaydını böylece tam katalogla aynı kayda bağlar.
 export function buildEquipmentBucket(bucket: number): EquipmentBucket {
-  return equipmentCatalog.filter((profile) => catalogBucketOf(profile.id, "equipment") === bucket).map((profile) => [profile.id, profile]);
+  return [...equipmentIdIndex()].filter(([id]) => catalogBucketOf(id, "equipment") === bucket).map(([id, profile]) => [id, profile]);
 }
 
 export function buildSpeciesNameBucket(bucket: number): SpeciesNameBucket {

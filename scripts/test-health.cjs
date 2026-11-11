@@ -78,7 +78,7 @@ const metric = (analysis, key) => analysis.metrics.find(item => item.key === key
   const analysis = analyzeAquarium(
     aquarium({ netVolumeLiters: 25, lengthCm: 40 }),
     [animal("betta", "Beta balığı")],
-    [device("oase-biomaster-350", "filter", "Oase", "BioMaster 350")],
+    [device("oase-biomaster2-350", "filter", "Oase", "BioMaster² 350")],
   );
   assert(warningTitles(analysis).includes("Filtre akışı güçlü olabilir"), "Aşırı filtre debisi uyarılmalı");
 }

@@ -4,7 +4,7 @@ import { ChevronDown, Filter, LampDesk, PencilLine, Plus, Search, SlidersHorizon
 import { AppShell } from "@/components/app-shell";
 import { ModalDialog } from "@/components/modal-dialog";
 import { PageHeader } from "@/components/page-header";
-import { equipmentBrandsForCategory, equipmentById, equipmentForBrandInCategory, equipmentForCategory, profileForEquipment, technicalDataReady } from "@/data/catalog-equipment";
+import { equipmentBrandsForCategory, equipmentById, equipmentForBrandInCategory, equipmentForCategory, equipmentMatchesModelQuery, profileForEquipment, technicalDataReady } from "@/data/catalog-equipment";
 import { equipmentSpecsText, profileSpecsText } from "@/lib/equipment-text";
 import { localIsoDate } from "@/lib/local-date";
 import { useDisplayFormat } from "@/lib/use-display-format";
@@ -123,7 +123,8 @@ function EquipmentForm({ aquarium, initialCategory, close, add }: {
   const [brand, setBrand] = useState(categoryItems[0]?.brand ?? "");
   const models = equipmentForBrandInCategory(selectedCategory, brand);
   const [modelQuery, setModelQuery] = useState("");
-  const visibleModels = models.filter(item => item.model.toLocaleLowerCase("tr-TR").includes(modelQuery.toLocaleLowerCase("tr-TR")));
+  // Model araması eş adlara da bakar (eski ya da öbür ülke adı, ör. "S 101"); kayıt listede kendi adıyla bir kez görünür.
+  const visibleModels = models.filter(item => equipmentMatchesModelQuery(item, modelQuery));
   const [selected, setSelected] = useState(models[0]?.id ?? "");
   const [raw, setRaw] = useState("");
   const [unit, setUnit] = useState<FlowUnit>("lph");
@@ -137,7 +138,7 @@ function EquipmentForm({ aquarium, initialCategory, close, add }: {
   function resetValue() { setRaw(""); setError(undefined); }
   function changeCategory(next: Equipment["category"]) { const nextItems = equipmentForCategory(next); setSelectedCategory(next); setBrand(nextItems[0]?.brand ?? ""); setModelQuery(""); setSelected(nextItems[0]?.id ?? ""); resetValue(); }
   function changeBrand(next: string) { setBrand(next); setModelQuery(""); setSelected(equipmentForBrandInCategory(selectedCategory, next)[0]?.id ?? ""); resetValue(); }
-  function changeModelQuery(next: string) { setModelQuery(next); const normalized = next.toLocaleLowerCase("tr-TR"); setSelected(models.find(item => item.model.toLocaleLowerCase("tr-TR").includes(normalized))?.id ?? ""); resetValue(); }
+  function changeModelQuery(next: string) { setModelQuery(next); setSelected(models.find(item => equipmentMatchesModelQuery(item, next))?.id ?? ""); resetValue(); }
   function submit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
     const d = new FormData(e.currentTarget);

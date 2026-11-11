@@ -15,7 +15,7 @@ import { meaningProblems, nameProblems, numberProblems, numberUnits, productName
 
 const TABLES: Record<"en" | "es", EquipmentTexts> = { en: enCatalogEquipment, es: esCatalogEquipment };
 const TURKISH_NAMES = /TÜV|Türkiye|İzmir|Armatürk/g;
-const TRANSLATED_PROPER = new Set(["ABD", "SSS", "Türkiye", "Polonya", "Alman", "Almanca", "İngilizce", "İspanyol", "Japon", "Eylül", "Hamburg"]);
+const TRANSLATED_PROPER = new Set(["ABD", "SSS", "Türkiye", "Polonya", "Finlandiya", "Alman", "Almanca", "İngilizce", "İspanyol", "Japon", "Eylül", "Hamburg"]);
 /** Litre birimi taşıyan ama ad ya da kod olan sayılar: düz yazılır, dönüştürülmez. */
 const PLAIN_LITERS = new Set(["#L paslanmaz çelik", "AquaArt Discovery Line # L için beyaz ve mavi LED", "AquaArt Discovery Line #/# L için beyaz ve mavi LED", "ürün kodu #-K#L"]);
 /** °C birimi taşıyan ama sıcaklık farkı olan sayılar (artış, soğutma, kademe, ± hassasiyet, gösterim çözünürlüğü): düz yazılır. */

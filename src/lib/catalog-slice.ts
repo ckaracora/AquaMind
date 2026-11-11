@@ -3,6 +3,9 @@
 // modüllerindeki `speciesForLivestock` ve `profileForEquipment` ile aynıdır:
 // - katalog kimliği varsa ve katalogda bulunuyorsa o kayıt;
 // - yoksa canlıda bilimsel ad ya da ortak ad/eş ad eşleşmesi (ikisi de varsa katalogda önce gelen), ekipmanda marka + model.
+// Ekipmanda birleştirilip kaldırılan eski kimlik (`formerIds`) ve eş ad (`aliases`) parçalara yazılır (src/data/catalog-bucket-builders.ts): eski
+// kimlik kendi parçasında birleştirildiği kaydın profiliyle, eş ad marka/model dizininde o kaydın kimliğiyle durur. Yükleyici bunları ayrıca
+// çözmez; kullanıcı kaydı değişmeden okuma anında birleştirilen kayıtla hesaplanır (2026-11-11, JBL PROTEMP S).
 import { catalogBucketOf, catalogBucketPath, type CatalogBucketKind, type EquipmentBucket, type EquipmentModelBucket, type SpeciesBucket, type SpeciesNameBucket } from "@/data/catalog-buckets";
 import type { EquipmentProfile } from "@/data/catalog-equipment";
 import { brandModelKey, normalize } from "@/data/catalog-shared";

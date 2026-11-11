@@ -103,10 +103,12 @@ const volumeProducts = (
   sourceUrl, verifiedAt:"2026-09-12",
 }));
 
+// Ürün sahibinin Chrome'unda 2026-11-11'de yeniden okunup bütün alanları doğrulanan Dennerle bakım ürünleri (docs/CATALOG_LOG.md, 2026-11-11 bölümü).
+const dennerleChromeVerifiedHandles = new Set(["carbo-elixier-bio","clear-water-elixir","humin-elixir","corner-filter-element-100"]);
 const dennerleProducts = (category:CareProductCategory, entries:Array<[string,string,string]>): CareProductProfile[] =>
   entries.map(([handle,model,description]) => ({
     id:catalogSlug(`Dennerle-${model}`), brand:"Dennerle", model, category, description,
-    sourceUrl:`https://dennerle.com/en/products/${handle}`, verifiedAt:"2026-08-27",
+    sourceUrl:`https://dennerle.com/en/products/${handle}`, verifiedAt:dennerleChromeVerifiedHandles.has(handle) ? "2026-11-11" : "2026-08-27",
   }));
 
 export const careProductCatalog: CareProductProfile[] = [
@@ -2396,9 +2398,10 @@ export const careProductCatalog: CareProductProfile[] = [
   ...products("JBL","food","https://www.jbl.de/en/products/detail/2217/jbl-novobel-refill-pack?country=gb",[
     ["NovoBel Refill 750 ml","Arşiv NovoBel yedek ambalajı · boş 1 L JBL kutusuna yerleştirilebilen, 3–20 cm tropikal tatlı su balıkları için pul ana yem · 750 ml / 135 g · ürün kodu 3014100 · açıldıktan sonra 4 ay, kapalı ambalajda 3 yıl saklama"],
   ],"2026-09-18"),
+  // JBL'de yeni ya da arşiv sayfası yok; değerler eski sayfanın internet arşivi kopyasından (ek kaynak, docs/DATA_SOURCES.md; docs/CATALOG_LOG.md, 2026-11-11 bölümü).
   ...products("JBL","food","https://www.jbl.de/en/products/detail/3518/jbl-nanobel?country=gb",[
-    ["NanoBel 60 ml","Arşiv Novo mini pul ana yem · 1–4 cm küçük tropikal tatlı su balıkları için tüm su katmanlarında tüketilen, 50'den fazla ham maddeden oluşan 7 farklı pul · 60 ml · eski katalog kodu 23171 · resmî kataloglarda net ağırlık 15 g ve 16 g olarak çeliştiğinden tek değer seçilmedi"],
-  ],"2026-09-18"),
+    ["NanoBel 60 ml","Arşiv Novo mini pul ana yem · 1–4 cm küçük tropikal tatlı su balıkları için tüm su katmanlarında tüketilen, 50'den fazla ham maddeden oluşan 7 farklı pul · 60 ml · eski katalog kodu 23171 · arşivlenmiş ürün sayfası 15 g, eski resmî kataloglar 15 g ve 16 g yayımlar; ağırlık çelişkisi çözülmedi"],
+  ],"2026-11-11").map((item) => ({...item,additionalSourceUrls:["https://web.archive.org/web/20251109200336/https://www.jbl.de/en/products/detail/3518/jbl-nanobel?country=gb"]})),
   ...products("JBL","food","https://www.jbl.de/en/products/detail/2218/jbl-novogrand?country=gb",[
     ["NovoGrand 1000 ml","Arşiv Novo iri pul ana yem · 10–25 cm büyük Güney Amerika cikletleri için · 1000 ml / 160 g · ürün kodu 3018000 · kapalı ambalaj raf ömrü 36 ay"],
     ["NovoGrand 12,5 L","Arşiv Novo iri pul ana yem · 10–25 cm büyük Güney Amerika cikletleri için · 12,5 L · ürün kodu 3018500 · resmî ürün veri sayfasında ağırlık 2200 g, net ağırlık 2100 g olarak çeliştiğinden tek değer seçilmedi · kapalı ambalaj raf ömrü 36 ay"],
@@ -2477,9 +2480,10 @@ export const careProductCatalog: CareProductProfile[] = [
     ["NovoPleco 1000 ml","Arşiv Novo vatoz yemi · 5–20 cm küçük ve orta vatozlar için odun lifi, Spirulina ve bitkisel içerik taşıyan batan wafer · 1000 ml / 530 g · ham protein %32, yağ %8, lif %13, kül %10, nem %8"],
     ["NovoPleco 5500 ml","Arşiv Novo vatoz yemi · 5–20 cm küçük ve orta vatozlar için odun lifi, Spirulina ve bitkisel içerik taşıyan batan wafer büyük ambalajı · 5500 ml / 2900 g · ürün kodu 3030900 · ham protein %32, yağ %8, lif %13, kül %10, nem %8"],
   ],"2026-09-19"),
+  // JBL'de yeni ya da arşiv sayfası yok; değerler eski sayfanın internet arşivi kopyasından (ek kaynak, docs/DATA_SOURCES.md; docs/CATALOG_LOG.md, 2026-11-11 bölümü).
   ...products("JBL","food","https://www.jbl.de/en/products/detail/3511/jbl-nanotabs?country=us",[
     ["NanoTabs 60 ml","Arşiv Novo nano tablet yemi · karidesler ve cüce kerevitler için pençeyle tutulabilen, batan sert tablet · 60 ml / 36 g · ürün kodu 2317700 · günlük 20–30 karidese bir tablet doz önerisi"],
-  ],"2026-09-19"),
+  ],"2026-11-11").map((item) => ({...item,additionalSourceUrls:["https://web.archive.org/web/20251115065655/https://www.jbl.de/en/products/detail/3511/jbl-nanotabs?country=us"]})),
   ...products("JBL","food","https://www.jbl.de/en/products/detail/2302/jbl-novofect?country=dk",[
     ["NovoFect 100 ml","Arşiv Novo bitkisel tablet ana yem · 3–20 cm bitkisel beslenen tatlı su balıkları ve karidesler için cama yapıştırılabilen tablet · 100 ml / 58 g · ürün kodu 3024700 · ham protein %35, yağ %5, lif %5, kül %8, nem %8"],
     ["NovoFect 250 ml","Arşiv Novo bitkisel tablet ana yem · 3–20 cm bitkisel beslenen tatlı su balıkları ve karidesler için cama yapıştırılabilen tablet · 250 ml / 150 g · ham protein %35, yağ %5, lif %5, kül %8, nem %8"],
@@ -2540,9 +2544,10 @@ export const careProductCatalog: CareProductProfile[] = [
     ["NovoRed 250 ml","Arşiv Novo Japon balığı yemi · 5–20 cm Japon balıkları ve tül kuyruklar için orta/üst su katmanında tüketilen, %70 bitkisel içerikli pul ana yem · 250 ml / 45 g · ürün kodu 3020000 · ham protein %35, yağ %5,5, lif %3, kül %10, nem %8"],
     ["NovoRed 1000 ml","Arşiv Novo Japon balığı yemi · 5–20 cm Japon balıkları ve tül kuyruklar için orta/üst su katmanında tüketilen, %70 bitkisel içerikli pul ana yem · 1000 ml / 190 g · ürün kodu 3022000 · ham protein %35, yağ %5,5, lif %3, kül %10, nem %8"],
   ],"2026-09-19"),
-  ...products("JBL","food","https://www.jbl.de/fr/produits/detail/4406/jbl-novored-recharge?country=fr&cpref=338",[
-    ["NovoRed Refill 750 ml","Arşiv Novo Japon balığı yemi ekonomik dolumu · NovoRed 1000 ml kutusuna yerleştirilen, yem içeriği NovoRed ile aynı dolum paketi · 750 ml / 130 g · ürün kodu 3022180 · ham protein %35, yağ %5,5, lif %3, kül %10, nem %8"],
-  ],"2026-09-19"),
+  // Kimlik eski model adından (750 ml) kalır: JBL'in sayfası 750 ml de gram da yazmıyor, ad sayfaya göre kısaldı (docs/CATALOG_LOG.md, 2026-11-11 bölümü).
+  ...products("JBL","food","https://www.jbl.de/fr-fr/productsv2/detail/25163591",[
+    ["NovoRed Refill","Arşiv Novo Japon balığı yemi dolum paketi · ürün kodu 3022180 · ham protein %35, yağ %5,5, lif %3, kül %10, nem %8"],
+  ],"2026-11-11").map((item) => ({...item,id:"jbl-novored-refill-750-ml"})),
   ...products("JBL","food","https://www.jbl.de/en/products/detail/4498/jbl-novopearl-click?country=us",[
     ["NovoPearl CLICK 100 ml","Arşiv Novo Japon balığı yemi · en az 8 cm Japon balıkları, tül kuyruklar ve Shubunkin için yüzen inci biçimli, %53 bitkisel içerikli ana yem · Click dozaj kapağıyla bir basış beş balık içindir · 100 ml / 37 g · ürün kodu 3030300"],
     ["NovoPearl 100 ml REFILL","Arşiv Novo Japon balığı yemi · en az 8 cm Japon balıkları, tül kuyruklar ve Shubunkin için yüzen inci biçimli, %53 bitkisel içerikli ana yem · Click kapağıyla uyumlu dolum kutusu · 100 ml / 37 g · ürün kodu 3029900"],
@@ -2793,7 +2798,7 @@ export const careProductCatalog: CareProductProfile[] = [
   },
   {
     id:"fluval-sea-iodine-a8264-237ml",brand:"Fluval",model:"SEA Iodine 237 ml",category:"water_conditioner",
-    description:"Deniz akvaryumlarında protein skimmer, koralin alg, mercan gelişimi ve oksidasyonla azalan iyodu destekleyen yoğun takviye · 237 ml · ürün kodu A8264 · UPC 015561182645 · doğal deniz suyundaki orana göre kalsiyum iyodat ve potasyum iyodür içerir; mercan ve omurgasız sistemi için yalnız ölçüm ve etiket talimatıyla kullanılmalı, ürün sayfasında yayımlanmayan doz tahmin edilmemelidir",
+    description:"Deniz akvaryumlarında protein skimmer, koralin alg, mercan gelişimi ve oksidasyonla azalan iyodu destekleyen yoğun takviye · 237 ml · ürün kodu A8264 · UPC 015561182645 · doğal deniz suyundaki orana göre kalsiyum iyodat ve potasyum iyodür içerir",
     sourceUrl:"https://fluvalaquatics.com/ca/shop/product/iodine-8-fl-oz-237-ml",additionalSourceUrls:["https://fluvalaquatics.com/ca/shop/water-care/page/2","https://www.regulatory-info-hsx.com/pdf/english/MSDS-A8264-A8265.pdf"],verifiedAt:"2026-09-29",
   },
   {
@@ -3102,7 +3107,7 @@ export const careProductCatalog: CareProductProfile[] = [
   {
     id:"fluval-bug-bites-color-enhancing-flakes-a7348-90g",brand:"Fluval",model:"Bug Bites Color Enhancing Flakes 90 g",category:"food",
     description:"Tropikal balıkların renk desteği için pul yem · 90 g · ürün kodu A7348 · UPC 015561173483 · ilk bileşen kara asker sineği larvası olan %46 ham proteinli formül karides unu ve astaksantin içerir; üretici günde iki-üç kez yalnız iki dakikada tüketilecek miktarı önerir",
-    sourceUrl:"https://fluvalaquatics.com/us/shop/product/bug-bites-color-enhancing-flakes-3-17-oz-90-g",verifiedAt:"2026-09-29",
+    sourceUrl:"https://fluvalaquatics.com/us/shop/product/bug-bites-color-enhancing-flakes-3-17-oz-90-g",verifiedAt:"2026-11-11",
   },
   {
     id:"fluval-bug-bites-color-enhancing-flakes-a7350-1kg",brand:"Fluval",model:"Bug Bites Color Enhancing Flakes 1 kg",category:"food",
@@ -3167,7 +3172,7 @@ export const careProductCatalog: CareProductProfile[] = [
   {
     id:"fluval-bug-bites-algae-crisps-a7361-100g",brand:"Fluval",model:"Bug Bites Algae Crisps 100 g",category:"food",
     description:"Pleco ve Ancistrus türleri için uzun süre dayanıklı alg crisp yemi · 100 g · ürün kodu A7361 · UPC 015561173612 · kara asker sineği larvası, Hawaii spirulinası ve kelp içeren %43,5 ham proteinli bitkisel-hayvansal formül; üretici günde iki-üç kez yalnız iki dakikada tüketilecek miktarı önerir",
-    sourceUrl:"https://fluvalaquatics.com/us/shop/product/bug-bites-algae-crisps-3-52-oz-100-g",verifiedAt:"2026-09-29",
+    sourceUrl:"https://fluvalaquatics.com/us/shop/product/bug-bites-algae-crisps-3-52-oz-100-g",verifiedAt:"2026-11-11",
   },
   {
     id:"fluval-bug-bites-goldfish-pellets-a6584-100g",brand:"Fluval",model:"Bug Bites Goldfish Pellets 100 g",category:"food",
@@ -3177,7 +3182,7 @@ export const careProductCatalog: CareProductProfile[] = [
   {
     id:"fluval-bug-bites-tropical-granules-a6579-125g",brand:"Fluval",model:"Bug Bites Tropical Granules 125 g",category:"food",
     description:"Tropikal balıklar için 1,4–2,0 mm yavaş batan granül · 125 g · ürün kodu A6579 · üretici sayfasındaki UPC 015561165976, 1,7 kg A6597 sayfasında da yayımlandığından benzersiz doğrulayıcı sayılmamıştır · %40'a kadar kara asker sineği larvası içeren %40 ham proteinli formül; günde iki-üç kez yalnız iki dakikada tüketilecek miktar önerilir",
-    sourceUrl:"https://fluvalaquatics.com/us/shop/product/bug-bites-tropical-granules-4-4-oz-125-g-2",verifiedAt:"2026-09-29",
+    sourceUrl:"https://fluvalaquatics.com/us/shop/product/bug-bites-tropical-granules-4-4-oz-125-g-2",verifiedAt:"2026-11-11",
   },
   {
     id:"fluval-bug-bites-tropical-granules-a6597-1-7kg",brand:"Fluval",model:"Bug Bites Tropical Granules 1,7 kg",category:"food",
@@ -3357,7 +3362,7 @@ export const careProductCatalog: CareProductProfile[] = [
   {
     id:"fluval-bio-foam-19598-ac20",brand:"Fluval",model:"Bio-Foam AC20",category:"filter_media",
     description:"Fluval AC20 askı filtresi için mekanik ve biyolojik filtre süngeri · ürün kodu 19598 · UPC 015561195980 · 30 PPI yoğunluk parçacıkları tutarken yararlı bakterilere yüzey sağlar; üretici iki ayda bir değişim ve tatlı/deniz suyu kullanımı belirtir",
-    sourceUrl:"https://fluvalaquatics.com/us/shop/product/bio-foam-for-ac20-aquaclear-power-filter",verifiedAt:"2026-09-28",
+    sourceUrl:"https://fluvalaquatics.com/us/shop/product/bio-foam-for-ac20-aquaclear-power-filter",verifiedAt:"2026-11-11",
   },
   {
     id:"fluval-bio-foam-19670-ac20-3pack",brand:"Fluval",model:"Bio-Foam AC20 · 3'lü paket",category:"filter_media",
@@ -3417,7 +3422,7 @@ export const careProductCatalog: CareProductProfile[] = [
   {
     id:"fluval-media-maintenance-kit-19693-ac70",brand:"Fluval",model:"Media Maintenance Kit AC70",category:"filter_media",
     description:"Fluval AC70 askı filtresi için bakım paketi · ürün kodu 19693 · UPC 015561196932 · iki Carbon, bir Bio-Foam ve bir BIOMAX medya içerir; mekanik, biyolojik ve kimyasal katmanlar tatlı/deniz suyu kullanımına uygun yedeklerdir",
-    sourceUrl:"https://fluvalaquatics.com/us/shop/product/media-maintenance-kit-for-aquaclear-ac70-power-filter",verifiedAt:"2026-09-28",
+    sourceUrl:"https://fluvalaquatics.com/us/shop/product/media-maintenance-kit-for-aquaclear-ac70-power-filter",verifiedAt:"2026-11-11",
   },
   {
     id:"fluval-media-maintenance-kit-19694-ac110",brand:"Fluval",model:"Media Maintenance Kit AC110",category:"filter_media",
@@ -3490,12 +3495,12 @@ export const careProductCatalog: CareProductProfile[] = [
   },
   {
     id:"fluval-carbon-a1377-spec-evo-flex-45g-3pack",brand:"Fluval",model:"Carbon Spec/Evo/Flex 45 g · 3'lü paket",category:"filter_media",
-    description:"Spec 10/19 L, Evo 19/52 L ve Flex 34/57/123 L kitleri için üçlü kimyasal filtre karbonu · ürün kodu A1377 · UPC 015561113779 · toplam yayımlanan paket ağırlığı 45 g'dır; ağır metal, koku, renklenme ve organik kirleticileri gidermeye yardımcı olur",
-    sourceUrl:"https://fluvalaquatics.com/us/shop/product/replacement-carbon-for-spec-evo-flex-aquarium-kit-1-6-oz-45-g-3-pack",verifiedAt:"2026-09-28",
+    description:"Spec 10/19 L, Evo 19/52 L ve Flex 34/57/123 L kitleri için kimyasal filtre karbonu · 45 g, 3'lü paket · ürün kodu A1377 · UPC 015561113779 · ağır metal, koku, renklenme ve kirleticileri gidermeye yardımcı olur",
+    sourceUrl:"https://fluvalaquatics.com/us/shop/product/replacement-carbon-for-spec-evo-flex-aquarium-kit-1-6-oz-45-g-3-pack",verifiedAt:"2026-11-11",
   },
   {
     id:"fluval-edge-carbon-a1379-45g-3pack",brand:"Fluval",model:"Edge Carbon Clean & Clear 45 g · 3'lü paket",category:"filter_media",
-    description:"Edge 23 ve 46 L akvaryum kitleri için üçlü yüksek kaliteli karbon poşeti · ürün kodu A1379 · UPC 015561113793 · toplam yayımlanan paket ağırlığı 45 g'dır; toksik kirletici, koku ve renklenmeyi azaltmaya yardımcı kimyasal medyadır",
+    description:"Edge 23 ve 46 L akvaryum kitleri için yüksek kaliteli karbon · 45 g, 3'lü paket · ürün kodu A1379 · UPC 015561113793 · toksik kirletici, koku ve renklenmeyi azaltmaya yardımcı kimyasal medyadır",
     sourceUrl:"https://fluvalaquatics.com/us/shop/product/carbon-clean-clear-renewal-sachet-for-edge-aquarium-kit-1-6-oz-45-g-3-pack",verifiedAt:"2026-09-28",
   },
   {
@@ -3606,7 +3611,7 @@ export const careProductCatalog: CareProductProfile[] = [
   {
     id:"fluval-c4-foam-pad-14007-2pack",brand:"Fluval",model:"C4 Foam Pad · 2'li paket",category:"filter_media",
     description:"C4 Power Filter için iki yüksek gözenekli mekanik köpük ped · ürün kodu 14007 · UPC 015561140072 · büyük parçacık ve döküntüleri tutmaya yardımcıdır; bağımsız filtre kapasitesi üretmez",
-    sourceUrl:"https://fluvalaquatics.com/us/shop/product/foam-pad-for-c4-power-filter-2-pack",verifiedAt:"2026-09-28",
+    sourceUrl:"https://fluvalaquatics.com/us/shop/product/foam-pad-for-c4-power-filter-2-pack",verifiedAt:"2026-11-11",
   },
   {
     id:"fluval-c2-poly-foam-pad-14008-3pack",brand:"Fluval",model:"C2 Poly/Foam Pad · 3'lü paket",category:"filter_media",
@@ -3640,47 +3645,47 @@ export const careProductCatalog: CareProductProfile[] = [
   },
   {
     id:"fluval-c2-carbon-14011-45g-3pack",brand:"Fluval",model:"C2 Activated Carbon 45 g · 3'lü paket",category:"filter_media",
-    description:"C2 Power Filter için üç aktif karbon poşeti · yayımlanan paket toplamı 45 g · ürün kodu 14011 · UPC 015561140119 · koku, renklenme ve kirleticileri azaltmaya yardımcıdır; tatlı ve deniz suyu akvaryumlarına uygundur",
+    description:"C2 Power Filter için aktif karbon · 45 g, 3'lü paket · ürün kodu 14011 · UPC 015561140119 · koku, renklenme ve kirleticileri azaltmaya yardımcıdır; tatlı ve deniz suyu akvaryumlarına uygundur",
     sourceUrl:"https://fluvalaquatics.com/us/shop/product/activated-carbon-for-c2-power-filter-1-6-oz-45-g-3-pack",verifiedAt:"2026-09-28",
   },
   {
     id:"fluval-c3-carbon-14012-70g-3pack",brand:"Fluval",model:"C3 Activated Carbon 70 g · 3'lü paket",category:"filter_media",
-    description:"C3 Power Filter için üç aktif karbon poşeti · yayımlanan paket toplamı 70 g · ürün kodu 14012 · UPC 015561140126 · koku, renklenme ve kirleticileri azaltmaya yardımcıdır; tatlı ve deniz suyu akvaryumlarına uygundur",
+    description:"C3 Power Filter için aktif karbon · 70 g, 3'lü paket · ürün kodu 14012 · UPC 015561140126 · koku, renklenme ve kirleticileri azaltmaya yardımcıdır; tatlı ve deniz suyu akvaryumlarına uygundur",
     sourceUrl:"https://fluvalaquatics.com/us/shop/product/activated-carbon-for-c3-power-filter-2-47-oz-70-g-3-pack",verifiedAt:"2026-09-28",
   },
   {
     id:"fluval-c4-carbon-14013-140g-3pack",brand:"Fluval",model:"C4 Activated Carbon 140 g · 3'lü paket",category:"filter_media",
-    description:"C4 Power Filter için üç aktif karbon poşeti · yayımlanan paket toplamı 140 g · ürün kodu 14013 · UPC 015561140133 · koku, renklenme ve kirleticileri azaltmaya yardımcıdır; tatlı ve deniz suyu akvaryumlarına uygundur",
+    description:"C4 Power Filter için aktif karbon · 140 g, 3'lü paket · ürün kodu 14013 · UPC 015561140133 · koku, renklenme ve kirleticileri azaltmaya yardımcıdır; tatlı ve deniz suyu akvaryumlarına uygundur",
     sourceUrl:"https://fluvalaquatics.com/us/shop/product/activated-carbon-for-c4-power-filter-4-9-oz-140-g-3-pack",verifiedAt:"2026-09-28",
   },
   {
     id:"fluval-c2-ammonia-remover-14014-90g-3pack",brand:"Fluval",model:"C2 Ammonia Remover 90 g · 3'lü paket",category:"filter_media",
-    description:"C2 Power Filter için üç kimyasal medya poşeti · yayımlanan paket toplamı 90 g · ürün kodu 14014 · UPC 015561140140 · yeni veya yoğun stoklu tatlı su akvaryumlarında amonyak ve nitrit kontrolüne yardımcıdır; biyolojik döngü, su testi ve su değişiminin yerine geçmez",
+    description:"C2 Power Filter için kimyasal filtre malzemesi · 90 g, 3'lü paket · ürün kodu 14014 · UPC 015561140140 · yeni veya yoğun stoklu tatlı su akvaryumlarında amonyak ve nitrit kontrolüne yardımcıdır; biyolojik döngü, su testi ve su değişiminin yerine geçmez",
     sourceUrl:"https://fluvalaquatics.com/us/shop/product/ammonia-remover-for-c2-power-filter-3-17-oz-90-g-3-pack",verifiedAt:"2026-09-28",
   },
   {
     id:"fluval-c3-ammonia-remover-14015-140g-3pack",brand:"Fluval",model:"C3 Ammonia Remover 140 g · 3'lü paket",category:"filter_media",
-    description:"C3 Power Filter için üç kimyasal medya poşeti · yayımlanan paket toplamı 140 g · ürün kodu 14015 · UPC 015561140157 · yeni veya yoğun stoklu tatlı su akvaryumlarında amonyak ve nitrit kontrolüne yardımcıdır; biyolojik döngü, su testi ve su değişiminin yerine geçmez",
-    sourceUrl:"https://fluvalaquatics.com/us/shop/product/ammonia-remover-for-c3-power-filter-4-9-oz-140-g-3-pack",verifiedAt:"2026-09-28",
+    description:"C3 Power Filter için kimyasal filtre malzemesi · 140 g, 3'lü paket · ürün kodu 14015 · UPC 015561140157 · yeni veya yoğun stoklu tatlı su akvaryumlarında amonyak ve nitrit kontrolüne yardımcıdır; biyolojik döngü, su testi ve su değişiminin yerine geçmez",
+    sourceUrl:"https://fluvalaquatics.com/us/shop/product/ammonia-remover-for-c3-power-filter-4-9-oz-140-g-3-pack",verifiedAt:"2026-11-11",
   },
   {
     id:"fluval-c4-ammonia-remover-14016-290g-3pack",brand:"Fluval",model:"C4 Ammonia Remover 290 g · 3'lü paket",category:"filter_media",
-    description:"C4 Power Filter için üç kimyasal medya poşeti · yayımlanan paket toplamı 290 g · ürün kodu 14016 · UPC 015561140164 · yeni veya yoğun stoklu tatlı su akvaryumlarında amonyak ve nitrit kontrolüne yardımcıdır; biyolojik döngü, su testi ve su değişiminin yerine geçmez",
+    description:"C4 Power Filter için kimyasal filtre malzemesi · 290 g, 3'lü paket · ürün kodu 14016 · UPC 015561140164 · yeni veya yoğun stoklu tatlı su akvaryumlarında amonyak ve nitrit kontrolüne yardımcıdır; biyolojik döngü, su testi ve su değişiminin yerine geçmez",
     sourceUrl:"https://fluvalaquatics.com/us/shop/product/ammonia-remover-for-c4-power-filter-10-2-oz-290-g-3-pack",verifiedAt:"2026-09-28",
   },
   {
     id:"fluval-c2-zeo-carb-14017-70g-3pack",brand:"Fluval",model:"C2 Zeo-Carb 70 g · 3'lü paket",category:"filter_media",
-    description:"C2 Power Filter için üç karbon ve amonyak giderici karışım poşeti · yayımlanan paket toplamı 70 g · ürün kodu 14017 · UPC 015561140171 · koku, renklenme, kirletici ve toksik amonyağı azaltmaya yardımcıdır; biyolojik döngü, su testi ve su değişiminin yerine geçmez",
+    description:"C2 Power Filter için karbon ve amonyak giderici karışım · 70 g, 3'lü paket · ürün kodu 14017 · UPC 015561140171 · koku, renklenme, kirletici ve toksik amonyağı azaltmaya yardımcıdır; biyolojik döngü, su testi ve su değişiminin yerine geçmez",
     sourceUrl:"https://fluvalaquatics.com/us/shop/product/zeo-carb-for-c2-power-filter-2-47-oz-70-g-3-pack",verifiedAt:"2026-09-28",
   },
   {
     id:"fluval-c3-zeo-carb-14018-3pack",brand:"Fluval",model:"C3 Zeo-Carb · 3'lü paket",category:"filter_media",
-    description:"C3 Power Filter için üç karbon ve amonyak giderici karışım poşeti · ürün kodu 14018 · UPC 015561140188 · resmî ürün başlığı 4,58 oz ile 140 g değerlerini birlikte yayımlar; bu iki değer birbirine dönüşmediği için ağırlık kesin alan olarak kullanılmamıştır · koku, renklenme, kirletici ve toksik amonyağı azaltmaya yardımcıdır",
+    description:"C3 Power Filter için karbon ve amonyak giderici karışım · 3'lü paket · ürün kodu 14018 · UPC 015561140188 · resmî ürün başlığı 4,58 oz ile 140 g değerlerini birlikte yayımlar; bu iki değer birbirine dönüşmediği için ağırlık kesin alan olarak kullanılmamıştır · koku, renklenme, kirletici ve toksik amonyağı azaltmaya yardımcıdır",
     sourceUrl:"https://fluvalaquatics.com/us/shop/product/zeo-carb-for-c3-power-filter-4-58-oz-140-g-3-pack",verifiedAt:"2026-09-28",
   },
   {
     id:"fluval-c4-zeo-carb-14019-3pack",brand:"Fluval",model:"C4 Zeo-Carb · 3'lü paket",category:"filter_media",
-    description:"C4 Power Filter için üç karbon ve amonyak giderici karışım poşeti · ürün kodu 14019 · UPC 015561140195 · resmî ürün başlığı 2,47 oz ile 230 g değerlerini birlikte yayımlar; bu iki değer birbirine dönüşmediği için ağırlık kesin alan olarak kullanılmamıştır · koku, renklenme, kirletici ve toksik amonyağı azaltmaya yardımcıdır",
+    description:"C4 Power Filter için karbon ve amonyak giderici karışım · 3'lü paket · ürün kodu 14019 · UPC 015561140195 · resmî ürün başlığı 2,47 oz ile 230 g değerlerini birlikte yayımlar; bu iki değer birbirine dönüşmediği için ağırlık kesin alan olarak kullanılmamıştır · koku, renklenme, kirletici ve toksik amonyağı azaltmaya yardımcıdır",
     sourceUrl:"https://fluvalaquatics.com/us/shop/product/zeo-carb-for-c4-power-filter-2-47-oz-230-g-3-pack",verifiedAt:"2026-09-28",
   },
   {

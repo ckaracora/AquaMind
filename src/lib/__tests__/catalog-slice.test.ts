@@ -27,7 +27,8 @@ describe("katalog parçaları", () => {
     const speciesIds = catalogBucketNumbers("species").flatMap((bucket) => (buildCatalogBucket(`/catalog-data/species/${bucket}`) as SpeciesBucket).map(([id]) => id));
     const equipmentIds = catalogBucketNumbers("equipment").flatMap((bucket) => (buildCatalogBucket(`/catalog-data/equipment/${bucket}`) as EquipmentBucket).map(([id]) => id));
     expect([...speciesIds].sort()).toEqual(speciesCatalog.map((profile) => profile.id).sort());
-    expect([...equipmentIds].sort()).toEqual(equipmentCatalog.map((profile) => profile.id).sort());
+    // Birleştirilen kaydın eski kimlikleri (`formerIds`, 2026-11-11 JBL PROTEMP S) de kendi parçasında, birleştirildiği kaydın profiliyle durur.
+    expect([...equipmentIds].sort()).toEqual(equipmentCatalog.flatMap((profile) => [profile.id, ...(profile.formerIds ?? [])]).sort());
     for (const bucket of catalogBucketNumbers("species")) {
       const ids = (buildCatalogBucket(`/catalog-data/species/${bucket}`) as SpeciesBucket).map(([id]) => id);
       expect(ids).toEqual(speciesCatalog.filter((profile) => catalogBucketOf(profile.id, "species") === bucket).map((profile) => profile.id));
