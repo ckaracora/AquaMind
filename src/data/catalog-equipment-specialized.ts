@@ -318,18 +318,18 @@ const jblProfloraLegacyBioCatalog: EquipmentProfile[] = [
 const jblProfloraLegacyPressureSetsCatalog: EquipmentProfile[] = [
   {
     id:"jbl-proflora-u501",category:"co2",brand:"JBL",model:"PROFLORA u501",
-    specifications:"Arşiv basınçlı CO₂ tam seti · 500 g tek kullanımlık tüp · gece kapatma valfi içermez · uzatılabilir difüzör · 400 L'ye kadar tatlı su akvaryumu; güncel PROFLORA CO₂ BASIC SET U ile karıştırılmamalı · tüp yalnız dik konumda çalıştırılmalı, güneşten ve ısıdan korunmalı",
+    specifications:"Arşiv basınçlı CO₂ tam seti · 500 g tek kullanımlık tüp · gece kapatma valfi içermez · uzatılabilir difüzör · 400 L'ye kadar tatlı su akvaryumu; güncel PROFLORA CO₂ BASIC SET U ile karıştırılmamalı",
     recommendedMaxL:400,sourceUrl:"https://www.jbl.de/en/blog/detail/127/interzoo-2016-jbl-proflora-co2-fertiliser-systems-now-even-better",additionalSourceUrls:["https://www.jbl.de/en/products/group/1064/disposable-u"],verifiedAt:"2026-09-15",
   },
   {
     id:"jbl-proflora-u502",category:"co2",brand:"JBL",model:"PROFLORA u502",
-    specifications:"Arşiv basınçlı CO₂ tam seti · 500 g tek kullanımlık tüp · solenoid gece kapatma valfi · uzatılabilir difüzör · 600 L'ye kadar tatlı su akvaryumu; güncel PROFLORA CO₂ ADVANCED SET U ile karıştırılmamalı · tüp yalnız dik konumda çalıştırılmalı, güneşten ve ısıdan korunmalı",
+    specifications:"Arşiv basınçlı CO₂ tam seti · 500 g tek kullanımlık tüp · solenoid gece kapatma valfi · uzatılabilir difüzör · 600 L'ye kadar tatlı su akvaryumu; güncel PROFLORA CO₂ ADVANCED SET U ile karıştırılmamalı",
     recommendedMaxL:600,sourceUrl:"https://www.jbl.de/en/blog/detail/127/interzoo-2016-jbl-proflora-co2-fertiliser-systems-now-even-better",additionalSourceUrls:["https://www.jbl.de/en/products/group/1064/disposable-u"],verifiedAt:"2026-09-15",
   },
   {
     id:"jbl-proflora-u504",category:"co2",brand:"JBL",model:"PROFLORA u504",
-    specifications:"Arşiv ekonomik basınçlı CO₂ tam seti · 500 g ayaklı tek kullanımlık tüp · mini regülatör, 3 m CO₂ hortumu, seramik difüzör, geri akış korumalı kabarcık sayacı ve kalıcı CO₂ testi · üretici akvaryum hacim sınırı yayımlamadığı için otomatik kapasite değerlendirmesi yapılmaz; güncel setlerle karıştırılmamalı · tüp yalnız dik konumda çalıştırılmalı, güneşten ve ısıdan korunmalı",
-    sourceUrl:"https://www.jbl.de/cs-cz/press/detail/674",additionalSourceUrls:["https://www.jbl.de/en/products/group/1064/disposable-u"],verifiedAt:"2026-09-15",
+    specifications:"Arşiv ekonomik basınçlı CO₂ tam seti · 500 g ayaklı tek kullanımlık tüp · mini regülatör, 3 m CO₂ hortumu, seramik difüzör, geri akış korumalı kabarcık sayacı ve kalıcı CO₂ testi · üretici akvaryum hacim sınırı yayımlamadığı için otomatik kapasite değerlendirmesi yapılmaz; güncel setlerle karıştırılmamalı",
+    sourceUrl:"https://www.jbl.de/cs-cz/press/detail/674",additionalSourceUrls:["https://www.jbl.de/en/products/group/1064/disposable-u"],verifiedAt:"2026-11-11",
   },
   {
     id:"jbl-proflora-m501",category:"co2",brand:"JBL",model:"PROFLORA m501",
@@ -394,7 +394,7 @@ const jblProfloraOlderPressureSetsCatalog: EquipmentProfile[] = [
 const jblProfloraLegacyCylindersCatalog: EquipmentProfile[] = [
   {
     id:"jbl-proflora-u201",category:"co2",brand:"JBL",model:"PROFLORA u201",
-    specifications:"Arşiv mini basınçlı CO₂ tam seti · 95 g tek kullanımlık kartuş ve ayak, 2 m bükülme korumalı hortum, mini regülatör/manometre, seramik difüzör, geri akış korumalı kabarcık sayacı ve kalıcı CO₂ testi · 10–200 L tatlı su akvaryumu · tüp yalnız dik konumda çalıştırılmalı, güneşten ve ısıdan korunmalı",
+    specifications:"Arşiv mini basınçlı CO₂ tam seti · 95 g tek kullanımlık kartuş ve ayak, 2 m bükülme korumalı hortum, mini regülatör/manometre, seramik difüzör, geri akış korumalı kabarcık sayacı ve kalıcı CO₂ testi · 10–200 L tatlı su akvaryumu",
     recommendedMinL:10,recommendedMaxL:200,sourceUrl:"https://www.jbl.de/en/download/10976/Ratgeber/JBL_ProScape_Equipment_for_professional_Aquascaping_en.pdf",additionalSourceUrls:["https://www.jbl.de/de-de/press/detail/474","https://www.jbl.de/en/products/group/1064/disposable-u"],verifiedAt:"2026-09-15",
   },
   {
@@ -438,27 +438,27 @@ const jblProfloraCurrentCylindersCatalog: EquipmentProfile[] = [
   {
     id:"jbl-proflora-co2-cylinder-500-m",category:"co2",brand:"JBL",model:"PROFLORA CO₂ CYLINDER 500 M",
     specifications:"Güncel yeniden doldurulabilir 500 g CO₂ tüpü · 43 × 11 cm · W21.8×1/14 bağlantı ve basınç emniyet valfi · kendi başına dik durmaz; CYLINDER STAND veya WALLMOUNT gerekir · tek başına CO₂ dozaj sistemi değildir · yalnız dik konumda kullanılmalı, güneşten korunmalı ve havalandırılan yerde saklanmalı",
-    passiveComponent:true,sourceUrl:jblPage(25167516),verifiedAt:"2026-10-30",
+    passiveComponent:true,sourceUrl:jblPage(25167516),verifiedAt:"2026-11-11",
   },
   {
     id:"jbl-proflora-co2-cylinder-2000-m",category:"co2",brand:"JBL",model:"PROFLORA CO₂ CYLINDER 2000 M",
-    specifications:"Güncel yeniden doldurulabilir 2000 g CO₂ tüpü · entegre tabanı sayesinde dik durur · tek başına CO₂ dozaj sistemi değildir · yalnız dik konumda kullanılmalı, güneşten korunmalı ve havalandırılan yerde saklanmalı",
-    passiveComponent:true,sourceUrl:jblPage(25168539),verifiedAt:"2026-10-30",
+    specifications:"Yeniden doldurulabilir 2000 g CO₂ tüpü · ayağı sayesinde kendi başına dik durur · tek başına CO₂ dozaj sistemi değildir · yalnız dik konumda kullanılmalı, güneşten korunmalı ve havalandırılan yerde saklanmalı · üretici sayfasında son şans olarak listelenir",
+    passiveComponent:true,sourceUrl:jblPage(25168539),verifiedAt:"2026-11-11",
   },
   {
     id:"jbl-proflora-co2-cylinder-500-u",category:"co2",brand:"JBL",model:"PROFLORA CO₂ CYLINDER 500 U",
     specifications:"Güncel geri dönüştürülebilir 500 g tek kullanımlık CO₂ tüpü · yaklaşık 31 × 7,5 cm · M10×1 bağlantı ve monte kauçuk ayak · tek başına CO₂ dozaj sistemi değildir · yalnız dik konumda kullanılmalı, güneşten korunmalı ve havalandırılan yerde saklanmalı",
-    passiveComponent:true,sourceUrl:jblPage(25172369),verifiedAt:"2026-10-30",
+    passiveComponent:true,sourceUrl:jblPage(25172369),verifiedAt:"2026-11-11",
   },
   {
     id:"jbl-proflora-co2-cylinder-500-u-3x",category:"co2",brand:"JBL",model:"PROFLORA CO₂ CYLINDER 500 U 3x",
-    specifications:"Güncel üçlü geri dönüştürülebilir tek kullanımlık CO₂ tüp paketi · her tüp 500 g, yaklaşık 31 × 7,5 cm, M10×1 bağlantı ve monte kauçuk ayak · tek başına CO₂ dozaj sistemi değildir · yalnız dik konumda kullanılmalı, güneşten korunmalı ve havalandırılan yerde saklanmalı",
-    passiveComponent:true,sourceUrl:jblPage(25189974),verifiedAt:"2026-10-30",
+    specifications:"Güncel üçlü tek kullanımlık CO₂ tüp paketi · her tüp 500 g, yaklaşık 31 × 7,5 cm, M10×1 bağlantı ve monte kauçuk ayak · tek başına CO₂ dozaj sistemi değildir · yalnız dik konumda kullanılmalı, güneşten korunmalı ve havalandırılan yerde saklanmalı",
+    passiveComponent:true,sourceUrl:jblPage(25189974),verifiedAt:"2026-11-11",
   },
   {
     id:"jbl-proflora-co2-cylinder-1200-u",category:"co2",brand:"JBL",model:"PROFLORA CO₂ CYLINDER 1200 U",
     specifications:"Güncel geri dönüştürülebilir 1200 g tek kullanımlık CO₂ çelik tüpü · yaklaşık 45 × 10 cm · M10×1 bağlantı ve monte kauçuk ayak · eski JBL PROFLORA U regülatörleriyle uyumlu · tek başına CO₂ dozaj sistemi değildir · yalnız dik konumda kullanılmalı, güneşten korunmalı ve havalandırılan yerde saklanmalı",
-    passiveComponent:true,sourceUrl:jblPage(25168880),verifiedAt:"2026-10-30",
+    passiveComponent:true,sourceUrl:jblPage(25168880),verifiedAt:"2026-11-11",
   },
   {
     id:"jbl-proflora-co2-cylinder-wallmount",category:"co2",brand:"JBL",model:"PROFLORA CO₂ CYLINDER WALLMOUNT",

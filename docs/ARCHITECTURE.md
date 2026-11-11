@@ -53,6 +53,8 @@ src/app/equipment ─► src/data/catalog-equipment.ts
 
 Sayfa hızı (2026-10-07, `docs/DECISIONS/0015-katalog-modulleri-ve-sayfa-hizi.md` ve `0016-gereken-katalog-kayitlarinin-yuklenmesi.md`): liste sayfaları (canlılar, ekipman, ürünler) katalog verisini istemciye gönderir; bu yüzden her sayfa yalnızca ihtiyaç duyduğu katalog modülünü içe aktarır. Sağlık sayfası ve ana sayfa ise katalog modüllerini hiç içe aktarmaz; yalnızca akvaryumdaki kayıtların parçalarını JSON olarak ister (eşleme kuralı katalog modülleriyle aynı; kullanıcı verisi sunucuya gitmez). Katalog aramaları (`speciesForLivestock`, `profileForEquipment`, katalog araması) Türkçe biçimlendirmeyi kayıt başına bir kez yapan dizinler kullanır; sonuçlar eski doğrusal aramalarla aynıdır.
 
+Ekipmanda eski kimlik ve eş ad (2026-11-11, `docs/DECISIONS/0038-ekipman-eski-kimlik-ve-es-ad.md`): birleştirilip katalogdan kaldırılan kaydın kimliği (`formerIds`) ve aynı ürünün öbür adları (`aliases`) kanonik katalog kaydında durur; kimlik ve marka/model dizinleri, tarayıcının katalog parçaları ve ekipman ekleme penceresinin model araması bunları okuma anında kanonik kayda bağlar, kullanıcı verisi yazılmaz (`assertEquipmentRedirects` denetler).
+
 Kural: paketler uygulamaya (`src/`) bağımlı olamaz. Uygulama paketlere bağımlıdır. Katalog bugün `src/data` içinde olduğu için motor kataloğa değil, uyarlayıcının verdiği çözümleyiciye bağlıdır.
 
 ### Tarayıcı deposu (yerel kullanıcı verisi)

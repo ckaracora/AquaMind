@@ -46,6 +46,10 @@ export const unverifiedEquipmentIds: readonly string[] = [
   "haqos-expro-500", "haqos-ex500at", "haqos-expro-230", "haqos-expro-1000", "haqos-ex1000at", "haqos-exc-500",
   "haqos-heater-25", "haqos-heater-50", "haqos-heater-75", "haqos-heater-100", "haqos-heater-150", "haqos-heater-200",
   "haqos-heater-300", "haqos-uv-9w", "haqos-mini-uv-5w",
+  // Oase (3; ürün sahibi kararı 2026-11-11): adında ² olmayan "BioMaster 250/350/600" önceki nesildir. Kayıtlardaki debi, güç ve hacim
+  // yeni nesil BioMaster²'nin değerleridir (eski BioMaster² aile sayfasından; bugünkü BioMaster² 250/350/600 sayfaları önceki modele göre %20–25 daha
+  // yüksek debi yazıyor); önceki nesil için üretici ya da kabul edilen kaynak yok. Kayıtlar silinmez, kullanıcı etiket değerini girebilir.
+  "oase-biomaster-250", "oase-biomaster-350", "oase-biomaster-600",
   // Netlea (14)
   "netlea-2fl-complete", "netlea-aquatic-time-no1-canister", "netlea-no1-dc-canister", "netlea-no1-sf", "netlea-no2-dc-canister", "netlea-no2-sf",
   "netlea-no2b-air-pump", "netlea-no2s-hang-on", "netlea-no2v-dc-canister", "netlea-no3-sf", "netlea-no3b-air-pump", "netlea-no4-sf",

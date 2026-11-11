@@ -16,10 +16,21 @@ export interface EquipmentProfile {
   auxiliaryFiltration?: boolean;
   capacityDataNote?: string;
   sourceUrl?: string; additionalSourceUrls?: string[]; verifiedAt?: string;
+  /**
+   * Aynı ürünün öbür adları (eski katalog adı, üreticinin başka ülke sayfasındaki ya da kılavuzdaki yazımı). Ekipman ekleme penceresinin model
+   * aramasında ve katalog kimliği olmayan kullanıcı kaydının marka + model eşlemesinde bu kaydı bulur; listede ayrı satır olmaz. Hiçbir kaydın
+   * (kendisi dahil) marka + model adıyla, başka kaydın eş adıyla aynı olamaz (`assertEquipmentRedirects`).
+   */
+  aliases?: string[];
+  /**
+   * Katalogdan kaldırılıp bu kayda birleştirilen eski kimlikler. Bu kimliği taşıyan kullanıcı kaydı okuma anında bu kayıtla hesaplanır; kullanıcı
+   * verisi değiştirilmez. Eski kimlik katalogdaki hiçbir kaydın kimliği olamaz ve yalnız bir kayda yönlenir (`assertEquipmentRedirects`).
+   */
+  formerIds?: string[];
 }
 
 export const equipmentCatalog: EquipmentProfile[] = [
-  { id:"oase-biomaster-350", category:"filter", brand:"Oase", model:"BioMaster 350", specifications:"Dış filtre · 1100 L/saat · 18 W", ratedFlowLph:1100, powerW:18, recommendedMaxL:350, adjustableFlow:true, sourceUrl:"https://www.oase.com/en/products-a-z/family/f/biomaster2.1001508935.html", verifiedAt:"2026-08-17" },
+  { id:"oase-biomaster-350", category:"filter", brand:"Oase", model:"BioMaster 350", specifications:"Dış filtre · 1100 L/saat · 18 W", ratedFlowLph:1100, powerW:18, recommendedMaxL:350, adjustableFlow:true, capacityDataNote:"Değerler yeni nesil BioMaster²'nin üretici sayfasından alınmıştı; önceki nesil BioMaster için üretici ya da kabul edilen kaynakta değer bulunamadı. Otomatik hesapta kullanılmaz.", sourceUrl:"https://www.oase.com/en/products-a-z/family/f/biomaster2.1001508935.html", verifiedAt:"2026-08-17" },
   { id:"eheim-classic-250", category:"filter", brand:"Eheim", model:"Classic 250 (2213)", specifications:"Dış filtre · 440 L/saat · 8 W", ratedFlowLph:440, powerW:8, recommendedMaxL:250, sourceUrl:"https://eheim.com/en_GB/aquatics/technology/external-filters/classic/classic-250", verifiedAt:"2026-08-17" },
   { id:"fluval-107", category:"filter", brand:"Fluval", model:"107", specifications:"Dış filtre · 550 L/saat · 10 W", ratedFlowLph:550, powerW:10, recommendedMinL:40, recommendedMaxL:130, sourceUrl:"https://fluvalaquatics.com/us/shop/product/07-series-performance-canister-filter-107-up-to-30-us-gal-130-l", additionalSourceUrls:["https://fluvalaquatics.com/us/wp-content/uploads/2026/08/Fluval_Aquarium_Care_Guide_EN.pdf","https://fluvalaquatics.com/us/shop/product/207-canister-filter-20-45-us-gal-60-220-l"], verifiedAt:"2026-08-17" },
   { id:"aquael-pat-mini", category:"filter", brand:"Aquael", model:"PAT Mini", specifications:"Ayarlanabilir kompakt iç filtre · 450 L/saat · 4,5 W · 10–120 L", ratedFlowLph:450, powerW:4.5, recommendedMinL:10, recommendedMaxL:120, adjustableFlow:true, sourceUrl:"https://www.aquael.com/products/aquaristics/internal-filters/pat-mini/", verifiedAt:"2026-09-11" },
@@ -34,8 +45,8 @@ export const equipmentCatalog: EquipmentProfile[] = [
   { id:"fluval-207", category:"filter", brand:"Fluval", model:"207", specifications:"Dış filtre · 780 L/saat · 10 W", ratedFlowLph:780, powerW:10, recommendedMinL:60, recommendedMaxL:220, sourceUrl:"https://fluvalaquatics.com/us/shop/product/07-series-performance-canister-filter-207-up-to-45-us-gal-220-l", additionalSourceUrls:["https://fluvalaquatics.com/us/wp-content/uploads/2026/08/Fluval_Aquarium_Care_Guide_EN.pdf","https://fluvalaquatics.com/us/shop/product/207-canister-filter-20-45-us-gal-60-220-l"], verifiedAt:"2026-08-18" },
   { id:"fluval-307", category:"filter", brand:"Fluval", model:"307", specifications:"Dış filtre · 1150 L/saat · 15 W", ratedFlowLph:1150, powerW:15, recommendedMinL:90, recommendedMaxL:330, sourceUrl:"https://fluvalaquatics.com/us/shop/product/07-series-performance-canister-filter-307-up-to-70-us-gal-330-l", additionalSourceUrls:["https://fluvalaquatics.com/us/wp-content/uploads/2026/08/Fluval_Aquarium_Care_Guide_EN.pdf","https://fluvalaquatics.com/us/shop/product/207-canister-filter-20-45-us-gal-60-220-l"], verifiedAt:"2026-08-18" },
   { id:"fluval-407", category:"filter", brand:"Fluval", model:"407", specifications:"Dış filtre · 1450 L/saat · 20 W", ratedFlowLph:1450, powerW:20, recommendedMinL:150, recommendedMaxL:500, sourceUrl:"https://fluvalaquatics.com/us/shop/product/07-series-performance-canister-filter-407-up-to-100-us-gal-500-l", additionalSourceUrls:["https://fluvalaquatics.com/us/wp-content/uploads/2026/08/Fluval_Aquarium_Care_Guide_EN.pdf","https://fluvalaquatics.com/us/shop/product/207-canister-filter-20-45-us-gal-60-220-l"], verifiedAt:"2026-08-18" },
-  { id:"oase-biomaster-250", category:"filter", brand:"Oase", model:"BioMaster 250", specifications:"Dış filtre · 900 L/saat", ratedFlowLph:900, recommendedMaxL:250, adjustableFlow:true, sourceUrl:"https://www.oase.com/en/products-a-z/family/f/biomaster2.1001508935.html", verifiedAt:"2026-08-17" },
-  { id:"oase-biomaster-600", category:"filter", brand:"Oase", model:"BioMaster 600", specifications:"Dış filtre · 1250 L/saat", ratedFlowLph:1250, recommendedMaxL:600, adjustableFlow:true, sourceUrl:"https://www.oase.com/en/products-a-z/family/f/biomaster2.1001508935.html", verifiedAt:"2026-08-17" },
+  { id:"oase-biomaster-250", category:"filter", brand:"Oase", model:"BioMaster 250", specifications:"Dış filtre · 900 L/saat", ratedFlowLph:900, recommendedMaxL:250, adjustableFlow:true, capacityDataNote:"Değerler yeni nesil BioMaster²'nin üretici sayfasından alınmıştı; önceki nesil BioMaster için üretici ya da kabul edilen kaynakta değer bulunamadı. Otomatik hesapta kullanılmaz.", sourceUrl:"https://www.oase.com/en/products-a-z/family/f/biomaster2.1001508935.html", verifiedAt:"2026-08-17" },
+  { id:"oase-biomaster-600", category:"filter", brand:"Oase", model:"BioMaster 600", specifications:"Dış filtre · 1250 L/saat", ratedFlowLph:1250, recommendedMaxL:600, adjustableFlow:true, capacityDataNote:"Değerler yeni nesil BioMaster²'nin üretici sayfasından alınmıştı; önceki nesil BioMaster için üretici ya da kabul edilen kaynakta değer bulunamadı. Otomatik hesapta kullanılmaz.", sourceUrl:"https://www.oase.com/en/products-a-z/family/f/biomaster2.1001508935.html", verifiedAt:"2026-08-17" },
   { id:"jbl-e702", category:"filter", brand:"JBL", model:"CristalProfi e702", specifications:"Dış filtre · 700 L/saat", ratedFlowLph:700, recommendedMinL:60, recommendedMaxL:200, sourceUrl:"https://www.jbl.de/en-kz/productsv2/download_instruction_quick_guide_pdf/25002039", verifiedAt:"2026-08-17" },
   { id:"jbl-e902", category:"filter", brand:"JBL", model:"CristalProfi e902", specifications:"Dış filtre · 900 L/saat", ratedFlowLph:900, recommendedMinL:90, recommendedMaxL:300, sourceUrl:"https://www.jbl.de/en-kz/productsv2/download_instruction_quick_guide_pdf/25002039", verifiedAt:"2026-08-17" },
   { id:"jbl-e1502", category:"filter", brand:"JBL", model:"CristalProfi e1502", specifications:"Dış filtre · 1400 L/saat", ratedFlowLph:1400, recommendedMinL:160, recommendedMaxL:600, sourceUrl:"https://www.jbl.de/en-kz/productsv2/download_instruction_quick_guide_pdf/25002039", verifiedAt:"2026-08-17" },
@@ -49,7 +60,6 @@ export const equipmentCatalog: EquipmentProfile[] = [
   { id:"eheim-thermo-150", category:"heater", brand:"Eheim", model:"Thermocontrol 150 W", specifications:"Ayarlı ısıtıcı · 150 W", powerW:150, recommendedMinL:200, recommendedMaxL:300, sourceUrl:"https://eheim.com/en_GB/aquatics/technology/aquarium-heaters/thermocontrol/", verifiedAt:"2026-08-17" },
   { id:"eheim-thermo-200", category:"heater", brand:"Eheim", model:"Thermocontrol 200 W", specifications:"Ayarlı ısıtıcı · 200 W", powerW:200, recommendedMinL:300, recommendedMaxL:400, sourceUrl:"https://eheim.com/en_GB/aquatics/technology/aquarium-heaters/thermocontrol/", verifiedAt:"2026-08-17" },
   { id:"aquael-ultra-100", category:"heater", brand:"Aquael", model:"Ultra Heater 100 W", specifications:"Elektronik ısıtıcı · 100 W", powerW:100, recommendedMinL:60, recommendedMaxL:100, sourceUrl:"https://www.aquael.com/products/aquaristics/aquarium-heaters/ultra-heater/", verifiedAt:"2026-08-17" },
-  { id:"jbl-protemp-s100", category:"heater", brand:"JBL", model:"ProTemp S 100", specifications:"Ayarlı ısıtıcı · 100 W", powerW:100, recommendedMinL:90, recommendedMaxL:150, sourceUrl:"https://www.jbl.de/en-ie/productsv2/download_instruction_manual_pdf/25000204", verifiedAt:"2026-08-17" },
   { id:"ista-co2-2l", category:"co2", brand:"ISTA", model:"2 L Refillable CO₂ Cylinder", specifications:"TÜV onaylı dikişsiz yeniden doldurulabilir alüminyum CO₂ tüpü · 2 L", sourceUrl:"https://www.istaproducts.com/wp-content/uploads/2014/08/ista-catalog1.pdf", verifiedAt:"2026-08-17" },
   { id:"eheim-air-200", category:"air_pump", brand:"Eheim", model:"air200", specifications:"Ayarlanabilir çift çıkışlı hava motoru · 200 L/saat", ratedFlowLph:200, sourceUrl:"https://eheim.com/en_GB/aquatics/technology/air-pumps/air/air200", verifiedAt:"2026-08-17" },
   { id:"sobo-sb-860a", category:"air_pump", brand:"Sobo", model:"SB-860A", specifications:"Ayarlanabilir çift çıkışlı hava motoru · 2 × 6 L/dakika · 10 W", ratedFlowLph:720, powerW:10, sourceUrl:"https://www.pets-lifestyle.com/products/sobo-sb-860-a-two-way-aquarium-air-pump", verifiedAt:"2026-08-17" },
@@ -434,15 +444,17 @@ export const equipmentCatalog: EquipmentProfile[] = [
   { id:"fluval-m200", category:"heater", brand:"Fluval", model:"M200", specifications:"Aynalı yüzeyli ayarlı ısıtıcı · 200 W · 200 litreye kadar", powerW:200, recommendedMaxL:200, sourceUrl:"https://fluvalaquatics.com/us/shop/product/m-series-heaters", verifiedAt:"2026-08-18" },
   { id:"fluval-m300", category:"heater", brand:"Fluval", model:"M300", specifications:"Aynalı yüzeyli ayarlı ısıtıcı · 300 W · 300 litreye kadar", powerW:300, recommendedMaxL:300, sourceUrl:"https://fluvalaquatics.com/us/shop/product/m-series-heaters", verifiedAt:"2026-08-18" },
   { id:"oase-biomaster2-150", category:"filter", brand:"Oase", model:"BioMaster² 150", specifications:"Dış filtre · 850 L/saat · 15 W · 150 litreye kadar", ratedFlowLph:850, powerW:15, recommendedMaxL:150, adjustableFlow:true, sourceUrl:"https://www.oase.com/en-GB/aquarium/biomaster-150", verifiedAt:"2026-09-09" },
-  { id:"oase-biomaster2-250", category:"filter", brand:"Oase", model:"BioMaster² 250", specifications:"Dış filtre · 900 L/saat · 15 W", ratedFlowLph:900, powerW:15, recommendedMaxL:250, sourceUrl:"https://www.oase.com/en/products-a-z/family/f/biomaster2.1001508935.html", verifiedAt:"2026-08-17" },
-  { id:"oase-biomaster2-350", category:"filter", brand:"Oase", model:"BioMaster² 350", specifications:"Dış filtre · 1100 L/saat · 18 W", ratedFlowLph:1100, powerW:18, recommendedMaxL:350, sourceUrl:"https://www.oase.com/en/products-a-z/family/f/biomaster2.1001508935.html", verifiedAt:"2026-08-17" },
-  { id:"oase-biomaster2-600", category:"filter", brand:"Oase", model:"BioMaster² 600", specifications:"Dış filtre · 1250 L/saat · 22 W", ratedFlowLph:1250, powerW:22, recommendedMaxL:600, sourceUrl:"https://www.oase.com/en/products-a-z/family/f/biomaster2.1001508935.html", verifiedAt:"2026-08-17" },
-  { id:"oase-biomaster2-850", category:"filter", brand:"Oase", model:"BioMaster² 850", specifications:"Dış filtre · 1500 L/saat · 32 W", ratedFlowLph:1500, powerW:32, recommendedMaxL:850, sourceUrl:"https://www.oase.com/en/products-a-z/family/f/biomaster2.1001508935.html", verifiedAt:"2026-08-17" },
-  { id:"oase-biomaster2-thermo-150", category:"filter", brand:"Oase", model:"BioMaster² Thermo 150", specifications:"Isıtıcılı dış filtre · 850 L/saat · 15 W + 100 W · 150 litreye kadar", ratedFlowLph:850, powerW:15, integratedHeaterW:100, recommendedMaxL:150, adjustableFlow:true, sourceUrl:"https://www.oase.com/en-US/aquarium/biomaster-thermo-150", verifiedAt:"2026-09-09" },
-  { id:"oase-biomaster2-thermo-250", category:"filter", brand:"Oase", model:"BioMaster² Thermo 250", specifications:"Isıtıcılı dış filtre · 900 L/saat · 15 W + 150 W", ratedFlowLph:900, powerW:15, integratedHeaterW:150, recommendedMaxL:250, sourceUrl:"https://www.oase.com/en/products-a-z/family/f/biomaster2.1001508935.html", verifiedAt:"2026-08-17" },
-  { id:"oase-biomaster2-thermo-350", category:"filter", brand:"Oase", model:"BioMaster² Thermo 350", specifications:"Isıtıcılı dış filtre · 1100 L/saat · 18 W + 200 W", ratedFlowLph:1100, powerW:18, integratedHeaterW:200, recommendedMaxL:350, sourceUrl:"https://www.oase.com/en/products-a-z/family/f/biomaster2.1001508935.html", verifiedAt:"2026-08-17" },
-  { id:"oase-biomaster2-thermo-600", category:"filter", brand:"Oase", model:"BioMaster² Thermo 600", specifications:"Isıtıcılı dış filtre · 1250 L/saat · 22 W + 300 W", ratedFlowLph:1250, powerW:22, integratedHeaterW:300, recommendedMaxL:600, sourceUrl:"https://www.oase.com/en/products-a-z/family/f/biomaster2.1001508935.html", verifiedAt:"2026-08-17" },
-  { id:"oase-biomaster2-thermo-850", category:"filter", brand:"Oase", model:"BioMaster² Thermo 850", specifications:"Isıtıcılı dış filtre · 1500 L/saat · 32 W + 400 W", ratedFlowLph:1500, powerW:32, integratedHeaterW:400, recommendedMaxL:850, sourceUrl:"https://www.oase.com/en/products-a-z/family/f/biomaster2.1001508935.html", verifiedAt:"2026-08-17" },
+  { id:"oase-biomaster2-250", category:"filter", brand:"Oase", model:"BioMaster² 250", specifications:"Dış filtre · 900 L/saat · 15 W", ratedFlowLph:900, powerW:15, recommendedMaxL:250, sourceUrl:"https://www.oase.com/en/aquarium/biomaster-250-int", verifiedAt:"2026-11-11" },
+  { id:"oase-biomaster2-350", category:"filter", brand:"Oase", model:"BioMaster² 350", specifications:"Dış filtre · 1100 L/saat · 18 W", ratedFlowLph:1100, powerW:18, recommendedMaxL:350, sourceUrl:"https://www.oase.com/en/aquarium/biomaster-350-int", verifiedAt:"2026-11-11" },
+  { id:"oase-biomaster2-600", category:"filter", brand:"Oase", model:"BioMaster² 600", specifications:"Dış filtre · 1250 L/saat · 22 W", ratedFlowLph:1250, powerW:22, recommendedMaxL:600, sourceUrl:"https://www.oase.com/en/aquarium/biomaster-600-int", verifiedAt:"2026-11-11" },
+  { id:"oase-biomaster2-850", category:"filter", brand:"Oase", model:"BioMaster² 850", specifications:"Dış filtre · 1500 L/saat · 32 W", ratedFlowLph:1500, powerW:32, recommendedMaxL:850, sourceUrl:"https://www.oase.com/en/aquarium/biomaster-850-int", verifiedAt:"2026-11-11" },
+  // BioMaster² Thermo 150: kaynak 2026-11-11'de ABD sayfasından ürünün INT (230 V / 50 Hz) sayfasına geçti (docs/DATA_SOURCES.md, şebeke değeri);
+  // değerler aynı. ABD sayfası eski kaynak izidir (AGENTS.md, "Kaynak bilgisini kaybetme").
+  { id:"oase-biomaster2-thermo-150", category:"filter", brand:"Oase", model:"BioMaster² Thermo 150", specifications:"Isıtıcılı dış filtre · 850 L/saat · 15 W + 100 W · 150 litreye kadar", ratedFlowLph:850, powerW:15, integratedHeaterW:100, recommendedMaxL:150, adjustableFlow:true, sourceUrl:"https://www.oase.com/en/aquarium/biomaster-thermo-150-int", additionalSourceUrls:["https://www.oase.com/en-US/aquarium/biomaster-thermo-150"], verifiedAt:"2026-09-09" },
+  { id:"oase-biomaster2-thermo-250", category:"filter", brand:"Oase", model:"BioMaster² Thermo 250", specifications:"Isıtıcılı dış filtre · 900 L/saat · 15 W + 150 W", ratedFlowLph:900, powerW:15, integratedHeaterW:150, recommendedMaxL:250, sourceUrl:"https://www.oase.com/en/aquarium/biomaster-thermo-250-int", verifiedAt:"2026-11-11" },
+  { id:"oase-biomaster2-thermo-350", category:"filter", brand:"Oase", model:"BioMaster² Thermo 350", specifications:"Isıtıcılı dış filtre · 1100 L/saat · 18 W + 200 W", ratedFlowLph:1100, powerW:18, integratedHeaterW:200, recommendedMaxL:350, sourceUrl:"https://www.oase.com/en/aquarium/biomaster-thermo-350-int", verifiedAt:"2026-11-11" },
+  { id:"oase-biomaster2-thermo-600", category:"filter", brand:"Oase", model:"BioMaster² Thermo 600", specifications:"Isıtıcılı dış filtre · 1250 L/saat · 22 W + 300 W", ratedFlowLph:1250, powerW:22, integratedHeaterW:300, recommendedMaxL:600, sourceUrl:"https://www.oase.com/en/aquarium/biomaster-thermo-600-int", verifiedAt:"2026-11-11" },
+  { id:"oase-biomaster2-thermo-850", category:"filter", brand:"Oase", model:"BioMaster² Thermo 850", specifications:"Isıtıcılı dış filtre · 1500 L/saat · 32 W + 400 W", ratedFlowLph:1500, powerW:32, integratedHeaterW:400, recommendedMaxL:850, sourceUrl:"https://www.oase.com/en/aquarium/biomaster-thermo-850-int", verifiedAt:"2026-11-11" },
   { id:"oase-filtosmart-60", category:"filter", brand:"Oase", model:"FiltoSmart 60", specifications:"Dış filtre · 300 L/saat · 5 W", ratedFlowLph:300, powerW:5, recommendedMaxL:60, sourceUrl:"https://www.oase.com/en/products-a-z/family/product/p/42663-filtosmart-60-int.html", verifiedAt:"2026-08-17" },
   { id:"oase-filtosmart-100", category:"filter", brand:"Oase", model:"FiltoSmart 100", specifications:"Dış filtre · 600 L/saat · 11 W", ratedFlowLph:600, powerW:11, recommendedMaxL:100, adjustableFlow:true, sourceUrl:"https://oase.com/en/products-a-z/family/product/p/55159-filtosmart-100-us.html", verifiedAt:"2026-08-17" },
   { id:"oase-filtosmart-200", category:"filter", brand:"Oase", model:"FiltoSmart 200", specifications:"Kompakt dış filtre · 800 L/saat · 17 W · 200 litreye kadar", ratedFlowLph:800, powerW:17, recommendedMaxL:200, adjustableFlow:true, sourceUrl:"https://www.oase.com/en-GB/aquarium/filtosmart-200", verifiedAt:"2026-09-09" },
@@ -473,11 +485,8 @@ export const equipmentCatalog: EquipmentProfile[] = [
   {id:"oase-crystalskim-600",category:"other",brand:"Oase",model:"CrystalSkim 600",specifications:"Ayarlanabilir yüzey emici · 400–600 L/saat · 4,5 W · 600 litreye kadar",ratedFlowLph:600,powerW:4.5,recommendedMaxL:600,adjustableFlow:true,sourceUrl:"https://www.oase.com/en/aquarium/crystalskim-600-gb",verifiedAt:"2026-09-09"},
   { id:"jbl-e402", category:"filter", brand:"JBL", model:"CristalProfi e402 greenline", specifications:"Dış filtre · 450 L/saat", ratedFlowLph:450, recommendedMinL:40, recommendedMaxL:120, sourceUrl:"https://www.jbl.de/en-kz/productsv2/download_instruction_quick_guide_pdf/25002039", verifiedAt:"2026-08-17" },
   { id:"jbl-e1902", category:"filter", brand:"JBL", model:"CristalProfi e1902 greenline", specifications:"Dış filtre · 1900 L/saat", ratedFlowLph:1900, recommendedMinL:200, recommendedMaxL:800, sourceUrl:"https://www.jbl.de/en-kz/productsv2/download_instruction_quick_guide_pdf/25002039", verifiedAt:"2026-08-17" },
-  { id:"jbl-protemp-s25", category:"heater", brand:"JBL", model:"ProTemp S 25", specifications:"Ayarlı ısıtıcı · 25 W", powerW:25, sourceUrl:"https://www.jbl.de/en-ie/productsv2/download_instruction_manual_pdf/25000204", verifiedAt:"2026-08-17" },
-  { id:"jbl-protemp-s50", category:"heater", brand:"JBL", model:"ProTemp S 50", specifications:"Ayarlı ısıtıcı · 50 W", powerW:50, sourceUrl:"https://www.jbl.de/en-ie/productsv2/download_instruction_manual_pdf/25000204", verifiedAt:"2026-08-17" },
-  { id:"jbl-protemp-s150", category:"heater", brand:"JBL", model:"ProTemp S 150", specifications:"Ayarlı ısıtıcı · 150 W", powerW:150, sourceUrl:"https://www.jbl.de/en-ie/productsv2/download_instruction_manual_pdf/25000204", verifiedAt:"2026-08-17" },
-  { id:"jbl-protemp-s200", category:"heater", brand:"JBL", model:"ProTemp S 200", specifications:"Ayarlı ısıtıcı · 200 W", powerW:200, sourceUrl:"https://www.jbl.de/en-ie/productsv2/download_instruction_manual_pdf/25000204", verifiedAt:"2026-08-17" },
-  { id:"jbl-protemp-s300", category:"heater", brand:"JBL", model:"ProTemp S 300", specifications:"Ayarlı ısıtıcı · 300 W", powerW:300, sourceUrl:"https://www.jbl.de/en-ie/productsv2/download_instruction_manual_pdf/25000204", verifiedAt:"2026-08-17" },
+  // JBL ProTemp S 25 … S 300 (`jbl-protemp-s25 … s300`, 2026-08-17) 2026-11-11'de aynı ürünün `jbl-protemp-s-26 … s-301` kaydıyla birleşti
+  // (catalog-equipment-hardware.ts, PROTEMP S): eski kimlikler o kaydın `formerIds`'i, kullanıcı kayıtları oraya bağlanır.
   { id:"sunsun-hw303a", category:"filter", brand:"SunSun", model:"HW-303A", specifications:"Dış filtre · 1400 L/saat · 35 W", ratedFlowLph:1400, powerW:35, recommendedMinL:250, recommendedMaxL:500, sourceUrl:"https://www.sunsun-china.com/product/aquarium-equipment/out-side-filter/hw-series-frequency-outside-filter-3.html", verifiedAt:"2026-08-17" },
   { id:"sunsun-hw304a", category:"filter", brand:"SunSun", model:"HW-304A", specifications:"Dış filtre · 2000 L/saat · 55 W", ratedFlowLph:2000, powerW:55, recommendedMinL:400, recommendedMaxL:700, sourceUrl:"https://www.sunsun-china.com/product/aquarium-equipment/out-side-filter/hw-series-frequency-outside-filter-3.html", verifiedAt:"2026-08-17" },
   { id:"sunsun-hw304b", category:"filter", brand:"SunSun", model:"HW-304B", specifications:"UV'li dış filtre · 2000 L/saat · 55 W + 9 W UV", ratedFlowLph:2000, powerW:55, integratedUvcW:9, recommendedMinL:400, recommendedMaxL:700, sourceUrl:"https://www.sunsun-china.com/product/aquarium-equipment/out-side-filter/hw-series-frequency-outside-filter-3.html", verifiedAt:"2026-08-17" },
@@ -522,9 +531,42 @@ const hasCapacityData = (profile:EquipmentProfile) => {
 };
 
 function assertUniqueEquipmentModels(items:EquipmentProfile[]){const seen=new Set<string>();for(const item of items){const key=[item.category,item.brand,item.model].map(value=>value.trim().toLocaleLowerCase("tr-TR")).join("|");if(seen.has(key))throw new Error(`Ekipman kataloğunda yinelenen kategori/marka/model: ${item.category} / ${item.brand} / ${item.model}`);seen.add(key)}}
+/** Marka + ad anahtarı; marka/model dizini ve eş ad denetimi aynı biçimlendirmeyi kullanır. */
+const equipmentNameKey = (brand: string, name: string) => brandModelKey(normalize(brand) ?? "", normalize(name) ?? "");
+/**
+ * Eski kimlik (`formerIds`) ve eş ad (`aliases`) yapısının denetimi (2026-11-11, JBL PROTEMP S birleştirmesi). Yönlendirmenin hedefi her zaman
+ * eski kimliği taşıyan kaydın kendisidir, bu yüzden hedef katalogda vardır. Eski kimlik katalogdaki bir kimlik olamaz; böylece bir yönlendirme
+ * başka bir yönlendirmeye ya da kendine çıkamaz (zincir ve döngü kurulamaz) ve katalogdaki bir kaydın önüne geçemez. Eş ad, aynı markadaki hiçbir
+ * kaydın (kendisi dahil) model adıyla ve başka bir kaydın eş adıyla aynı olamaz; marka/model eşlemesi kategoriye bakmadığı için denetim de bakmaz.
+ * Testler bozuk örneklerle de çağırır.
+ */
+export function assertEquipmentRedirects(items: readonly EquipmentProfile[]) {
+  const liveIds = new Set(items.map((item) => item.id));
+  const formerTargets = new Map<string, string>();
+  for (const item of items) for (const formerId of item.formerIds ?? []) {
+    if (!formerId || formerId.trim() !== formerId) throw new Error(`Geçersiz eski ekipman kimliği: ${item.id} → ${JSON.stringify(formerId)}`);
+    if (liveIds.has(formerId)) throw new Error(`Eski ekipman kimliği katalogda kayıtlı bir kimlik: ${formerId} (${item.id} kaydında)`);
+    const other = formerTargets.get(formerId);
+    if (other !== undefined) throw new Error(`Eski ekipman kimliği iki kez yönleniyor: ${formerId} → ${other}, ${item.id}`);
+    formerTargets.set(formerId, item.id);
+  }
+  const nameOwners = new Map<string, string>();
+  for (const item of items) { const key = equipmentNameKey(item.brand, item.model); if (!nameOwners.has(key)) nameOwners.set(key, item.id); }
+  const aliasOwners = new Map<string, string>();
+  for (const item of items) for (const alias of item.aliases ?? []) {
+    if (!alias.trim()) throw new Error(`Boş ekipman eş adı: ${item.id}`);
+    const key = equipmentNameKey(item.brand, alias);
+    const owner = nameOwners.get(key);
+    if (owner === item.id) throw new Error(`Ekipman eş adı kaydın kendi model adıyla aynı: ${item.id} / ${alias}`);
+    if (owner !== undefined) throw new Error(`Ekipman eş adı başka bir kaydın marka/model adıyla çakışıyor: ${item.id} / ${alias} ↔ ${owner}`);
+    const other = aliasOwners.get(key);
+    if (other !== undefined) throw new Error(`Ekipman eş adı iki kayıtta: ${alias} → ${other}, ${item.id}`);
+    aliasOwners.set(key, item.id);
+  }
+}
 // Bütünlük denetimi geliştirmede, testlerde ve CI'da (`pnpm verify`) çalışır; üretim derlemesinde kullanıcının tarayıcısında çalışmaz (docs/DECISIONS/0015-katalog-modulleri-ve-sayfa-hizi.md).
 function assertEquipmentCatalogIntegrity(){
-  assertUniqueIds("Ekipman",equipmentCatalog);assertUniqueEquipmentModels(equipmentCatalog);
+  assertUniqueIds("Ekipman",equipmentCatalog);assertUniqueEquipmentModels(equipmentCatalog);assertEquipmentRedirects(equipmentCatalog);
   if(unknownUnverifiedIds.length)throw new Error(`Değeri çekilecek ekipman katalogda yok: ${unknownUnverifiedIds.join(", ")}`);
   const unverifiedEquipmentIds:string[]=[];
   for(const item of equipmentCatalog){
@@ -544,11 +586,14 @@ if(process.env.NODE_ENV!=="production")assertEquipmentCatalogIntegrity();
 // 3500'ü aşan kaydın marka ve model adını her çağrıda yeniden biçimlendiriyordu. Katalog çalışma sırasında değişmez; anahtarlar
 // ilk kullanımda bir kez hesaplanır. Sonuçlar eski aramalarla birebir aynıdır: eşleşme varsa katalog sırasındaki ilk kayıt döner.
 // Kimlik dizini biçimlendirme gerektirmediği için ayrı tutulur; marka/model dizini yalnızca kimliği olmayan bir kayıt geldiğinde kurulur.
+// 2026-11-11 (JBL PROTEMP S birleştirmesi): kimlik dizini birleştirilen kaydın eski kimliklerini (`formerIds`), marka/model dizini eş adlarını
+// (`aliases`) da taşır. İkisi de ikinci geçişte eklenir; katalogdaki bir kaydın kendi kimliğinin ya da adının önüne geçmez.
 let equipmentByIdCache: Map<string, EquipmentProfile> | undefined;
 function equipmentByIdIndex() {
   if (equipmentByIdCache) return equipmentByIdCache;
   equipmentByIdCache = new Map();
   for (const profile of equipmentCatalog) if (!equipmentByIdCache.has(profile.id)) equipmentByIdCache.set(profile.id, profile);
+  for (const profile of equipmentCatalog) for (const formerId of profile.formerIds ?? []) if (!equipmentByIdCache.has(formerId)) equipmentByIdCache.set(formerId, profile);
   return equipmentByIdCache;
 }
 let equipmentByBrandModelCache: Map<string, EquipmentProfile> | undefined;
@@ -556,14 +601,29 @@ function equipmentByBrandModelIndex() {
   if (equipmentByBrandModelCache) return equipmentByBrandModelCache;
   equipmentByBrandModelCache = new Map();
   for (const profile of equipmentCatalog) {
-    const key = brandModelKey(normalize(profile.brand) ?? "", normalize(profile.model) ?? "");
+    const key = equipmentNameKey(profile.brand, profile.model);
+    if (!equipmentByBrandModelCache.has(key)) equipmentByBrandModelCache.set(key, profile);
+  }
+  for (const profile of equipmentCatalog) for (const alias of profile.aliases ?? []) {
+    const key = equipmentNameKey(profile.brand, alias);
     if (!equipmentByBrandModelCache.has(key)) equipmentByBrandModelCache.set(key, profile);
   }
   return equipmentByBrandModelCache;
 }
+/** Katalog kimliğiyle kayıt; birleştirilip kaldırılan eski kimlik (`formerIds`) birleştirildiği kaydı verir. */
 export const equipmentById = (id?: string) => id === undefined ? undefined : equipmentByIdIndex().get(id);
-// Marka/model dizini katalog parçalarına da yazılır (src/data/catalog-bucket-builders.ts); tarayıcıdaki yükleyici böylece aynı eşlemeyi kullanır.
+// Kimlik dizini (eski kimlikler dahil) ve marka/model dizini (eş adlar dahil) katalog parçalarına da yazılır (src/data/catalog-bucket-builders.ts);
+// tarayıcıdaki yükleyici böylece aynı eşlemeyi kullanır.
+export const equipmentIdIndex = (): ReadonlyMap<string, EquipmentProfile> => equipmentByIdIndex();
 export const equipmentModelIndex = (): ReadonlyMap<string, EquipmentProfile> => equipmentByBrandModelIndex();
+/**
+ * Ekipman ekleme penceresinin model araması: model adı ya da eş adlarından biri (`aliases`) aranan metni içeriyorsa kayıt bulunur; büyük/küçük
+ * harf Türkçe kurala göre yok sayılır (pencerenin önceki aramasıyla aynı). Eş adla bulunan kayıt listede kendi adıyla, bir kez görünür.
+ */
+export const equipmentMatchesModelQuery = (profile: EquipmentProfile, query: string) => {
+  const needle = query.toLocaleLowerCase("tr-TR");
+  return [profile.model, ...(profile.aliases ?? [])].some((name) => name.toLocaleLowerCase("tr-TR").includes(needle));
+};
 export const equipmentForCategory = (category: Equipment["category"]) => equipmentCatalog.filter(item=>item.category===category);
 export const equipmentBrandsForCategory = (category: Equipment["category"]) => [...new Set(equipmentForCategory(category).map(item=>item.brand))].sort((a,b)=>a.localeCompare(b,"tr"));
 export const equipmentForBrandInCategory = (category: Equipment["category"], brand: string) => equipmentForCategory(category).filter(item=>item.brand===brand);

@@ -21,7 +21,7 @@ Katalogların her bilgisinin yüzde kaçının dolu olduğu ve kaynağının tü
 ## Güncel durum
 
 <!-- kapsam:başla -->
-Ölçüm tarihi: 2026-11-10
+Ölçüm tarihi: 2026-11-11
 
 ### Canlılar (443 kayıt)
 
@@ -35,16 +35,16 @@ Katalogların her bilgisinin yüzde kaçının dolu olduğu ve kaynağının tü
 | Eş ad ya da satış adı | 383/443 | %86,5 |
 | Son 92 günde doğrulanmış | 443/443 | %100 |
 
-### Ekipman (3541 kayıt)
+### Ekipman (3535 kayıt)
 
 | Bilgi | Dolu | Oran |
 |---|---|---|
-| Kaynak sayfası | 3541/3541 | %100 |
-| Doğrulanmamışlar listesinde değil | 3419/3541 | %96,6 |
-| Hesap değeri (filtre, ısıtıcı, hava motoru) | 1126/1255 | %89,7 |
-| Güç (W) | 1689/3541 | %47,7 |
-| Önerilen hacim | 716/3541 | %20,2 |
-| Son 92 günde doğrulanmış | 3541/3541 | %100 |
+| Kaynak sayfası | 3535/3535 | %100 |
+| Doğrulanmamışlar listesinde değil | 3410/3535 | %96,5 |
+| Hesap değeri (filtre, ısıtıcı, hava motoru) | 1117/1249 | %89,4 |
+| Güç (W) | 1682/3535 | %47,6 |
+| Önerilen hacim | 712/3535 | %20,1 |
+| Son 92 günde doğrulanmış | 3535/3535 | %100 |
 
 ### Bakım ürünleri (1893 kayıt)
 
@@ -75,6 +75,10 @@ Katalogların her bilgisinin yüzde kaçının dolu olduğu ve kaynağının tü
 
 ## Geçmiş
 
+- 2026-11-11 (Codex kontrolü): NovoRed Refill ve NanoBel metinleri düzeltildi; dört eksik yeniden doğrulamanın tarihi eski güne döndü, NovoRed Refill okuma gününü aldı (CATALOG_LOG son bölüm). `node scripts/data-coverage.cjs 2026-11-11` yeniden çalıştırıldı; önceki tablonun tüm sayıları ve oranları aynı kaldı. Tarihi geri alınan dört kayıt da 92 günlük aralıkta.
+- 2026-11-11 (Chrome oturumunun kardeş kayıtları, veri aşaması; ürün sahibinin kararı): adında ² olmayan üç Oase kaydı (`oase-biomaster-250`, `-350`, `-600`) önceki nesil sayıldı; taşıdıkları BioMaster² değerleri hesaptan çekildi, kayıtlar doğrulanamayanlar listesinde (`docs/CATALOG_LOG.md`, aynı günün bölümü). Doğrulanmamışlar listesinde değil %96,5 (3413 → 3410), hesap değeri %89,7 → %89,4 (1120 → 1117/1249), güç %47,6 (1683 → 1682), önerilen hacim %20,2 → %20,1 (715 → 712). BioMaster² ailesinin sekiz kaydı, Twinstar S Line V5'in beş kaydı, Dennerle 5 m CO₂ hortumu ve üç güncel JBL CO₂ tüpü kaynağa karşı okundu, tarihleri 2026-11-11; Twinstar'ın üç güç değeri ve 1200S'in lümeni düzeltildi, 200S'in çelişkili uzunluğu kaldırıldı (aydınlatma bu tabloda hesap değerine girmez); bakım ürünlerinde yalnız metin değişti.
+- 2026-11-11 (JBL PROTEMP S birleştirmesi, veri aşaması; ürün sahibinin kararı): aynı ürünün iki kez kataloglanmış altı çubuk ısıtıcısı tek kayıt oldu (`docs/CATALOG_LOG.md`, aynı günün bölümü). Eski adlı altı kopya (`jbl-protemp-s25 … s300`) katalogdan çıktı; kimlikleri kanonik kayda yönleniyor. Ekipman 3541 → 3535 kayıt. Doğrulanmamışlar listesinde değil %96,6 → %96,5 (3419/3541 → 3413/3535), güç %47,7 → %47,6, hesap değeri %89,7 (1126/1255 → 1120/1249), önerilen hacim %20,2 (716 → 715: kaynaksız 90–150 L'li eski S 100 çıktı). Kalan altı kaydın güç ve hacim değerleri değişmedi; adları JBL'in Almanca ve Türkiye sayfasındaki ad oldu.
+- 2026-11-11 (ürün sahibiyle Chrome oturumu, veri aşaması): veri testinde Chrome gerektiren 25 kaydın kaynağı okundu, bütün dolu alanları doğrulandı ya da kaynağa göre düzeltildi ve doğrulama tarihi 2026-11-11 oldu (`docs/CATALOG_LOG.md`, aynı günün bölümü). Kaynakta olmayan metin parçaları çıkarıldı; sayısal değer değişmedi. Oranlar değişmedi; "son 92 günde doğrulanmış" satırları %100 kalsın diye ölçüm tarihi 2026-11-11.
 - 2026-11-10 (veri testi düzeltmeleri, veri aşaması): Aquawing'in 16 filtresi eksenpet.com'un ürün sayfalarıyla doğrulandı (ürün sahibi kararı: eksenpet yalnız Aquawing için kaynak) ve doğrulanamayanlar listesinden çıktı; Sobo SB-8808'in gücü (10 W) distribütör sayfasından geldi. Doğrulanmamışlar listesinde değil %96,1 → %96,6, hesap değeri %88,4 → %89,7, güç %47,2 → %47,7. Canlılarda Afrika cüce kurbağasına kaynaklı topluluk notu (avcı işareti PR #87 denetiminde kaldırıldı), Maingano ile üç benekli guramiye kaynak farklarını anlatan bakım notu eklendi: davranış ya da bakım notu %75,4 → %76,1 (334 → 337). 142 kaydın doğrulama tarihi kaynağın okunduğu güne (2026-11-09 ya da 2026-11-10) yenilendi; "son 92 günde doğrulanmış" satırları %100 kaldı. ADA Super Jet ES'in 50 Hz değerleri, Tetra HT, ADA makas ve bakım ürünlerindeki metin düzeltmeleri oranları değiştirmedi.
 - 2026-11-08 (ürün sahibiyle Chrome oturumu: Cikletist, Fluval, Resun ve Haqos; veri aşaması): değerleri www.haqos.com'a dayanan 15 Haqos kaydı (6 filtre, 7 ısıtıcı, 2 UV) doğrulanamayanlar listesine girdi (ürün sahibi kararı); Thermo-Sprite 2026-09-06'daki Betta doğrulamasıyla değerini korudu. Doğrulanmamışlar listesinde değil %96,5 → %96,1, hesap değeri %89,5 → %88,4, güç %47,6 → %47,2, önerilen hacim %20,5 → %20,2. AquaClear'ın üç debisi ürün sayfasının değerine döndü, Reef 4.0'a lümen ve renk sıcaklığı eklendi, Plant 4.0 Nano ve Reef 4.0 Nano'nun anlamı belirsiz uzunluk aralığı kaldırıldı; bunlar oranları değiştirmedi.
 - 2026-11-04 (Trendyol'a bağlı ekipman, veri aşaması): değerleri yalnız Trendyol'da yayımlanan 23 kayıt (22 Shark armatürü, Meç Turbo Pipo) doğrulanamayanlar listesine girdi; RS-605 zaten listedeydi. Doğrulanmamışlar listesinde değil %97,2 → %96,5. Hesap değeri ve öbür oranlar değişmedi (aydınlatma ve Meç'in hava motoruyla çalışan filtresi hesaba değer vermiyordu).

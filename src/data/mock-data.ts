@@ -38,7 +38,7 @@ export const plants: Plant[] = [
 ];
 
 export const equipment: Equipment[] = [
-  { id: "e1", aquariumId: "aqua-1", category: "filter", brand: "Oase", model: "BioMaster 350", installedAt: "2024-03-12", specifications: "1100 L/saat", catalogId:"oase-biomaster-350" },
+  { id: "e1", aquariumId: "aqua-1", category: "filter", brand: "Oase", model: "BioMaster² 350", installedAt: "2024-03-12", specifications: "1100 L/saat", catalogId:"oase-biomaster2-350" },
   { id: "e2", aquariumId: "aqua-1", category: "lighting", brand: "Chihiros", model: "WRGB II 90", installedAt: "2024-03-12", specifications: "100 W", catalogId:"chihiros-wrgb2-90" },
   { id: "e3", aquariumId: "aqua-1", category: "co2", brand: "ISTA", model: "2L Set", installedAt: "2024-03-18" },
 ];

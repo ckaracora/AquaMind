@@ -8,6 +8,7 @@ import { AppShell } from "@/components/app-shell";
 import { ModalDialog } from "@/components/modal-dialog";
 import { PageHeader } from "@/components/page-header";
 import { statusTones } from "@/components/parameter-card";
+import { selectedAquarium } from "@/lib/aquarium-selection";
 import { useCatalogLookup } from "@/lib/use-catalog-lookup";
 import { useDisplayFormat } from "@/lib/use-display-format";
 import { parameterStatuses, pendingStatus, unavailableStatus, type ParameterStatus } from "@/lib/water-status";
@@ -43,30 +44,35 @@ function WaterContent() {
   // Telefonda ölçüm geçmişi tablo yerine kart olarak gösterilir (11 sütunluk tablo yana kaydırılmadan okunmuyordu); masaüstünde tablo aynı.
   const formatReadingDate = (date: string) => fmt.date(date, { day: "2-digit", month: "short", hour: "2-digit", minute: "2-digit" });
   const initialId = searchParams.get("aquarium");
-  const [aquariumId, setAquariumId] = useState(initialId && aquariums.some((a) => a.id === initialId) ? initialId : aquariums[0]?.id ?? "");
+  const [selectedId, setSelectedId] = useState(initialId ?? "");
   const [showForm, setShowForm] = useState(false);
+  // Seçili akvaryum her çizimde güncel listeden türetilir (src/lib/aquarium-selection.ts): adresteki akvaryum (`?aquarium=`) listede varsa o,
+  // yoksa ilki. Sağlayıcı ilk çizimde örnek veriyle başlar; ilk çizimde saklanan kimlik kullanıcının akvaryumları gelince listede
+  // kalmayabilir. Akvaryum yoksa pencere açılmaz, boş durum görünür; ölçüm örnek verideki ya da boş bir akvaryum kimliğiyle yazılamaz.
+  const aquarium = selectedAquarium(aquariums, selectedId);
+  const aquariumId = aquarium?.id ?? "";
   const readings = useMemo(() => waterReadings.filter((item) => item.aquariumId === aquariumId).sort((a, b) => +new Date(b.measuredAt) - +new Date(a.measuredAt)), [aquariumId, waterReadings]);
   const latest = readings[0];
-  const selectedAquarium = aquariums.find((item) => item.id === aquariumId);
   // Kart etiketleri ana sayfayla aynı kuraldan gelir; yalnızca seçili akvaryumdaki türlerin katalog kayıtları yüklenir
   // (docs/DECISIONS/0016-gereken-katalog-kayitlarinin-yuklenmesi.md).
   const animals = useMemo(() => livestock.filter((item) => item.aquariumId === aquariumId), [livestock, aquariumId]);
-  const { lookup, failed, retry } = useCatalogLookup(animals, [], Boolean(selectedAquarium));
-  const statuses = selectedAquarium ? parameterStatuses(animals, lookup?.speciesForLivestock, latest, selectedAquarium.type, failed ? unavailableStatus : pendingStatus) : undefined;
+  const { lookup, failed, retry } = useCatalogLookup(animals, [], Boolean(aquarium));
+  const statuses = aquarium ? parameterStatuses(animals, lookup?.speciesForLivestock, latest, aquarium.type, failed ? unavailableStatus : pendingStatus) : undefined;
 
   function submit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
+    if (!aquarium) return;
     const data = new FormData(event.currentTarget);
-    const reading: WaterParameters = { id: crypto.randomUUID(), aquariumId, measuredAt: new Date(String(data.get("measuredAt"))).toISOString() };
+    const reading: WaterParameters = { id: crypto.randomUUID(), aquariumId: aquarium.id, measuredAt: new Date(String(data.get("measuredAt"))).toISOString() };
     for (const [key] of fields) { const value = data.get(key); if (value !== null && value !== "") Object.assign(reading, { [key]: key === "temperature" ? temperatureToCelsius(Number(value), fmt.temperatureUnit) : Number(value) }); }
     addWaterReading(reading); setShowForm(false);
   }
 
   return <AppShell><PageHeader title={t.navigation.items.water}/><div className="mx-auto max-w-[1280px] px-5 py-8 sm:px-8 lg:px-10 lg:py-10">
-    <div className="mb-7 flex flex-col justify-between gap-4 sm:flex-row sm:items-end"><div><p className="eyebrow mb-2 text-aqua">{t.water.eyebrow}</p><h1 className="text-2xl font-extrabold sm:text-3xl">{t.navigation.items.water}</h1><p className="mt-2 text-sm text-[#71858d]">{t.water.description}</p></div><div className="flex gap-2"><label className="relative flex-1 sm:min-w-52"><select value={aquariumId} onChange={(e) => setAquariumId(e.target.value)} className="min-h-11 w-full appearance-none rounded-xl border border-white/[.08] bg-panel px-4 py-3 pr-9 text-xs font-bold outline-none sm:min-h-0">{aquariums.map((a) => <option key={a.id} value={a.id}>{a.name}</option>)}</select><ChevronDown size={14} className="pointer-events-none absolute right-3 top-3.5 text-[#71858d]"/></label><button onClick={() => setShowForm(true)} className="flex min-h-11 min-w-11 items-center gap-2 rounded-xl bg-aqua px-4 py-3 text-xs font-extrabold text-ink sm:min-h-0 sm:min-w-0"><Plus size={16}/>{t.common.addReading}</button></div></div>
+    <div className="mb-7 flex flex-col justify-between gap-4 sm:flex-row sm:items-end"><div><p className="eyebrow mb-2 text-aqua">{t.water.eyebrow}</p><h1 className="text-2xl font-extrabold sm:text-3xl">{t.navigation.items.water}</h1><p className="mt-2 text-sm text-[#71858d]">{t.water.description}</p></div><div className="flex gap-2"><label className="relative flex-1 sm:min-w-52"><select value={aquariumId} onChange={(e) => setSelectedId(e.target.value)} className="min-h-11 w-full appearance-none rounded-xl border border-white/[.08] bg-panel px-4 py-3 pr-9 text-xs font-bold outline-none sm:min-h-0">{aquariums.map((a) => <option key={a.id} value={a.id}>{a.name}</option>)}</select><ChevronDown size={14} className="pointer-events-none absolute right-3 top-3.5 text-[#71858d]"/></label><button onClick={() => setShowForm(true)} disabled={!aquarium} className="flex min-h-11 min-w-11 items-center gap-2 rounded-xl bg-aqua px-4 py-3 text-xs font-extrabold text-ink disabled:opacity-40 sm:min-h-0 sm:min-w-0"><Plus size={16}/>{t.common.addReading}</button></div></div>
 
-    {!aquariumId ? <div className="surface p-12 text-center text-sm text-[#71858d]">{t.water.noAquarium}</div> : <>
-      <div className="mb-5 grid grid-cols-2 gap-3 lg:grid-cols-4"><ValueCard icon={Thermometer} label={t.common.temperature} value={shownValue(fmt, "temperature", latest?.temperature)} unit={fmt.temperatureSymbol} status={statuses?.temperature}/><ValueCard icon={FlaskConical} label={t.water.fields.ph} value={shownValue(fmt, "ph", latest?.ph)} status={statuses?.ph}/>{selectedAquarium?.type==="freshwater"?<ValueCard icon={CircleGauge} label={t.water.fields.tds} value={shownValue(fmt, "tds", latest?.tds)} unit="ppm" status={statuses?.tds}/>:<ValueCard icon={CircleGauge} label={t.water.fields.specificGravity} value={shownValue(fmt, "specificGravity", latest?.specificGravity)} unit="SG" status={statuses?.specificGravity}/>}<ValueCard icon={Activity} label={t.water.nitrate} value={shownValue(fmt, "nitrate", latest?.nitrate)} unit="ppm" status={statuses?.nitrate}/></div>
+    {!aquarium ? <div className="surface p-12 text-center text-sm text-[#71858d]">{t.water.noAquarium}</div> : <>
+      <div className="mb-5 grid grid-cols-2 gap-3 lg:grid-cols-4"><ValueCard icon={Thermometer} label={t.common.temperature} value={shownValue(fmt, "temperature", latest?.temperature)} unit={fmt.temperatureSymbol} status={statuses?.temperature}/><ValueCard icon={FlaskConical} label={t.water.fields.ph} value={shownValue(fmt, "ph", latest?.ph)} status={statuses?.ph}/>{aquarium.type==="freshwater"?<ValueCard icon={CircleGauge} label={t.water.fields.tds} value={shownValue(fmt, "tds", latest?.tds)} unit="ppm" status={statuses?.tds}/>:<ValueCard icon={CircleGauge} label={t.water.fields.specificGravity} value={shownValue(fmt, "specificGravity", latest?.specificGravity)} unit="SG" status={statuses?.specificGravity}/>}<ValueCard icon={Activity} label={t.water.nitrate} value={shownValue(fmt, "nitrate", latest?.nitrate)} unit="ppm" status={statuses?.nitrate}/></div>
       {failed && <p role="status" className="-mt-2 mb-5 text-[11px] text-amber-300">{t.common.speciesRangesFailed} <button type="button" onClick={retry} className="-my-3.5 inline-flex min-h-11 min-w-11 items-center font-bold underline underline-offset-2">{t.common.retry}</button></p>}
       <div className="grid gap-5 xl:grid-cols-[1.25fr_.8fr]">
         <section className="surface p-5 sm:p-6"><div className="mb-6"><p className="eyebrow">{t.water.trendEyebrow}</p><h2 className="mt-1 text-lg font-extrabold">{t.water.trendTitle}</h2></div><WaterChart readings={[...readings].reverse().slice(-8)}/></section>
@@ -74,7 +80,7 @@ function WaterContent() {
       </div>
       <section className="surface mt-5 overflow-hidden"><div className="flex items-center justify-between border-b border-white/[.06] p-5 sm:p-6"><div><p className="eyebrow">{t.water.historyEyebrow}</p><h2 className="mt-1 text-lg font-extrabold">{t.water.historyTitle}</h2></div><span className="text-[11px] sm:text-[10px] font-bold text-[#647981]">{t.common.recordCount(readings.length)}</span></div><div className="divide-y divide-white/[.035] sm:hidden">{readings.map((r) => { const measured = fields.filter(([key]) => r[key] !== undefined); return <div key={r.id} className="px-5 py-4"><p className="text-xs font-bold">{formatReadingDate(r.measuredAt)}</p>{measured.length ? <dl className="mt-3 grid grid-cols-3 gap-x-3 gap-y-3">{measured.map(([key, unit]) => <div key={key} className="min-w-0"><dt className="text-[11px] font-bold text-[#586e77]">{t.water.fields[key]}</dt><dd className="mt-0.5 text-sm font-bold text-[#91a3aa]">{shownValue(fmt, key, r[key])}{unitFor(fmt, key, unit) && <span className="ml-1 text-[11px] font-normal text-[#647981]">{unitFor(fmt, key, unit)}</span>}</dd></div>)}</dl> : <p className="mt-2 text-xs text-[#647981]">{t.water.noValues}</p>}</div>; })}</div><div className="hidden overflow-x-auto sm:block"><table className="w-full min-w-[850px] text-left text-xs"><thead><tr className="border-b border-white/[.06] text-[11px] sm:text-[9px] uppercase tracking-wider text-[#586e77]"><th className="px-5 py-3">{t.common.date}</th>{fields.map(([key]) => <th key={key} className="px-3 py-3">{t.water.fields[key]}</th>)}</tr></thead><tbody>{readings.map((r) => <tr key={r.id} className="border-b border-white/[.035] last:border-0"><td className="whitespace-nowrap px-5 py-4 font-bold">{formatReadingDate(r.measuredAt)}</td>{fields.map(([key]) => <td key={key} className="px-3 py-4 text-[#91a3aa]">{shownValue(fmt, key, r[key]) ?? "—"}</td>)}</tr>)}</tbody></table></div>{!readings.length && <div className="p-10 text-center text-xs text-[#647981]">{t.water.noReadings}</div>}</section>
     </>}
-  </div>{showForm && <MeasurementForm aquariumName={aquariums.find((a) => a.id === aquariumId)?.name ?? ""} onClose={() => setShowForm(false)} onSubmit={submit}/>}</AppShell>;
+  </div>{showForm && aquarium && <MeasurementForm aquariumName={aquarium.name} onClose={() => setShowForm(false)} onSubmit={submit}/>}</AppShell>;
 }
 
 function ValueCard({ icon: Icon, label, value, unit = "", status = pendingStatus }: { icon: typeof Droplets; label: string; value?: string; unit?: string; status?: ParameterStatus }) { const { t } = useI18n(); return <div className="surface p-4 sm:p-5"><div className="mb-5 flex justify-between"><span className="grid size-9 place-items-center rounded-lg bg-aqua/10 text-aqua"><Icon size={18}/></span><span className={`rounded-full px-2 py-1 text-[11px] sm:text-[8px] font-extrabold uppercase ${statusTones[status.tone]}`}>{t.waterStatus[status.key]}</span></div><p className="text-[11px] sm:text-[10px] font-bold text-[#647981]">{label}</p><p className="mt-1 text-xl font-extrabold">{value ?? "—"} <span className="text-[11px] sm:text-[10px] text-[#71858d]">{unit}</span></p></div>; }

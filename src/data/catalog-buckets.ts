@@ -27,7 +27,7 @@ export const catalogBucketPath = (kind: CatalogBucketKind, bucket: number) => `/
 // JSON biçimleri. Nesne yerine dizi kullanılır; böylece "constructor" gibi bir ad, nesnenin kendi özelliğiyle karışmaz.
 /** Canlı parçası: [kimlik, profil, davranış kayıtları ya da null], katalog sırasıyla. */
 export type SpeciesBucket = [id: string, profile: SpeciesProfile, behavior: BehaviorRecord[] | null][];
-/** Ekipman parçası: [kimlik, profil], katalog sırasıyla. */
+/** Ekipman parçası: [kimlik, profil], katalog sırasıyla; birleştirilen kaydın eski kimliği (`formerIds`) o kaydın profiliyle, sonda. */
 export type EquipmentBucket = [id: string, profile: EquipmentProfile][];
 /** Canlı ad dizini parçası: biçimlendirilmiş ad → [kimlik, katalogdaki sıra]; bilimsel ad ve ortak ad/eş ad ayrı. */
 export interface SpeciesNameBucket { scientific: [key: string, id: string, position: number][]; names: [key: string, id: string, position: number][] }

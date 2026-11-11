@@ -362,6 +362,13 @@ export const es: Messages = {
         const water = { freshwater: "agua dulce", brackish: "agua salobre", saltwater: "agua salada" };
         return `Esta especie no es apta para un acuario de ${water[aquariumType]}; necesita un acuario de ${required.map((type) => water[type]).join(" o ")}.`;
       },
+      otherWaterSuggestions: (count: number) => (count === 1 ? "Especie de nombre parecido apta para este acuario" : "Especies de nombre parecido aptas para este acuario"),
+      otherWaterSuggestionHint: "Si eliges una, el volumen y la compatibilidad se calculan para esa especie.",
+      otherWaterSuggestionChoose: "Elegir",
+      otherWaterSuggestionChosen: "Elegida",
+      otherWaterSuggestionsShowAll: (count: number) => `Mostrar todas (${count})`,
+      otherWaterSuggestionPicked: (name: string) => `Se eligió ${name}.`,
+      chosenFromSuggestion: (query: string) => `Elegiste esta especie de una sugerencia. Buscaste: ${query}`,
       species: "3. Especie",
       chooseSpecies: "Elegir especie",
       awaitingIdentity: "Esperando confirmación de identidad",

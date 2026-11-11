@@ -103,7 +103,9 @@ const dennerleCurrentCo2Equipment: EquipmentProfile[] = [
   {id:"dennerle-co2-nano-flipper",category:"co2",brand:"Dennerle",model:"CO₂ Nano-Flipper",specifications:"Nano akvaryumlar için pasif CO₂ çözündürme cihazı",sourceUrl:"https://dennerle.com/en/products/co2-nano-flipper",verifiedAt:"2026-08-27"},
   {id:"dennerle-co2-bubble-counter-exact",category:"co2",brand:"Dennerle",model:"CO₂ Blasenzähler Exact",specifications:"CO₂ besleme hızını görsel olarak izlemek için hassas kabarcık sayacı",sourceUrl:"https://dennerle.com/en/products/co2-blasenzaehler",verifiedAt:"2026-08-27"},
   {id:"dennerle-co2-check-valve",category:"co2",brand:"Dennerle",model:"CO₂ Geri Akış Önleyici",specifications:"Akvaryum suyunun CO₂ sistemine geri akmasını önleyen valf",sourceUrl:"https://dennerle.com/en/products/co2-ruecklaufsicherung",verifiedAt:"2026-08-27"},
-  ...([2,5] as const).map(meters=>({id:`dennerle-co2-hose-${meters}m`,category:"co2" as const,brand:"Dennerle",model:`CO₂ Hortumu ${meters} m`,specifications:`Basınca dayanıklı CO₂ hortumu · ${meters} m`,sourceUrl:`https://dennerle.com/en/products/co2-schlauch-${meters}m`,verifiedAt:"2026-08-27"})),
+  // Eski adresler (`/co2-schlauch-2m`, `/co2-schlauch-5m`) 2026-11-11'de yeni adreslere (`/co2-hose-2m`, `/co2-hose-5m`) yönleniyordu; iki yeni
+  // sayfa da okundu (docs/CATALOG_LOG.md, 2026-11-11 Chrome oturumu ve kardeş kayıtlar bölümleri).
+  ...([2,5] as const).map(meters=>({id:`dennerle-co2-hose-${meters}m`,category:"co2" as const,brand:"Dennerle",model:`CO₂ Hortumu ${meters} m`,specifications:`Basınca dayanıklı CO₂ hortumu · ${meters} m`,sourceUrl:`https://dennerle.com/en/products/co2-hose-${meters}m`,verifiedAt:"2026-11-11"})),
   {id:"dennerle-carbo-bio-depot-60-80",category:"co2",brand:"Dennerle",model:"Carbo Bio Depot 60/80",specifications:"Carbo Bio Start 60/80 için biyolojik CO₂ yedek dolumu",sourceUrl:"https://dennerle.com/en/products/carbo-bio-depot-60-80",verifiedAt:"2026-08-27"},
   {id:"dennerle-carbo-bio-depot-120",category:"co2",brand:"Dennerle",model:"Carbo Bio Depot 120",specifications:"Carbo Bio Style 120 için biyolojik CO₂ yedek dolumu",sourceUrl:"https://dennerle.com/en/products/carbo-bio-depot-120",verifiedAt:"2026-08-27"},
 ];
@@ -138,7 +140,7 @@ const ferplastFilters: EquipmentProfile[] = [
 ].map(([model,ratedFlowLph,powerW,recommendedMaxL]) => ({
   id:`ferplast-bluextreme-${model}`, category:"filter", brand:"Ferplast", model:`Bluextreme ${model}`,
   specifications:`Dış filtre · ${ratedFlowLph} L/saat · ${powerW} W`, ratedFlowLph, powerW, recommendedMaxL,
-  adjustableFlow:true, sourceUrl:ferplastFilterSource, verifiedAt,
+  adjustableFlow:true, sourceUrl:ferplastFilterSource, verifiedAt:model === 1500 ? "2026-11-11" : verifiedAt,
 }));
 ferplastFilters.push(
   ...([[250,800,12],[350,1100,16],[450,1300,22]] as const).map(([model,flow,power])=>({id:`ferplast-professional-2-${model}`,category:"filter" as const,brand:"Ferplast",model:`Professional 2.0 ${model}`,specifications:`Dört aşamalı dış filtre · ${flow} L/saat · en çok ${power} W · entegre CO₂ difüzörü`,ratedFlowLph:flow,powerW:power,recommendedMaxL:model,sourceUrl:"https://www.ferplast.com/products/filter-professional-2-0-250-eu",verifiedAt})),
@@ -155,9 +157,9 @@ ferplastFilters.push(
   {id:"ferplast-bluwave-03",category:"filter",brand:"Ferplast",model:"Bluwave 03",specifications:"Üç aşamalı iç filtre · 500 L/saat · 4,5 W · 150 litreye kadar",ratedFlowLph:500,powerW:4.5,recommendedMaxL:150,sourceUrl:"https://www.ferplast.com/products/bluwave-03",verifiedAt},
   {id:"ferplast-bluwave-05",category:"filter",brand:"Ferplast",model:"Bluwave 05",specifications:"Üç aşamalı iç filtre · 500 L/saat · 4,5 W · 150 litreye kadar",ratedFlowLph:500,powerW:4.5,recommendedMaxL:150,sourceUrl:"https://www.ferplast.com/products/bluwave-05",verifiedAt},
   {id:"ferplast-bluwave-07",category:"filter",brand:"Ferplast",model:"Bluwave 07",specifications:"Üç aşamalı iç filtre · 900 L/saat · 13 W · 300 litreye kadar",ratedFlowLph:900,powerW:13,recommendedMaxL:300,sourceUrl:"https://www.ferplast.com/products/bluwave-07",verifiedAt},
-  {id:"ferplast-pico-filter",category:"filter",brand:"Ferplast",model:"Pico Filter",specifications:"Ayarlanabilir mini iç filtre · 350 L/saat · 6,5 W · 30 litreye kadar",ratedFlowLph:350,powerW:6.5,recommendedMaxL:30,adjustableFlow:true,sourceUrl:"https://www.ferplast.com/products/pico-filter-eu",verifiedAt},
+  {id:"ferplast-pico-filter",category:"filter",brand:"Ferplast",model:"Pico Filter",specifications:"Ayarlanabilir mini iç filtre · 350 L/saat · 6,5 W · 30 litreye kadar",ratedFlowLph:350,powerW:6.5,recommendedMaxL:30,adjustableFlow:true,sourceUrl:"https://www.ferplast.com/products/pico-filter-eu",verifiedAt:"2026-11-11"},
   {id:"ferplast-pico-pro",category:"filter",brand:"Ferplast",model:"Pico Pro",specifications:"Üç aşamalı iç filtre · 300 L/saat · 4,5 W · 45 litreye kadar",ratedFlowLph:300,powerW:4.5,recommendedMaxL:45,adjustableFlow:true,sourceUrl:"https://www.ferplast.com/products/pico-pro-eu",verifiedAt},
-  ...([[50,170,4,20,50],[90,450,5,40,90],[150,650,10,80,150],[200,800,11,120,200],[300,900,12,200,500]] as const).map(([model,flow,power,minL,maxL])=>({id:`ferplast-crystal-${model}`,category:"filter" as const,brand:"Ferplast",model:`Crystal ${model}`,specifications:`İki aşamalı iç filtre · ${flow} L/saat · ${power} W`,ratedFlowLph:flow,powerW:power,recommendedMinL:minL,recommendedMaxL:maxL,sourceUrl:"https://www.ferplast.com/products/crystal-50-eu",verifiedAt})),
+  ...([[50,170,4,20,50],[90,450,5,40,90],[150,650,10,80,150],[200,800,11,120,200],[300,900,12,200,500]] as const).map(([model,flow,power,minL,maxL])=>({id:`ferplast-crystal-${model}`,category:"filter" as const,brand:"Ferplast",model:`Crystal ${model}`,specifications:`İki aşamalı iç filtre · ${flow} L/saat · ${power} W`,ratedFlowLph:flow,powerW:power,recommendedMinL:minL,recommendedMaxL:maxL,sourceUrl:"https://www.ferplast.com/products/crystal-50-eu",verifiedAt:model === 200 ? "2026-11-11" : verifiedAt})),
 );
 
 const ferplastHeaterSource = "https://www.ferplast.com/products/bluclima-8299";
@@ -1068,19 +1070,26 @@ const jblExpandedEquipment:EquipmentProfile[]=[
   })),
   {id:"jbl-protemp-e300",category:"heater",brand:"JBL",model:"PROTEMP e301",specifications:"Önceki e300 adlandırmasıyla aynı 6042700 ürün kaydı · tatlı su dış filtre hattı dijital ısıtıcısı · 300 W · 90–300 L · 12/16, 16/22 ve 19/25 mm hortum bağlantıları · ±0,5 °C ölçüm hassasiyeti",powerW:300,recommendedMinL:90,recommendedMaxL:300,sourceUrl:"https://www.jbl.de/de-de/productsv2/detail/25133751",verifiedAt:"2026-10-30"},
   {id:"jbl-protemp-e500",category:"heater",brand:"JBL",model:"PROTEMP e501",specifications:"Önceki e500 adlandırmasıyla aynı 6042800 ürün kaydı · tatlı su dış filtre hattı dijital ısıtıcısı · 500 W · 160–600 L · 12/16, 16/22 ve 19/25 mm hortum bağlantıları · ±0,5 °C ölçüm hassasiyeti",powerW:500,recommendedMinL:160,recommendedMaxL:600,sourceUrl:"https://www.jbl.de/de-de/productsv2/detail/25134421",verifiedAt:"2026-10-30"},
+  // PROTEMP S (2026-11-11, ürün sahibinin kararı; docs/CATALOG_LOG.md, "2026-11-11 JBL PROTEMP S: aynı ürünün iki kaydı tek kayıt oldu"): aynı ürün
+  // iki kez kataloglanmıştı (2026-08-17 eski adlı `jbl-protemp-s25 … s300`, 2026-10-30 S 26 … S 301). İki ailenin kılavuzu bayt bayt aynı PDF, ürün
+  // numaraları aynı (6042100–6042600). Tek kayıt kalır: bu kimlikler, JBL'in Almanca ve Türkiye sayfasındaki adla (S 25 … S 300). Eski kimlikler
+  // `formerIds`, öbür adlar `aliases` ile bu kayda bağlanır; kullanıcı kaydı değişmez. S 101 (ABD) ve S 201 (Finlandiya) JBL'in o ülke sayfasındaki
+  // adıdır, fark açıklamada gösterilir (docs/DATA_SOURCES.md, "Çelişki ve eksiklik"); S 26/51/151/301 katalogun 2026-10-30 adıdır, 2026-11-11'de
+  // JBL'de bu adla sayfa bulunamadı. "PROTEMP S25" … kılavuzun yazımıdır. Sayfalar 2026-11-11'de yeniden okundu.
   ...([
-    ["26","25",25,10,50,25146142],
-    ["51","50",50,30,80,25152632],
-    ["101","100",100,50,160,25207631],
-    ["151","150",150,90,200,25212003],
-    ["201","200",200,100,300,25134704],
-    ["301","300",300,160,400,25134979],
-  ] as const).map(([currentName,legacyName,power,minL,maxL,productId])=>({
-    id:"jbl-protemp-s-" + currentName,category:"heater" as const,brand:"JBL",model:"PROTEMP S " + currentName,
-    // 101 (2026-11-10 veri testi): JBL'in ABD sayfası başlıkta "S 101", Almanca ve Türkiye sayfası ile kılavuz "S 100" yazıyor (aynı ürün
-    // no. 6042300). Ad S 101 kalır, fark açıklamada gösterilir (docs/DATA_SOURCES.md, "Çelişki ve eksiklik"); iki sayfa ek kaynaktır.
-    specifications:(currentName === "101" ? "JBL'in ABD sayfasında S 101, Almanca sayfasında, Türkiye sayfasında ve kılavuzunda S 100 adıyla geçen aynı 6042300 ürün kaydı" : "Üreticinin önceki S " + legacyName + " URL/adlandırmasıyla aynı ürün kaydı") + " · koruyucu sepetli kuvars cam termostatlı çubuk ısıtıcı · " + power + " W · " + minL + "–" + maxL + " L · 20–34 °C ayar · ±0,5 °C kontrol hassasiyeti · kuru çalışma koruması",
-    powerW:power,recommendedMinL:minL,recommendedMaxL:maxL,sourceUrl:"https://www.jbl.de/de-de/productsv2/detail/" + productId,additionalSourceUrls:["https://www.jbl.de/en-sk/productsv2/download_instruction_manual_pdf/25000215", ...(currentName === "101" ? ["https://www.jbl.de/en-us/productsv2/detail/25207620", "https://www.jbl.de/tr-tr/productsv2/detail/25207653"] : [])],verifiedAt:currentName === "101" ? "2026-11-10" : "2026-10-30",
+    ["26","25",25,10,50,25146142,6042100],
+    ["51","50",50,30,80,25152632,6042200],
+    ["101","100",100,50,160,25207631,6042300],
+    ["151","150",150,90,200,25212003,6042400],
+    ["201","200",200,100,300,25134704,6042500],
+    ["301","300",300,160,400,25134979,6042600],
+  ] as const).map(([formerName,name,power,minL,maxL,productId,articleNo])=>({
+    id:"jbl-protemp-s-" + formerName,category:"heater" as const,brand:"JBL",model:"PROTEMP S " + name,
+    aliases:["PROTEMP S " + formerName,"PROTEMP S" + name],formerIds:["jbl-protemp-s" + name],
+    specifications:"Ürün no. " + articleNo + (name === "100" ? " · JBL'in ABD sayfasında S 101 adıyla geçer" : name === "200" ? " · JBL'in Finlandiya sayfasında S 201 adıyla geçer" : "") + " · koruyucu sepetli kuvars cam termostatlı çubuk ısıtıcı · " + power + " W · " + minL + "–" + maxL + " L · 20–34 °C ayar · ±0,5 °C kontrol hassasiyeti · kuru çalışma koruması",
+    powerW:power,recommendedMinL:minL,recommendedMaxL:maxL,sourceUrl:"https://www.jbl.de/de-de/productsv2/detail/" + productId,
+    // 25000204: eski `jbl-protemp-s25 … s300` kayıtlarının kaynağı (aynı PDF); izi korunur (AGENTS.md, "Kaynak bilgisini kaybetme").
+    additionalSourceUrls:["https://www.jbl.de/en-sk/productsv2/download_instruction_manual_pdf/25000215","https://www.jbl.de/en-ie/productsv2/download_instruction_manual_pdf/25000204", ...(name === "100" ? ["https://www.jbl.de/en-us/productsv2/detail/25207620", "https://www.jbl.de/tr-tr/productsv2/detail/25207653"] : name === "200" ? ["https://www.jbl.de/en-fi/productsv2/detail/25134633"] : [])],verifiedAt:"2026-11-11",
   })),
   ...([
     ["10",10,40,120,"3,6",20,25154071],
@@ -1756,7 +1765,7 @@ const mecAirDrivenFilters:EquipmentProfile[]=[
   {id:"mec-pipo-5",model:"Pipo 5",specifications:"Küçük boy sünger pipo filtre · yaklaşık 9 × 16 cm",sourceUrl:"https://cukurovapet.com.tr/urun/mec-akvaryum-pi%CC%87po-fi%CC%87ltre-kucuk-boy-5-3015"},
   {id:"mec-pipo-10",model:"Pipo 10",specifications:"Orta boy sünger pipo filtre",sourceUrl:"https://emirakvaryum.com/index.php?path=109&route=product%2Fcategory"},
   {id:"mec-pipo-15",model:"Pipo 15",specifications:"Büyük boy sünger pipo filtre",sourceUrl:"https://emirakvaryum.com/index.php?path=109&route=product%2Fcategory"},
-  {id:"mec-hamburg-pipo",model:"Modüler Hamburg Pipo Filtre",specifications:"Modüler biyolojik Hamburg tipi sünger filtre",sourceUrl:"https://cukurovapet.com.tr/marka/mec"},
+  {id:"mec-hamburg-pipo",model:"Modüler Hamburg Pipo Filtre",specifications:"Modüler biyolojik Hamburg tipi sünger filtre · model kaynakta ve kabul edilen mağazalarda bulunamadı; doğrulanamadı",sourceUrl:"https://cukurovapet.com.tr/marka/mec"},
   {id:"mec-turbo-pipo",model:"Turbo Pipo Filtre",specifications:"Biyolojik sünger pipo filtre · 25 cm gövde",sourceUrl:"https://www.trendyol.com/mec/mec-turbo-pipo-filtre-nostaljik-p-802855493"},
   {id:"mec-f002",model:"F002 Tekli Pipo Filtre",specifications:"Tek süngerli biyolojik pipo filtre",sourceUrl:"https://www.cmticaret.com/filtreler-motorlar-ve-isiticilar/"},
   {id:"mec-f003",model:"F003 Çiftli Pipo Filtre",specifications:"Çift süngerli biyolojik pipo filtre",sourceUrl:"https://www.cmticaret.com/filtreler-motorlar-ve-isiticilar/"},
