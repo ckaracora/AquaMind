@@ -595,7 +595,7 @@ export const enCatalogSpecies: CatalogTexts = {
   "6c6c0a153b4e7cab": "Three-spot Gourami",
   "f20b4e6b032fe35d": "Snakeskin Gourami",
   "6290d9f167b7b7eb": "Moonlight Gourami",
-  "20c592891b91835b": "A large swimming area with low flow, shaded by dense and floating plants, is needed. It can eat soft-leaved plants.",
+  "90ba49a11f3b8d63": "A large swimming area with low flow, shaded by dense and floating plants, is needed. It can eat soft-leaved plants. Fishkeeper recommends keeping the species in groups in a large aquarium; Seriously Fish lists its social behavior as unknown and notes that males can be territorial toward other males and gouramis. The temperature is the overlap of Fishkeeper’s 23–30 °C and Seriously Fish’s 25–30 °C ranges.",
   "fba201602acd63f6": "Usually peaceful and timid; it can eat very small fish, and males can behave territorially toward other large gouramis.",
   "76f450ba70e7941c": "Chocolate Gourami",
   "cbcbcc70011cc8ee": "A delicate blackwater specialist. A group of at least six; a biologically mature, very soft and acidic, tannin-stained, dim aquarium with low flow and low nitrate is needed. It is sensitive to sudden changes in water chemistry.",

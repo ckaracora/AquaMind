@@ -7441,7 +7441,7 @@ assert(threeSpotGourami?.aliases?.includes("Gold gurami"), "Üç benekli guramin
 assert.equal(threeSpotGourami?.minVolumeL, 243, "Üç benekli gurami küçük satış akvaryumlarına uygun gösterilmemeli");
 assert.equal(speciesCatalog.filter((item) => speciesGroup(item) === "labyrinth").length, 15, "Labirentli kataloğu gerçek Parosphromenus deissneri dahil 15 doğrulanmış profil içermeli");
 for (const [id, minVolumeL, minGroup] of [
-  ["moonlight-gourami", 150, 3],
+  ["moonlight-gourami", 81, 1],
   ["chocolate-gourami", 120, 6],
   ["croaking-gourami", 54, 2],
   ["betta-imbellis", 120, 4],
@@ -8565,7 +8565,7 @@ const redTailedSnakehead = speciesForLivestock({ commonName: "Kırmızı kuyrukl
 assert.deepEqual([redTailedSnakehead?.id, redTailedSnakehead?.adultSizeCm, redTailedSnakehead?.minVolumeL, redTailedSnakehead?.minTankLengthCm, redTailedSnakehead?.minGroup, redTailedSnakehead?.temperature, redTailedSnakehead?.ph, redTailedSnakehead?.flow], ["red-tailed-snakehead", 20, 100, 80, 1, [22, 28], [5.5, 8], "low"], "Channa limbata kaynaklı erişkin boy, akvaryum ve su eşiklerini taşımalı");
 assert.equal(redTailedSnakehead?.predatory, true, "Channa limbata küçük canlılar için avcılık riskini taşımalı");
 assert.equal(redTailedSnakehead?.speciesOnly, true, "Channa limbata genel topluluk balığı olarak önerilmemeli");
-assert(redTailedSnakehead?.sourceUrl?.includes("channaturkiye.com/cuce-turler/channa-limbata"), "Channa limbata doğrudan uzman bakım kaynağına bağlanmalı");
+assert(redTailedSnakehead?.sourceUrl?.includes("channaturkiye.com/channa-turleri/channa-limbata"), "Channa limbata doğrudan uzman bakım kaynağına bağlanmalı");
 assert(redTailedSnakehead?.additionalSourceUrls?.some((url) => url.includes("researcharchive.calacademy.org")), "Channa limbata güncel taksonomi kaynağıyla çapraz doğrulanmalı");
 assert.equal(speciesForCatalogExactSearch("Channa limbata", "fish", "freshwater")?.id, "red-tailed-snakehead", "Kesin Channa limbata bilimsel adı doğru profili bulmalı");
 assert.equal(speciesForCatalogExactSearch("Golden Limbata", "fish", "freshwater"), undefined, "Golden form adı bilimsel kimlik kanıtı olmadan Channa limbata profiline dönüşmemeli");
