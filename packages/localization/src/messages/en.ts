@@ -514,6 +514,7 @@ export const en: Messages = {
       perHourOption: "L/hour (L/H)",
       perMinuteOption: "L/minute (L/min)",
       savedAs: (value: string) => `Saved as ${value} L/hour.`,
+      flowNote: "Flow rate is the manufacturer's figure; with filter media, actual flow is usually lower. That is why the health check uses 65% of it.",
     },
     valueDialogHelp: "Enter the value printed on the device. If you leave the field empty and save, the value is deleted.",
     form: {

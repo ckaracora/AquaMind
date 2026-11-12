@@ -514,6 +514,7 @@ export const es: Messages = {
       perHourOption: "L/hora (L/H)",
       perMinuteOption: "L/minuto (L/min)",
       savedAs: (value: string) => `Se guarda como ${value} L/hora.`,
+      flowNote: "El caudal es el valor del fabricante; con los materiales filtrantes, el caudal real suele ser menor. Por eso el análisis de salud usa el 65 % de ese valor.",
     },
     valueDialogHelp: "Ingresa el valor que aparece en el equipo. Si dejas el campo vacío y guardas, el valor se elimina.",
     form: {

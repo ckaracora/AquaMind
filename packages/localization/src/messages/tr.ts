@@ -546,6 +546,7 @@ export const tr = {
       perHourOption: "L/saat (L/H)",
       perMinuteOption: "L/dakika (L/min)",
       savedAs: (value: string) => `Kayda ${value} L/saat olarak yazılır.`,
+      flowNote: "Debi üreticinin değeridir; filtre malzemesiyle gerçek akış genelde daha düşüktür. Sağlık hesabı bu yüzden debinin %65'ini kullanır.",
     },
     valueDialogHelp: "Cihazın üzerindeki değeri gir. Alanı boş bırakıp kaydedersen değer silinir.",
     form: {
