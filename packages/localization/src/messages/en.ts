@@ -220,7 +220,7 @@ export const en: Messages = {
       eyebrow: "Seawater",
       title: { fishOnly: "Fish-only aquarium target", invertebrates: "Aquarium with invertebrates target" },
       reason: { fishOnly: "No marine invertebrates are recorded in the aquarium.", invertebrates: "Marine invertebrates (such as shrimp, snails or anemones) are recorded in the aquarium." },
-      source: "Source: OATA, marine aquarium setup guide (2022).",
+      source: "Source: OATA, marine aquarium setup guide and marine fish care sheets (2022).",
       parameters: { specificGravity: "Specific gravity", ph: "pH", kh: "KH", nitrate: "Nitrate", phosphate: "Phosphate", temperature: "Temperature" },
       units: { kh: "dKH", nitrate: "mg/L", phosphate: "mg/L" },
       status: {

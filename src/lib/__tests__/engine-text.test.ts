@@ -190,7 +190,8 @@ const scenarios: Array<[string, HealthAnalysis]> = [
   ["acı su akvaryumunda tatlı su türü", analyze(tank({ type: "brackish" }), [animal("plain")], [])],
   ["iki önerili filtrenin toplamının üstünde", analyze(tank({ netVolumeLiters: 150 }), [animal("plain")], [device("sized"), device("sized2")])],
   // Motor 1.13.0: deniz akvaryumunun OATA hedefleri (karar 0029, 0030).
-  ["deniz: yalnız balık, hedef dışı tuzluluk, pH ve nitrat", analyze(tank({ type: "saltwater" }), [animal("marine")], [], reading({ specificGravity: 1.025, ph: 8.4, nitrate: 40, temperature: 25 }))],
+  // 1.16.0 (karar 0041): yalnız balıklı hedefin üst sınırı 1,025; hedef dışı sarı için 1,026.
+  ["deniz: yalnız balık, hedef dışı tuzluluk, pH ve nitrat", analyze(tank({ type: "saltwater" }), [animal("marine")], [], reading({ specificGravity: 1.026, ph: 8.4, nitrate: 40, temperature: 25 }))],
   ["deniz: güvenli aralığın üstünde tuzluluk", analyze(tank({ type: "saltwater" }), [animal("marine")], [], reading({ specificGravity: 1.03, ph: 8.1, temperature: 25 }))],
   ["karides yiyen balık ve cüce karides", analyze(tank({ netVolumeLiters: 150 }), [animal("shrimpEater"), animal("dwarfShrimp", "shrimp", 5)], [])],
   ["fırsatçı avcı ve küçük balık", analyze(tank({ netVolumeLiters: 150 }), [animal("hunter"), animal("plain")], [])],
@@ -206,6 +207,10 @@ const scenarios: Array<[string, HealthAnalysis]> = [
   ["yalnız taban ısıtma kablosu", analyze(tank(), [animal("tropicalStub")], [device("substrateHeater")])],
   ["yalnız genişliği yetmeyen balıklar", analyze(tank({ lengthCm: 80, widthCm: 35, heightCm: 40, netVolumeLiters: 150 }), [animal("wide"), animal("wideNoLength")], [])],
   ["tek tutulması gereken türden iki birey", analyze(tank(), [animal("loner", "fish", 2)], [])],
+  // Motor 1.16.0 (karar 0041): canlısız akvaryumda amonyak ya da nitrit; değerlerin üç birleşimi (ikisi, yalnız amonyak, yalnız nitrit).
+  ["canlısız akvaryumda amonyak ve nitrit", analyze(tank(), [], [], reading({ ammonia: 2, ph: 7, temperature: 24, nitrite: 0.5 }))],
+  ["canlısız akvaryumda yalnız amonyak", analyze(tank(), [], [], reading({ ammonia: 0.25, nitrite: 0 }))],
+  ["canlısız akvaryumda yalnız nitrit", analyze(tank(), [], [], reading({ ammonia: 0, nitrite: 0.1 }))],
 ];
 const scenario = (name: string) => scenarios.find(([label]) => label === name)![1];
 const warningOf = (analysis: HealthAnalysis, code: string) => analysis.warnings.find((warning) => warning.code === code)!;
@@ -223,8 +228,8 @@ describe("motor metinleri dil dosyasından (karar 0021, 3. paket)", () => {
 
   it("motorun her kodu dil dosyasında var, dil dosyasında kullanılmayan kod yok, her kod en az bir kez sınandı", () => {
     // 1.13.0: beş deniz suyu kodu (karar 0030). 1.14.0 (karar 0037): yedi yeni uyarı kodu; ölçüt kodlarından `communityCaution` çıktı,
-    // `filterNotRecorded` ve `heaterNotRecorded` geldi.
-    expect(sourceWarningCodes.size).toBe(60);
+    // `filterNotRecorded` ve `heaterNotRecorded` geldi. 1.16.0 (karar 0041): `cycleIncomplete`.
+    expect(sourceWarningCodes.size).toBe(61);
     expect(sourceDetailCodes.size).toBe(39);
     expect(new Set(Object.keys(tr.warnings))).toEqual(sourceWarningCodes);
     expect(new Set(Object.keys(tr.metricDetails))).toEqual(sourceDetailCodes);
@@ -513,6 +518,7 @@ describe("motor metinleri dil dosyasından (karar 0021, 3. paket)", () => {
       "uyarı ammoniaWorstCase": "measurement(3):total measurement(3):limit",
       "uyarı coldwaterWithTropical": "temperatureNumber:min temperature:max",
       "uyarı conspecificMales": "number:count",
+      "uyarı cycleIncomplete": "measurement(3):ammonia | measurement(3):ammonia measurement(3):nitrite | measurement(3):nitrite",
       "uyarı filterCapacityLow": "volume:volume volume:liters",
       "uyarı filterFlowInsufficient": "cycles:turnover",
       "uyarı filterFlowLow": "cycles:turnover cycles:min",

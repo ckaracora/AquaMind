@@ -31,6 +31,8 @@ Hedefler (OATA, Eylül 2022):
 
 Sıcaklık her canlının kendi aralığıyla değerlendirilir (karar 0029); OATA'nın sıcaklığı yalnız gösterilir.
 
+**Sonra değişti (2026-11-12, karar 0041, motor 1.16.0):** yalnız balıklı akvaryumda özgül ağırlık hedefi 1,017–1,025. Üst sınır OATA'nın deniz balığı bakım kartlarından ve Fishkeeper'dan; omurgasızlı hedef ve 1,017–1,026 güvenli aralığı değişmedi.
+
 Teknik kararlar (Claude):
 
 - **Motor:**

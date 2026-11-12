@@ -6,7 +6,7 @@
 // kod değişikliğinde yükseltilir.
 // RULESET_VERSION: motorun içine gömülü eşik ve ceza sabitlerinin sürümü
 // (0,85 etkin hacim, 0,65 filtre verimi, 0,5–1,5 W/L ısıtıcı bandı, 80 yaşam ortamı ve
-// 55/55/20/60/60 uyum cezaları, %40 avlanma oranı, 60 sarı alan ve grup tabanı, 23 °C tropikal eşiği, canlı riski uyarı sınıfı). Bir sabit ya da
+// 55/55/20/60/60 uyum cezaları, %40 avlanma oranı, 60 sarı alan ve grup tabanı, 23 °C tropikal eşiği, canlı riski uyarı sınıfı, deniz suyu hedefleri). Bir sabit ya da
 // kural değişince yükseltilir.
 //
 // 1.1.0: katalog entegrasyonuyla yaşam ortamı, tuzluluk, birey başına ek hacim ve
@@ -74,5 +74,12 @@
 // avcının küçük balık uyarısı tehlike seviyesine çıkar (kesin tehlike değil, en fazla "dikkat"); fırsatçı avcı her kategoriden olabilir, av yalnız
 // balıktır. "Tek tutulmalı" uyarısı, katalog türü çift ya da grup halinde öneriyorsa ve kayıtlı adet bu sayıyı aşmıyorsa çıkmaz. Yeni sayı yok;
 // tavan kuralı, uyarı seviyesi ve uyarı koşulu değiştiği için kural seti 1.12.0. Sonuç nesnesinin biçimi değişmez.
-export const ENGINE_VERSION = "1.15.0";
-export const RULESET_VERSION = "1.12.0";
+//
+// 1.16.0: veri testi D'nin üç uç durumu (bkz. docs/DECISIONS/0041-karides-tuzluluk-ve-baliksiz-dongu.md; ürün sahibinin onayı 2026-11-12).
+// "Karides yer" kaydı kaynak boy sınırı vermiyorsa bütün karideslerde uyarır; kaynak riski küçük karidesle ya da yavruyla sınırlıyorsa
+// (`smallShrimpOnly`) yalnız 4 cm ve altı karideste. Yalnız balıklı deniz akvaryumunda özgül ağırlık hedefi 1,017–1,025 (üst sınır OATA'nın
+// deniz balığı bakım kartlarından). Canlı kaydı olmayan akvaryumda amonyak ya da nitrit sıfırın üstündeyse tek sarı "Canlı eklemek için erken"
+// uyarısı çıkar (`cycleIncomplete`); kesin tehlike değildir, genel puan en fazla 74 olur. Canlı varken su kalitesi kuralı değişmez. Yeni sayı yok;
+// bir hedef sabiti, uyarı kapsamı ve kesin tehlike koşulu değiştiği, yeni uyarı kodu geldiği için kural seti 1.13.0. Sonuç nesnesinin biçimi değişmez.
+export const ENGINE_VERSION = "1.16.0";
+export const RULESET_VERSION = "1.13.0";

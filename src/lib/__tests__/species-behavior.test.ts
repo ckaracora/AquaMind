@@ -175,3 +175,43 @@ describe("salyangoz uyarısı (gerçek katalog, kural seti 1.7.0)", () => {
     expect(snailWarning(analyzeAquarium(tank, [animal("neon-tetra", 10), animal("nerite-snail", 3)], []))).toBeUndefined();
   });
 });
+
+describe("karides uyarısının kapsamı (gerçek katalog, karar 0041)", () => {
+  // Kaynağı riski küçük karidesle ya da yavruyla sınırlayan "karides yer" kayıtları (2026-11-12'de kaynak sayfaları yeniden okundu).
+  const SMALL_ONLY = ["banggai-cardinalfish", "clown-killifish", "croaking-gourami", "guppy", "kuhli-loach", "ocellaris-clownfish", "pea-puffer", "red-lip-goby-exallisquamulus", "sparkling-gourami", "white-cloud"];
+  const tank = (type: Aquarium["type"]): Aquarium => ({ id: "t", name: "T", type, lengthCm: 120, widthCm: 50, heightCm: 50, netVolumeLiters: 300, setupDate: "2026-01-01" });
+  const animal = (id: string, quantity: number): Livestock => {
+    const profile = speciesById(id)!;
+    return { id: `${id}-${quantity}`, aquariumId: "t", catalogId: id, commonName: profile.commonName, scientificName: profile.scientificName, category: profile.category, quantity, addedAt: "2026-01-01" };
+  };
+  const fresh = { id: "w", aquariumId: "t", measuredAt: "2026-11-12", temperature: 22, ph: 7, ammonia: 0, nitrite: 0, nitrate: 10 };
+  const sea = { id: "w", aquariumId: "t", measuredAt: "2026-11-12", temperature: 25, ph: 8.1, specificGravity: 1.025, kh: 9, ammonia: 0, nitrite: 0, nitrate: 8 };
+  const shrimpWarning = (result: ReturnType<typeof analyzeAquarium>) => result.warnings.find((warning) => warning.code === "shrimpEaten");
+
+  it("smallShrimpOnly yalnız bu 10 açık kaynaklı 'karides yer' kaydında", () => {
+    const marked = entries.filter(({ record }) => record.smallShrimpOnly !== undefined);
+    for (const { id, record } of marked) {
+      expect(record.flag, id).toBe("eatsShrimp");
+      expect(record.confidence, id).toBe("explicit");
+      expect(record.smallShrimpOnly, id).toBe(true);
+    }
+    expect(marked.map(({ id }) => id).sort()).toEqual(SMALL_ONLY);
+    expect(withBehavior(speciesById("guppy"))?.behavior?.eatsShrimp).toMatchObject({ source: "Practical Fishkeeping", smallShrimpOnly: true });
+    expect(withBehavior(speciesById("goldfish"))?.behavior?.eatsShrimp).not.toHaveProperty("smallShrimpOnly");
+  });
+
+  it("Japon balığı ve melek Amano karidesinde de uyarır (veri testi D29); lepistes yalnız cüce karideste", () => {
+    expect(speciesById("amano-shrimp")!.adultSizeCm).toBeGreaterThan(4);
+    const goldfish = shrimpWarning(analyzeAquarium(tank("freshwater"), [animal("goldfish", 2), animal("amano-shrimp", 6)], [], fresh));
+    expect(goldfish?.params).toMatchObject({ eaters: [speciesById("goldfish")!.commonName], shrimp: [speciesById("amano-shrimp")!.commonName], sources: ["Practical Fishkeeping"] });
+    const angel = { ...fresh, temperature: 25 };
+    expect(shrimpWarning(analyzeAquarium(tank("freshwater"), [animal("angelfish", 2), animal("amano-shrimp", 6)], [], angel))).toBeDefined();
+    expect(shrimpWarning(analyzeAquarium(tank("freshwater"), [animal("guppy", 6), animal("amano-shrimp", 6)], [], angel))).toBeUndefined();
+    expect(shrimpWarning(analyzeAquarium(tank("freshwater"), [animal("guppy", 6), animal("cherry-shrimp", 10)], [], angel))).toBeDefined();
+  });
+
+  it("denizde: ocellaris temizlikçi karidesle uyarı almaz, sarı lapin alır", () => {
+    expect(shrimpWarning(analyzeAquarium(tank("saltwater"), [animal("ocellaris-clownfish", 2), animal("cleaner-shrimp", 1)], [], sea))).toBeUndefined();
+    expect(shrimpWarning(analyzeAquarium(tank("saltwater"), [animal("yellow-wrasse", 1), animal("cleaner-shrimp", 1)], [], sea))).toBeDefined();
+  });
+});

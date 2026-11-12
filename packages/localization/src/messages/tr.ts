@@ -229,7 +229,7 @@ export const tr = {
       eyebrow: "Deniz suyu",
       title: { fishOnly: "Yalnız balıklı akvaryum hedefi", invertebrates: "Omurgasızlı akvaryum hedefi" },
       reason: { fishOnly: "Akvaryumda deniz omurgasızı kayıtlı değil.", invertebrates: "Akvaryumda deniz omurgasızı (karides, salyangoz, anemon gibi) kayıtlı." },
-      source: "Kaynak: OATA, deniz akvaryumu kurulum rehberi (2022).",
+      source: "Kaynak: OATA, deniz akvaryumu kurulum rehberi ve deniz balığı bakım kartları (2022).",
       parameters: { specificGravity: "Özgül ağırlık", ph: "pH", kh: "KH", nitrate: "Nitrat", phosphate: "Fosfat", temperature: "Sıcaklık" },
       /** Değerin birimi; özgül ağırlık ve pH birimsiz. Sıcaklık kullanıcının birimiyle ayrıca yazılır. */
       units: { kh: "dKH", nitrate: "mg/L", phosphate: "mg/L" },

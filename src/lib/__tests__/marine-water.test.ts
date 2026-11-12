@@ -28,22 +28,23 @@ describe("Deniz suyu bölümü", () => {
   });
 
   it("yalnız balıklı hedefte değerleri, hedefleri ve durumları yazar", () => {
-    const text = section(assessMarineWater("saltwater", fish, reading({ specificGravity: 1.025, ph: 8.1, nitrate: 30, temperature: 25 })));
+    const text = section(assessMarineWater("saltwater", fish, reading({ specificGravity: 1.026, ph: 8.1, nitrate: 30, temperature: 25 })));
     expect(text).toContain("Deniz suyu Yalnız balıklı akvaryum hedefi Akvaryumda deniz omurgasızı kayıtlı değil. Kaynak: OATA");
-    expect(text).toContain("Özgül ağırlık 1,025 Hedef 1,017–1,023");
+    // 1.16.0 (karar 0041): yalnız balıklı hedefin üst sınırı 1,025; hedef dışı için 1,026.
+    expect(text).toContain("Özgül ağırlık 1,026 Hedef 1,017–1,025");
     expect(text).toContain("pH 8,1 Hedefte Hedef 8–8,2");
     expect(text).toContain("Nitrat 30 mg/L Hedef en çok 20 mg/L");
     expect(text).toContain("Sıcaklık 25 °C Canlılara göre OATA'nın aralığı 24–27 °C");
     expect(text).not.toContain("KH");
     expect(text).not.toContain("Fosfat");
     // Hedef dışı satır hedefi bir kez yazar (etikette), yanında ikinci kez yazmaz.
-    expect(count(text, "Hedef 1,017–1,023")).toBe(1);
+    expect(count(text, "Hedef 1,017–1,025")).toBe(1);
     expect(count(text, "Hedef en çok 20 mg/L")).toBe(1);
   });
 
   it("yalnız balıklı hedefte ölçülmemiş değerlerin hedefini de yazar (en çok değerli nitrat dahil)", () => {
     const text = section(assessMarineWater("saltwater", fish, reading({})));
-    expect(text).toContain("Özgül ağırlık — Ölçüm yok Hedef 1,017–1,023");
+    expect(text).toContain("Özgül ağırlık — Ölçüm yok Hedef 1,017–1,025");
     expect(text).toContain("pH — Ölçüm yok Hedef 8–8,2");
     expect(text).toContain("Nitrat — Ölçüm yok Hedef en çok 20 mg/L");
     expect(text).toContain("Sıcaklık — Canlılara göre OATA'nın aralığı 24–27 °C");
@@ -63,7 +64,7 @@ describe("Deniz suyu bölümü", () => {
 
   it("iki hedefin de dışındaki özgül ağırlığı tehlike rengiyle gösterir", () => {
     const html = renderToStaticMarkup(createElement(MarineWaterSection, { marine: assessMarineWater("saltwater", fish, reading({ specificGravity: 1.03 })) }));
-    expect(textOf(html)).toContain("Özgül ağırlık 1,03 Hedef 1,017–1,023");
-    expect(html).toMatch(/bg-red-400\/10 text-red-300[^>]*>Hedef 1,017–1,023/);
+    expect(textOf(html)).toContain("Özgül ağırlık 1,03 Hedef 1,017–1,025");
+    expect(html).toMatch(/bg-red-400\/10 text-red-300[^>]*>Hedef 1,017–1,025/);
   });
 });

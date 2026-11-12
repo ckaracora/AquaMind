@@ -220,7 +220,7 @@ export const es: Messages = {
       eyebrow: "Agua de mar",
       title: { fishOnly: "Objetivo para acuario solo de peces", invertebrates: "Objetivo para acuario con invertebrados" },
       reason: { fishOnly: "No hay invertebrados marinos registrados en el acuario.", invertebrates: "Hay invertebrados marinos (como camarones, caracoles o anémonas) registrados en el acuario." },
-      source: "Fuente: OATA, guía de montaje de acuarios marinos (2022).",
+      source: "Fuente: OATA, guía de montaje de acuarios marinos y fichas de cuidado de peces marinos (2022).",
       parameters: { specificGravity: "Gravedad específica", ph: "pH", kh: "KH", nitrate: "Nitrato", phosphate: "Fosfato", temperature: "Temperatura" },
       units: { kh: "dKH", nitrate: "mg/L", phosphate: "mg/L" },
       status: {

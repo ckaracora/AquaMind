@@ -38,7 +38,7 @@ Uygulamada akvaryum türü olarak tuzlu ve acı su seçilebiliyor. Motor, deniz 
 
 Teknik kararlar (Claude):
 
-- **OATA'nın hangi değeri:** OATA'nın üç belgesi farklı değer veriyor. Hedefler için ev akvaryumu için yazılmış olan kurulum rehberi esas alınır; grup sayfalarının değerleri günlüğe yazılır, hedef olarak kullanılmaz. Ticaret ölçütü ev akvaryumu hedefi değildir; motorun bugünkü amonyak, nitrit ve nitrat tehlike sınırlarının kaynağı olarak kalır (karar 0008). Rehberin hedefleriyle bu sınırların birlikte nasıl kullanılacağı motor paketinde ürün sahibine gösterilir.
+- **OATA'nın hangi değeri:** OATA'nın üç belgesi farklı değer veriyor. Hedefler için ev akvaryumu için yazılmış olan kurulum rehberi esas alınır; grup sayfalarının değerleri günlüğe yazılır, hedef olarak kullanılmaz. **Sonra değişti (2026-11-12, karar 0041, motor 1.16.0):** yalnız balıklı akvaryumda özgül ağırlığın üst sınırı OATA'nın deniz balığı bakım kartlarından ve Fishkeeper'dan 1,025 (rehber 1,023); alt sınır ve öbür hedefler rehberden kalır. Ticaret ölçütü ev akvaryumu hedefi değildir; motorun bugünkü amonyak, nitrit ve nitrat tehlike sınırlarının kaynağı olarak kalır (karar 0008). Rehberin hedefleriyle bu sınırların birlikte nasıl kullanılacağı motor paketinde ürün sahibine gösterilir.
 - **Tür seçimi:** satış kanıtı aranmadığı için türler şöyle seçilir: Türk uzman deniz mağazalarında (BlueLife Akvaryum, Mercan Çiftliği, Evcilim Pet) en sık görülen başlangıç aileleri içinden, Fishkeeper'da sayfası olan türler (balık ve omurgasız). Mağazalar yalnız seçim için kullanılır; katalogda kanıt olarak saklanmaz, satış adı oradan alınmaz.
 - **Sıra:**
   1. Bu karar ve kaynak kuralları (belge).

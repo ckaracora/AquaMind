@@ -255,6 +255,12 @@ export const trEngine = {
       title: fixed("Nitrit ölçüldü"),
       message: (p, f) => `Nitrit ${f.measurement(num(p, "value"))} ppm. Nitrit 0 olmalıdır; sıfırın üstündeki değerler yalnızca kısa süre tolere edilebilir.`,
     },
+    /** Motor 1.16.0 (karar 0041): canlı kaydı olmayan akvaryumda amonyak ya da nitrit sıfırın üstünde; yalnız sıfırın üstündeki değer yazılır. */
+    cycleIncomplete: {
+      title: fixed("Canlı eklemek için erken"),
+      message: (p, f) =>
+        `Son ölçümde ${nameList([...(p.ammonia !== undefined ? [`amonyak ${f.measurement(num(p, "ammonia"))} ppm`] : []), ...(p.nitrite !== undefined ? [`nitrit ${f.measurement(num(p, "nitrite"))} ppm`] : [])])}. Canlı eklemeden önce amonyak ve nitrit sıfıra inmeli.`,
+    },
     nitrateTooHighSaltwater: {
       title: fixed("Nitrat çok yüksek"),
       message: (p, f) =>
