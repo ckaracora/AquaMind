@@ -4,6 +4,7 @@
 import type { EngineTextFormat } from "../engine-format";
 import {
   MARINE_NITRATE_LIMIT_PPM, MARINE_SPECIFIC_GRAVITY_SAFE_MAX, MARINE_SPECIFIC_GRAVITY_SAFE_MIN, NITRATE_ABOVE_TAP_LIMIT_PPM, TAP_WATER_NITRATE_LIMIT_PPM,
+  marineSpecificGravityDangerBound,
 } from "./engine-limits";
 import type { EngineMessages, EngineTextParams } from "./tr-engine";
 
@@ -194,14 +195,16 @@ export const enEngine: EngineMessages = {
       title: fixed("Specific gravity outside the animals' range"),
       message: (p, f) => `For ${f.number(num(p, "count"))} ${plural(num(p, "count"), "animal", "animals")}, the latest specific gravity reading is outside the safe catalog range.`,
     },
+    // Motor 1.17.0 (karar 0042): ölçüm, aştığı sınırla aynı görünmez (Türkçe dosyadaki not).
     marineSpecificGravity: {
       title: fixed("Specific gravity off target"),
-      message: (p, f) => `OATA's target for a ${marineTarget(p)} is ${marineRange(p, f)}; latest reading ${f.measurement(num(p, "value"), 3)}.`,
+      message: (p, f) =>
+        `OATA's target for a ${marineTarget(p)} is ${marineRange(p, f)}; latest reading ${f.measurement(num(p, "value"), 3, str(p, "direction") === "high" ? num(p, "max") : num(p, "min"))}.`,
     },
     marineSpecificGravityDanger: {
       title: fixed("Specific gravity outside the safe range"),
       message: (p, f) =>
-        `Latest reading ${f.measurement(num(p, "value"), 3)}. None of OATA's home aquarium targets covers this value (${f.measurement(MARINE_SPECIFIC_GRAVITY_SAFE_MIN, 3)}–${f.measurement(MARINE_SPECIFIC_GRAVITY_SAFE_MAX, 3)}). Bring the salinity to the target slowly.`,
+        `Latest reading ${f.measurement(num(p, "value"), 3, marineSpecificGravityDangerBound(str(p, "profile"), str(p, "direction")))}. None of OATA's home aquarium targets covers this value (${f.measurement(MARINE_SPECIFIC_GRAVITY_SAFE_MIN, 3)}–${f.measurement(MARINE_SPECIFIC_GRAVITY_SAFE_MAX, 3)}). Bring the salinity to the target slowly.`,
     },
     marinePh: {
       title: fixed("pH off target"),

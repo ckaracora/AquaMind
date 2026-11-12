@@ -556,8 +556,9 @@ const metric = (analysis, key) => analysis.metrics.find(item => item.key === key
 
 // Motor 1.13.0 (karar 0029, 0030): deniz akvaryumunda özgül ağırlık OATA'nın ev akvaryumu hedefiyle karşılaştırılır. Akvaryumda deniz
 // omurgasızı yoksa yalnız balık hedefi 1,017–1,025 (1.16.0'dan beri, karar 0041: üst sınır OATA'nın deniz balığı bakım kartlarından); hedef dışı
-// sarı uyarı, 1,017–1,026 dışı kesin tehlike.
-for (const [specificGravity, expected] of [[1.018, "none"], [1.025, "none"], [1.026, "warning"], [1.016, "danger"]]) {
+// sarı uyarı, 1,017–1,026 dışı kesin tehlike. 1.17.0'dan beri (karar 0042) bu aralığın bir okuma basamağı dışı da sarıdır: yalnız balıklı
+// akvaryumda 1,016 ve 1,027 dahil; ötesi kesin tehlike.
+for (const [specificGravity, expected] of [[1.018, "none"], [1.025, "none"], [1.026, "warning"], [1.016, "warning"], [1.027, "warning"], [1.015, "danger"], [1.028, "danger"]]) {
   const analysis = analyzeAquarium(
     aquarium({ type: "saltwater", netVolumeLiters: 100, lengthCm: 60 }),
     [animal("ocellaris-clownfish", "Ocellaris palyaço balığı", 2)],
@@ -566,10 +567,37 @@ for (const [specificGravity, expected] of [[1.018, "none"], [1.025, "none"], [1.
   );
   const titles = warningTitles(analysis);
   assert.equal(titles.includes("Özgül ağırlık hedefin dışında"), expected === "warning", `${specificGravity}: yalnız balıklı akvaryum hedefinin dışı sarı uyarı olmalı`);
-  assert.equal(titles.includes("Özgül ağırlık güvenli aralığın dışında"), expected === "danger", `${specificGravity}: iki hedefin de dışı tehlike olmalı`);
+  assert.equal(titles.includes("Özgül ağırlık güvenli aralığın dışında"), expected === "danger", `${specificGravity}: kesin tehlike sınırının dışı tehlike olmalı`);
   assert(!titles.includes("Özgül ağırlık canlı aralığı dışında"), "Deniz canlısının kaydında artık özgül ağırlık aralığı yok");
   if (expected === "danger") assert(analysis.score <= 49, "Güvenli aralığın dışındaki tuzluluk genel puanı en çok 49'a çekmeli");
   if (expected === "warning") assert.equal(metric(analysis, "water").status, "warning", "Tek hedef dışı deniz suyu değeri su metriğini uyarı seviyesine düşürmeli");
+}
+
+// Motor 1.17.0 (karar 0042): omurgasızlı deniz akvaryumunda hedef 1,024–1,026; sarı bant yalnız üst uçta (1,027 dahil). Alt uçta kesin
+// tehlike sınırı 1,017'de kalır (1,017 sarı, 1,016 kesin tehlike). Temizlikçi karides katalogda "shrimp" kategorisindedir: hedef "omurgasızlı".
+for (const [specificGravity, expected] of [[1.016, "danger"], [1.017, "warning"], [1.024, "none"], [1.026, "none"], [1.027, "warning"], [1.028, "danger"]]) {
+  const analysis = analyzeAquarium(
+    aquarium({ type: "saltwater", netVolumeLiters: 100, lengthCm: 60 }),
+    [animal("ocellaris-clownfish", "Ocellaris palyaço balığı", 2), { ...animal("cleaner-shrimp", "Temizlikçi karides"), category: "shrimp" }],
+    [],
+    { id: "marine-water-sg-reef", aquariumId: "test-aquarium", measuredAt: "2026-11-12", temperature: 25, ph: 8.1, kh: 9, specificGravity },
+  );
+  const titles = warningTitles(analysis);
+  assert.equal(analysis.marineWater?.profile, "invertebrates", `${specificGravity}: karidesli akvaryumda omurgasızlı hedef seçilmeli`);
+  assert.equal(titles.includes("Özgül ağırlık hedefin dışında"), expected === "warning", `${specificGravity}: omurgasızlı akvaryumda sarı bant (1,017–1,024 ve 1,026–1,027, sınırlar dahil) sarı uyarı olmalı`);
+  assert.equal(titles.includes("Özgül ağırlık güvenli aralığın dışında"), expected === "danger", `${specificGravity}: omurgasızlı akvaryumda 1,017'nin altı ve 1,027'nin üstü kesin tehlike olmalı`);
+  assert(!titles.includes("Özgül ağırlık canlı aralığı dışında"), "Deniz canlısının kaydında artık özgül ağırlık aralığı yok");
+  if (expected === "danger") {
+    assert(analysis.score <= 49, "Kesin tehlike sınırının dışındaki tuzluluk genel puanı en çok 49'a çekmeli");
+    assert.equal(analysis.status, "danger", "Kesin tehlike sınırının dışındaki tuzluluk genel durumu 'uygun değil' yapmalı");
+  }
+  // Omurgasızlı hedefte su ölçütünde denetim daha çoktur (KH dahil): tek başarısız denetim ölçütün puanını düşürür (bu kurulumda 100 → 80)
+  // ama durumunu "iyi"de bırakır; yalnız balıklı kurulumda (yukarıda) "uyarı"ya iner.
+  if (expected === "warning") {
+    assert(metric(analysis, "water").score < 100, `${specificGravity}: sarı bant su değeri ölçütünün puanını düşürmeli`);
+    assert(analysis.score > 49 && analysis.status !== "danger", `${specificGravity}: sarı bant genel sonucu 'uygun değil' yapmamalı`);
+  }
+  if (expected === "none") assert.equal(metric(analysis, "water").score, 100, `${specificGravity}: hedefteki ölçüm su değeri ölçütünü düşürmemeli`);
 }
 
 {
@@ -1421,5 +1449,5 @@ for (const [specificGravity, expected] of [[1.018, "none"], [1.025, "none"], [1.
 
 // 1.14.0 kontrolü: ölçüm ve sınır aynı hassasiyetle yazılmalı (TR/EN/ES).
 require("../packages/compatibility-engine/test/warning-format-checks.ts").assertWarningFormatting();
-console.log("Sağlık analizi: 113 senaryo başarıyla doğrulandı.");
+console.log("Sağlık analizi: 114 senaryo başarıyla doğrulandı.");
 console.log("Uyarı biçimlemesi: 3 dilde 18 sınır kontrolü başarıyla doğrulandı.");

@@ -3,6 +3,18 @@
 /** Özgül ağırlığın güvenli aralığı: OATA'nın iki ev akvaryumu hedefinin birleşimi; motorun `MARINE_SPECIFIC_GRAVITY_SAFE` sabitiyle aynı olmalı (testte denetlenir). */
 export const MARINE_SPECIFIC_GRAVITY_SAFE_MIN = 1.017;
 export const MARINE_SPECIFIC_GRAVITY_SAFE_MAX = 1.026;
+/**
+ * Özgül ağırlığın kesin tehlike sınırları (motor 1.17.0, karar 0042); motorun `MARINE_SPECIFIC_GRAVITY_DANGER_LIMITS` sabitiyle aynı olmalı
+ * (testte denetlenir). Metne yazılmaz: kesin tehlike uyarısında ölçüm, aştığı sınırla aynı görünmesin diye biçimleyiciye karşılaştırma
+ * değeri olarak verilir (1,0159 "1,016" değil "1,0159" yazılır).
+ */
+export const MARINE_SPECIFIC_GRAVITY_DANGER_BOUNDS = { fishOnly: [1.016, 1.027], invertebrates: [1.017, 1.027] } as const;
+/** Kesin tehlike uyarısındaki ölçümün aştığı sınır: yön "high" ise üst, değilse alt sınır. Bilinmeyen hedefte yok (yazım değişmez). */
+export function marineSpecificGravityDangerBound(profile: string, direction: string): number | undefined {
+  const bounds = profile === "fishOnly" || profile === "invertebrates" ? MARINE_SPECIFIC_GRAVITY_DANGER_BOUNDS[profile] : undefined;
+  if (bounds === undefined) return undefined;
+  return direction === "high" ? bounds[1] : bounds[0];
+}
 /** Nitrat sınırları (ppm); motorun `MARINE_NITRATE_LIMIT`, `TAP_WATER_NITRATE_LIMIT` ve `NITRATE_ABOVE_TAP_LIMIT` sabitleriyle aynı olmalı (testte denetlenir). */
 export const MARINE_NITRATE_LIMIT_PPM = 100;
 export const TAP_WATER_NITRATE_LIMIT_PPM = 50;

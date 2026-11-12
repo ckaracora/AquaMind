@@ -15,7 +15,7 @@ export * from "./water-quality";
 export * from "./plants";
 export * from "./marine";
 import { assessWaterQuality } from "./water-quality";
-import { assessMarineWater, type MarineRow, type MarineWaterAssessment } from "./marine";
+import { assessMarineWater, MARINE_SPECIFIC_GRAVITY_SAFE, type MarineRow, type MarineWaterAssessment } from "./marine";
 
 /** Motorun bir canlı profilinden okuduğu alanlar. Katalogdaki SpeciesProfile bunu yapısal olarak karşılar. */
 export interface SpeciesProfileInput {
@@ -411,7 +411,7 @@ export function createAnalyzer(resolver:KnowledgeResolver):AnalyzeAquarium{
   const range=(row:MarineRow)=>row.min!==undefined?`${fmt(row.min)}–${fmt(row.max!)}`:`en çok ${fmt(row.max!)}`;
   for(const row of marine.rows.filter(row=>(row.status==="warning"||row.status==="danger")&&row.value!==undefined)){
    const value=row.value!;const marineParams={value,...(row.min!==undefined?{min:row.min}:{}),max:row.max!,profile:marine.profile,direction:value>row.max!?"high":"low"};
-   if(row.parameter==="specificGravity")warnings.push(row.status==="danger"?{level:"danger",title:"Özgül ağırlık güvenli aralığın dışında",message:`Son ölçüm ${fmt(value)}. OATA'nın hiçbir ev akvaryumu hedefi bu değeri kapsamıyor (1,017–1,026). Tuzluluğu yavaşça hedefe getirin.`,code:"marineSpecificGravityDanger",params:marineParams}
+   if(row.parameter==="specificGravity")warnings.push(row.status==="danger"?{level:"danger",title:"Özgül ağırlık güvenli aralığın dışında",message:`Son ölçüm ${fmt(value)}. OATA'nın hiçbir ev akvaryumu hedefi bu değeri kapsamıyor (${fmt(MARINE_SPECIFIC_GRAVITY_SAFE[0])}–${fmt(MARINE_SPECIFIC_GRAVITY_SAFE[1])}). Tuzluluğu yavaşça hedefe getirin.`,code:"marineSpecificGravityDanger",params:marineParams}
     :{level:"warning",title:"Özgül ağırlık hedefin dışında",message:`OATA'nın ${targetName} hedefi ${range(row)}; son ölçüm ${fmt(value)}.`,code:"marineSpecificGravity",params:marineParams});
    if(row.parameter==="ph")warnings.push({level:"warning",title:"pH hedefin dışında",message:`OATA'nın ${targetName} hedefi pH ${range(row)}; son ölçüm ${fmt(value,2)}.`,code:"marinePh",params:marineParams});
    if(row.parameter==="kh")warnings.push({level:"warning",title:"KH hedefin dışında",message:`OATA'nın ${targetName} hedefi KH ${range(row)} dKH; son ölçüm ${fmt(value,2)} dKH.`,code:"marineKh",params:marineParams});

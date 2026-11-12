@@ -42,10 +42,10 @@ describe("deniz suyu hedefleri (1.13.0)", () => {
     expect(MARINE_SPECIFIC_GRAVITY_SAFE).toEqual([MARINE_TARGETS.fishOnly.specificGravity[0], MARINE_TARGETS.invertebrates.specificGravity[1]]);
   });
 
-  it("yalnız balık: sınırlar hedefin içinde; hedef dışı sarı, güvenli aralık dışı tehlike; nitrat en çok 20", () => {
+  it("yalnız balık: sınırlar hedefin içinde; hedef dışı sarı, kesin tehlike sınırlarının (1.17.0'dan beri 1,016–1,027, karar 0042) dışı tehlike; nitrat en çok 20", () => {
     for (const specificGravity of [1.017, 1.02, 1.023, 1.024, 1.025]) expect(rowsOf(assessMarineWater("saltwater", fishOnly, reading({ specificGravity }))).specificGravity).toBe("ok");
-    for (const specificGravity of [1.016, 1.0169, 1.0261, 1.03]) expect(rowsOf(assessMarineWater("saltwater", fishOnly, reading({ specificGravity }))).specificGravity).toBe("danger");
-    for (const specificGravity of [1.0251, 1.026]) expect(rowsOf(assessMarineWater("saltwater", fishOnly, reading({ specificGravity }))).specificGravity).toBe("warning");
+    for (const specificGravity of [1.0159, 1.0271, 1.03]) expect(rowsOf(assessMarineWater("saltwater", fishOnly, reading({ specificGravity }))).specificGravity).toBe("danger");
+    for (const specificGravity of [1.016, 1.0169, 1.0251, 1.026, 1.0261, 1.027]) expect(rowsOf(assessMarineWater("saltwater", fishOnly, reading({ specificGravity }))).specificGravity).toBe("warning");
     const rows = (ph: number, nitrate: number) => rowsOf(assessMarineWater("saltwater", fishOnly, reading({ ph, nitrate })));
     expect([rows(8.0, 20), rows(8.2, 0)].map((row) => [row.ph, row.nitrate])).toEqual([["ok", "ok"], ["ok", "ok"]]);
     expect([rows(7.9, 20.1), rows(8.3, 100)].map((row) => [row.ph, row.nitrate])).toEqual([["warning", "warning"], ["warning", "warning"]]);
@@ -61,6 +61,9 @@ describe("deniz suyu hedefleri (1.13.0)", () => {
     expect(rows({ specificGravity: 1.026, kh: 12 })).toMatchObject({ specificGravity: "ok", kh: "ok" });
     expect(rows({ specificGravity: 1.023, kh: 7.9 })).toMatchObject({ specificGravity: "warning", kh: "warning" });
     expect(rows({ specificGravity: 1.016, kh: 12.1 })).toMatchObject({ specificGravity: "danger", kh: "warning" });
+    // 1.17.0 (karar 0042): üst uçta bir okuma basamağı sarı; alt uç değişmedi.
+    expect(rows({ specificGravity: 1.027 })).toMatchObject({ specificGravity: "warning" });
+    expect(rows({ specificGravity: 1.0271 })).toMatchObject({ specificGravity: "danger" });
     expect(rows({ nitrate: 80, phosphate: 1 })).toMatchObject({ nitrate: "info", phosphate: "info", temperature: "info" });
     expect(assessMarineWater("saltwater", withShrimp)).toMatchObject({ profile: "invertebrates", invertebratesPresent: true });
   });
@@ -83,8 +86,8 @@ describe("sağlık analizinde deniz suyu (1.13.0)", () => {
     expect(analysis.marineWater).toMatchObject({ profile: "fishOnly", invertebratesPresent: false });
   });
 
-  it("güvenli aralığın dışındaki özgül ağırlık kesin tehlikedir: genel puan en çok 49", () => {
-    for (const specificGravity of [1.016, 1.03]) {
+  it("kesin tehlike sınırlarının dışındaki özgül ağırlık kesin tehlikedir: genel puan en çok 49 (1.17.0'dan beri 1,016 sarı, karar 0042)", () => {
+    for (const specificGravity of [1.015, 1.03]) {
       const analysis = analyze(tank(), fishOnly, [], reading({ temperature: 26, ph: 8.1, specificGravity }));
       expect(codes(analysis)).toContain("marineSpecificGravityDanger:danger");
       expect(codes(analysis)).not.toContain("marineSpecificGravity:warning");

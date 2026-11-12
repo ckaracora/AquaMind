@@ -78,6 +78,7 @@ Karar:
   - omurgasızlı hedef (1,024–1,026);
   - uyarı kodları ve metinleri.
 - Yalnız balıklı akvaryumda sarı bant artık 1,025'in üstü ile 1,026 arası.
+- **Sonra değişti (2026-11-12, karar 0042, motor 1.17.0):** kesin tehlike artık `MARINE_SPECIFIC_GRAVITY_DANGER_LIMITS` ile: güvenli aralığın bir okuma basamağı (0,001) dışı sarı. Yalnız balıklı akvaryumda sarı bant 1,016–1,017 arası ve 1,025'in üstü ile 1,027 arası (sınırlar dahil); omurgasızlı akvaryumda üstte 1,027'ye kadar. `MARINE_SPECIFIC_GRAVITY_SAFE` metindeki aralık olarak kaldı.
 - "Deniz suyu" bölümünün kaynak satırı: "Kaynak: OATA, deniz akvaryumu kurulum rehberi ve deniz balığı bakım kartları (2022)." (EN "Source: OATA, marine aquarium setup guide and marine fish care sheets (2022).", ES "Fuente: OATA, guía de montaje de acuarios marinos y fichas de cuidado de peces marinos (2022).")
 - **Karar 0029'un değişen ilkesi:** 0029 "hedefler için yalnız kurulum rehberi esas alınır, grup sayfalarının değerleri hedef olarak kullanılmaz" demişti. Yalnız balıklı özgül ağırlığın üst sınırında bu ilke değişti; öbür hedefler rehberden kalır.
 

@@ -5,6 +5,7 @@
 import type { EngineTextFormat } from "../engine-format";
 import {
   MARINE_NITRATE_LIMIT_PPM, MARINE_SPECIFIC_GRAVITY_SAFE_MAX, MARINE_SPECIFIC_GRAVITY_SAFE_MIN, NITRATE_ABOVE_TAP_LIMIT_PPM, TAP_WATER_NITRATE_LIMIT_PPM,
+  marineSpecificGravityDangerBound,
 } from "./engine-limits";
 import type { EngineMessages, EngineTextParams } from "./tr-engine";
 
@@ -195,14 +196,16 @@ export const esEngine: EngineMessages = {
       title: fixed("Gravedad específica fuera del rango de los animales"),
       message: (p, f) => `Para ${f.number(num(p, "count"))} ${plural(num(p, "count"), "animal", "animales")}, la última medición de gravedad específica está fuera del rango seguro del catálogo.`,
     },
+    // Motor 1.17.0 (karar 0042): ölçüm, aştığı sınırla aynı görünmez (Türkçe dosyadaki not).
     marineSpecificGravity: {
       title: fixed("Gravedad específica fuera del objetivo"),
-      message: (p, f) => `El objetivo de OATA para un ${marineTarget(p)} es ${marineRange(p, f)}; última medición: ${f.measurement(num(p, "value"), 3)}.`,
+      message: (p, f) =>
+        `El objetivo de OATA para un ${marineTarget(p)} es ${marineRange(p, f)}; última medición: ${f.measurement(num(p, "value"), 3, str(p, "direction") === "high" ? num(p, "max") : num(p, "min"))}.`,
     },
     marineSpecificGravityDanger: {
       title: fixed("Gravedad específica fuera del rango seguro"),
       message: (p, f) =>
-        `Última medición: ${f.measurement(num(p, "value"), 3)}. Ninguno de los objetivos de OATA para acuarios domésticos cubre este valor (${f.measurement(MARINE_SPECIFIC_GRAVITY_SAFE_MIN, 3)}–${f.measurement(MARINE_SPECIFIC_GRAVITY_SAFE_MAX, 3)}). Lleva la salinidad al objetivo poco a poco.`,
+        `Última medición: ${f.measurement(num(p, "value"), 3, marineSpecificGravityDangerBound(str(p, "profile"), str(p, "direction")))}. Ninguno de los objetivos de OATA para acuarios domésticos cubre este valor (${f.measurement(MARINE_SPECIFIC_GRAVITY_SAFE_MIN, 3)}–${f.measurement(MARINE_SPECIFIC_GRAVITY_SAFE_MAX, 3)}). Lleva la salinidad al objetivo poco a poco.`,
     },
     marinePh: {
       title: fixed("pH fuera del objetivo"),

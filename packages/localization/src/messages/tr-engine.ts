@@ -6,6 +6,7 @@
 import type { EngineTextFormat } from "../engine-format";
 import {
   MARINE_NITRATE_LIMIT_PPM, MARINE_SPECIFIC_GRAVITY_SAFE_MAX, MARINE_SPECIFIC_GRAVITY_SAFE_MIN, NITRATE_ABOVE_TAP_LIMIT_PPM, TAP_WATER_NITRATE_LIMIT_PPM,
+  marineSpecificGravityDangerBound,
 } from "./engine-limits";
 
 export {
@@ -202,14 +203,17 @@ export const trEngine = {
       title: fixed("Özgül ağırlık canlı aralığı dışında"),
       message: (p, f) => `${f.number(num(p, "count"))} canlı için son özgül ağırlık ölçümü güvenli katalog aralığının dışında.`,
     },
+    // Motor 1.17.0 (karar 0042): ölçüm, aştığı sınırla aynı görünmez. Sarıda hedefin aşılan ucu (1,0251 "1,025" değil), kesin tehlikede
+    // aşılan kesin tehlike sınırı (1,0159 "1,016" değil) karşılaştırılır; gerekince daha çok ondalık yazılır.
     marineSpecificGravity: {
       title: fixed("Özgül ağırlık hedefin dışında"),
-      message: (p, f) => `OATA'nın ${marineTarget(p)} hedefi ${marineRange(p, f)}; son ölçüm ${f.measurement(num(p, "value"), 3)}.`,
+      message: (p, f) =>
+        `OATA'nın ${marineTarget(p)} hedefi ${marineRange(p, f)}; son ölçüm ${f.measurement(num(p, "value"), 3, str(p, "direction") === "high" ? num(p, "max") : num(p, "min"))}.`,
     },
     marineSpecificGravityDanger: {
       title: fixed("Özgül ağırlık güvenli aralığın dışında"),
       message: (p, f) =>
-        `Son ölçüm ${f.measurement(num(p, "value"), 3)}. OATA'nın hiçbir ev akvaryumu hedefi bu değeri kapsamıyor (${f.measurement(MARINE_SPECIFIC_GRAVITY_SAFE_MIN, 3)}–${f.measurement(MARINE_SPECIFIC_GRAVITY_SAFE_MAX, 3)}). Tuzluluğu yavaşça hedefe getirin.`,
+        `Son ölçüm ${f.measurement(num(p, "value"), 3, marineSpecificGravityDangerBound(str(p, "profile"), str(p, "direction")))}. OATA'nın hiçbir ev akvaryumu hedefi bu değeri kapsamıyor (${f.measurement(MARINE_SPECIFIC_GRAVITY_SAFE_MIN, 3)}–${f.measurement(MARINE_SPECIFIC_GRAVITY_SAFE_MAX, 3)}). Tuzluluğu yavaşça hedefe getirin.`,
     },
     marinePh: {
       title: fixed("pH hedefin dışında"),

@@ -43,8 +43,14 @@ const warningOf = (result: ReturnType<typeof analyze>, code: string) => result.w
 const average = (result: ReturnType<typeof analyze>) => Math.round(result.metrics.reduce((sum, item) => sum + item.score, 0) / result.metrics.length);
 
 describe("sürüm (karar 0041)", () => {
-  it("motor 1.16.0, kural seti 1.13.0", () => {
-    expect([ENGINE_VERSION, RULESET_VERSION]).toEqual(["1.16.0", "1.13.0"]);
+  // 1.17.0'dan beri (karar 0042) sürümün tam değeri warnings-1-17.test.ts içinde sınanır; burada en az 1.16.0 / 1.13.0 olması.
+  it("motor en az 1.16.0, kural seti en az 1.13.0", () => {
+    const atLeast = (version: string, minimum: string) => {
+      const [a, b] = [version, minimum].map((value) => value.split(".").map(Number));
+      return a[0] !== b[0] ? a[0] > b[0] : a[1] !== b[1] ? a[1] > b[1] : a[2] >= b[2];
+    };
+    expect(atLeast(ENGINE_VERSION, "1.16.0")).toBe(true);
+    expect(atLeast(RULESET_VERSION, "1.13.0")).toBe(true);
   });
 });
 
@@ -111,7 +117,7 @@ describe("yalnız balıklı deniz akvaryumunda özgül ağırlık hedefi 1,017�
     expect(MARINE_TARGETS.invertebrates.specificGravity).toEqual([1.024, 1.026]);
   });
 
-  it("1,025 yalnız balıklı akvaryumda temiz ve 'uygun'; 1,0251–1,026 sarı ve 'dikkat'; 1,026'nın üstü kesin tehlike", () => {
+  it("1,025 yalnız balıklı akvaryumda temiz ve 'uygun'; 1,0251–1,026 sarı ve 'dikkat'; kesin tehlike sınırının dışı kesin tehlike", () => {
     for (const value of [1.017, 1.02, 1.024, 1.025]) {
       const result = sea(value);
       expect(codes(result), String(value)).not.toContain("marineSpecificGravity");
@@ -123,8 +129,9 @@ describe("yalnız balıklı deniz akvaryumunda özgül ağırlık hedefi 1,017�
       expect(result).toMatchObject({ score: 74, status: "warning" });
     }
     expect(warningOf(sea(1.026), "marineSpecificGravity")?.message).toBe("OATA'nın yalnız balıklı akvaryum hedefi 1,017–1,025; son ölçüm 1,026.");
-    expect(sea(1.0261)).toMatchObject({ status: "danger" });
-    expect(sea(1.0169)).toMatchObject({ status: "danger" });
+    // 1.17.0'dan beri (karar 0042) güvenli aralığın bir okuma basamağı dışı (1,016–1,027) sarıdır; sınırlar warnings-1-17.test.ts içinde.
+    expect(sea(1.0271)).toMatchObject({ status: "danger" });
+    expect(sea(1.0159)).toMatchObject({ status: "danger" });
   });
 
   it("omurgasızlı akvaryumda bugünkü hedef: 1,023 sarı, 1,025 temiz", () => {

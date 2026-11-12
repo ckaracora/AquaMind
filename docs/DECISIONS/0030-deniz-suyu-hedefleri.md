@@ -33,6 +33,8 @@ Sıcaklık her canlının kendi aralığıyla değerlendirilir (karar 0029); OAT
 
 **Sonra değişti (2026-11-12, karar 0041, motor 1.16.0):** yalnız balıklı akvaryumda özgül ağırlık hedefi 1,017–1,025. Üst sınır OATA'nın deniz balığı bakım kartlarından ve Fishkeeper'dan; omurgasızlı hedef ve 1,017–1,026 güvenli aralığı değişmedi.
 
+**Sonra değişti (2026-11-12, karar 0042, motor 1.17.0):** 1. kararın kesin tehlike sınırı. Güvenli aralığın (1,017–1,026) bir okuma basamağı (0,001) dışı artık sarı uyarıdır: yalnız balıklı akvaryumda 1,016 ve 1,027 dahil, omurgasızlı akvaryumda yalnız üstte 1,027 dahil. Kesin tehlike yalnız balıkta 1,016'nın altı ve 1,027'nin üstü, omurgasızlıda 1,017'nin altı ve 1,027'nin üstü. Hedefler ve metinler değişmedi.
+
 Teknik kararlar (Claude):
 
 - **Motor:**

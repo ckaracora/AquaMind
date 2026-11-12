@@ -4299,3 +4299,21 @@ Güncel alt adım: JBL filtre medyası, bakteri başlangıcı, sorun giderici/pH
 - Çeviri: koşul metinleri değişmedi; çeviri tablosu değişmedi (`node scripts/catalog-translations.cjs --check` geçti).
 - Testler: `src/lib/__tests__/species-behavior.test.ts` (alanın yalnız bu 10 kayıtta olması; gerçek katalogla Japon balığı ve melek + Amano uyarılı, lepistes + Amano uyarısız, ocellaris + temizlikçi karides uyarısız, sarı lapin + temizlikçi karides uyarılı).
 - Altın fikstür: karides kapsamı hiçbir altın vakayı değiştirmez. Tuzluluk hedefi 36 deniz balığı vakasında yalnız gösterilen hedefi değiştirir (karar 0041).
+
+## 2026-11-12 Motor 1.17.0: özgül ağırlığın sınır bandı için kaynaklar (Claude)
+
+- Gerekçe: veri testi E'nin üç yersiz alarmı (E20 yalnız balık 1,016; E21 yalnız balık 1,027; E23 omurgasızlı 1,027; üçü de 49 "uygun değil"). Ürün sahibinin onayı (2026-11-12): "Sınırda 'dikkat' bandı olsun"; sınırlar kaynaklara bakılarak. Karar 0042, motor 1.17.0. Katalog kaydı değişmedi.
+- Kaynaklar 2026-11-12'de açılarak okundu. Hiçbiri özgül ağırlık için "şu değerin altı ya da üstü tehlikelidir" demiyor. Aktarımlar kısa Türkçe özettir; tam metin bağlantıdadır.
+  - OATA, "How to set up and maintain a marine aquarium" (Eylül 2022; https://ornamentalfish.org/wp-content/uploads/How-to-set-up-and-maintain-a-marine-aquarium-Sept-2022.pdf): yalnız balık 1.017–1.023 SG (23–30 ppt), omurgasızlı 1.024–1.026 SG (32–35 ppt). Tehlikeli değer yazmıyor.
+  - OATA, "OATA water quality criteria" (Ekim 2022; https://ornamentalfish.org/wp-content/uploads/OATA-Water-quality-criteria-Oct-2022.pdf): deniz türleri için serbest amonyak, nitrit, pH (en az 8,1), oksijen ve nitrat; tuzluluk satırı yok.
+  - OATA, "How to understand & test water quality in a marine aquarium" (Eylül 2022; https://ornamentalfish.org/what-we-do/advice-information/care-sheets/caresheets-marine-fish/how-to-test-for-water-quality-in-a-marine-tank-aquarium/): sayı yok. Tuzluluğun hızlı değişmesi ciddi strese, hatta ölüme yol açabilir; değişiklikler yavaş yapılmalı; buharlaşan su RO suyuyla tamamlanmalı.
+  - OATA'nın deniz omurgasızı bakım kartları (Eylül 2022): tuzluluk dördünde de 1.023–1.026; dördü de omurgasızların su kimyasındaki değişime balıktan daha zor dayandığını yazıyor.
+    - anemonlar (https://ornamentalfish.org/what-we-do/advice-information/care-sheets/caresheets-marine-invertebrates/how-to-look-after-anemones/);
+    - deniz yumuşakçaları (https://ornamentalfish.org/what-we-do/advice-information/care-sheets/caresheets-marine-invertebrates/how-to-look-after-marine-molluscs/);
+    - denizyıldızı, deniz kestanesi ve deniz hıyarı (https://ornamentalfish.org/what-we-do/advice-information/care-sheets/caresheets-marine-invertebrates/how-to-look-after-starfish-sea-urchins-and-sea-cucumbers/);
+    - deniz kabukluları (https://ornamentalfish.org/what-we-do/advice-information/care-sheets/caresheets-marine-invertebrates/how-to-look-after-marine-crustaceans/).
+  - Practical Fishkeeping, Jeremy Gay, "Marine fish with character" (https://www.practicalfishkeeping.co.uk/features/marine-fish-with-character/): omurgasız yokken deniz balıkları geniş bir sıcaklık ve tuzluluk aralığına dayanır; düşük tuzlulukta beyaz benek daha az görülür. Sayı vermiyor.
+  - Fishkeeper, Aqua Marin refraktometresi (https://www.fishkeeper.co.uk/aqua-marin-refractometer): doğruluk ±1 ppt. Ürün bilgisidir, bakım kaynağı değildir; yalnız ölçüm payının örneği olarak anıldı.
+- Kaynaklar bant vermediği için bandın genişliği teknik karardır: bir okuma basamağı (0,001). OATA rehberinin kendi dönüşümüne göre 1 ppt yaklaşık 0,0007–0,0009 SG; ±1 ppt en çok bir basamak. Yalnız balıklı akvaryumda iki uçta (1,016 ve 1,027), omurgasızlı akvaryumda yalnız üst uçta (1,027).
+- Okunamayanlar: Hanna HI98319 ürün sayfası (404) ve Fishkeeper'ın refraktometre kılavuzu (401). Kullanılmadı.
+- Altın fikstür: son kapıda yeniden üretildi, bayt bayt aynı (vakalarda tuzluluk ölçümü yok).
