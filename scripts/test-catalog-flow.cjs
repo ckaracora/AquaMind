@@ -80,8 +80,8 @@ const acceptedShopHosts = ["akvaryumexpress.com", "atakanpetshop.com", "malawiiz
 // Rakamla ya da yazıyla yazılmış kapasite değeri ("600 L/saat", "60 cm", "üç litre filtre hacimli").
 const numericValueText = /\d[\d.,]*\s*(?:L\/saat|L\/dakika|W\b|litre|L\b|cm\b|kPa|MPa|lm\b|°C)/;
 const writtenValueText = /(?:^|[\s(])(?:yarım|bir|iki|üç|dört|beş|altı|yedi|sekiz|dokuz|on|yirmi|otuz|kırk|elli|altmış|yetmiş|seksen|doksan|yüz|bin)(?:\s+(?:buçuk|yüz|bin))?\s+(?:litre|watt|santimetre|metre)/iu;
-assert.equal(withdrawnEquipmentIds.size + withdrawnAirFlowIds.size + Object.keys(shopVerifiedEquipment).length, 205, "0019 listeleri 125 (86 kayıttan 2026-11-10 eksenpet kararıyla 16 Aquawing çıktı: 70; 2026-10-30 örnek denetiminin 11 Boyu ısıtıcısı, JBL paketinin 3 WHITE kaydı, 2026-11-04 Trendyol paketinin 23 kaydı, 2026-11-08 Haqos kararının 15 kaydı ve 2026-11-11 önceki nesil Oase BioMaster kararının 3 kaydı) + 4 + 76 kayıt içermeli");
-assert.equal(new Set([...withdrawnEquipmentIds, ...withdrawnAirFlowIds, ...Object.keys(shopVerifiedEquipment)]).size, 205, "0019'daki bir kayıt yalnız bir listede bulunmalı");
+assert.equal(withdrawnEquipmentIds.size + withdrawnAirFlowIds.size + Object.keys(shopVerifiedEquipment).length, 200, "0019 listeleri 121 (86 kayıttan 2026-11-10 eksenpet kararıyla 16 Aquawing çıktı: 70; 2026-10-30 örnek denetiminin 11 Boyu ısıtıcısı, JBL paketinin 3 WHITE kaydı, 2026-11-04 Trendyol paketinin 23 kaydı, 2026-11-08 Haqos kararının 15 kaydı ve 2026-11-11 önceki nesil Oase BioMaster kararının 3 kaydı; 2026-11-12 paket A ile Sobo SB-848, WP-4001 ve SunSun 502, 503 çıktı) + 4 + 75 (2026-11-12 paket A ile Sobo SB-860A çıktı) kayıt içermeli");
+assert.equal(new Set([...withdrawnEquipmentIds, ...withdrawnAirFlowIds, ...Object.keys(shopVerifiedEquipment)]).size, 200, "0019'daki bir kayıt yalnız bir listede bulunmalı");
 assert.match("Üç litre filtre hacimli askı dış filtre", writtenValueText, "Yazıyla yazılmış kapasite yakalanmalı");
 assert.doesNotMatch("Üç aşamalı kompakt iç filtre · Dört çıkış", writtenValueText, "Yazıyla yazılmış özellik kapasite sayılmamalı");
 for (const id of [...withdrawnEquipmentIds, ...withdrawnAirFlowIds]) {
@@ -160,7 +160,6 @@ const expectedShopValues = {
   "rs-rs2004": { ratedFlowLph: 1750, powerW: 25 },
   "sobo-aq-500f": { ratedFlowLph: 500, powerW: 6 },
   "sobo-fg-1204": { ratedFlowLph: 880, powerW: 12 },
-  "sobo-sb-860a": { powerW: 5 },
   "sobo-sf-550f": { ratedFlowLph: 500 },
   "sobo-wp-303h": { ratedFlowLph: 280, powerW: 5, recommendedMinL: 10, recommendedMaxL: 50 },
   "sobo-wp-607h": { ratedFlowLph: 600, powerW: 12 },
@@ -2350,7 +2349,7 @@ for (const id of sunsunTurkeyExtraIds) {
   const item = sunsun.find((entry) => entry.id === id);
   assert(item, `SunSun Türkiye güncel ürün kaydı eksik: ${id}`);
   assert(item.sourceUrl.startsWith("https://"), `SunSun ${id} doğrulanabilir HTTPS kaynağına bağlanmalı`);
-  assert.equal(item.verifiedAt, expectedVerifiedAt(item.id, shopVerified(item) ? shopVerifiedAt : ["sunsun-502", "sunsun-503"].includes(id) ? "2026-08-29" : "2026-08-27"), `SunSun ${id} güncel doğrulama tarihini taşımalı`);
+  assert.equal(item.verifiedAt, expectedVerifiedAt(item.id, shopVerified(item) ? shopVerifiedAt : ["sunsun-502", "sunsun-503"].includes(id) ? "2026-11-12" : "2026-08-27"), `SunSun ${id} güncel doğrulama tarihini taşımalı`);
 }
 const sunsun604b = sunsun.find((item) => item.id === "sunsun-604b");
 assert.deepEqual([sunsun604b?.category, sunsun604b?.ratedFlowLph, sunsun604b?.powerW], ["filter", sourced(sunsun604b, "ratedFlowLph", 800), sourced(sunsun604b, "powerW", 14)], "SunSun 604B doğrulanmış 800 L/saat ve 14 W değerlerini taşımalı");
@@ -2359,12 +2358,9 @@ assert.deepEqual([sunsunJp025f?.ratedFlowLph, sunsunJp025f?.powerW, sunsunJp025f
 const sunsunAco006 = sunsun.find((item) => item.id === "sunsun-aco006");
 assert.deepEqual([sunsunAco006?.category, sunsunAco006?.ratedFlowLph, sunsunAco006?.powerW], ["air_pump", 5100, 105], "SunSun ACO-006 birim dönüşümü doğrulanmış hava debisi ve güç değerini taşımalı");
 assert.deepEqual([sunsun.find((item) => item.id === "sunsun-pg180")?.ratedFlowLph, sunsun.find((item) => item.id === "sunsun-pg250")?.ratedFlowLph], [26000, 35000], "SunSun blower modellerinin m³/saat değerleri L/saat olarak doğru dönüştürülmeli");
-const sunsun502 = sunsun.find((entry) => entry.id === "sunsun-502");
-assert.deepEqual([sunsun502?.ratedFlowLph, sunsun502?.powerW, sunsun502?.recommendedMaxL], [sourced(sunsun502, "ratedFlowLph", 320), undefined, sourced(sunsun502, "recommendedMaxL", 60)], "SunSun 502 ortak doğrulanan debi ve hacmi taşımalı, çelişkili güç seçilmemeli");
-assert.equal(sunsun502?.additionalSourceUrls?.length, 2, "SunSun 502 çapraz doğrulama kaynaklarını taşımalı");
-const sunsun503 = sunsun.find((entry) => entry.id === "sunsun-503");
-assert.deepEqual([sunsun503?.ratedFlowLph, sunsun503?.powerW], [sourced(sunsun503, "ratedFlowLph", 600), sourced(sunsun503, "powerW", 6)], "SunSun 503 güncel Türkiye ürününün doğrulanan debi ve güç değerlerini taşımalı");
-assert.equal(sunsun503?.additionalSourceUrls?.length, 2, "SunSun 503 çapraz doğrulama kaynaklarını taşımalı");
+// SunSun 502 ve 503 2026-11-12 paket A'da üreticinin HW serisi tablosuna bağlandı (değerleri aşağıda, `packageAEquipment`). 600 L/saat ve 6 W'lık
+// 503B ayrı kayıttır ve değerini korur.
+assert.deepEqual([sunsun.find((entry) => entry.id === "sunsun-503b")?.ratedFlowLph, sunsun.find((entry) => entry.id === "sunsun-503b")?.powerW], [600, 6], "SunSun 503B ayrı kayıt olarak 600 L/saat ve 6 W değerini korumalı");
 for (const id of ["sunsun-jvp102a", "sunsun-jvp201"]) {
   assert.equal(sunsun.find((item) => item.id === id)?.category, "other", `SunSun ${id} dalga motoru filtrasyon hesabına karışmamalı`);
 }
@@ -3969,12 +3965,30 @@ for (const model of ["IPF-020", "LT-300", "XP-15", "XP-17", "AL-28 50 W", "AL-28
   assert(item?.capacityDataNote, `Jeneca ${model} doğrulanamayan değerin neden kullanılmadığını açıklamalı`);
   assert.deepEqual([item?.ratedFlowLph, item?.powerW, item?.recommendedMinL, item?.recommendedMaxL], [undefined, undefined, undefined, undefined], `Jeneca ${model} doğrulanamayan teknik değer taşımamalı`);
 }
-const dophinCf300 = equipmentCatalog.find((entry) => entry.brand === "Dophin" && entry.model === "CF-300");
-assert.deepEqual([dophinCf300?.ratedFlowLph, dophinCf300?.powerW, dophinCf300?.recommendedMaxL], [undefined, undefined, 40], "Dophin CF-300 yalnız kabul edilen yerel mağazaların yayımladığı 40 L sınırını taşımalı");
-assert(dophinCf300?.sourceUrl.includes("atakanpetshop.com"), "Dophin CF-300 kabul edilen yerel mağazaya bağlanmalı");
-const dophinAp1302 = equipmentCatalog.find((entry) => entry.brand === "Dophin" && entry.model === "AP1302");
-assert.deepEqual([dophinAp1302?.ratedFlowLph, dophinAp1302?.powerW], [undefined, undefined], "Dophin AP1302 doğrulanamayan hava debisi taşımamalı");
-assert(dophinAp1302?.capacityDataNote, "Dophin AP1302 neden hesap dışı olduğunu açıklamalı");
+// 2026-11-12 paket A (Canberk'in `codex/catalog-main-integration` dalından; kaynaklar 2026-11-12'de okundu, docs/CATALOG_LOG.md aynı günün
+// bölümü): Sobo'da Türkiye distribütörü (sobo.com.tr), SunSun'da üretici (Sensen Group, sunsun-china.com), Dophin'de üretici (qimeigroup.com;
+// 230 V / 50 Hz satırı). Değerler kaynağınkidir; eski kaynak ek kaynakta kalır; kayıt hesaba girer (kapasite notu yok).
+const packageAEquipment = [
+  ["sobo-sb-860a", "https://www.sobo.com.tr/sobo-sessiz-ayarlanabilir-cift-cikisli-ucgen-akvaryum-hava-motoru-sb-860a", 720, 10, undefined, undefined, ["https://malawiizmir.com/sobo-sb-860a-cift-cikisli-hava-motoru", "https://www.pets-lifestyle.com/products/sobo-sb-860-a-two-way-aquarium-air-pump"]],
+  ["sobo-sb-848", "https://www.sobo.com.tr/sobo-ultra-sessiz-ayarlanabilir-cift-cikisli-akvaryum-hava-motoru-sb-848", 540, 12, undefined, undefined, ["https://manuals.plus/ae/1005007988043520"]],
+  ["sobo-wp-4001", "https://www.sobo.com.tr/sobo-akvaryum-ic-filtre-wp-4001", undefined, 30, undefined, 200, ["https://www.amigospet.com.tr/gallery/AM%C4%B0GOS%20KATALOG22.pdf"]],
+  ["sunsun-502", "https://www.sunsun-china.com/product/aquarium-equipment/hw-series-out-side-filter-2.html", 320, 5, undefined, undefined, ["https://e-catalog.com/SUNSUN-HW-502.htm", "https://manuals.plus/ae/1005007451551630", "https://malawiizmir.com/sunsun-502-dis-filtre"]],
+  ["sunsun-503", "https://www.sunsun-china.com/product/aquarium-equipment/hw-series-out-side-filter-2.html", 350, 5, undefined, undefined, ["https://www.aquashop.com.tr/urunler/sunsun-dis-filtre-600-lt-h-6w", "https://www.trendyol.com/sunsun/503-dis-filtre-600l-h-6w-p-1144414509", "https://malawiizmir.com/sunsun-503-dis-filtre"]],
+  ["dophin-ap1302", "https://www.qimeigroup.com/Products_detail/dophin-aquarium-air-pump-ap1301.html", 120, 2.5, 120, 200, ["https://atakanpetshop.com/dophin"]],
+  ["dophin-980f", "https://www.qimeigroup.com/Products_detail/dophin-aquarium-internal-filter-950f.html", 1550, 29.3, undefined, 300, ["https://malawiizmir.com/dophin-980f-ic-filtre"]],
+  ["dophin-fb1000f", "https://www.qimeigroup.com/Products_detail/dophin-aquarium-internal-filter-fb4000.html", 300, 3.3, undefined, 50, ["https://atakanpetshop.com/dophin-fb1000-f-ic-filtre-300-l-s"]],
+  ["dophin-fb3000f", "https://www.qimeigroup.com/Products_detail/dophin-aquarium-internal-filter-fb4000.html", 480, 7.2, undefined, 110, ["https://atakanpetshop.com/dophin-fb3000-f-ic-filtre-500-l-s"]],
+  ["dophin-fb4000f", "https://www.qimeigroup.com/Products_detail/dophin-aquarium-internal-filter-fb4000.html", 760, 13.8, undefined, 140, ["https://atakanpetshop.com/dophin-fb4000-f-ic-filtre-600-l-s"]],
+  ["dophin-cf300", "https://www.qimeigroup.com/Products_detail/dophin-external-canister-filter-cf300html", 410, 6.7, 60, 110, ["https://atakanpetshop.com/dophin-cf-300-mini-dis-filtre", "https://www.akvaryumexpress.com/dophin-cf300-mini-dis-filtre"]],
+];
+for (const [id, sourceUrl, flow, power, minL, maxL, oldSources] of packageAEquipment) {
+  const item = equipmentCatalog.find((entry) => entry.id === id);
+  assert.deepEqual([item?.sourceUrl, item?.ratedFlowLph, item?.powerW, item?.recommendedMinL, item?.recommendedMaxL, item?.additionalSourceUrls, item?.verifiedAt, item?.capacityDataNote],
+    [sourceUrl, flow, power, minL, maxL, oldSources, "2026-11-12", undefined], `${id} paket A'da okunan kaynağı, değerleri ve eski kaynak izini taşımalı`);
+  assert(!withdrawnEquipmentIds.has(id) && !shopVerified(item), `${id} karar 0019 listelerinden çıkmış olmalı`);
+}
+assert.match(equipmentCatalog.find((entry) => entry.id === "sobo-wp-4001")?.specifications ?? "", /saat birimi olmadan yazdığı için debi kullanılmaz/, "Sobo WP-4001 distribütörün birimsiz debisini kullanmamalı ve nedenini söylemeli");
+assert.equal(equipmentCatalog.find((entry) => entry.id === "dophin-980f")?.adjustableFlow, true, "Dophin 980F'in hava ayarı (Malawi İzmir) korunmalı");
 for (const model of ["T8-LY", "T8-YW", "T8-JL", "T8-BS", "T12-LY", "T12-JL", "SZ-40D", "SZ-50D", "SZ-60D", "X1", "X3", "X5", "D3", "D5", "D7"]) {
   assert.equal(jenecaProfiles.find((entry) => entry.model === model)?.category, "lighting", `Jeneca ${model} resmî aydınlatma portföyünde bulunmalı`);
 }

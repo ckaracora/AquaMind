@@ -21,7 +21,7 @@ Katalogların her bilgisinin yüzde kaçının dolu olduğu ve kaynağının tü
 ## Güncel durum
 
 <!-- kapsam:başla -->
-Ölçüm tarihi: 2026-11-11
+Ölçüm tarihi: 2026-11-12
 
 ### Canlılar (443 kayıt)
 
@@ -40,10 +40,10 @@ Katalogların her bilgisinin yüzde kaçının dolu olduğu ve kaynağının tü
 | Bilgi | Dolu | Oran |
 |---|---|---|
 | Kaynak sayfası | 3535/3535 | %100 |
-| Doğrulanmamışlar listesinde değil | 3410/3535 | %96,5 |
-| Hesap değeri (filtre, ısıtıcı, hava motoru) | 1117/1249 | %89,4 |
-| Güç (W) | 1682/3535 | %47,6 |
-| Önerilen hacim | 712/3535 | %20,1 |
+| Doğrulanmamışlar listesinde değil | 3414/3535 | %96,6 |
+| Hesap değeri (filtre, ısıtıcı, hava motoru) | 1123/1249 | %89,9 |
+| Güç (W) | 1691/3535 | %47,8 |
+| Önerilen hacim | 717/3535 | %20,3 |
 | Son 92 günde doğrulanmış | 3535/3535 | %100 |
 
 ### Bakım ürünleri (1893 kayıt)
@@ -75,6 +75,7 @@ Katalogların her bilgisinin yüzde kaçının dolu olduğu ve kaynağının tü
 
 ## Geçmiş
 
+- 2026-11-12 (Canberk'in dalından paket A, veri aşaması; ürün sahibinin isteği): 11 ekipmanın kaynağı üreticiye ya da Türkiye distribütörüne bağlandı, değerleri o sayfadan geldi (Sobo SB-860A, SB-848, WP-4001; SunSun 502, 503; Dophin AP1302, 980F, FB1000 F, FB3000 F, FB4000 F, CF-300; `docs/CATALOG_LOG.md`, aynı günün bölümü). Sobo SB-848, WP-4001 ve SunSun 502, 503 doğrulanamayanlar listesinden çıktı. Değişen oranlar: doğrulanmamışlar listesinde değil %96,5 → %96,6 (3410 → 3414/3535), hesap değeri %89,4 → %89,9 (1117 → 1123/1249), güç %47,6 → %47,8 (1682 → 1691/3535), önerilen hacim %20,1 → %20,3 (712 → 717/3535). Ölçüm tarihi 2026-11-12; "son 92 günde doğrulanmış" satırları %100 kaldı.
 - 2026-11-11 (Codex kontrolü): NovoRed Refill ve NanoBel metinleri düzeltildi; dört eksik yeniden doğrulamanın tarihi eski güne döndü, NovoRed Refill okuma gününü aldı (CATALOG_LOG son bölüm). `node scripts/data-coverage.cjs 2026-11-11` yeniden çalıştırıldı; önceki tablonun tüm sayıları ve oranları aynı kaldı. Tarihi geri alınan dört kayıt da 92 günlük aralıkta.
 - 2026-11-11 (Chrome oturumunun kardeş kayıtları, veri aşaması; ürün sahibinin kararı): adında ² olmayan üç Oase kaydı (`oase-biomaster-250`, `-350`, `-600`) önceki nesil sayıldı; taşıdıkları BioMaster² değerleri hesaptan çekildi, kayıtlar doğrulanamayanlar listesinde (`docs/CATALOG_LOG.md`, aynı günün bölümü). Doğrulanmamışlar listesinde değil %96,5 (3413 → 3410), hesap değeri %89,7 → %89,4 (1120 → 1117/1249), güç %47,6 (1683 → 1682), önerilen hacim %20,2 → %20,1 (715 → 712). BioMaster² ailesinin sekiz kaydı, Twinstar S Line V5'in beş kaydı, Dennerle 5 m CO₂ hortumu ve üç güncel JBL CO₂ tüpü kaynağa karşı okundu, tarihleri 2026-11-11; Twinstar'ın üç güç değeri ve 1200S'in lümeni düzeltildi, 200S'in çelişkili uzunluğu kaldırıldı (aydınlatma bu tabloda hesap değerine girmez); bakım ürünlerinde yalnız metin değişti.
 - 2026-11-11 (JBL PROTEMP S birleştirmesi, veri aşaması; ürün sahibinin kararı): aynı ürünün iki kez kataloglanmış altı çubuk ısıtıcısı tek kayıt oldu (`docs/CATALOG_LOG.md`, aynı günün bölümü). Eski adlı altı kopya (`jbl-protemp-s25 … s300`) katalogdan çıktı; kimlikleri kanonik kayda yönleniyor. Ekipman 3541 → 3535 kayıt. Doğrulanmamışlar listesinde değil %96,6 → %96,5 (3419/3541 → 3413/3535), güç %47,7 → %47,6, hesap değeri %89,7 (1126/1255 → 1120/1249), önerilen hacim %20,2 (716 → 715: kaynaksız 90–150 L'li eski S 100 çıktı). Kalan altı kaydın güç ve hacim değerleri değişmedi; adları JBL'in Almanca ve Türkiye sayfasındaki ad oldu.

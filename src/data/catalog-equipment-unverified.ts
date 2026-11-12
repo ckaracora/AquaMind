@@ -63,11 +63,10 @@ export const unverifiedEquipmentIds: readonly string[] = [
   "resun-lp300", "resun-sf-400",
   // RS Electrical (7)
   "rs-118f", "rs-rs-04b", "rs-rs602", "rs-rs604", "rs-rs605", "rs-rs760", "rs-rs800",
-  // Sobo (5; Türkiye distribütörünün sitesine, sobo.com.tr'ye dayanan Sobo kayıtları listede değil. Mağazalardaki WP-190F-UV5 ve
+  // Sobo (3; Türkiye distribütörünün sitesine, sobo.com.tr'ye dayanan Sobo kayıtları listede değil; SB-848 ve WP-4001 2026-11-12'de distribütörün ürün sayfasıyla listeden çıktı. Mağazalardaki WP-190F-UV5 ve
   // WP-290F-UV7 UV lambalı türler olduğu için bu kayıtlarla eşleştirilmedi; WP-390F sayfası kendi içinde çelişkili.)
-  "sobo-sb-848", "sobo-wp-4001", "sobo-wp190f", "sobo-wp290f", "sobo-wp390f",
-  // SunSun (2; Malawi İzmir sayfaları teknik değer vermiyor, Atakan Petshop'taki 503B ayrı tür)
-  "sunsun-502", "sunsun-503",
+  "sobo-wp190f", "sobo-wp290f", "sobo-wp390f",
+  // SunSun 502 ve 503 2026-11-12'de üreticinin HW serisi tablosuyla doğrulandı ve listeden çıktı (docs/CATALOG_LOG.md, aynı günün bölümü).
   // Xinyou (11; hava motoruyla çalışan sünger filtre, önerilen hacimleri çekiliyor)
   "xinyou-xy-168", "xinyou-xy-180", "xinyou-xy-280", "xinyou-xy-2810", "xinyou-xy-2811", "xinyou-xy-2812", "xinyou-xy-2813", "xinyou-xy-2836",
   "xinyou-xy-2901", "xinyou-xy-2902", "xinyou-xy-380",
@@ -161,10 +160,9 @@ export const shopVerifiedEquipment: Readonly<Record<string, ShopVerification>> =
   "rs-388-top": { sourceUrl: "https://atakanpetshop.com/rs-388-tepe-filtre-1750l-h-25w", values: { ratedFlowLph: 1750, powerW: 25 }, specifications: "Tepe filtre · 1750 L/saat · 25 W" },
   "rs-rs2002": { sourceUrl: "https://bettamarketim.com.tr/ic-filitre-1500l-h-18watt-rs-2002-yeni-model", values: { ratedFlowLph: 1500, powerW: 18 }, specifications: "İç filtre · 1500 L/saat · 18 W" },
   "rs-rs2004": { sourceUrl: "https://bettamarketim.com.tr/ic-filitre-1750l-h-25watt-rs-2004-yeni-model", values: { ratedFlowLph: 1750, powerW: 25 }, specifications: "İç filtre · 1750 L/saat · 25 W" },
-  // Sobo (7)
+  // Sobo (6; SB-860A 2026-11-12'de Türkiye distribütörünün ürün sayfasıyla listeden çıktı)
   "sobo-aq-500f": { sourceUrl: "https://atakanpetshop.com/sobo-aq-500f-ic-filtre-yeni-nesil-6w-500l-s", values: { ratedFlowLph: 500, powerW: 6 }, specifications: "Kompakt iç filtre · 500 L/saat · 6 W" },
   "sobo-fg-1204": { sourceUrl: "https://www.akvaryumexpress.com/sobo-fg-1204-internal-filter-ic-filtre", values: { ratedFlowLph: 880, powerW: 12 }, specifications: "Dört filtre malzemeli, Venturi çıkışlı iç filtre · 880 L/saat · 12 W" },
-  "sobo-sb-860a": { sourceUrl: "https://malawiizmir.com/sobo-sb-860a-cift-cikisli-hava-motoru", values: { powerW: 5 }, specifications: "Ayarlanabilir çift çıkışlı hava motoru · 5 W · hava debisi doğrulanamadı", note: "Hava debisinin kaynağı pets-lifestyle.com; kabul edilen yerel mağaza (Malawi İzmir) yalnızca gücü yayımlıyor. Debi otomatik hesapta kullanılmaz." },
   "sobo-sf-550f": { sourceUrl: "https://www.akvaryumexpress.com/sobo-sf-550f-askili-dis-filtre", values: { ratedFlowLph: 500 }, specifications: "Askı dış filtre · 500 L/saat · güç mağazalarda farklı (7 W / 8,6 W)" },
   "sobo-wp-303h": { sourceUrl: "https://atakanpetshop.com/sobo-mini-aski-filtre-5w-280lh-745-wp-303h", values: { ratedFlowLph: 280, powerW: 5, recommendedMinL: 10, recommendedMaxL: 50 }, specifications: "Ayarlanabilir, yüzey emişli askı şelale filtre · 280 L/saat · 5 W · 10–50 litre" },
   "sobo-wp-607h": { sourceUrl: "https://malawiizmir.com/sobo-wp-607h-selale-filtre-600-l-h", values: { ratedFlowLph: 600, powerW: 12 }, specifications: "Ayarlanabilir, yüzey emişli askı şelale filtre · 600 L/saat · 12 W" },
