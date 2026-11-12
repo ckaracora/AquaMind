@@ -1,7 +1,7 @@
 # 0040 — Canlı riski uyarıları genel durumda
 
 - Tarih: 2026-11-12
-- Durum: Kabul edildi. Ürün sahibi (`buraksenfx`) 2026-11-12'de seçenek B'yi seçti: "Kırmızı uyarı, sonuç 'dikkat'". Teknik kararlar Claude'un (lider); "tek çift" düzeltmesi liderin teknik kararıdır. Motor 1.15.0, kural seti 1.12.0. Kontrol: Antigravity (Gemini), 2026-11-12; P1 ve P2 yok. Tek P3 (`smallFishPredation` tehlike seviyesinde olduğu için sınıftaki yeri puanı değiştirmiyor) kod açıklamasıyla giderildi; davranış değişmedi. Altın fikstür ayrı commit'te yeniden üretilir.
+- Durum: Kabul edildi. Ürün sahibi (`buraksenfx`) 2026-11-12'de seçenek B'yi seçti: "Kırmızı uyarı, sonuç 'dikkat'". Teknik kararlar Claude'un (lider); "tek çift" düzeltmesi liderin teknik kararıdır. Motor 1.15.0, kural seti 1.12.0. Kontrol: Antigravity (Gemini), 2026-11-12; P1 ve P2 yok. Tek P3 (`smallFishPredation` tehlike seviyesinde olduğu için sınıftaki yeri puanı değiştirmiyor) kod açıklamasıyla giderildi; davranış değişmedi. Commit'ler: kod, metin, veri ve belgeler `ec81a45`; altın fikstür ayrı commit'te `0b62813`; `conspecificAll` artık altın vakalarda olmadığı için `engine-text.test.ts`'e stub senaryo `0d2f20d`.
 
 ## Bağlam
 
@@ -76,7 +76,7 @@ Teknik kararlar (Claude):
   - C: 38 sayılan senaryoda 32 → 38 tuttu. C sınıfı 30/6/2/0 → 37/0/1/0, hata %21,1 → %2,6.
   - Hiçbir senaryoda motor beklenenden sert değil. Sorunsuz C01–C12'de hüküm "uygun" kaldı.
   - Kalan C03: "erkekler kavga eder" notu; C raporu bu notu kaynağa uygun buluyor.
-- Altın fikstür (beklenen, yeniden üretilmedi): 13 vaka değişir, hepsinde `conspecificAll` kalkar. Durumu değişen vaka yok. Puanı değişen 2 vaka: Siyam yosun yiyicisinin "dar" vakası 62 → 65, Siyam yosun yiyicisi + prochilodus 69 → 73. Değişen vakalar:
+- Altın fikstür (`0b62813`'te yeniden üretildi; eski ve yeni fikstür vaka vaka karşılaştırıldı, beklenenle aynı): 13 vaka değişir, hepsinde `conspecificAll` kalkar. Durumu değişen vaka yok. Puanı değişen 2 vaka: Siyam yosun yiyicisinin "dar" vakası 62 → 65, Siyam yosun yiyicisi + prochilodus 69 → 73. Değişen vakalar:
   - 9 tek tür vakası: apisto panduro, Çin yılanbaşı, jewel, kribensis, leleupi, marliers julie, gökkuşağı yılanbaşı, sajica, Siyam yosun yiyicisi;
   - 3 ikili: turbo salyangoz + marliers julie, gökkuşağı yılanbaşı + ramirezi, Siyam yosun yiyicisi + prochilodus;
   - 1 "dar" vaka: Siyam yosun yiyicisi.
