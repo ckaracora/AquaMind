@@ -120,6 +120,8 @@ const species: Record<string, SpeciesProfileInput> = {
   hotStub: { id: "hotStub", commonName: "Sıcak su türü", adultSizeCm: 4, minVolumeL: 40, minGroup: 1, temperature: [25, 30], ph: [6, 7.5], wasteFactor: 0.5 },
   wide: { id: "wide", commonName: "Geniş isteyen tür", adultSizeCm: 20, minVolumeL: 200, minTankLengthCm: 100, minGroup: 1, temperature: [22, 27], ph: [6, 7.5], wasteFactor: 1 },
   wideNoLength: { id: "wideNoLength", commonName: "Uzunluksuz geniş tür", adultSizeCm: 20, minVolumeL: 200, minGroup: 1, temperature: [22, 27], ph: [6, 7.5], wasteFactor: 1 },
+  // Motor 1.15.0 (karar 0040): kaynağın önerdiği çift ya da grupta "tek tutulmalı" çıkmadığı için bu kod altın fikstürde kalmadı.
+  loner: { id: "loner", commonName: "Tek tutulan tür", adultSizeCm: 8, minVolumeL: 60, minGroup: 1, temperature: [22, 27], ph: [6, 7.5], wasteFactor: 0.8, behavior: { conspecificAggression: { source: "Seriously Fish", value: "all", condition: "Çok büyük akvaryum hariç" } } },
 };
 const devices: Record<string, EquipmentProfileInput> = {
   skimmer: { id: "skimmer", category: "filter", brand: "Stub", model: "Skimmer", auxiliaryFiltration: true },
@@ -203,6 +205,7 @@ const scenarios: Array<[string, HealthAnalysis]> = [
   ["soğuk su türü ve tropikal balık, tek nokta", analyze(tank({ netVolumeLiters: 200 }), [animal("goldfishStub"), animal("hotStub")], [])],
   ["yalnız taban ısıtma kablosu", analyze(tank(), [animal("tropicalStub")], [device("substrateHeater")])],
   ["yalnız genişliği yetmeyen balıklar", analyze(tank({ lengthCm: 80, widthCm: 35, heightCm: 40, netVolumeLiters: 150 }), [animal("wide"), animal("wideNoLength")], [])],
+  ["tek tutulması gereken türden iki birey", analyze(tank(), [animal("loner", "fish", 2)], [])],
 ];
 const scenario = (name: string) => scenarios.find(([label]) => label === name)![1];
 const warningOf = (analysis: HealthAnalysis, code: string) => analysis.warnings.find((warning) => warning.code === code)!;
