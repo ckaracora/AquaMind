@@ -67,7 +67,7 @@ export interface SpeciesBehaviorInput {
   shrimpSafe?: BehaviorNote;
   /** Salyangoz yer (kural seti 1.7.0). */
   eatsSnails?: BehaviorNote;
-  /** Ağzına sığan küçük balıkları yer; asıl avcı (`predatory`) değildir. */
+  /** Ağzına sığan küçük balıkları yer; asıl avcı (`predatory`) değildir. 1.15.0'dan beri balık olmayan canlıda da (ör. kurbağa) kullanılır; av yalnız balıktır. */
   eatsSmallFish?: BehaviorNote;
   /** Aynı türün erkekleri kavga eder ("males") ya da tür tek tutulmalıdır ("all"). */
   conspecificAggression?: BehaviorNote & { value: "males" | "all" };
@@ -127,7 +127,7 @@ const FILTER_MIN_RATED_TURNOVER=4;
 const FILTER_DANGER_RATED_TURNOVER=2;
 /** Tahmini yük oranı bunun üstündeyse uyarı. Katalogdaki hiçbir tür, kendi kaynağının önerdiği en küçük akvaryum ve grupta bu değere ulaşmaz. */
 const LOAD_WARNING_RATIO=2.5;
-/** Kesin tehlike olmayan bir tehlike uyarısı ya da (1.14.0'dan beri) tehlikedeki bir ölçüt varken genel puanın üst sınırı (en fazla "dikkat"). */
+/** Kesin tehlike olmayan bir tehlike uyarısı, (1.14.0'dan beri) tehlikedeki bir ölçüt ya da (1.15.0'dan beri) canlı riski uyarısı varken genel puanın üst sınırı (en fazla "dikkat"). */
 const DANGER_WARNING_SCORE_CAP=74;
 // Kural seti 1.4.0 (docs/DECISIONS/0010-davranis-uyarilari.md).
 /** Av, avcının yetişkin boyunun bu oranı veya altındaysa avlanabilir (asıl ve fırsatçı avcılar için aynı). */
@@ -156,6 +156,22 @@ const SOCIAL_WARNING_FLOOR=SPACE_WARNING_FLOOR;
  */
 const TROPICAL_MIN_TEMPERATURE_C=23;
 const isTropical=(profile:SpeciesProfileInput)=>profile.group!=="coldwater"&&profile.temperature[0]>=TROPICAL_MIN_TEMPERATURE_C;
+// Kural seti 1.12.0 (docs/DECISIONS/0040-canli-riski-uyarilari-genel-durumda.md): canlıya zarar anlatan uyarılar (yenme ve yaralanma; alan,
+// kalabalık ve grup; aralık dışı su değeri) canlı kaydı olan akvaryumda genel puanı en fazla 74 yapar (en fazla "dikkat"). Bilgi notları, kayıt
+// ve veri eksikliği, cinsiyete bağlı aynı tür saldırganlığı ve ekipman uyumu bu sınıfta değildir; onlar genel puanı değiştirmez.
+/**
+ * Canlı riski sınıfındaki uyarı kodları (18). 17'si uyarı seviyesindedir; onlarda 74 tavanını bu küme koyar (`livestockRiskWarning`).
+ * `smallFishPredation` 1.15.0'dan beri tehlike seviyesindedir (kesin tehlike değil); tavanını zaten `dangerWarning` koyar. Kümedeki yeri
+ * puanı değiştirmez; sınıfı (yenme ve yaralanma) eksiksiz tutar.
+ */
+export const LIVESTOCK_RISK_WARNING_CODES:ReadonlySet<string>=new Set([
+ // yenme ve yaralanma
+ "smallFishPredation","shrimpEaten","snailEaten","finNip",
+ // alan, kalabalık ve grup
+ "spaceLimited","spaceNarrow","highLoad","groupLow",
+ // aralık dışı su değeri
+ "speciesTemperatureOutOfRange","speciesPhOutOfRange","coldwaterWithTropical","marineSpecificGravity","marinePh","marineKh","marineNitrate","ammoniaDetected","nitriteDetected","nitrateHigh",
+]);
 const status=(score:number):HealthMetric["status"]=>score>=75?"good":score>=50?"warning":"danger";
 
 // Kural seti 1.8.0 (docs/DECISIONS/0017-elle-girilen-ekipman-degerleri.md): katalogda doğrulanmış kapasite verisi olmayan
@@ -247,14 +263,17 @@ export function createAnalyzer(resolver:KnowledgeResolver):AnalyzeAquarium{
  const coldwaterWithTropical=!temperatureConflict&&coldwaterProfiles.length>0&&tropicalFish.length>0;
  const temperatureRangeNarrow=!temperatureConflict&&!coldwaterWithTropical&&profiles.length>1&&tempIntersection[0]===tempIntersection[1];
  const finNipIssues=fishProfiles.flatMap(nipper=>{const note=explicit(nipper.profile!.behavior?.finNipper);return note?fishProfiles.filter(target=>target.profile!.id!==nipper.profile!.id&&explicit(target.profile!.behavior?.finNipTarget)).map(target=>({nipper:nipper.profile!,target:target.profile!,note})):[];});
- const smallFishPredationIssues=fishProfiles.flatMap(hunter=>{const note=explicit(hunter.profile!.behavior?.eatsSmallFish);return note&&!hunter.profile!.predatory?fishProfiles.filter(prey=>prey.profile!.id!==hunter.profile!.id&&prey.profile!.adultSizeCm<=Math.min(hunter.profile!.adultSizeCm*PREY_SIZE_RATIO,note.maxPreyCm??Infinity)).map(prey=>({hunter:hunter.profile!,prey:prey.profile!,note})):[];});
+ // 1.15.0 (karar 0040): fırsatçı avcı her kategoriden olabilir (ör. Afrika cüce kurbağası); av yalnız balıktır.
+ const smallFishPredationIssues=profiles.flatMap(hunter=>{const note=explicit(hunter.profile!.behavior?.eatsSmallFish);return note&&!hunter.profile!.predatory?fishProfiles.filter(prey=>prey.profile!.id!==hunter.profile!.id&&prey.profile!.adultSizeCm<=Math.min(hunter.profile!.adultSizeCm*PREY_SIZE_RATIO,note.maxPreyCm??Infinity)).map(prey=>({hunter:hunter.profile!,prey:prey.profile!,note})):[];});
  const dwarfShrimp=profiles.filter(({item,profile})=>item.category==="shrimp"&&profile!.adultSizeCm<=DWARF_SHRIMP_MAX_CM);
  const shrimpEaters=dwarfShrimp.length?fishProfiles.filter(({profile})=>explicit(profile!.behavior?.eatsShrimp)):[];
  const shrimpUnverified=dwarfShrimp.length?fishProfiles.filter(({profile})=>!explicit(profile!.behavior?.eatsShrimp)&&!explicit(profile!.behavior?.shrimpSafe)):[];
  // Kural seti 1.7.0 (docs/DECISIONS/0013-salyangoz-uyarisi.md): yalnızca kaynağı açıkça "salyangoz yer" diyen balıklar uyarı üretir.
  const snails=profiles.filter(({item})=>item.category==="snail");
  const snailEaters=snails.length?fishProfiles.filter(({profile})=>explicit(profile!.behavior?.eatsSnails)):[];
- const conspecificIssues=profiles.filter(({item,profile})=>item.quantity>=2&&explicit(profile!.behavior?.conspecificAggression));
+ // 1.15.0 (karar 0040): "tek tutulmalı" kaydı, katalog türü çift ya da grup halinde önerirken (en az grup 2 ve üstü) kayıtlı adet bu sayıyı aşmıyorsa
+ // uyarı üretmez (ör. leleupi çifti). Fazlası yine uyarı alır. "Erkekler kavga eder" kaydı değişmedi.
+ const conspecificIssues=profiles.filter(({item,profile})=>item.quantity>=2&&explicit(profile!.behavior?.conspecificAggression)!==undefined&&!(profile!.behavior!.conspecificAggression!.value==="all"&&profile!.minGroup>=2&&item.quantity<=profile!.minGroup));
  // Ortak güvenli sıcaklık veya pH aralığı bulunmaması doğrudan tehlike seviyesidir.
  const compatibilityPenalty=(habitatIssues.length?80:0)+(temperatureConflict?55:0)+(phConflict?55:0)+(flowConflict?20:0)+(predationIssues.length?60:0)+(speciesOnlyIssues.length?60:0);
  const behaviorPenalty=(smallFishPredationIssues.length?40:0)+(finNipIssues.length?30:0)+(conspecificIssues.length?30:0)+(shrimpEaters.length?30:0)+(shrimpUnverified.length?15:0)+(snailEaters.length?30:0);
@@ -404,7 +423,7 @@ export function createAnalyzer(resolver:KnowledgeResolver):AnalyzeAquarium{
  for(const {profile} of communityCautionIssues)warnings.push({level:"warning",title:`${profile!.commonName}: tank arkadaşı seçimine dikkat`,message:profile!.communityCaution!,code:"communityCaution",params:{name:profile!.commonName,text:profile!.communityCaution!}});
  const noteText=(note:BehaviorNote)=>(note.condition?` Kaynağın notu: ${note.condition.replace(/\.?$/,".")}`:"")+` Kaynak: ${note.source}.`;
  const noteParams=(note:BehaviorNote):EngineParams=>({condition:note.condition??"",source:note.source});
- for(const {hunter,prey,note} of smallFishPredationIssues)warnings.push({level:"warning",title:`${prey.commonName}: avlanabilir`,message:`${hunter.commonName} ağzına sığan küçük balıkları yiyebilir; ${prey.commonName} yetişkin boyuyla bu risk içinde.${noteText(note)}`,code:"smallFishPredation",params:{hunter:hunter.commonName,prey:prey.commonName,...noteParams(note)}});
+ for(const {hunter,prey,note} of smallFishPredationIssues)warnings.push({level:"danger",title:`${prey.commonName}: avlanabilir`,message:`${hunter.commonName} ağzına sığan küçük balıkları yiyebilir; ${prey.commonName} yetişkin boyuyla bu risk içinde. Bu iki türü aynı akvaryumda tutmayın.${noteText(note)}`,code:"smallFishPredation",params:{hunter:hunter.commonName,prey:prey.commonName,...noteParams(note)}});
  for(const {nipper,target,note} of finNipIssues)warnings.push({level:"warning",title:`${target.commonName}: yüzgeç ısırma riski`,message:`${nipper.commonName} yüzgeç ısırabilir; ${target.commonName} gibi uzun ya da yavaş yüzgeçli balıklarla birlikte tutulması önerilmez.${noteText(note)}`,code:"finNip",params:{nipper:nipper.commonName,target:target.commonName,...noteParams(note)}});
  for(const {item,profile} of conspecificIssues){const note=profile!.behavior!.conspecificAggression!;warnings.push(note.value==="males"?{level:"warning",title:`${profile!.commonName}: erkekler kavga eder`,message:`Kaynağa göre bu türün erkekleri birbiriyle kavga eder; kayıtlı ${item.quantity} bireyden birden fazlası erkekse ayırın.${noteText(note)}`,code:"conspecificMales",params:{name:profile!.commonName,count:item.quantity,...noteParams(note)}}:{level:"warning",title:`${profile!.commonName}: tek tutulmalı`,message:`Kaynağa göre bu tür kendi türünden bireylere karşı saldırgandır ve genellikle tek tutulmalıdır.${noteText(note)}`,code:"conspecificAll",params:{name:profile!.commonName,...noteParams(note)}});}
  const shrimpNames=nameList(dwarfShrimp.map(({profile})=>profile!.commonName));
@@ -427,9 +446,12 @@ export function createAnalyzer(resolver:KnowledgeResolver):AnalyzeAquarium{
  // 1.14.0 (karar 0037): tehlikedeki bir ölçüt de genel puanı en fazla "dikkat" yapar. Veri güveni bu kurala girmez; canlısı olmayan
  // akvaryumda filtre ve ısıtıcı ölçütü de girmez.
  const dangerMetric=metrics.some(metric=>metric.status==="danger"&&metric.key!=="confidence"&&(animals.length>0||(metric.key!=="filter"&&metric.key!=="heater")));
+ // 1.15.0 (karar 0040): canlı kaydı olan akvaryumda canlı riski sınıfından bir uyarı da genel puanı en fazla "dikkat" yapar. Canlısız akvaryumda
+ // (ör. döngü kuran akvaryumda amonyak) tavan koymaz.
+ const livestockRiskWarning=animals.length>0&&warnings.some(warning=>LIVESTOCK_RISK_WARNING_CODES.has(warning.code));
  const metricSum=metrics.reduce((s,m)=>s+m.score,0); const averageScore=clamp(metricSum/metrics.length);
  // Davranış uyarıları uyarı seviyesindedir: davranış cezası olmadan tehlikede olmayan akvaryumu tek başına tehlikeye çekemez.
  const averageWithoutBehavior=clamp((metricSum-compatibilityScore+compatibilityFor(compatibilityPenalty))/metrics.length); const behaviorFloor=averageWithoutBehavior>=50?50:0;
- const score=criticalDanger?Math.min(averageScore,49):Math.min(Math.max(averageScore,behaviorFloor),dangerWarning||dangerMetric?DANGER_WARNING_SCORE_CAP:100); return {score,status:status(score),metrics,warnings,...(marine?{marineWater:marine}:{})};
+ const score=criticalDanger?Math.min(averageScore,49):Math.min(Math.max(averageScore,behaviorFloor),dangerWarning||dangerMetric||livestockRiskWarning?DANGER_WARNING_SCORE_CAP:100); return {score,status:status(score),metrics,warnings,...(marine?{marineWater:marine}:{})};
  };
 }

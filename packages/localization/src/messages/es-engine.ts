@@ -325,7 +325,7 @@ export const esEngine: EngineMessages = {
     },
     smallFishPredation: {
       title: (p) => `${str(p, "prey")}: puede ser presa`,
-      message: (p) => `${str(p, "hunter")} puede comer peces pequeños que le quepan en la boca; con su tamaño adulto, ${str(p, "prey")} corre este riesgo.${sourceNote(p)}`,
+      message: (p) => `${str(p, "hunter")} puede comer peces pequeños que le quepan en la boca; con su tamaño adulto, ${str(p, "prey")} corre este riesgo. No mantengas estas dos especies en el mismo acuario.${sourceNote(p)}`,
     },
     finNip: {
       title: (p) => `${str(p, "target")}: riesgo de mordisqueo de aletas`,

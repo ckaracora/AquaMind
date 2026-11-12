@@ -7440,7 +7440,10 @@ for (const [id, minVolumeL, minGroup] of [
   assert(profile.husbandryCaution, `${id} özel bakım uyarısı taşımalı`);
 }
 assert.deepEqual(speciesCatalog.find((item) => item.id === "chocolate-gourami")?.ph, [4, 6], "Çikolata gurami genel sert su topluluğuna uygun gösterilmemeli");
-assert.equal(speciesCatalog.find((item) => item.id === "moonlight-gourami")?.predatory, true, "Ayışığı gurami çok küçük balıklar için risk taşımalı");
+// 2026-11-12 (karar 0040, docs/CATALOG_LOG.md): Fishkeeper "not to be trusted with very tiny fish", Seriously Fish "so small as to be seen as food";
+// iki kaynak da asıl avcı demiyor. Risk avcı işaretiyle değil, kaynaklı fırsatçı avcı kaydıyla taşınır (src/data/species-behavior.ts).
+assert.equal(speciesCatalog.find((item) => item.id === "moonlight-gourami")?.predatory, undefined, "Ayışığı gurami asıl avcı sayılmamalı: kaynaklar yalnız çok küçük balıkları anıyor");
+assert(speciesCatalog.find((item) => item.id === "moonlight-gourami")?.communityCaution?.includes("çok küçük balıkları yiyebilir"), "Ayışığı gurami çok küçük balıklar için riski bakım metninde taşımalı");
 const threadfinRainbow = speciesCatalog.find((item) => item.id === "threadfin-rainbowfish");
 assert.equal(threadfinRainbow?.minGroup, 6, "Threadfin gökkuşağı grup halinde önerilmeli");
 assert.equal(threadfinRainbow?.flow, "low", "Threadfin gökkuşağı güçlü akıntıya zorlanmamalı");

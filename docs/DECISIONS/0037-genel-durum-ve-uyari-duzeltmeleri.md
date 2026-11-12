@@ -137,7 +137,7 @@ Codex 2026-11-11'de değişikliği kontrol etti. D1–D7'de uygulama hatası, te
 - **Kalkan yanlış alarmlar:** B12'de kırmızı alan uyarısı sarı "akvaryum bu tür için dar" oldu. B25'te alan ölçütü 20 yerine 60. Topluluk notu tür uyumunu düşürmüyor.
 - **Daha sert hükümler:** B20 ve B22 "dikkat" oldu; B22 "uygun değil" olmadı. Bunun için filtre yokluğunun kesin tehlike sayılması gerekirdi; onaylanan bu değil.
 - **Değişmeyenler:**
-  - B02, B16, B17 ve B18 yalnız sarı uyarıyla "uygun" kaldı. Sarı uyarılar genel durumu düşürmez; bu bulgu bu kararın kapsamında değil.
+  - B02, B16, B17 ve B18 yalnız sarı uyarıyla "uygun" kaldı. Sarı uyarılar genel durumu düşürmez; bu bulgu bu kararın kapsamında değil. Sonra değişti: karar 0040.
   - B15, B19 ve B21 "dikkat"te kaldı.
   - B14 yeni uyarı almadı. Lepistesin alt sıcaklığı 20 °C, yani 23 °C eşiğine göre tropikal sayılmıyor. Ortak aralık (20–25 °C) tek nokta değil ve 25 °C iki türün de aralığında.
   - B22'de ısıtıcı uyarısı çıkmadı: neonun alt sıcaklığı 21 °C.
@@ -152,6 +152,7 @@ Codex 2026-11-11'de değişikliği kontrol etti. D1–D7'de uygulama hatası, te
 - **Soğuk su grubunun kapsamı.** `group:"coldwater"` yalnız 7 kayıtta: goldfish, white-cloud, medaka, dojo-loach, rainbow-shiner, koi-carp, axolotl. Serin su türü olup başka grupta duranlar bu kuralla yakalanmaz (ör. cennet balığı 10–22 °C, dark-edged splitfin 10–22 °C). Katalog verisi puan için değiştirilmez; gerekirse ayrı bir veri işi.
 - **Sünger filtre kapasitesi.** Hava motorlu sünger filtre akvaryum hacminden bağımsız olarak "hazır" sayılıyor (veri testi: 300 L'de de hazır). Ayrı bir motor işi; kaynak ve ürün sahibi onayı gerekir.
 - **Sarı uyarıların genel duruma etkisi** (B02, B14, B16, B17, B18) bu kararın kapsamında değil.
+  - Sonra değişti (2026-11-12, motor 1.15.0, kural seti 1.12.0, `docs/DECISIONS/0040-canli-riski-uyarilari-genel-durumda.md`): canlı riski uyarısı (yenme ve yaralanma; alan, kalabalık ve grup; aralık dışı su değeri) canlı kaydı olan akvaryumda genel puanı en fazla 74 yapar; "küçük balık avlanabilir" tehlike seviyesine çıktı. B14, B16, B17, B18 ve B28 "dikkat" oldu; B02 "dikkat"te kaldı (beklenen "uygun değil").
 
 ## Geri alma
 

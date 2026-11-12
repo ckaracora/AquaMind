@@ -95,9 +95,9 @@ describe("kaynağın av boyu sınırı (gerçek katalog)", () => {
   };
   const predation = (result: ReturnType<typeof analyzeAquarium>) => result.warnings.filter((warning) => / avlanabilir$|için avlanma riski$/.test(warning.title));
 
-  it("threadfin acara 2 cm'lik balık için sarı uyarı verir, neon tetra için vermez", () => {
+  it("threadfin acara 2 cm'lik balık için uyarı verir (1.15.0'dan beri tehlike seviyesinde), neon tetra için vermez", () => {
     const small = predation(analyzeAquarium(tank, [fish("threadfin-acara", 1), fish("chili-rasbora", 10)], []));
-    expect(small.map((warning) => warning.level)).toEqual(["warning"]);
+    expect(small.map((warning) => warning.level)).toEqual(["danger"]);
     expect(small[0].message).toContain("Kaynağın notu: Yaklaşık 2 cm ve altındaki balıklar");
     expect(small[0].message).toContain("Kaynak: Seriously Fish.");
     expect(predation(analyzeAquarium(tank, [fish("threadfin-acara", 1), fish("neon-tetra", 10)], []))).toEqual([]);
@@ -105,6 +105,54 @@ describe("kaynağın av boyu sınırı (gerçek katalog)", () => {
 
   it("winemilleri yalnızca birkaç milimetrelik balıkları avladığı için katalogdaki balıklara uyarı vermez", () => {
     expect(predation(analyzeAquarium(tank, [fish("winemillers-eartheater", 1), fish("chili-rasbora", 10)], []))).toEqual([]);
+  });
+});
+
+// 2026-11-12, karar 0040 (docs/CATALOG_LOG.md): kaynakları yalnız çok küçük balıkları anan iki tür asıl avcı değil, fırsatçı avcıdır.
+describe("ayışığı guramisi ve Afrika cüce kurbağası: fırsatçı avcı (gerçek katalog)", () => {
+  const tank: Aquarium = { id: "t", name: "T", type: "freshwater", lengthCm: 120, widthCm: 45, heightCm: 50, netVolumeLiters: 250, setupDate: "2026-01-01" };
+  const animal = (id: string, quantity: number): Livestock => {
+    const profile = speciesById(id)!;
+    return { id: `${id}-${quantity}`, aquariumId: "t", catalogId: id, commonName: profile.commonName, scientificName: profile.scientificName, category: profile.category, quantity, addedAt: "2026-01-01" };
+  };
+  const water = { id: "w", aquariumId: "t", measuredAt: "2026-11-12", temperature: 24, ph: 7.2, ammonia: 0, nitrite: 0, nitrate: 10 };
+  const predation = (result: ReturnType<typeof analyzeAquarium>) => result.warnings.filter((warning) => / avlanabilir$|için avlanma riski$/.test(warning.title));
+
+  it("ayışığı guramisi avcı işareti taşımaz; Fishkeeper kaydıyla fırsatçı avcıdır", () => {
+    expect(speciesById("moonlight-gourami")?.predatory).toBeUndefined();
+    expect(withBehavior(speciesById("moonlight-gourami"))?.behavior?.eatsSmallFish).toMatchObject({ source: "Fishkeeper", condition: "Çok küçük balıklar." });
+  });
+
+  it("ayışığı guramisi ile neon tetra: kırmızı 'avlanabilir' uyarısı, kesin tehlike değil (veri testi C38)", () => {
+    const result = analyzeAquarium(tank, [animal("moonlight-gourami", 3), animal("neon-tetra", 10)], [], water);
+    expect(result.warnings.find((warning) => warning.title === "Neon tetra: avlanabilir")).toMatchObject({ level: "danger", code: "smallFishPredation" });
+    expect(result.warnings.some((warning) => warning.code === "predation")).toBe(false);
+    expect(result.status).not.toBe("danger");
+  });
+
+  it("Afrika cüce kurbağası 2 cm'lik balık için kırmızı uyarı verir; 3 cm'lik balık, karides ve salyangoz için vermez", () => {
+    expect(withBehavior(speciesById("african-dwarf-frog"))?.behavior?.eatsSmallFish).toMatchObject({ source: "Fishkeeper", condition: "Çok küçük balıklar ve yavrular." });
+    const chili = analyzeAquarium(tank, [animal("african-dwarf-frog", 3), animal("chili-rasbora", 10)], [], water);
+    expect(predation(chili).map((warning) => [warning.level, warning.title])).toEqual([["danger", `${speciesById("chili-rasbora")!.commonName}: avlanabilir`]]);
+    expect(predation(chili)[0].message).toContain("Kaynak: Fishkeeper.");
+    expect(chili.status).not.toBe("danger");
+    expect(predation(analyzeAquarium(tank, [animal("african-dwarf-frog", 3), animal("neon-tetra", 10)], [], water))).toEqual([]);
+    expect(predation(analyzeAquarium(tank, [animal("african-dwarf-frog", 3), animal("cherry-shrimp", 10), animal("ramshorn-snail", 3)], [], water))).toEqual([]);
+  });
+});
+
+describe("'tek tutulmalı' ve kaynağın önerdiği çift (gerçek katalog, karar 0040)", () => {
+  const tank: Aquarium = { id: "t", name: "T", type: "freshwater", lengthCm: 120, widthCm: 50, heightCm: 50, netVolumeLiters: 300, setupDate: "2026-01-01" };
+  const fish = (id: string, quantity: number): Livestock => {
+    const profile = speciesById(id)!;
+    return { id: `${id}-${quantity}`, aquariumId: "t", catalogId: id, commonName: profile.commonName, scientificName: profile.scientificName, category: profile.category, quantity, addedAt: "2026-01-01" };
+  };
+  const single = (result: ReturnType<typeof analyzeAquarium>) => result.warnings.filter((warning) => warning.code === "conspecificAll");
+
+  it("leleupi çifti uyarı almaz (veri testi C04), üç birey alır", () => {
+    expect(speciesById("leleupi-cichlid")?.minGroup).toBe(2);
+    expect(single(analyzeAquarium(tank, [fish("leleupi-cichlid", 2)], []))).toEqual([]);
+    expect(single(analyzeAquarium(tank, [fish("leleupi-cichlid", 3)], [])).map((warning) => warning.title)).toEqual([`${speciesById("leleupi-cichlid")!.commonName}: tek tutulmalı`]);
   });
 });
 

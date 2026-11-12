@@ -130,12 +130,19 @@ describe("denetim senaryoları: filtre ve biyolojik yük", () => {
 describe("denetim senaryoları: davranış", () => {
   it("Japon balığı ile neon tetra: küçük balık avlama uyarısı", () => {
     const result = analyzeAquarium(tank(80, 100), [fish("goldfish", 2), fish("neon-tetra", 10)], communityDevices(), water({ temperature: 23 }));
-    expect(result.warnings.find((warning) => warning.title === "Neon tetra: avlanabilir")?.level).toBe("warning");
+    // 1.15.0 (karar 0040): fırsatçı avcının uyarısı tehlike seviyesinde, genel durum en fazla "dikkat".
+    expect(result.warnings.find((warning) => warning.title === "Neon tetra: avlanabilir")?.level).toBe("danger");
+    expect(result.score).toBeLessThanOrEqual(74);
+    expect(result.status).toBe("warning");
   });
 
   it("Melek balığı ile neon tetra: küçük balık avlama uyarısı", () => {
     const result = analyzeAquarium(tank(100, 200), [fish("angelfish", 2), fish("neon-tetra", 15)], [device("jbl-e902"), device("eheim-thermo-150")], water({ temperature: 26 }));
-    expect(result.warnings.find((warning) => warning.title === "Neon tetra: avlanabilir")?.message).toContain("Kaynak: Seriously Fish.");
+    const warning = result.warnings.find((item) => item.title === "Neon tetra: avlanabilir");
+    expect(warning?.message).toContain("Bu iki türü aynı akvaryumda tutmayın.");
+    expect(warning?.message).toContain("Kaynak: Seriously Fish.");
+    // Veri testi B16: kaynaklar "uygun değil" ya da "dikkat" bekliyor; 1.14.0'da 93 "uygun" çıkıyordu.
+    expect(result.status).toBe("warning");
   });
 
   it("Sumatra barb ile beta: yüzgeç ısırma uyarısı", () => {

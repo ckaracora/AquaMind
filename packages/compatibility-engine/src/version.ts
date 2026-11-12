@@ -6,7 +6,8 @@
 // kod değişikliğinde yükseltilir.
 // RULESET_VERSION: motorun içine gömülü eşik ve ceza sabitlerinin sürümü
 // (0,85 etkin hacim, 0,65 filtre verimi, 0,5–1,5 W/L ısıtıcı bandı, 80 yaşam ortamı ve
-// 55/55/20/60/60 uyum cezaları, %40 avlanma oranı, 60 sarı alan ve grup tabanı, 23 °C tropikal eşiği). Bir sabit değişince yükseltilir.
+// 55/55/20/60/60 uyum cezaları, %40 avlanma oranı, 60 sarı alan ve grup tabanı, 23 °C tropikal eşiği, canlı riski uyarı sınıfı). Bir sabit ya da
+// kural değişince yükseltilir.
 //
 // 1.1.0: katalog entegrasyonuyla yaşam ortamı, tuzluluk, birey başına ek hacim ve
 // yardımcı filtre kuralları eklendi (bkz. docs/DECISIONS/0007-katalog-entegrasyonu-motor-kurallari.md).
@@ -66,5 +67,12 @@
 // kayıtlı değilse ve tropikal canlı varken ısıtıcı kayıtlı değilse sarı uyarı çıkar (tropikal: soğuk su türü değil, en düşük sıcaklığı ≥ 23 °C;
 // ısıtıcı ölçütündeki mevcut eşik). İsviçre genişlik kuralı tehlikeden sarı "akvaryum bu tür için dar" uyarısına iner. Bir ceza sabiti kalktığı,
 // taban sabiti geldiği, tavan kuralı ve kırmızı alan koşulu değiştiği için kural seti 1.11.0. Sonuç nesnesinin biçimi değişmez.
-export const ENGINE_VERSION = "1.14.0";
-export const RULESET_VERSION = "1.11.0";
+//
+// 1.15.0: canlı riski uyarıları genel duruma girer (bkz. docs/DECISIONS/0040-canli-riski-uyarilari-genel-durumda.md; ürün sahibinin onayı 2026-11-12,
+// seçenek B). Canlı kaydı olan akvaryumda yenme ve yaralanma, alan, kalabalık ve grup ya da aralık dışı su değeri uyarısı (18 kod) genel puanı en
+// fazla 74 yapar; bilgi notları, kayıt ve veri eksikliği, cinsiyete bağlı aynı tür saldırganlığı ve ekipman uyumu genel puanı değiştirmez. Fırsatçı
+// avcının küçük balık uyarısı tehlike seviyesine çıkar (kesin tehlike değil, en fazla "dikkat"); fırsatçı avcı her kategoriden olabilir, av yalnız
+// balıktır. "Tek tutulmalı" uyarısı, katalog türü çift ya da grup halinde öneriyorsa ve kayıtlı adet bu sayıyı aşmıyorsa çıkmaz. Yeni sayı yok;
+// tavan kuralı, uyarı seviyesi ve uyarı koşulu değiştiği için kural seti 1.12.0. Sonuç nesnesinin biçimi değişmez.
+export const ENGINE_VERSION = "1.15.0";
+export const RULESET_VERSION = "1.12.0";

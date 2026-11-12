@@ -332,7 +332,7 @@ export const trEngine = {
     },
     smallFishPredation: {
       title: (p) => `${str(p, "prey")}: avlanabilir`,
-      message: (p) => `${str(p, "hunter")} ağzına sığan küçük balıkları yiyebilir; ${str(p, "prey")} yetişkin boyuyla bu risk içinde.${sourceNote(p)}`,
+      message: (p) => `${str(p, "hunter")} ağzına sığan küçük balıkları yiyebilir; ${str(p, "prey")} yetişkin boyuyla bu risk içinde. Bu iki türü aynı akvaryumda tutmayın.${sourceNote(p)}`,
     },
     finNip: {
       title: (p) => `${str(p, "target")}: yüzgeç ısırma riski`,

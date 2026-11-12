@@ -324,7 +324,7 @@ export const enEngine: EngineMessages = {
     },
     smallFishPredation: {
       title: (p) => `${str(p, "prey")}: may be eaten`,
-      message: (p) => `${str(p, "hunter")} can eat small fish that fit in its mouth; at its adult size, ${str(p, "prey")} is within this risk.${sourceNote(p)}`,
+      message: (p) => `${str(p, "hunter")} can eat small fish that fit in its mouth; at its adult size, ${str(p, "prey")} is within this risk. Do not keep these two species in the same aquarium.${sourceNote(p)}`,
     },
     finNip: {
       title: (p) => `${str(p, "target")}: risk of fin nipping`,

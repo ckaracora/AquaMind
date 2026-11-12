@@ -62,14 +62,15 @@ describe("yüzgeç ısırma", () => {
 describe("fırsatçı avcı", () => {
   it("yetişkin boyu avcının %40'ı veya altındaki balık için uyarı verir", () => {
     const result = run(animal("hunter", 2), animal("prey6", 10), animal("prey61", 10));
-    expect(find(result, "Altı santim: avlanabilir")?.level).toBe("warning");
+    // 1.15.0 (karar 0040): fırsatçı avcının uyarısı tehlike seviyesinde ama kesin tehlike değil; genel durum "dikkat".
+    expect(find(result, "Altı santim: avlanabilir")?.level).toBe("danger");
     expect(titles(result)).not.toContain("Altı virgül bir: avlanabilir");
-    expect(result.status).not.toBe("danger");
+    expect(result.status).toBe("warning");
   });
 
   it("kaynak bir av boyu verdiyse %40 kuralı yerine o sınır geçerlidir", () => {
     const result = run(animal("limitedHunter", 1), animal("prey2", 10), animal("prey25", 10));
-    expect(find(result, "İki santim: avlanabilir")?.level).toBe("warning");
+    expect(find(result, "İki santim: avlanabilir")?.level).toBe("danger");
     expect(titles(result)).not.toContain("İki buçuk santim: avlanabilir");
   });
 
@@ -118,7 +119,9 @@ describe("tür uyumu ölçütü", () => {
   it("uyarı seviyesindeki sorunlar birikse de ölçüt en fazla 'dikkat' olur", () => {
     const result = run(animal("hunter", 2), animal("prey6", 10), animal("nipper", 8), animal("longFin", 2), animal("fighter", 3), animal("dwarfShrimp", 10));
     expect(compatibility(result)).toMatchObject({ score: 50, status: "warning" });
-    expect(result.warnings.filter((warning) => warning.level === "danger")).toEqual([]);
+    // Tehlike seviyesindeki tek uyarı fırsatçı avcınınki (1.15.0); kesin tehlike yok, genel durum "dikkat".
+    expect(new Set(result.warnings.filter((warning) => warning.level === "danger").map((warning) => warning.code))).toEqual(new Set(["smallFishPredation"]));
+    expect(result.status).toBe("warning");
   });
 
   it("davranış uyarısı, onsuz tehlikede olmayan akvaryumu tek başına tehlikeye çekmez", () => {
