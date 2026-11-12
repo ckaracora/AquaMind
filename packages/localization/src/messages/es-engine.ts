@@ -248,6 +248,12 @@ export const esEngine: EngineMessages = {
       title: fixed("Se detectó nitrito"),
       message: (p, f) => `Nitrito: ${f.measurement(num(p, "value"))} ppm. El nitrito debe ser 0; los valores por encima de cero solo pueden tolerarse durante poco tiempo.`,
     },
+    /** Motor 1.16.0 (karar 0041): canlı kaydı olmayan akvaryumda amonyak ya da nitrit sıfırın üstünde; yalnız sıfırın üstündeki değer yazılır. */
+    cycleIncomplete: {
+      title: fixed("Aún es pronto para agregar animales"),
+      message: (p, f) =>
+        `Última medición: ${nameList([...(p.ammonia !== undefined ? [`amoníaco ${f.measurement(num(p, "ammonia"))} ppm`] : []), ...(p.nitrite !== undefined ? [`nitrito ${f.measurement(num(p, "nitrite"))} ppm`] : [])])}. El amoníaco y el nitrito deben bajar a cero antes de agregar animales.`,
+    },
     nitrateTooHighSaltwater: {
       title: fixed("Nitrato muy alto"),
       message: (p, f) =>

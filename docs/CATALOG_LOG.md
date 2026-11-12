@@ -4243,3 +4243,59 @@ Güncel alt adım: JBL filtre medyası, bakteri başlangıcı, sorun giderici/pH
   - Dophin tablolarında hangi değerin hangi voltaja ait olduğu sütun başlığındaki sıradan çıkarıldı ("120V/230V" ve "60/50Hz" ile aynı sırada); sayfa bunu ayrıca yazmıyor. Canberk'in dalı da aynı okumayı yapmış.
   - SunSun tablosu voltaja göre ayrı değer vermiyor (110V/220V/240V için tek satır).
   - Türkiye'de "503" adıyla 600 L/saat ve 6 W yazılarak satılan ürün 503B olabilir; kullanıcı kendi cihazının etiketine bakmalı (0017'deki elle değer girişi).
+
+## 2026-11-12 Motor 1.16.0: "karides yer" kayıtlarının kapsamı ve deniz suyu kaynakları (Claude)
+
+- Gerekçe: veri testi D29 (Japon balığı + Amano karides, uyarısız "uygun"). Motor karides yeme uyarısını yalnız 4 cm ve altı karideste çıkarıyordu. Ürün sahibinin isteği (2026-11-12): kaynak "cüce" ya da boy sınırı demiyorsa kural bütün karidesleri kapsasın. Karar 0041, motor 1.16.0.
+- Veride ayrım yoktu: 29 `eatsShrimp` kaydının hiçbirinde boy alanı yok, hiçbir kaynak santimetre vermiyor. Kaynak sayfaları 2026-11-12'de yeniden açıldı. Aşağıdaki aktarımlar kısa Türkçe özettir; tam metin bağlantıdadır.
+- `src/data/species-behavior.ts`: `BehaviorRecord`'a `smallShrimpOnly?: true` alanı eklendi. Alan 10 kaydın `eatsShrimp` satırına yazıldı. `verifiedAt`, `condition` ve `evidence` değişmedi; kayıtların öbür alanları bugün kaynağa karşı okunmadı.
+- **Yalnız küçük karides (`smallShrimpOnly`, 10 kayıt):**
+  - `guppy`, `kuhli-loach`, `clown-killifish`, `white-cloud`: Practical Fishkeeping, "What can I keep with shrimp?" (https://www.practicalfishkeeping.co.uk/features/what-can-i-keep-with-shrimp/).
+    - "Who's a maybe?" bölümü bu türleri karidesi yiyebilecek ya da yemeyecek, yavruları neredeyse kesin yiyecek balıklar arasında sayar ve karidesle olası seçenek diye anar.
+    - White Cloud için ayrıca PFK'nın White Cloud biyotop yazısı yosun için *Caridina multidentata* (Amano) eklemeyi önerir (https://www.practicalfishkeeping.co.uk/features/how-to-set-up-a-white-cloud-biotope/).
+  - `sparkling-gourami`: PFK (https://www.practicalfishkeeping.co.uk/features/everything-you-need-to-know-about-the-brilliantly-bright-sparkling-gou/).
+    - Küçük karides türlerini sparkling guramiyle tutmadan önce iki kez düşünmeyi öğütler.
+    - Yetişkin karidesi ancak kabuk değiştirdiyse avlar; yavrular atıştırmalık olur.
+    - Karides yerine iri Amano'ları önerir; bilgi kutusu küçük süs karideslerini yer der.
+  - `pea-puffer`: PFK, cüce balonlar (https://www.practicalfishkeeping.co.uk/features/how-to-keep-dwarf-puffers/). Amano ve kiraz karidesin küçük boyları balona yem olur; yavru kiraz karidesler tereddütsüz yenir; büyüyünce de küçük türler (ör. Bumblebee) risk altındadır.
+  - `croaking-gourami`: Fishkeeper (https://www.fishkeeper.co.uk/fish/freshwater/anabantids/croaking-gourami). Mikro avcıdır; küçük süs karidesleriyle tutarken çok dikkat gerekir.
+  - `ocellaris-clownfish`: PFK, ocellaris bakım rehberi (https://www.practicalfishkeeping.co.uk/features/common-clownfish-the-complete-care-guide-to-amphiprion-ocellaris/). Resife tamamen güvenlidir; çok küçük süs karidesleri iri yetişkinlerce ara sıra yem sayılabilir.
+  - `banggai-cardinalfish`: Fishkeeper (https://www.fishkeeper.co.uk/fish/marine/miscellaneous-fish/banggai-cardinalfish-). Küçük karidesler ve çok küçük balıklar iri bireylerce yem sayılabilir.
+  - `red-lip-goby-exallisquamulus`: Seriously Fish (https://www.seriouslyfish.com/species/sicyopus-exallisquamulus/). Küçük canlı omurgasızlar için iyi arkadaş değildir.
+- **Bütün karidesler (işaretsiz, 18 kayıt):**
+  - `goldfish`: PFK, aynı yazının "Who's out?" bölümü. Japon balığı karidesle tutulmayan balıklar arasındadır: "it is not a matter of if but when they will eat your shrimp". Boy ayrımı yok.
+  - `half-banded-spiny-eel`, `tire-track-eel`: PFK, aynı bölüm. Dikenli yılan balıkları karidesle tutulmaz.
+  - `discus`: PFK, aynı bölüm.
+    - Melek ve diskus dahil çiklitler dışarıda; cüce çiklitler bile bulduğu karidesi temizler.
+    - Aynı paragraf Amano'nun hayatta kalabileceğini ama saklanmayı bileceğini yazar; risk Amano'yu da kapsar.
+  - `angelfish`: PFK, Neale Monks'un yanıtı (https://www.practicalfishkeeping.co.uk/fishkeeping-answers/are-there-any-shrimps-my-fish-wont-eat/).
+    - Melek yakalayabildiği her karidesi yer.
+    - Fan karidesleri (*Atya gabonensis*, *Atyopsis moluccensis*) sorundan kaçacak kadar büyüktür ve yeterince beslenirse melekle işe yarayabilir. Kaydın koşul notu bunu yazıyor; uyarı "dikkat" kalır (liderin kararı).
+  - `paradise-fish`: PFK, Bob Mehen'in yanıtı (https://www.practicalfishkeeping.co.uk/fishkeeping-answers/whats-safe-to-keep-with-minnows-and-shrimp/). Karidesi avlama ihtimali var, özellikle küçükse.
+  - `black-ghost-knifefish`: Fishkeeper (https://www.fishkeeper.co.uk/fish/freshwater/miscellaneous/black-ghost-knifefish). Salyangoz ya da karidesle birlikte tutulmaz, avlanırlar.
+  - `spotted-congo-puffer`: Fishkeeper (https://www.fishkeeper.co.uk/fish/freshwater/miscellaneous/spotted-congo-puffer). Canlı karides yem olarak verilir; yanından geçen küçük balık ve kabukluları pusuda bekler.
+  - `yellow-wrasse` (deniz): Fishkeeper (https://www.fishkeeper.co.uk/fish/marine/wrasses/yellow-wrasse).
+    - Süs karidesi, salyangoz ya da yelpaze kurdu olmayan resiflere uygundur; yelpaze kurtları, küçük salyangozlar ve karidesler için tehdittir.
+    - "Küçük" yalnız salyangoza bağlanabilir; tanım cümlesine göre bütün karidesler (liderin kararı).
+  - `orchid-dottyback` (deniz): Fishkeeper (https://www.fishkeeper.co.uk/fish/marine/dottybacks-grammas/orchid-dottyback). Resif bölümü süs karideslerini avlar der, bakım bölümü küçük süs karidesleri der; bütün karidesler (liderin kararı).
+  - Seriously Fish'in canlı nehir karidesi yem önerisi olan 8 kayıt: `andrao-snakehead`, `rainbow-snakehead`, `arowana`, `clown-knifefish`, `freshwater-needlefish`, `indochinese-needlefish`, `hujeta-gar`, `red-bellied-piranha`. Yetişkin yemleri arasında canlı nehir karidesi sayılır, boy sınırı yok. Örnek olarak Andrao yılanbaşı sayfası yeniden okundu (https://www.seriouslyfish.com/species/channa-andrao/).
+- `betta` kaydı çelişkili (`conflict`) kalır, uyarı üretmez.
+- **Deniz suyu kaynakları** (yalnız balıklı özgül ağırlık hedefi 1,017–1,025, karar 0041; katalog kaydı değişmedi):
+  - OATA, "How to set up and maintain a marine aquarium" (Eylül 2022; https://ornamentalfish.org/wp-content/uploads/How-to-set-up-and-maintain-a-marine-aquarium-Sept-2022.pdf).
+    - Tuzluluk: yalnız balıklı ev akvaryumu 1.017–1.023 SG (23–30 ppt), omurgasızlı 1.024–1.026 SG (32–35 ppt).
+    - Döngü: amonyak ve nitrit önce yükselip sonra düşer; ikisi sıfıra inip sıfırda kalınca filtre olgunlaşmıştır ve yavaşça canlı eklenebilir.
+  - OATA'nın deniz balığı bakım kartları (2026-11-12'de okundu): tuzluluk 1.020–1.025, pH 7.9–8.3. Kartlar:
+    - palyaço (https://ornamentalfish.org/what-we-do/advice-information/care-sheets/caresheets-marine-fish/how-to-look-after-clown-fish/);
+    - basslet ve dottyback;
+    - jawfish ve dartfish;
+    - gobi;
+    - horozbina;
+    - chromis ve damsel;
+    - tang ve tavşan balığı;
+    - lapin;
+    - cüce melek.
+  - Fishkeeper: royal gramma (https://www.fishkeeper.co.uk/fish/marine/dottybacks-grammas/royal-gramma-) ve Banggai kardinal sayfalarında SG 1.020–1.025, pH 8.1–8.4.
+  - OATA, "Guppies and mollies" bakım kartı (Eylül 2022; https://ornamentalfish.org/wp-content/uploads/Guppies-and-mollies-Sept-2022.pdf): balık eklemeden önce amonyak ve nitritin sıfır olduğunu kontrol edin; kontrol listesinde akvaryumun döngüsünü tamamlamış ve balığa hazır olması.
+- Çeviri: koşul metinleri değişmedi; çeviri tablosu değişmedi (`node scripts/catalog-translations.cjs --check` geçti).
+- Testler: `src/lib/__tests__/species-behavior.test.ts` (alanın yalnız bu 10 kayıtta olması; gerçek katalogla Japon balığı ve melek + Amano uyarılı, lepistes + Amano uyarısız, ocellaris + temizlikçi karides uyarısız, sarı lapin + temizlikçi karides uyarılı).
+- Altın fikstür: karides kapsamı hiçbir altın vakayı değiştirmez. Tuzluluk hedefi 36 deniz balığı vakasında yalnız gösterilen hedefi değiştirir (karar 0041).

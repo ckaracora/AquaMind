@@ -1,7 +1,9 @@
-// Deniz akvaryumunun su hedefleri (motor 1.13.0, docs/DECISIONS/0029-tuzlu-su-baslangic-paketi.md, 0030-deniz-suyu-hedefleri.md).
+// Deniz akvaryumunun su hedefleri (motor 1.13.0, docs/DECISIONS/0029-tuzlu-su-baslangic-paketi.md, 0030-deniz-suyu-hedefleri.md; 1.16.0, 0041).
 // Tuzluluk, pH ve KH kaynaklarda türe özgü değildir; deniz akvaryumunun son ölçümü OATA'nın ev akvaryumu kurulum rehberindeki
 // hedeflerle karşılaştırılır ("How to set up and maintain a marine aquarium", Eylül 2022). Akvaryumda deniz omurgasızı varsa
 // "omurgasızlı", yoksa "yalnız balık" hedefi kullanılır (ürün sahibinin 2026-10-30 kararı: otomatik).
+// 1.16.0 (karar 0041): yalnız balıklı hedefin üst sınırı 1.025. Alt sınır (1.017) kurulum rehberinden; üst sınır OATA'nın deniz balığı bakım
+// kartlarından (katalogdaki deniz balıklarının bütün grupları 1.020–1.025, Eylül 2022) ve Fishkeeper'ın deniz balığı sayfalarından (1.020–1.025).
 // Ciddiyet (ürün sahibinin kararı): hedef dışı sarı uyarı; özgül ağırlık iki hedefin de dışındaysa (1.017'nin altı, 1.026'nın üstü)
 // tehlike. Sıcaklık türün aralığıyla değerlendirilir; rehberin sıcaklığı ve "türe bağlı" nitrat/fosfat aralıkları yalnız bilgidir.
 import type { AquariumType, Livestock, WaterParameters } from "@aquamind/domain";
@@ -10,10 +12,10 @@ export type MarineProfile = "fishOnly" | "invertebrates";
 export type MarineRowStatus = "ok" | "warning" | "danger" | "missing" | "info";
 export type MarineParameter = "specificGravity" | "ph" | "kh" | "nitrate" | "phosphate" | "temperature";
 
-/** OATA kurulum rehberinin hedefleri. `limit` alanları değerlendirilir; `info` alanları yalnız gösterilir. */
+/** OATA kurulum rehberinin hedefleri (yalnız balıklı tuzluluğun üst sınırı OATA bakım kartlarından, 1.16.0). `limit` alanları değerlendirilir; `info` alanları yalnız gösterilir. */
 export const MARINE_TARGETS = {
   fishOnly: {
-    specificGravity: [1.017, 1.023],
+    specificGravity: [1.017, 1.025],
     ph: [8.0, 8.2],
     nitrateMax: 20,
     temperatureInfo: [24, 27],

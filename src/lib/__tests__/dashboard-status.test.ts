@@ -21,7 +21,7 @@ describe("dashboardStatus", () => {
   it("deniz akvaryumunda özgül ağırlık kartı OATA hedefiyle etiketlenir (karar 0030)", () => {
     const clown = speciesById("ocellaris-clownfish")!;
     const marine: Livestock[] = [{ id: "c", aquariumId: "a", catalogId: clown.id, commonName: clown.commonName, category: clown.category, quantity: 2, addedAt: "2026-01-01" }];
-    const status = dashboardStatus(fullCatalogLookup, { ...aquarium, type: "saltwater" }, marine, [], reading({ temperature: 25, ph: 8.1, specificGravity: 1.025 }));
+    const status = dashboardStatus(fullCatalogLookup, { ...aquarium, type: "saltwater" }, marine, [], reading({ temperature: 25, ph: 8.1, specificGravity: 1.026 }));
     expect([status.specificGravity, status.ph]).toEqual([{ key: "outOfTarget", tone: "warning" }, { key: "inTarget", tone: "good" }]);
   });
 

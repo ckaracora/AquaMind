@@ -107,12 +107,20 @@ describe("canlı riski uyarısı genel puanı en fazla 74 yapar (karar 0040)", (
     expect(analyze(tank(), [animal("shoal", 6)], equipped(), reading())).toMatchObject({ status: "good" });
   });
 
-  it("canlısız akvaryumda su kalitesi uyarısı tavan koymaz (ör. döngü kuran akvaryumda amonyak)", () => {
-    const result = analyze(tank(), [], equipped(), reading({ ammonia: 0.1 }));
-    expect(codes(result)).toContain("ammoniaDetected");
+  it("canlısız akvaryumda canlı riski sınıfı tavan koymaz (ör. nitrat)", () => {
+    const result = analyze(tank(), [], equipped(), reading({ nitrate: 60 }));
+    expect(codes(result)).toContain("nitrateHigh");
     expect(result.metrics.filter((item) => item.status === "danger")).toEqual([]);
     expect(result.score).toBe(average(result));
     expect(result.status).toBe("good");
+  });
+
+  it("1.16.0 (karar 0041): canlısız akvaryumda amonyak canlı riski sınıfından değil, ayrı uyarıyla en fazla 74 yapar", () => {
+    const result = analyze(tank(), [], equipped(), reading({ ammonia: 0.1 }));
+    expect(codes(result)).toEqual(["cycleIncomplete"]);
+    expect(riskCodes(result)).toEqual([]);
+    expect(average(result)).toBeGreaterThan(74);
+    expect(result).toMatchObject({ score: 74, status: "warning" });
   });
 
   it("kesin tehlike önce gelir: canlı riski uyarısı olsa da genel puan en fazla 49", () => {

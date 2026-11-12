@@ -54,6 +54,11 @@ export interface BehaviorNote {
   conflict?: boolean;
   /** Yalnızca eatsSmallFish: kaynağın açıkça verdiği en büyük av boyu (cm); %40 kuralından küçükse o geçerlidir. */
   maxPreyCm?: number;
+  /**
+   * Yalnızca eatsShrimp (kural seti 1.13.0, karar 0041): kaynak riski küçük (cüce) karideslerle ya da yavrularla sınırlıyor. Uyarı yalnız
+   * yetişkin boyu `DWARF_SHRIMP_MAX_CM` ya da altındaki karideste çıkar. Alan yoksa kaynak boy sınırı vermemiştir; uyarı bütün karideslerde çıkar.
+   */
+  smallShrimpOnly?: boolean;
 }
 
 export interface SpeciesBehaviorInput {
@@ -61,7 +66,7 @@ export interface SpeciesBehaviorInput {
   finNipper?: BehaviorNote;
   /** Uzun ya da yavaş yüzgeçli; ısıranların hedefi olur. */
   finNipTarget?: BehaviorNote;
-  /** Cüce karidesleri yer. */
+  /** Karides yer. 1.16.0'dan beri bütün karidesler için; kaynak riski küçük karidesle sınırlıyorsa `smallShrimpOnly` taşır. */
   eatsShrimp?: BehaviorNote;
   /** Kaynağa göre cüce karideslerle güvenli (yavrular için koşul olabilir). */
   shrimpSafe?: BehaviorNote;
@@ -127,12 +132,15 @@ const FILTER_MIN_RATED_TURNOVER=4;
 const FILTER_DANGER_RATED_TURNOVER=2;
 /** Tahmini yük oranı bunun üstündeyse uyarı. Katalogdaki hiçbir tür, kendi kaynağının önerdiği en küçük akvaryum ve grupta bu değere ulaşmaz. */
 const LOAD_WARNING_RATIO=2.5;
-/** Kesin tehlike olmayan bir tehlike uyarısı, (1.14.0'dan beri) tehlikedeki bir ölçüt ya da (1.15.0'dan beri) canlı riski uyarısı varken genel puanın üst sınırı (en fazla "dikkat"). */
+/** Kesin tehlike olmayan bir tehlike uyarısı, (1.14.0'dan beri) tehlikedeki bir ölçüt, (1.15.0'dan beri) canlı riski uyarısı ya da (1.16.0'dan beri) canlısız akvaryumda amonyak veya nitrit varken genel puanın üst sınırı (en fazla "dikkat"). */
 const DANGER_WARNING_SCORE_CAP=74;
 // Kural seti 1.4.0 (docs/DECISIONS/0010-davranis-uyarilari.md).
 /** Av, avcının yetişkin boyunun bu oranı veya altındaysa avlanabilir (asıl ve fırsatçı avcılar için aynı). */
 const PREY_SIZE_RATIO=.4;
-/** Cüce karides: yetişkin boyu bu değer veya altındaki karidesler (OATA: cüce karidesler yaklaşık 3 cm). */
+/**
+ * Cüce karides: yetişkin boyu bu değer veya altındaki karidesler (OATA: cüce karidesler yaklaşık 3 cm). 1.16.0'dan beri (karar 0041) yalnız iki yerde
+ * kullanılır: kaynağı riski küçük karidesle sınırlayan "karides yer" kaydı (`smallShrimpOnly`) ve "karides uyumu doğrulanmadı" uyarısı.
+ */
 const DWARF_SHRIMP_MAX_CM=4;
 // Kural seti 1.6.0 (docs/DECISIONS/0012-alan-uyarisinin-siddeti.md). İsviçre Hayvan Koruma Yönetmeliği (TSchV, SR 455.1)
 // Ek 2 Tablo 8 not b): akvaryum ölçüleri en büyük balığın boyuna göre en az bu katlar olmalı. Kaynağın önerisinin altındaki
@@ -265,8 +273,13 @@ export function createAnalyzer(resolver:KnowledgeResolver):AnalyzeAquarium{
  const finNipIssues=fishProfiles.flatMap(nipper=>{const note=explicit(nipper.profile!.behavior?.finNipper);return note?fishProfiles.filter(target=>target.profile!.id!==nipper.profile!.id&&explicit(target.profile!.behavior?.finNipTarget)).map(target=>({nipper:nipper.profile!,target:target.profile!,note})):[];});
  // 1.15.0 (karar 0040): fırsatçı avcı her kategoriden olabilir (ör. Afrika cüce kurbağası); av yalnız balıktır.
  const smallFishPredationIssues=profiles.flatMap(hunter=>{const note=explicit(hunter.profile!.behavior?.eatsSmallFish);return note&&!hunter.profile!.predatory?fishProfiles.filter(prey=>prey.profile!.id!==hunter.profile!.id&&prey.profile!.adultSizeCm<=Math.min(hunter.profile!.adultSizeCm*PREY_SIZE_RATIO,note.maxPreyCm??Infinity)).map(prey=>({hunter:hunter.profile!,prey:prey.profile!,note})):[];});
- const dwarfShrimp=profiles.filter(({item,profile})=>item.category==="shrimp"&&profile!.adultSizeCm<=DWARF_SHRIMP_MAX_CM);
- const shrimpEaters=dwarfShrimp.length?fishProfiles.filter(({profile})=>explicit(profile!.behavior?.eatsShrimp)):[];
+ // 1.16.0 (karar 0041): "karides yer" kaydı kaynak boy sınırı vermiyorsa bütün karideslerde uyarır; kaynak riski küçük karidesle ya da yavruyla
+ // sınırlıyorsa (`smallShrimpOnly`) yalnız cüce karideste. "Karides uyumu doğrulanmadı" bugünkü gibi yalnız cüce karidestedir.
+ const allShrimp=profiles.filter(({item})=>item.category==="shrimp");
+ const dwarfShrimp=allShrimp.filter(({profile})=>profile!.adultSizeCm<=DWARF_SHRIMP_MAX_CM);
+ const shrimpPreyFor=(note:BehaviorNote)=>note.smallShrimpOnly?dwarfShrimp:allShrimp;
+ const shrimpEaters=fishProfiles.filter(({profile})=>{const note=explicit(profile!.behavior?.eatsShrimp);return note!==undefined&&shrimpPreyFor(note).length>0;});
+ const shrimpAtRisk=allShrimp.filter(entry=>shrimpEaters.some(({profile})=>shrimpPreyFor(profile!.behavior!.eatsShrimp!).includes(entry)));
  const shrimpUnverified=dwarfShrimp.length?fishProfiles.filter(({profile})=>!explicit(profile!.behavior?.eatsShrimp)&&!explicit(profile!.behavior?.shrimpSafe)):[];
  // Kural seti 1.7.0 (docs/DECISIONS/0013-salyangoz-uyarisi.md): yalnızca kaynağı açıkça "salyangoz yer" diyen balıklar uyarı üretir.
  const snails=profiles.filter(({item})=>item.category==="snail");
@@ -407,8 +420,14 @@ export function createAnalyzer(resolver:KnowledgeResolver):AnalyzeAquarium{
   }
  }
  if(invalid.length){const names=invalid.map(key=>({ammonia:"amonyak",nitrite:"nitrit",nitrate:"nitrat"})[key]);const list=names.length>1?`${names.slice(0,-1).join(", ")} ve ${names[names.length-1]}`:names[0];warnings.push({level:"warning",title:"Geçersiz su ölçümü",message:names.length>1?`Son ölçümdeki ${list} değerleri geçersiz (negatif ya da geçerli bir sayı değil); bu değerler değerlendirmeye alınmadı. Yeniden ölçüp kaydedin.`:`Son ölçümdeki ${list} değeri geçersiz (negatif ya da geçerli bir sayı değil); bu değer değerlendirmeye alınmadı. Yeniden ölçüp kaydedin.`,code:"invalidReading",params:{fields:[...invalid]}});}
- if(ammonia&&ammonia.level!=="ok")warnings.push(ammonia.level==="danger"?(ammonia.worstCase?{level:"danger",title:"Amonyak zehirli olabilir",message:`Toplam amonyak ${fmt(ammonia.total)} ppm. pH veya sıcaklık ölçümü eksik ya da geçersiz olduğu için zehirli (serbest) kısmı hesaplanamadı; en kötü durumda güvenli üst sınır olan ${fmt(ammonia.limit)} ppm aşılıyor. pH ve sıcaklığı da ölçün, bu arada kısmi su değişimi yapın.`,code:"ammoniaWorstCase",params:{total:ammonia.total,limit:ammonia.limit}}:{level:"danger",title:"Zehirli amonyak sınırın üzerinde",message:`Ölçülen pH ve sıcaklıkta serbest (zehirli) amonyak yaklaşık ${fmt(ammonia.free,4)} ppm; güvenli üst sınır ${fmt(ammonia.limit)} ppm. Hemen kısmi su değişimi yapın, beslemeyi azaltın ve filtreyi kontrol edin.`,code:"ammoniaToxic",params:{free:ammonia.free,limit:ammonia.limit}}):{level:"warning",title:"Amonyak ölçüldü",message:`Toplam amonyak ${fmt(ammonia.total)} ppm. Olgun bir akvaryumda amonyak 0 olmalıdır; sıfırın üstündeki değerler yalnızca kısa süre tolere edilebilir. pH yükselirse zehirli kısmı hızla artar.`,code:"ammoniaDetected",params:{total:ammonia.total}});
- if(nitrite&&nitrite.level!=="ok")warnings.push(nitrite.level==="danger"?{level:"danger",title:"Nitrit sınırın üzerinde",message:`Nitrit ${fmt(nitrite.value)} ppm; güvenli üst sınır ${fmt(nitrite.limit)} ppm. Hemen kısmi su değişimi yapın ve filtreyi kontrol edin.`,code:"nitriteHigh",params:{value:nitrite.value,limit:nitrite.limit}}:{level:"warning",title:"Nitrit ölçüldü",message:`Nitrit ${fmt(nitrite.value)} ppm. Nitrit 0 olmalıdır; sıfırın üstündeki değerler yalnızca kısa süre tolere edilebilir.`,code:"nitriteDetected",params:{value:nitrite.value}});
+ // 1.16.0 (karar 0041): canlı kaydı olmayan akvaryumda (ör. balıksız döngü) amonyak ya da nitrit sıfırın üstündeyse amonyak ve nitrit uyarılarının
+ // yerine tek sarı uyarı çıkar; kesin tehlike değildir, genel puan en fazla 74 olur. OATA: ikisi sıfıra inip sıfırda kalınca canlı eklenir.
+ const noLivestock=animals.length===0;
+ const ammoniaAboveZero=ammonia!==undefined&&ammonia.level!=="ok"; const nitriteAboveZero=nitrite!==undefined&&nitrite.level!=="ok";
+ const cycleIncomplete=noLivestock&&(ammoniaAboveZero||nitriteAboveZero);
+ if(cycleIncomplete){const parts=[...(ammoniaAboveZero?[`amonyak ${fmt(ammonia!.total)} ppm`]:[]),...(nitriteAboveZero?[`nitrit ${fmt(nitrite!.value)} ppm`]:[])];warnings.push({level:"warning",title:"Canlı eklemek için erken",message:`Son ölçümde ${nameList(parts)}. Canlı eklemeden önce amonyak ve nitrit sıfıra inmeli.`,code:"cycleIncomplete",params:{...(ammoniaAboveZero?{ammonia:ammonia!.total}:{}),...(nitriteAboveZero?{nitrite:nitrite!.value}:{})}});}
+ if(!cycleIncomplete&&ammonia&&ammonia.level!=="ok")warnings.push(ammonia.level==="danger"?(ammonia.worstCase?{level:"danger",title:"Amonyak zehirli olabilir",message:`Toplam amonyak ${fmt(ammonia.total)} ppm. pH veya sıcaklık ölçümü eksik ya da geçersiz olduğu için zehirli (serbest) kısmı hesaplanamadı; en kötü durumda güvenli üst sınır olan ${fmt(ammonia.limit)} ppm aşılıyor. pH ve sıcaklığı da ölçün, bu arada kısmi su değişimi yapın.`,code:"ammoniaWorstCase",params:{total:ammonia.total,limit:ammonia.limit}}:{level:"danger",title:"Zehirli amonyak sınırın üzerinde",message:`Ölçülen pH ve sıcaklıkta serbest (zehirli) amonyak yaklaşık ${fmt(ammonia.free,4)} ppm; güvenli üst sınır ${fmt(ammonia.limit)} ppm. Hemen kısmi su değişimi yapın, beslemeyi azaltın ve filtreyi kontrol edin.`,code:"ammoniaToxic",params:{free:ammonia.free,limit:ammonia.limit}}):{level:"warning",title:"Amonyak ölçüldü",message:`Toplam amonyak ${fmt(ammonia.total)} ppm. Olgun bir akvaryumda amonyak 0 olmalıdır; sıfırın üstündeki değerler yalnızca kısa süre tolere edilebilir. pH yükselirse zehirli kısmı hızla artar.`,code:"ammoniaDetected",params:{total:ammonia.total}});
+ if(!cycleIncomplete&&nitrite&&nitrite.level!=="ok")warnings.push(nitrite.level==="danger"?{level:"danger",title:"Nitrit sınırın üzerinde",message:`Nitrit ${fmt(nitrite.value)} ppm; güvenli üst sınır ${fmt(nitrite.limit)} ppm. Hemen kısmi su değişimi yapın ve filtreyi kontrol edin.`,code:"nitriteHigh",params:{value:nitrite.value,limit:nitrite.limit}}:{level:"warning",title:"Nitrit ölçüldü",message:`Nitrit ${fmt(nitrite.value)} ppm. Nitrit 0 olmalıdır; sıfırın üstündeki değerler yalnızca kısa süre tolere edilebilir.`,code:"nitriteDetected",params:{value:nitrite.value}});
  if(nitrate&&nitrate.level!=="ok")warnings.push(nitrate.level==="danger"?{level:"danger",title:"Nitrat çok yüksek",message:aquarium.type==="saltwater"?`Nitrat ${fmt(nitrate.value)} ppm; deniz akvaryumu için üst sınır 100 ppm. Su değişimini artırın.`:`Nitrat ${fmt(nitrate.value)} ppm. Musluk suyu yasal olarak en fazla 50 ppm nitrat içerebildiği için önerilen sınır (musluk suyunun en fazla 50 ppm üstü) aşılmış. Su değişimini artırın.`,code:aquarium.type==="saltwater"?"nitrateTooHighSaltwater":"nitrateTooHigh",params:{value:nitrate.value}}:{level:"warning",title:"Nitrat yüksek olabilir",message:`Nitrat ${fmt(nitrate.value)} ppm. Önerilen sınır musluk suyunun en fazla 50 ppm üstüdür; musluk suyunun nitratını da ölçün ve su değişimini artırın.`,code:"nitrateHigh",params:{value:nitrate.value}});
  const outsideText=(above:string[],below:string[])=>above.length&&below.length?`${nameList(above)} için kaynaktaki aralığın üstünde, ${nameList(below)} için altında.`:above.length?`${nameList(above)} için kaynaktaki aralığın üstünde.`:`${nameList(below)} için kaynaktaki aralığın altında.`;
  if(latestTemperature!==undefined&&(temperatureAbove.length||temperatureBelow.length)){const hasRange=!temperatureConflict;const [min,max]=hasRange?tempIntersection:[0,0];warnings.push({level:"warning",title:"Sıcaklık canlı aralığı dışında",message:`Son ölçüm ${celsius(latestTemperature)}; bu değer ${outsideText(commonNames(temperatureAbove),commonNames(temperatureBelow))}${hasRange?(min===max?` Seçilen canlıların ortak sıcaklığı yalnız ${celsius(min)}; sıcaklığı yavaşça bu değere getirin.`:` Seçilen canlıların ortak aralığı ${fmt(min,2)}–${celsius(max)}; sıcaklığı yavaşça bu aralığa getirin.`):""}`,code:"speciesTemperatureOutOfRange",params:{value:latestTemperature,above:commonNames(temperatureAbove),below:commonNames(temperatureBelow),hasRange,min,max}});}
@@ -427,7 +446,7 @@ export function createAnalyzer(resolver:KnowledgeResolver):AnalyzeAquarium{
  for(const {nipper,target,note} of finNipIssues)warnings.push({level:"warning",title:`${target.commonName}: yüzgeç ısırma riski`,message:`${nipper.commonName} yüzgeç ısırabilir; ${target.commonName} gibi uzun ya da yavaş yüzgeçli balıklarla birlikte tutulması önerilmez.${noteText(note)}`,code:"finNip",params:{nipper:nipper.commonName,target:target.commonName,...noteParams(note)}});
  for(const {item,profile} of conspecificIssues){const note=profile!.behavior!.conspecificAggression!;warnings.push(note.value==="males"?{level:"warning",title:`${profile!.commonName}: erkekler kavga eder`,message:`Kaynağa göre bu türün erkekleri birbiriyle kavga eder; kayıtlı ${item.quantity} bireyden birden fazlası erkekse ayırın.${noteText(note)}`,code:"conspecificMales",params:{name:profile!.commonName,count:item.quantity,...noteParams(note)}}:{level:"warning",title:`${profile!.commonName}: tek tutulmalı`,message:`Kaynağa göre bu tür kendi türünden bireylere karşı saldırgandır ve genellikle tek tutulmalıdır.${noteText(note)}`,code:"conspecificAll",params:{name:profile!.commonName,...noteParams(note)}});}
  const shrimpNames=nameList(dwarfShrimp.map(({profile})=>profile!.commonName));
- if(shrimpEaters.length){const sources=[...new Set(shrimpEaters.map(({profile})=>profile!.behavior!.eatsShrimp!.source))];warnings.push({level:"warning",title:"Karidesler yenebilir",message:`Kaynaklara göre ${nameList(shrimpEaters.map(({profile})=>profile!.commonName))} karides yer; ${shrimpNames} ve özellikle yavruları risk altındadır. Kaynak: ${sources.join(", ")}.`,code:"shrimpEaten",params:{eaters:shrimpEaters.map(({profile})=>profile!.commonName),shrimp:dwarfShrimp.map(({profile})=>profile!.commonName),sources}});}
+ if(shrimpEaters.length){const sources=[...new Set(shrimpEaters.map(({profile})=>profile!.behavior!.eatsShrimp!.source))];warnings.push({level:"warning",title:"Karidesler yenebilir",message:`Kaynaklara göre ${nameList(shrimpEaters.map(({profile})=>profile!.commonName))} karides yer; ${nameList(shrimpAtRisk.map(({profile})=>profile!.commonName))} ve özellikle yavruları risk altındadır. Kaynak: ${sources.join(", ")}.`,code:"shrimpEaten",params:{eaters:shrimpEaters.map(({profile})=>profile!.commonName),shrimp:shrimpAtRisk.map(({profile})=>profile!.commonName),sources}});}
  if(snailEaters.length){const sources=[...new Set(snailEaters.map(({profile})=>profile!.behavior!.eatsSnails!.source))];const notes=snailEaters.flatMap(({profile})=>profile!.behavior!.eatsSnails!.condition?[` ${profile!.commonName}: ${profile!.behavior!.eatsSnails!.condition!.replace(/\.?$/,".")}`]:[]).join("");warnings.push({level:"warning",title:"Salyangozlar yenebilir",message:`Kaynaklara göre ${nameList(snailEaters.map(({profile})=>profile!.commonName))} salyangoz yer; ${nameList(snails.map(({profile})=>profile!.commonName))} risk altında olabilir.${notes} Kaynak: ${sources.join(", ")}.`,code:"snailEaten",params:{eaters:snailEaters.map(({profile})=>profile!.commonName),snails:snails.map(({profile})=>profile!.commonName),noteNames:snailEaters.flatMap(({profile})=>profile!.behavior!.eatsSnails!.condition?[profile!.commonName]:[]),noteConditions:snailEaters.flatMap(({profile})=>profile!.behavior!.eatsSnails!.condition?[profile!.behavior!.eatsSnails!.condition!]:[]),sources}});}
  if(shrimpUnverified.length)warnings.push({level:"warning",title:"Karides uyumu doğrulanmadı",message:`${nameList(shrimpUnverified.map(({profile})=>profile!.commonName))} için "karidesle güvenli" bilgisi kaynaklarda bulunamadı. OATA, karideslerin ağzına sığabilecekleri balıklarla tutulmamasını önerir; ${shrimpNames} yavruları ve yeni kabuk değiştirmiş karidesler özellikle risk altındadır.`,code:"shrimpUnverified",params:{fish:shrimpUnverified.map(({profile})=>profile!.commonName),shrimp:dwarfShrimp.map(({profile})=>profile!.commonName)}});
  for(const {profile} of profiles.filter(({profile})=>profile!.husbandryCaution))warnings.push({level:"warning",title:`${profile!.commonName}: özel bakım gereksinimi`,message:profile!.husbandryCaution!,code:"husbandryCaution",params:{name:profile!.commonName,text:profile!.husbandryCaution!}});
@@ -438,20 +457,21 @@ export function createAnalyzer(resolver:KnowledgeResolver):AnalyzeAquarium{
    :narrowSpaceIssues.has(entry)?{level:"warning",title:`${profile!.commonName}: akvaryum bu tür için dar`,message:`${reference} Akvaryumun genişliği (${cm(aquarium.widthCm)}), katalogdaki ${cm(size)} yetişkin boyun iki katından az. AquaMind bu öneriyi İsviçre Hayvan Koruma Yönetmeliği'nin ölçü kuralından (genişlik 2× vücut boyu) uyarlar; yönetmelik kuyruk yüzgeci hariç boyu, AquaMind çoğu türde toplam boyu kullanır. Genişliği en az ${cm(size*SWISS_MIN_WIDTH_RATIO)} olan bir akvaryum daha uygundur.`,code:"spaceNarrow",params:{...spaceParams,size,width:aquarium.widthCm,minWidth:size*SWISS_MIN_WIDTH_RATIO}}
    :{level:"warning",title:`${profile!.commonName}: alan sınırda`,message:reference,code:"spaceLimited",params:spaceParams});}
  // Kesin tehlikeler (yanlış su türü, kesişmeyen sıcaklık veya pH, avlanma, tür akvaryumu, tuzluluk, zehirli
- // amonyak veya nitrit) genel durumu "tehlike"ye çeker; sekiz ölçütün ortalaması bunları gizleyemez.
+ // amonyak veya nitrit) genel durumu "tehlike"ye çeker; sekiz ölçütün ortalaması bunları gizleyemez. Zehirli amonyak ve sınırı aşan nitrit
+ // 1.16.0'dan beri (karar 0041) yalnız canlı kaydı olan akvaryumda kesin tehlikedir.
  // Diğer tehlike uyarıları (ör. üretici önerisini çok aşan filtre, yetersiz ısıtıcı) genel durumu "tehlike"ye
  // çekmez ama "iyi" görünmesini de engeller: genel puan en fazla "dikkat" olur.
- const criticalDanger=habitatIssues.length>0||temperatureConflict||phConflict||predationIssues.length>0||speciesOnlyIssues.length>0||salinityIssues.length>0||marine?.rows.some(row=>row.parameter==="specificGravity"&&row.status==="danger")===true||ammonia?.level==="danger"||nitrite?.level==="danger";
+ const criticalDanger=habitatIssues.length>0||temperatureConflict||phConflict||predationIssues.length>0||speciesOnlyIssues.length>0||salinityIssues.length>0||marine?.rows.some(row=>row.parameter==="specificGravity"&&row.status==="danger")===true||(!noLivestock&&(ammonia?.level==="danger"||nitrite?.level==="danger"));
  const dangerWarning=warnings.some(warning=>warning.level==="danger");
  // 1.14.0 (karar 0037): tehlikedeki bir ölçüt de genel puanı en fazla "dikkat" yapar. Veri güveni bu kurala girmez; canlısı olmayan
  // akvaryumda filtre ve ısıtıcı ölçütü de girmez.
  const dangerMetric=metrics.some(metric=>metric.status==="danger"&&metric.key!=="confidence"&&(animals.length>0||(metric.key!=="filter"&&metric.key!=="heater")));
  // 1.15.0 (karar 0040): canlı kaydı olan akvaryumda canlı riski sınıfından bir uyarı da genel puanı en fazla "dikkat" yapar. Canlısız akvaryumda
- // (ör. döngü kuran akvaryumda amonyak) tavan koymaz.
+ // bu sınıf tavan koymaz; amonyak ve nitrit için 1.16.0'dan beri (karar 0041) ayrı "Canlı eklemek için erken" tavanı vardır (`cycleIncomplete`).
  const livestockRiskWarning=animals.length>0&&warnings.some(warning=>LIVESTOCK_RISK_WARNING_CODES.has(warning.code));
  const metricSum=metrics.reduce((s,m)=>s+m.score,0); const averageScore=clamp(metricSum/metrics.length);
  // Davranış uyarıları uyarı seviyesindedir: davranış cezası olmadan tehlikede olmayan akvaryumu tek başına tehlikeye çekemez.
  const averageWithoutBehavior=clamp((metricSum-compatibilityScore+compatibilityFor(compatibilityPenalty))/metrics.length); const behaviorFloor=averageWithoutBehavior>=50?50:0;
- const score=criticalDanger?Math.min(averageScore,49):Math.min(Math.max(averageScore,behaviorFloor),dangerWarning||dangerMetric||livestockRiskWarning?DANGER_WARNING_SCORE_CAP:100); return {score,status:status(score),metrics,warnings,...(marine?{marineWater:marine}:{})};
+ const score=criticalDanger?Math.min(averageScore,49):Math.min(Math.max(averageScore,behaviorFloor),dangerWarning||dangerMetric||livestockRiskWarning||cycleIncomplete?DANGER_WARNING_SCORE_CAP:100); return {score,status:status(score),metrics,warnings,...(marine?{marineWater:marine}:{})};
  };
 }

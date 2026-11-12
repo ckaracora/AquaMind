@@ -18,6 +18,7 @@ const noteFrom = (record: BehaviorRecord): BehaviorNote => ({
   source: record.source,
   ...(record.condition ? { condition: record.condition } : {}),
   ...(record.confidence === "conflict" ? { conflict: true } : {}),
+  ...(record.smallShrimpOnly ? { smallShrimpOnly: true } : {}),
 });
 
 /**

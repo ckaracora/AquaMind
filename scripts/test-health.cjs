@@ -555,8 +555,9 @@ const metric = (analysis, key) => analysis.metrics.find(item => item.key === key
 }
 
 // Motor 1.13.0 (karar 0029, 0030): deniz akvaryumunda özgül ağırlık OATA'nın ev akvaryumu hedefiyle karşılaştırılır. Akvaryumda deniz
-// omurgasızı yoksa yalnız balık hedefi 1,017–1,023; hedef dışı sarı uyarı, 1,017–1,026 dışı kesin tehlike.
-for (const [specificGravity, expected] of [[1.018, "none"], [1.025, "warning"], [1.016, "danger"]]) {
+// omurgasızı yoksa yalnız balık hedefi 1,017–1,025 (1.16.0'dan beri, karar 0041: üst sınır OATA'nın deniz balığı bakım kartlarından); hedef dışı
+// sarı uyarı, 1,017–1,026 dışı kesin tehlike.
+for (const [specificGravity, expected] of [[1.018, "none"], [1.025, "none"], [1.026, "warning"], [1.016, "danger"]]) {
   const analysis = analyzeAquarium(
     aquarium({ type: "saltwater", netVolumeLiters: 100, lengthCm: 60 }),
     [animal("ocellaris-clownfish", "Ocellaris palyaço balığı", 2)],

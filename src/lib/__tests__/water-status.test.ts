@@ -115,11 +115,13 @@ describe("parameterStatuses ve latestReading", () => {
 
   it("deniz akvaryumunda pH, özgül ağırlık ve yalnız balıklı akvaryumda nitrat OATA'nın hedefiyle etiketlenir (motor 1.13.0, karar 0030)", () => {
     const fishOnly = (values: object) => parameterStatuses([animal("ocellaris-clownfish")], speciesForLivestock, reading(values), "saltwater");
-    const sea = fishOnly({ temperature: 25, ph: 8.1, specificGravity: 1.025, nitrate: 30 });
+    const sea = fishOnly({ temperature: 25, ph: 8.1, specificGravity: 1.026, nitrate: 30 });
     expect(sea.temperature).toEqual({ key: "inRange", tone: "good" });
     expect(sea.ph).toEqual({ key: "inTarget", tone: "good" });
     expect(sea.specificGravity).toEqual({ key: "outOfTarget", tone: "warning" });
     expect(sea.nitrate).toEqual({ key: "outOfTarget", tone: "warning" });
+    // 1.16.0 (karar 0041): yalnız balıklı hedefin üst sınırı 1,025.
+    expect(fishOnly({ specificGravity: 1.025 }).specificGravity).toEqual({ key: "inTarget", tone: "good" });
     expect(fishOnly({ specificGravity: 1.03 }).specificGravity).toEqual({ key: "outOfTarget", tone: "danger" });
     expect(fishOnly({ ph: 7.9 }).ph).toEqual({ key: "outOfTarget", tone: "warning" });
     expect(fishOnly({}).specificGravity).toEqual({ key: "noReading", tone: "neutral" });

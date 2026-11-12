@@ -247,6 +247,12 @@ export const enEngine: EngineMessages = {
       title: fixed("Nitrite detected"),
       message: (p, f) => `Nitrite ${f.measurement(num(p, "value"))} ppm. Nitrite should be 0; values above zero can only be tolerated for a short time.`,
     },
+    /** Motor 1.16.0 (karar 0041): canlı kaydı olmayan akvaryumda amonyak ya da nitrit sıfırın üstünde; yalnız sıfırın üstündeki değer yazılır. */
+    cycleIncomplete: {
+      title: fixed("Too early to add livestock"),
+      message: (p, f) =>
+        `Latest reading: ${nameList([...(p.ammonia !== undefined ? [`ammonia ${f.measurement(num(p, "ammonia"))} ppm`] : []), ...(p.nitrite !== undefined ? [`nitrite ${f.measurement(num(p, "nitrite"))} ppm`] : [])])}. Ammonia and nitrite should drop to zero before you add livestock.`,
+    },
     nitrateTooHighSaltwater: {
       title: fixed("Nitrate very high"),
       message: (p, f) =>
