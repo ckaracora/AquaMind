@@ -81,5 +81,12 @@
 // deniz balığı bakım kartlarından). Canlı kaydı olmayan akvaryumda amonyak ya da nitrit sıfırın üstündeyse tek sarı "Canlı eklemek için erken"
 // uyarısı çıkar (`cycleIncomplete`); kesin tehlike değildir, genel puan en fazla 74 olur. Canlı varken su kalitesi kuralı değişmez. Yeni sayı yok;
 // bir hedef sabiti, uyarı kapsamı ve kesin tehlike koşulu değiştiği, yeni uyarı kodu geldiği için kural seti 1.13.0. Sonuç nesnesinin biçimi değişmez.
-export const ENGINE_VERSION = "1.16.0";
-export const RULESET_VERSION = "1.13.0";
+//
+// 1.17.0: deniz akvaryumunda özgül ağırlığın sınır bandı (bkz. docs/DECISIONS/0042-ozgul-agirlik-sinir-bandi.md; ürün sahibinin onayı 2026-11-12,
+// "sınırda dikkat bandı"). Güvenli aralığın (1,017–1,026) bir okuma basamağı (0,001) dışına kadar olan ölçüm kesin tehlike değil, sarı
+// "hedefin dışında" uyarısıdır: yalnız balıklı akvaryumda 1,016 ve 1,027 dahil, omurgasızlı akvaryumda yalnız üstte 1,027 dahil
+// (`MARINE_SPECIFIC_GRAVITY_DANGER_LIMITS`). Ötesi kesin tehlike kalır. Hedefler, uyarı kodları ve metinleri değişmez. Kesin tehlike sınırı
+// değiştiği, yeni sabit geldiği için kural seti 1.14.0. Sonuç nesnesinin biçimi değişmez. Denetim sonrası: karşılaştırma kayan nokta
+// artığını 1e-9 payla yutar (hesapla gelen 1,0270000000000001 sınırın kendisi); ekranda ölçüm aştığı sınırla aynı yazılmaz (dil dosyaları).
+export const ENGINE_VERSION = "1.17.0";
+export const RULESET_VERSION = "1.14.0";

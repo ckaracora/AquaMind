@@ -7,12 +7,13 @@ import { readFileSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 import { describe, expect, it } from "vitest";
 import type { Aquarium, Equipment, Livestock, WaterParameters } from "@aquamind/domain";
-import { createAnalyzer, MARINE_NITRATE_LIMIT, MARINE_SPECIFIC_GRAVITY_SAFE, NITRATE_ABOVE_TAP_LIMIT, TAP_WATER_NITRATE_LIMIT, type EquipmentProfileInput, type HealthAnalysis, type KnowledgeResolver, type SpeciesProfileInput } from "@aquamind/compatibility-engine";
+import { createAnalyzer, MARINE_NITRATE_LIMIT, MARINE_SPECIFIC_GRAVITY_DANGER_LIMITS, MARINE_SPECIFIC_GRAVITY_SAFE, NITRATE_ABOVE_TAP_LIMIT, TAP_WATER_NITRATE_LIMIT, type EquipmentProfileInput, type HealthAnalysis, type KnowledgeResolver, type SpeciesProfileInput } from "@aquamind/compatibility-engine";
 import { createDisplayFormat, loadLocaleBundle, localeBundle, type VolumeUnit } from "@aquamind/localization";
 import { engineMessagesFor, engineTextFormat, type EngineMessages, type EngineTextFormat, type EngineTextParams } from "@aquamind/localization/engine";
 import { catalogTranslator } from "@aquamind/localization/catalog";
 import { EQUIPMENT_NOTE_PARAMS, SPECIES_CATALOG_LIST_PARAMS, SPECIES_CATALOG_PARAMS, SPECIES_NAME_LIST_PARAMS, SPECIES_NAME_PARAMS, engineMetricText, engineWarningText, translateCatalogParams } from "@/lib/engine-text";
 import { MARINE_NITRATE_LIMIT_PPM, MARINE_SPECIFIC_GRAVITY_SAFE_MAX, MARINE_SPECIFIC_GRAVITY_SAFE_MIN, NITRATE_ABOVE_TAP_LIMIT_PPM, TAP_WATER_NITRATE_LIMIT_PPM } from "../../../packages/localization/src/messages/tr-engine";
+import { MARINE_SPECIFIC_GRAVITY_DANGER_BOUNDS, marineSpecificGravityDangerBound } from "../../../packages/localization/src/messages/engine-limits";
 
 const tr = engineMessagesFor("tr");
 await loadLocaleBundle("en");
@@ -211,6 +212,9 @@ const scenarios: Array<[string, HealthAnalysis]> = [
   ["canlısız akvaryumda amonyak ve nitrit", analyze(tank(), [], [], reading({ ammonia: 2, ph: 7, temperature: 24, nitrite: 0.5 }))],
   ["canlısız akvaryumda yalnız amonyak", analyze(tank(), [], [], reading({ ammonia: 0.25, nitrite: 0 }))],
   ["canlısız akvaryumda yalnız nitrit", analyze(tank(), [], [], reading({ ammonia: 0, nitrite: 0.1 }))],
+  // Motor 1.17.0 (karar 0042): güvenli aralığın bir okuma basamağı dışı sarı; yalnız balıkta alt uç (yön "low"), omurgasızlıda üst uç.
+  ["deniz: yalnız balık, sınır bandında düşük tuzluluk", analyze(tank({ type: "saltwater" }), [animal("marine")], [], reading({ specificGravity: 1.016, ph: 8.1, nitrate: 10, temperature: 25 }))],
+  ["deniz: omurgasızlı, sınır bandında yüksek tuzluluk", analyze(tank({ type: "saltwater" }), [animal("marine"), animal("snail", "snail")], [], reading({ specificGravity: 1.027, ph: 8.1, kh: 9, temperature: 25 }))],
 ];
 const scenario = (name: string) => scenarios.find(([label]) => label === name)![1];
 const warningOf = (analysis: HealthAnalysis, code: string) => analysis.warnings.find((warning) => warning.code === code)!;
@@ -332,6 +336,49 @@ describe("motor metinleri dil dosyasından (karar 0021, 3. paket)", () => {
     );
     expect(engineWarningText(tr, liters, warningOf(scenario("tatlı suda tehlike sınırını çok az aşan nitrat"), "nitrateTooHigh")).message).toMatch(/^Nitrat 100,0004 ppm\. /);
     expect(engineWarningText(tr, liters, warningOf(scenario("tatlı suda uyarı sınırını çok az aşan nitrat"), "nitrateHigh")).message).toMatch(/^Nitrat 50,0004 ppm\. /);
+  });
+
+  it("1.17.0 (karar 0042): özgül ağırlık ölçümü aştığı sınırla aynı görünmez (üç dil)", () => {
+    // Kesin tehlikede aşılan kesin tehlike sınırı (1,0159 "1,016" yazılırsa sarı bandın sınırı sanılır), sarıda hedefin aşılan ucu
+    // (1,0251 "1,025" yazılırsa hedefin içi sanılır) karşılaştırılır. Üç ondalıklı ölçüm olduğu gibi yazılır.
+    expect(MARINE_SPECIFIC_GRAVITY_DANGER_BOUNDS).toEqual(MARINE_SPECIFIC_GRAVITY_DANGER_LIMITS);
+    const fishOnly = () => [animal("marine")];
+    const reef = () => [animal("marine"), animal("snail", "snail")];
+    const metricUnits = { temperature: "celsius", volume: "liters", dateFormat: "day-first" } as const;
+    const formats: Array<[EngineMessages, EngineTextFormat]> = [[tr, liters], [en, engineTextFormat(createDisplayFormat("en", metricUnits))], [es, engineTextFormat(createDisplayFormat("es", metricUnits))]];
+    /** Üç dilde ölçümün yazımı (TR, EN, ES), uyarının bulunduğu yerden alınır: Türkçe ve İspanyolca "ölçüm X.", İngilizce "reading X.". */
+    const reading3 = (specificGravity: number, animals: Livestock[], code: string) => {
+      const warning = warningOf(analyze(tank({ type: "saltwater" }), animals, [], reading({ specificGravity, ph: 8.1, kh: 9, nitrate: 10, temperature: 25 })), code);
+      expect(warning, `${specificGravity} ${code}`).toBeDefined();
+      return formats.map(([messages, format]) => /(?:ölçüm|reading|medición:) ([\d.,]+)\./.exec(engineWarningText(messages, format, warning).message)?.[1]);
+    };
+    const danger = "marineSpecificGravityDanger";
+    const band = "marineSpecificGravity";
+    // Kesin tehlike: yalnız balıkta 1,016'nın altı ve 1,027'nin üstü, omurgasızlıda 1,017'nin altı ve 1,027'nin üstü.
+    expect(reading3(1.0159, fishOnly(), danger)).toEqual(["1,0159", "1.0159", "1.0159"]);
+    expect(reading3(1.0271, fishOnly(), danger)).toEqual(["1,0271", "1.0271", "1.0271"]);
+    expect(reading3(1.0169, reef(), danger)).toEqual(["1,0169", "1.0169", "1.0169"]);
+    expect(reading3(1.0271, reef(), danger)).toEqual(["1,0271", "1.0271", "1.0271"]);
+    expect(reading3(1.015, fishOnly(), danger)).toEqual(["1,015", "1.015", "1.015"]);
+    expect(reading3(1.028, reef(), danger)).toEqual(["1,028", "1.028", "1.028"]);
+    // Sarı: hedefin aşılan ucu.
+    expect(reading3(1.0251, fishOnly(), band)).toEqual(["1,0251", "1.0251", "1.0251"]);
+    expect(reading3(1.0169, fishOnly(), band)).toEqual(["1,0169", "1.0169", "1.0169"]);
+    expect(reading3(1.0239, reef(), band)).toEqual(["1,0239", "1.0239", "1.0239"]);
+    expect(reading3(1.0261, reef(), band)).toEqual(["1,0261", "1.0261", "1.0261"]);
+    expect(reading3(1.016, fishOnly(), band)).toEqual(["1,016", "1.016", "1.016"]);
+    expect(reading3(1.027, reef(), band)).toEqual(["1,027", "1.027", "1.027"]);
+    // Bandın içindeki dört ondalıklı ölçüm sarıdır; aştığı hedef ucundan uzaksa üç ondalıkla yazılır.
+    expect(reading3(1.0161, fishOnly(), band)).toEqual(["1,016", "1.016", "1.016"]);
+    // Tam cümle (Türkçe); güvenli aralık sabitten.
+    const full = warningOf(analyze(tank({ type: "saltwater" }), fishOnly(), [], reading({ specificGravity: 1.0159, ph: 8.1, temperature: 25 })), danger);
+    expect(engineWarningText(tr, liters, full).message).toBe("Son ölçüm 1,0159. OATA'nın hiçbir ev akvaryumu hedefi bu değeri kapsamıyor (1,017–1,026). Tuzluluğu yavaşça hedefe getirin.");
+    // Aşılan sınır: hedef ve yöne göre; bilinmeyen hedefte yok (yazım eskisi gibi).
+    expect([
+      marineSpecificGravityDangerBound("fishOnly", "low"), marineSpecificGravityDangerBound("fishOnly", "high"),
+      marineSpecificGravityDangerBound("invertebrates", "low"), marineSpecificGravityDangerBound("invertebrates", "high"),
+      marineSpecificGravityDangerBound("other", "high"),
+    ]).toEqual([1.016, 1.027, 1.017, 1.027, undefined]);
   });
 
   it.each(["tr-engine.ts", "en-engine.ts", "es-engine.ts"])("3b: dil dosyasında sayı türündeki hiçbir değer metne biçimleyicisiz girmez (tip denetimi, bütün dallar; %s)", async (name) => {
