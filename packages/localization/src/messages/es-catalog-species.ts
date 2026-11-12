@@ -595,7 +595,7 @@ export const esCatalogSpecies: CatalogTexts = {
   "6c6c0a153b4e7cab": "Gurami de tres manchas",
   "f20b4e6b032fe35d": "Gurami piel de serpiente",
   "6290d9f167b7b7eb": "Gurami luz de luna",
-  "20c592891b91835b": "Se necesita una amplia zona de nado con corriente baja, sombreada por plantas densas y flotantes. Puede comer plantas de hojas blandas.",
+  "90ba49a11f3b8d63": "Se necesita una amplia zona de nado con corriente baja, sombreada por plantas densas y flotantes. Puede comer plantas de hojas blandas. Fishkeeper recomienda mantener la especie en grupos en un acuario grande; Seriously Fish indica que su comportamiento social es desconocido y señala que los machos pueden ser territoriales con otros machos y con otros gurámis. La temperatura es el rango común entre los 23–30 °C de Fishkeeper y los 25–30 °C de Seriously Fish.",
   "fba201602acd63f6": "Por lo general es pacífico y tímido; puede comerse peces muy pequeños, y los machos pueden comportarse de forma territorial con otros guramis grandes.",
   "76f450ba70e7941c": "Gurami chocolate",
   "cbcbcc70011cc8ee": "Es un especialista delicado de aguas negras. Se necesitan un grupo de al menos seis y un acuario biológicamente maduro, con agua muy blanda y ácida, teñida de taninos, en penumbra, con poca corriente y nitrato bajo. Es sensible a los cambios bruscos en la química del agua.",

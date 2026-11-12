@@ -348,7 +348,7 @@ export const unresolvedSpeciesListings: UnresolvedSpeciesListing[] = [
     category: "fish", group: "monster", waterTypes: ["freshwater"],
     reason: "Satış başlığı geçerli Channa limbata adına işaret ediyor ancak ürün sayfası bilimsel kimliği, Golden formun köken popülasyonunu veya zorunlu bakım eşiklerini yayımlamıyor. Kesin Channa limbata için ayrı 20 cm, 100 litre/80 cm ve 22–28 °C profili eklendi; fakat Golden adı tek başına o bilimsel kimliği ve yerel formu kanıtlamadığından mağaza kaydı otomatik eşleşmez.",
     sourceUrl: "https://www.cikletistpetshop.com/channa-golden-limbata",
-    additionalSourceUrls: ["https://researcharchive.calacademy.org/research/ichthyology/catalog/fishcatget.asp?spid=34187", "https://channaturkiye.com/cuce-turler/channa-limbata/", "https://journal.ipb.ac.id/jai/article/download/52145/28773/293734"], verifiedAt: "2026-09-09",
+    additionalSourceUrls: ["https://researcharchive.calacademy.org/research/ichthyology/catalog/fishcatget.asp?spid=34187", "https://channaturkiye.com/channa-turleri/channa-limbata", "https://journal.ipb.ac.id/jai/article/download/52145/28773/293734"], verifiedAt: "2026-09-09",
   },
   {
     name: "WHITE CHECK EEL MÜREN", aliases: ["White Check Eel", "White Cheek Eel", "White Cheek Moray"],
