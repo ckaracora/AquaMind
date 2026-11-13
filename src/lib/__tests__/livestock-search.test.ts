@@ -5,6 +5,8 @@ import { loadLocaleBundle, localeBundle, messagesFor, type Locale } from "@aquam
 import { catalogTranslator } from "@aquamind/localization/catalog";
 import { normalize } from "@/data/catalog-shared";
 import { speciesById, speciesCatalog, speciesForCatalogSearch, speciesForOtherWaterExactSearch, speciesWaterTypes, type SpeciesProfile } from "@/data/catalog-species";
+import { unresolvedSpeciesListings } from "@/data/catalog-species-unresolved";
+import { foldWords, matchingSpecies, matchRange, searchKey, searchWords } from "@/lib/species-search";
 import type { Aquarium, AquariumType, Livestock } from "@/types/aquarium";
 
 // Canlı ekleme penceresinde arama önerisi (ürün sahibi kararı 2026-11-11). Aranan ad başka su türündeki bir türün tam adıysa tür
@@ -23,7 +25,7 @@ vi.mock("@/lib/use-display-format", async () => {
 });
 const {
   CatalogLivestockForm, changeLivestockCategory, changeLivestockGroup, changeLivestockQuery, changeLivestockSpecies, livestockSearch, OtherWaterNotice,
-  pickLivestockSuggestion, SelectedSpeciesCard, showAllLivestockSuggestions, VISIBLE_SUGGESTIONS,
+  pickLivestockSuggestion, quantityAfterAdding, SelectedSpeciesCard, showAllLivestockSuggestions, VISIBLE_SUGGESTIONS,
 } = await import("@/components/catalog-livestock-form");
 await loadLocaleBundle("en");
 await loadLocaleBundle("es");
@@ -170,6 +172,24 @@ describe("başka su türündeki tam ad: uyarı ve öneri, kendiliğinden seçim 
     expect(changeLivestockQuery(start, "böyle bir balık yok", fresh).selected).toBe("");
   });
 
+  // Kullanılabilirlik turu (2026-11-12): "panda" engelli "PANDA GARRARUFA YOSUN YİYİCİ" kutusunu açıyordu; katalog sırasında da önce
+  // Lepistes ("Panda Lepistes" eş adı) geliyordu.
+  it("kısmi eşleşmede adı aranan metinle başlayan tür öne gelir; çözülmemiş satış adının parçası katalogdaki kısmi eşleşmenin arkasında kalır", () => {
+    const fresh = contextFor("freshwater");
+    const start = changeLivestockCategory("fish", "freshwater");
+    expect(livestockSearch("panda", "fish", fresh)).toMatchObject({ kind: "partial", profile: { id: "corydoras-panda" } });
+    expect(changeLivestockQuery(start, "panda", fresh)).toMatchObject({ group: "bottom", selected: "corydoras-panda", quantity: species("corydoras-panda").minGroup });
+    // Satış adının kendisi yine güvenlik kutusunu açar; daha uzun parçası da, katalogda kısmi eşleşme yoksa.
+    expect(livestockSearch("Panda Garrarufa", "fish", fresh)).toMatchObject({ kind: "unresolved", listing: { name: "PANDA GARRARUFA YOSUN YİYİCİ" } });
+    expect(livestockSearch("panda garrarufa yosun", "fish", fresh)).toMatchObject({ kind: "unresolved", listing: { name: "PANDA GARRARUFA YOSUN YİYİCİ" } });
+    expect(changeLivestockQuery(start, "panda garrarufa yosun", fresh).selected).toBe("");
+    // Satış adının kendisi (2026-09-02 kuralı) yine kutuyu açar; yalnız parçası katalogdaki türün arkasında kalır.
+    expect(livestockSearch("Gurami", "fish", fresh)).toMatchObject({ kind: "unresolved", listing: { name: "Gurami" } });
+    expect(livestockSearch("Neon", "fish", fresh)).toMatchObject({ kind: "partial", profile: { id: "neon-tetra" } });
+    // Aynı sırada katalog sırası korunur: "lepist" bugünkü gibi Lepistes.
+    expect(livestockSearch("lepist", "fish", fresh)).toMatchObject({ kind: "partial", profile: { id: "guppy" } });
+  });
+
   it("bütün katalog adları: başka su türündeki tam ad hiçbir dilde kendiliğinden kısmi seçime ya da sessiz sonuca düşmez", () => {
     const offenders: string[] = [];
     let checked = 0;
@@ -308,7 +328,87 @@ describe("uyarının görünümü", () => {
   });
 });
 
+// Arama hoşgörüsü (kullanılabilirlik turu, 2026-11-12; src/lib/species-search.ts): harf ve aksan, tire ve boşluk, küçük bir yazım listesi.
+// Yalnız aramadır; katalog verisi ve kayıt eşlemesi değişmez.
+describe("arama hoşgörüsü", () => {
+  it("çözülmemiş satış adının tamamı katalog eş adıyla çakışsa da üç dilde seçimi engeller", () => {
+    for (const locale of ["tr", "en", "es"] as const) {
+      for (const listing of unresolvedSpeciesListings) for (const waterType of listing.waterTypes) {
+        const context = contextFor(waterType, locale);
+        const start = changeLivestockCategory(listing.category, waterType);
+        for (const name of [listing.name, ...(listing.aliases ?? [])]) {
+          const folded = foldWords(name);
+          for (const query of new Set([name, folded, folded.replaceAll(" ", "-"), folded.replaceAll(" ", "")])) {
+            expect(livestockSearch(query, listing.category, context).kind, query).toBe("unresolved");
+            expect(changeLivestockQuery(start, query, context).selected, query).toBe("");
+          }
+        }
+      }
+    }
+    expect(livestockSearch("Panda Garra", "fish", contextFor("freshwater")).kind).toBe("unresolved");
+  }, 60_000);
+
+  it("harf ve aksan katlaması: Türkçe ve İspanyolca harfler, büyük I ve İ", () => {
+    expect(foldWords("Papağan")).toBe("papagan");
+    expect(searchKey("pez ángel")).toBe(searchKey("Pez Angel"));
+    expect(searchKey("Tetra neón")).toBe(searchKey("tetra neon"));
+    expect(foldWords("ÇÖPÇÜ İĞNE IŞIK")).toBe("copcu igne isik");
+  });
+
+  it("tire ve boşluk katlaması: rummy nose = Rummy-nose, glow light = Glowlight", () => {
+    expect(searchKey("rummy nose")).toBe(searchKey("Rummy-nose"));
+    expect(searchKey("glow light")).toBe(searchKey("Glowlight"));
+    expect(matchRange("Rummy-nose Tetra", "rummy nose")).toEqual([0, 10]);
+  });
+
+  it("yazım listesi yalnız beş sözcüktür: koridoras, koridora, coridora, coridoras → corydoras; oskar → oscar", () => {
+    for (const word of ["koridoras", "koridora", "coridora", "coridoras", "Koridoras"]) expect(searchWords(word), word).toBe("corydoras");
+    expect(searchWords("oskar")).toBe("oscar");
+    expect(searchWords("koridoras panda")).toBe("corydoras panda");
+    // Listede olmayan yazım düzeltilmez.
+    expect(searchWords("korido")).toBe("korido");
+  });
+
+  it("koridoras bütün Corydoras kayıtlarını bulur, Panda çöpçü dahil; seçilen tür bu listedendir", () => {
+    const fresh = contextFor("freshwater");
+    const found = matchingSpecies("koridoras", "fish", "freshwater", fresh.translatedName).map((item) => item.id);
+    expect(found).toEqual(matchingSpecies("corydoras", "fish", "freshwater", fresh.translatedName).map((item) => item.id));
+    expect(found).toContain("corydoras-panda");
+    expect(found.length).toBeGreaterThan(5);
+    const search = livestockSearch("koridoras", "fish", fresh);
+    expect(search.kind === "exact" || search.kind === "partial").toBe(true);
+    expect(found).toContain("profile" in search ? search.profile.id : "");
+    expect(livestockSearch("koridoras panda", "fish", fresh)).toMatchObject({ profile: { id: "corydoras-panda" } });
+  });
+
+  it("oskar → Astronot (Oscar); rummy nose → Kırmızı burun tetra; glow light tetra → Günışığı tetra", () => {
+    const fresh = contextFor("freshwater");
+    expect(livestockSearch("oskar", "fish", fresh)).toMatchObject({ profile: { id: "oscar" } });
+    expect(livestockSearch("rummy nose", "fish", fresh)).toMatchObject({ profile: { id: "rummy-nose" } });
+    expect(livestockSearch("glow light tetra", "fish", fresh)).toMatchObject({ kind: "exact", profile: { id: "glowlight-tetra" } });
+    expect(matchingSpecies("glow light", "fish", "freshwater").map((item) => item.id)).toContain("glowlight-tetra");
+  });
+
+  it("İspanyolca ekranda aksansız yazılan çeviri adı türü bulur: pez angel → Pez ángel, tetra neon → Tetra neón", () => {
+    const fresh = contextFor("freshwater", "es");
+    expect(livestockSearch("pez angel", "fish", fresh)).toMatchObject({ kind: "exact", profile: { id: "angelfish" } });
+    expect(livestockSearch("tetra neon", "fish", fresh)).toMatchObject({ kind: "exact", profile: { id: "neon-tetra" } });
+  });
+});
+
 describe("tür kartı ve pencere", () => {
+  it("aynı tür yeniden eklenince grup ve hacim notları mevcut bireyleri de sayar; eski kimliksiz kayıtlar korunur", () => {
+    const panda = species("corydoras-panda");
+    const existing: Livestock[] = [
+      { id: "old", aquariumId: "a", category: "fish", commonName: panda.commonName, quantity: 5, addedAt: "2026-11-12" },
+      { id: "other", aquariumId: "a", category: "fish", catalogId: "neon-tetra", commonName: "Neon tetra", quantity: 10, addedAt: "2026-11-12" },
+    ];
+    const before = JSON.stringify(existing);
+    expect(quantityAfterAdding(panda, 1, existing)).toBe(6);
+    expect(quantityAfterAdding(panda, 2, [{ ...existing[0], catalogId: panda.id }])).toBe(7);
+    expect(JSON.stringify(existing)).toBe(before);
+  });
+
   it("tür öneriden seçildiyse kartın altında kullanıcının aradığı adla yazar", () => {
     const chosen = plain(renderToStaticMarkup(createElement(SelectedSpeciesCard, { profile: species("guppy"), searchedFor: "Koi" })));
     expect(chosen).toContain("Bu türü öneriden sen seçtin. Aradığın ad: Koi");

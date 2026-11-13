@@ -4,7 +4,7 @@ import { ChevronDown, Filter, LampDesk, PencilLine, Plus, Search, SlidersHorizon
 import { AppShell } from "@/components/app-shell";
 import { ModalDialog } from "@/components/modal-dialog";
 import { PageHeader } from "@/components/page-header";
-import { equipmentBrandsForCategory, equipmentById, equipmentForBrandInCategory, equipmentForCategory, equipmentMatchesModelQuery, profileForEquipment, technicalDataReady } from "@/data/catalog-equipment";
+import { equipmentBrandsForCategory, equipmentById, equipmentForBrandInCategory, equipmentMatchesModelQuery, profileForEquipment, technicalDataReady } from "@/data/catalog-equipment";
 import { selectedAquarium } from "@/lib/aquarium-selection";
 import { equipmentSpecsText, profileSpecsText } from "@/lib/equipment-text";
 import { localIsoDate } from "@/lib/local-date";
@@ -124,14 +124,15 @@ function EquipmentForm({ aquarium, initialCategory, close, add }: {
   const [selectedCategory, setSelectedCategory] = useState(initialCategory);
   // Listede olmayan cihaz için kullanıcı marka ve modeli kendisi yazar.
   const [manual, setManual] = useState(false);
-  const categoryItems = equipmentForCategory(selectedCategory);
   const brands = equipmentBrandsForCategory(selectedCategory);
-  const [brand, setBrand] = useState(categoryItems[0]?.brand ?? "");
+  // Marka ve model boş başlar; kullanıcı seçer (kullanılabilirlik turu, 2026-11-12, ürün sahibi onayı). Eskiden listedeki ilk model, değeri
+  // doğrulanmamış olsa da seçili geliyordu (ör. Oase BioMaster 350) ve hızlıca "Ekle"ye basan, sahip olmadığı cihazı kaydediyordu.
+  const [brand, setBrand] = useState("");
   const models = equipmentForBrandInCategory(selectedCategory, brand);
   const [modelQuery, setModelQuery] = useState("");
   // Model araması eş adlara da bakar (eski ya da öbür ülke adı, ör. "S 101"); kayıt listede kendi adıyla bir kez görünür.
   const visibleModels = models.filter(item => equipmentMatchesModelQuery(item, modelQuery));
-  const [selected, setSelected] = useState(models[0]?.id ?? "");
+  const [selected, setSelected] = useState("");
   const [raw, setRaw] = useState("");
   const [unit, setUnit] = useState<FlowUnit>("lph");
   const [error, setError] = useState<string>();
@@ -142,9 +143,10 @@ function EquipmentForm({ aquarium, initialCategory, close, add }: {
   const profile = manual ? typedMatch : equipmentById(selected);
   const valueField = profile ? userValueField(profile.category, profile) : manual ? userValueField(selectedCategory) : undefined;
   function resetValue() { setRaw(""); setError(undefined); }
-  function changeCategory(next: Equipment["category"]) { const nextItems = equipmentForCategory(next); setSelectedCategory(next); setBrand(nextItems[0]?.brand ?? ""); setModelQuery(""); setSelected(nextItems[0]?.id ?? ""); resetValue(); }
-  function changeBrand(next: string) { setBrand(next); setModelQuery(""); setSelected(equipmentForBrandInCategory(selectedCategory, next)[0]?.id ?? ""); resetValue(); }
-  function changeModelQuery(next: string) { setModelQuery(next); setSelected(models.find(item => equipmentMatchesModelQuery(item, next))?.id ?? ""); resetValue(); }
+  function changeCategory(next: Equipment["category"]) { setSelectedCategory(next); setBrand(""); setModelQuery(""); setSelected(""); resetValue(); }
+  function changeBrand(next: string) { setBrand(next); setModelQuery(""); setSelected(""); resetValue(); }
+  // Arama tek bir modele inerse o model seçilir; birden çok model kalırsa liste açık kalır, kullanıcı seçer.
+  function changeModelQuery(next: string) { setModelQuery(next); const matches = models.filter(item => equipmentMatchesModelQuery(item, next)); setSelected(next.trim() && matches.length === 1 ? matches[0].id : ""); resetValue(); }
   function submit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
     const d = new FormData(e.currentTarget);
@@ -172,11 +174,11 @@ function EquipmentForm({ aquarium, initialCategory, close, add }: {
         <label className="text-xs font-bold text-[#91a3aa]">{t.equipment.form.brand}<input required name="brand" value={manualBrand} onChange={e => { setManualBrand(e.target.value); resetValue(); }} maxLength={60} autoComplete="off" placeholder={t.equipment.form.brandPlaceholder} className={field}/></label>
         <label className="text-xs font-bold text-[#91a3aa]">{t.equipment.form.model}<input required name="model" value={manualModel} onChange={e => { setManualModel(e.target.value); resetValue(); }} maxLength={80} autoComplete="off" placeholder={t.equipment.form.modelPlaceholder} className={field}/></label>
       </> : <>
-        <label className="text-xs font-bold text-[#91a3aa]">{t.equipment.form.brand}<select value={brand} onChange={e => changeBrand(e.target.value)} disabled={!brands.length} className={field}>{brands.map(item => <option key={item}>{item}</option>)}</select></label>
-        <label className="text-xs font-bold text-[#91a3aa] sm:col-span-2">{t.equipment.form.model}<span className="relative mt-1.5 block"><Search size={15} className="pointer-events-none absolute left-3 top-3.5 text-[#586e77]"/><input value={modelQuery} onChange={e => changeModelQuery(e.target.value)} placeholder={t.equipment.form.modelSearch} className={`${field} mt-0 pl-9`}/></span><select required name="catalogId" value={selected} onChange={e => { setSelected(e.target.value); resetValue(); }} disabled={!visibleModels.length} className={field}>{visibleModels.map(item => <option key={item.id} value={item.id}>{item.model}</option>)}</select>{modelQuery && !visibleModels.length && <span className="mt-2 block text-[11px] sm:text-[10px] font-normal text-amber-300">{t.equipment.form.noModelMatch}</span>}</label>
+        <label className="text-xs font-bold text-[#91a3aa]">{t.equipment.form.brand}<select value={brand} onChange={e => changeBrand(e.target.value)} disabled={!brands.length} className={`${field} ${brand ? "" : "text-[#71858d]"}`}><option value="" disabled>{t.equipment.form.chooseBrand}</option>{brands.map(item => <option key={item}>{item}</option>)}</select></label>
+        <label className="text-xs font-bold text-[#91a3aa] sm:col-span-2">{t.equipment.form.model}<span className="relative mt-1.5 block"><Search size={15} className="pointer-events-none absolute left-3 top-3.5 text-[#586e77]"/><input value={modelQuery} onChange={e => changeModelQuery(e.target.value)} disabled={!brand} placeholder={t.equipment.form.modelSearch} className={`${field} mt-0 pl-9 disabled:opacity-50`}/></span><select required name="catalogId" value={selected} onChange={e => { setSelected(e.target.value); resetValue(); }} disabled={!visibleModels.length} className={`${field} disabled:opacity-50 ${selected ? "" : "text-[#71858d]"}`}><option value="" disabled>{brand ? t.equipment.form.chooseModel : t.equipment.form.brandFirst}</option>{visibleModels.map(item => <option key={item.id} value={item.id}>{item.model}</option>)}</select>{modelQuery && !visibleModels.length && <span className="mt-2 block text-[11px] sm:text-[10px] font-normal text-amber-300">{t.equipment.form.noModelMatch}</span>}</label>
       </>}
       <p className="text-[11px] sm:text-[10px] text-[#71858d] sm:col-span-2">{manual ? t.equipment.form.maybeListed : t.equipment.form.notListed}<button type="button" onClick={() => { setManual(!manual); setManualBrand(""); setManualModel(""); resetValue(); }} className="-my-[14.5px] inline-flex min-h-11 min-w-11 items-center font-bold text-aqua underline-offset-2 hover:underline">{manual ? t.equipment.form.backToList : t.equipment.form.typeManually}</button></p>
-      {!manual && !profile && <div className="rounded-xl border border-amber-300/15 bg-amber-300/[.06] p-4 text-[11px] sm:text-[10px] text-amber-100/70 sm:col-span-2">{t.equipment.form.noModelsInCategory}</div>}
+      {!manual && !brands.length && <div className="rounded-xl border border-amber-300/15 bg-amber-300/[.06] p-4 text-[11px] sm:text-[10px] text-amber-100/70 sm:col-span-2">{t.equipment.form.noModelsInCategory}</div>}
       {typedMatch && <p className="text-[11px] sm:text-[10px] font-bold text-aqua sm:col-span-2">{t.equipment.form.typedMatch}</p>}
       {profile && <><div className="rounded-xl border border-aqua/15 bg-aqua/[.05] p-4 sm:col-span-2"><div className="flex items-start justify-between gap-3"><div><p className="text-sm font-extrabold">{profile.brand} {profile.model}</p><p className="mt-1 text-[11px] sm:text-[10px] text-[#71858d]">{profileSpecsText(profile, equipmentText, t.equipment.specSummary, fmt)}</p></div><span className={`shrink-0 rounded-full px-2 py-1 text-[11px] sm:text-[8px] font-bold ${capacityReady?"bg-emerald-400/10 text-emerald-400":"bg-amber-300/10 text-amber-300"}`}>{capacityReady?t.equipment.form.dataReady:valueField?t.equipment.form.valueMissing:t.equipment.form.modelListed}</span></div>{(profile.recommendedMinL || profile.recommendedMaxL) && <p className="mt-3 text-[11px] sm:text-[9px] text-aqua/70">{t.equipment.form.recommendedVolume(`${fmt.volumeNumber(profile.recommendedMinL ?? 0)}–${profile.recommendedMaxL !== undefined ? fmt.volumeNumber(profile.recommendedMaxL) : "+"} ${fmt.volumeSymbol}`)}</p>}{profile.category === "filter" && profile.ratedFlowLph && <p className="mt-2 text-[11px] sm:text-[9px] text-[#71858d]">{t.equipment.valueInput.flowNote}</p>}</div>{(!capacityReady || mismatch || (turnover && turnover > 10)) && <div className="rounded-xl border border-amber-300/15 bg-amber-300/[.06] p-4 sm:col-span-2"><p className="text-[11px] sm:text-[10px] font-extrabold text-amber-300">{t.equipment.form.attention}</p>{!capacityReady && valueField && <p className="mt-2 text-[11px] sm:text-[10px] text-amber-100/80">{t.equipment.form.unverified}</p>}{!capacityReady && profile.capacityDataNote && equipmentText(profile.capacityDataNote) && <p className="mt-2 text-[11px] sm:text-[9px] text-amber-100/65">• {equipmentText(profile.capacityDataNote)}</p>}{mismatch && <p className="mt-2 text-[11px] sm:text-[9px] text-amber-100/65">{t.equipment.form.mismatch(fmt.volume(aquarium.netVolumeLiters))}</p>}{turnover && turnover > 10 && <p className="mt-2 text-[11px] sm:text-[9px] text-amber-100/65">{t.equipment.form.strongFlow(fmt.number(turnover, { minimumFractionDigits: 1, maximumFractionDigits: 1 }))}</p>}</div>}</>}
       {valueField && <UserValueInput valueField={valueField} category={profile?.category ?? selectedCategory} volumeL={aquarium.netVolumeLiters} raw={raw} unit={unit} error={error} setRaw={value => { setRaw(value); setError(undefined); }} setUnit={next => { setUnit(next); setError(undefined); }}/>}

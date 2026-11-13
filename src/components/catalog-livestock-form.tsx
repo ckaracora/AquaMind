@@ -1,22 +1,24 @@
 "use client";
 
-import { FormEvent, useEffect, useId, useRef, useState, type ReactNode } from "react";
-import { Check, Search, X } from "lucide-react";
+import { FormEvent, useEffect, useId, useMemo, useRef, useState, type ReactNode } from "react";
+import { AlertTriangle, Check, Search, ShieldAlert, X } from "lucide-react";
+import { engineMessagesFor, engineTextFormat } from "@aquamind/localization/engine";
 import { ModalDialog } from "@/components/modal-dialog";
-import { speciesById, speciesCatalog, speciesForCatalogExactSearch, speciesForCatalogSearch, speciesForCategoryAndWaterType, speciesForOtherWaterExactName, speciesGroup, speciesGroupsForCategoryAndWaterType, speciesMatchesForCatalogSearch, speciesWaterTypes } from "@/data/catalog-species";
-import { unresolvedSpeciesForSearch } from "@/data/catalog-species-unresolved";
+import { speciesById, speciesCatalog, speciesForLivestock, speciesForCategoryAndWaterType, speciesGroup, speciesGroupsForCategoryAndWaterType, speciesWaterTypes } from "@/data/catalog-species";
 import type { SpeciesProfile, SpeciesSearchName } from "@/data/catalog-species";
 import type { UnresolvedSpeciesListing } from "@/data/catalog-species-unresolved";
+import { bestPartialMatch, exactSpecies, matchingSpecies, matchRange, otherWaterExactSpecies, searchWords, speciesNameMatches, unresolvedListingFor } from "@/lib/species-search";
+import { engineWarningText } from "@/lib/engine-text";
 import { localIsoDate } from "@/lib/local-date";
+import { newWarningsForCandidate } from "@/lib/selection-warnings";
+import { useCatalogLookup } from "@/lib/use-catalog-lookup";
 import { useDisplayFormat } from "@/lib/use-display-format";
 import { useI18n } from "@/providers/i18n-provider";
-import type { Aquarium, AquariumType, Livestock } from "@/types/aquarium";
+import type { Aquarium, AquariumType, Equipment, Livestock, WaterParameters } from "@/types/aquarium";
 
 // Canlı sınıfları; adları dil dosyasındadır (`t.livestock.categories[category]`).
 const allCategories: Livestock["category"][] = ["fish", "shrimp", "snail", "other"];
 const field = "mt-1.5 w-full rounded-xl border border-white/[.08] bg-[#09171e] px-3 py-3 text-sm outline-none focus:border-aqua/60";
-const normalizeSearch = (value: string) => value.trim().toLocaleLowerCase("tr-TR").replaceAll("ı", "i").replace(/\s+/g, " ");
-const searchableText = (item: SpeciesProfile) => normalizeSearch(`${item.commonName} ${item.scientificName} ${(item.aliases ?? []).join(" ")}`);
 
 type SpeciesGroupKey = NonNullable<SpeciesProfile["group"]>;
 
@@ -35,27 +37,26 @@ export type LivestockSearch =
 /** Akvaryumun su türü ve ekranın dilindeki tür adı (aramayla aynı biçimde; Türkçede verilmez ya da `undefined` döner). */
 export interface LivestockSearchContext { waterType: AquariumType; translatedName?: SpeciesSearchName }
 
-// Eşleşme sırası (ürün sahibi kararı 2026-11-11). Ekranda gösterilen değerler ve arama değişince yapılan seçim aynı sırayı kullanır:
-// 1. arama boş; 2. bu su türünde tam ad (çeviri dahil); 3. çözülmemiş satış adı (güvenlik kutusu); 4. başka su türünde tam ad (çeviri
-// dahil): seçim yok, uyarı ve bu akvaryum türü ile sınıfındaki bütün kısmi eşleşmeler öneri olarak; 5. kısmi eşleşme (katalog sırasındaki
-// ilk tür, bugünkü gibi); 6. eşleşme yok.
+// Eşleşme sırası (ürün sahibi kararı 2026-11-11; 2026-11-12 kullanılabilirlik turunda inceltildi). Ekranda gösterilen değerler ve arama
+// değişince yapılan seçim aynı sırayı kullanır. Adlar harf, aksan, tire ve küçük bir yazım listesiyle hoşgörülü karşılaştırılır
+// (src/lib/species-search.ts):
+// 1. arama boş; 2. çözülmemiş satış adının kendisi (güvenlik kutusu); 3. bu su türünde tam ad (çeviri dahil); 4. başka su türünde tam ad
+// (çeviri dahil): seçim yok, uyarı ve bu akvaryum türü ile sınıfındaki bütün kısmi eşleşmeler öneri olarak; 5. katalogda kısmi eşleşme
+// (`bestPartialMatch`: adı aranan metinle başlayan tür önce); 6. çözülmemiş satış adının bir parçası (güvenlik kutusu; katalogda kısmi
+// eşleşme yoksa); 7. eşleşme yok. Satış adının parçası eskiden (2026-09-02) katalogdaki kısmi eşleşmenin önündeydi: "panda" engelli
+// "PANDA GARRARUFA YOSUN YİYİCİ" kutusunu, "Neon" "BLUE NEON GOBBY GOBİ" kutusunu açıyordu. Satış adının kendisi yazılınca kutu yine açılır.
 export function livestockSearch(query: string, category: Livestock["category"], { waterType, translatedName }: LivestockSearchContext): LivestockSearch {
-  const normalized = normalizeSearch(query);
-  if (!normalized) return { kind: "empty" };
-  const translatedMatch = (exact: boolean) => translatedName === undefined ? undefined : speciesForCategoryAndWaterType(category, waterType).find((item) => {
-    const name = translatedName(item);
-    return name !== undefined && (exact ? name === normalized : name.includes(normalized));
-  });
-  const exact = speciesForCatalogExactSearch(query, category, waterType) ?? translatedMatch(true);
+  if (!searchWords(query)) return { kind: "empty" };
+  // Belirsiz satış adı katalog eş adıyla çakışsa da sessizce bir türe bağlanmaz.
+  const listing = unresolvedListingFor(query, category, waterType);
+  if (listing?.exact) return { kind: "unresolved", listing: listing.listing };
+  const exact = exactSpecies(query, category, waterType, translatedName);
   if (exact) return { kind: "exact", profile: exact };
-  const listing = unresolvedSpeciesForSearch(query, category, waterType);
-  const otherWater = speciesForOtherWaterExactName(query, category, waterType, translatedName);
-  // Satış adının kendisi (tam eşleşme) güvenlik kutusunu açar; daha uzun satış adının içinden bulunması başka su türündeki tam adın önüne
-  // geçmez. Türkçe adlarda bunu çözülmemiş arama kendisi yapar (`unresolvedSpeciesForSearch`); ekranın dilindeki adlar için burada yapılır.
-  if (listing && (!otherWater || [listing.name, ...(listing.aliases ?? [])].some((name) => normalizeSearch(name) === normalized))) return { kind: "unresolved", listing };
-  if (otherWater) return { kind: "otherWater", profile: otherWater, suggestions: speciesMatchesForCatalogSearch(query, category, waterType, translatedName) };
-  const partial = speciesForCatalogSearch(query, category, waterType) ?? translatedMatch(false);
-  return partial ? { kind: "partial", profile: partial } : { kind: "none" };
+  const otherWater = otherWaterExactSpecies(query, category, waterType, translatedName);
+  if (otherWater) return { kind: "otherWater", profile: otherWater, suggestions: matchingSpecies(query, category, waterType, translatedName) };
+  const partial = bestPartialMatch(query, category, waterType, translatedName);
+  if (partial) return { kind: "partial", profile: partial };
+  return listing ? { kind: "unresolved", listing: listing.listing } : { kind: "none" };
 }
 
 /** Penceredeki seçimler. `fromSuggestion`: tür, başka su türü uyarısının önerisinden seçildi (kartta yazar, ekran okuyucu okur). */
@@ -118,27 +119,6 @@ export function pickLivestockSuggestion(state: LivestockFormState, profile: Spec
 
 export const showAllLivestockSuggestions = (state: LivestockFormState): LivestockFormState => ({ ...state, showAllSuggestions: true });
 
-// Aranan metnin addaki yeri: ad, aramayla aynı kuralla harf harf küçültülür (Türkçe büyük-küçük harf, "ı", boşluklar); bulunan parça
-// özgün yazımıyla vurgulanır.
-function matchRange(text: string, query: string): [number, number] | undefined {
-  if (!query) return undefined;
-  let normalized = "";
-  const origin: number[] = [];
-  let space = true;
-  for (let index = 0; index < text.length; index += 1) {
-    const char = text[index];
-    if (/\s/.test(char)) {
-      if (!space) { normalized += " "; origin.push(index); space = true; }
-      continue;
-    }
-    const lower = char.toLocaleLowerCase("tr-TR").replaceAll("ı", "i");
-    for (let unit = 0; unit < lower.length; unit += 1) { normalized += lower[unit]; origin.push(index); }
-    space = false;
-  }
-  const at = normalized.indexOf(query);
-  return at < 0 ? undefined : [origin[at], origin[at + query.length - 1] + 1];
-}
-
 function Highlighted({ text, query }: { text: string; query: string }): ReactNode {
   const range = matchRange(text, query);
   if (!range) return text;
@@ -148,7 +128,7 @@ function Highlighted({ text, query }: { text: string; query: string }): ReactNod
 /**
  * Başka su türü uyarısı ve öneriler (ürün sahibi kararı 2026-11-11). Tür kendiliğinden seçilmez; öneriye tıklanınca seçilir. Tür seçilince
  * uyarı küçülür (başlık ve aranan türün adı kalır), öbür öneriler görünür kalır. En çok `VISIBLE_SUGGESTIONS` öneri görünür. `query` aramanın
- * `normalizeSearch` biçimidir; `announced` öneriden seçilen türün adıdır (ekran okuyucu okur).
+ * aranan metindir (vurgu `matchRange` ile aynı hoşgörüyle bulunur, src/lib/species-search.ts); `announced` öneriden seçilen türün adıdır.
  */
 export function OtherWaterNotice({ match, aquariumType, suggestions, query, selectedId, announced, showAll, pick, showAllSuggestions }: {
   match: SpeciesProfile; aquariumType: AquariumType; suggestions: SpeciesProfile[]; query: string; selectedId?: string; announced?: string; showAll: boolean;
@@ -199,27 +179,42 @@ export function SelectedSpeciesCard({ profile, searchedFor }: { profile: Species
   return <div className="rounded-xl border border-aqua/15 bg-aqua/[.05] p-4 sm:col-span-2"><div className="flex justify-between"><div><p className="text-sm font-extrabold">{catalogText(profile.commonName) ?? profile.commonName}</p><p className="mt-1 text-[11px] sm:text-[10px] italic text-[#71858d]">{profile.scientificName}</p></div><span className="rounded-full bg-emerald-400/10 px-2 py-1 text-[11px] sm:text-[8px] font-bold text-emerald-400">{f.inCatalog}</span></div><div className="mt-3 grid grid-cols-3 gap-2 text-[11px] sm:text-[9px]"><span>{f.adultSize} <b>{profile.adultSizeCm} cm</b></span><span>{f.minVolume} <b>{fmt.volume(profile.minVolumeL)}</b></span><span>{f.minGroup} <b>{profile.minGroup}+</b></span></div>{searchedFor !== undefined && <p className="mt-3 flex items-start gap-1.5 border-t border-aqua/15 pt-2.5 text-[11px] sm:text-[10px] font-semibold leading-normal text-aqua"><Check size={13} strokeWidth={3} aria-hidden="true" className="mt-0.5 shrink-0" /><span>{f.chosenFromSuggestion(searchedFor)}</span></p>}</div>;
 }
 
-export function CatalogLivestockForm({ aquarium, initialCategory, close, submit }: { aquarium: Aquarium; initialCategory: Livestock["category"]; close: () => void; submit: (e: FormEvent<HTMLFormElement>) => void }) {
+/** Motor gibi, aynı katalog türünün eski kayıtlarını da yeni adetle birlikte sayar. */
+export function quantityAfterAdding(profile: SpeciesProfile, quantity: number, animals: Livestock[]): number {
+  return quantity + animals.reduce((total, item) => total + (speciesForLivestock(item)?.id === profile.id ? item.quantity : 0), 0);
+}
+
+const NO_ANIMALS: Livestock[] = [];
+const NO_DEVICES: Equipment[] = [];
+
+/**
+ * Canlı seçme penceresi. `animals`, `devices` ve `latest` bu akvaryumun kayıtlarıdır: seçilen canlının onlarla birlikte yeni getirdiği
+ * avlanma ve uyumsuzluk uyarıları eklemeden önce gösterilir (src/lib/selection-warnings.ts). Verilmezse akvaryum boş sayılır.
+ */
+export function CatalogLivestockForm({ aquarium, initialCategory, close, submit, animals = NO_ANIMALS, devices = NO_DEVICES, latest }: { aquarium: Aquarium; initialCategory: Livestock["category"]; close: () => void; submit: (e: FormEvent<HTMLFormElement>) => void; animals?: Livestock[]; devices?: Equipment[]; latest?: WaterParameters }) {
   // Katalogdaki hacim referansları ayarlardaki birimde (litre/galon) yazılır.
   const fmt = useDisplayFormat();
-  const { t, catalogText } = useI18n();
+  const { t, locale, catalogText } = useI18n();
   // Tür adı çevirisi yoksa katalogdaki ad kalır; çevirisi olmayan not gösterilmez (ürün sahibi kararı 2026-10-30).
   const speciesName = (item: SpeciesProfile) => catalogText(item.commonName) ?? item.commonName;
   // Başka dilde tür adının çevirisi de aranır; Türkçe ad, bilimsel ad ve eş adlar her dilde aranır. Türkçede çeviri adın kendisidir.
+  // Ad olduğu gibi verilir; küçük harf, aksan ve tire katlaması tek yerde yapılır (src/lib/species-search.ts `foldWords`).
   const translatedName: SpeciesSearchName = (item) => {
     const name = catalogText(item.commonName);
-    return name !== undefined && name !== item.commonName ? normalizeSearch(name) : undefined;
+    return name !== undefined && name !== item.commonName ? name : undefined;
   };
   const searchContext: LivestockSearchContext = { waterType: aquarium.type, translatedName };
   const compatibleSpecies = speciesCatalog.filter((item) => speciesWaterTypes(item).includes(aquarium.type));
   const categories = allCategories.filter((key) => compatibleSpecies.some((item) => item.category === key));
   const [form, setForm] = useState(() => livestockFormStart(initialCategory, aquarium.type));
   const { category, group, query, selected, quantity } = form;
+  // Cinsiyet seçimi denetimli alandır; kayda formdan, seçme anındaki analize aday canlıyla gider.
+  const [gender, setGender] = useState<NonNullable<Livestock["gender"]>>("unknown");
   const categoryItems = speciesForCategoryAndWaterType(category, aquarium.type);
   const groups = speciesGroupsForCategoryAndWaterType(category, aquarium.type);
-  const normalizedQuery = normalizeSearch(query);
+  const normalizedQuery = searchWords(query);
   const allGroupItems = categoryItems.filter((item) => speciesGroup(item) === group);
-  const groupItems = allGroupItems.filter((item) => searchableText(item).includes(normalizedQuery) || Boolean(translatedName(item)?.includes(normalizedQuery)));
+  const groupItems = allGroupItems.filter((item) => speciesNameMatches(item, query, translatedName));
   const profile = speciesById(selected);
   const search = livestockSearch(query, category, searchContext);
   const unresolvedMatch = search.kind === "unresolved" ? search.listing : undefined;
@@ -231,13 +226,25 @@ export function CatalogLivestockForm({ aquarium, initialCategory, close, submit 
 
   const hasSelectedProfile = Boolean(profile && groupItems.some((item) => item.id === profile.id));
   const chosenFromSuggestion = form.fromSuggestion && hasSelectedProfile;
-  const requiredVolumeL = profile ? profile.minVolumeL + Math.max(0, quantity - 1) * (profile.additionalVolumePerAnimalL ?? 0) : 0;
+  const population = profile ? quantityAfterAdding(profile, quantity, animals) : quantity;
+  const requiredVolumeL = profile ? profile.minVolumeL + Math.max(0, population - 1) * (profile.additionalVolumePerAnimalL ?? 0) : 0;
   const issues = profile ? [
     aquarium.netVolumeLiters < requiredVolumeL ? t.livestock.form.volumeIssue(fmt.volume(requiredVolumeL)) : "",
     profile.minTankLengthCm !== undefined && aquarium.lengthCm < profile.minTankLengthCm ? t.livestock.form.lengthIssue(profile.minTankLengthCm) : "",
     profile.tankLengthDataNote ? (catalogText(profile.tankLengthDataNote) ?? "") : "",
-    quantity < profile.minGroup ? t.livestock.form.groupIssue(profile.minGroup) : "",
+    population < profile.minGroup ? t.livestock.form.groupIssue(profile.minGroup) : "",
   ].filter(Boolean) : [];
+  // Seçme anındaki uyarılar (kullanılabilirlik turu, 2026-11-12): sağlık analizi aday canlıyla ve adaysız çalıştırılır, adayla yeni çıkan
+  // avlanma ve uyumsuzluk uyarıları gösterilir. Ekleme engellenmez; aynı uyarı eklendikten sonra Sağlık Analizi'nde de çıkar.
+  const candidateQuantity = Number.isFinite(quantity) && quantity >= 1 ? Math.round(quantity) : 1;
+  const candidate = useMemo<Livestock | undefined>(() => hasSelectedProfile && profile && !unresolvedMatch
+    ? { id: "selection-candidate", aquariumId: aquarium.id, catalogId: profile.id, commonName: profile.commonName, scientificName: profile.scientificName, category: profile.category, quantity: candidateQuantity, gender, addedAt: localIsoDate() }
+    : undefined, [hasSelectedProfile, profile, unresolvedMatch, aquarium.id, candidateQuantity, gender]);
+  const lookupAnimals = useMemo(() => (candidate ? [...animals, candidate] : animals), [animals, candidate]);
+  const { lookup, failed: riskFailed } = useCatalogLookup(lookupAnimals, devices, Boolean(candidate));
+  const riskWarnings = useMemo(() => (lookup && candidate ? newWarningsForCandidate(lookup, aquarium, animals, devices, latest, candidate) : []), [lookup, candidate, aquarium, animals, devices, latest]);
+  const engineTexts = engineMessagesFor(locale);
+  const engineFormat = useMemo(() => engineTextFormat(fmt), [fmt]);
   const titleId = useId();
   const descriptionId = useId();
 
@@ -252,8 +259,19 @@ export function CatalogLivestockForm({ aquarium, initialCategory, close, submit 
         {otherWaterMatch && <OtherWaterNotice match={otherWaterMatch.profile} aquariumType={aquarium.type} suggestions={otherWaterMatch.suggestions} query={normalizedQuery} selectedId={hasSelectedProfile ? selected : undefined} announced={chosenFromSuggestion && profile ? speciesName(profile) : undefined} showAll={form.showAllSuggestions} pick={(item) => setForm((current) => pickLivestockSuggestion(current, item))} showAllSuggestions={() => setForm(showAllLivestockSuggestions)} />}
         <label className="text-xs font-bold text-[#91a3aa] sm:col-span-2">{t.livestock.form.species}<select required name="catalogId" value={hasSelectedProfile ? selected : ""} onChange={(e) => { const next = e.target.value; setForm((current) => changeLivestockSpecies(current, next)); }} className={field}><option value="" disabled>{groupItems.length ? t.livestock.form.chooseSpecies : unresolvedMatch ? t.livestock.form.awaitingIdentity : t.livestock.form.noMatch}</option>{groupItems.map((item) => <option key={item.id} value={item.id}>{speciesName(item)} · {item.scientificName}</option>)}</select></label>
         {hasSelectedProfile && profile && <SelectedSpeciesCard profile={profile} searchedFor={chosenFromSuggestion ? query.trim() : undefined} />}
-        <label className="text-xs font-bold text-[#91a3aa]">{t.common.quantity}<input required name="quantity" type="number" inputMode="numeric" min="1" value={quantity} onChange={(e) => { const next = Number(e.target.value); setForm((current) => ({ ...current, quantity: next })); }} className={field} /></label><label className="text-xs font-bold text-[#91a3aa]">{t.livestock.form.gender}<select name="gender" className={field}><option value="unknown">{t.livestock.form.genders.unknown}</option><option value="mixed">{t.livestock.form.genders.mixed}</option><option value="male">{t.livestock.form.genders.male}</option><option value="female">{t.livestock.form.genders.female}</option></select></label>
+        <label className="text-xs font-bold text-[#91a3aa]">{t.common.quantity}<input required name="quantity" type="number" inputMode="numeric" min="1" value={quantity} onChange={(e) => { const next = Number(e.target.value); setForm((current) => ({ ...current, quantity: next })); }} className={field} /></label><label className="text-xs font-bold text-[#91a3aa]">{t.livestock.form.gender}<select name="gender" value={gender} onChange={(e) => setGender(e.target.value as NonNullable<Livestock["gender"]>)} className={field}><option value="unknown">{t.livestock.form.genders.unknown}</option><option value="mixed">{t.livestock.form.genders.mixed}</option><option value="male">{t.livestock.form.genders.male}</option><option value="female">{t.livestock.form.genders.female}</option></select></label>
         {issues.length > 0 && <div className="rounded-xl border border-amber-300/15 bg-amber-300/[.06] p-4 sm:col-span-2"><p className="text-[11px] sm:text-[10px] font-extrabold text-amber-300">{t.livestock.form.beforeSaving}</p>{issues.map((issue) => <p key={issue} className="mt-2 text-[11px] sm:text-[9px] text-amber-100/65">• {issue}</p>)}</div>}
+        {candidate && (riskWarnings.length > 0 ? <div className="grid gap-2 sm:col-span-2">{riskWarnings.map((warning, index) => {
+          const text = engineWarningText(engineTexts, engineFormat, warning, catalogText);
+          const danger = warning.level === "danger";
+          return <div key={`${warning.code}-${index}`} role="note" className={`rounded-xl border p-4 ${danger ? "border-red-400/25 bg-red-400/[.07]" : "border-amber-300/20 bg-amber-300/[.07]"}`}>
+            <p className={`flex items-center gap-1.5 text-[11px] sm:text-[10px] font-extrabold ${danger ? "text-red-400" : "text-amber-300"}`}>{danger ? <ShieldAlert size={13} aria-hidden="true" /> : <AlertTriangle size={13} aria-hidden="true" />}{t.livestock.form.riskTitle}</p>
+            <p className={`mt-1.5 text-sm font-bold ${danger ? "text-red-50" : "text-amber-50"}`}>{text.title}</p>
+            <p className={`mt-1 text-[11px] sm:text-[10px] leading-relaxed ${danger ? "text-red-100/70" : "text-amber-100/65"}`}>{text.message}</p>
+          </div>;
+        })}<p className="text-[11px] sm:text-[10px] text-[#71858d]">{t.livestock.form.riskNote}</p></div>
+          : riskFailed ? <p className="text-[11px] sm:text-[10px] text-[#71858d] sm:col-span-2">{t.livestock.form.riskFailed}</p>
+          : !lookup ? <p className="text-[11px] sm:text-[10px] text-[#71858d] sm:col-span-2">{t.livestock.form.riskChecking}</p> : null)}
         <label className="text-xs font-bold text-[#91a3aa]">{t.common.addedDate}<input required name="addedAt" type="date" defaultValue={localIsoDate()} className={field} /></label><label className="text-xs font-bold text-[#91a3aa] sm:col-span-2">{t.common.notes}<textarea name="notes" rows={2} className={field} /></label>
       </div>
       <div className="mt-7 flex justify-end gap-2"><button type="button" onClick={close} className="min-h-11 min-w-11 rounded-xl border border-white/[.08] px-5 py-3 text-xs font-bold text-[#91a3aa] sm:min-h-0 sm:min-w-0">{t.common.cancel}</button><button disabled={!hasSelectedProfile || Boolean(unresolvedMatch)} className="min-h-11 min-w-11 rounded-xl bg-aqua px-5 py-3 text-xs font-extrabold text-ink disabled:opacity-40 sm:min-h-0 sm:min-w-0">{t.livestock.form.submit}</button></div>

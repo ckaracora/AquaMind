@@ -8,7 +8,7 @@ import type { PrivacyMessages } from "./tr-privacy";
 export const esPrivacy: PrivacyMessages = {
   eyebrow: "Tus datos y tu privacidad",
   title: "Privacidad",
-  updatedAt: "2026-10-31",
+  updatedAt: "2026-11-12",
   updated: (date) => `Última actualización: ${date}`,
   draftNotice: "Borrador: este texto aún no ha sido aprobado ni revisado legalmente.",
   summaryTitle: "En resumen",
@@ -22,7 +22,6 @@ export const esPrivacy: PrivacyMessages = {
       title: "Qué se guarda en este dispositivo",
       paragraphs: [
         "Tus acuarios, mediciones del agua, registros de mantenimiento, animales, plantas, equipos y configuración se guardan en el almacenamiento local de tu navegador (localStorage). Un acuario eliminado se guarda 30 días más en este dispositivo para que puedas restaurarlo.",
-        "Los campos \"Nombre completo\" y \"Correo electrónico\" de la página de Configuración hoy no se guardan en ningún lugar.",
         "Estos datos no pasan solos a otro dispositivo ni a otro navegador. Si borras los datos del sitio en el navegador, o el navegador los borra para liberar espacio, los datos también se borran. Por eso te recomendamos hacer copias de seguridad con regularidad desde Configuración.",
       ],
     },

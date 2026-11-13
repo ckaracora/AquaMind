@@ -30,7 +30,8 @@ import type { Aquarium, Equipment, Livestock, MaintenanceTask, Plant, WaterParam
 interface AquariumContextValue {
   aquariums: Aquarium[];
   hydrated: boolean;
-  addAquarium: (aquarium: Aquarium) => void;
+  /** Yalnız yerel depoya yazılmışsa `true`; başarısız eklemede form ve eski kayıtlar korunur. */
+  addAquarium: (aquarium: Aquarium) => boolean;
   removeAquarium: (id: string) => void;
   updateAquarium: (aquarium: Aquarium) => void;
   waterReadings: WaterParameters[];
@@ -245,10 +246,16 @@ export function AquariumProvider({ children }: { children: React.ReactNode }) {
       },
 
       addAquarium: (aquarium: Aquarium) => {
-        if (!gate()) return;
+        if (!hydrated || suspendRef.current || !gate()) return false;
         const flags = demoRef.current;
-        setAquariums(flags.aquariums ? [aquarium] : [...aquariums, aquarium]);
+        const next = flags.aquariums ? [aquarium] : [...aquariums, aquarium];
+        // Yönlendirmeden önce gerçek yazma sonucunu al; kota hatasında demo ve mevcut kayıtlar değişmez.
+        const result = persistCollection("aquariums", next);
+        recordPersist(result);
+        if (result.status !== "saved") return false;
+        setAquariums(next);
         applyDemo({ ...flags, aquariums: false });
+        return true;
       },
 
       updateAquarium: (aquarium: Aquarium) => {

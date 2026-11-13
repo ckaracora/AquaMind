@@ -64,6 +64,18 @@ export const tr = {
     help: "Tarayıcı verileri silerse ya da cihaz değiştirirsen, yedek dosyasıyla hepsini Ayarlar'dan geri yükleyebilirsin.",
     backupNow: "Şimdi yedek al",
     later: "Sonra hatırlat",
+    /** Genel Bakış dışındaki sayfalarda tek satırlık şerit (kullanılabilirlik turu, 2026-11-12). */
+    stripNever: "Henüz yedek almadın.",
+    stripOld: (days: number) => `Son yedeğin ${days} gün önce alındı.`,
+    stripBackup: "Yedek al",
+  },
+  /** Depo boşken ekranda gösterilen örnek akvaryum (kaydedilmez, yedeğe girmez). Kullanılabilirlik turu, 2026-11-12. */
+  demo: {
+    badge: "Örnek",
+    title: "Bu bir örnek akvaryum",
+    text: "Uygulamanın nasıl çalıştığını göstermek için var; senin verin değil. Kendi akvaryumunu oluşturunca örnek kaybolur.",
+    strip: "Örnek akvaryum gösteriliyor; senin verin değil.",
+    create: "Kendi akvaryumunu oluştur",
   },
   /** Birden çok ekranda aynı anlamla geçen sözcükler. Kimyasal ve ölçü simgeleri (pH, TDS, NO₃, ppm, cm) koda yazılı kalır. */
   common: {
@@ -199,6 +211,10 @@ export const tr = {
       noUpcomingTasks: "Yaklaşan bakım görevi yok.",
       openMaintenance: "Bakım planını aç",
       quickActions: "Hızlı işlem",
+      /** Yeni akvaryum kaydedilince sayfanın üstünde bir kez görünen kutu. */
+      created: (name: string) => `${name} kaydedildi`,
+      createdText: "Sıradaki adım: içindekileri ekle. Sağlık Analizi bunlarla çalışır.",
+      addEquipment: "Ekipman ekle",
     },
     /** Yeni akvaryum ve akvaryumu düzenle formları. */
     form: {
@@ -216,6 +232,8 @@ export const tr = {
       photoTitle: "Akvaryum fotoğrafı",
       photoText: "Fotoğraf yükleme, bulut depolama aşamasında etkinleştirilecek.",
       save: "Akvaryumu kaydet",
+      /** Kayıt yazılamazsa (yer dolu, erişim yok ya da yarım kalmış silme) düğmenin yanında görünür. */
+      saveFailed: "Akvaryum kaydedilemedi. Bilgilerin bu sayfada duruyor; sayfanın üstündeki uyarıya bak ve yeniden dene.",
       editPageTitle: "Akvaryumu Düzenle",
       backToDetail: "Detaya dön",
       editTitle: "Akvaryumu düzenle",
@@ -265,6 +283,21 @@ export const tr = {
     enterValue: "Değeri gir",
     noRiskTitle: "Belirgin bir risk görünmüyor",
     noRiskText: "Düzenli ölçüm ve bakım kayıtlarına devam et.",
+    /** Canlı kaydı olmayan akvaryumda puan yerine gösterilen durum (kullanılabilirlik turu, 2026-11-12). */
+    noLivestock: {
+      title: "Henüz değerlendirilecek canlı yok",
+      text: "Sağlık puanı akvaryumdaki canlılara göre hesaplanır. Canlı eklediğinde puan burada görünür.",
+      livestock: "Canlı",
+      noRecords: "Kayıt yok",
+      equipment: "Ekipman",
+      equipmentCount: (count: number) => `${count} kayıt`,
+      reading: "Son su ölçümü",
+      readingYes: "Var",
+      readingNo: "Yok",
+    },
+    /** Türlerin kaynaktaki bakım notları ayrı ve kapalı bir grupta; puanı etkilemez (karar 0040). */
+    notesTitle: "Tür bakım notları",
+    notesHelp: "Kaynaklardaki bakım bilgileri. Puanı etkilemez.",
     updateLivestock: "Canlıları güncelle",
     speciesRecorded: (count: number) => `${count} tür kayıtlı`,
     updateEquipment: "Ekipmanı güncelle",
@@ -368,7 +401,7 @@ export const tr = {
       category: "1. Ana sınıf",
       group: "2. Canlı grubu",
       search: "Tür veya varyete ara",
-      searchPlaceholder: "Tüm canlı gruplarında Türkçe, bilimsel ad veya varyete ara...",
+      searchPlaceholder: "Ad, bilimsel ad ya da varyete",
       unresolvedTitle: "Ad bulundu, bilimsel kimlik doğrulanamadı",
       unresolvedBadge: "Güvenli beklemede",
       unresolvedBlocked: "Yanlış hacim ve uyumluluk hesabı vermemek için bu canlı henüz eklenemez.",
@@ -402,9 +435,14 @@ export const tr = {
       gender: "Cinsiyet",
       genders: { unknown: "Bilinmiyor", mixed: "Karışık", male: "Erkek", female: "Dişi" },
       beforeSaving: "Kaydetmeden önce dikkat",
-      volumeIssue: (volume: string) => `Seçilen adet için katalog referansı en az ${volume}.`,
+      volumeIssue: (volume: string) => `Ekledikten sonraki toplam adet için katalog referansı en az ${volume}.`,
       lengthIssue: (cm: number) => `Önerilen akvaryum uzunluğu en az ${cm} cm.`,
       groupIssue: (count: number) => `Sosyal grup için en az ${count} adet öneriliyor.`,
+      /** Seçme anındaki uyarılar: sağlık analizinin bu canlıyla yeni çıkan uyarıları (kullanılabilirlik turu, 2026-11-12). */
+      riskTitle: "Bu akvaryumdaki canlılarla",
+      riskNote: "Bu uyarı ekledikten sonra Sağlık Analizi'nde de görünür. Eklemek senin kararın.",
+      riskChecking: "Akvaryumdaki canlılarla uyum kontrol ediliyor…",
+      riskFailed: "Uyum kontrolü yüklenemedi; ekledikten sonra Sağlık Analizi'ne bak.",
       submit: "Canlıyı ekle",
     },
   },
@@ -559,6 +597,10 @@ export const tr = {
       brandPlaceholder: "ör. Aquawing",
       modelPlaceholder: "ör. AQ604F",
       modelSearch: "Model adı ara...",
+      /** Pencere boş seçimle açılır; marka ve model kullanıcı seçer (kullanılabilirlik turu, 2026-11-12). */
+      chooseBrand: "Marka seç",
+      chooseModel: "Model seç",
+      brandFirst: "Önce marka seç",
       noModelMatch: "Bu markada aramayla eşleşen model bulunamadı.",
       /** Sondaki boşluk, metinden sonra gelen bağlantıyla arasındadır. */
       maybeListed: "Cihazın listede olabilir. ",
@@ -669,15 +711,6 @@ export const tr = {
   settings: {
     eyebrow: "Tercihler",
     description: "AquaMind deneyimini ihtiyaçlarına göre düzenle.",
-    profile: {
-      title: "Profil",
-      description: "Uygulamada görünen profil bilgilerin",
-      name: "Ad soyad",
-      namePlaceholder: "Adınız",
-      email: "E-posta",
-      emailPlaceholder: "ornek@email.com",
-      note: "Gerçek kullanıcı hesabı eklendiğinde bu bilgiler hesabınla eşitlenecek.",
-    },
     units: {
       title: "Birimler ve bölge",
       description: "Arayüz dili ve hesaplamalarda kullanılacak ölçü biçimleri",
@@ -694,23 +727,13 @@ export const tr = {
       dayFirst: "GG.AA.YYYY",
       monthFirst: "AA/GG/YYYY",
     },
-    notifications: {
-      title: "Bildirimler",
-      description: "Hatırlatma ve bilgilendirme tercihleri",
-      maintenance: "Bakım hatırlatmaları",
-      maintenanceHelp: "Yaklaşan bakım görevlerinde hatırlat",
-      water: "Su değeri uyarıları",
-      waterHelp: "Değerler güvenli aralığın dışına çıktığında bildir",
-      news: "Ürün haberleri",
-      newsHelp: "Yeni özellikler hakkında bilgi ver",
-    },
+    // Hiçbir şey yapmayan bölümler kaldırıldı (kullanılabilirlik turu, 2026-11-12; ürün sahibi onayı): Profil (kaydedilmeyen ad ve e-posta),
+    // Bildirimler (bildirim gönderen kod yok) ve Kompakt görünüm. Tercih şemasındaki alanlar yerel kayıt ve yedek uyumu için kalır.
     appearance: {
       title: "Görünüm",
-      description: "Arayüz ve yoğunluk seçenekleri",
+      description: "Arayüzün görünümü",
       darkTheme: "Koyu tema",
       darkThemeHelp: "AquaMind varsayılanı",
-      compact: "Kompakt görünüm",
-      compactHelp: "Kartlarda daha fazla bilgi göster",
     },
     data: {
       title: "Veri yönetimi",

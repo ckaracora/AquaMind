@@ -34,6 +34,7 @@ Ayarlar → Veri yönetimi'nde "Tarayıcı verilerimi silmesin" satırı tarayı
 ### 3. Yedek hatırlatması
 
 - Bu cihazda kalıcı kullanıcı verisi varken (demo kayıtlar sayılmaz), hiç yedek alınmadıysa ya da son yedekten bu yana 7 gün geçtiyse Genel Bakış'ta ve her sayfanın başlığının altında bir kutu çıkar: "Şimdi yedek al" ve "Sonra hatırlat" (7 gün erteler). 7 gün, Safari'nin 7 günlük kuralıyla aynı aralıktır.
+- 2026-11-12 notu (kullanılabilirlik turu, ürün sahibi onayı): kutu yalnız Genel Bakış'ta kaldı; öbür sayfalarda başlığın altında tek satırlık şerit çıkar ("Yedek al" ve 7 gün erteleyen ×), kural aynı. Ayarlar'daki kaydetmeyen "Ad soyad" ve "E-posta" kutuları (yukarıda kapsam dışı) kaldırıldı; gizlilik taslağındaki onları anlatan cümle de çıkarıldı.
 - Son yedek zamanı ve erteleme yeni anahtar `aquamind:backup-status:v1`'de durur. Kullanıcı verisi değildir: yedeğe girmez, geri yüklemede değişmez, okunamıyorsa boş sayılır. "Tüm verileri sıfırla" onu da siler.
 - Ayarlar'da "Son yedek: tarih" ve "Yedek dosyası şifresizdir" notu yazar.
 

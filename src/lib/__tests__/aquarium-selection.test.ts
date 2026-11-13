@@ -27,7 +27,8 @@ vi.mock("react", async (importOriginal) => {
   return { ...react, useState, useEffect: (effect: () => void) => { store.effects.push(effect); } };
 });
 vi.mock("@/providers/aquarium-provider", () => ({
-  useAquariums: () => ({ aquariums: store.aquariums, livestock: store.livestock, addLivestock: () => {}, removeLivestock: () => {} }),
+  // Sayfa seçme anındaki uyarılar için akvaryumun ekipmanını ve son ölçümünü de okur (2026-11-12 kullanılabilirlik turu).
+  useAquariums: () => ({ aquariums: store.aquariums, livestock: store.livestock, equipment: [], waterReadings: [], addLivestock: () => {}, removeLivestock: () => {} }),
 }));
 vi.mock("@/providers/i18n-provider", async () => {
   const { localeBundle: bundle, messagesFor: messages } = await import("@aquamind/localization");
