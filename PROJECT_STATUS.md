@@ -2264,7 +2264,7 @@ Son güncelleme: 2026-11-13
 - Son kapı (2026-11-13): `pnpm verify` yeşil: tip denetimi, katalog akışı (1893 bakım ürünü), 114 sağlık senaryosu ve 18 biçimleme kontrolü, hesaplayıcılar, katalog denetimi, 69 Vitest dosyasında 896 test, üretim derlemesi (160 sayfa), dil paketi sınırı. Kullanılabilirlik commit'i tek başına da denendi (veri dosyaları geçici olarak `504c3d3` sürümündeyken; dosya yedeğiyle, stash kullanılmadan): ilk denemede tek kırmızı `livestock-search.test.ts`'te "rummy nose" aramasının tam ad beklentisiydi (veri (b)'nin "Rummy Nose" eş adına dayanıyor). O beklenti veri commit'ine bırakıldı; sonra `pnpm verify` tek başına da yeşil (68 Vitest dosyasında 890 test, üretim derlemesi dahil).
 - Commit'ler: kullanılabilirlik ve durum kaydı, veri, altın fikstür ve bu durum kaydı ayrı commit; aynı dalda, kullanılabilirlik önce.
 - Açık işler:
-  - Opsiyonel 3 bitki Burak'ın cevabını bekliyor: *Dracaena sanderiana*, *Spathiphyllum wallisii*, *Myriophyllum spicatum*.
+  - Opsiyonel 3 bitki: Burak "Evet, ekle" dedi, eklendi (aşağıda "Veri doldurma 2").
   - Cyprichromis ve mermer balta balığı: davranışları bugünkü davranış kayıtlarıyla anlatılamıyor (grup büyüklüğüne ya da üreme bölgesine bağlı saldırganlık); motor işi, Burak'ın onayı.
   - "Davranış bilgisi yok" motor notu (davranış kaydı olmayan türde kullanıcıya not), motor işi.
   - İstilacı hayvan etiketi (bitkilerdeki etiketin canlı karşılığı yok; kural boşluğu).
@@ -2275,6 +2275,19 @@ Son güncelleme: 2026-11-13
   - "Turuncu Papağan Balığı" → blood parrot bağı Burak'a sorulacak (mağaza başlığı tür bilgisi vermiyor).
   - marine-engine çalışma kopyasında veri (b)'nin eski yarım değişikliği duruyor (`catalog-species.ts`, `catalog-species-expanded.ts`); temizliği Burak'a sorulacak.
   - Dal henüz push edilmedi, PR açılmadı.
+
+## Veri doldurma 2: 3 bitki ve 5 İngilizce ad (`codex/data-fill-2`, 2026-11-13)
+
+- Birleştirme kaydı: PR #95 (kullanılabilirlik 1) `3bd6a73` olarak 2026-11-13 06:26:37Z'de, PR #96 (veri doldurma 1) `498ec7f` olarak 06:27:21Z'de `main`'e birleşti. `main` 498ec7f: CI `pnpm verify` başarılı (run 43378822646), Vercel üretim dağıtımı 7758841802 başarılı, canlıda yeni arama kodu doğrulandı. Bu dal 498ec7f üstünde.
+- İstek: Burak'ın açık isteği ("Evet, ekle"; karar 0039, 2. madde). 3 bitki eklendi: *Dracaena sanderiana* ("su bitkisi değil"), *Spathiphyllum wallisii* ("su bitkisi değil"), *Myriophyllum spicatum* (istilacı uyarı kaydı). Dünkü 5 bitkiye karar 0036 gereği İngilizce ortak ad eklendi. Ayrıntı `docs/CATALOG_LOG.md`.
+- Dosyalar: `src/data/catalog-plants.ts`, `src/lib/__tests__/plant-catalog.test.ts`, `src/lib/__tests__/plant-catalog.expected.json`, `scripts/test-catalog-flow.cjs`, `docs/CATALOG_LOG.md`, `docs/DATA_COVERAGE.md` (2026-11-13 ölçümü: bitkiler 149 → 152; su bitkisi değil etiketi 1 → 3, istilacı 9 → 10, İngilizce ortak ad 42 → 49, yalnız uyarı kaydı 5 → 6). Veri commit'i `4be4ceb`.
+- Kontrol: Codex (karşı firma) P1, P2, P3 bulmadı.
+- Altın fikstür değişmedi (bitkiler vakalara girmiyor); motor ve kural seti değişmedi.
+- Son kapı: `pnpm verify` yeşil: 69 Vitest dosyasında 896 test geçti, üretim derlemesi başarılı, dil paketi sınırı temiz.
+- Açık işler:
+  - Atakan'ın "Dracaena Sanderiana Gold/White" ve "Dracaena Red" ürünleri katalogdaki bitkilere bağlanmadı.
+  - Çikletist'in "Dracaena deremensis" ürününün ürün adresi yok.
+  - Veri doldurma 1'in açık işleri (yukarıda) geçerli. Dal henüz push edilmedi, PR açılmadı.
 
 ## Uyumluluk denetimi (2026-09-24)
 
