@@ -1,10 +1,11 @@
 "use client";
 
 import { useParams } from "next/navigation";
-import { Activity, ArrowLeft, CalendarDays, ChevronRight, Droplets, Fish, Leaf, Pencil, Plus, Ruler, SlidersHorizontal, Thermometer } from "lucide-react";
-import { useMemo } from "react";
+import { Activity, ArrowLeft, CalendarDays, Check, ChevronRight, Droplets, Fish, Leaf, Pencil, Plus, Ruler, SlidersHorizontal, Thermometer } from "lucide-react";
+import { useEffect, useMemo, useState } from "react";
 import { AppShell } from "@/components/app-shell";
 import { PageHeader } from "@/components/page-header";
+import { CREATED_AQUARIUM_FLAG } from "@/lib/aquarium-links";
 import { calculateGrossVolume } from "@/lib/aquarium-storage";
 import { useCatalogLookup } from "@/lib/use-catalog-lookup";
 import { useDisplayFormat } from "@/lib/use-display-format";
@@ -28,6 +29,18 @@ export default function AquariumDetailPage() {
   // Su değeri kartlarının etiketleri ana sayfayla aynı kuraldan gelir; yalnızca bu akvaryumdaki türlerin katalog kayıtları yüklenir
   // (docs/DECISIONS/0016-gereken-katalog-kayitlarinin-yuklenmesi.md).
   const { lookup, failed, retry } = useCatalogLookup(animals, [], Boolean(aquarium));
+  // Yeni akvaryum sayfasından gelindiyse bir kez "kaydedildi, sıradaki adım" kutusu gösterilir (src/lib/aquarium-links.ts `CREATED_AQUARIUM_FLAG`).
+  const [justCreatedId, setJustCreatedId] = useState<string>();
+  useEffect(() => {
+    setJustCreatedId(current => current === id ? current : undefined);
+    if (!hydrated || !aquarium) return;
+    try {
+      if (sessionStorage.getItem(CREATED_AQUARIUM_FLAG) === id) {
+        sessionStorage.removeItem(CREATED_AQUARIUM_FLAG);
+        setJustCreatedId(id);
+      }
+    } catch {}
+  }, [id, hydrated, aquarium]);
 
   if (!hydrated) return <AppShell><PageHeader title={t.aquariums.detail.pageTitle}/><div className="grid min-h-[60vh] place-items-center text-sm text-[#71858d]">{t.aquariums.detail.loading}</div></AppShell>;
   if (!aquarium) return <AppShell><PageHeader title={t.aquariums.detail.pageTitle}/><div className="mx-auto max-w-xl px-5 py-24 text-center"><h1 className="text-2xl font-extrabold">{t.aquariums.detail.notFoundTitle}</h1><p className="mt-3 text-sm text-[#71858d]">{t.aquariums.detail.notFoundText}</p><a href="/aquariums" className="mt-6 inline-flex min-h-11 items-center rounded-xl bg-aqua px-5 py-3 text-xs font-extrabold text-ink">{t.aquariums.detail.back}</a></div></AppShell>;
@@ -41,6 +54,7 @@ export default function AquariumDetailPage() {
   const grossVolume = calculateGrossVolume(aquarium.lengthCm, aquarium.widthCm, aquarium.heightCm);
 
   return <AppShell><PageHeader title={aquarium.name}/><div className="mx-auto max-w-[1280px] px-5 py-7 sm:px-8 lg:px-10 lg:py-10">
+    {justCreatedId === id && <section role="status" className="mb-5 rounded-xl border border-emerald-400/20 bg-emerald-400/[.07] p-4"><p className="flex items-center gap-2 text-sm font-extrabold text-emerald-50"><Check size={16} aria-hidden="true" className="text-emerald-400"/>{t.aquariums.detail.created(aquarium.name)}</p><p className="mt-1 text-xs leading-relaxed text-[#91a3aa]">{t.aquariums.detail.createdText}</p><div className="mt-3 grid grid-cols-3 gap-2">{([[Fish, t.common.addLivestock, `/livestock?aquarium=${id}`], [SlidersHorizontal, t.aquariums.detail.addEquipment, `/equipment?aquarium=${id}`], [Droplets, t.common.addReading, `/water?aquarium=${id}`]] as const).map(([Icon, label, href]) => <a key={href} href={href} className="flex min-h-11 flex-col items-start gap-2 rounded-xl border border-aqua/25 bg-aqua/[.06] p-3 text-[11px] font-extrabold text-aqua hover:bg-aqua/[.11]"><Icon size={16} aria-hidden="true"/>{label}</a>)}</div></section>}
     <div className="mb-6 flex items-center justify-between"><a href="/aquariums" className="inline-flex min-h-11 items-center gap-2 text-xs font-bold text-[#82969e] hover:text-white sm:min-h-0"><ArrowLeft size={15}/>{t.aquariums.detail.back}</a><a href={`/aquariums/${id}/edit`} className="inline-flex min-h-11 items-center gap-2 rounded-xl border border-white/[.08] px-4 py-2.5 text-xs font-bold text-[#91a3aa] sm:min-h-0"><Pencil size={14}/>{t.aquariums.detail.edit}</a></div>
 
     <section className="surface relative mb-5 overflow-hidden bg-gradient-to-r from-[#0c2730] via-[#0d3b43] to-[#0b242c] p-6 sm:p-8">

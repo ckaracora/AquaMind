@@ -69,7 +69,9 @@ describe("JBL PROTEMP S: eski kimlik ve eş ad yönlendirmesi", () => {
     const page = readFileSync("src/app/equipment/page.tsx", "utf8");
     expect(page).toMatch(/import \{[^}]*\bequipmentMatchesModelQuery\b[^}]*\} from "@\/data\/catalog-equipment"/);
     expect(page).toContain("const visibleModels = models.filter(item => equipmentMatchesModelQuery(item, modelQuery));");
-    expect(page).toContain("setSelected(models.find(item => equipmentMatchesModelQuery(item, next))?.id ?? \"\")");
+    // 2026-11-12 (kullanılabilirlik turu): arama tek modele inerse o seçilir, birden çok model kalırsa seçim kullanıcıya bırakılır.
+    expect(page).toContain("const matches = models.filter(item => equipmentMatchesModelQuery(item, next));");
+    expect(page).toContain("setSelected(next.trim() && matches.length === 1 ? matches[0].id : \"\")");
     expect(page).not.toMatch(/item\.model\.toLocaleLowerCase\("tr-TR"\)\.includes/);
     // Pencerenin JBL ısıtıcı listesinde eski ve öbür ülke adları kanonik kaydı seçer.
     const models = equipmentForBrandInCategory("heater", "JBL");

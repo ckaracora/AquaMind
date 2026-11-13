@@ -7,7 +7,7 @@ import type { PrivacyMessages } from "./tr-privacy";
 export const enPrivacy: PrivacyMessages = {
   eyebrow: "Your data and privacy",
   title: "Privacy",
-  updatedAt: "2026-10-31",
+  updatedAt: "2026-11-12",
   updated: (date) => `Last updated: ${date}`,
   draftNotice: "Draft: this text has not been approved yet and has not been legally reviewed.",
   summaryTitle: "In short",
@@ -21,7 +21,6 @@ export const enPrivacy: PrivacyMessages = {
       title: "What is stored on this device",
       paragraphs: [
         "Your aquariums, water readings, maintenance records, livestock, plants, equipment and settings are kept in your browser's local storage (localStorage). A deleted aquarium is kept on this device for 30 more days so that you can restore it.",
-        "The \"Full name\" and \"Email\" fields on the Settings page are not saved anywhere today.",
         "This data does not move to another device or browser by itself. If you clear the browser's site data, or the browser clears it to free up space, the data is deleted too. That is why we recommend making regular backups from Settings.",
       ],
     },

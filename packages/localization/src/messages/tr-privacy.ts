@@ -8,7 +8,7 @@ export const trPrivacy = {
   eyebrow: "Verilerin ve gizliliğin",
   title: "Gizlilik",
   /** Metnin son değiştiği gün (YYYY-AA-GG). */
-  updatedAt: "2026-10-29",
+  updatedAt: "2026-11-12",
   updated: (date: string) => `Son güncelleme: ${date}`,
   draftNotice: "Taslak: bu metin henüz onaylanmadı ve hukuki incelemeden geçmedi.",
   summaryTitle: "Kısaca",
@@ -22,7 +22,6 @@ export const trPrivacy = {
       title: "Bu cihazda ne saklanıyor",
       paragraphs: [
         "Akvaryumların, su ölçümlerin, bakım kayıtların, canlıların, bitkilerin, ekipmanların ve ayarların tarayıcının yerel deposunda (localStorage) durur. Silinen bir akvaryum, geri alabilmen için 30 gün daha bu cihazda saklanır.",
-        "Ayarlar sayfasındaki \"Ad soyad\" ve \"E-posta\" kutuları bugün hiçbir yere kaydedilmez.",
         "Bu veriler başka bir cihaza ya da tarayıcıya kendiliğinden geçmez. Tarayıcının site verilerini silersen ya da tarayıcı yer açmak için silerse veriler de silinir. Bunun için Ayarlar'dan düzenli yedek almanı öneririz.",
       ],
     },

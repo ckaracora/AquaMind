@@ -3,6 +3,7 @@
 import { Activity, CalendarDays, ChevronRight, CircleGauge, Droplets, FlaskConical, Plus, Thermometer, Waves } from "lucide-react";
 import { useEffect, useMemo, useState } from "react";
 import { BackupReminder } from "@/components/backup-reminder";
+import { DemoBadge, DemoNotice, useShowingDemoAquarium } from "@/components/demo-notice";
 import { MobileNav } from "@/components/mobile-nav";
 import { ParameterCard, statusTones } from "@/components/parameter-card";
 import { Sidebar } from "@/components/sidebar";
@@ -35,6 +36,7 @@ export default function Dashboard() {
   const animals = useMemo(() => livestock.filter((item) => item.aquariumId === aquariumId), [livestock, aquariumId]);
   const devices = useMemo(() => equipment.filter((item) => item.aquariumId === aquariumId), [equipment, aquariumId]);
   const { lookup, failed: statusLoadFailed } = useCatalogLookup(animals, devices, Boolean(aquarium));
+  const showingDemo = useShowingDemoAquarium();
   if (!aquarium) return <div className="min-h-screen"><Sidebar/><main className="pb-28 lg:ml-[248px]"><div className="grid min-h-screen place-items-center px-5 text-center"><div><Waves size={45} className="mx-auto mb-5 text-aqua"/><h1 className="text-2xl font-extrabold">{t.dashboard.welcomeTitle}</h1><p className="mt-2 text-sm text-[#71858d]">{t.dashboard.welcomeText}</p><a href="/aquariums/new" className="mt-6 inline-flex min-h-11 items-center gap-2 rounded-xl bg-aqua px-5 py-3 text-xs font-extrabold text-ink sm:min-h-0"><Plus size={16}/>{t.dashboard.createAquarium}</a></div></div></main><MobileNav/></div>;
   const aquariumReadings = waterReadings.filter((item) => item.aquariumId === aquarium.id);
   // Sağlık sayfasıyla aynı kural: en son ölçüm tarihe göre seçilir.
@@ -57,11 +59,13 @@ export default function Dashboard() {
         <div className="flex items-center gap-3 lg:hidden"><span className="grid size-9 place-items-center rounded-xl bg-aqua text-ink"><Waves size={20}/></span><span className="font-extrabold">{t.app.name}</span></div>
         <div className="hidden items-center gap-2 text-xs text-[#647981] lg:flex"><span>{t.navigation.dashboard}</span><ChevronRight size={13}/><span className="text-[#aab9be]">{t.navigation.items.overview}</span></div>
       </header>
+      {/* Genel Bakış'ta açıklamalı kutular; öbür sayfalarda başlığın altında tek satırlık şeritler (src/components/page-header.tsx). */}
+      <DemoNotice />
       <BackupReminder />
       <div className="mx-auto max-w-[1440px] px-5 py-7 sm:px-8 lg:px-10 lg:py-10">
         <section className="mb-8 flex flex-col justify-between gap-4 sm:flex-row sm:items-end">
           <div><p className="eyebrow mb-2 text-aqua">{fmt.date(new Date(),{day:"numeric",month:"long",weekday:"long"})}</p><h1 className="text-2xl font-extrabold tracking-tight sm:text-3xl">{greeting ? t.greeting[greeting] : t.greeting.fallback}</h1><p className={`mt-2 text-sm ${summaryTones[summary.tone]}`}>{summary.text} <a href={`/aquariums/${aquarium.id}/health`} className="-my-3.5 inline-block py-3.5 font-bold text-aqua hover:underline">{t.dashboard.openHealth}</a></p></div>
-          <label className="surface flex w-full items-center justify-between gap-4 px-4 py-3 text-left sm:w-auto"><div><p className="text-[11px] sm:text-[10px] font-bold uppercase tracking-wider text-[#647981]">{t.dashboard.activeAquarium}</p><select value={aquarium.id} onChange={e=>setSelectedId(e.target.value)} className="-mb-2.5 -mt-1.5 min-h-11 min-w-40 bg-transparent text-sm font-bold outline-none">{aquariums.map(item=><option key={item.id} value={item.id}>{item.name}</option>)}</select></div><ChevronRight size={16} className="text-aqua"/></label>
+          <label className="surface flex w-full items-center justify-between gap-4 px-4 py-3 text-left sm:w-auto"><div><p className="flex items-center gap-2 text-[11px] sm:text-[10px] font-bold uppercase tracking-wider text-[#647981]">{t.dashboard.activeAquarium}{showingDemo && <DemoBadge/>}</p><select value={aquarium.id} onChange={e=>setSelectedId(e.target.value)} className="-mb-2.5 -mt-1.5 min-h-11 min-w-40 bg-transparent text-sm font-bold outline-none">{aquariums.map(item=><option key={item.id} value={item.id}>{item.name}</option>)}</select></div><ChevronRight size={16} className="text-aqua"/></label>
         </section>
 
         <section className="mb-5 grid grid-cols-2 gap-3 xl:grid-cols-4">
