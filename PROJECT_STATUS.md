@@ -2251,6 +2251,31 @@ Son güncelleme: 2026-11-13
   - P3-2 bilinçli bırakıldı (yukarıda).
   - Canlılar sayfasının paketine seçme anındaki uyarı için motor ve Türkçe motor metinleri girdi; `/livestock` ilk yükleme bu dalda 307 kB (main ile karşılaştırılmadı).
 
+## Veri doldurma 1: eş adlar, en az hacim ve uzunluk, eksik yaygın canlılar ve bitkiler (`claude/nostalgic-jang-94798d`, 2026-11-12/13)
+
+- İstek: ürün sahibinin açık isteği (karar 0039, 2. madde; "veri tamam mı" değerlendirmesinin sonucu). Dondurma altında yalnız kabul edilen kaynakla kanıtlanan değer girdi; kaynak bulunamayan değer değişmedi ve `docs/CATALOG_SOURCE_GAPS.md`'ye yazıldı. Ayrıntı `docs/CATALOG_LOG.md`'nin üç bölümünde ("2026-11-12 Arama adları paketi", "2026-11-12 En az hacim ve uzunluk", "2026-11-12 Eksik yaygın canlılar ve bitkiler").
+- Eş adlar (veri b): 57 kayda 99 eş ad (İngilizce, İspanyolca, Türkçe satış adı ve eski bilimsel ad). Codex kontrolünden sonra iki ad çıktı: "Tiger Barb" beş bantlı barbdan (kaldı yalnız `tiger-barb`'da) ve "Turuncu Papağan Balığı" (mağaza sayfası blood parrot kimliğini kanıtlamıyor). Ad çakışma testi (`src/data/__tests__/species-search-aliases.test.ts`) bütün katalog ve 68 çözülmemiş kayıtla karşılaştırıyor.
+- En az hacim ve uzunluk (veri a): 60 yaygın tatlı su türü okundu; 56 kayıtta en az bir değer ya da kaynak değişti. Hacim 52 yeni değer (35 büyüdü, 17 küçüldü; ör. Moorii Tropheus 500 → 1000 L, Fahaka 800 → 450 L), uzunluk 36 yeni değer. 30 yeni hacmi yalnız Fishipedia taslağı belirliyor (var olan kural; şablon görünen taslak alanı yok). Kaynak bulunamayan 5 kayıt (Jaguar, Skunk, CW009, Blood Parrot, Palyaço vatoz) değişmedi.
+- Eksik yaygın canlılar ve bitkiler (veri c): 25 canlı (23 balık, 2 salyangoz) ve 8 bitki (6 kaynaklı, 2 yalnız istilacı uyarısı) eklendi; 17 davranış kaydı (`src/data/species-behavior.ts`); SİYAH KUHLİ → `black-kuhli-loach`. Sıcaklık ve pH kaynakların ortak aralığı (karar 0014 yöntemi; Gemini'nin bulgusuyla 18 kayıtta yeniden hesaplandı). Trewavasae ve Red Devil bekletildi: kaynakların ortak sıcaklık aralığı tek noktaya iniyor (24 °C ve 28 °C), katalogda emsal yok. Variatus davranış kaydı olmadan eklendi (platiyle tutarlı).
+- Teknik yöntem (lider kararı, `docs/DATA_SOURCES.md` "Canlı verisi için özel kaynak kuralı"na iki satır): fit çevirisi 1 ft = 30 cm (Calvus, L190 ve Benekli Silver Dollar 152 → 150 cm); tatlı suda atık katsayısı karar 0031'in boy aralığı ortancası.
+- Son kapıdaki düzeltmeler (2026-11-13): Benekli Silver Dollar 152 → 150 cm (Fishkeeper sayfası yeniden açıldı: "5' x 18" x 18""; bakım notu TR/EN/ES "yaklaşık 150 × 45 × 45 cm"); Inka paragrafı tabloyla aynı (80 L Fishipedia, 100 cm Practical Fishkeeping; Calvus ve L190 veri (c)'de yapılmıştı). `docs/DATA_COVERAGE.md` 2026-11-13 ölçümüyle yenilendi: canlılar 443 → 468, bitkiler 141 → 149; eş ad %86,5 → %89,7. `docs/COMPATIBILITY.md` ve `docs/ARCHITECTURE.md`'de fikstürün vaka sayısı 1132.
+- Kontrol (karşı firma): eş adlar Codex (P2'ler düzeltildi, yukarıda); hacim ve uzunluk Google Gemini (18 tür kaynağında doğrulandı, P1 ve P2 yok, P3'ler düzeltildi); yeni canlılar ve bitkiler Google Gemini (P1 yok, avcı ve saldırganların davranış kaydı tam; ortak aralık bulgusu ve P2/P3'ler düzeltildi, Red Devil'in uzunluğu kaynakta yok, tahmin yapılmadı).
+- Altın fikstür (motor değişmedi; ayrı commit; eski ve yeni fikstür vaka vaka karşılaştırıldı): 1.077 → 1.132 vaka. 50 yeni tür vakası (25 "sığar", 25 "dar"), hepsi "dikkat". Tür çiftleri kimlik sırasıyla kurulduğu için 66 çift kalktı, 71 yeni çift geldi. Var olan 111 vaka değişti (52 "sığar", 56 "dar", 3 çift); değişen tek ölçüt yük (104 vaka), öbürleri uyarı metni. Hükmü değişen eski vaka yok. Puanı değişen 11 vaka, hepsi "dar" ve yalnız yük ölçütünden, en çok 2 puan (Petricola 60 → 58; Fahaka ve L010a 1 düştü, 8 vaka 1 arttı).
+- Son kapı (2026-11-13): `pnpm verify` yeşil: tip denetimi, katalog akışı (1893 bakım ürünü), 114 sağlık senaryosu ve 18 biçimleme kontrolü, hesaplayıcılar, katalog denetimi, 69 Vitest dosyasında 896 test, üretim derlemesi (160 sayfa), dil paketi sınırı. Kullanılabilirlik commit'i tek başına da denendi (veri dosyaları geçici olarak `504c3d3` sürümündeyken; dosya yedeğiyle, stash kullanılmadan): ilk denemede tek kırmızı `livestock-search.test.ts`'te "rummy nose" aramasının tam ad beklentisiydi (veri (b)'nin "Rummy Nose" eş adına dayanıyor). O beklenti veri commit'ine bırakıldı; sonra `pnpm verify` tek başına da yeşil (68 Vitest dosyasında 890 test, üretim derlemesi dahil).
+- Commit'ler: kullanılabilirlik ve durum kaydı, veri, altın fikstür ve bu durum kaydı ayrı commit; aynı dalda, kullanılabilirlik önce.
+- Açık işler:
+  - Opsiyonel 3 bitki Burak'ın cevabını bekliyor: *Dracaena sanderiana*, *Spathiphyllum wallisii*, *Myriophyllum spicatum*.
+  - Cyprichromis ve mermer balta balığı: davranışları bugünkü davranış kayıtlarıyla anlatılamıyor (grup büyüklüğüne ya da üreme bölgesine bağlı saldırganlık); motor işi, Burak'ın onayı.
+  - "Davranış bilgisi yok" motor notu (davranış kaydı olmayan türde kullanıcıya not), motor işi.
+  - İstilacı hayvan etiketi (bitkilerdeki etiketin canlı karşılığı yok; kural boşluğu).
+  - Tek nokta ya da boş ortak sıcaklık aralığı için kural; gelince Trewavasae ve Red Devil hazır değerlerle eklenebilir.
+  - Kalan 62 tatlı su kaydının en az hacmi ve uzunluğu (sonraki paket).
+  - Corydoras World tür sayfaları ücretli üyelik istiyor; Skunk ve CW009'un değeri alınamadı.
+  - Jaguar ciklet: kaynaklarda tutarlı yetişkin değeri yok, 680 L ve 182 cm kaldı.
+  - "Turuncu Papağan Balığı" → blood parrot bağı Burak'a sorulacak (mağaza başlığı tür bilgisi vermiyor).
+  - marine-engine çalışma kopyasında veri (b)'nin eski yarım değişikliği duruyor (`catalog-species.ts`, `catalog-species-expanded.ts`); temizliği Burak'a sorulacak.
+  - Dal henüz push edilmedi, PR açılmadı.
+
 ## Uyumluluk denetimi (2026-09-24)
 
 - Yöntem: motor kodu satır satır okundu; akvaryumculukta cevabı bilinen 11 senaryo hem `main` hem katalog dalında çalıştırıldı; katalog otomatik tutarlılık kontrollerinden geçirildi; 189 balık türünün sıcaklık, pH ve boy değerleri FishBase kayıtlarıyla karşılaştırıldı. Denetim sırasında dosya değiştirilmedi
