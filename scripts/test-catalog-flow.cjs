@@ -9040,6 +9040,10 @@ for (const [id, minVolumeL, minTankLengthCm] of [["jaguar-cichlid", 680, 182], [
   ["hydrocotyle-verticillata", ["high", "high"], "medium", 10, null, null, [], "https://tropica.com/en/plants/plantdetails/Hydrocotyleverticillata(039)/4457"],
   ["pontederia-crassipes", null, null, null, null, null, ["eu-union-list", "fisc-invasive"], "https://eur-lex.europa.eu/legal-content/EN/TXT/HTML/?uri=CELEX:02016R1141-20250807"],
   ["lagarosiphon-major", null, null, null, null, null, ["eu-union-list", "us-federal-noxious-weed"], "https://eur-lex.europa.eu/legal-content/EN/TXT/HTML/?uri=CELEX:02016R1141-20250807"],
+  // Ürün sahibinin onayıyla eklenen üç bitki (2026-11-13): iki ev bitkisi ve FISC 2 istilacı uyarı kaydı.
+  ["dracaena-sanderiana", ["medium", "medium"], null, 50, [22, 28], [6, 8], [], "https://www.fishkeeper.co.uk/fish/plant/aquarium-plants/dracaena-sanderiana-"],
+  ["spathiphyllum-wallisii", ["medium", "high"], null, 30, [22, 28], [5.5, 7.5], [], "https://www.fishkeeper.co.uk/fish/plant/aquarium-plants/spathiphyllum-wallisii-"],
+  ["myriophyllum-spicatum", null, null, null, null, null, ["fisc-invasive"], "https://plant-directory.ifas.ufl.edu/plant-directory/myriophyllum-spicatum/"],
   ]) {
     const plant = missingPlants.find((item) => item.id === id);
     assert(plant, `${id} bitki kataloğunda bulunmalı`);
@@ -9047,6 +9051,21 @@ for (const [id, minVolumeL, minTankLengthCm] of [["jaguar-cichlid", 680, 182], [
     assert.equal(plant.sourceUrl, sourceUrl, `${id} ana kaynağı`);
     assert.equal(plant.verifiedAt, "2026-11-12", `${id} doğrulama günü`);
   }
+  // İki ev bitkisi Fishkeeper değerleriyle girer ama Practical Fishkeeping'in kaçınılacak bitkiler yazısındaki "su bitkisi değil" etiketini taşır;
+  // İngilizce adları Fishkeeper sayfalarının başlığı. Atakan'ın 'Gold' ve 'White' alacalı formları bağlanmadı: Fishkeeper'da ayrı bir alacalı
+  // Dracaena sayfası var ("Variegated Dragon Tree", kimliği belirsiz).
+  for (const [id, commonNameEn] of [["dracaena-sanderiana", "Lucky Bamboo"], ["spathiphyllum-wallisii", "Peace Lily"]]) {
+    const plant = missingPlants.find((item) => item.id === id);
+    assert.equal(plant.notAquatic?.sourceUrl, "https://www.practicalfishkeeping.co.uk/features/21-plants-to-avoid-in-the-aquarium/", `${id} su bitkisi değil etiketini taşımalı`);
+    assert.equal(plant.commonNameEn, commonNameEn, `${id} İngilizce adı Fishkeeper başlığı olmalı`);
+    assert.equal(plant.warningOnly, undefined, `${id} değerleri kaynaklı, yalnız uyarı kaydı değil`);
+  }
+  // 2026-11-12 paketinin Fishkeeper'a dayanan beş bitkisinin İngilizce adı (karar 0036; başlıklar 2026-11-13'te kayıttaki adreste yeniden okundu).
+  for (const [id, commonNameEn] of [["echinodorus-grisebachii-bleherae", "Amazon Sword Plant"], ["vallisneria-spiralis", "Straight Vallis"], ["nymphaea-lotus-zenkeri", "Tiger Lotus"], ["heteranthera-zosterifolia", "Stargrass"], ["cabomba-piauhyensis", "Red Cabomba"]]) {
+    assert.equal(missingPlants.find((item) => item.id === id)?.commonNameEn, commonNameEn, `${id} İngilizce adı Fishkeeper başlığı olmalı`);
+  }
+  assert.equal(missingPlants.find((item) => item.id === "myriophyllum-spicatum")?.warningOnly, true, "Myriophyllum spicatum yalnız uyarı kaydı olmalı");
+  assert(!missingPlants.some((item) => item.shopUrls.some((url) => /dracaena-sanderiana-(gold|white)/.test(url))), "Dracaena 'Gold' ve 'White' ürünleri bağlanmamalı");
   // Eş adlar: Çikletist'in "SİYAH KUHLİ" başlığı P. oblonga'ya taşındı (kaynakların İngilizce adı Black Kuhli Loach); Atakan başlıkları eklendi.
   assert.equal(speciesForLivestock({commonName:"SİYAH KUHLİ",category:"fish",quantity:5})?.id, "black-kuhli-loach", "SİYAH KUHLİ siyah kuhli kaydına bağlanmalı");
   assert(!speciesCatalog.find((item) => item.id === "kuhli-loach").aliases.includes("SİYAH KUHLİ"), "kuhli-loach kaydında SİYAH KUHLİ kalmamalı");
