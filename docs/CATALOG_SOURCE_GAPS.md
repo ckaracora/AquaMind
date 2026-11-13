@@ -94,6 +94,49 @@ Paket 2 (2026-10-30, `docs/CATALOG_LOG.md`): 7 "diğer" kayıt Fishkeeper'a, Fis
 
 Fishipedia'nın taslak sayfaları (2026-10-30): sayfa "hazırlanıyor; metinler veri modelinden geliyor" diyor ve Tropheus taslaklarında şablon hataları görüldü ("en az 0 birey", Kiriza'da 8–23 °C). Katalogdaki 31 Fishipedia bağlantısının (İngilizce, Fransızca, İspanyolca ve İtalyanca sürümler) hepsi açıldı. Ikola dışında kaynaklarından biri böyle bir taslak olan 12 kayıt vardı; paket 3'te (2026-10-30, `docs/CATALOG_LOG.md`) hepsi alan alan yeniden okundu, Seriously Fish'te sayfası olan 8'i SF'ye bağlandı (madde kapandı). Taslak sayfalar: *Cichla piquiti*, *Hyphessobrycon pyrrhonotus*, *Apistogramma commbrae*, *Centropyge loriculus*, *Corydoras similis*, *Pterygoplichthys pardalis*, *Salarias fasciatus*, *Semaprochilodus insignis*, *Vieja maculicauda* (İspanyolca), *Placidochromis milomo*, *Channa stewartii* ve *Cichla ocellaris* (İtalyanca).
 
+## En az hacmi kabul edilen kaynakta bulunmayan canlılar (2026-11-12, geliştirilecek)
+
+"Veri tamam mı" değerlendirmesinde (2026-11-12) hacim yayımlayan kabul edilen bir kaynağa bağlı olmayan 123 canlı kaydı bulundu (ölçüt: `sourceUrl` ve `additionalSourceUrls` alanlarında Seriously Fish, Practical Fishkeeping, Fishipedia, wirbellose.de, OATA, Meerwasser-Lexikon, Welsfans, Corydoras World, Goodeid WG ya da Parosphromenus Project yok). Veri modelinde kaynaksız hacmi işaretleyen bir alan yok (`tankLengthDataNote` yalnız uzunluk boşken kullanılıyor); bu yüzden liste burada tutulur. İlk 60 tatlı su türü 2026-11-12'de kaynaklandı (`docs/CATALOG_LOG.md` → "2026-11-12 En az hacim ve uzunluk: 60 tatlı su türü"). Değerler olduğu gibi kalır; her üç ayda bir yapılan bilgi araştırmasında (karar 0020) yeniden aranır.
+
+Kabul edilen kaynaklarda bulunamayanlar (değer değişmedi):
+
+| Kimlik | Ad | Alan | Durum |
+|---|---|---|---|
+| `jaguar-cichlid` | Jaguar ciklet | hacim (680 L), uzunluk (182 cm) | Seriously Fish'in ölçüsü (120 × 45 × 37,5 cm, 212 L) "MUCH larger for 12"+" diyor, yetişkini kapsamıyor; Fishipedia'nın taslağı (2000 L, 150 cm cephe) kendi içinde tutarsız; Fishkeeper ve FishBase ölçü yazmıyor |
+| `skunk-cory` | Skunk çöpçü | hacim (75 L), uzunluk (60 cm) | Fishkeeper ticari balığın *Hoplisoma granti* olduğunu yazıyor; Seriously Fish'te ve Fishipedia'da yalnız gerçek *Brochis arcuata* var |
+| `green-laser-cory-cw009` | Green Laser çöpçü CW009 | hacim (100 L), uzunluk (80 cm) | Seriously Fish ve Fishipedia'da sayfa yok; Fishkeeper ve ScotCat ölçü yazmıyor; Welsfans'ta *Corydoras* yok |
+| `blood-parrot-cichlid` | Blood Parrot ciklet | hacim (120 L) | Melez; uzman kaynakta tür sayfası yok. Uzunluk Practical Fishkeeping'ten (120 cm) |
+| `clown-pleco` | Palyaço vatoz | hacim (80 L) | Seriously Fish ve Fishipedia'da sayfa yok; Fishkeeper ölçü yazmıyor. Uzunluk Welsfans'tan (60 cm) |
+
+- Corydoras World tür sayfaları üyelik istiyor (2026-11-12, Chrome'da denendi): sayfa yalnız başlık gösteriyor, içerik ücretli üyeliğe kapalı. Skunk, CW009, benekli, üç çizgili, adolfoi ve zümrüt çöpçüde bu kaynaktan değer alınamadı.
+- Saulosi'nin Fishkeeper sayfası 2026-11-12'de bulundu ve ek kaynak oldu (uzunluk); ana kaynak (aquariumcoop.com) kabul edilen kaynak değil. Fishkeeper'ın sıcaklık ve boy değerleri kayıttan farklı (24–26 °C ve 10 cm; kayıt 24–28 °C ve 9 cm); ayrı iş.
+
+Henüz bakılmayan 62 tatlı su kaydı (değerleri olduğu gibi; sıradaki paket): `sparkling-limia`, `cochus-blue-tetra`, `rubicundus-lipstick-goby`, `red-tailed-rasbora`, `somphongs-dwarf-rasbora`, `cherryspot-rasbora`, `six-banded-barb`, `melon-barb`, `apisto-erythrura`, `apisto-panduro`, `redhead-tapajos`, `tropheus-kiriza`, `uaru-cichlid`, `teardrop-guianacara`, `owroewefi-guianacara`, `silver-maskaheros`, `malayan-river-sole`, `selheims-freshwater-sole`, `kners-yellow-flagtail`, `red-neon-blue-eye`, `parkinsons-rainbowfish`, `bluefin-notho`, `normans-lampeye`, `snakeskin-gourami`, `betta-imbellis`, `royal-farlowella`, `ninja-woodcat`, `south-american-bumblebee-catfish`, `golden-king-tiger-pleco-l333`, `orange-seam-pleco-l106`, `colombian-zebra-pleco-l129`, `orinoco-angel-pleco-l201`, `royal-pleco-l190`, `mega-clown-pleco-l340`, `vampire-pleco-l240`, `butterfly-pleco-l052`, `cucuta-bristlenose-l149`, `brokenline-royal-pleco-l191`, `black-spotted-flyer-pleco-l244`, `blue-spotted-bristlenose-l059a`, `anthrax-flyer-pleco-l235`, `lujans-pleco-l127`, `peckoltia-l103`, `manacapuru-bristlenose-l148`, `ucayali-flathead-pleco`, `highfin-spotted-cory-cw027`, `red-tailed-snakehead`, `half-banded-spiny-eel`, `african-arowana`, `rainbow-shiner`, `spotted-congo-puffer`, `ghost-shrimp`, `ramshorn-snail`, `sun-nerite-snail`, `turbo-snail`, `tiger-nerite-snail`, `mini-tiger-nerite-snail`, `mini-nerite-snail`, `batik-nerite-snail`, `batman-nerite-snail`, `red-clawed-crayfish`, `african-dwarf-frog`. Kimliği olmayan nerit satış adları ve Ekim'de aranıp bulunamayan hayalet karides ile ramshorn yukarıdaki listelerde de var. 123'ün kalan kaydı (`pink-lipped-moray`) acı ve tuzlu su kaydıdır.
+- Olası iyileştirme: OATA'nın tatlı su grup kartlarındaki hacimler bugünkü kurallarda tatlı su balığı için kaynak değildir (2026-11-12 lider kararı; dondurma sırasında yeni kural yok). Kural gelirse etkisi günlükteki bölümde yazılı.
+
+## Davranışı bugünkü davranış kayıtlarıyla anlatılamadığı için eklenmeyen canlılar (2026-11-12, geliştirilecek)
+
+Eksik yaygın canlılar paketinde (`docs/CATALOG_LOG.md`, "Eksik yaygın canlılar ve bitkiler") değerleri kabul edilen kaynaklarla hazır, ama kaynaklarında davranış ifadesi geçtiği için davranış kaydı zorunlu olan iki tür bekletildi (lider kararı, 2026-11-12). `src/data/species-behavior.ts`'deki bayraklardan hiçbiri kaynağın anlattığını doğru söylemiyor; yanlış kayıt, kayıtsız eklemekten kötü sayıldı.
+
+| Aday kimlik | Tür | Kaynağın ifadesi | Neden bekliyor |
+|---|---|---|---|
+| `sardine-cichlid` | *Cyprichromis leptosoma* (Seriously Fish) | "Male fish form 3-dimensional breeding territories in the open water ... rival males are chased away"; aynı sayfa "Always buy a shoal of at least eight" ve büyük grupta birden çok baskın erkek görülebileceğini yazıyor | `conspecificAggression` ("males") iki ve üstü bireyde "erkekler kavga eder, ayırın" uyarısı verir; kaynak en az 8'lik sürü öneriyor |
+| `marbled-hatchetfish` | *Carnegiella strigata* (Seriously Fish) | "when kept in larger groups any aggression is spread between individuals" | Saldırganlık grup büyüdükçe dağılıyor; "males" (erkekler kavga eder) ve "all" (tek tutulmalı) bunu anlatmıyor |
+
+- Grup büyüklüğüne bağlı ya da yalnız üreme bölgesinde görülen saldırganlık için bir davranış biçimi (motor işi, ürün sahibinin onayıyla) gelirse ikisi de taslaktaki değerleriyle eklenebilir.
+
+## Sıcaklık ortak aralığı tek noktaya inen canlılar (2026-11-13, geliştirilecek)
+
+Eksik yaygın canlılar paketinde (`docs/CATALOG_LOG.md`, "Eksik yaygın canlılar ve bitkiler") sıcaklık ve pH, kabul edilen kaynakların tutma aralıklarının ortak aralığı olarak yeniden hesaplandı (`docs/DATA_SOURCES.md`, "Sıcaklık ve pH"; karar 0014 yöntemi). İki türde sıcaklığın ortak aralığı tek bir dereceye iniyor. Karar 0014'te ve katalogda bunun nasıl ele alınacağı yazılı değil (katalogdaki en dar sıcaklık aralığı 1 °C); türler kayıtları ve davranışlarıyla çıkarılıp bekletildi (lider kararı, 2026-11-13).
+
+| Aday kimlik | Tür | Kaynakların sıcaklığı | Ortak aralık | Öbür değerler (hazır) |
+|---|---|---|---|---|
+| `trewavasae-cichlid` | *Labeotropheus trewavasae* (Seriously Fish) | Seriously Fish 24–28 °C, Fishkeeper 21–24 °C (FishBase'in doğal yaşam alanı değeriyle aynı, Ref. 1672); Fishipedia taslağının 23–28 °C'si şablon | yalnız 24 °C | 15 cm, 300 L, 120 cm, grup 4, pH 7,6–8,5; davranış `conspecificAggression` ("males") |
+| `red-devil-cichlid` | *Amphilophus labiatus* (Seriously Fish) | Seriously Fish ve Fishkeeper 22–28 °C; Fishipedia taslağı 28–33 °C (FishBase Ref. 7335 ve taslağın kendi doğal ortam alanıyla aynı) | yalnız 28 °C | 40 cm, 1000 L, uzunluk kaynakta yok (not), grup 2, pH 7,2–7,8, tür akvaryumu; davranış `conspecificAggression` ("all") |
+
+- Bir kaynağın değerinin FishBase'inkiyle aynı olması tek başına dışlama nedeni sayılmadı: bu paketin Fishkeeper sayfalarının sekizinde (Trewavasae dahil), Seriously Fish sayfalarının üçünde de sıcaklık FishBase'le aynı.
+- Açılacak yol bir kural ister (karar ürün sahibinde): ortak aralık tek noktaya ya da boşa indiğinde ne yapılacağı (ör. tek noktayı kabul etmek ya da ana kaynağın aralığına dönmek). Kural gelince iki tür yukarıdaki değerlerle eklenebilir.
+
 ## Ekipman kaynak bağlantıları (örnek denetimi 2026-10-30, geliştirilecek)
 
 Örnek denetiminde ekipman değerlerinin çoğu doğru çıktı; bulunan iki değer hatası bu pakette düzeltildi (`docs/CATALOG_LOG.md`). Asıl sorun bağlantılarda. Sayılar 2026-10-30 taramasının, bu paketteki düzeltmelerden sonraki hâli.

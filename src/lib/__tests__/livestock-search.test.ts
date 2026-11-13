@@ -384,7 +384,7 @@ describe("arama hoşgörüsü", () => {
   it("oskar → Astronot (Oscar); rummy nose → Kırmızı burun tetra; glow light tetra → Günışığı tetra", () => {
     const fresh = contextFor("freshwater");
     expect(livestockSearch("oskar", "fish", fresh)).toMatchObject({ profile: { id: "oscar" } });
-    expect(livestockSearch("rummy nose", "fish", fresh)).toMatchObject({ profile: { id: "rummy-nose" } });
+    expect(livestockSearch("rummy nose", "fish", fresh)).toMatchObject({ kind: "exact", profile: { id: "rummy-nose" } });
     expect(livestockSearch("glow light tetra", "fish", fresh)).toMatchObject({ kind: "exact", profile: { id: "glowlight-tetra" } });
     expect(matchingSpecies("glow light", "fish", "freshwater").map((item) => item.id)).toContain("glowlight-tetra");
   });

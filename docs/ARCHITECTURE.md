@@ -91,7 +91,7 @@ Yedek aynı sayfadan geri yüklenir (`docs/DECISIONS/0027-yedekten-geri-yukleme.
 pnpm verify
 ```
 
-Sırasıyla: `tsc --noEmit`, `scripts/test-catalog-flow.cjs`, `scripts/test-health.cjs`, `scripts/test-calculators.cjs`, `scripts/audit-catalog.cjs`, `vitest run`, `next build`. Vitest paketi testleri `pnpm test` ile ayrıca çalıştırılabilir. Motorun değişmezliği `packages/compatibility-engine/test/golden.test.ts` ile 1077 vakalık altın fikstüre karşı denetlenir (bkz. `docs/COMPATIBILITY.md`).
+Sırasıyla: `tsc --noEmit`, `scripts/test-catalog-flow.cjs`, `scripts/test-health.cjs`, `scripts/test-calculators.cjs`, `scripts/audit-catalog.cjs`, `vitest run`, `next build`. Vitest paketi testleri `pnpm test` ile ayrıca çalıştırılabilir. Motorun değişmezliği `packages/compatibility-engine/test/golden.test.ts` ile 1132 vakalık altın fikstüre karşı denetlenir (bkz. `docs/COMPATIBILITY.md`).
 
 ## Hedef mimari (planlanan)
 
