@@ -35,6 +35,7 @@ describe("bitki kataloğu bütünlüğü", () => {
       "barclaya-longifolia": "Orchid Lily",
       "bolbitis-heudelotii": "African Water Fern",
       "cabomba-aquatica": "Fanwort",
+      "cabomba-piauhyensis": "Red Cabomba",
       "cardamine-lyrata": "Japanese Cress",
       "ceratophyllum-demersum": "Rigid Hornwort",
       "ceratopteris-thalictroides": "Water Sprite",
@@ -43,11 +44,14 @@ describe("bitki kataloğu bütünlüğü", () => {
       "cryptocoryne-walkeri": "Walker's Water Trumpet",
       "cryptocoryne-wendtii-brown": "Brown Wendt's Water Trumpet",
       "cryptocoryne-wendtii-green": "Green Wendt's Water Trumpet",
+      "dracaena-sanderiana": "Lucky Bamboo",
+      "echinodorus-grisebachii-bleherae": "Amazon Sword Plant",
       "echinodorus-ozelot": "Ozelot Sword",
       "egeria-densa": "Common Waterweed",
       "eleocharis-vivipara": "Umbrella Hairgrass",
       "glossostigma-elatinoides": "Small Mud-Mat",
       "helanthium-tenellum-green": "Mudbabies",
+      "heteranthera-zosterifolia": "Stargrass",
       "hottonia-palustris": "Water Violet",
       "hygrophila-polysperma": "Indian Swampweed",
       "hygrophila-polysperma-rosanervig": "Indian Swampweed",
@@ -62,13 +66,16 @@ describe("bitki kataloğu bütünlüğü", () => {
       "microsorum-pteropus-narrow": "Java Fern",
       "microsorum-pteropus-trident": "Java Fern",
       "microsorum-pteropus-windelov": "Lace Java Fern",
+      "nymphaea-lotus-zenkeri": "Tiger Lotus",
       "pogostemon-stellatus": "Water Star",
       "riccia-fluitans": "Floating Crystalwort",
       "rotala-macrandra": "Giant Red Rotala",
       "rotala-macrandra-japan": "Giant Red Rotala",
       "salvinia-natans": "Floating Fern",
+      "spathiphyllum-wallisii": "Peace Lily",
       "taxiphyllum-barbieri": "Java Moss",
       "vallisneria-americana-var-gigantea": "Giant Vallis",
+      "vallisneria-spiralis": "Straight Vallis",
     });
     for (const item of plantCatalog.filter((entry) => entry.commonNameEn)) expect([item.sourceUrl, ...(item.additionalSourceUrls ?? [])].some((url) => FISHKEEPER.test(url))).toBe(true);
     expect(Object.fromEntries(plantCatalog.filter((item) => item.turkishAliases).map((item) => [item.id, item.turkishAliases]))).toEqual({
@@ -90,8 +97,9 @@ describe("bitki kataloğu bütünlüğü", () => {
     expect(() => assertPlantCatalogIntegrity(withChange("ceratophyllum-demersum", (item) => { item.turkishAliases = ["Boynuz otu"]; }))).toThrow("Türkçe satış adı eş adlarda yok");
   });
 
-  // Eksik yaygın bitkiler paketinin değerli kayıtları (2026-11-12, docs/CATALOG_LOG.md "Eksik yaygın canlılar ve bitkiler").
-  const missingPlantIds = new Set(["echinodorus-grisebachii-bleherae", "vallisneria-spiralis", "nymphaea-lotus-zenkeri", "heteranthera-zosterifolia", "cabomba-piauhyensis", "hydrocotyle-verticillata"]);
+  // Eksik yaygın bitkiler paketinin değerli kayıtları (2026-11-12, docs/CATALOG_LOG.md "Eksik yaygın canlılar ve bitkiler"); son ikisi
+  // "su bitkisi değil" etiketli ev bitkileri (ürün sahibinin onayı, 2026-11-13; kaynakları 2026-11-12'de okundu).
+  const missingPlantIds = new Set(["echinodorus-grisebachii-bleherae", "vallisneria-spiralis", "nymphaea-lotus-zenkeri", "heteranthera-zosterifolia", "cabomba-piauhyensis", "hydrocotyle-verticillata", "dracaena-sanderiana", "spathiphyllum-wallisii"]);
   // Veri testinin A örnekleminde (2026-11-09) bütün dolu alanları kaynakla aynı ya da yazılı kural sonucu çıkan 25 bitki (docs/CATALOG_LOG.md).
   const dataTestPlants = new Set(["aegagropila-linnaei","aponogeton-longiplumulosus","aponogeton-madagascariensis","bacopa-australis","bolbitis-heudelotii","ceratopteris-thalictroides","cryptocoryne-wendtii-mi-oya","eleocharis-parvula","eriocaulon-vietnam","helanthium-bolivianum-quadricostatus","hygrophila-lancea-araguaia","hygrophila-odora","lagenandra-meeboldii-red","lilaeopsis-brasiliensis","limnophila-aromatica","ludwigia-glandulosa","ludwigia-repens-rubin","lysimachia-nummularia-aurea","mayaca-fluviatilis","microsorum-pteropus-windelov","riccardia-chamedryfolia","rotala-rotundifolia","rotala-wallichii","schismatoglottis-prietoi","staurogyne-repens"]);
 
@@ -100,10 +108,12 @@ describe("bitki kataloğu bütünlüğü", () => {
     expect(sourced).toEqual(expected);
   });
 
-  it("3. paket ve 2026-11-12 eksik bitkiler: beş yalnız uyarı kaydı; değer yok, etiket ve ana kaynak resmî listeden ya da Practical Fishkeeping'den, satış Türk mağazasında", () => {
+  it("3. paket ve 2026-11-12 eksik bitkiler: altı yalnız uyarı kaydı; değer yok, etiket ve ana kaynak resmî listeden ya da Practical Fishkeeping'den, satış Türk mağazasında", () => {
     expect(plantCatalog.filter((item) => item.warningOnly)).toEqual([
       { id: "azolla-filiculoides", scientificName: "Azolla filiculoides", warningOnly: true, invasiveListings: [{ list: "england-sale-ban", sourceUrl: "https://www.legislation.gov.uk/uksi/2014/538/article/3" }], sourceUrl: "https://www.legislation.gov.uk/uksi/2014/538/article/3", shopUrls: ["https://aquarubi.com/azolla-filiculoides-porsiyon"], verifiedAt: "2026-10-28" },
       { id: "lagarosiphon-major", scientificName: "Lagarosiphon major", warningOnly: true, invasiveListings: [{ list: "eu-union-list", sourceUrl: "https://eur-lex.europa.eu/legal-content/EN/TXT/HTML/?uri=CELEX:02016R1141-20250807" }, { list: "us-federal-noxious-weed", sourceUrl: ufUrl("lagarosiphon-major") }], sourceUrl: "https://eur-lex.europa.eu/legal-content/EN/TXT/HTML/?uri=CELEX:02016R1141-20250807", shopUrls: ["https://atakanpetshop.com/lagarosiphon-major-saksi-canli-bitki"], verifiedAt: "2026-11-12" },
+      // UF/IFAS başlığı "FISC Category 2 Invasive" (aynı başlıktaki Florida eyalet listeleri etiket değildir); ürün sahibinin onayı 2026-11-13.
+      { id: "myriophyllum-spicatum", scientificName: "Myriophyllum spicatum", warningOnly: true, invasiveListings: [{ list: "fisc-invasive", category: 2, sourceUrl: ufUrl("myriophyllum-spicatum") }], sourceUrl: ufUrl("myriophyllum-spicatum"), shopUrls: ["https://bettamarketim.com.tr/myriophyllum-spicatum-1-bag-canli-biti"], verifiedAt: "2026-11-12" },
       { id: "ophiopogon-japonicus", scientificName: "Ophiopogon japonicus", warningOnly: true, notAquatic: { sourceUrl: "https://www.practicalfishkeeping.co.uk/features/21-plants-to-avoid-in-the-aquarium/" }, sourceUrl: "https://www.practicalfishkeeping.co.uk/features/21-plants-to-avoid-in-the-aquarium/", shopUrls: ["https://aquarubi.com/ophiopogon-japonicus"], verifiedAt: "2026-10-28" },
       { id: "pistia-stratiotes", scientificName: "Pistia stratiotes", aliases: ["Su marulu"], turkishAliases: ["Su marulu"], warningOnly: true, invasiveListings: [{ list: "eu-union-list", sourceUrl: "https://eur-lex.europa.eu/legal-content/EN/TXT/HTML/?uri=CELEX:02016R1141-20250807" }, { list: "fisc-invasive", category: 1, sourceUrl: ufUrl("pistia-stratiotes") }], sourceUrl: "https://eur-lex.europa.eu/legal-content/EN/TXT/HTML/?uri=CELEX:02016R1141-20250807", shopUrls: ["https://aquarubi.com/pistia-stratiotes-su-marulu"], verifiedAt: "2026-10-28" },
       { id: "pontederia-crassipes", scientificName: "Pontederia crassipes", aliases: ["Eichhornia crassipes", "Su Sümbülü"], turkishAliases: ["Su Sümbülü"], warningOnly: true, invasiveListings: [{ list: "eu-union-list", sourceUrl: "https://eur-lex.europa.eu/legal-content/EN/TXT/HTML/?uri=CELEX:02016R1141-20250807" }, { list: "fisc-invasive", category: 1, sourceUrl: ufUrl("pontederia-crassipes") }], sourceUrl: "https://eur-lex.europa.eu/legal-content/EN/TXT/HTML/?uri=CELEX:02016R1141-20250807", shopUrls: ["https://atakanpetshop.com/su-sumbulu-eichornia-crassipes-su-ustu-canli-bitki"], verifiedAt: "2026-11-12" },
@@ -112,11 +122,11 @@ describe("bitki kataloğu bütünlüğü", () => {
     expect(plantForName("su marulu")?.id).toBe("pistia-stratiotes");
   });
 
-  it("144 bitki: 57'si Fishkeeper'a, 87'si Tropica'ya dayanıyor; her biri kabul edilen Türk mağazasına ve tarihe bağlı", () => {
-    expect(plantCatalog).toHaveLength(149);
-    expect(new Set(plantCatalog.map((item) => item.id)).size).toBe(149);
-    expect(sourced).toHaveLength(144);
-    expect(sourced.filter(fromFishkeeper)).toHaveLength(57);
+  it("146 bitki: 59'u Fishkeeper'a, 87'si Tropica'ya dayanıyor; her biri kabul edilen Türk mağazasına ve tarihe bağlı", () => {
+    expect(plantCatalog).toHaveLength(152);
+    expect(new Set(plantCatalog.map((item) => item.id)).size).toBe(152);
+    expect(sourced).toHaveLength(146);
+    expect(sourced.filter(fromFishkeeper)).toHaveLength(59);
     for (const item of sourced) {
       if (fromFishkeeper(item)) {
         // Fishkeeper'ın bitki listesi A. heterophylla'yı bilgi bankası dışındaki bir sayfaya bağlıyor.
@@ -232,10 +242,10 @@ describe("değer kuralı", () => {
     expect(heterophylla?.ph).toBeUndefined();
     expect(heterophylla?.growth).toBeUndefined();
     expect(heterophylla?.co2).toBeUndefined();
-    // Fishkeeper'a dayanan kayıtta CO₂ yalnız Tropica'da aynı bitkinin sayfası varsa yazılır (18 kayıtta yok).
+    // Fishkeeper'a dayanan kayıtta CO₂ yalnız Tropica'da aynı bitkinin sayfası varsa yazılır (20 kayıtta yok).
     const fk = sourced.filter(fromFishkeeper);
     expect(fk.filter((item) => !item.co2).map((item) => item.id)).toEqual(fk.filter((item) => !item.additionalSourceUrls?.some((url) => TROPICA.test(url))).map((item) => item.id));
-    expect(fk.filter((item) => !item.co2)).toHaveLength(18);
+    expect(fk.filter((item) => !item.co2)).toHaveLength(20);
     // Tropica sıcaklık ve pH vermez: Tropica'ya dayanan kayıtta yalnız Fishkeeper'daki türün formuysa (10 kayıt) ya da Practical Fishkeeping'de
     // kutusu varsa (4. paket, aşağıda) yazılır.
     const tropica = sourced.filter((item) => !fromFishkeeper(item));
@@ -391,6 +401,7 @@ describe("istilacı tür listeleri", () => {
       // 3. paket: resmî listeler (AB, İngiltere) ve UF/IFAS'ın başlığı (Pistia: "FISC Category 1"; Azolla Florida'nın yerli bitkisi).
       ["azolla-filiculoides", [{ list: "england-sale-ban", sourceUrl: "https://www.legislation.gov.uk/uksi/2014/538/article/3" }]],
       ["lagarosiphon-major", [{ list: "eu-union-list", sourceUrl: "https://eur-lex.europa.eu/legal-content/EN/TXT/HTML/?uri=CELEX:02016R1141-20250807" }, { ...federal, sourceUrl: ufUrl("lagarosiphon-major") }]],
+      ["myriophyllum-spicatum", [{ list: "fisc-invasive", category: 2, sourceUrl: ufUrl("myriophyllum-spicatum") }]],
       ["pistia-stratiotes", [{ list: "eu-union-list", sourceUrl: "https://eur-lex.europa.eu/legal-content/EN/TXT/HTML/?uri=CELEX:02016R1141-20250807" }, { list: "fisc-invasive", category: 1, sourceUrl: ufUrl("pistia-stratiotes") }]],
       ["pontederia-crassipes", [{ list: "eu-union-list", sourceUrl: "https://eur-lex.europa.eu/legal-content/EN/TXT/HTML/?uri=CELEX:02016R1141-20250807" }, { list: "fisc-invasive", category: 1, sourceUrl: ufUrl("pontederia-crassipes") }]],
     ]);

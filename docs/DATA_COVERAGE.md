@@ -54,27 +54,28 @@ Katalogların her bilgisinin yüzde kaçının dolu olduğu ve kaynağının tü
 | Hacim (tank, set, teraryum) | 126/147 | %85,7 |
 | Son 92 günde doğrulanmış | 1893/1893 | %100 |
 
-### Bitkiler (149 kayıt)
+### Bitkiler (152 kayıt)
 
 | Bilgi | Dolu | Oran |
 |---|---|---|
-| Işık | 142/149 | %95,3 |
-| CO₂ | 123/149 | %82,6 |
-| Büyüme hızı | 129/149 | %86,6 |
-| Boy | 144/149 | %96,6 |
-| Sıcaklık | 80/149 | %53,7 |
-| pH | 77/149 | %51,7 |
-| Yerleşim | 75/149 | %50,3 |
-| Bütün değerler dolu | 37/149 | %24,8 |
-| İstilacı tür etiketi | 9/149 | %6 |
-| Su bitkisi değil etiketi | 1/149 | %0,7 |
-| İngilizce ortak ad (Fishkeeper) | 42/149 | %28,2 |
-| Yalnız uyarı kaydı (değer kaynağı yok) | 5/149 | %3,4 |
-| Son 92 günde doğrulanmış | 149/149 | %100 |
+| Işık | 144/152 | %94,7 |
+| CO₂ | 123/152 | %80,9 |
+| Büyüme hızı | 131/152 | %86,2 |
+| Boy | 146/152 | %96,1 |
+| Sıcaklık | 82/152 | %53,9 |
+| pH | 79/152 | %52 |
+| Yerleşim | 75/152 | %49,3 |
+| Bütün değerler dolu | 37/152 | %24,3 |
+| İstilacı tür etiketi | 10/152 | %6,6 |
+| Su bitkisi değil etiketi | 3/152 | %2 |
+| İngilizce ortak ad (Fishkeeper) | 49/152 | %32,2 |
+| Yalnız uyarı kaydı (değer kaynağı yok) | 6/152 | %3,9 |
+| Son 92 günde doğrulanmış | 152/152 | %100 |
 <!-- kapsam:bitir -->
 
 ## Geçmiş
 
+- 2026-11-13 (veri doldurma 2, veri aşaması; ürün sahibinin açık isteği "Evet, ekle", karar 0039 2. madde): 3 yeni bitki (Dracaena sanderiana ve Spathiphyllum wallisii "su bitkisi değil", Myriophyllum spicatum istilacı uyarı kaydı) ve dünkü 5 bitkiye İngilizce ortak ad (`docs/CATALOG_LOG.md`). Bitkiler 149 → 152 kayıt: ışık %95,3 → %94,7 (142 → 144), CO₂ %82,6 → %80,9, büyüme hızı %86,6 → %86,2 (129 → 131), boy %96,6 → %96,1 (144 → 146), sıcaklık %53,7 → %53,9 (80 → 82), pH %51,7 → %52 (77 → 79), yerleşim %50,3 → %49,3, bütün değerler dolu %24,8 → %24,3 (37), istilacı etiketi %6 → %6,6 (9 → 10), su bitkisi değil etiketi 1 → 3, İngilizce ortak ad 42 → 49, yalnız uyarı kaydı 5 → 6. Canlılar, ekipman ve bakım ürünleri değişmedi. "Son 92 günde doğrulanmış" %100 kaldı.
 - 2026-11-12/13 (veri doldurma 1, veri aşaması; ürün sahibinin açık isteği, karar 0039 2. madde): 57 kayda 99 eş ad, 56 tatlı su kaydında en az hacim ve uzunluk, 25 yeni canlı ve 8 yeni bitki (`docs/CATALOG_LOG.md`, "2026-11-12 Arama adları paketi", "2026-11-12 En az hacim ve uzunluk" ve "2026-11-12 Eksik yaygın canlılar ve bitkiler" bölümleri). Canlılar 443 → 468 kayıt: en az tank uzunluğu %91 (403 → 426), akıntı %89,8 → %86,1 (398 → 403), davranış ya da bakım notu %76,1 → %77,4 (337 → 362), eş ad ya da satış adı %86,5 → %89,7 (383 → 420). Bitkiler 141 → 149 kayıt: ışık %96,5 → %95,3 (136 → 142), CO₂ %84,4 → %82,6 (119 → 123), büyüme hızı %87,2 → %86,6 (123 → 129), boy %97,9 → %96,6 (138 → 144), sıcaklık %53,2 → %53,7 (75 → 80), pH %51,1 → %51,7 (72 → 77), yerleşim %51,1 → %50,3 (72 → 75), bütün değerler dolu %25,5 → %24,8 (36 → 37), istilacı tür etiketi %5 → %6 (7 → 9), İngilizce ortak ad %29,8 → %28,2 (42/149), yalnız uyarı kaydı %2,1 → %3,4 (3 → 5). Ekipman ve bakım ürünleri değişmedi. Ölçüm tarihi 2026-11-13; "son 92 günde doğrulanmış" satırları %100 kaldı.
 - 2026-11-12 (Canberk'in dalından paket A, veri aşaması; ürün sahibinin isteği): 11 ekipmanın kaynağı üreticiye ya da Türkiye distribütörüne bağlandı, değerleri o sayfadan geldi (Sobo SB-860A, SB-848, WP-4001; SunSun 502, 503; Dophin AP1302, 980F, FB1000 F, FB3000 F, FB4000 F, CF-300; `docs/CATALOG_LOG.md`, aynı günün bölümü). Sobo SB-848, WP-4001 ve SunSun 502, 503 doğrulanamayanlar listesinden çıktı. Değişen oranlar: doğrulanmamışlar listesinde değil %96,5 → %96,6 (3410 → 3414/3535), hesap değeri %89,4 → %89,9 (1117 → 1123/1249), güç %47,6 → %47,8 (1682 → 1691/3535), önerilen hacim %20,1 → %20,3 (712 → 717/3535). Ölçüm tarihi 2026-11-12; "son 92 günde doğrulanmış" satırları %100 kaldı.
 - 2026-11-11 (Codex kontrolü): NovoRed Refill ve NanoBel metinleri düzeltildi; dört eksik yeniden doğrulamanın tarihi eski güne döndü, NovoRed Refill okuma gününü aldı (CATALOG_LOG son bölüm). `node scripts/data-coverage.cjs 2026-11-11` yeniden çalıştırıldı; önceki tablonun tüm sayıları ve oranları aynı kaldı. Tarihi geri alınan dört kayıt da 92 günlük aralıkta.

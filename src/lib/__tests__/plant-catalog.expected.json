@@ -4157,6 +4157,7 @@
  {
   "id": "echinodorus-grisebachii-bleherae",
   "scientificName": "Echinodorus grisebachii 'Bleherae'",
+  "commonNameEn": "Amazon Sword Plant",
   "aliases": [
    "Echinodorus bleheri"
   ],
@@ -4193,6 +4194,7 @@
  {
   "id": "vallisneria-spiralis",
   "scientificName": "Vallisneria spiralis",
+  "commonNameEn": "Straight Vallis",
   "aliases": [
    "Straight Vallis"
   ],
@@ -4225,6 +4227,7 @@
  {
   "id": "nymphaea-lotus-zenkeri",
   "scientificName": "Nymphaea lotus 'Zenkeri'",
+  "commonNameEn": "Tiger Lotus",
   "aliases": [
    "Nymphaea lotus zenkeri",
    "Tiger Lotus",
@@ -4266,6 +4269,7 @@
  {
   "id": "heteranthera-zosterifolia",
   "scientificName": "Heteranthera zosterifolia",
+  "commonNameEn": "Stargrass",
   "aliases": [
    "Star Grass",
    "Heteranthera Stargrass"
@@ -4307,6 +4311,7 @@
  {
   "id": "cabomba-piauhyensis",
   "scientificName": "Cabomba piauhyensis",
+  "commonNameEn": "Red Cabomba",
   "aliases": [
    "Red Cabomba",
    "Cabomba Red",
@@ -4358,6 +4363,69 @@
   "sourceUrl": "https://tropica.com/en/plants/plantdetails/Hydrocotyleverticillata(039)/4457",
   "shopUrls": [
    "https://atakanpetshop.com/hydrocotyle-verticillata-saksi-canli-bitki"
+  ],
+  "verifiedAt": "2026-11-12"
+ },
+ {
+  "id": "dracaena-sanderiana",
+  "scientificName": "Dracaena sanderiana",
+  "commonNameEn": "Lucky Bamboo",
+  "aliases": [
+   "Dracaena Sanderiana Green"
+  ],
+  "light": [
+   "medium",
+   "medium"
+  ],
+  "growth": [
+   "slow",
+   "slow"
+  ],
+  "heightCm": 50,
+  "temperature": [
+   22,
+   28
+  ],
+  "ph": [
+   6,
+   8
+  ],
+  "notAquatic": {
+   "sourceUrl": "https://www.practicalfishkeeping.co.uk/features/21-plants-to-avoid-in-the-aquarium/"
+  },
+  "sourceUrl": "https://www.fishkeeper.co.uk/fish/plant/aquarium-plants/dracaena-sanderiana-",
+  "shopUrls": [
+   "https://atakanpetshop.com/dracaena-sanderiana-green-saksi-canli-bitki"
+  ],
+  "verifiedAt": "2026-11-12"
+ },
+ {
+  "id": "spathiphyllum-wallisii",
+  "scientificName": "Spathiphyllum wallisii",
+  "commonNameEn": "Peace Lily",
+  "light": [
+   "medium",
+   "high"
+  ],
+  "growth": [
+   "slow",
+   "slow"
+  ],
+  "heightCm": 30,
+  "temperature": [
+   22,
+   28
+  ],
+  "ph": [
+   5.5,
+   7.5
+  ],
+  "notAquatic": {
+   "sourceUrl": "https://www.practicalfishkeeping.co.uk/features/21-plants-to-avoid-in-the-aquarium/"
+  },
+  "sourceUrl": "https://www.fishkeeper.co.uk/fish/plant/aquarium-plants/spathiphyllum-wallisii-",
+  "shopUrls": [
+   "https://atakanpetshop.com/spathiphyllum-wallisii-saksi-canli-bitki"
   ],
   "verifiedAt": "2026-11-12"
  }
