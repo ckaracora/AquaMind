@@ -103,15 +103,15 @@ export function PlantFacts({ item }: { item: PlantProfile }) {
   const fmt = useDisplayFormat();
   const c = t.plants.catalog;
   const values = plantValues(item, t, fmt);
-  const rows: [string, string | undefined][] = [
+  const rows: [string, string | undefined, string?][] = [
     [c.light, values.light && values.light.charAt(0).toLocaleUpperCase("tr-TR") + values.light.slice(1)],
     [c.co2, values.co2 && values.co2.charAt(0).toLocaleUpperCase("tr-TR") + values.co2.slice(1)],
-    [c.temperature, values.temperature],
-    [c.ph, values.ph],
+    [c.temperature, values.temperature, item.warningOnly ? c.missing : c.notPublished.temperature],
+    [c.ph, values.ph, item.warningOnly ? c.missing : c.notPublished.ph],
     [c.height, values.height && c.heightUpTo(values.height)],
     [c.growth, values.growth],
   ];
-  return <dl className="grid grid-cols-2 gap-2 sm:grid-cols-3">{rows.map(([label, value]) => <div key={label} className="rounded-xl bg-white/[.03] p-3"><dt className="text-[11px] sm:text-[10px] font-bold text-[#647981]">{label}</dt><dd className={`mt-1 text-xs font-bold ${value ? "text-[#dbe7ea]" : "text-[#647981]"}`}>{value ?? c.missing}</dd></div>)}</dl>;
+  return <dl className="grid grid-cols-2 gap-2 sm:grid-cols-3">{rows.map(([label, value, fallback]) => <div key={label} className="rounded-xl bg-white/[.03] p-3"><dt className="text-[11px] sm:text-[10px] font-bold text-[#647981]">{label}</dt><dd className={`mt-1 text-xs font-bold ${value ? "text-[#dbe7ea]" : "text-[#647981]"}`}>{value ?? fallback ?? c.missing}</dd></div>)}</dl>;
 }
 
 /** İstilacı tür listesindeki bitkinin uyarısı (kaynaklı etiket; "Türkiye'de yasak" anlamına gelmez). `short` kartta tek satır yazar. */

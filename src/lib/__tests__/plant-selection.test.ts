@@ -109,12 +109,20 @@ describe("bitkinin bilgileri", () => {
     expect(text(renderToStaticMarkup(createElement(PlantFacts, { item: item("anubias-barteri-var-nana") })))).toContain("pH 5–8,5");
     // Tropica'ya dayanan kayıt: sıcaklık ve pH yok.
     expect(text(renderToStaticMarkup(createElement(PlantFacts, { item: item("eleocharis-acicularis") })))).toBe(
-      "Işık Düşük CO₂ Düşük Sıcaklık Kaynakta yok pH Kaynakta yok Boy 15 cm'ye kadar Büyüme Orta");
+      "Işık Düşük CO₂ Düşük Sıcaklık Kaynak yayımlamıyor pH Kaynak yayımlamıyor Boy 15 cm'ye kadar Büyüme Orta");
     // Tropica'ya dayanan kayıt, sıcaklık ve pH Practical Fishkeeping'in tür kutusundan (4. paket).
     expect(text(renderToStaticMarkup(createElement(PlantFacts, { item: item("staurogyne-repens") })))).toBe(
       "Işık Düşük CO₂ Düşük Sıcaklık 20–28 °C pH 6–8 Boy 10 cm'ye kadar Büyüme Orta");
     expect(text(renderToStaticMarkup(createElement(PlantFacts, { item: item("anubias-heterophylla") })))).toBe(
-      "Işık Orta CO₂ Kaynakta yok Sıcaklık 22–30 °C pH Kaynakta yok Boy 80 cm'ye kadar Büyüme Kaynakta yok");
+      "Işık Orta CO₂ Kaynakta yok Sıcaklık 22–30 °C pH Kaynak yayımlamıyor Boy 80 cm'ye kadar Büyüme Kaynakta yok");
+  });
+
+  it("boş sıcaklık ve pH \"üretici yayımlamıyor\" yazar; yalnız uyarı kaydı \"Kaynakta yok\" kalır; üç dilde metin var", () => {
+    const facts = (id: string) => text(renderToStaticMarkup(createElement(PlantFacts, { item: item(id) })));
+    expect(facts("eleocharis-acicularis")).toContain("Sıcaklık Kaynak yayımlamıyor pH Kaynak yayımlamıyor");
+    expect(facts("ophiopogon-japonicus")).toContain("Sıcaklık Kaynakta yok pH Kaynakta yok");
+    expect(readFileSync("packages/localization/src/messages/en.ts", "utf8")).toContain('notPublished: { temperature: "Not published by the source", ph: "Not published by the source" }');
+    expect(readFileSync("packages/localization/src/messages/es.ts", "utf8")).toContain('notPublished: { temperature: "La fuente no la publica", ph: "La fuente no lo publica" }');
   });
 
   it("sıcaklık ayarlardaki birimle yazılır", () => {

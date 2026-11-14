@@ -620,6 +620,7 @@ export const tr = {
       height: "Boy",
       growth: "Büyüme",
       missing: "Kaynakta yok",
+      notPublished: { temperature: "Kaynak yayımlamıyor", ph: "Kaynak yayımlamıyor" },
       levels: { low: "düşük", medium: "orta", high: "yüksek" },
       growthRates: { "very-slow": "Çok yavaş", slow: "Yavaş", medium: "Orta", fast: "Hızlı", "very-fast": "Çok hızlı" },
       heightUpTo: (cm: string) => `${cm} cm'ye kadar`,
