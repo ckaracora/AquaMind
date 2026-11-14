@@ -417,13 +417,16 @@ describe("tür kartı ve pencere", () => {
     expect(listed).not.toContain("öneriden");
   });
 
-  it("pencere açılınca arama boştur, uyarı yoktur ve sınıfın ilk türü seçilidir", () => {
+  // 2026-11-14 sprinti: pencere boş açılır (eskiden sınıfın ilk türü, ör. Neon tetra, seçili geliyordu); ekleme düğmesi kapalıdır.
+  it("pencere açılınca arama boştur, uyarı yoktur, tür seçili değildir ve ekleme düğmesi kapalıdır", () => {
     const aquarium: Aquarium = { id: "a", name: "Argus akvaryumu", type: "brackish", lengthCm: 100, widthCm: 40, heightCm: 50, netVolumeLiters: 120, setupDate: "2026-01-01" };
     const html = decode(renderToStaticMarkup(createElement(CatalogLivestockForm, { aquarium, initialCategory: "fish", close: () => {}, submit: () => {} })));
     expect(html).toContain(t.livestock.form.title);
     expect(html).not.toContain(t.livestock.form.otherWaterTitle);
-    const first = changeLivestockCategory("fish", "brackish");
-    expect(html).toContain(`<option value="${first.selected}" selected="">`);
+    expect(changeLivestockCategory("fish", "brackish").selected).toBe("");
+    expect(html).toContain(`<option value="" disabled="" selected="">${t.livestock.form.chooseSpecies}</option>`);
+    expect(html).toMatch(/<button disabled=""[^>]*>Canlıyı ekle<\/button>/);
+    expect(html).toContain('name="quantity" value="1"');
   });
 });
 

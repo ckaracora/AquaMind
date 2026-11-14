@@ -6,6 +6,7 @@ import { AppShell } from "@/components/app-shell";
 import { PageHeader } from "@/components/page-header";
 import { PlantCardCatalog, PlantForm, plantPositions } from "@/components/plant-catalog";
 import { PlantCardWarnings, PlantCatalogFailed } from "@/components/plant-warnings";
+import { addRequested } from "@/lib/aquarium-links";
 import { selectedAquarium } from "@/lib/aquarium-selection";
 import { plantShownName } from "@/lib/plant-names";
 import { checkAquariumPlants, isLabelWarning } from "@/lib/plant-warning-text";
@@ -22,6 +23,8 @@ export default function PlantsPage(){
  const {aquariums,plants,equipment,waterReadings,addPlant,removePlant}=useAquariums(); const fmt=useDisplayFormat(); const {t,locale}=useI18n(); const [selectedId,setSelectedId]=useState(""); const [position,setPosition]=useState<string>("all");
  const positionLabel=(value:string)=>{const key=positionKeys.get(value);return key?t.plants.positions[key]:value}; const [query,setQuery]=useState(""); const [open,setOpen]=useState(false);
  useEffect(()=>{const requested=new URLSearchParams(location.search).get("aquarium");if(requested&&aquariums.some(a=>a.id===requested))setSelectedId(requested)},[aquariums]);
+ // Akvaryum sayfasındaki "Bitki ekle" pencereyi doğrudan açar (`?add=1`, src/lib/aquarium-links.ts).
+ useEffect(()=>{if(addRequested(location.search))setOpen(true)},[]);
  // Seçili akvaryum her çizimde güncel listeden türetilir (src/lib/aquarium-selection.ts): sağlayıcı ilk çizimde örnek veriyle başlar,
  // saklanan kimlik kullanıcının akvaryumları gelince listede kalmayabilir. Akvaryum yoksa pencere açılmaz, boş durum görünür; yeni bitki
  // örnek verideki ya da boş bir akvaryum kimliğiyle yazılamaz.

@@ -6,6 +6,7 @@ import { ModalDialog } from "@/components/modal-dialog";
 import type { Locale } from "@aquamind/localization";
 import type { PlantInvasiveListing, PlantProfile, PlantSearchResult } from "@/data/catalog-plants";
 import { localIsoDate } from "@/lib/local-date";
+import { withEnglishPlantMatches } from "@/lib/plant-search";
 import type { usePlantCatalog } from "@/lib/use-plant-catalog";
 import { useDisplayFormat } from "@/lib/use-display-format";
 import { useI18n } from "@/providers/i18n-provider";
@@ -214,7 +215,8 @@ export function PlantForm({ aquariumId, aquariumName, catalog, close, save }: { 
   const [manual, setManual] = useState(false);
   const [query, setQuery] = useState("");
   const [selected, setSelected] = useState<PlantSearchResult>();
-  const results = catalog.catalog && query.trim() ? catalog.catalog.searchPlants(query, locale) : [];
+  // İngilizce ortak ad her dilde aranır; ekranda ad arayüz dilinde kalır (src/lib/plant-search.ts).
+  const results = catalog.catalog && query.trim() ? withEnglishPlantMatches(catalog.catalog.searchPlants(query, locale), catalog.catalog.searchPlants(query, "en"), locale) : [];
   function submit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
     const plant = plantFromForm(new FormData(e.currentTarget), { aquariumId, manual, selected: selected?.item });

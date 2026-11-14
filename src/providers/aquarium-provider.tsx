@@ -2,7 +2,7 @@
 
 import { createContext, useContext, useEffect, useMemo, useRef, useState } from "react";
 import { DEFAULT_PREFERENCES, type Preferences } from "@aquamind/domain";
-import { aquariums as seedAquariums, equipment as seedEquipment, livestock as seedLivestock, localizeDemoRows, maintenanceTasks as seedMaintenanceTasks, plants as seedPlants, waterReadings as seedWaterReadings } from "@/data/mock-data";
+import { aquariums as seedAquariums, demoRowsForToday, equipment as seedEquipment, livestock as seedLivestock, localizeDemoRows, maintenanceTasks as seedMaintenanceTasks, plants as seedPlants, waterReadings as seedWaterReadings } from "@/data/mock-data";
 import {
   beginStorageSuspension,
   checkMutationGate,
@@ -24,6 +24,7 @@ import {
   type StorageIssue,
 } from "@/lib/aquarium-storage";
 import { browserPreferenceDefaults } from "@/lib/locale-choice";
+import { completeMaintenance } from "@/lib/maintenance-recurrence";
 import { useI18n } from "@/providers/i18n-provider";
 import type { Aquarium, Equipment, Livestock, MaintenanceTask, Plant, WaterParameters } from "@/types/aquarium";
 
@@ -38,9 +39,13 @@ interface AquariumContextValue {
   addWaterReading: (reading: WaterParameters) => void;
   maintenanceTasks: MaintenanceTask[];
   addMaintenanceTask: (task: MaintenanceTask) => void;
+  /** Görevi tamamlar; tekrarlıysa sonraki görevi oluşturur (src/lib/maintenance-recurrence.ts). */
   completeMaintenanceTask: (id: string) => void;
+  removeMaintenanceTask: (id: string) => void;
   livestock: Livestock[];
   addLivestock: (item: Livestock) => void;
+  /** Var olan canlı kaydını aynı kimlikle değiştirir (adet, cinsiyet, tarih, not). */
+  updateLivestock: (item: Livestock) => void;
   removeLivestock: (id: string) => void;
   plants: Plant[];
   addPlant: (item: Plant) => void;
@@ -140,10 +145,12 @@ export function AquariumProvider({ children }: { children: React.ReactNode }) {
     // denemeden uyarı gösterilir; başarıyla toparlandıysa uyarı çıkmaz.
     setWriteBlocked(hasPendingJournal());
 
+    // Örnek ölçümler ve bakımlar bugüne göre tarihlenir (src/data/mock-data.ts `demoRowsForToday`); yalnız ekranda gösterilir.
+    const todayDemo = demoRowsForToday(new Date());
     const { snapshot, demo: demoFlags } = hydrateFromStorage({
       aquariums: seedAquariums,
-      waterReadings: seedWaterReadings,
-      maintenanceTasks: seedMaintenanceTasks,
+      waterReadings: todayDemo.waterReadings,
+      maintenanceTasks: todayDemo.maintenanceTasks,
       livestock: seedLivestock,
       plants: seedPlants,
       equipment: seedEquipment,
@@ -326,16 +333,20 @@ export function AquariumProvider({ children }: { children: React.ReactNode }) {
         setMaintenanceTasks(flags.maintenanceTasks ? [task] : [task, ...maintenanceTasks]);
         applyDemo({ ...flags, maintenanceTasks: false });
       },
+      // Tekrarlayan görev tamamlanınca sonraki görev oluşur (src/lib/maintenance-recurrence.ts).
       completeMaintenanceTask: (id: string) => {
         if (!gate()) return;
         const task = maintenanceTasks.find((item) => item.id === id);
-        if (!task) return;
-        const completed = { ...task, completedAt: new Date().toISOString() };
+        if (!task || task.completedAt) return;
         const flags = promoteOwner(task.aquariumId, demoRef.current);
-        setMaintenanceTasks(
-          flags.maintenanceTasks ? [completed] : maintenanceTasks.map((item) => (item.id === id ? completed : item)),
-        );
+        const source = flags.maintenanceTasks ? [task] : maintenanceTasks;
+        setMaintenanceTasks(completeMaintenance(source, id, new Date(), () => crypto.randomUUID()));
         applyDemo({ ...flags, maintenanceTasks: false });
+      },
+      removeMaintenanceTask: (id: string) => {
+        if (!gate()) return;
+        // Canlı ve bitki silmeyle aynı: demo koleksiyonda yalnız ekrandaki gösterim değişir (depoya yazılmaz).
+        setMaintenanceTasks(maintenanceTasks.filter((item) => item.id !== id));
       },
 
       livestock,
@@ -343,6 +354,12 @@ export function AquariumProvider({ children }: { children: React.ReactNode }) {
         if (!gate()) return;
         const flags = promoteOwner(item.aquariumId, demoRef.current);
         setLivestock(flags.livestock ? [item] : [item, ...livestock]);
+        applyDemo({ ...flags, livestock: false });
+      },
+      updateLivestock: (item: Livestock) => {
+        if (!gate()) return;
+        const flags = promoteOwner(item.aquariumId, demoRef.current);
+        setLivestock(flags.livestock ? [item] : livestock.map((entry) => (entry.id === item.id ? item : entry)));
         applyDemo({ ...flags, livestock: false });
       },
       removeLivestock: (id: string) => {

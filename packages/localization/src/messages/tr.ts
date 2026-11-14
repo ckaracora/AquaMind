@@ -4,9 +4,6 @@
 export const tr = {
   app: {
     name: "AquaMind",
-    tagline: "Aquarium intelligence",
-    /** Sloganın dili: büyük harfe çevirme o dilin kuralıyla yapılsın (Türkçe kuralla "AQUARİUM" olmasın). */
-    taglineLang: "en",
     title: "AquaMind — Akvaryum yönetimi",
     description: "Akvaryumunuzu bilinçle yönetin.",
   },
@@ -22,7 +19,6 @@ export const tr = {
       products: "Ürün Kataloğu",
       calculators: "Hesaplayıcılar",
       diseases: "Hastalık ve Tedavi",
-      aquamatch: "AquaMatch",
       settings: "Ayarlar",
     },
     shortItems: {
@@ -31,16 +27,11 @@ export const tr = {
       maintenance: "Bakım",
       menu: "Menü",
     },
-    comingSoon: "Yakında",
     mainMenu: "Ana menü",
     mobileMainMenu: "Mobil ana menü",
     closeMenu: "Menüyü kapat",
     newAquarium: "Yeni akvaryum",
     dashboard: "Panel",
-  },
-  account: {
-    guest: "Misafir",
-    freePlan: "Ücretsiz plan",
   },
   storageWarning: {
     collections: {
@@ -118,6 +109,10 @@ export const tr = {
     speciesCount: (count: number) => `${count} tür`,
     recordCount: (count: number) => `${count} kayıt`,
     confirmRemove: (name: string) => `${name} silinsin mi?`,
+    /** Silme onayı penceresi (2026-11-14 sprinti). */
+    delete: "Sil",
+    cannotUndo: "Bu işlem geri alınamaz.",
+    edit: "Düzenle",
   },
   greeting: {
     morning: "Günaydın.",
@@ -149,6 +144,8 @@ export const tr = {
     danger: "Sağlık analizi acil ilgilenmen gereken bir durum gösteriyor.",
     warning: "Sağlık analizinde dikkat gerektiren konular var.",
     good: "Sağlık analizinde öne çıkan bir sorun görünmüyor.",
+    /** Hüküm "iyi" olacakken tanınmayan canlı var (motor 1.18.0, karar 0043). */
+    incomplete: "Sağlık analizi eksik: bazı canlılar katalogda tanınmadı, sonuç onları kapsamıyor.",
   },
   dashboard: {
     welcomeTitle: "AquaMind’e hoş geldin",
@@ -229,8 +226,6 @@ export const tr = {
       typeShort: "Tür",
       descriptionPlaceholder: "Akvaryumun hakkında kısa bir not...",
       autoCalculated: "Otomatik hesaplanır",
-      photoTitle: "Akvaryum fotoğrafı",
-      photoText: "Fotoğraf yükleme, bulut depolama aşamasında etkinleştirilecek.",
       save: "Akvaryumu kaydet",
       /** Kayıt yazılamazsa (yer dolu, erişim yok ya da yarım kalmış silme) düğmenin yanında görünür. */
       saveFailed: "Akvaryum kaydedilemedi. Bilgilerin bu sayfada duruyor; sayfanın üstündeki uyarıya bak ve yeniden dene.",
@@ -283,6 +278,14 @@ export const tr = {
     enterValue: "Değeri gir",
     noRiskTitle: "Belirgin bir risk görünmüyor",
     noRiskText: "Düzenli ölçüm ve bakım kayıtlarına devam et.",
+    /** Motor 1.18.0 (karar 0043): tanınmayan canlı varken "iyi" ve "sorun görünmüyor" denmez. */
+    incomplete: "Eksik değerlendirildi",
+    noRiskIncompleteTitle: "Değerlendirebildiğimiz kayıtlarda risk bulunmadı",
+    noRiskIncompleteText: "Tanınmayan kayıtlar hesaba katılmadı; hangileri olduğu yukarıdaki kartta.",
+    /** Uygunluk göstergelerinde çubuğun yanındaki etiket (ölçütün durumu). */
+    metricStatus: { good: "Uygun", warning: "Sınırda", danger: "Yetersiz" },
+    /** "Veri güveni" ölçütünün sade açıklaması. */
+    recordsCounted: (ready: number, total: number, userValue: number) => `Hesaba giren kayıtlar: ${ready}/${total}${userValue ? ` · ${userValue} kayıt senin girdiğin değerle` : ""}`,
     /** Canlı kaydı olmayan akvaryumda puan yerine gösterilen durum (kullanılabilirlik turu, 2026-11-12). */
     noLivestock: {
       title: "Henüz değerlendirilecek canlı yok",
@@ -340,6 +343,17 @@ export const tr = {
     noValues: "Bu ölçümde değer girilmemiş.",
     noReadings: "Henüz ölçüm kaydı yok.",
     formTitle: "Yeni su ölçümü",
+    /** Ölçüm penceresi (2026-11-14 sprinti): kutuların açık adları ve üstteki tek satır. Tabloda kısa adlar (`fields`) kalır. */
+    formHint: "Hepsini doldurman gerekmez; testin neyi ölçüyorsa onu gir.",
+    formFields: {
+      gh: "Genel sertlik (GH)",
+      kh: "Karbonat sertliği (KH)",
+      ammonia: "Amonyak (NH₃/NH₄)",
+      nitrite: "Nitrit (NO₂)",
+      nitrate: "Nitrat (NO₃)",
+      phosphate: "Fosfat (PO₄)",
+      iron: "Demir (Fe)",
+    },
   },
   maintenance: {
     eyebrow: "Rutinler",
@@ -366,6 +380,10 @@ export const tr = {
     markDone: "Tamamlandı olarak işaretle",
     done: "Tamamlandı",
     planned: "Planlandı",
+    /** Görevi silme düğmesi ve onayı (2026-11-14 sprinti). */
+    remove: "Görevi sil",
+    /** Tekrarlama alanının altında: tamamlanınca sonraki görev oluşur. */
+    recurrenceHelp: "Tamamlayınca sonraki görev bu kadar gün sonrasına kendiliğinden eklenir.",
     everyDays: (days: number) => `Her ${days} gün`,
     percent: (value: number) => `%${value}`,
     formTitle: "Yeni bakım kaydı",
@@ -384,6 +402,9 @@ export const tr = {
     speciesTotal: "Tür sayısı",
     search: "Canlı ara...",
     remove: "Canlıyı sil",
+    /** Canlı kaydını düzenleme penceresi (2026-11-14 sprinti): adet, cinsiyet, tarih ve not değişir; tür değişmez. */
+    editTitle: "Canlı kaydını düzenle",
+    editHelp: "Adet, cinsiyet, eklenme tarihi ve notu değiştirebilirsin. Türü değiştirmek için kaydı silip yeniden ekle.",
     emptyTitle: "Canlı bulunamadı",
     emptyText: "İlk canlı kaydını ekleyebilirsin.",
     /** Canlı grupları (katalogdaki `group` kimliği); her kimliğin adı olduğu test edilir. */
@@ -397,11 +418,19 @@ export const tr = {
     /** Katalogdan canlı ekleme penceresi. Tür adları ve türün notları katalogdan gelir ve katalog çevirmeninden geçer (4. paket). */
     form: {
       title: "Canlı seç",
-      help: "Ana sınıf → canlı grubu → tür sırasıyla ilerle.",
-      category: "1. Ana sınıf",
-      group: "2. Canlı grubu",
-      search: "Tür veya varyete ara",
+      help: "Adını yaz ya da sınıf ve gruba göre göz at.",
+      category: "Ana sınıf",
+      group: "Canlı grubu",
+      search: "Canlı ara",
       searchPlaceholder: "Ad, bilimsel ad ya da varyete",
+      /** Arama kutusunun altında (2026-11-14 sprinti): arama bütün sınıflarda ve başka dillerdeki adlarda da arar. */
+      searchAllHint: "Balık, karides, salyangoz ve öbür canlıların hepsinde arar; İngilizce adlar da olur.",
+      /** Sınıf ve grup seçimlerinin başlığı. */
+      browseTitle: "Ya da göz at",
+      /** "Bunu mu demek istedin?" düğmesi; ad arayüz dilindedir. */
+      didYouMean: (name: string) => `Bunu mu demek istedin: ${name}?`,
+      /** Tuzlu ve acı su akvaryumunda dürüst not (2026-11-14 sprinti). Listede olmayan canlı bugün eklenemez; not bunu söyler. */
+      limitedCoverage: (aquariumType: "brackish" | "saltwater") => `${aquariumType === "saltwater" ? "Deniz" : "Acı su"} kapsamı başlangıç düzeyinde; aradığın canlı listede olmayabilir. Listede olmayan canlı için hacim ve uyumluluk değerlendirmesi yapılamaz.`,
       unresolvedTitle: "Ad bulundu, bilimsel kimlik doğrulanamadı",
       unresolvedBadge: "Güvenli beklemede",
       unresolvedBlocked: "Yanlış hacim ve uyumluluk hesabı vermemek için bu canlı henüz eklenemez.",
@@ -424,7 +453,7 @@ export const tr = {
       otherWaterSuggestionPicked: (name: string) => `${name} seçildi.`,
       /** Tür kartının altında, tür öneriden seçildiyse. `query` kullanıcının arama kutusuna yazdığıdır. */
       chosenFromSuggestion: (query: string) => `Bu türü öneriden sen seçtin. Aradığın ad: ${query}`,
-      species: "3. Tür",
+      species: "Tür",
       chooseSpecies: "Tür seç",
       awaitingIdentity: "Kimlik doğrulaması bekleniyor",
       noMatch: "Aramayla eşleşen tür yok",
@@ -600,8 +629,10 @@ export const tr = {
       /** Pencere boş seçimle açılır; marka ve model kullanıcı seçer (kullanılabilirlik turu, 2026-11-12). */
       chooseBrand: "Marka seç",
       chooseModel: "Model seç",
-      brandFirst: "Önce marka seç",
+      brandFirst: "Marka seç ya da model ara",
       noModelMatch: "Bu markada aramayla eşleşen model bulunamadı.",
+      /** Marka seçilmeden yapılan model aramasında sonuç yoksa (2026-11-14 sprinti). */
+      noModelMatchAnyBrand: "Bu türde aramayla eşleşen model bulunamadı. Listede yoksa elle yazabilirsin.",
       /** Sondaki boşluk, metinden sonra gelen bağlantıyla arasındadır. */
       maybeListed: "Cihazın listede olabilir. ",
       notListed: "Cihazın listede yok mu? ",
@@ -706,7 +737,6 @@ export const tr = {
       coral: { name: "Mercan kırığı", note: "Sertliği yükseltebilir" },
       gravel: { name: "Doğal çakıl", note: "Orta ve iri taneli" },
     },
-    comingSoon: { fertilizer: "Gübre", minerals: "Mineral / Tuz" },
   },
   settings: {
     eyebrow: "Tercihler",
@@ -823,7 +853,6 @@ export const tr = {
     /** Gizlilik sayfasının bağlantısı; ürün sahibinin 2026-10-30 kararıyla iletişim bilgisi eklenene kadar ekranda gösterilmez (0027). */
     privacyLink: "Gizlilik: verilerin nerede ve nasıl saklanıyor",
     /** Sayfanın altındaki sürüm satırı; dil adı seçili dili gösterir. */
-    footer: "AquaMind MVP · Türkçe · v0.1",
   },
 };
 
