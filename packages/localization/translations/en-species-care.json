@@ -484,7 +484,7 @@
 {"key": "946a46e0179259d6", "fields": ["care.sexing"], "tr": "Dişilerin karnı daha yuvarlaktır ve biraz daha iridirler.", "en": "Females are rounder-bellied and slightly larger."},
 {"key": "94a5395717b28a09", "fields": ["care.breeding"], "tr": "Cinsin diğer türlerine benzer biçimde üretilebilir.", "en": "It can be spawned in a similar way to other species in the genus."},
 {"key": "94b704a9367de727", "fields": ["care.sexing"], "tr": "Erişkin erkekler genellikle daha az derin gövdeli ve biraz daha küçüktür.", "en": "Adult males tend to be less deep-bodied and slightly smaller."},
-{"key": "94c4cb6ea3015814", "fields": ["care.breeding"], "tr": "Discus türlerinde üretim çok zor olabilir.", "en": "Breeding can be very difficult with Altums."},
+{"key": "07d551d4bd911b6a", "fields": ["care.breeding"], "tr": "Altum melek balığında üretim çok zor olabilir.", "en": "Breeding can be very difficult with Altums."},
 {"key": "94e01dae927db004", "fields": ["care.breeding"], "tr": "Üreme sağlanmıştır, ancak ne yazık ki ayrıntı çok azdır.", "en": "Breeding has been achieved, but unfortunately very few details are known."},
 {"key": "94ec767723124ad1", "fields": ["care.breeding"], "tr": "Hobide üretilmesinin gerçekleştiği düşünülmemektedir.", "en": "It is not thought to have been achieved in the hobby."},
 {"key": "9502a2e22af1f240", "fields": ["care.sexing"], "tr": "Erkekler çok daha parlaktır ve yüzgeçleri belirgin biçimde daha uzundur.", "en": "Males are much brighter and have significantly longer finnage."},

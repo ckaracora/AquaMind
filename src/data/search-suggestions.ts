@@ -212,7 +212,7 @@ export const searchSuggestions: SearchSuggestion[] = [
     term: "Komando çöpçü",
     speciesIds: ["peppered-cory"],
     evidence: [
-      { url: "https://www.akvaryum.com/corydoras_sterbai_uretimi_makaler_18_2774.asp", quote: "Çöpçü Üretimi (Corydoras Paleatus - Komando Çöpçü)" },
+      { url: "https://www.akvaryum.com/copcu_uretimi_corydoras_paleatus_-_komando_copcu_makaler_18_106.asp", quote: "Çöpçü Üretimi (Corydoras Paleatus - Komando Çöpçü)" },
       { url: "https://www.lepisteskulubu.org/2019_03_07_archive.html", quote: "Çöpçüler (Callichthyidae ailesinin tüm cinsleri ve türleri; komando çöpçü, bronz çöpçü, juli çöpçü, panda çöpçü ve diğerleri)" },
     ],
     addedAt: "2026-11-14",
@@ -231,7 +231,7 @@ export const searchSuggestions: SearchSuggestion[] = [
     speciesIds: ["oscar"],
     evidence: [
       { url: "https://www.lepisteskulubu.org/2019_03_07_archive.html", quote: "Astronot balığı (Astronotus ocellatus)" },
-      { url: "https://e-evcil.com/pedidetay/papagan-ciklet-462", quote: "Sağlıklı albino astronot balığı 20cm" },
+      { url: "https://e-evcil.com/pedidetay/astronotus-ocellatus-astronot-oscar-39", quote: "Astronotus ocellatus, halk arasında genellikle \"astronot balığı\" olarak bilinir." },
     ],
     addedAt: "2026-11-14",
   },
@@ -266,8 +266,8 @@ export const searchSuggestions: SearchSuggestion[] = [
     term: "Koi balığı",
     speciesIds: ["koi-carp"],
     evidence: [
-      { url: "https://doldurkabi.com/hayvan-ansiklopedisi/baliklar/moli", quote: "Discus Diskus Balığı Koi Koi Balığı" },
-      { url: "https://blog.petzzshop.com/akvaryum-icin-en-ideal-su-bitkileri/", quote: "Akvaryum Koi Balığı Bakımı ve Özellikleri" },
+      { url: "https://dergipark.org.tr/tr/pub/actaquatr/article/587691", quote: "Koi balığı (Cyprinus carpio, Linnaeus, 1758) Yetiştiriciliğinde Argulus japonicus (Thiele, 1900) Enfestasyonu" },
+      { url: "https://blog.petzzshop.com/koi-baligi/", quote: "Koi Balığı Bakımı ve Özellikleri (Koi Balığı Efsanesi)" },
     ],
     addedAt: "2026-11-14",
   },
@@ -290,7 +290,7 @@ export const plantSearchSuggestions: PlantSearchSuggestion[] = [
     evidence: [
       { url: "https://www.bitki.market/java-moss/", quote: "Java yosunu olarak da bilinen bitki, akvaryum hobisinde en çok tercih edilen yosun türüdür." },
       { url: "https://www.evcilal.com/blog/icerik/karides-akvaryumu-kurulumu", quote: "Java moss (Java yosunu), anubias ve cryptocoryne gibi bitkiler, karides akvaryumlarında tercih edilen seçeneklerdir." },
-      { url: "https://www.lepisteskulubu.org/2019_03_07_archive.html", quote: "Java yosunu (Vesicularia dubyana)" },
+      { url: "https://www.akvared.net/urun/dennerle-plants-taxiphyllum-barbieri-bogor-moss-plantit-porsiyon", quote: "Taxiphyllum barbieri, yanlışlıkla Java yosunu olarak adlandırılır." },
     ],
     addedAt: "2026-11-14",
   },

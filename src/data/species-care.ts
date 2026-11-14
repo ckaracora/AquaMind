@@ -1,6 +1,6 @@
 // Tür bakım bilgisi: beslenme, cinsiyet ayrımı, üreme, ömür, bakım zorluğu, yüzme bölgesi ve su sertliği (karar yok: veri sprinti E3, 2026-11-14).
-// Her alan yalnızca kaynak sayfada açıkça yazana dayanır; kaynak yazmıyorsa alan yoktur ve kayıt olmaması "bilgi yok" demektir. Kanıt (sayfa adresi ve
-// kısa alıntı) alan başına `sources` içindedir; metin çevirileri `packages/localization/translations/{en,es}-species-care.json` dosyalarındadır.
+// Her alan yalnızca kaynak sayfada açıkça yazana dayanır; kaynak yazmıyorsa alan yoktur ve kayıt olmaması "bilgi yok" demektir.
+// Kaynak sayfa adresleri alan başına `sources` içindedir; metin çevirileri `packages/localization/translations/{en,es}-species-care.json` dosyalarındadır.
 // Bu dosya yalnız tür kartı ve ayrıntı ekranı gibi gereken yerde dinamik içe aktarmayla (`import("@/data/species-care")`) yüklenir; ilk yüklemeye girmez.
 // Su sertliği yalnız kaydedilir, uyumluluk hesabına girmez. Sertlik dGH (Alman derecesi); kaynak başka birim verdiyse çevrilmiştir.
 // `lifespan.qualifier`: yok = aralık, atLeast = en az, upTo = en çok, about = yaklaşık, maxRecorded = kayıtlı en yüksek yaş.
@@ -74,7 +74,7 @@ export const speciesCare: Record<string, SpeciesCare> = {
   "altum-angelfish": {
     diet: "Bu balıklara düzenli olarak canlı yem sunulması gerekir.",
     sexing: "Cinsiyeti ayırmak zordur.",
-    breeding: "Discus türlerinde üretim çok zor olabilir.",
+    breeding: "Altum melek balığında üretim çok zor olabilir.",
     hardnessDgh: [0, 5],
     sources: { diet: "https://www.seriouslyfish.com/species/pterophyllum-altum/", sexing: "https://www.seriouslyfish.com/species/pterophyllum-altum/", breeding: "https://www.seriouslyfish.com/species/pterophyllum-altum/", hardness: "https://www.seriouslyfish.com/species/pterophyllum-altum/" },
     verifiedAt: "2026-11-14",
@@ -404,7 +404,7 @@ export const speciesCare: Record<string, SpeciesCare> = {
     breeding: "Neocaridina'nın üremesi için özel bir işlem gerekmez.",
     lifespan: { years: [1.5, 1.5], qualifier: "upTo" },
     hardnessDgh: [8, 18],
-    sources: { diet: "https://www.practicalfishkeeping.co.uk/features/frequently-asked-questions-on-neocaridina-shrimps/", sexing: "https://www.fishkeeper.co.uk/fish/freshwater/miscellaneous/cherry-shrimp", breeding: "https://www.practicalfishkeeping.co.uk/features/frequently-asked-questions-on-neocaridina-shrimps/", lifespan: "https://www.practicalfishkeeping.co.uk/features/frequently-asked-questions-on-neocaridina-shrimps/", hardness: "https://www.practicalfishkeeping.co.uk/features/frequently-asked-questions-on-neocaridina-shrimps/" },
+    sources: { diet: "https://www.practicalfishkeeping.co.uk/features/frequently-asked-questions-on-neocaridina-shrimps/", sexing: "https://www.fishkeeper.co.uk/fish/freshwater/miscellaneous/cherry-shrimp", breeding: "https://www.practicalfishkeeping.co.uk/features/frequently-asked-questions-on-neocaridina-shrimps/", lifespan: "https://www.practicalfishkeeping.co.uk/features/frequently-asked-questions-on-neocaridina-shrimps/", hardness: "https://www.practicalfishkeeping.co.uk/features/an-introduction-to-shrimp/" },
     verifiedAt: "2026-11-14",
   },
   "black-ruby-barb": {
@@ -488,7 +488,7 @@ export const speciesCare: Record<string, SpeciesCare> = {
     breeding: "Neocaridina'nın üremesi için özel bir işlem gerekmez.",
     lifespan: { years: [1.5, 1.5], qualifier: "upTo" },
     hardnessDgh: [8, 18],
-    sources: { diet: "https://www.practicalfishkeeping.co.uk/features/frequently-asked-questions-on-neocaridina-shrimps/", sexing: "https://www.fishkeeper.co.uk/fish/freshwater/miscellaneous/cherry-shrimp", breeding: "https://www.practicalfishkeeping.co.uk/features/frequently-asked-questions-on-neocaridina-shrimps/", lifespan: "https://www.practicalfishkeeping.co.uk/features/frequently-asked-questions-on-neocaridina-shrimps/", hardness: "https://www.practicalfishkeeping.co.uk/features/frequently-asked-questions-on-neocaridina-shrimps/" },
+    sources: { diet: "https://www.practicalfishkeeping.co.uk/features/frequently-asked-questions-on-neocaridina-shrimps/", sexing: "https://www.fishkeeper.co.uk/fish/freshwater/miscellaneous/cherry-shrimp", breeding: "https://www.practicalfishkeeping.co.uk/features/frequently-asked-questions-on-neocaridina-shrimps/", lifespan: "https://www.practicalfishkeeping.co.uk/features/frequently-asked-questions-on-neocaridina-shrimps/", hardness: "https://www.practicalfishkeeping.co.uk/features/an-introduction-to-shrimp/" },
     verifiedAt: "2026-11-14",
   },
   "blue-acara": {
@@ -505,7 +505,7 @@ export const speciesCare: Record<string, SpeciesCare> = {
     breeding: "Neocaridina'nın üremesi için özel bir işlem gerekmez.",
     lifespan: { years: [1.5, 1.5], qualifier: "upTo" },
     hardnessDgh: [8, 18],
-    sources: { diet: "https://www.practicalfishkeeping.co.uk/features/frequently-asked-questions-on-neocaridina-shrimps/", sexing: "https://www.fishkeeper.co.uk/fish/freshwater/miscellaneous/cherry-shrimp", breeding: "https://www.practicalfishkeeping.co.uk/features/frequently-asked-questions-on-neocaridina-shrimps/", lifespan: "https://www.practicalfishkeeping.co.uk/features/frequently-asked-questions-on-neocaridina-shrimps/", hardness: "https://www.practicalfishkeeping.co.uk/features/frequently-asked-questions-on-neocaridina-shrimps/" },
+    sources: { diet: "https://www.practicalfishkeeping.co.uk/features/frequently-asked-questions-on-neocaridina-shrimps/", sexing: "https://www.fishkeeper.co.uk/fish/freshwater/miscellaneous/cherry-shrimp", breeding: "https://www.practicalfishkeeping.co.uk/features/frequently-asked-questions-on-neocaridina-shrimps/", lifespan: "https://www.practicalfishkeeping.co.uk/features/frequently-asked-questions-on-neocaridina-shrimps/", hardness: "https://www.practicalfishkeeping.co.uk/features/an-introduction-to-shrimp/" },
     verifiedAt: "2026-11-14",
   },
   "blue-black-rili-shrimp": {
@@ -514,7 +514,7 @@ export const speciesCare: Record<string, SpeciesCare> = {
     breeding: "Neocaridina'nın üremesi için özel bir işlem gerekmez.",
     lifespan: { years: [1.5, 1.5], qualifier: "upTo" },
     hardnessDgh: [8, 18],
-    sources: { diet: "https://www.practicalfishkeeping.co.uk/features/frequently-asked-questions-on-neocaridina-shrimps/", sexing: "https://www.fishkeeper.co.uk/fish/freshwater/crustaceans/rili-shrimp", breeding: "https://www.practicalfishkeeping.co.uk/features/frequently-asked-questions-on-neocaridina-shrimps/", lifespan: "https://www.practicalfishkeeping.co.uk/features/frequently-asked-questions-on-neocaridina-shrimps/", hardness: "https://www.practicalfishkeeping.co.uk/features/frequently-asked-questions-on-neocaridina-shrimps/" },
+    sources: { diet: "https://www.practicalfishkeeping.co.uk/features/frequently-asked-questions-on-neocaridina-shrimps/", sexing: "https://www.fishkeeper.co.uk/fish/freshwater/crustaceans/rili-shrimp", breeding: "https://www.practicalfishkeeping.co.uk/features/frequently-asked-questions-on-neocaridina-shrimps/", lifespan: "https://www.practicalfishkeeping.co.uk/features/frequently-asked-questions-on-neocaridina-shrimps/", hardness: "https://www.practicalfishkeeping.co.uk/features/an-introduction-to-shrimp/" },
     verifiedAt: "2026-11-14",
   },
   "blue-bolt-shrimp": {
@@ -541,7 +541,7 @@ export const speciesCare: Record<string, SpeciesCare> = {
     breeding: "Neocaridina'nın üremesi için özel bir işlem gerekmez.",
     lifespan: { years: [1.5, 1.5], qualifier: "upTo" },
     hardnessDgh: [8, 18],
-    sources: { diet: "https://www.practicalfishkeeping.co.uk/features/frequently-asked-questions-on-neocaridina-shrimps/", sexing: "https://www.fishkeeper.co.uk/fish/freshwater/miscellaneous/cherry-shrimp", breeding: "https://www.practicalfishkeeping.co.uk/features/frequently-asked-questions-on-neocaridina-shrimps/", lifespan: "https://www.practicalfishkeeping.co.uk/features/frequently-asked-questions-on-neocaridina-shrimps/", hardness: "https://www.practicalfishkeeping.co.uk/features/frequently-asked-questions-on-neocaridina-shrimps/" },
+    sources: { diet: "https://www.practicalfishkeeping.co.uk/features/frequently-asked-questions-on-neocaridina-shrimps/", sexing: "https://www.fishkeeper.co.uk/fish/freshwater/miscellaneous/cherry-shrimp", breeding: "https://www.practicalfishkeeping.co.uk/features/frequently-asked-questions-on-neocaridina-shrimps/", lifespan: "https://www.practicalfishkeeping.co.uk/features/frequently-asked-questions-on-neocaridina-shrimps/", hardness: "https://www.practicalfishkeeping.co.uk/features/an-introduction-to-shrimp/" },
     verifiedAt: "2026-11-14",
   },
   "blue-emperor-tetra": {
@@ -558,7 +558,7 @@ export const speciesCare: Record<string, SpeciesCare> = {
     breeding: "Neocaridina'nın üremesi için özel bir işlem gerekmez.",
     lifespan: { years: [1.5, 1.5], qualifier: "upTo" },
     hardnessDgh: [8, 18],
-    sources: { diet: "https://www.practicalfishkeeping.co.uk/features/frequently-asked-questions-on-neocaridina-shrimps/", sexing: "https://www.fishkeeper.co.uk/fish/freshwater/miscellaneous/cherry-shrimp", breeding: "https://www.practicalfishkeeping.co.uk/features/frequently-asked-questions-on-neocaridina-shrimps/", lifespan: "https://www.practicalfishkeeping.co.uk/features/frequently-asked-questions-on-neocaridina-shrimps/", hardness: "https://www.practicalfishkeeping.co.uk/features/frequently-asked-questions-on-neocaridina-shrimps/" },
+    sources: { diet: "https://www.practicalfishkeeping.co.uk/features/frequently-asked-questions-on-neocaridina-shrimps/", sexing: "https://www.fishkeeper.co.uk/fish/freshwater/miscellaneous/cherry-shrimp", breeding: "https://www.practicalfishkeeping.co.uk/features/frequently-asked-questions-on-neocaridina-shrimps/", lifespan: "https://www.practicalfishkeeping.co.uk/features/frequently-asked-questions-on-neocaridina-shrimps/", hardness: "https://www.practicalfishkeeping.co.uk/features/an-introduction-to-shrimp/" },
     verifiedAt: "2026-11-14",
   },
   "blue-neon-goby-atropurpureus": {
@@ -746,7 +746,7 @@ export const speciesCare: Record<string, SpeciesCare> = {
     breeding: "Neocaridina'nın üremesi için özel bir işlem gerekmez.",
     lifespan: { years: [1.5, 1.5], qualifier: "upTo" },
     hardnessDgh: [8, 18],
-    sources: { diet: "https://www.practicalfishkeeping.co.uk/features/frequently-asked-questions-on-neocaridina-shrimps/", sexing: "https://www.fishkeeper.co.uk/fish/freshwater/crustaceans/rili-shrimp", breeding: "https://www.practicalfishkeeping.co.uk/features/frequently-asked-questions-on-neocaridina-shrimps/", lifespan: "https://www.practicalfishkeeping.co.uk/features/frequently-asked-questions-on-neocaridina-shrimps/", hardness: "https://www.practicalfishkeeping.co.uk/features/frequently-asked-questions-on-neocaridina-shrimps/" },
+    sources: { diet: "https://www.practicalfishkeeping.co.uk/features/frequently-asked-questions-on-neocaridina-shrimps/", sexing: "https://www.fishkeeper.co.uk/fish/freshwater/crustaceans/rili-shrimp", breeding: "https://www.practicalfishkeeping.co.uk/features/frequently-asked-questions-on-neocaridina-shrimps/", lifespan: "https://www.practicalfishkeeping.co.uk/features/frequently-asked-questions-on-neocaridina-shrimps/", hardness: "https://www.practicalfishkeeping.co.uk/features/an-introduction-to-shrimp/" },
     verifiedAt: "2026-11-14",
   },
   "cardinal-sulawesi-shrimp": {
@@ -879,7 +879,7 @@ export const speciesCare: Record<string, SpeciesCare> = {
     breeding: "Neocaridina'nın üremesi için özel bir işlem gerekmez.",
     lifespan: { years: [1.5, 1.5], qualifier: "upTo" },
     hardnessDgh: [8, 18],
-    sources: { diet: "https://www.practicalfishkeeping.co.uk/features/frequently-asked-questions-on-neocaridina-shrimps/", sexing: "https://www.fishkeeper.co.uk/fish/freshwater/miscellaneous/cherry-shrimp", breeding: "https://www.practicalfishkeeping.co.uk/features/frequently-asked-questions-on-neocaridina-shrimps/", lifespan: "https://www.practicalfishkeeping.co.uk/features/frequently-asked-questions-on-neocaridina-shrimps/", hardness: "https://www.practicalfishkeeping.co.uk/features/frequently-asked-questions-on-neocaridina-shrimps/" },
+    sources: { diet: "https://www.practicalfishkeeping.co.uk/features/frequently-asked-questions-on-neocaridina-shrimps/", sexing: "https://www.fishkeeper.co.uk/fish/freshwater/miscellaneous/cherry-shrimp", breeding: "https://www.practicalfishkeeping.co.uk/features/frequently-asked-questions-on-neocaridina-shrimps/", lifespan: "https://www.practicalfishkeeping.co.uk/features/frequently-asked-questions-on-neocaridina-shrimps/", hardness: "https://www.practicalfishkeeping.co.uk/features/an-introduction-to-shrimp/" },
     verifiedAt: "2026-11-14",
   },
   "clown-killifish": {
@@ -1469,7 +1469,7 @@ export const speciesCare: Record<string, SpeciesCare> = {
     breeding: "Neocaridina'nın üremesi için özel bir işlem gerekmez.",
     lifespan: { years: [1.5, 1.5], qualifier: "upTo" },
     hardnessDgh: [8, 18],
-    sources: { diet: "https://www.practicalfishkeeping.co.uk/features/frequently-asked-questions-on-neocaridina-shrimps/", sexing: "https://www.fishkeeper.co.uk/fish/freshwater/miscellaneous/cherry-shrimp", breeding: "https://www.practicalfishkeeping.co.uk/features/frequently-asked-questions-on-neocaridina-shrimps/", lifespan: "https://www.practicalfishkeeping.co.uk/features/frequently-asked-questions-on-neocaridina-shrimps/", hardness: "https://www.practicalfishkeeping.co.uk/features/frequently-asked-questions-on-neocaridina-shrimps/" },
+    sources: { diet: "https://www.practicalfishkeeping.co.uk/features/frequently-asked-questions-on-neocaridina-shrimps/", sexing: "https://www.fishkeeper.co.uk/fish/freshwater/miscellaneous/cherry-shrimp", breeding: "https://www.practicalfishkeeping.co.uk/features/frequently-asked-questions-on-neocaridina-shrimps/", lifespan: "https://www.practicalfishkeeping.co.uk/features/frequently-asked-questions-on-neocaridina-shrimps/", hardness: "https://www.practicalfishkeeping.co.uk/features/an-introduction-to-shrimp/" },
     verifiedAt: "2026-11-14",
   },
   "green-jelly-shrimp": {
@@ -1478,7 +1478,7 @@ export const speciesCare: Record<string, SpeciesCare> = {
     breeding: "Neocaridina'nın üremesi için özel bir işlem gerekmez.",
     lifespan: { years: [1.5, 1.5], qualifier: "upTo" },
     hardnessDgh: [8, 18],
-    sources: { diet: "https://www.practicalfishkeeping.co.uk/features/frequently-asked-questions-on-neocaridina-shrimps/", sexing: "https://www.fishkeeper.co.uk/fish/freshwater/miscellaneous/cherry-shrimp", breeding: "https://www.practicalfishkeeping.co.uk/features/frequently-asked-questions-on-neocaridina-shrimps/", lifespan: "https://www.practicalfishkeeping.co.uk/features/frequently-asked-questions-on-neocaridina-shrimps/", hardness: "https://www.practicalfishkeeping.co.uk/features/frequently-asked-questions-on-neocaridina-shrimps/" },
+    sources: { diet: "https://www.practicalfishkeeping.co.uk/features/frequently-asked-questions-on-neocaridina-shrimps/", sexing: "https://www.fishkeeper.co.uk/fish/freshwater/miscellaneous/cherry-shrimp", breeding: "https://www.practicalfishkeeping.co.uk/features/frequently-asked-questions-on-neocaridina-shrimps/", lifespan: "https://www.practicalfishkeeping.co.uk/features/frequently-asked-questions-on-neocaridina-shrimps/", hardness: "https://www.practicalfishkeeping.co.uk/features/an-introduction-to-shrimp/" },
     verifiedAt: "2026-11-14",
   },
   "green-laser-cory-cw009": {
@@ -2041,7 +2041,7 @@ export const speciesCare: Record<string, SpeciesCare> = {
     breeding: "Neocaridina'nın üremesi için özel bir işlem gerekmez.",
     lifespan: { years: [1.5, 1.5], qualifier: "upTo" },
     hardnessDgh: [8, 18],
-    sources: { diet: "https://www.practicalfishkeeping.co.uk/features/frequently-asked-questions-on-neocaridina-shrimps/", sexing: "https://www.fishkeeper.co.uk/fish/freshwater/crustaceans/rili-shrimp", breeding: "https://www.practicalfishkeeping.co.uk/features/frequently-asked-questions-on-neocaridina-shrimps/", lifespan: "https://www.practicalfishkeeping.co.uk/features/frequently-asked-questions-on-neocaridina-shrimps/", hardness: "https://www.practicalfishkeeping.co.uk/features/frequently-asked-questions-on-neocaridina-shrimps/" },
+    sources: { diet: "https://www.practicalfishkeeping.co.uk/features/frequently-asked-questions-on-neocaridina-shrimps/", sexing: "https://www.fishkeeper.co.uk/fish/freshwater/crustaceans/rili-shrimp", breeding: "https://www.practicalfishkeeping.co.uk/features/frequently-asked-questions-on-neocaridina-shrimps/", lifespan: "https://www.practicalfishkeeping.co.uk/features/frequently-asked-questions-on-neocaridina-shrimps/", hardness: "https://www.practicalfishkeeping.co.uk/features/an-introduction-to-shrimp/" },
     verifiedAt: "2026-11-14",
   },
   "orange-sakura-shrimp": {
@@ -2050,7 +2050,7 @@ export const speciesCare: Record<string, SpeciesCare> = {
     breeding: "Neocaridina'nın üremesi için özel bir işlem gerekmez.",
     lifespan: { years: [1.5, 1.5], qualifier: "upTo" },
     hardnessDgh: [8, 18],
-    sources: { diet: "https://www.practicalfishkeeping.co.uk/features/frequently-asked-questions-on-neocaridina-shrimps/", sexing: "https://www.fishkeeper.co.uk/fish/freshwater/miscellaneous/cherry-shrimp", breeding: "https://www.practicalfishkeeping.co.uk/features/frequently-asked-questions-on-neocaridina-shrimps/", lifespan: "https://www.practicalfishkeeping.co.uk/features/frequently-asked-questions-on-neocaridina-shrimps/", hardness: "https://www.practicalfishkeeping.co.uk/features/frequently-asked-questions-on-neocaridina-shrimps/" },
+    sources: { diet: "https://www.practicalfishkeeping.co.uk/features/frequently-asked-questions-on-neocaridina-shrimps/", sexing: "https://www.fishkeeper.co.uk/fish/freshwater/miscellaneous/cherry-shrimp", breeding: "https://www.practicalfishkeeping.co.uk/features/frequently-asked-questions-on-neocaridina-shrimps/", lifespan: "https://www.practicalfishkeeping.co.uk/features/frequently-asked-questions-on-neocaridina-shrimps/", hardness: "https://www.practicalfishkeeping.co.uk/features/an-introduction-to-shrimp/" },
     verifiedAt: "2026-11-14",
   },
   "orange-seam-pleco-l106": {
@@ -2523,7 +2523,7 @@ export const speciesCare: Record<string, SpeciesCare> = {
     breeding: "Neocaridina'nın üremesi için özel bir işlem gerekmez.",
     lifespan: { years: [1.5, 1.5], qualifier: "upTo" },
     hardnessDgh: [8, 18],
-    sources: { diet: "https://www.practicalfishkeeping.co.uk/features/frequently-asked-questions-on-neocaridina-shrimps/", sexing: "https://www.fishkeeper.co.uk/fish/freshwater/crustaceans/rili-shrimp", breeding: "https://www.practicalfishkeeping.co.uk/features/frequently-asked-questions-on-neocaridina-shrimps/", lifespan: "https://www.practicalfishkeeping.co.uk/features/frequently-asked-questions-on-neocaridina-shrimps/", hardness: "https://www.practicalfishkeeping.co.uk/features/frequently-asked-questions-on-neocaridina-shrimps/" },
+    sources: { diet: "https://www.practicalfishkeeping.co.uk/features/frequently-asked-questions-on-neocaridina-shrimps/", sexing: "https://www.fishkeeper.co.uk/fish/freshwater/crustaceans/rili-shrimp", breeding: "https://www.practicalfishkeeping.co.uk/features/frequently-asked-questions-on-neocaridina-shrimps/", lifespan: "https://www.practicalfishkeeping.co.uk/features/frequently-asked-questions-on-neocaridina-shrimps/", hardness: "https://www.practicalfishkeeping.co.uk/features/an-introduction-to-shrimp/" },
     verifiedAt: "2026-11-14",
   },
   "red-sakura-shrimp": {
@@ -2532,7 +2532,7 @@ export const speciesCare: Record<string, SpeciesCare> = {
     breeding: "Neocaridina'nın üremesi için özel bir işlem gerekmez.",
     lifespan: { years: [1.5, 1.5], qualifier: "upTo" },
     hardnessDgh: [8, 18],
-    sources: { diet: "https://www.practicalfishkeeping.co.uk/features/frequently-asked-questions-on-neocaridina-shrimps/", sexing: "https://www.fishkeeper.co.uk/fish/freshwater/miscellaneous/cherry-shrimp", breeding: "https://www.practicalfishkeeping.co.uk/features/frequently-asked-questions-on-neocaridina-shrimps/", lifespan: "https://www.practicalfishkeeping.co.uk/features/frequently-asked-questions-on-neocaridina-shrimps/", hardness: "https://www.practicalfishkeeping.co.uk/features/frequently-asked-questions-on-neocaridina-shrimps/" },
+    sources: { diet: "https://www.practicalfishkeeping.co.uk/features/frequently-asked-questions-on-neocaridina-shrimps/", sexing: "https://www.fishkeeper.co.uk/fish/freshwater/miscellaneous/cherry-shrimp", breeding: "https://www.practicalfishkeeping.co.uk/features/frequently-asked-questions-on-neocaridina-shrimps/", lifespan: "https://www.practicalfishkeeping.co.uk/features/frequently-asked-questions-on-neocaridina-shrimps/", hardness: "https://www.practicalfishkeeping.co.uk/features/an-introduction-to-shrimp/" },
     verifiedAt: "2026-11-14",
   },
   "red-striped-killifish": {
@@ -3289,7 +3289,7 @@ export const speciesCare: Record<string, SpeciesCare> = {
     breeding: "Neocaridina'nın üremesi için özel bir işlem gerekmez.",
     lifespan: { years: [1.5, 1.5], qualifier: "upTo" },
     hardnessDgh: [8, 18],
-    sources: { diet: "https://www.practicalfishkeeping.co.uk/features/frequently-asked-questions-on-neocaridina-shrimps/", breeding: "https://www.practicalfishkeeping.co.uk/features/frequently-asked-questions-on-neocaridina-shrimps/", lifespan: "https://www.practicalfishkeeping.co.uk/features/frequently-asked-questions-on-neocaridina-shrimps/", hardness: "https://www.practicalfishkeeping.co.uk/features/frequently-asked-questions-on-neocaridina-shrimps/" },
+    sources: { diet: "https://www.practicalfishkeeping.co.uk/features/frequently-asked-questions-on-neocaridina-shrimps/", breeding: "https://www.practicalfishkeeping.co.uk/features/frequently-asked-questions-on-neocaridina-shrimps/", lifespan: "https://www.practicalfishkeeping.co.uk/features/frequently-asked-questions-on-neocaridina-shrimps/", hardness: "https://www.practicalfishkeeping.co.uk/features/an-introduction-to-shrimp/" },
     verifiedAt: "2026-11-14",
   },
   "white-spotted-doras": {
@@ -3331,7 +3331,7 @@ export const speciesCare: Record<string, SpeciesCare> = {
     breeding: "Neocaridina'nın üremesi için özel bir işlem gerekmez.",
     lifespan: { years: [1.5, 1.5], qualifier: "upTo" },
     hardnessDgh: [8, 18],
-    sources: { diet: "https://www.practicalfishkeeping.co.uk/features/frequently-asked-questions-on-neocaridina-shrimps/", sexing: "https://www.fishkeeper.co.uk/fish/freshwater/miscellaneous/yellow-fire-shrimp", breeding: "https://www.practicalfishkeeping.co.uk/features/frequently-asked-questions-on-neocaridina-shrimps/", lifespan: "https://www.practicalfishkeeping.co.uk/features/frequently-asked-questions-on-neocaridina-shrimps/", hardness: "https://www.practicalfishkeeping.co.uk/features/frequently-asked-questions-on-neocaridina-shrimps/" },
+    sources: { diet: "https://www.practicalfishkeeping.co.uk/features/frequently-asked-questions-on-neocaridina-shrimps/", sexing: "https://www.fishkeeper.co.uk/fish/freshwater/miscellaneous/yellow-fire-shrimp", breeding: "https://www.practicalfishkeeping.co.uk/features/frequently-asked-questions-on-neocaridina-shrimps/", lifespan: "https://www.practicalfishkeeping.co.uk/features/frequently-asked-questions-on-neocaridina-shrimps/", hardness: "https://www.practicalfishkeeping.co.uk/features/an-introduction-to-shrimp/" },
     verifiedAt: "2026-11-14",
   },
   "yellow-lab": {

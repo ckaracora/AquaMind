@@ -484,7 +484,7 @@
 {"key": "946a46e0179259d6", "fields": ["care.sexing"], "tr": "Dişilerin karnı daha yuvarlaktır ve biraz daha iridirler.", "es": "Las hembras tienen el vientre más redondeado y son ligeramente más grandes."},
 {"key": "94a5395717b28a09", "fields": ["care.breeding"], "tr": "Cinsin diğer türlerine benzer biçimde üretilebilir.", "es": "Se puede reproducir de forma similar a otras especies del género."},
 {"key": "94b704a9367de727", "fields": ["care.sexing"], "tr": "Erişkin erkekler genellikle daha az derin gövdeli ve biraz daha küçüktür.", "es": "Los machos adultos suelen tener un cuerpo menos alto y ser ligeramente más pequeños."},
-{"key": "94c4cb6ea3015814", "fields": ["care.breeding"], "tr": "Discus türlerinde üretim çok zor olabilir.", "es": "La reproducción puede ser muy difícil con los Altum."},
+{"key": "07d551d4bd911b6a", "fields": ["care.breeding"], "tr": "Altum melek balığında üretim çok zor olabilir.", "es": "La reproducción puede ser muy difícil con los Altum."},
 {"key": "94e01dae927db004", "fields": ["care.breeding"], "tr": "Üreme sağlanmıştır, ancak ne yazık ki ayrıntı çok azdır.", "es": "Se ha logrado su reproducción, pero lamentablemente se conocen muy pocos detalles."},
 {"key": "94ec767723124ad1", "fields": ["care.breeding"], "tr": "Hobide üretilmesinin gerçekleştiği düşünülmemektedir.", "es": "No se cree que se haya logrado en el hobby."},
 {"key": "9502a2e22af1f240", "fields": ["care.sexing"], "tr": "Erkekler çok daha parlaktır ve yüzgeçleri belirgin biçimde daha uzundur.", "es": "Los machos son mucho más brillantes y tienen aletas significativamente más largas."},

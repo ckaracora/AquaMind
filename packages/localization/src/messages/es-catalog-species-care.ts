@@ -487,7 +487,7 @@ export const esCatalogSpeciesCare: CatalogTexts = {
   "946a46e0179259d6": "Las hembras tienen el vientre más redondeado y son ligeramente más grandes.",
   "94a5395717b28a09": "Se puede reproducir de forma similar a otras especies del género.",
   "94b704a9367de727": "Los machos adultos suelen tener un cuerpo menos alto y ser ligeramente más pequeños.",
-  "94c4cb6ea3015814": "La reproducción puede ser muy difícil con los Altum.",
+  "07d551d4bd911b6a": "La reproducción puede ser muy difícil con los Altum.",
   "94e01dae927db004": "Se ha logrado su reproducción, pero lamentablemente se conocen muy pocos detalles.",
   "94ec767723124ad1": "No se cree que se haya logrado en el hobby.",
   "9502a2e22af1f240": "Los machos son mucho más brillantes y tienen aletas significativamente más largas.",

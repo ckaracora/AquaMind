@@ -487,7 +487,7 @@ export const enCatalogSpeciesCare: CatalogTexts = {
   "946a46e0179259d6": "Females are rounder-bellied and slightly larger.",
   "94a5395717b28a09": "It can be spawned in a similar way to other species in the genus.",
   "94b704a9367de727": "Adult males tend to be less deep-bodied and slightly smaller.",
-  "94c4cb6ea3015814": "Breeding can be very difficult with Altums.",
+  "07d551d4bd911b6a": "Breeding can be very difficult with Altums.",
   "94e01dae927db004": "Breeding has been achieved, but unfortunately very few details are known.",
   "94ec767723124ad1": "It is not thought to have been achieved in the hobby.",
   "9502a2e22af1f240": "Males are much brighter and have significantly longer finnage.",
