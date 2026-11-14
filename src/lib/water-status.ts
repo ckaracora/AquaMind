@@ -97,5 +97,7 @@ export function healthSummary(analysis: HealthAnalysis, hasData: boolean): { key
   if (!hasData) return { key: "noData", tone: "neutral" };
   if (analysis.status === "danger") return { key: "danger", tone: "danger" };
   if (analysis.status === "warning") return { key: "warning", tone: "warning" };
+  // Motor 1.18.0 (karar 0043): tanınmayan ya da doğrulanmamış canlı varken "sorun görünmüyor" denmez; sonuç eksiktir.
+  if (analysis.incomplete) return { key: "incomplete", tone: "neutral" };
   return { key: "good", tone: "good" };
 }

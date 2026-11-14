@@ -6,7 +6,9 @@
 // "Karides yer" kayıtlarının kapsamı (`smallShrimpOnly`: kaynak riski küçük karidesle ya da yavruyla sınırlıyor) 2026-11-12'de kaynak sayfaları
 // yeniden okunarak eklendi; işaretsiz kayıt bütün karideslerde uyarır (motor 1.16.0, docs/DECISIONS/0041-karides-tuzluluk-ve-baliksiz-dongu.md).
 
-export type BehaviorFlag = "finNipper" | "finNipTarget" | "eatsShrimp" | "shrimpSafe" | "eatsSnails" | "eatsSmallFish" | "notPiscivorous" | "conspecificAggression";
+// `peaceful` (motor 1.18.0, docs/DECISIONS/0043-eksik-degerlendirme-ve-hukum-kurallari.md): kaynak türü açıkça barışçıl ya da topluluk akvaryumuna
+// uygun sayıyor. Uyarı üretmez; motor türü yalnız "davranışı biliniyor" sayar ve "Değerlendirilemeyenler" kartına yazmaz.
+export type BehaviorFlag = "finNipper" | "finNipTarget" | "eatsShrimp" | "shrimpSafe" | "eatsSnails" | "eatsSmallFish" | "notPiscivorous" | "conspecificAggression" | "peaceful";
 
 export interface BehaviorRecord {
   flag: BehaviorFlag;

@@ -27,8 +27,8 @@ const species: Record<string, SpeciesProfileInput & { category: Livestock["categ
   disputedFighter: { id: "disputedFighter", commonName: "Tartışmalı kavgacı", adultSizeCm: 5, category: "fish", ...base, behavior: { conspecificAggression: { source: "Seriously Fish", value: "males", conflict: true } } },
   cold: { id: "cold", commonName: "Soğuk su", adultSizeCm: 5, category: "fish", ...base, temperature: [10, 18] },
   // Alan ve grup sarı (1.14.0'dan beri en az 60), filtre, ısıtıcı ve su ölçütleri tehlikede; iki tanınmayan canlı kaydıyla veri güveni 1/3:
-  // davranış cezası olmadan genel puan 53.
-  strained: { id: "strained", commonName: "Zorlanan", adultSizeCm: 6, category: "fish", ...base, minVolumeL: 1000, minGroup: 20, temperature: [24, 28], behavior: { conspecificAggression: { source: "Fishkeeper", value: "males" } } },
+  // davranış cezası olmadan genel puan 53. 1.18.0 (karar 0043): 400 L akvaryum 600 L isteyen türün yarısının üstünde; alan sarı kalır.
+  strained: { id: "strained", commonName: "Zorlanan", adultSizeCm: 6, category: "fish", ...base, minVolumeL: 600, minGroup: 20, temperature: [24, 28], behavior: { conspecificAggression: { source: "Fishkeeper", value: "males" } } },
 };
 
 const resolver: KnowledgeResolver = {

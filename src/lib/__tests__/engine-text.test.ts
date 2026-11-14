@@ -177,7 +177,8 @@ const scenarios: Array<[string, HealthAnalysis]> = [
   ["salyangoz yiyen balık", analyze(tank(), [animal("snailEater"), animal("snail", "snail", 3)], [])],
   ["güçlü akıntı", analyze(tank({ netVolumeLiters: 100 }), [animal("plain")], [device("strong")])],
   ["1.000 litrenin üstünde küçük filtre", analyze(tank({ netVolumeLiters: 1200 }), [animal("plain")], [device("big")])],
-  ["buçuklu boyda çok küçük akvaryum", analyze(tank({ lengthCm: 12, widthCm: 8, heightCm: 10, netVolumeLiters: 5 }), [animal("halfCm")], [])],
+  // 1.18.0 (karar 0043): hacim gerekenin yarısının üstünde (25 L ≥ 20 L), yalnız İsviçre ölçü sınırı kırmızı.
+  ["buçuklu boyda çok küçük akvaryum", analyze(tank({ lengthCm: 12, widthCm: 8, heightCm: 10, netVolumeLiters: 25 }), [animal("halfCm")], [])],
   ["üretici önerisinin hemen üstünde", analyze(tank({ netVolumeLiters: 600.01 }), [animal("plain")], [device("big")])],
   ["sınırı çok az aşan nitrit ve çok düşük amonyak", analyze(tank(), [animal("plain")], [], reading({ ammonia: 0.0001, ph: 6.5, temperature: 24, nitrite: 0.2004 }))],
   ["deniz akvaryumunda sınırı çok az aşan nitrat", analyze(tank({ type: "saltwater" }), [animal("marine")], [], reading({ nitrate: 100.0004, specificGravity: 1.024 }))],
@@ -215,6 +216,9 @@ const scenarios: Array<[string, HealthAnalysis]> = [
   // Motor 1.17.0 (karar 0042): güvenli aralığın bir okuma basamağı dışı sarı; yalnız balıkta alt uç (yön "low"), omurgasızlıda üst uç.
   ["deniz: yalnız balık, sınır bandında düşük tuzluluk", analyze(tank({ type: "saltwater" }), [animal("marine")], [], reading({ specificGravity: 1.016, ph: 8.1, nitrate: 10, temperature: 25 }))],
   ["deniz: omurgasızlı, sınır bandında yüksek tuzluluk", analyze(tank({ type: "saltwater" }), [animal("marine"), animal("snail", "snail")], [], reading({ specificGravity: 1.027, ph: 8.1, kh: 9, temperature: 25 }))],
+  // Motor 1.18.0 (karar 0043): net hacim gerekenin yarısından küçük; kaynağın uzunluğu olan (akvaryum daha kısa) ve olmayan tür.
+  ["gerekenin yarısından küçük akvaryum, uzunluk da kısa", analyze(tank({ lengthCm: 40, netVolumeLiters: 15 }), [animal("plain", "fish", 2)], [])],
+  ["gerekenin yarısından küçük akvaryum, kaynak uzunluk vermiyor", analyze(tank({ netVolumeLiters: 15 }), [animal("coldRange")], [])],
 ];
 const scenario = (name: string) => scenarios.find(([label]) => label === name)![1];
 const warningOf = (analysis: HealthAnalysis, code: string) => analysis.warnings.find((warning) => warning.code === code)!;
@@ -232,8 +236,8 @@ describe("motor metinleri dil dosyasından (karar 0021, 3. paket)", () => {
 
   it("motorun her kodu dil dosyasında var, dil dosyasında kullanılmayan kod yok, her kod en az bir kez sınandı", () => {
     // 1.13.0: beş deniz suyu kodu (karar 0030). 1.14.0 (karar 0037): yedi yeni uyarı kodu; ölçüt kodlarından `communityCaution` çıktı,
-    // `filterNotRecorded` ve `heaterNotRecorded` geldi. 1.16.0 (karar 0041): `cycleIncomplete`.
-    expect(sourceWarningCodes.size).toBe(61);
+    // `filterNotRecorded` ve `heaterNotRecorded` geldi. 1.16.0 (karar 0041): `cycleIncomplete`. 1.18.0 (karar 0043): `spaceTooSmall`.
+    expect(sourceWarningCodes.size).toBe(62);
     expect(sourceDetailCodes.size).toBe(39);
     expect(new Set(Object.keys(tr.warnings))).toEqual(sourceWarningCodes);
     expect(new Set(Object.keys(tr.metricDetails))).toEqual(sourceDetailCodes);
@@ -444,7 +448,8 @@ describe("motor metinleri dil dosyasından (karar 0021, 3. paket)", () => {
     // biçiminde sabit bir adla yapılmalı, ad motorun gönderdiği değişkenlerden olmalı ve türü okuyucuyla aynı olmalıdır.
     const kinds = new Map<string, Set<string>>();
     for (const analysis of [...fixture.map(({ result }) => result), ...scenarios.map(([, analysis]) => analysis)]) {
-      for (const params of [...analysis.warnings.map((warning) => warning.params), ...analysis.metrics.map((metric) => metric.detailParams)]) {
+      // 1.18.0 (karar 0043): "Değerlendirilemeyenler" tablosu da aynı dosyadadır; değişkenleri motorun `unevaluated` listesinden.
+      for (const params of [...analysis.warnings.map((warning) => warning.params), ...analysis.metrics.map((metric) => metric.detailParams), ...(analysis.unevaluated ?? []).map((item) => item.params)]) {
         for (const [key, value] of Object.entries(params)) kinds.set(key, (kinds.get(key) ?? new Set<string>()).add(Array.isArray(value) ? "list" : typeof value));
       }
     }
@@ -588,6 +593,7 @@ describe("motor metinleri dil dosyasından (karar 0021, 3. paket)", () => {
       "uyarı salinityOutOfRange": "number:count",
       "uyarı spaceLimited": "volume:volume | volume:volume length:length",
       "uyarı spaceNarrow": "volume:volume length:length length:width length:size length:minWidth | volume:volume length:width length:size length:minWidth",
+      "uyarı spaceTooSmall": "number:count volume:volume volume:aquariumVolume | number:count volume:volume volume:aquariumVolume length:length length:tankLength",
       "uyarı spaceSevere": "volume:volume length:length length:size length:minLength length:minDepth | volume:volume length:size length:minLength length:minDepth",
       "uyarı speciesPhOutOfRange": "measurement(2):value | measurement(2):value measurement(2):min measurement(2):max",
       "uyarı speciesTemperatureOutOfRange": "temperature:value | temperature:value temperatureNumber:min temperature:max",

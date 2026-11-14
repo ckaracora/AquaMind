@@ -64,6 +64,12 @@ describe("healthSummary", () => {
     expect(text("warning")).toBe("Sağlık analizinde dikkat gerektiren konular var.");
     expect(text("good")).toBe("Sağlık analizinde öne çıkan bir sorun görünmüyor.");
     expect(text("good")).not.toMatch(/her şey yolunda/);
+    // Motor 1.18.0 (karar 0043): tanınmayan canlı varken "sorun görünmüyor" denmez; "dikkat" ve "uygun değil" aynen kalır.
+    const incomplete = (status: HealthAnalysis["status"]) => ({ ...analysis(status), incomplete: true as const });
+    expect(healthSummary(incomplete("good"), true)).toEqual({ key: "incomplete", tone: "neutral" });
+    expect(healthSummary(incomplete("warning"), true)).toEqual({ key: "warning", tone: "warning" });
+    expect(healthSummary(incomplete("danger"), true)).toEqual({ key: "danger", tone: "danger" });
+    expect(messagesFor("tr").healthSummary.incomplete).not.toMatch(/sorun görünmüyor/);
   });
 });
 
@@ -82,6 +88,7 @@ describe("durum metinleri", () => {
       danger: "Sağlık analizi acil ilgilenmen gereken bir durum gösteriyor.",
       warning: "Sağlık analizinde dikkat gerektiren konular var.",
       good: "Sağlık analizinde öne çıkan bir sorun görünmüyor.",
+      incomplete: "Sağlık analizi eksik: bazı canlılar katalogda tanınmadı, sonuç onları kapsamıyor.",
     });
   });
 });

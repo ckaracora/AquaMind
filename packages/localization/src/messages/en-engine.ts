@@ -32,6 +32,9 @@ const spaceReference = (p: EngineTextParams, f: EngineTextFormat) =>
     ? `For the recorded number, a minimum of ${f.volume(num(p, "volume"))} and a length of ${f.length(num(p, "length"))} were used as the reference.`
     : `For the recorded number, a minimum of ${f.volume(num(p, "volume"))} was used as the reference; the source publishes no tank length.`;
 const fixed = (text: string): Text => () => text;
+const deviceKind = (category: string) => ({ filter: "filter", heater: "heater", air_pump: "air pump" } as Record<string, string>)[category] ?? "device";
+const deviceCalculation = (category: string) => (category === "heater" ? "heater" : "filtration");
+const animals = (p: EngineTextParams, f: EngineTextFormat) => `${f.number(num(p, "count"))} ${plural(num(p, "count"), "animal", "animals")}`;
 /** The animals whose range the latest reading is above (`above`) or below (`below`) (engine 1.14.0). */
 const outsideRange = (p: EngineTextParams) =>
   list(p, "above").length && list(p, "below").length
@@ -388,10 +391,27 @@ export const enEngine: EngineMessages = {
       message: (p, f) =>
         `${spaceReference(p, f)} The aquarium's width (${f.length(num(p, "width"))}) is less than twice the catalog's adult size of ${f.length(num(p, "size"))}. AquaMind adapts this recommendation from the size rule of the Swiss Animal Welfare Ordinance (width 2× body length); the ordinance uses body length without the tail fin, while AquaMind uses total length for most species. An aquarium at least ${f.length(num(p, "minWidth"))} wide is more suitable.`,
     },
+    spaceTooSmall: {
+      title: (p) => `${str(p, "name")}: aquarium too small`,
+      message: (p, f) =>
+        `Sources say ${str(p, "name")} needs at least ${f.volume(num(p, "volume"))} for the ${f.number(num(p, "count"))} recorded ${plural(num(p, "count"), "animal", "animals")}; the aquarium's net volume is ${f.volume(num(p, "aquariumVolume"))}, less than half of that.${flag(p, "lengthShort") ? ` Sources also call for a length of at least ${f.length(num(p, "length"))}; the aquarium is ${f.length(num(p, "tankLength"))} long.` : ""} This species shouldn't be kept in this aquarium.`,
+    },
     spaceSevere: {
       title: (p) => `${str(p, "name")}: aquarium too small`,
       message: (p, f) =>
         `${spaceReference(p, f)} The aquarium is also below the AquaMind limit adapted from the length (3×) and water depth (1× body length) limits in the size rule of the Swiss Animal Welfare Ordinance. The ordinance uses body length without the tail fin; AquaMind is stricter and uses the catalog's adult size of ${f.length(num(p, "size"))} (total length for most species): length at least ${f.length(num(p, "minLength"))}, water depth at least ${f.length(num(p, "minDepth"))}.`,
     },
+  },
+  unevaluatedTitle: "Not assessed",
+  unevaluatedIntro: "This result doesn't cover the items below; the score is based only on what we know.",
+  unevaluated: {
+    unknownAnimal: (p, f) => `${str(p, "name")} (${animals(p, f)}) isn't in the catalog; its needs and compatibility weren't taken into account.`,
+    unverifiedAnimal: (p, f) => `The catalog record for ${str(p, "name")} (${animals(p, f)}) hasn't been verified yet; its needs and compatibility weren't taken into account.`,
+    behaviorUnknown: (p) => `Sources don't say how ${str(p, "name")} gets along with other animals.`,
+    unknownEquipment: (p) =>
+      `${str(p, "name") ? `${str(p, "name")} (${deviceKind(str(p, "category"))})` : `An unnamed ${deviceKind(str(p, "category"))}`} isn't in the catalog; it wasn't included in the ${deviceCalculation(str(p, "category"))} calculation.`,
+    equipmentNoCapacity: (p) =>
+      `${str(p, "name") || `Unnamed ${deviceKind(str(p, "category"))}`}: the capacity data needed for the calculation is missing; it wasn't included in the ${deviceCalculation(str(p, "category"))} calculation.${str(p, "note") ? ` ${sentence(str(p, "note"))}` : ""}`,
+    noReading: fixed("There is no water reading; temperature, pH, ammonia, nitrite and nitrate weren't assessed."),
   },
 };

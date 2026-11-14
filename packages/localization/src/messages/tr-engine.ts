@@ -36,6 +36,9 @@ const spaceReference = (p: EngineTextParams, f: EngineTextFormat) =>
     ? `Kayıtlı adet için minimum ${f.volume(num(p, "volume"))} ve ${f.length(num(p, "length"))} uzunluk referansı kullanıldı.`
     : `Kayıtlı adet için minimum ${f.volume(num(p, "volume"))} referansı kullanıldı; kaynak tank uzunluğu yayımlamıyor.`;
 const fixed = (text: string): Text => () => text;
+/** Değerlendirilemeyen cihazın türü ve girmediği hesap (motor 1.18.0); motor yalnız filtre, ısıtıcı ve hava motorunu listeler. */
+const deviceKind = (category: string) => ({ filter: "filtre", heater: "ısıtıcı", air_pump: "hava motoru" } as Record<string, string>)[category] ?? "cihaz";
+const deviceCalculation = (category: string) => (category === "heater" ? "ısıtıcı" : "filtrasyon");
 /** Son ölçümün, aralığının üstünde (`above`) ve altında (`below`) kaldığı canlılar (motor 1.14.0). */
 const outsideRange = (p: EngineTextParams) =>
   list(p, "above").length && list(p, "below").length
@@ -397,12 +400,34 @@ export const trEngine = {
       message: (p, f) =>
         `${spaceReference(p, f)} Akvaryumun genişliği (${f.length(num(p, "width"))}), katalogdaki ${f.length(num(p, "size"))} yetişkin boyun iki katından az. AquaMind bu öneriyi İsviçre Hayvan Koruma Yönetmeliği'nin ölçü kuralından (genişlik 2× vücut boyu) uyarlar; yönetmelik kuyruk yüzgeci hariç boyu, AquaMind çoğu türde toplam boyu kullanır. Genişliği en az ${f.length(num(p, "minWidth"))} olan bir akvaryum daha uygundur.`,
     },
+    /** Motor 1.18.0 (karar 0043): net hacim, kayıtlı adet için gereken en az hacmin yarısından küçük (kesin tehlike). */
+    spaceTooSmall: {
+      title: (p) => `${str(p, "name")}: akvaryum çok küçük`,
+      message: (p, f) =>
+        `Kaynağa göre ${str(p, "name")} için kayıtlı ${f.number(num(p, "count"))} bireyle en az ${f.volume(num(p, "volume"))} gerekir; akvaryumun net hacmi ${f.volume(num(p, "aquariumVolume"))}, gerekenin yarısından da az.${flag(p, "lengthShort") ? ` Kaynak en az ${f.length(num(p, "length"))} uzunluk da istiyor; akvaryumun uzunluğu ${f.length(num(p, "tankLength"))}.` : ""} Bu tür bu akvaryumda tutulmamalı.`,
+    },
     spaceSevere: {
       title: (p) => `${str(p, "name")}: akvaryum çok küçük`,
       message: (p, f) =>
         `${spaceReference(p, f)} Akvaryum ayrıca İsviçre Hayvan Koruma Yönetmeliği'nin ölçü kuralındaki uzunluk (3×) ve su derinliği (1× vücut boyu) sınırlarından uyarlanan AquaMind sınırının altında. Yönetmelik kuyruk yüzgeci hariç boyu kullanır; AquaMind daha sıkı davranıp katalogdaki ${f.length(num(p, "size"))} yetişkin boyu (çoğu türde toplam boy) kullanır: uzunluk en az ${f.length(num(p, "minLength"))}, su derinliği en az ${f.length(num(p, "minDepth"))}.`,
     },
   } satisfies Record<string, { title: Text; message: Text }>,
+  /**
+   * "Değerlendirilemeyenler" kartı (motor 1.18.0, karar 0043): sağlık sayfasında hükmün altında, motorun `unevaluated` listesinden. Her madde tek
+   * cümledir; kodlar motorun `UnevaluatedCode` türüyle aynıdır (src/lib/__tests__/health-unevaluated.test.ts).
+   */
+  unevaluatedTitle: "Değerlendirilemeyenler",
+  unevaluatedIntro: "Bu sonuç aşağıdakileri kapsamıyor; puan yalnız bildiklerimize dayanıyor.",
+  unevaluated: {
+    unknownAnimal: (p, f) => `${str(p, "name")} (${f.number(num(p, "count"))} adet) katalogda yok; ihtiyaçları ve uyumu hesaba katılmadı.`,
+    unverifiedAnimal: (p, f) => `${str(p, "name")} (${f.number(num(p, "count"))} adet) için katalog kaydı henüz doğrulanmadı; ihtiyaçları ve uyumu hesaba katılmadı.`,
+    behaviorUnknown: (p) => `Kaynaklar ${str(p, "name")} türünün başka canlılarla uyumunu yazmıyor.`,
+    unknownEquipment: (p) =>
+      `${str(p, "name") ? `${str(p, "name")} (${deviceKind(str(p, "category"))})` : `Adı girilmemiş bir ${deviceKind(str(p, "category"))}`} katalogda yok; ${deviceCalculation(str(p, "category"))} hesabına katılmadı.`,
+    equipmentNoCapacity: (p) =>
+      `${str(p, "name") || `Adı girilmemiş ${deviceKind(str(p, "category"))}`}: hesap için gereken kapasite bilgisi eksik; ${deviceCalculation(str(p, "category"))} hesabına katılmadı.${str(p, "note") ? ` ${sentence(str(p, "note"))}` : ""}`,
+    noReading: fixed("Su ölçümü yok; sıcaklık, pH, amonyak, nitrit ve nitrat değerlendirilmedi."),
+  } satisfies Record<string, Text>,
 };
 
 /** Motor metinlerinin biçimi; başka bir dilin motor metinleri bu tipi karşılamalıdır. */

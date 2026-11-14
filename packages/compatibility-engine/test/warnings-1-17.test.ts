@@ -68,8 +68,12 @@ function expectDanger(result: ReturnType<typeof analyze>, label: string) {
 }
 
 describe("sürüm (karar 0042)", () => {
-  it("motor 1.17.0, kural seti 1.14.0", () => {
-    expect([ENGINE_VERSION, RULESET_VERSION]).toEqual(["1.17.0", "1.14.0"]);
+  // Güncel sürüm warnings-1-18.test.ts'te sınanır (karar 0043); burada 1.17.0'ın geride kalmadığı denetlenir.
+  it("motor en az 1.17.0, kural seti en az 1.14.0", () => {
+    const parts = (version: string) => version.split(".").map(Number);
+    const atLeast = (version: string, minimum: string) => parts(version).reduce((result, value, index) => result ?? (value === parts(minimum)[index] ? undefined : value > parts(minimum)[index]), undefined as boolean | undefined) ?? true;
+    expect(atLeast(ENGINE_VERSION, "1.17.0")).toBe(true);
+    expect(atLeast(RULESET_VERSION, "1.14.0")).toBe(true);
   });
 });
 

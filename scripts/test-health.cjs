@@ -602,7 +602,8 @@ for (const [specificGravity, expected] of [[1.016, "danger"], [1.017, "warning"]
 
 {
   const analysis = analyzeAquarium(
-    aquarium({ type: "saltwater", netVolumeLiters: 80, lengthCm: 70 }),
+    // 1.18.0 (karar 0043): 100 litrenin (200 L'nin yarısı) altı "akvaryum çok küçük" kesin tehlikesidir; burada sarı "alan sınırda" sınanır.
+    aquarium({ type: "saltwater", netVolumeLiters: 120, lengthCm: 70 }),
     [animal("maroon-clownfish", "Maroon palyaço balığı", 2), animal("ocellaris-clownfish", "Ocellaris palyaço balığı", 2)],
     [],
     { id: "marine-water-maroon", aquariumId: "test-aquarium", measuredAt: "2026-08-31", temperature: 25, ph: 8.2, specificGravity: 1.023 },
@@ -750,7 +751,8 @@ for (const [specificGravity, expected] of [[1.016, "danger"], [1.017, "warning"]
   );
   const spaceWarning = analysis.warnings.find((warning) => warning.title === "Piquiti peacock bass: akvaryum çok küçük");
   assert(spaceWarning, "Cichla piquiti 5.000 litre/300 cm altındaki akvaryuma önerilmemeli");
-  assert(spaceWarning.message.includes("5000 L") && spaceWarning.message.includes("300 cm"), "Cichla piquiti alan uyarısı kaynaklı hacim ve uzunluğu göstermeli");
+  // 1.18.0 (karar 0043): hacim gerekenin yarısından küçük; metin akvaryumun ve türün hacmini, kaynağın uzunluğunu birlikte söyler.
+  assert(spaceWarning.message.includes("5000 L") && spaceWarning.message.includes("1000 L") && spaceWarning.message.includes("300 cm"), "Cichla piquiti alan uyarısı kaynaklı hacim ve uzunluğu göstermeli");
   assert(warningTitles(analysis).includes("Neon tetra için avlanma riski"), "Cichla piquiti küçük balıklarla seçildiğinde avlanma uyarısı vermeli");
   assert(warningTitles(analysis).includes("Piquiti peacock bass için tür akvaryumu önerilir"), "Cichla piquiti sıradan topluluk akvaryumunda tehlike üretmeli");
   assert(warningTitles(analysis).includes("Piquiti peacock bass: özel bakım gereksinimi"), "Cichla piquiti kaynak farkı ve uzman bakım uyarısını göstermeli");

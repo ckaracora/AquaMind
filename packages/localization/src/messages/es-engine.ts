@@ -33,6 +33,10 @@ const spaceReference = (p: EngineTextParams, f: EngineTextFormat) =>
     ? `Para la cantidad registrada se tomó como referencia un mínimo de ${f.volume(num(p, "volume"))} y una longitud de ${f.length(num(p, "length"))}.`
     : `Para la cantidad registrada se tomó como referencia un mínimo de ${f.volume(num(p, "volume"))}; la fuente no publica una longitud de acuario.`;
 const fixed = (text: string): Text => () => text;
+const deviceKind = (category: string) => ({ filter: "filtro", heater: "calentador", air_pump: "bomba de aire" } as Record<string, string>)[category] ?? "equipo";
+const unnamedDevice = (category: string) => (category === "air_pump" ? "Una bomba de aire sin nombre" : `Un ${deviceKind(category)} sin nombre`);
+const deviceCalculation = (category: string) => (category === "heater" ? "calefacción" : "filtración");
+const specimens = (p: EngineTextParams, f: EngineTextFormat) => `${f.number(num(p, "count"))} ${plural(num(p, "count"), "ejemplar", "ejemplares")}`;
 /** Los animales para los que la última medición queda por encima (`above`) o por debajo (`below`) de su rango (motor 1.14.0). */
 const outsideRange = (p: EngineTextParams) =>
   list(p, "above").length && list(p, "below").length
@@ -389,10 +393,27 @@ export const esEngine: EngineMessages = {
       message: (p, f) =>
         `${spaceReference(p, f)} El ancho del acuario (${f.length(num(p, "width"))}) es menor que el doble del tamaño adulto del catálogo, ${f.length(num(p, "size"))}. AquaMind adapta esta recomendación de la regla de dimensiones de la Ordenanza de Protección de los Animales de Suiza (ancho 2× la longitud del cuerpo); la ordenanza usa la longitud del cuerpo sin la aleta caudal, mientras que AquaMind usa la longitud total en la mayoría de las especies. Es más adecuado un acuario de al menos ${f.length(num(p, "minWidth"))} de ancho.`,
     },
+    spaceTooSmall: {
+      title: (p) => `${str(p, "name")}: acuario demasiado pequeño`,
+      message: (p, f) =>
+        `Según las fuentes, ${str(p, "name")} necesita al menos ${f.volume(num(p, "volume"))} para ${num(p, "count") === 1 ? "el ejemplar registrado" : `los ${f.number(num(p, "count"))} ejemplares registrados`}; el volumen neto del acuario es de ${f.volume(num(p, "aquariumVolume"))}, menos de la mitad.${flag(p, "lengthShort") ? ` Las fuentes también piden un largo de al menos ${f.length(num(p, "length"))}; el acuario mide ${f.length(num(p, "tankLength"))} de largo.` : ""} Esta especie no debe mantenerse en este acuario.`,
+    },
     spaceSevere: {
       title: (p) => `${str(p, "name")}: acuario demasiado pequeño`,
       message: (p, f) =>
         `${spaceReference(p, f)} Además, el acuario está por debajo del límite de AquaMind adaptado de los límites de largo (3×) y de profundidad del agua (1× la longitud del cuerpo) de la regla de dimensiones de la Ordenanza de Protección de los Animales de Suiza. La ordenanza usa la longitud del cuerpo sin la aleta caudal; AquaMind aplica un criterio más estricto y usa el tamaño adulto del catálogo, ${f.length(num(p, "size"))} (longitud total en la mayoría de las especies): largo de al menos ${f.length(num(p, "minLength"))}, profundidad del agua de al menos ${f.length(num(p, "minDepth"))}.`,
     },
+  },
+  unevaluatedTitle: "Sin evaluar",
+  unevaluatedIntro: "Este resultado no incluye lo siguiente; la puntuación se basa solo en lo que sabemos.",
+  unevaluated: {
+    unknownAnimal: (p, f) => `${str(p, "name")} (${specimens(p, f)}) no está en el catálogo; no se tuvieron en cuenta sus necesidades ni su compatibilidad.`,
+    unverifiedAnimal: (p, f) => `El registro del catálogo de ${str(p, "name")} (${specimens(p, f)}) aún no está verificado; no se tuvieron en cuenta sus necesidades ni su compatibilidad.`,
+    behaviorUnknown: (p) => `Las fuentes no indican cómo se lleva ${str(p, "name")} con otros animales.`,
+    unknownEquipment: (p) =>
+      `${str(p, "name") ? `${str(p, "name")} (${deviceKind(str(p, "category"))})` : unnamedDevice(str(p, "category"))} no está en el catálogo; no se incluyó en el cálculo de ${deviceCalculation(str(p, "category"))}.`,
+    equipmentNoCapacity: (p) =>
+      `${str(p, "name") || unnamedDevice(str(p, "category"))}: faltan los datos de capacidad que necesita el cálculo; no se incluyó en el cálculo de ${deviceCalculation(str(p, "category"))}.${str(p, "note") ? ` ${sentence(str(p, "note"))}` : ""}`,
+    noReading: fixed("No hay ninguna medición del agua; no se evaluaron la temperatura, el pH, el amoníaco, el nitrito ni el nitrato."),
   },
 };
