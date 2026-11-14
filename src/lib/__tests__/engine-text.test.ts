@@ -123,6 +123,9 @@ const species: Record<string, SpeciesProfileInput> = {
   wideNoLength: { id: "wideNoLength", commonName: "Uzunluksuz geniş tür", adultSizeCm: 20, minVolumeL: 200, minGroup: 1, temperature: [22, 27], ph: [6, 7.5], wasteFactor: 1 },
   // Motor 1.15.0 (karar 0040): kaynağın önerdiği çift ya da grupta "tek tutulmalı" çıkmadığı için bu kod altın fikstürde kalmadı.
   loner: { id: "loner", commonName: "Tek tutulan tür", adultSizeCm: 8, minVolumeL: 60, minGroup: 1, temperature: [22, 27], ph: [6, 7.5], wasteFactor: 0.8, behavior: { conspecificAggression: { source: "Seriously Fish", value: "all", condition: "Çok büyük akvaryum hariç" } } },
+  // 2026-11-14 (veri sprinti son kapı 2): altın fikstürün tür çiftleri yeni türlerle kaydı; "akıntı ihtiyaçları farklı" ölçüt kodu stub ile de sınanır.
+  lowFlowStub: { id: "lowFlowStub", commonName: "Sakin su türü", adultSizeCm: 4, minVolumeL: 40, minGroup: 1, temperature: [22, 27], ph: [6, 7.5], flow: "low", wasteFactor: 0.5 },
+  highFlowStub: { id: "highFlowStub", commonName: "Akıntı seven tür", adultSizeCm: 4, minVolumeL: 40, minGroup: 1, temperature: [22, 27], ph: [6, 7.5], flow: "high", wasteFactor: 0.5 },
 };
 const devices: Record<string, EquipmentProfileInput> = {
   skimmer: { id: "skimmer", category: "filter", brand: "Stub", model: "Skimmer", auxiliaryFiltration: true },
@@ -209,6 +212,7 @@ const scenarios: Array<[string, HealthAnalysis]> = [
   ["yalnız taban ısıtma kablosu", analyze(tank(), [animal("tropicalStub")], [device("substrateHeater")])],
   ["yalnız genişliği yetmeyen balıklar", analyze(tank({ lengthCm: 80, widthCm: 35, heightCm: 40, netVolumeLiters: 150 }), [animal("wide"), animal("wideNoLength")], [])],
   ["tek tutulması gereken türden iki birey", analyze(tank(), [animal("loner", "fish", 2)], [])],
+  ["düşük ve yüksek akıntı isteyen türler", analyze(tank({ netVolumeLiters: 150 }), [animal("lowFlowStub"), animal("highFlowStub")], [])],
   // Motor 1.16.0 (karar 0041): canlısız akvaryumda amonyak ya da nitrit; değerlerin üç birleşimi (ikisi, yalnız amonyak, yalnız nitrit).
   ["canlısız akvaryumda amonyak ve nitrit", analyze(tank(), [], [], reading({ ammonia: 2, ph: 7, temperature: 24, nitrite: 0.5 }))],
   ["canlısız akvaryumda yalnız amonyak", analyze(tank(), [], [], reading({ ammonia: 0.25, nitrite: 0 }))],
