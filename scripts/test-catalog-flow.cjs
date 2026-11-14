@@ -9208,3 +9208,7 @@ for (const [id, minVolumeL, minTankLengthCm] of [["jaguar-cichlid", 680, 182], [
   assert.deepEqual(speciesCatalog.find((item) => item.id === "prl-shrimp")?.temperature, [18, 22], "PRL karides sıcaklığı kural gelene kadar değişmemeli");
 }
 console.log(`Katalog akışı: ${equipmentCategories.length} ekipman kategorisi, ${livestockCategories.length} canlı sınıfı ve ${careProductCatalog.length} bakım ürünü başarıyla doğrulandı.`);
+
+require("../src/lib/__tests__/engine-identity-checks.ts").assertIdentity119Review().then(() => {
+  console.log("Kimlik kontrol turu 2: eski kayıtlar, tam/parçalı analiz eşitliği ve indirme sınırları doğrulandı.");
+}).catch((error) => { console.error(error); process.exitCode = 1; });

@@ -192,6 +192,22 @@ describe("kontrol turu: ekranın bir yeri 'eksik' ya da 'yetersiz' derken başka
     expect(ui.tr.healthSummary.incomplete).toContain("doğrulanmadı");
   });
 
+  // Kural 3 (2026-11-14, docs/DECISIONS/0044 ek): kimliği katalogda olmayan eski kaydın adları çelişiyorsa ya da bilimsel adı tanınmıyorsa
+  // kayıt sessizce bir türe bağlanmaz; tanınmayan canlı olarak "eksik değerlendirildi" yoluna gider. Tutarlı eski kayıt eşleşmeye devam eder.
+  it("çelişkili adlı eski kayıt tanınmayan canlıdır (incomplete); tutarlı eski kayıt ve geçerli kimlik eşleşir", () => {
+    const record = (commonName: string, scientificName: string | undefined, catalogId?: string): Livestock => ({ id: "o", aquariumId: "a", commonName, scientificName, ...(catalogId ? { catalogId } : {}), category: "fish", quantity: 4, addedAt: "2026-11-14" });
+    for (const animal of [record("Neon tetra", "Poecilia reticulata", "kaldirilmis-tur"), record("Lepistes", "Poecilia fantasia", "kaldirilmis-tur"), record("Lepistes", "Poecilia fantasia")]) {
+      const analysis = analyzeAquarium(aquarium, [animal], good, reading);
+      expect(analysis.incomplete, `${animal.commonName} / ${animal.scientificName}`).toBe(true);
+      expect(analysis.unevaluated?.map((item) => item.code), animal.commonName).toContain("unknownAnimal");
+    }
+    for (const animal of [record("Lepistes", "Poecilia reticulata", "kaldirilmis-tur"), record("Lepistes", undefined), record("Neon tetra", "Poecilia reticulata", "guppy")]) {
+      const analysis = analyzeAquarium(aquarium, [animal], good, reading);
+      expect(analysis.incomplete, `${animal.commonName} / ${animal.scientificName}`).toBeUndefined();
+      expect(analysis.status).toBe("good");
+    }
+  });
+
   it("yalnız tanınmayan canlı varken canlıya bağlı göstergeler (yük, alan, sosyal, uyum, ısıtıcı yoksa ısıtıcı) yeşil 'Uygun' değil 'Değerlendirilemedi'", () => {
     const analysis = analyzeAquarium(aquarium, [unknown], [device("f", filter)], reading);
     for (const key of ["load", "space", "social", "compatibility", "heater"]) expect(analysis.metrics.find((metric) => metric.key === key)?.status, key).toBe("good");

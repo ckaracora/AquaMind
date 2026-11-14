@@ -1,6 +1,6 @@
 import type { AquariumType, Livestock } from "@/types/aquarium";
 import { expandedSpeciesCatalog } from "./catalog-species-expanded";
-import { assertUniqueIds, isVerifiedSpeciesProfile, normalize } from "./catalog-shared";
+import { assertUniqueIds, isVerifiedSpeciesProfile, normalize, speciesIdForNames, speciesNameKeys } from "./catalog-shared";
 
 export interface SpeciesProfile {
   id: string; commonName: string; scientificName: string; category: Livestock["category"];
@@ -144,11 +144,11 @@ function speciesLookup(): SpeciesLookup {
   if (speciesLookupCache) return speciesLookupCache;
   const scientific = new Map<string, number>(), names = new Map<string, number>();
   const searchNames = speciesCatalog.map((profile, index) => {
-    const commonName = normalize(profile.commonName) ?? "", scientificName = normalize(profile.scientificName) ?? "", aliases = (profile.aliases ?? []).map((alias) => normalize(alias) ?? "");
+    const keys = speciesNameKeys(profile), [commonName, scientificName, ...aliases] = keys;
     rememberFirst(scientific, scientificName, index);
     rememberFirst(names, commonName, index);
     for (const alias of aliases) rememberFirst(names, alias, index);
-    return [commonName, scientificName, ...aliases];
+    return keys;
   });
   speciesLookupCache = { scientific, names, searchNames };
   return speciesLookupCache;
@@ -211,12 +211,16 @@ export const speciesMatchesForCatalogSearch = (value: string, category: Livestoc
   return speciesCatalog.filter((profile, index) => profile.category === category && speciesWaterTypes(profile).includes(waterType)
     && (searchNames[index].some((name) => name.includes(query)) || Boolean(translatedName?.(profile)?.includes(query))));
 };
-// Katalog kimliği yoksa eski kayıtlar bilimsel ada ya da ortak ada/eş ada göre eşlenir; birden fazla eşleşmede katalogda önce gelen kazanır.
+// Katalog kimliği yoksa ya da katalogda bulunmuyorsa eski kayıtlar bilimsel ada ya da ortak ada/eş ada göre eşlenir; aynı ad birden fazla
+// türün adıysa katalogda önce gelen kazanır. İki ad çelişiyorsa (bilimsel ad bir türü, ortak ad başka türü gösteriyor) ya da bilimsel ad
+// tanınmıyor ama ortak ad eşleşiyorsa kayıt çözülmez (`speciesIdForNames`, 2026-11-14, kural 3); parça yükleyici aynı kuralı kullanır.
 export const speciesForLivestock = (item: Livestock) => {
   const profile = speciesById(item.catalogId);
   if (profile) return profile;
-  const { scientific, names } = speciesLookup();
+  const { scientific, names, searchNames } = speciesLookup();
   const scientificName = normalize(item.scientificName), commonName = normalize(item.commonName);
-  const matches = [scientificName === undefined ? undefined : scientific.get(scientificName), commonName === undefined ? undefined : names.get(commonName)].filter((index): index is number => index !== undefined);
-  return matches.length ? speciesCatalog[Math.min(...matches)] : undefined;
+  const candidate = (index: number | undefined) => index === undefined ? undefined : { id: speciesCatalog[index].id, names: searchNames[index], index };
+  const byScientific = candidate(scientificName ? scientific.get(scientificName) : undefined), byCommon = candidate(commonName ? names.get(commonName) : undefined);
+  const id = speciesIdForNames(scientificName, commonName, byScientific, byCommon);
+  return id === undefined ? undefined : speciesCatalog[(id === byScientific?.id ? byScientific : byCommon)!.index];
 };

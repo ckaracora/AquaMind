@@ -95,6 +95,13 @@ describe("gereken kayıtlarla analiz", () => {
     ]));
     animals.push({ id: "l", aquariumId: "a", commonName: "Neon tetra", catalogId: "yok-boyle", category: "fish", quantity: 1, addedAt: "2026-01-01" });
     animals.push({ id: "l", aquariumId: "a", commonName: "Bilinmeyen balık", category: "fish", quantity: 1, addedAt: "2026-01-01" });
+    // Kural 3 (2026-11-14): iki adlı kayıtlar; çelişkili ad ve tanınmayan bilimsel ad çözülmez, tutarlı ad ve eski bilimsel ad eşleşir.
+    for (const [commonName, scientificName, catalogId] of [["Neon tetra", "Poecilia reticulata", "yok-boyle"], ["Lepistes", "Poecilia fantasia", undefined], ["Lepistes", "Poecilia reticulata", "yok-boyle"],
+      ["Benim balığım", "Poecilia reticulata", undefined], ["Midas ciklet", "Cichlasoma citrinellum", undefined], ["Guppy", "Poecilia reticulata", undefined]] as const) {
+      animals.push({ id: "l", aquariumId: "a", commonName, scientificName, ...(catalogId ? { catalogId } : {}), category: "fish", quantity: 1, addedAt: "2026-01-01" });
+    }
+    const paired = animals.slice(-6).map((item) => speciesForLivestock(item)?.id);
+    expect(paired).toEqual([undefined, undefined, "guppy", "guppy", "midas-cichlid", "guppy"]);
     const slice = await loadCatalogSlice(animals, [], fromBuilders);
     for (const item of animals) {
       const expected = speciesForLivestock(item);
