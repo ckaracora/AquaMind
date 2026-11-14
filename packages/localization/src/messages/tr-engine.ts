@@ -49,6 +49,8 @@ const outsideRange = (p: EngineTextParams) =>
 /** Deniz akvaryumunun hedefinin adı (motor 1.13.0, `MarineProfile`). */
 const marineTarget = (p: EngineTextParams) => (str(p, "profile") === "fishOnly" ? "yalnız balıklı akvaryum" : "omurgasızlı akvaryum");
 const marineRange = (p: EngineTextParams, f: EngineTextFormat) => `${f.measurement(num(p, "min"), 3)}–${f.measurement(num(p, "max"), 3)}`;
+/** Birbirine karıştırılmayan türlerin grubu (motor 1.19.0, karar 0044); motorun Türkçe adıyla aynı. */
+const groupName = (group: string) => ({ clownfish: "palyaço balığı" } as Record<string, string>)[group] ?? "aynı gruptan";
 
 export const trEngine = {
   /** Ölçütlerin adları, motorun `key` alanına göre. */
@@ -72,6 +74,7 @@ export const trEngine = {
     groupOk: fixed("Grup ihtiyaçları uygun"),
     habitat: fixed("Akvaryum türüyle yaşam ortamı uyuşmuyor"),
     speciesOnly: fixed("Tür akvaryumu önerilen canlı var"),
+    incompatibleGroup: fixed("Birbirine karıştırılmaması gereken türler var"),
     predation: fixed("Küçük canlılar için avlanma riski var"),
     waterRanges: fixed("Su değeri aralıkları kesişmiyor"),
     smallFishPredation: fixed("Küçük balıklar avlanabilir"),
@@ -339,13 +342,19 @@ export const trEngine = {
       title: (p) => `${str(p, "name")} için tür akvaryumu önerilir`,
       message: fixed("Bu tür agresiflik ve özel beslenme davranışları nedeniyle başka canlılarla birlikte güvenli kabul edilmedi."),
     },
+    /** Motor 1.19.0 (karar 0044): kaynağın birbirine karıştırılmamasını yazdığı farklı türler (kesin tehlike). */
+    incompatibleGroup: {
+      title: (p) => `Farklı ${groupName(str(p, "group"))} türleri bir arada`,
+      message: (p) =>
+        `Kaynaklara göre ${nameList(list(p, "fish"))} birbiriyle kavga eder; farklı ${groupName(str(p, "group"))} türleri aynı akvaryumda tutulmamalıdır. Kaynak: ${list(p, "sources").join(", ")}.`,
+    },
     communityCaution: {
       title: (p) => `${str(p, "name")}: tank arkadaşı seçimine dikkat`,
       message: (p) => str(p, "text"),
     },
     smallFishPredation: {
       title: (p) => `${str(p, "prey")}: avlanabilir`,
-      message: (p) => `${str(p, "hunter")} ağzına sığan küçük balıkları yiyebilir; ${str(p, "prey")} yetişkin boyuyla bu risk içinde. Bu iki türü aynı akvaryumda tutmayın.${sourceNote(p)}`,
+      message: (p) => `${str(p, "hunter")} ağzına sığan küçük balıkları yiyebilir; ${str(p, "prey")} yetişkin boyuyla bu risk içinde. Birlikte tutulurlarsa ${str(p, "prey")} yenebilir; bu eşleşmeden kaçınmak daha güvenlidir.${sourceNote(p)}`,
     },
     finNip: {
       title: (p) => `${str(p, "target")}: yüzgeç ısırma riski`,
@@ -361,6 +370,12 @@ export const trEngine = {
       title: (p) => `${str(p, "name")}: tek tutulmalı`,
       message: (p) => `Kaynağa göre bu tür kendi türünden bireylere karşı saldırgandır ve genellikle tek tutulmalıdır.${sourceNote(p)}`,
     },
+    /** Motor 1.19.0 (karar 0044): kaynağın "tek ya da uyumlu çift" dediği türde tam iki birey (sarı). */
+    conspecificPair: {
+      title: (p) => `${str(p, "name")}: yalnız uyumlu bir çift birlikte yaşar`,
+      message: (p) =>
+        `Kaynağa göre bu tür kendi türüne saldırgandır; tek ya da uyumlu bir çift olarak tutulabilir. Kayıtlı 2 birey ancak uyumlu, eşleşmiş bir çiftse birlikte yaşayabilir; rastgele bir araya getirilen iki birey kavga edebilir.${sourceNote(p)}`,
+    },
     shrimpEaten: {
       title: fixed("Karidesler yenebilir"),
       message: (p) =>
@@ -374,10 +389,13 @@ export const trEngine = {
         return `Kaynaklara göre ${nameList(list(p, "eaters"))} salyangoz yer; ${nameList(list(p, "snails"))} risk altında olabilir.${notes} Kaynak: ${list(p, "sources").join(", ")}.`;
       },
     },
+    /** 1.19.0 (karar 0044): `conflict` değişkeni varsa kaynaklar çelişiyor (tek balık, kaynağın notu ve adı); yoksa kayıt bulunamadı. */
     shrimpUnverified: {
-      title: fixed("Karides uyumu doğrulanmadı"),
+      title: (p) => (flag(p, "conflict") ? `${list(p, "fish")[0]}: karides uyumunda kaynaklar çelişiyor` : "Karides uyumu doğrulanmadı"),
       message: (p) =>
-        `${nameList(list(p, "fish"))} için "karidesle güvenli" bilgisi kaynaklarda bulunamadı. OATA, karideslerin ağzına sığabilecekleri balıklarla tutulmamasını önerir; ${nameList(list(p, "shrimp"))} yavruları ve yeni kabuk değiştirmiş karidesler özellikle risk altındadır.`,
+        flag(p, "conflict")
+          ? `Kaynaklar ${list(p, "fish")[0]} ile karideslerin uyumu konusunda çelişiyor; güvenli birlikte yaşam doğrulanamadı. OATA, karideslerin ağzına sığabilecekleri balıklarla tutulmamasını önerir; ${nameList(list(p, "shrimp"))} yavruları ve yeni kabuk değiştirmiş karidesler özellikle risk altındadır.${sourceNote(p)}`
+          : `${nameList(list(p, "fish"))} için "karidesle güvenli" bilgisi kaynaklarda bulunamadı. OATA, karideslerin ağzına sığabilecekleri balıklarla tutulmamasını önerir; ${nameList(list(p, "shrimp"))} yavruları ve yeni kabuk değiştirmiş karidesler özellikle risk altındadır.`,
     },
     husbandryCaution: {
       title: (p) => `${str(p, "name")}: özel bakım gereksinimi`,
@@ -406,8 +424,9 @@ export const trEngine = {
       message: (p, f) =>
         `Kaynağa göre ${str(p, "name")} için kayıtlı ${f.number(num(p, "count"))} bireyle en az ${f.volume(num(p, "volume"))} gerekir; akvaryumun net hacmi ${f.volume(num(p, "aquariumVolume"))}, gerekenin yarısından da az.${flag(p, "lengthShort") ? ` Kaynak en az ${f.length(num(p, "length"))} uzunluk da istiyor; akvaryumun uzunluğu ${f.length(num(p, "tankLength"))}.` : ""} Bu tür bu akvaryumda tutulmamalı.`,
     },
+    /** 1.19.0 (karar 0044): başlık `spaceTooSmall` ile ayrıldı; hüküm etkisi (en çok "dikkat") değişmedi. */
     spaceSevere: {
-      title: (p) => `${str(p, "name")}: akvaryum çok küçük`,
+      title: (p) => `${str(p, "name")}: akvaryumun uzunluğu ya da derinliği yetersiz`,
       message: (p, f) =>
         `${spaceReference(p, f)} Akvaryum ayrıca İsviçre Hayvan Koruma Yönetmeliği'nin ölçü kuralındaki uzunluk (3×) ve su derinliği (1× vücut boyu) sınırlarından uyarlanan AquaMind sınırının altında. Yönetmelik kuyruk yüzgeci hariç boyu kullanır; AquaMind daha sıkı davranıp katalogdaki ${f.length(num(p, "size"))} yetişkin boyu (çoğu türde toplam boy) kullanır: uzunluk en az ${f.length(num(p, "minLength"))}, su derinliği en az ${f.length(num(p, "minDepth"))}.`,
     },
@@ -423,7 +442,11 @@ export const trEngine = {
   unevaluated: {
     unknownAnimal: (p, f) => `${str(p, "name")} (${f.number(num(p, "count"))} adet) katalogda yok; ihtiyaçları ve uyumu hesaba katılmadı.`,
     unverifiedAnimal: (p, f) => `${str(p, "name")} (${f.number(num(p, "count"))} adet) için katalog kaydı henüz doğrulanmadı; ihtiyaçları ve uyumu hesaba katılmadı.`,
-    behaviorUnknown: (p) => `Kaynaklar ${str(p, "name")} türünün başka canlılarla uyumunu yazmıyor.`,
+    /** 1.19.0 (karar 0044): `conflict` varsa kaynaklar çelişiyor. */
+    behaviorUnknown: (p) =>
+      flag(p, "conflict")
+        ? `Kaynaklar ${str(p, "name")} türünün başka canlılarla uyumu konusunda çelişiyor; uyumu doğrulanamadı.`
+        : `Kaynaklar ${str(p, "name")} türünün başka canlılarla uyumunu yazmıyor.`,
     unknownEquipment: (p) =>
       `${str(p, "name") ? `${str(p, "name")} (${deviceKind(str(p, "category"))})` : `Adı girilmemiş bir ${deviceKind(str(p, "category"))}`} katalogda yok; ${deviceCalculation(str(p, "category"))} hesabına katılmadı.`,
     equipmentNoCapacity: (p) =>

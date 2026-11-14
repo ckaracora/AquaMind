@@ -126,6 +126,12 @@ const species: Record<string, SpeciesProfileInput> = {
   // 2026-11-14 (veri sprinti son kapı 2): altın fikstürün tür çiftleri yeni türlerle kaydı; "akıntı ihtiyaçları farklı" ölçüt kodu stub ile de sınanır.
   lowFlowStub: { id: "lowFlowStub", commonName: "Sakin su türü", adultSizeCm: 4, minVolumeL: 40, minGroup: 1, temperature: [22, 27], ph: [6, 7.5], flow: "low", wasteFactor: 0.5 },
   highFlowStub: { id: "highFlowStub", commonName: "Akıntı seven tür", adultSizeCm: 4, minVolumeL: 40, minGroup: 1, temperature: [22, 27], ph: [6, 7.5], flow: "high", wasteFactor: 0.5 },
+  // Motor 1.19.0 (karar 0044): farklı palyaço türleri, kaynağın kabul ettiği çift, çelişkili karides ve davranış kaydı.
+  clownA: { id: "clownA", commonName: "Birinci palyaço", waterTypes: ["saltwater"], adultSizeCm: 11, minVolumeL: 100, minGroup: 1, temperature: [24, 27], wasteFactor: 1, behavior: { incompatibleGroup: { source: "Fishkeeper", group: "clownfish" } } },
+  clownB: { id: "clownB", commonName: "İkinci palyaço", waterTypes: ["saltwater"], adultSizeCm: 17, minVolumeL: 100, minGroup: 1, temperature: [24, 27], wasteFactor: 1, behavior: { incompatibleGroup: { source: "Fishkeeper", group: "clownfish" } } },
+  pairStub: { id: "pairStub", commonName: "Çift tutulabilen tür", adultSizeCm: 8, minVolumeL: 60, minGroup: 1, temperature: [22, 27], ph: [6, 7.5], wasteFactor: 0.8, behavior: { conspecificAggression: { source: "Fishkeeper", value: "all", condition: "Tek ya da uyumlu bir çift", pairAccepted: true } } },
+  conflictShrimp: { id: "conflictShrimp", commonName: "Çelişkili karides avcısı", adultSizeCm: 6, minVolumeL: 40, minGroup: 1, temperature: [22, 27], ph: [6, 7.5], wasteFactor: 0.5, behavior: { eatsShrimp: { source: "Practical Fishkeeping", condition: "Küçük karidesler", conflict: true } } },
+  conflictBehavior: { id: "conflictBehavior", commonName: "Çelişkili davranışlı tür", adultSizeCm: 4, minVolumeL: 40, minGroup: 1, temperature: [22, 27], ph: [6, 7.5], wasteFactor: 0.5, behavior: { finNipper: { source: "Seriously Fish", conflict: true } } },
 };
 const devices: Record<string, EquipmentProfileInput> = {
   skimmer: { id: "skimmer", category: "filter", brand: "Stub", model: "Skimmer", auxiliaryFiltration: true },
@@ -223,6 +229,11 @@ const scenarios: Array<[string, HealthAnalysis]> = [
   // Motor 1.18.0 (karar 0043): net hacim gerekenin yarısından küçük; kaynağın uzunluğu olan (akvaryum daha kısa) ve olmayan tür.
   ["gerekenin yarısından küçük akvaryum, uzunluk da kısa", analyze(tank({ lengthCm: 40, netVolumeLiters: 15 }), [animal("plain", "fish", 2)], [])],
   ["gerekenin yarısından küçük akvaryum, kaynak uzunluk vermiyor", analyze(tank({ netVolumeLiters: 15 }), [animal("coldRange")], [])],
+  // Motor 1.19.0 (karar 0044).
+  ["farklı palyaço türleri", analyze(tank({ type: "saltwater", netVolumeLiters: 300 }), [animal("clownA"), animal("clownB")], [])],
+  ["kaynağın kabul ettiği çift", analyze(tank(), [animal("pairStub", "fish", 2)], [])],
+  ["kaynakları çelişen balık ve cüce karides", analyze(tank({ netVolumeLiters: 150 }), [animal("conflictShrimp"), animal("dwarfShrimp", "shrimp", 5)], [])],
+  ["davranışı yalnız çelişkili kayıtla bilinen tür", analyze(tank(), [animal("plain"), animal("conflictBehavior")], [])],
 ];
 const scenario = (name: string) => scenarios.find(([label]) => label === name)![1];
 const warningOf = (analysis: HealthAnalysis, code: string) => analysis.warnings.find((warning) => warning.code === code)!;
@@ -241,8 +252,9 @@ describe("motor metinleri dil dosyasından (karar 0021, 3. paket)", () => {
   it("motorun her kodu dil dosyasında var, dil dosyasında kullanılmayan kod yok, her kod en az bir kez sınandı", () => {
     // 1.13.0: beş deniz suyu kodu (karar 0030). 1.14.0 (karar 0037): yedi yeni uyarı kodu; ölçüt kodlarından `communityCaution` çıktı,
     // `filterNotRecorded` ve `heaterNotRecorded` geldi. 1.16.0 (karar 0041): `cycleIncomplete`. 1.18.0 (karar 0043): `spaceTooSmall`.
-    expect(sourceWarningCodes.size).toBe(62);
-    expect(sourceDetailCodes.size).toBe(39);
+    // 1.19.0 (karar 0044): `conspecificPair` ve `incompatibleGroup` (uyarı), `incompatibleGroup` (ölçüt).
+    expect(sourceWarningCodes.size).toBe(64);
+    expect(sourceDetailCodes.size).toBe(40);
     expect(new Set(Object.keys(tr.warnings))).toEqual(sourceWarningCodes);
     expect(new Set(Object.keys(tr.metricDetails))).toEqual(sourceDetailCodes);
     expect(new Set(Object.keys(tr.metricLabels))).toEqual(new Set(fixture[0].result.metrics.map((metric) => metric.key)));
@@ -629,7 +641,8 @@ describe("motor metinleri dil dosyasından (karar 0021, 3. paket)", () => {
 describe("katalogdan gelen değişkenlerin çevirisi (karar 0021, 4. paket)", () => {
   // Katalogdan gelen Türkçe metin taşımayan metin değişkenleri: kaynak adları (özel ad), ekipman adı (marka ve model), dilden bağımsız
   // kodlar (akvaryum türü, deniz suyu profili ve yönü, geçersiz ölçüm alanları). Ekipmanın kapasite notu katalog metnidir (5. paket).
-  const notSpeciesCatalog = new Set(["source", "sources", "names", "aquariumType", "profile", "direction", "fields"]);
+  // 1.19.0 (karar 0044): `group` birbirine karıştırılmayan türlerin dilden bağımsız grup kodudur (ör. "clownfish"); dil dosyası adını kendisi yazar.
+  const notSpeciesCatalog = new Set(["source", "sources", "names", "aquariumType", "profile", "direction", "fields", "group"]);
   const speciesCatalog = new Set<string>([...SPECIES_CATALOG_PARAMS, ...SPECIES_CATALOG_LIST_PARAMS, ...EQUIPMENT_NOTE_PARAMS]);
   const analyses = [...fixture.map(({ name, result }) => [name, result] as const), ...scenarios];
 

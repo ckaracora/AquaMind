@@ -95,9 +95,10 @@ describe("canlı riski uyarısı genel puanı en fazla 74 yapar (karar 0040)", (
   });
 
   // 1.18.0 (karar 0043): aynı tür saldırganlığı (iki kod) ve gerekenin yarısından küçük akvaryum sınıfa girdi; 18 koddan 21 koda.
-  it("sınıf 21 koddur: yenme ve yaralanma, aynı tür saldırganlığı, alan, kalabalık ve grup, aralık dışı su değeri", () => {
+  // 1.19.0 (karar 0044): kaynağın kabul ettiği çift ve birbirine karıştırılmayan türler; 23 kod.
+  it("sınıf 23 koddur: yenme ve yaralanma, aynı tür saldırganlığı, alan, kalabalık ve grup, aralık dışı su değeri", () => {
     expect([...LIVESTOCK_RISK_WARNING_CODES].sort()).toEqual([
-      "ammoniaDetected", "coldwaterWithTropical", "conspecificAll", "conspecificMales", "finNip", "groupLow", "highLoad", "marineKh", "marineNitrate", "marinePh", "marineSpecificGravity",
+      "ammoniaDetected", "coldwaterWithTropical", "conspecificAll", "conspecificMales", "conspecificPair", "finNip", "groupLow", "highLoad", "incompatibleGroup", "marineKh", "marineNitrate", "marinePh", "marineSpecificGravity",
       "nitrateHigh", "nitriteDetected", "shrimpEaten", "smallFishPredation", "snailEaten", "spaceLimited", "spaceNarrow", "spaceTooSmall", "speciesPhOutOfRange",
       "speciesTemperatureOutOfRange",
     ]);
@@ -152,11 +153,11 @@ describe("bilgi notları, koşullu notlar ve ekipman uyumu genel puanı değişt
 });
 
 describe("fırsatçı avcı: tehlike seviyesinde uyarı, kesin tehlike değil (karar 0040)", () => {
-  it("küçük balık uyarısı kırmızıdır, metni iki türü ayırmayı söyler; genel durum 'dikkat'", () => {
+  it("küçük balık uyarısı kırmızıdır, metni riski anlatır (1.19.0); genel durum 'dikkat'", () => {
     const result = analyze(tank(), [animal("hunter", 1), animal("calm", 1)], equipped(), reading());
     const warning = result.warnings.find((item) => item.code === "smallFishPredation");
     expect(warning).toMatchObject({ level: "danger", title: "Sakin tür: avlanabilir" });
-    expect(warning?.message).toBe("Fırsatçı ağzına sığan küçük balıkları yiyebilir; Sakin tür yetişkin boyuyla bu risk içinde. Bu iki türü aynı akvaryumda tutmayın. Kaynağın notu: Çok küçük balıklar. Kaynak: Seriously Fish.");
+    expect(warning?.message).toBe("Fırsatçı ağzına sığan küçük balıkları yiyebilir; Sakin tür yetişkin boyuyla bu risk içinde. Birlikte tutulurlarsa Sakin tür yenebilir; bu eşleşmeden kaçınmak daha güvenlidir. Kaynağın notu: Çok küçük balıklar. Kaynak: Seriously Fish.");
     expect(result).toMatchObject({ score: 74, status: "warning" });
   });
 
@@ -180,6 +181,8 @@ describe("fırsatçı avcı: tehlike seviyesinde uyarı, kesin tehlike değil (k
   });
 });
 
+// 1.19.0 (karar 0044, son kapı 3 lider kararı): 0040 istisnası korunur; `pairAccepted` en az grubu 1 olan türde iki bireyi sarıya indirir
+// (test/warnings-1-19.test.ts), en az grubu 2 ve üstü olan türde iki birey bugünkü gibi uyarısızdır.
 describe("'tek tutulmalı' kaynağın önerdiği çift ya da grupta çıkmaz (karar 0040)", () => {
   const titles = (result: ReturnType<typeof analyze>) => result.warnings.map((item) => item.title);
   const run = (...animals: Livestock[]) => analyze(tank(), animals, equipped(), reading());

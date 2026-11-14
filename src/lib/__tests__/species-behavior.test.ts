@@ -6,7 +6,8 @@ import type { Aquarium, Livestock } from "@/types/aquarium";
 
 // Kaynaklı davranış verisinin bütünlüğü ve motora bağlanması (docs/DECISIONS/0010-davranis-uyarilari.md).
 
-const flags = ["finNipper", "finNipTarget", "eatsShrimp", "shrimpSafe", "eatsSnails", "eatsSmallFish", "notPiscivorous", "conspecificAggression", "peaceful"];
+// `incompatibleGroup` (motor 1.19.0, karar 0044): tür kartının satırı değil, yalnız sağlık analizinin kaydı.
+const flags = ["finNipper", "finNipTarget", "eatsShrimp", "shrimpSafe", "eatsSnails", "eatsSmallFish", "notPiscivorous", "conspecificAggression", "peaceful", "incompatibleGroup"];
 const hosts: Record<string, string> = {
   "seriouslyfish.com": "Seriously Fish",
   "fishkeeper.co.uk": "Fishkeeper",
@@ -64,6 +65,28 @@ describe("davranış verisi", () => {
 
   it("bir tür için aynı davranış iki kez tanımlanmaz", () => {
     for (const [id, records] of Object.entries(speciesBehavior)) expect(new Set(records.map((record) => record.flag)).size, id).toBe(records.length);
+  });
+
+  // Motor 1.19.0 (karar 0044): grup yalnız grup kaydında, çift kabulü yalnız "tek tutulmalı" kaydında; ikisi de kaynak sayfası açılarak doğrulanmış
+  // kayıtlarla sınırlı (palyaço grubu: katalogdaki altı tür; çift kabulü: kaynağı "tek ya da uyumlu çift" diyen altı tür). Yeni kayıt koşul metni
+  // taşımaz (koşul çevrilen metindir; çeviri tablosuna yeni satır gerektirmez).
+  it("1.19.0: palyaço grubu ve kaynağın kabul ettiği çift yalnız doğrulanan kayıtlarda", () => {
+    const grouped = entries.filter(({ record }) => record.group !== undefined || record.flag === "incompatibleGroup");
+    for (const { id, record } of grouped) {
+      expect(record, id).toMatchObject({ flag: "incompatibleGroup", group: "clownfish", confidence: "explicit", source: "Fishkeeper" });
+      expect(record.condition, id).toBeUndefined();
+      expect(speciesById(id)?.scientificName, id).toMatch(/^Amphiprion /);
+    }
+    expect(grouped.map(({ id }) => id).sort()).toEqual(["maroon-clownfish", "ocellaris-clownfish", "percula-clownfish", "pink-skunk-clownfish", "saddleback-clownfish", "tomato-clownfish"]);
+    const paired = entries.filter(({ record }) => record.pairAccepted !== undefined);
+    for (const { id, record } of paired) expect(record, id).toMatchObject({ flag: "conspecificAggression", value: "all", confidence: "explicit", pairAccepted: true });
+    // İkinci tur (2026-11-14): kalan "tek tutulmalı" kayıtlarından kaynağı çifti açıkça kabul eden 17 kayıt daha (toplam 23).
+    expect(paired.map(({ id }) => id).sort()).toEqual([
+      "andrao-snakehead", "anthrax-flyer-pleco-l235", "apisto-panduro", "assamese-snakehead", "bicolour-blenny", "blue-acara", "chinese-snakehead",
+      "green-terror", "jack-dempsey", "jewel-cichlid", "kribensis", "leleupi-cichlid", "marliers-julie", "masked-julie", "midas-cichlid",
+      "ocellaris-peacock-bass", "pearl-cichlid", "rainbow-snakehead", "regani-julie", "sajica-cichlid", "salvini-cichlid", "silver-maskaheros", "texas-cichlid",
+    ]);
+    for (const { id, record } of paired) expect(record.verifiedAt, id).toBe("2026-11-14");
   });
 });
 
@@ -157,9 +180,12 @@ describe("'tek tutulmalı' ve kaynağın önerdiği çift (gerçek katalog, kara
   };
   const single = (result: ReturnType<typeof analyzeAquarium>) => result.warnings.filter((warning) => warning.code === "conspecificAll");
 
+  // 1.19.0 (karar 0044, son kapı 3 lider kararı): leleupi `pairAccepted` olsa da en az grubu 2; 0040 istisnası korunur, çift uyarı almaz.
   it("leleupi çifti uyarı almaz (veri testi C04), üç birey alır", () => {
     expect(speciesById("leleupi-cichlid")?.minGroup).toBe(2);
-    expect(single(analyzeAquarium(tank, [fish("leleupi-cichlid", 2)], []))).toEqual([]);
+    const pair = analyzeAquarium(tank, [fish("leleupi-cichlid", 2)], []);
+    expect(single(pair)).toEqual([]);
+    expect(pair.warnings.find((warning) => warning.code === "conspecificPair")).toBeUndefined();
     expect(single(analyzeAquarium(tank, [fish("leleupi-cichlid", 3)], [])).map((warning) => warning.title)).toEqual([`${speciesById("leleupi-cichlid")!.commonName}: tek tutulmalı`]);
   });
 });

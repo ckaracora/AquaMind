@@ -30,7 +30,7 @@ const analyze = createAnalyzer(resolver);
 
 const tank = (lengthCm: number, widthCm: number, heightCm: number, netVolumeLiters: number): Aquarium => ({ id: "a", name: "Stub", type: "freshwater", lengthCm, widthCm, heightCm, netVolumeLiters, setupDate: "2026-01-01" });
 const animal = (catalogId: string, category: Livestock["category"] = "fish"): Livestock => ({ id: `l-${catalogId}`, aquariumId: "a", catalogId, commonName: species[catalogId].commonName, category, quantity: 1, addedAt: "2026-01-01" });
-const spaceWarnings = (result: ReturnType<typeof analyze>) => result.warnings.filter((warning) => /: (alan sınırda|akvaryum çok küçük|akvaryum bu tür için dar)$/.test(warning.title));
+const spaceWarnings = (result: ReturnType<typeof analyze>) => result.warnings.filter((warning) => /: (alan sınırda|akvaryum çok küçük|akvaryumun uzunluğu ya da derinliği yetersiz|akvaryum bu tür için dar)$/.test(warning.title));
 const metric = (result: ReturnType<typeof analyze>, key: string) => result.metrics.find((item) => item.key === key)!;
 
 describe("alan: kaynağın önerisi esas alınır", () => {
@@ -54,7 +54,7 @@ describe("alan: kaynağın önerisi esas alınır", () => {
 describe("alan: kaynak ve İsviçre sınırının altı tehlikedir", () => {
   it("uzunluk 3 × yetişkin boyun altındaysa tehlike (sınırda tam 3 × uyarı)", () => {
     const danger = spaceWarnings(analyze(tank(59, 40, 40, 150), [animal("cichlid")], []));
-    expect(danger.map((warning) => [warning.level, warning.title])).toEqual([["danger", "Stub çiklit: akvaryum çok küçük"]]);
+    expect(danger.map((warning) => [warning.level, warning.title])).toEqual([["danger", "Stub çiklit: akvaryumun uzunluğu ya da derinliği yetersiz"]]);
     expect(danger[0].message).toContain("Kayıtlı adet için minimum 200 L ve 100 cm uzunluk referansı kullanıldı.");
     expect(danger[0].message).toContain("İsviçre Hayvan Koruma Yönetmeliği'nin ölçü kuralındaki uzunluk (3×) ve su derinliği (1× vücut boyu) sınırlarından uyarlanan AquaMind sınırının altında");
     expect(danger[0].message).toContain("katalogdaki 20 cm yetişkin boyu (çoğu türde toplam boy) kullanır: uzunluk en az 60 cm, su derinliği en az 20 cm.");
@@ -87,7 +87,7 @@ describe("alan: kaynak ve İsviçre sınırının altı tehlikedir", () => {
 
   it("kaynak tank uzunluğu yayımlamasa da hacim altındaki akvaryumda İsviçre sınırı uygulanır", () => {
     const [warning] = spaceWarnings(analyze(tank(50, 40, 40, 100), [animal("noLength")], []));
-    expect([warning.level, warning.title]).toEqual(["danger", "Uzunluksuz tür: akvaryum çok küçük"]);
+    expect([warning.level, warning.title]).toEqual(["danger", "Uzunluksuz tür: akvaryumun uzunluğu ya da derinliği yetersiz"]);
     expect(warning.message).toContain("kaynak tank uzunluğu yayımlamıyor");
   });
 

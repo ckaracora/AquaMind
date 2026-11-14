@@ -46,6 +46,8 @@ const outsideRange = (p: EngineTextParams) =>
       : `por debajo del rango de ${nameList(list(p, "below"))} según la fuente.`;
 const marineTarget = (p: EngineTextParams) => (str(p, "profile") === "fishOnly" ? "acuario solo con peces" : "acuario con invertebrados");
 const marineRange = (p: EngineTextParams, f: EngineTextFormat) => `${f.measurement(num(p, "min"), 3)}–${f.measurement(num(p, "max"), 3)}`;
+/** Grupo de especies que no deben mezclarse (motor 1.19.0, decisión 0044). */
+const groupName = (group: string) => ({ clownfish: "de pez payaso" } as Record<string, string>)[group] ?? "del mismo grupo";
 
 export const esEngine: EngineMessages = {
   metricLabels: {
@@ -67,6 +69,7 @@ export const esEngine: EngineMessages = {
     groupOk: fixed("Se cubren las necesidades de grupo"),
     habitat: fixed("El hábitat no coincide con el tipo de acuario"),
     speciesOnly: fixed("Hay un animal para el que se recomienda un acuario monoespecífico"),
+    incompatibleGroup: fixed("Hay especies que no deben mezclarse"),
     predation: fixed("Los animales pequeños corren riesgo de depredación"),
     waterRanges: fixed("Los rangos de parámetros del agua no se superponen"),
     smallFishPredation: fixed("Los peces pequeños pueden ser comidos"),
@@ -332,13 +335,18 @@ export const esEngine: EngineMessages = {
       title: (p) => `Se recomienda un acuario monoespecífico para ${str(p, "name")}`,
       message: fixed("Por su agresividad y su comportamiento alimentario especial, esta especie no se considera segura junto con otros animales."),
     },
+    incompatibleGroup: {
+      title: (p) => `Diferentes especies ${groupName(str(p, "group"))} juntas`,
+      message: (p) =>
+        `Según las fuentes, ${nameList(list(p, "fish"))} pelean entre sí; no se deben mantener diferentes especies ${groupName(str(p, "group"))} en el mismo acuario. Fuente: ${list(p, "sources").join(", ")}.`,
+    },
     communityCaution: {
       title: (p) => `${str(p, "name")}: elige con cuidado a sus compañeros de acuario`,
       message: catalogNote,
     },
     smallFishPredation: {
       title: (p) => `${str(p, "prey")}: puede ser presa`,
-      message: (p) => `${str(p, "hunter")} puede comer peces pequeños que le quepan en la boca; con su tamaño adulto, ${str(p, "prey")} corre este riesgo. No mantengas estas dos especies en el mismo acuario.${sourceNote(p)}`,
+      message: (p) => `${str(p, "hunter")} puede comer peces pequeños que le quepan en la boca; con su tamaño adulto, ${str(p, "prey")} corre este riesgo. Si conviven, ${str(p, "prey")} puede acabar siendo presa; es más seguro evitar esta combinación.${sourceNote(p)}`,
     },
     finNip: {
       title: (p) => `${str(p, "target")}: riesgo de mordisqueo de aletas`,
@@ -354,6 +362,11 @@ export const esEngine: EngineMessages = {
       title: (p) => `${str(p, "name")}: debe mantenerse en solitario`,
       message: (p) => `Según la fuente, esta especie es agresiva con individuos de su misma especie y, por lo general, debe mantenerse en solitario.${sourceNote(p)}`,
     },
+    conspecificPair: {
+      title: (p) => `${str(p, "name")}: solo una pareja compatible puede convivir`,
+      message: (p) =>
+        `Según la fuente, esta especie es agresiva con individuos de su misma especie; puede mantenerse en solitario o como una pareja compatible. Los 2 ejemplares registrados solo pueden convivir si forman una pareja compatible y ya emparejada; dos ejemplares reunidos al azar pueden pelear.${sourceNote(p)}`,
+    },
     shrimpEaten: {
       title: fixed("Los camarones pueden ser comidos"),
       message: (p) =>
@@ -368,9 +381,11 @@ export const esEngine: EngineMessages = {
       },
     },
     shrimpUnverified: {
-      title: fixed("Compatibilidad con camarones sin confirmar"),
+      title: (p) => (flag(p, "conflict") ? `${list(p, "fish")[0]}: las fuentes se contradicen sobre los camarones` : "Compatibilidad con camarones sin confirmar"),
       message: (p) =>
-        `No se encontró en las fuentes la indicación "seguro con camarones" para ${nameList(list(p, "fish"))}. OATA recomienda no mantener camarones con peces en cuya boca puedan caber; las crías de ${nameList(list(p, "shrimp"))} y los camarones recién mudados están especialmente en riesgo.`,
+        flag(p, "conflict")
+          ? `Las fuentes se contradicen sobre la compatibilidad de ${list(p, "fish")[0]} con los camarones; no se pudo confirmar una convivencia segura. OATA recomienda no mantener camarones con peces en cuya boca puedan caber; las crías de ${nameList(list(p, "shrimp"))} y los camarones recién mudados están especialmente en riesgo.${sourceNote(p)}`
+          : `No se encontró en las fuentes la indicación "seguro con camarones" para ${nameList(list(p, "fish"))}. OATA recomienda no mantener camarones con peces en cuya boca puedan caber; las crías de ${nameList(list(p, "shrimp"))} y los camarones recién mudados están especialmente en riesgo.`,
     },
     husbandryCaution: {
       title: (p) => `${str(p, "name")}: necesidades de cuidado especiales`,
@@ -399,7 +414,7 @@ export const esEngine: EngineMessages = {
         `Según las fuentes, ${str(p, "name")} necesita al menos ${f.volume(num(p, "volume"))} para ${num(p, "count") === 1 ? "el ejemplar registrado" : `los ${f.number(num(p, "count"))} ejemplares registrados`}; el volumen neto del acuario es de ${f.volume(num(p, "aquariumVolume"))}, menos de la mitad.${flag(p, "lengthShort") ? ` Las fuentes también piden un largo de al menos ${f.length(num(p, "length"))}; el acuario mide ${f.length(num(p, "tankLength"))} de largo.` : ""} Esta especie no debe mantenerse en este acuario.`,
     },
     spaceSevere: {
-      title: (p) => `${str(p, "name")}: acuario demasiado pequeño`,
+      title: (p) => `${str(p, "name")}: el acuario es demasiado corto o poco profundo`,
       message: (p, f) =>
         `${spaceReference(p, f)} Además, el acuario está por debajo del límite de AquaMind adaptado de los límites de largo (3×) y de profundidad del agua (1× la longitud del cuerpo) de la regla de dimensiones de la Ordenanza de Protección de los Animales de Suiza. La ordenanza usa la longitud del cuerpo sin la aleta caudal; AquaMind aplica un criterio más estricto y usa el tamaño adulto del catálogo, ${f.length(num(p, "size"))} (longitud total en la mayoría de las especies): largo de al menos ${f.length(num(p, "minLength"))}, profundidad del agua de al menos ${f.length(num(p, "minDepth"))}.`,
     },
@@ -410,7 +425,10 @@ export const esEngine: EngineMessages = {
   unevaluated: {
     unknownAnimal: (p, f) => `${str(p, "name")} (${specimens(p, f)}) no está en el catálogo; no se tuvieron en cuenta sus necesidades ni su compatibilidad.`,
     unverifiedAnimal: (p, f) => `El registro del catálogo de ${str(p, "name")} (${specimens(p, f)}) aún no está verificado; no se tuvieron en cuenta sus necesidades ni su compatibilidad.`,
-    behaviorUnknown: (p) => `Las fuentes no indican cómo se lleva ${str(p, "name")} con otros animales.`,
+    behaviorUnknown: (p) =>
+      flag(p, "conflict")
+        ? `Las fuentes se contradicen sobre cómo se lleva ${str(p, "name")} con otros animales; no se pudo confirmar su compatibilidad.`
+        : `Las fuentes no indican cómo se lleva ${str(p, "name")} con otros animales.`,
     unknownEquipment: (p) =>
       `${str(p, "name") ? `${str(p, "name")} (${deviceKind(str(p, "category"))})` : unnamedDevice(str(p, "category"))} no está en el catálogo; no se incluyó en el cálculo de ${deviceCalculation(str(p, "category"))}.`,
     equipmentNoCapacity: (p) =>

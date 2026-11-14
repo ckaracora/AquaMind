@@ -89,9 +89,15 @@ describe("cüce karides", () => {
   });
 
   it("güvenli bilgisi olmayan ya da kaynakları çelişen balık için yavru uyarısı verir", () => {
-    const warning = find(run(animal("unknownFish", 6), animal("disputedEater", 1), animal("dwarfShrimp", 10)), "Karides uyumu doğrulanmadı");
-    expect(warning?.message).toContain("Bilgisiz ve Tartışmalı yiyen için \"karidesle güvenli\" bilgisi kaynaklarda bulunamadı.");
+    const result = run(animal("unknownFish", 6), animal("disputedEater", 1), animal("dwarfShrimp", 10));
+    const warning = find(result, "Karides uyumu doğrulanmadı");
+    // 1.19.0 (karar 0044): kaynakları çelişen balık "bulunamadı" listesinde değil, kendi "kaynaklar çelişiyor" uyarısındadır.
+    expect(warning?.message).toContain("Bilgisiz için \"karidesle güvenli\" bilgisi kaynaklarda bulunamadı.");
     expect(warning?.message).toContain("OATA");
+    const conflict = find(result, "Tartışmalı yiyen: karides uyumunda kaynaklar çelişiyor");
+    expect(conflict).toMatchObject({ level: "warning", code: "shrimpUnverified", params: { fish: ["Tartışmalı yiyen"], conflict: true, source: "Practical Fishkeeping" } });
+    expect(conflict?.message).toContain("Kaynaklar Tartışmalı yiyen ile karideslerin uyumu konusunda çelişiyor; güvenli birlikte yaşam doğrulanamadı.");
+    expect(conflict?.message).not.toContain("bulunamadı");
   });
 
   it("kaynağı güvenli diyen balıkta, cüce olmayan karideste ve karides yokken uyarı vermez", () => {

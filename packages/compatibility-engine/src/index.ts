@@ -74,8 +74,16 @@ export interface SpeciesBehaviorInput {
   eatsSnails?: BehaviorNote;
   /** Ağzına sığan küçük balıkları yer; asıl avcı (`predatory`) değildir. 1.15.0'dan beri balık olmayan canlıda da (ör. kurbağa) kullanılır; av yalnız balıktır. */
   eatsSmallFish?: BehaviorNote;
-  /** Aynı türün erkekleri kavga eder ("males") ya da tür tek tutulmalıdır ("all"). */
-  conspecificAggression?: BehaviorNote & { value: "males" | "all" };
+  /**
+   * Aynı türün erkekleri kavga eder ("males") ya da tür tek tutulmalıdır ("all"). `pairAccepted` (motor 1.19.0, karar 0044): kaynak türü
+   * "tek ya da uyumlu bir çift" olarak tutulabilir sayıyor; tam iki bireyde kırmızı "tek tutulmalı" yerine sarı "yalnız uyumlu bir çift" uyarısı çıkar.
+   */
+  conspecificAggression?: BehaviorNote & { value: "males" | "all"; pairAccepted?: true };
+  /**
+   * Motor 1.19.0 (karar 0044): kaynak türü aynı gruptaki başka türlerle karıştırılmaması gereken bir gruba koyuyor (ör. "clownfish": başka palyaço
+   * türleriyle kavga eder). Akvaryumda aynı gruptan iki farklı tür varsa kesin tehlike; aynı türün kendi bireyleri bu kurala girmez.
+   */
+  incompatibleGroup?: BehaviorNote & { group: string };
   /**
    * Kaynak türü açıkça barışçıl ya da topluluk akvaryumuna uygun sayıyor (kural seti 1.15.0, karar 0043). Uyarı üretmez; tür yalnız
    * "davranışı biliniyor" sayılır ve "Değerlendirilemeyenler" listesine girmez.
@@ -133,7 +141,8 @@ export interface HealthWarning { level:"warning"|"danger"; title:string; message
  * - `unknownAnimal`: canlı katalogda tanınmadı; ihtiyaçları ve uyumu hesaba katılmadı.
  * - `unverifiedAnimal`: canlının katalog kaydı doğrulanmayı bekliyor; hesaba katılmadı.
  * - `behaviorUnknown`: kaynaklar türün başka canlılarla uyumunu yazmıyor (davranış kaydı, avcı ve tür akvaryumu işareti, tank arkadaşı notu yok).
- *   Yalnız akvaryumda en az iki tanınan tür varken çıkar. Hükmü ve puanı değiştirmez.
+ *   Yalnız akvaryumda en az iki tanınan tür varken çıkar. Hükmü ve puanı değiştirmez. 1.19.0'dan beri (karar 0044) başka canlılarla ilgili kaydı
+ *   yalnız çelişkili olan türde `conflict: true` değişkeni gelir; metin "kaynaklar çelişiyor" der.
  * - `unknownEquipment`: filtre ya da ısıtıcı katalogda tanınmadı; filtrasyon ya da ısıtıcı hesabına katılmadı.
  * - `equipmentNoCapacity`: cihaz tanındı ama hesap için gereken kapasite verisi (debi, hacim, güç ya da hava motoru bağlantısı) yok ya da doğrulanmadı.
  * - `noReading`: su ölçümü yok; su değerleri değerlendirilmedi.
@@ -202,7 +211,8 @@ const isTropical=(profile:SpeciesProfileInput)=>profile.group!=="coldwater"&&pro
 // hacminin bu oranından küçükse alan uyarısı kesin tehlikedir (hüküm "uygun değil"). Yeni bir kaynak eşiği değildir; ürün sahibinin kararıdır.
 const SEVERE_VOLUME_RATIO=.5;
 /**
- * Canlı riski sınıfındaki uyarı kodları (21). Uyarı seviyesindekilerde 74 tavanını bu küme koyar (`livestockRiskWarning`).
+ * Canlı riski sınıfındaki uyarı kodları (23). Uyarı seviyesindekilerde 74 tavanını bu küme koyar (`livestockRiskWarning`). 1.19.0'dan beri (karar 0044)
+ * kaynağın kabul ettiği tek çift (`conspecificPair`, sarı) ve birbirine karıştırılmayan türler (`incompatibleGroup`, kesin tehlike) bu sınıftadır.
  * `smallFishPredation` 1.15.0'dan beri tehlike seviyesindedir (kesin tehlike değil); tavanını zaten `dangerWarning` koyar. 1.18.0'dan beri
  * (karar 0043) "erkekler kavga eder" (`conspecificMales`) bu sınıftadır; "tek tutulmalı" (`conspecificAll`) ve "akvaryum gerekenin yarısından
  * küçük" (`spaceTooSmall`) kesin tehlikedir. Kümedeki yerleri puanı değiştirmez; sınıfı eksiksiz tutar.
@@ -210,8 +220,10 @@ const SEVERE_VOLUME_RATIO=.5;
 export const LIVESTOCK_RISK_WARNING_CODES:ReadonlySet<string>=new Set([
  // yenme ve yaralanma
  "smallFishPredation","shrimpEaten","snailEaten","finNip",
- // aynı tür saldırganlığı (1.18.0)
- "conspecificMales","conspecificAll",
+ // aynı tür saldırganlığı (1.18.0); kaynağın kabul ettiği çift (1.19.0)
+ "conspecificMales","conspecificAll","conspecificPair",
+ // birbirine karıştırılmayan türler (1.19.0)
+ "incompatibleGroup",
  // alan, kalabalık ve grup
  "spaceTooSmall","spaceLimited","spaceNarrow","highLoad","groupLow",
  // aralık dışı su değeri
@@ -305,6 +317,11 @@ export function createAnalyzer(resolver:KnowledgeResolver):AnalyzeAquarium{
  const communityCautionIssues=profiles.filter(({profile})=>profile!.communityCaution&&profiles.some(other=>other.profile!.id!==profile!.id));
  // Davranış (kural seti 1.4.0): yalnızca açık kaynaklı notlar uyarı üretir; çelişkili notlar sayılmaz. Hepsi uyarı seviyesindedir.
  const explicit=(note?:BehaviorNote)=>note&&!note.conflict?note:undefined;
+ // 1.19.0 (karar 0044): kaynağın aynı gruba koyduğu farklı türler (ör. palyaço balıkları) bir aradaysa kesin tehlike. Gruplar profil kimliğine
+ // göre toplandığı için aynı türün kendi bireyleri (ör. iki Ocellaris) bu kurala girmez.
+ const groupOf=(profile:SpeciesProfileInput)=>{const note=profile.behavior?.incompatibleGroup;return note&&!note.conflict?note.group:undefined;};
+ const presentGroupProfiles=profiles.filter(({item})=>item.quantity>0);
+ const incompatibleGroupIssues=[...new Set(presentGroupProfiles.flatMap(({profile})=>{const group=groupOf(profile!);return group?[group]:[];}))].map(group=>({group,members:presentGroupProfiles.filter(({profile})=>groupOf(profile!)===group).map(({profile})=>profile!)})).filter(({members})=>members.length>1);
  const fishProfiles=profiles.filter(({item})=>item.category==="fish");
  // 1.14.0 (karar 0037): ortak sıcaklık aralığı varken soğuk su türü (`group:"coldwater"`) tropikal balıkla birlikteyse ya da türlerin ortak
  // sıcaklığı tek bir değerse sarı uyarı çıkar; ikisi birlikte tutarsa yalnız soğuk su uyarısı çıkar. Tür uyumuna ceza yazılmaz.
@@ -323,7 +340,12 @@ export function createAnalyzer(resolver:KnowledgeResolver):AnalyzeAquarium{
  const shrimpPreyFor=(note:BehaviorNote,eaterId:string)=>(note.smallShrimpOnly?dwarfShrimp:allShrimp).filter(({profile})=>profile!.id!==eaterId);
  const shrimpEaters=profiles.filter(({profile})=>{const note=explicit(profile!.behavior?.eatsShrimp);return note!==undefined&&shrimpPreyFor(note,profile!.id).length>0;});
  const shrimpAtRisk=allShrimp.filter(entry=>shrimpEaters.some(({profile})=>shrimpPreyFor(profile!.behavior!.eatsShrimp!,profile!.id).includes(entry)));
- const shrimpUnverified=dwarfShrimp.length?fishProfiles.filter(({profile})=>!explicit(profile!.behavior?.eatsShrimp)&&!explicit(profile!.behavior?.shrimpSafe)):[];
+ // 1.19.0 (karar 0044): karides uyumu doğrulanmayan balıklardan kaynakları çelişenler (`conflict`) ayrı söylenir ("kaynaklar çelişiyor"); kayıt hiç
+ // olmayanlar bugünkü "kaynaklarda bulunamadı" metnini alır. Ceza (15), ölçüt ve seviye ikisi için aynıdır.
+ const shrimpNotConfirmed=dwarfShrimp.length?fishProfiles.filter(({profile})=>!explicit(profile!.behavior?.eatsShrimp)&&!explicit(profile!.behavior?.shrimpSafe)):[];
+ const shrimpConflictNote=(profile:SpeciesProfileInput)=>profile.behavior?.eatsShrimp?.conflict?profile.behavior.eatsShrimp:profile.behavior?.shrimpSafe?.conflict?profile.behavior.shrimpSafe:undefined;
+ const shrimpConflict=shrimpNotConfirmed.filter(({profile})=>shrimpConflictNote(profile!)!==undefined);
+ const shrimpUnverified=shrimpNotConfirmed.filter(entry=>!shrimpConflict.includes(entry));
  // Kural seti 1.7.0 (docs/DECISIONS/0013-salyangoz-uyarisi.md): yalnızca kaynağı açıkça "salyangoz yer" diyen canlılar uyarı üretir.
  const snails=profiles.filter(({item})=>item.category==="snail");
  const snailPreyFor=(eaterId:string)=>snails.filter(({profile})=>profile!.id!==eaterId);
@@ -333,15 +355,22 @@ export function createAnalyzer(resolver:KnowledgeResolver):AnalyzeAquarium{
  // uyarı üretmez (ör. leleupi çifti). Fazlası yine uyarı alır.
  // 1.18.0 (karar 0043): "tek tutulmalı" kaydının uyarısı kesin tehlikedir (hüküm "uygun değil"); "erkekler kavga eder" sarı kalır ama canlı riski
  // sınıfına girer (hüküm en çok "dikkat").
+ // 0040 grup istisnası `pairAccepted` türlerde de korunur (son kapı 3, lider kararı 2026-11-14): en az grubu 2 ve üstü olan türde kayıtlı adet bu
+ // sayıyı aşmıyorsa uyarı yok; sarı `conspecificPair` yalnız istisnaya girmeyen (en az grubu 1) `pairAccepted` türde tam iki bireyde çıkar.
  const conspecificIssues=profiles.filter(({item,profile})=>item.quantity>=2&&explicit(profile!.behavior?.conspecificAggression)!==undefined&&!(profile!.behavior!.conspecificAggression!.value==="all"&&profile!.minGroup>=2&&item.quantity<=profile!.minGroup));
- const conspecificAllIssues=conspecificIssues.filter(({profile})=>profile!.behavior!.conspecificAggression!.value==="all");
+ // 1.19.0 (karar 0044): kaynak türü "tek ya da uyumlu bir çift" olarak kabul ediyorsa (`pairAccepted`) tam iki birey kesin tehlike değil, sarı uyarıdır
+ // (en çok "dikkat"): yalnız uyumlu, eşleşmiş bir çift birlikte yaşar. Üç ve üstü birey "tek tutulmalı" kalır.
+ const acceptedPair=({item,profile}:(typeof profiles)[number])=>profile!.behavior!.conspecificAggression!.value==="all"&&profile!.behavior!.conspecificAggression!.pairAccepted===true&&item.quantity===2;
+ const conspecificPairIssues=conspecificIssues.filter(acceptedPair);
+ const conspecificAllIssues=conspecificIssues.filter(entry=>entry.profile!.behavior!.conspecificAggression!.value==="all"&&!acceptedPair(entry));
  const conspecificMaleIssues=conspecificIssues.filter(({profile})=>profile!.behavior!.conspecificAggression!.value!=="all");
  // Ortak güvenli sıcaklık veya pH aralığı bulunmaması doğrudan tehlike seviyesidir. "Tek tutulmalı" türün cezası tür akvaryumuyla aynıdır (60).
- const compatibilityPenalty=(habitatIssues.length?80:0)+(temperatureConflict?55:0)+(phConflict?55:0)+(flowConflict?20:0)+(predationIssues.length?60:0)+(speciesOnlyIssues.length?60:0)+(conspecificAllIssues.length?60:0);
- const behaviorPenalty=(smallFishPredationIssues.length?40:0)+(finNipIssues.length?30:0)+(conspecificMaleIssues.length?30:0)+(shrimpEaters.length?30:0)+(shrimpUnverified.length?15:0)+(snailEaters.length?30:0);
+ const compatibilityPenalty=(habitatIssues.length?80:0)+(temperatureConflict?55:0)+(phConflict?55:0)+(flowConflict?20:0)+(predationIssues.length?60:0)+(speciesOnlyIssues.length?60:0)+(conspecificAllIssues.length?60:0)+(incompatibleGroupIssues.length?60:0);
+ // 1.19.0: kaynağın kabul ettiği çift "erkekler kavga eder" ile aynı cezayı (30) alır; ikisi birlikte de bir kez sayılır.
+ const behaviorPenalty=(smallFishPredationIssues.length?40:0)+(finNipIssues.length?30:0)+(conspecificMaleIssues.length||conspecificPairIssues.length?30:0)+(shrimpEaters.length?30:0)+(shrimpNotConfirmed.length?15:0)+(snailEaters.length?30:0);
  // Topluluk notu (communityCaution) 1.14.0'dan beri yalnız sarı uyarıdır; tür uyumuna ceza yazmaz ve ölçütün açıklamasına girmez (karar 0037).
  // Uyarı seviyesindeki uyum sorunları (akıntı, davranış) birikse de tür uyumunu tehlikeye çekmez; yalnızca kesin tehlikeler çeker.
- const criticalCompatibilityIssue=habitatIssues.length>0||temperatureConflict||phConflict||predationIssues.length>0||speciesOnlyIssues.length>0||conspecificAllIssues.length>0;
+ const criticalCompatibilityIssue=habitatIssues.length>0||temperatureConflict||phConflict||predationIssues.length>0||speciesOnlyIssues.length>0||conspecificAllIssues.length>0||incompatibleGroupIssues.length>0;
  const compatibilityFor=(penalty:number)=>criticalCompatibilityIssue?clamp(100-penalty):Math.max(50,clamp(100-penalty));
  const compatibilityScore=compatibilityFor(compatibilityPenalty+behaviorPenalty);
  // Elle girilen değer (1.8.0) katalog kaydının eksik alanını doldurur; katalogda olmayan cihaz için yalnız bu değeri taşıyan bir kayıt oluşur.
@@ -415,7 +444,7 @@ export function createAnalyzer(resolver:KnowledgeResolver):AnalyzeAquarium{
  const heaterUsesUserValue=heaters.some(h=>userProvidedEquipment.get(h)==="power");
  const userValueReadyCount=calculationReadyEquipment.filter(p=>userProvidedEquipment.has(p)).length;
  const userProvidedFlag=(used:boolean)=>used?{userProvided:true as const}:{};
- const compatibilityDetail:[string,string]=habitatIssues.length?["habitat","Akvaryum türüyle yaşam ortamı uyuşmuyor"]:speciesOnlyIssues.length?["speciesOnly","Tür akvaryumu önerilen canlı var"]:predationIssues.length?["predation","Küçük canlılar için avlanma riski var"]:conspecificAllIssues.length?["conspecific","Aynı tür bireyleri kavga edebilir"]:temperatureConflict||phConflict?["waterRanges","Su değeri aralıkları kesişmiyor"]:smallFishPredationIssues.length?["smallFishPredation","Küçük balıklar avlanabilir"]:finNipIssues.length?["finNip","Yüzgeç ısırma riski var"]:conspecificIssues.length?["conspecific","Aynı tür bireyleri kavga edebilir"]:shrimpEaters.length?["shrimpEaten","Karidesler yenebilir"]:snailEaters.length?["snailEaten","Salyangozlar yenebilir"]:flowConflict?["flowConflict","Akıntı ihtiyaçları farklı"]:shrimpUnverified.length?["shrimpUnverified","Karides uyumu doğrulanmadı"]:["compatible","Ortak yaşam aralıkları mevcut"];
+ const compatibilityDetail:[string,string]=habitatIssues.length?["habitat","Akvaryum türüyle yaşam ortamı uyuşmuyor"]:speciesOnlyIssues.length?["speciesOnly","Tür akvaryumu önerilen canlı var"]:incompatibleGroupIssues.length?["incompatibleGroup","Birbirine karıştırılmaması gereken türler var"]:predationIssues.length?["predation","Küçük canlılar için avlanma riski var"]:conspecificAllIssues.length?["conspecific","Aynı tür bireyleri kavga edebilir"]:temperatureConflict||phConflict?["waterRanges","Su değeri aralıkları kesişmiyor"]:smallFishPredationIssues.length?["smallFishPredation","Küçük balıklar avlanabilir"]:finNipIssues.length?["finNip","Yüzgeç ısırma riski var"]:conspecificIssues.length?["conspecific","Aynı tür bireyleri kavga edebilir"]:shrimpEaters.length?["shrimpEaten","Karidesler yenebilir"]:snailEaters.length?["snailEaten","Salyangozlar yenebilir"]:flowConflict?["flowConflict","Akıntı ihtiyaçları farklı"]:shrimpNotConfirmed.length?["shrimpUnverified","Karides uyumu doğrulanmadı"]:["compatible","Ortak yaşam aralıkları mevcut"];
  const filterDetail:[string,string,EngineParams]=sizedByManufacturer?["manufacturerMax",`Üretici önerisi en fazla ${filterOkL} L`,{liters:filterOkL}]:sizedByFlow?["ratedTurnover",`Etiket debisiyle ${ratedTurnover.toFixed(1).replace(".",",")} çevrim/saat`,{turnover:ratedTurnover}]:sizedFilters.length?["mixedMax",`Üretici önerisi ve etiket debisine göre en fazla ${Math.round(filterOkL)} L`,{liters:Math.round(filterOkL)}]:airDrivenFilters.length?(airDrivenReady?["airReady","Hava motorlu sünger filtre bağlantısı hazır",{}]:["airMissing","Sünger filtre için hava motoru gerekli",{}]):primaryFilters.length?["flowUnverified","Debi bilgisi doğrulanmayı bekliyor",{}]:auxiliaryFilters.length?["auxiliaryOnly","Yalnız yardımcı yüzey skimmeri kayıtlı; ana filtre gerekli",{}]:anyFilterRecord?["noFilter","Katalogdan filtre bulunamadı",{}]:["filterNotRecorded","Filtre kayıtlı değil",{}];
  const heaterDetail:[string,string,EngineParams]=heaterDataReady?(heaterFit?(useEstimatedHeaterRange?["estimatedOk",`Toplam ${heaterPowerW} W için tahmini hacim uygun`,{watts:heaterPowerW}]:["manufacturerOk","Üretici hacim aralığı uygun",{}]):(heaterTooSmall?["powerLow","Isıtma gücü bu hacim için düşük",{}]:heaterTooLarge?["powerHigh","Isıtma gücü bu hacim için yüksek",{}]:["outOfRange","Hacim aralığı dışında",{}])):heaters.length?["heaterUnverified","Watt veya hacim verisi doğrulanmayı bekliyor",{}]:heaterRecorded||passiveHeaterRecorded?["noHeater","Katalogdan ısıtıcı bulunamadı",{}]:["heaterNotRecorded","Isıtıcı kayıtlı değil",{}];
  const metrics:HealthMetric[]=[
@@ -488,22 +517,27 @@ export function createAnalyzer(resolver:KnowledgeResolver):AnalyzeAquarium{
  if(flowConflict)warnings.push({level:"warning",title:"Akıntı ihtiyaçları farklı",message:"Düşük ve yüksek akıntı isteyen türler birlikte seçildi. Akvaryumda sakin ve güçlü akış bölgeleri oluşturulmalı.",code:"flowConflict",params:{}});
  for(const {predator,prey} of predationIssues)warnings.push({level:"danger",title:`${prey.commonName} için avlanma riski`,message:`${predator.commonName}, yetişkin boy farkı nedeniyle ${prey.commonName} için güvenli bir tank arkadaşı olmayabilir.`,code:"predation",params:{predator:predator.commonName,prey:prey.commonName}});
  for(const {profile} of speciesOnlyIssues)warnings.push({level:"danger",title:`${profile!.commonName} için tür akvaryumu önerilir`,message:"Bu tür agresiflik ve özel beslenme davranışları nedeniyle başka canlılarla birlikte güvenli kabul edilmedi.",code:"speciesOnly",params:{name:profile!.commonName}});
+ // 1.19.0 (karar 0044): grup adı dil dosyasında koddan kurulur; tanınmayan grup için genel ad kullanılır.
+ const groupName=(group:string)=>({clownfish:"palyaço balığı"} as Record<string,string>)[group]??"aynı gruptan";
+ for(const {group,members} of incompatibleGroupIssues){const names=members.map(member=>member.commonName);const sources=[...new Set(members.map(member=>member.behavior!.incompatibleGroup!.source))];warnings.push({level:"danger",title:`Farklı ${groupName(group)} türleri bir arada`,message:`Kaynaklara göre ${nameList(names)} birbiriyle kavga eder; farklı ${groupName(group)} türleri aynı akvaryumda tutulmamalıdır. Kaynak: ${sources.join(", ")}.`,code:"incompatibleGroup",params:{group,fish:names,sources}});}
  for(const {profile} of communityCautionIssues)warnings.push({level:"warning",title:`${profile!.commonName}: tank arkadaşı seçimine dikkat`,message:profile!.communityCaution!,code:"communityCaution",params:{name:profile!.commonName,text:profile!.communityCaution!}});
  const noteText=(note:BehaviorNote)=>(note.condition?` Kaynağın notu: ${note.condition.replace(/\.?$/,".")}`:"")+` Kaynak: ${note.source}.`;
  const noteParams=(note:BehaviorNote):EngineParams=>({condition:note.condition??"",source:note.source});
- for(const {hunter,prey,note} of smallFishPredationIssues)warnings.push({level:"danger",title:`${prey.commonName}: avlanabilir`,message:`${hunter.commonName} ağzına sığan küçük balıkları yiyebilir; ${prey.commonName} yetişkin boyuyla bu risk içinde. Bu iki türü aynı akvaryumda tutmayın.${noteText(note)}`,code:"smallFishPredation",params:{hunter:hunter.commonName,prey:prey.commonName,...noteParams(note)}});
+ for(const {hunter,prey,note} of smallFishPredationIssues)warnings.push({level:"danger",title:`${prey.commonName}: avlanabilir`,message:`${hunter.commonName} ağzına sığan küçük balıkları yiyebilir; ${prey.commonName} yetişkin boyuyla bu risk içinde. Birlikte tutulurlarsa ${prey.commonName} yenebilir; bu eşleşmeden kaçınmak daha güvenlidir.${noteText(note)}`,code:"smallFishPredation",params:{hunter:hunter.commonName,prey:prey.commonName,...noteParams(note)}});
  for(const {nipper,target,note} of finNipIssues)warnings.push({level:"warning",title:`${target.commonName}: yüzgeç ısırma riski`,message:`${nipper.commonName} yüzgeç ısırabilir; ${target.commonName} gibi uzun ya da yavaş yüzgeçli balıklarla birlikte tutulması önerilmez.${noteText(note)}`,code:"finNip",params:{nipper:nipper.commonName,target:target.commonName,...noteParams(note)}});
- for(const {item,profile} of conspecificIssues){const note=profile!.behavior!.conspecificAggression!;warnings.push(note.value==="males"?{level:"warning",title:`${profile!.commonName}: erkekler kavga eder`,message:`Kaynağa göre bu türün erkekleri birbiriyle kavga eder; kayıtlı ${item.quantity} bireyden birden fazlası erkekse ayırın.${noteText(note)}`,code:"conspecificMales",params:{name:profile!.commonName,count:item.quantity,...noteParams(note)}}:{level:"danger",title:`${profile!.commonName}: tek tutulmalı`,message:`Kaynağa göre bu tür kendi türünden bireylere karşı saldırgandır ve genellikle tek tutulmalıdır.${noteText(note)}`,code:"conspecificAll",params:{name:profile!.commonName,...noteParams(note)}});}
+ for(const {item,profile} of conspecificIssues){const note=profile!.behavior!.conspecificAggression!;warnings.push(note.value==="males"?{level:"warning",title:`${profile!.commonName}: erkekler kavga eder`,message:`Kaynağa göre bu türün erkekleri birbiriyle kavga eder; kayıtlı ${item.quantity} bireyden birden fazlası erkekse ayırın.${noteText(note)}`,code:"conspecificMales",params:{name:profile!.commonName,count:item.quantity,...noteParams(note)}}:conspecificPairIssues.some(entry=>entry.profile===profile)?{level:"warning",title:`${profile!.commonName}: yalnız uyumlu bir çift birlikte yaşar`,message:`Kaynağa göre bu tür kendi türüne saldırgandır; tek ya da uyumlu bir çift olarak tutulabilir. Kayıtlı 2 birey ancak uyumlu, eşleşmiş bir çiftse birlikte yaşayabilir; rastgele bir araya getirilen iki birey kavga edebilir.${noteText(note)}`,code:"conspecificPair",params:{name:profile!.commonName,...noteParams(note)}}:{level:"danger",title:`${profile!.commonName}: tek tutulmalı`,message:`Kaynağa göre bu tür kendi türünden bireylere karşı saldırgandır ve genellikle tek tutulmalıdır.${noteText(note)}`,code:"conspecificAll",params:{name:profile!.commonName,...noteParams(note)}});}
  const shrimpNames=nameList(dwarfShrimp.map(({profile})=>profile!.commonName));
  if(shrimpEaters.length){const sources=[...new Set(shrimpEaters.map(({profile})=>profile!.behavior!.eatsShrimp!.source))];warnings.push({level:"warning",title:"Karidesler yenebilir",message:`Kaynaklara göre ${nameList(shrimpEaters.map(({profile})=>profile!.commonName))} karides yer; ${nameList(shrimpAtRisk.map(({profile})=>profile!.commonName))} ve özellikle yavruları risk altındadır. Kaynak: ${sources.join(", ")}.`,code:"shrimpEaten",params:{eaters:shrimpEaters.map(({profile})=>profile!.commonName),shrimp:shrimpAtRisk.map(({profile})=>profile!.commonName),sources}});}
  if(snailEaters.length){const sources=[...new Set(snailEaters.map(({profile})=>profile!.behavior!.eatsSnails!.source))];const notes=snailEaters.flatMap(({profile})=>profile!.behavior!.eatsSnails!.condition?[` ${profile!.commonName}: ${profile!.behavior!.eatsSnails!.condition!.replace(/\.?$/,".")}`]:[]).join("");warnings.push({level:"warning",title:"Salyangozlar yenebilir",message:`Kaynaklara göre ${nameList(snailEaters.map(({profile})=>profile!.commonName))} salyangoz yer; ${nameList(snailsAtRisk.map(({profile})=>profile!.commonName))} risk altında olabilir.${notes} Kaynak: ${sources.join(", ")}.`,code:"snailEaten",params:{eaters:snailEaters.map(({profile})=>profile!.commonName),snails:snailsAtRisk.map(({profile})=>profile!.commonName),noteNames:snailEaters.flatMap(({profile})=>profile!.behavior!.eatsSnails!.condition?[profile!.commonName]:[]),noteConditions:snailEaters.flatMap(({profile})=>profile!.behavior!.eatsSnails!.condition?[profile!.behavior!.eatsSnails!.condition!]:[]),sources}});}
  if(shrimpUnverified.length)warnings.push({level:"warning",title:"Karides uyumu doğrulanmadı",message:`${nameList(shrimpUnverified.map(({profile})=>profile!.commonName))} için "karidesle güvenli" bilgisi kaynaklarda bulunamadı. OATA, karideslerin ağzına sığabilecekleri balıklarla tutulmamasını önerir; ${shrimpNames} yavruları ve yeni kabuk değiştirmiş karidesler özellikle risk altındadır.`,code:"shrimpUnverified",params:{fish:shrimpUnverified.map(({profile})=>profile!.commonName),shrimp:dwarfShrimp.map(({profile})=>profile!.commonName)}});
+ // 1.19.0 (karar 0044): kaynakları çelişen balık için aynı kod, ayrı metin (`conflict: true`); kaynağın koşulu ve adı eklenir. Seviye ve ceza aynı.
+ for(const {profile} of shrimpConflict){const note=shrimpConflictNote(profile!)!;warnings.push({level:"warning",title:`${profile!.commonName}: karides uyumunda kaynaklar çelişiyor`,message:`Kaynaklar ${profile!.commonName} ile karideslerin uyumu konusunda çelişiyor; güvenli birlikte yaşam doğrulanamadı. OATA, karideslerin ağzına sığabilecekleri balıklarla tutulmamasını önerir; ${shrimpNames} yavruları ve yeni kabuk değiştirmiş karidesler özellikle risk altındadır.${noteText(note)}`,code:"shrimpUnverified",params:{fish:[profile!.commonName],shrimp:dwarfShrimp.map(({profile})=>profile!.commonName),conflict:true,...noteParams(note)}});}
  for(const {profile} of profiles.filter(({profile})=>profile!.husbandryCaution))warnings.push({level:"warning",title:`${profile!.commonName}: özel bakım gereksinimi`,message:profile!.husbandryCaution!,code:"husbandryCaution",params:{name:profile!.commonName,text:profile!.husbandryCaution!}});
  for(const {profile} of profiles.filter(({profile})=>profile!.tankLengthDataNote))warnings.push({level:"warning",title:`${profile!.commonName}: tank uzunluğu verisi sınırlı`,message:profile!.tankLengthDataNote!,code:"tankLengthNote",params:{name:profile!.commonName,text:profile!.tankLengthDataNote!}});
  for(const {item,profile} of groupIssues)warnings.push({level:"warning",title:`${profile!.commonName}: grup sayısı düşük`,message:`Kayıtlı adet ${item.quantity}; katalog önerisi en az ${profile!.minGroup}.`,code:"groupLow",params:{name:profile!.commonName,count:item.quantity,min:profile!.minGroup}});
  for(const entry of spaceIssues){const {profile}=entry;const volume=requiredVolume(entry);const reference=profile!.minTankLengthCm===undefined?`Kayıtlı adet için minimum ${volume} L referansı kullanıldı; kaynak tank uzunluğu yayımlamıyor.`:`Kayıtlı adet için minimum ${volume} L ve ${profile!.minTankLengthCm} cm uzunluk referansı kullanıldı.`;const size=profile!.adultSizeCm;const cm=(n:number)=>`${Math.round(n*10)/10} cm`;const spaceParams:EngineParams={name:profile!.commonName,volume,hasLength:profile!.minTankLengthCm!==undefined,length:profile!.minTankLengthCm??0};const lengthShort=aquarium.lengthCm>0&&profile!.minTankLengthCm!==undefined&&aquarium.lengthCm<profile!.minTankLengthCm;
   warnings.push(tooSmallIssues.has(entry)?{level:"danger",title:`${profile!.commonName}: akvaryum çok küçük`,message:`Kaynağa göre ${profile!.commonName} için kayıtlı ${entry.item.quantity} bireyle en az ${volume} L gerekir; akvaryumun net hacmi ${aquarium.netVolumeLiters} L, gerekenin yarısından da az.${lengthShort?` Kaynak en az ${profile!.minTankLengthCm} cm uzunluk da istiyor; akvaryumun uzunluğu ${aquarium.lengthCm} cm.`:""} Bu tür bu akvaryumda tutulmamalı.`,code:"spaceTooSmall",params:{name:profile!.commonName,count:entry.item.quantity,volume,aquariumVolume:aquarium.netVolumeLiters,lengthShort,length:profile!.minTankLengthCm??0,tankLength:aquarium.lengthCm}}
-   :severeSpaceIssues.has(entry)?{level:"danger",title:`${profile!.commonName}: akvaryum çok küçük`,message:`${reference} Akvaryum ayrıca İsviçre Hayvan Koruma Yönetmeliği'nin ölçü kuralındaki uzunluk (3×) ve su derinliği (1× vücut boyu) sınırlarından uyarlanan AquaMind sınırının altında. Yönetmelik kuyruk yüzgeci hariç boyu kullanır; AquaMind daha sıkı davranıp katalogdaki ${cm(size)} yetişkin boyu (çoğu türde toplam boy) kullanır: uzunluk en az ${cm(size*SWISS_MIN_LENGTH_RATIO)}, su derinliği en az ${cm(size*SWISS_MIN_DEPTH_RATIO)}.`,code:"spaceSevere",params:{...spaceParams,size,minLength:size*SWISS_MIN_LENGTH_RATIO,minDepth:size*SWISS_MIN_DEPTH_RATIO}}
+   :severeSpaceIssues.has(entry)?{level:"danger",title:`${profile!.commonName}: akvaryumun uzunluğu ya da derinliği yetersiz`,message:`${reference} Akvaryum ayrıca İsviçre Hayvan Koruma Yönetmeliği'nin ölçü kuralındaki uzunluk (3×) ve su derinliği (1× vücut boyu) sınırlarından uyarlanan AquaMind sınırının altında. Yönetmelik kuyruk yüzgeci hariç boyu kullanır; AquaMind daha sıkı davranıp katalogdaki ${cm(size)} yetişkin boyu (çoğu türde toplam boy) kullanır: uzunluk en az ${cm(size*SWISS_MIN_LENGTH_RATIO)}, su derinliği en az ${cm(size*SWISS_MIN_DEPTH_RATIO)}.`,code:"spaceSevere",params:{...spaceParams,size,minLength:size*SWISS_MIN_LENGTH_RATIO,minDepth:size*SWISS_MIN_DEPTH_RATIO}}
    :narrowSpaceIssues.has(entry)?{level:"warning",title:`${profile!.commonName}: akvaryum bu tür için dar`,message:`${reference} Akvaryumun genişliği (${cm(aquarium.widthCm)}), katalogdaki ${cm(size)} yetişkin boyun iki katından az. AquaMind bu öneriyi İsviçre Hayvan Koruma Yönetmeliği'nin ölçü kuralından (genişlik 2× vücut boyu) uyarlar; yönetmelik kuyruk yüzgeci hariç boyu, AquaMind çoğu türde toplam boyu kullanır. Genişliği en az ${cm(size*SWISS_MIN_WIDTH_RATIO)} olan bir akvaryum daha uygundur.`,code:"spaceNarrow",params:{...spaceParams,size,width:aquarium.widthCm,minWidth:size*SWISS_MIN_WIDTH_RATIO}}
    :{level:"warning",title:`${profile!.commonName}: alan sınırda`,message:reference,code:"spaceLimited",params:spaceParams});}
  // Kesin tehlikeler (yanlış su türü, kesişmeyen sıcaklık veya pH, avlanma, tür akvaryumu, tuzluluk, zehirli
@@ -512,7 +546,8 @@ export function createAnalyzer(resolver:KnowledgeResolver):AnalyzeAquarium{
  // Diğer tehlike uyarıları (ör. üretici önerisini çok aşan filtre, yetersiz ısıtıcı) genel durumu "tehlike"ye
  // çekmez ama "iyi" görünmesini de engeller: genel puan en fazla "dikkat" olur.
  // 1.18.0 (karar 0043): "tek tutulmalı" türden birden çok birey ve gerekenin yarısından küçük akvaryum da kesin tehlikedir.
- const criticalDanger=habitatIssues.length>0||temperatureConflict||phConflict||predationIssues.length>0||speciesOnlyIssues.length>0||conspecificAllIssues.length>0||tooSmallIssues.size>0||salinityIssues.length>0||marine?.rows.some(row=>row.parameter==="specificGravity"&&row.status==="danger")===true||(!noLivestock&&(ammonia?.level==="danger"||nitrite?.level==="danger"));
+ // 1.19.0 (karar 0044): kaynağın birbirine karıştırılmamasını yazdığı farklı türler (ör. iki ayrı palyaço türü) de kesin tehlikedir.
+ const criticalDanger=habitatIssues.length>0||temperatureConflict||phConflict||predationIssues.length>0||speciesOnlyIssues.length>0||conspecificAllIssues.length>0||incompatibleGroupIssues.length>0||tooSmallIssues.size>0||salinityIssues.length>0||marine?.rows.some(row=>row.parameter==="specificGravity"&&row.status==="danger")===true||(!noLivestock&&(ammonia?.level==="danger"||nitrite?.level==="danger"));
  const dangerWarning=warnings.some(warning=>warning.level==="danger");
  // 1.14.0 (karar 0037): tehlikedeki bir ölçüt de genel puanı en fazla "dikkat" yapar. Veri güveni bu kurala girmez; canlısı olmayan
  // akvaryumda filtre ve ısıtıcı ölçütü de girmez.
@@ -533,7 +568,10 @@ export function createAnalyzer(resolver:KnowledgeResolver):AnalyzeAquarium{
  // Davranışı biliniyor: başka canlılarla ilgili açık kaynaklı bir davranış kaydı (barışçıl ve "balık avcısı değil" dahil), avcı ya da tür akvaryumu
  // işareti, tank arkadaşı notu. Aynı tür saldırganlığı (`conspecificAggression`) yalnız kendi türünü anlattığı için tek başına yetmez (kontrol turu).
  const behaviorKnown=(profile:SpeciesProfileInput)=>Boolean(profile.predatory||profile.speciesOnly||profile.communityCaution)||Object.entries(profile.behavior??{}).some(([key,note])=>key!=="conspecificAggression"&&explicit(note)!==undefined);
- if(profiles.length>1)for(const {profile} of profiles)if(!behaviorKnown(profile!))unevaluated.push(gap("behaviorUnknown",{name:profile!.commonName}));
+ // 1.19.0 (karar 0044): başka canlılarla ilgili kaydı yalnız çelişkili olan tür "kaynaklar yazmıyor" değil, "kaynaklar çelişiyor" metnini alır
+ // (`conflict: true`); kod ve kart aynıdır.
+ const behaviorConflict=(profile:SpeciesProfileInput)=>Object.entries(profile.behavior??{}).some(([key,note])=>key!=="conspecificAggression"&&note?.conflict===true);
+ if(profiles.length>1)for(const {profile} of profiles)if(!behaviorKnown(profile!))unevaluated.push(gap("behaviorUnknown",{name:profile!.commonName,...(behaviorConflict(profile!)?{conflict:true}:{})}));
  for(const item of equipment)if(entersSafetyCalculation(item.category)&&!resolver.profileForEquipment(item)&&!userValueFor(item))unevaluated.push(gap("unknownEquipment",{name:deviceName(item),category:item.category}));
  // Hava motoru olmayan sünger filtrenin eksiği kapasite bilgisi değil, hava motorudur; bunu kırmızı `airPumpRequired` uyarısı söyler (kontrol turu).
  const waitsOnlyForAirPump=(profile:EquipmentProfileInput)=>profile.category==="filter"&&Boolean(profile.requiresAirPump)&&usableEquipment(profile)&&airPumpsWithFlow.length===0;
