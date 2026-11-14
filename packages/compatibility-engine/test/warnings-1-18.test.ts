@@ -41,6 +41,8 @@ const devices: Record<string, EquipmentProfileInput> = {
   filter: { id: "filter", category: "filter", brand: "Stub", model: "F200", ratedFlowLph: 800, recommendedMaxL: 200 },
   heater: { id: "heater", category: "heater", brand: "Stub", model: "H100", powerW: 100, recommendedMinL: 50, recommendedMaxL: 250 },
   bareFilter: { id: "bareFilter", category: "filter", brand: "Stub", model: "Verisiz", capacityDataNote: "Üretici debi yayımlamıyor." },
+  sponge: { id: "sponge", category: "filter", brand: "Stub", model: "Sünger", requiresAirPump: true, recommendedMaxL: 200 },
+  airPump: { id: "airPump", category: "air_pump", brand: "Stub", model: "Hava", ratedFlowLph: 200 },
 };
 const resolver: KnowledgeResolver = {
   speciesForLivestock: (item) => (item.catalogId ? species[item.catalogId] : undefined),
@@ -226,5 +228,34 @@ describe("5. salyangoz ve karides yiyenler, 'other' kategorisindeki avcılar", (
     const result = analyze(tank(200), [animal("frog"), animal("smallFish", 6)], equipped(), reading());
     expect(warningOf(result, "predation")).toMatchObject({ level: "danger", params: { predator: "Kurbağa", prey: "Küçük balık" } });
     expect(result.status).toBe("danger");
+  });
+});
+
+describe("kontrol turu düzeltmeleri (karşı firma kontrolü, 2026-11-14)", () => {
+  it("hava motoru olmayan sünger filtre kartta 'kapasite bilgisi eksik' diye görünmez; eksiği kırmızı 'hava motoru gerekli' uyarısı söyler", () => {
+    const result = analyze(tank(), [animal("calm", 6)], [device("sponge"), device("heater")], reading());
+    expect(warningOf(result, "airPumpRequired")).toMatchObject({ level: "danger" });
+    expect(unevaluatedCodes(result)).not.toContain("equipmentNoCapacity");
+    // Hava motoru eklenince filtre hesaba girer; kartta yine madde yok.
+    expect(analyze(tank(), [animal("calm", 6)], [device("sponge"), device("airPump"), device("heater")], reading()).unevaluated).toBeUndefined();
+    // Kapasite bilgisi gerçekten eksik olan filtre kartta kalır.
+    expect(unevaluatedCodes(analyze(tank(), [animal("calm", 6)], [device("bareFilter"), device("heater")], reading()))).toEqual(["equipmentNoCapacity"]);
+  });
+
+  it("uzunluğu girilmemiş akvaryumda (0) 'yarısından küçük' uyarısı 'akvaryumun uzunluğu 0 cm' demez", () => {
+    const result = analyze({ ...tank(54, 0), widthCm: 0, heightCm: 0 }, [animal("big")], equipped(), reading());
+    expect(warningOf(result, "spaceTooSmall")?.params).toMatchObject({ lengthShort: false });
+    expect(warningOf(result, "spaceTooSmall")?.message).not.toContain("0 cm");
+  });
+
+  it("cihazın markası ya da modeli yalnız boşluksa adı boş sayılır", () => {
+    const result = analyze(tank(), [], [device("unknownHeater", "heater", { brand: "  ", model: " " })]);
+    expect(result.unevaluated).toEqual([{ code: "unknownEquipment", params: { name: "", category: "heater" } }]);
+  });
+
+  it("yalnız aynı tür saldırganlığı kaydı olan tür, başka canlılarla uyumu bilinmediği için listeye girer; hüküm değişmez", () => {
+    const result = analyze(tank(200), [animal("calm", 6), animal("fighter", 1)], equipped(), reading());
+    expect(result.unevaluated).toEqual([{ code: "behaviorUnknown", params: { name: "Kavgacı" } }]);
+    expect(result.status).toBe("good");
   });
 });

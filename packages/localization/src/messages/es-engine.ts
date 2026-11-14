@@ -406,6 +406,7 @@ export const esEngine: EngineMessages = {
   },
   unevaluatedTitle: "Sin evaluar",
   unevaluatedIntro: "Este resultado no incluye lo siguiente; la puntuación se basa solo en lo que sabemos.",
+  unevaluatedIntroNoLivestock: "Los registros de abajo no se tuvieron en cuenta.",
   unevaluated: {
     unknownAnimal: (p, f) => `${str(p, "name")} (${specimens(p, f)}) no está en el catálogo; no se tuvieron en cuenta sus necesidades ni su compatibilidad.`,
     unverifiedAnimal: (p, f) => `El registro del catálogo de ${str(p, "name")} (${specimens(p, f)}) aún no está verificado; no se tuvieron en cuenta sus necesidades ni su compatibilidad.`,

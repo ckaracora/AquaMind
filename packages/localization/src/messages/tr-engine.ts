@@ -418,6 +418,8 @@ export const trEngine = {
    */
   unevaluatedTitle: "Değerlendirilemeyenler",
   unevaluatedIntro: "Bu sonuç aşağıdakileri kapsamıyor; puan yalnız bildiklerimize dayanıyor.",
+  /** Canlısız akvaryumda puan gösterilmez; kart yalnız hesaba katılmayan kayıtları söyler (kontrol turu). */
+  unevaluatedIntroNoLivestock: "Aşağıdaki kayıtlar hesaba katılmadı.",
   unevaluated: {
     unknownAnimal: (p, f) => `${str(p, "name")} (${f.number(num(p, "count"))} adet) katalogda yok; ihtiyaçları ve uyumu hesaba katılmadı.`,
     unverifiedAnimal: (p, f) => `${str(p, "name")} (${f.number(num(p, "count"))} adet) için katalog kaydı henüz doğrulanmadı; ihtiyaçları ve uyumu hesaba katılmadı.`,

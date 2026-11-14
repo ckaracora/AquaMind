@@ -1,7 +1,7 @@
 import { readFileSync } from "node:fs";
 import { describe, expect, it } from "vitest";
 import { analyzeAquarium } from "@/lib/health-analysis";
-import { groupHealthWarnings, sortWarningsBySeverity, SPECIES_NOTE_CODES } from "@/lib/health-warning-groups";
+import { groupHealthWarnings, healthAdviceView, sortWarningsBySeverity, SPECIES_NOTE_CODES } from "@/lib/health-warning-groups";
 import type { Aquarium, Livestock } from "@/types/aquarium";
 
 // Sağlık sayfasındaki uyarıların ekrandaki düzeni (kullanılabilirlik turu, 2026-11-12, ürün sahibi onayı). Kırmızı uyarı sarıların altında
@@ -59,7 +59,9 @@ describe("türlerin bakım notları ayrı grupta", () => {
 
   it("sağlık sayfası uyarıları bu gruplarla çizer; notlar kapalı bir <details> içinde", () => {
     const source = page();
-    expect(source).toContain("groupHealthWarnings(analysis.warnings)");
+    // Kontrol turu (motor 1.18.0): sayfa grupları `healthAdviceView` üzerinden alır (o da `groupHealthWarnings` kullanır).
+    expect(source).toContain("healthAdviceView(analysis,animals.length,awaiting.length)");
+    expect(readFileSync("src/lib/health-warning-groups.ts", "utf8")).toContain("const { risks, notes, records } = groupHealthWarnings(analysis.warnings);");
     expect(source).toContain("{risks.length?");
     expect(source).toContain("{notes.length>0&&<details");
     expect(source).not.toContain("{analysis.warnings.map(");
@@ -73,7 +75,9 @@ describe("canlısı olmayan akvaryumda puan gösterilmez", () => {
     const groups = groupHealthWarnings(analysis.warnings);
     expect(groups.risks).toContainEqual(analysis.warnings.find(w => w.code === "cycleIncomplete"));
     expect(groups.notes).toEqual([]);
-    expect(page()).toContain("const showAdvice=!noLivestock||awaiting.length>0||analysis.warnings.length>0;");
+    // Kontrol turu: boş kart çizilmez; kart risk, not ya da elle değer bekleyen cihaz varsa görünür.
+    expect(page()).toContain("const showAdvice=advice.showAdvice;");
+    expect(healthAdviceView(analysis, 0, 0).showAdvice).toBe(true);
   });
 
   it("motor boş akvaryuma yine 78 'iyi' verir (değişmedi); sayfa canlı yoksa halkayı ve göstergeleri çizmez", () => {

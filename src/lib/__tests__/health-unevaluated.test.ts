@@ -5,9 +5,11 @@ import { createDisplayFormat, loadLocaleBundle, messagesFor } from "@aquamind/lo
 import { engineMessagesFor, engineTextFormat } from "@aquamind/localization/engine";
 import { withBehaviorRecords } from "@/lib/health-analysis-core";
 import { analyzeAquarium } from "@/lib/health-analysis";
-import { groupHealthWarnings, unevaluatedTexts } from "@/lib/health-warning-groups";
+import { groupHealthWarnings, healthAdviceView, unevaluatedTexts } from "@/lib/health-warning-groups";
 import type { SpeciesProfile } from "@/data/catalog-species";
-import type { Aquarium, Livestock } from "@/types/aquarium";
+import { equipmentCatalog as equipmentProfiles } from "@/data/catalog-equipment";
+import { isVerifiedEquipmentProfile } from "@/data/catalog-shared";
+import type { Aquarium, Equipment, Livestock, WaterParameters } from "@/types/aquarium";
 
 // Motor 1.18.0 (docs/DECISIONS/0043-eksik-degerlendirme-ve-hukum-kurallari.md; ürün sahibinin onayı 2026-11-14): "Değerlendirilemeyenler" kartı.
 // Ürün sahibinin şartı: "Neyi eksik değerlendirdiğini de söylesin. Güzel bir yazıyla, bilgi şeklinde, net, öz." Kartın metinleri üç dilde,
@@ -129,10 +131,101 @@ describe("sağlık sayfası", () => {
     expect(source).toContain("const verdictLabel=incompleteGood?t.health.incomplete:t.health.overall[analysis.status];");
     expect(source).toContain('<ScoreRing score={analysis.score} status={incompleteGood?"neutral":analysis.status}/>');
     expect(source).toContain("{engineTexts.unevaluatedTitle}");
-    expect(source).toContain("analysis.incomplete?t.health.noRiskIncompleteTitle:t.health.noRiskTitle");
+    // Kontrol turu: risk yok kutusunu, kartın görünürlüğünü ve nötr göstergeleri `healthAdviceView` belirler (aşağıdaki testler).
+    expect(source).toContain("const advice=healthAdviceView(analysis,animals.length,awaiting.length);");
+    expect(source).toContain("const showAdvice=advice.showAdvice;");
+    expect(source).toContain("{advice.showUnevaluated&&unevaluated.length>0&&<section");
+    expect(source).toContain('emptyBox==="clear"?{tone:"bg-emerald-400/10 text-emerald-400",icon:<CheckCircle2 size={19}/>,title:t.health.noRiskTitle');
+    expect(source.match(/t\.health\.noRiskTitle/g)?.length).toBe(1);
+    expect(source).toContain("unassessed?t.health.metricNotAssessed:t.health.metricStatus[status]");
+    expect(source).toContain("noLivestock?engineTexts.unevaluatedIntroNoLivestock:engineTexts.unevaluatedIntro");
     // Göstergenin yanındaki çıplak yüzde yerine durum etiketi.
-    expect(source).toContain("{t.health.metricStatus[status]}");
+    expect(source).toContain(":t.health.metricStatus[status]}");
     expect(source).not.toContain("{score}%</span>");
+  });
+});
+
+describe("kontrol turu: ekranın bir yeri 'eksik' ya da 'yetersiz' derken başka yeri 'sorun yok' demez", () => {
+  const aquarium: Aquarium = { id: "a", name: "Deneme", type: "freshwater", lengthCm: 60, widthCm: 30, heightCm: 35, netVolumeLiters: 60, setupDate: "2026-11-14" };
+  const guppy: Livestock = { id: "g", aquariumId: "a", catalogId: "guppy", commonName: "Lepistes", category: "fish", quantity: 4, addedAt: "2026-11-14" };
+  const unknown: Livestock = { id: "x", aquariumId: "a", commonName: "Balon moli", category: "fish", quantity: 4, addedAt: "2026-11-14" };
+  const reading: WaterParameters = { id: "w", aquariumId: "a", measuredAt: "2026-11-14T10:00:00.000Z", temperature: 25, ph: 7.2, ammonia: 0, nitrite: 0, nitrate: 10 };
+  const filter = equipmentProfiles.find((profile) => profile.category === "filter" && profile.recommendedMaxL !== undefined && profile.recommendedMaxL >= 60 && profile.recommendedMaxL <= 120 && !profile.requiresAirPump && isVerifiedEquipmentProfile(profile))!;
+  const heater = equipmentProfiles.find((profile) => profile.category === "heater" && profile.powerW !== undefined && profile.powerW >= 50 && profile.powerW <= 100 && isVerifiedEquipmentProfile(profile))!;
+  const device = (id: string, profile: { id: string; category: Equipment["category"]; brand: string; model: string }): Equipment => ({ id, aquariumId: "a", catalogId: profile.id, category: profile.category, brand: profile.brand, model: profile.model, installedAt: "2026-11-14" });
+  const good = [device("f", filter), device("h", heater)];
+
+  it("hazırlık: tanınan lepistes, doğrulanmış filtre ve ısıtıcı ve ölçümle sonuç 'iyi', değerlendirilemeyen yok, yeşil kutu", () => {
+    const analysis = analyzeAquarium(aquarium, [guppy], good, reading);
+    expect(analysis.status).toBe("good");
+    expect(analysis.unevaluated).toBeUndefined();
+    const view = healthAdviceView(analysis, 1, 0);
+    expect(view.emptyBox).toBe("clear");
+    expect(view.unassessedMetrics.size).toBe(0);
+  });
+
+  it("P1: katalogda tanınmayan filtre ölçütü 'Yetersiz' yapıp hükmü 'dikkat'e çekerken yeşil 'Belirgin bir risk görünmüyor' çıkmaz", () => {
+    const analysis = analyzeAquarium(aquarium, [guppy], [{ id: "f", aquariumId: "a", category: "filter", brand: "Marka", model: "Yok", installedAt: "2026-11-14" }, device("h", heater)], reading);
+    expect(analysis.status).toBe("warning");
+    expect(analysis.metrics.find((metric) => metric.key === "filter")?.status).toBe("danger");
+    const view = healthAdviceView(analysis, 1, 1);
+    expect(view.risks).toEqual([]);
+    expect(view.emptyBox).toBe("verdict");
+    expect(view.showUnevaluated).toBe(true);
+  });
+
+  it("P1: su ölçümü yokken (canlılar tanınsa da) yeşil kutu yerine 'Hesaba katılmayanlar yukarıdaki kartta' kutusu", () => {
+    const analysis = analyzeAquarium(aquarium, [guppy], good);
+    expect(analysis.status).toBe("good");
+    expect(analysis.incomplete).toBeUndefined();
+    expect(analysis.unevaluated?.map((item) => item.code)).toEqual(["noReading"]);
+    expect(healthAdviceView(analysis, 1, 0).emptyBox).toBe("unevaluated");
+    expect([ui.tr.health.noRiskUnevaluatedText, ui.en.health.noRiskUnevaluatedText, ui.es.health.noRiskUnevaluatedText]).toEqual([
+      "Hesaba katılmayanlar yukarıdaki kartta yazıyor.", "What wasn't taken into account is listed in the card above.", "Lo que no se tuvo en cuenta aparece en la tarjeta de arriba.",
+    ]);
+  });
+
+  it("tanınmayan canlı varken 'incomplete' kutusu; metin doğrulanmamış kaydı da kapsar", () => {
+    const analysis = analyzeAquarium(aquarium, [guppy, unknown], good, reading);
+    expect(healthAdviceView(analysis, 2, 0).emptyBox).toBe("incomplete");
+    expect(ui.tr.health.noRiskIncompleteText).toBe("Tanınmayan ya da doğrulanmamış kayıtlar hesaba katılmadı; hangileri olduğu yukarıdaki kartta.");
+    expect(ui.tr.healthSummary.incomplete).toContain("doğrulanmadı");
+  });
+
+  it("yalnız tanınmayan canlı varken canlıya bağlı göstergeler (yük, alan, sosyal, uyum, ısıtıcı yoksa ısıtıcı) yeşil 'Uygun' değil 'Değerlendirilemedi'", () => {
+    const analysis = analyzeAquarium(aquarium, [unknown], [device("f", filter)], reading);
+    for (const key of ["load", "space", "social", "compatibility", "heater"]) expect(analysis.metrics.find((metric) => metric.key === key)?.status, key).toBe("good");
+    const view = healthAdviceView(analysis, 1, 0);
+    expect([...view.unassessedMetrics].sort()).toEqual(["compatibility", "heater", "load", "social", "space"]);
+    // Isıtıcı kayıtlıysa ısıtıcı ölçütü cihazın kendisine bakar; o zaman değerlendirilmiş sayılır. Tanınan bir canlı varsa hiçbir gösterge nötr değildir.
+    expect([...healthAdviceView(analyzeAquarium(aquarium, [unknown], good, reading), 1, 0).unassessedMetrics]).not.toContain("heater");
+    expect(healthAdviceView(analyzeAquarium(aquarium, [unknown, guppy], good, reading), 2, 0).unassessedMetrics.size).toBe(0);
+    expect([ui.tr.health.metricNotAssessed, ui.en.health.metricNotAssessed, ui.es.health.metricNotAssessed]).toEqual(["Değerlendirilemedi", "Not assessed", "Sin evaluar"]);
+    expect([ui.tr.health.metricNoLivestockCounted, ui.en.health.metricNoLivestockCounted, ui.es.health.metricNoLivestockCounted]).toEqual(["Hesaba giren canlı yok", "No livestock included in the calculation", "Ningún animal entró en el cálculo"]);
+  });
+
+  it("canlısız akvaryum: tanınmayan cihaz 'Değerlendirilemeyenler' kartında görünür; boş 'Bulgular ve Öneriler' kartı çizilmez", () => {
+    const analysis = analyzeAquarium(aquarium, [], [{ id: "f", aquariumId: "a", category: "filter", brand: "Marka", model: "Yok", installedAt: "2026-11-14" }]);
+    expect(analysis.unevaluated?.map((item) => item.code)).toEqual(["unknownEquipment"]);
+    const withoutAwaiting = healthAdviceView(analysis, 0, 0);
+    expect(withoutAwaiting).toMatchObject({ showUnevaluated: true, showAdvice: false, emptyBox: undefined });
+    expect(withoutAwaiting.records.map((warning) => warning.code)).toEqual(["unmatchedEquipment"]);
+    expect(healthAdviceView(analysis, 0, 1).showAdvice).toBe(true);
+    expect([engine.tr.unevaluatedIntroNoLivestock, engine.en.unevaluatedIntroNoLivestock, engine.es.unevaluatedIntroNoLivestock]).toEqual([
+      "Aşağıdaki kayıtlar hesaba katılmadı.", "The records below weren't taken into account.", "Los registros de abajo no se tuvieron en cuenta.",
+    ]);
+  });
+
+  it("'verdict' kutusunun metni üç dilde", () => {
+    expect([ui.tr.health.noRiskVerdictTitle, ui.en.health.noRiskVerdictTitle, ui.es.health.noRiskVerdictTitle]).toEqual(["Ayrı bir uyarı yok", "No separate warning", "Sin advertencias aparte"]);
+    expect(ui.tr.health.noRiskVerdictText).toBe("Sonucu yukarıdaki göstergeler belirliyor; Sınırda ya da Yetersiz olanlara bak.");
+    expect(ui.en.health.noRiskVerdictText).toBe("The result comes from the indicators above; check the ones marked Borderline or Insufficient.");
+    expect(ui.es.health.noRiskVerdictText).toBe("El resultado viene de los indicadores de arriba; revisa los que dicen Al límite o Insuficiente.");
+  });
+
+  it("yalnız cihaz çevirmeni verilse de kapasite notu çevrilir", () => {
+    const equipment = (value: string) => (value === "Üretici debi yayımlamıyor" ? "The manufacturer doesn't publish a flow rate" : undefined);
+    expect(unevaluatedTexts(engine.en, format("en"), [sample[1]], undefined, equipment)[0]).toContain("The manufacturer doesn't publish a flow rate.");
   });
 });
 

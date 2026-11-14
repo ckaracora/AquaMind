@@ -126,6 +126,22 @@ Liderin 28 kurulumu (aynı betik, `S\sprint\motor\`):
 - "Erkekler kavga eder" uyarısı kullanıcının girdiği cinsiyeti (`gender`) okumuyor; iki dişi beta da uyarı alır. Cinsiyete göre ayırmak ayrı karar.
 - Yarı hacim kuralının oranı (0,5) ürün sahibinin kararıdır; değiştirmek tek sabit.
 
+## Kontrol turu düzeltmeleri (2026-11-14)
+
+Karşı firma kontrolü (Gemini, salt okuma) bulguları kodda doğrulandı. Beş kural ve puanlama değişmedi; düzeltmeler ekran ve `unevaluated` listesiyle sınırlı.
+
+- Ekranın bir yeri "eksik" ya da "yetersiz" derken başka yeri "sorun yok" demez (`healthAdviceView`, `src/lib/health-warning-groups.ts`):
+  - Kayıt uyarıları risk listesinden çıkınca, katalogda tanınmayan filtre yüzünden "dikkat" alan ya da su ölçümü olmayan akvaryumda yeşil "Belirgin bir risk görünmüyor" çıkıyordu. Yeşil kutu artık yalnız hüküm "iyi" ve değerlendirilemeyen hiçbir şey yokken çıkar. Öbür durumlar: tanınmayan ya da doğrulanmamış canlı → "Değerlendirebildiğimiz kayıtlarda risk bulunmadı"; başka bir eksik → aynı başlık, "Hesaba katılmayanlar yukarıdaki kartta yazıyor."; hüküm "dikkat" ya da "uygun değil" → "Ayrı bir uyarı yok · Sonucu yukarıdaki göstergeler belirliyor; Sınırda ya da Yetersiz olanlara bak."
+  - Hiçbir canlı hesaba girmeyince (hepsi tanınmadı ya da doğrulanmadı) canlıya bağlı göstergeler (yük, alan, sosyal ihtiyaç, tür uyumu; ısıtıcı kayıtlı değilse ısıtıcı) yeşil "Uygun" yerine nötr "Değerlendirilemedi" ve "Hesaba giren canlı yok" yazar; çubuk boş kalır.
+  - Canlısız akvaryumda "Değerlendirilemeyenler" kartı da görünür (giriş "Aşağıdaki kayıtlar hesaba katılmadı.", çünkü puan gösterilmez); "Bulgular ve Öneriler" kartı yalnız içinde bir şey varken çizilir.
+  - "Eksik" metinleri doğrulanmamış canlıyı da söyler ("tanınmadı ya da kaydı doğrulanmadı").
+- `unevaluated` listesi:
+  - Hava motoru olmayan sünger filtre "kapasite bilgisi eksik" maddesine girmez; eksiği hava motorudur ve kırmızı `airPumpRequired` uyarısı bunu söyler.
+  - Yalnız aynı tür saldırganlığı kaydı (`conspecificAggression`) olan tür "davranışı biliniyor" sayılmaz; o kayıt başka canlılarla uyumu anlatmaz.
+  - Yalnız boşluktan oluşan marka ya da model "adı girilmemiş" sayılır.
+- `spaceTooSmall` metni uzunluğu girilmemiş (0) akvaryumda "akvaryumun uzunluğu 0 cm" demez.
+- Uygulanmayan öneriler: doğrulanmamış katalog cihazını "kapasite bilgisi eksik" maddesinden çıkarmak (tablodaki tanım "yok ya da doğrulanmadı"; çıkarsa hesaba girmeyen cihaz kartta görünmezdi); yarı hacim uyarısı varken İsviçre ölçü uyarısını da göstermek (bu kararın "tek uyarı" ilkesi).
+
 ## Geri alma
 
 Kod, test ve belge tek commit; altın fikstür ayrı commit. Kod commit'i geri alınınca motor 1.17.0 davranışına döner. Kullanıcı verisi ve depolama biçimi etkilenmez; analiz her açılışta yeniden hesaplanır.

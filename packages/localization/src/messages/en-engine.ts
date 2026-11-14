@@ -404,6 +404,7 @@ export const enEngine: EngineMessages = {
   },
   unevaluatedTitle: "Not assessed",
   unevaluatedIntro: "This result doesn't cover the items below; the score is based only on what we know.",
+  unevaluatedIntroNoLivestock: "The records below weren't taken into account.",
   unevaluated: {
     unknownAnimal: (p, f) => `${str(p, "name")} (${animals(p, f)}) isn't in the catalog; its needs and compatibility weren't taken into account.`,
     unverifiedAnimal: (p, f) => `The catalog record for ${str(p, "name")} (${animals(p, f)}) hasn't been verified yet; its needs and compatibility weren't taken into account.`,

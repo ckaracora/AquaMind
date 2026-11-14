@@ -88,7 +88,7 @@ describe("durum metinleri", () => {
       danger: "Sağlık analizi acil ilgilenmen gereken bir durum gösteriyor.",
       warning: "Sağlık analizinde dikkat gerektiren konular var.",
       good: "Sağlık analizinde öne çıkan bir sorun görünmüyor.",
-      incomplete: "Sağlık analizi eksik: bazı canlılar katalogda tanınmadı, sonuç onları kapsamıyor.",
+      incomplete: "Sağlık analizi eksik: bazı canlılar katalogda tanınmadı ya da kaydı doğrulanmadı, sonuç onları kapsamıyor.",
     });
   });
 });
