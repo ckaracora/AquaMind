@@ -8,6 +8,7 @@ const projectRoot = path.resolve(__dirname, "..");
 const originalResolveFilename = Module._resolveFilename;
 
 Module._resolveFilename = function resolveTypeScriptImports(request, parent, ...rest) {
+  if (request.startsWith("@/")) return originalResolveFilename.call(this, path.join(projectRoot, "src", request.slice(2)), parent, ...rest);
   if (request.startsWith(".") && parent?.filename) {
     const candidate = path.resolve(path.dirname(parent.filename), request);
     if (!path.extname(candidate) && fs.existsSync(`${candidate}.ts`)) {
@@ -64,6 +65,9 @@ const dataTestVerifiedAt = new Map([
 // yenilendi (docs/CATALOG_LOG.md, "2026-11-12 En az hacim ve uzunluk: 60 tatlı su türü").
 // 2026-11-14 veri denetimi (E1): ana kaynağı yeniden açılan ve değerleri kaynakla uyumlu (ya da düzeltilen) kayıtlar bu günü taşır (docs/CATALOG_LOG.md, "2026-11-14 Katalog denetimi").
 const reverified20261114 = new Set(["african-arowana", "african-butterfly-fish", "amazon-puffer", "angelfish", "anthrax-flyer-pleco-l235", "apisto-borellii", "apisto-hongsloi", "apisto-macmasteri", "apisto-mendezi", "apisto-nijsseni", "baenschi-peacock", "bala-shark", "barred-shovelnose-catfish", "betta", "black-devil-snail", "black-galaxy-shrimp", "black-ghost-knifefish", "black-kuhli-loach", "black-neon-tetra", "black-phantom-tetra", "black-pinto-shrimp", "black-ruby-barb", "black-sharkminnow", "black-skirt-tetra", "black-spotted-flyer-pleco-l244", "black-venezuela-cory", "bleeding-heart-tetra", "blood-parrot-cichlid", "blue-bolt-shrimp", "blue-neon-goby-atropurpureus", "blue-peru-tetra", "blue-phantom-pleco-l128", "blue-shadow-mosura-shrimp", "blue-spotted-bristlenose-l059a", "bluefin-notho", "boesemani-rainbow", "brichardi-cichlid", "brokenline-royal-pleco-l191", "bronze-cory", "bumblebee-goby", "butterfly-goodeid", "butterfly-pleco-l052", "c125-red-aspidoras", "cardinal-tetra", "celebes-halfbeak", "checker-barb", "checkerboard-cichlid", "cherry-barb", "chili-rasbora", "chinese-high-fin-sucker", "chinese-snakehead", "chocolate-gourami", "clown-killifish", "clown-loach", "clown-pleco", "cobalt-blue-goby-semoni", "cochus-blue-tetra", "colombian-ramshorn-snail", "colombian-zebra-pleco-l129", "congo-puffer", "congo-tetra", "coral-red-pencilfish", "corydoras-panda", "croaking-gourami", "crystal-black-shrimp", "daisys-blue-ricefish", "dark-edged-splitfin", "delhezi-bichir", "denison-barb", "diamond-tetra", "dojo-loach", "duckbill-catfish-sorubim-lima", "dwarf-chain-loach", "dwarf-neon-rainbow", "eight-banded-false-barb", "elongatus-mpanga", "ember-tetra", "emerald-cory", "emerald-dwarf-rasbora", "empire-gudgeon", "endlicheri-bichir", "fahaka-puffer", "flameback-bleeding-heart-tetra", "flowerhorn", "flying-fox", "forktail-rainbow", "freshwater-bumblebee-goby", "freshwater-needlefish", "frontosa", "fuelleborni-cichlid", "galaxy-rasbora", "gertrudae-rainbowfish", "giant-danio", "giant-gourami", "giant-sailfin-molly", "glowlight-danio", "gold-barb", "golden-king-tiger-pleco-l333", "golden-wonder-killifish", "goldeneye-dwarf-cichlid", "grants-peacock", "green-fire-tetra", "green-laser-cory-cw009", "green-neon-tetra", "green-terror", "guppy", "harlequin-rasbora", "head-and-tail-light-tetra", "hengeli-rasbora", "high-fin-green-phantom-l200a", "highfin-spotted-cory-cw027", "hillstream-loach", "honey-gourami", "indian-glass-fish", "indochinese-needlefish", "iridescent-shark-catfish", "jack-dempsey", "jewel-cichlid", "johanni-cichlid", "keyhole-cichlid", "king-kong-shrimp", "kissing-gourami", "kners-yellow-flagtail", "kuhli-loach", "lake-tebera-rainbowfish", "lambchop-rasbora", "lujans-pleco-l127", "lyretail-killifish", "maccullochs-rainbowfish", "madagascar-rainbowfish", "malayan-river-sole", "mascara-barb", "medaka", "mega-clown-pleco-l340", "metae-cory", "midas-cichlid", "molly", "moonlight-gourami", "napo-cory", "neon-tetra", "nerite-snail", "normans-lampeye", "northern-purple-spotted-gudgeon", "orange-seam-pleco-l106", "orange-venezuela-cory", "orinoco-angel-pleco-l201", "orinoco-wood-pleco-lda38", "ornate-tetra", "otocinclus", "pagoda-snail", "panda-garra", "panda-loach", "panda-shrimp", "pantano-cichlid", "parkinsons-rainbowfish", "peacock-gudgeon", "pearl-cichlid", "pearl-danio", "pearl-gourami", "pearlscale-cichlid", "peckoltia-l103", "pink-lipped-moray", "pinocchio-shrimp", "platy", "poso-orange-rabbit-snail", "poso-yellow-rabbit-snail", "prl-shrimp", "purple-pencilfish", "pygmy-cory", "rabauts-cory", "rainbow-shark", "rainbow-shiner", "rainbow-snakehead", "red-bellied-pacu", "red-clawed-crayfish", "red-eye-tetra", "red-eyed-puffer", "red-fancy-tiger-shrimp", "red-fin-thresher-pleco-l116", "red-galaxy-shrimp", "red-garra-rufa", "red-lip-goby-exallisquamulus", "red-neon-blue-eye", "red-pinto-shrimp", "red-rainbowfish", "red-tailed-black-shark", "red-tailed-goodeid", "red-tailed-rasbora", "red-whiptail-catfish", "red-wine-shrimp", "redhead-tapajos", "redhook-myleus", "redhump-eartheater", "redline-rasbora", "royal-farlowella", "rubicundus-lipstick-goby", "salt-pepper-cory", "sawbwa-resplendens", "scissortail-rasbora", "selheims-freshwater-sole", "senegal-bichir", "serpae-tetra", "serrata-dwarf-shrimp", "siamese-algae-eater", "silver-dollar-argenteus", "silver-hatchetfish", "silver-scat", "silver-tip-tetra", "skunk-cory", "slender-hemiodus", "smudge-spot-cory", "snakeskin-gourami", "snow-white-shrimp", "south-american-bumblebee-catfish", "southern-purple-spotted-gudgeon", "sparkling-gourami", "sparkling-limia", "starry-borneo-sucker", "sterbai-cory", "strawberry-rasbora", "swordtail", "tail-spot-pygmy-cory", "taiwan-bee-black-shrimp", "taiwan-bee-red-shrimp", "taiwan-bee-yellow-kingkong", "teardrop-guianacara", "thicklip-gourami", "threadfin-rainbowfish", "three-beacon-pleco-l091", "tiger-barb", "tiger-shovelnose-catfish", "tropheus-moorii", "turquoise-rainbowfish", "ucayali-flathead-pleco", "vampire-pleco-l240", "vampire-shrimp", "variatus-platy", "white-cloud", "winemillers-eartheater", "yellow-spotted-rabbit-snail", "yoyo-loach", "zebra-danio", "zebra-loach"]);
+// Veri sprinti tur 2 (2026-11-14, docs/CATALOG_LOG.md "Tur 2: kaynaksız hacim"): hacmi, uzunluğu ya da bekletilen değeri kaynak sayfası yeniden açılarak
+// değişen kayıtlar da bu günü taşır.
+for (const id of ["guppy", "molly", "platy", "swordtail", "betta", "koi-carp", "bluefin-notho", "butterfly-pleco-l052", "orange-seam-pleco-l106", "ucayali-flathead-pleco", "red-neon-blue-eye", "mega-clown-pleco-l340", "blue-spotted-bristlenose-l059a", "brokenline-royal-pleco-l191", "royal-pleco-l190", "rainbow-shiner", "cochus-blue-tetra", "normans-lampeye", "ninja-woodcat", "snakeskin-gourami", "colombian-ramshorn-snail", "cucuta-bristlenose-l149", "skunk-cory", "clown-pleco", "redhead-tapajos", "nerite-snail", "ramshorn-snail", "ghost-shrimp", "sun-nerite-snail", "tiger-nerite-snail", "mini-tiger-nerite-snail", "mini-nerite-snail", "batik-nerite-snail", "batman-nerite-snail", "turbo-snail", "red-clawed-crayfish", "ramirezi", "kubotai-rasbora", "odessa-barb", "blue-panaque-l239", "apisto-cacatuoides", "apisto-agassizii", "orange-tiger-pleco-l243", "apple-snail"]) reverified20261114.add(id);
 const rev14 = (id, previous) => (reverified20261114.has(id) ? "2026-11-14" : previous);
 const reverifiedAfterDataTest = new Map([["jbl-protemp-s-101", "2026-11-11"], ["calvus-cichlid", "2026-11-12"]]);
 // Codex denetimi: kalan bütün parçaları okuma alıntısıyla doğrulanan sadeleştirilmiş kayıt.
@@ -4736,7 +4740,7 @@ assert.equal(speciesForCatalogExactSearch("Pseudomugil sp. Red Neon", "fish", "f
 const ninjaWoodcat = speciesCatalog.find((item) => item.id === "ninja-woodcat");
 assert.deepEqual(
   [ninjaWoodcat?.scientificName,ninjaWoodcat?.adultSizeCm,ninjaWoodcat?.minVolumeL,ninjaWoodcat?.minTankLengthCm,ninjaWoodcat?.minGroup,ninjaWoodcat?.temperature,ninjaWoodcat?.ph,ninjaWoodcat?.flow],
-  ["Tatia musaica",7,56,60,5,[25,26],[6,7.2],"medium"],
+  ["Tatia musaica",7,54,60,5,[25,26],[6,7.2],"medium"],
   "Ninja Woodcat kaynaklı kimlik, koruyucu boy, tank tabanı, grup, su ve akıntı eşiklerini taşımalı",
 );
 assert.deepEqual(ninjaWoodcat?.waterTypes,["freshwater"],"Ninja Woodcat yalnız tatlı su profili taşımalı");
@@ -5268,7 +5272,7 @@ for (const [retailName, expectedId] of cikletistLivebearerInventory) {
   else assert.equal(matched, undefined, `Bilimsel kimliği yayımlanmayan ticari ad tahminle bir türe bağlanmamalı: ${retailName}`);
 }
 const verifiedGuppy = speciesCatalog.find((item) => item.id === "guppy");
-assert.deepEqual([verifiedGuppy?.adultSizeCm,verifiedGuppy?.minVolumeL,verifiedGuppy?.minTankLengthCm,verifiedGuppy?.minGroup,verifiedGuppy?.temperature,verifiedGuppy?.ph], [6,45,60,3,[20,28],[7,8]], "Lepistes FishBase ve OATA bakım eşiklerini taşımalı");
+assert.deepEqual([verifiedGuppy?.adultSizeCm,verifiedGuppy?.minVolumeL,verifiedGuppy?.minTankLengthCm,verifiedGuppy?.minGroup,verifiedGuppy?.temperature,verifiedGuppy?.ph], [6,60,60,3,[20,28],[7,8]], "Lepistes kaynakların büyüğü olan hacmi (Fishipedia 60 L) ve uzunluğu (Practical Fishkeeping 60 cm) taşımalı");
 assert.equal(verifiedGuppy?.verifiedAt, expectedVerifiedAt("guppy", "2026-09-02"), "Lepistes güncel kaynak doğrulama tarihini taşımalı");
 assert((verifiedGuppy?.additionalSourceUrls?.length || 0) >= 3, "Lepistes bilimsel, bakım ve yerel envanter kaynaklarını saklamalı");
 const verifiedVelifera = speciesCatalog.find((item) => item.id === "giant-sailfin-molly");
@@ -5298,11 +5302,11 @@ for (const [retailName, expectedId] of cikletistBettaInventory) {
   else assert.equal(matched, undefined, `Bilimsel kimliği yayımlanmayan Betta kategorisi adı tahminle bir türe bağlanmamalı: ${retailName}`);
 }
 const verifiedBetta = speciesCatalog.find((item) => item.id === "betta");
-assert.deepEqual([verifiedBetta?.scientificName,verifiedBetta?.adultSizeCm,verifiedBetta?.minVolumeL,verifiedBetta?.minTankLengthCm,verifiedBetta?.minGroup,verifiedBetta?.temperature,verifiedBetta?.ph,verifiedBetta?.flow], ["Betta splendens",6.5,20,undefined,1,[20,28],[6,8],"low"], "Betta splendens FishBase ve OATA bakım eşiklerini taşımalı; yayımlanmayan tank uzunluğu tahmin edilmemeli");
+assert.deepEqual([verifiedBetta?.scientificName,verifiedBetta?.adultSizeCm,verifiedBetta?.minVolumeL,verifiedBetta?.minTankLengthCm,verifiedBetta?.minGroup,verifiedBetta?.temperature,verifiedBetta?.ph,verifiedBetta?.flow], ["Betta splendens",6.5,41,45,1,[20,28],[6,8],"low"], "Betta splendens Seriously Fish'in 45 × 30 cm tabanını (yaklaşık 41 L) taşımalı; OATA'nın 20 L'si daha küçük");
 assert.equal(verifiedBetta?.verifiedAt, rev14(verifiedBetta?.id, "2026-09-02"), "Betta güncel kaynak doğrulama tarihini taşımalı");
 assert(verifiedBetta?.sourceUrl?.includes("fishbase.se"), "Betta bilimsel kimlik ve boy kaynağına bağlanmalı");
 assert(verifiedBetta?.additionalSourceUrls?.some((url) => url.includes("ornamentalfish.org")), "Betta kurumsal bakım kaynağına bağlanmalı");
-assert(verifiedBetta?.tankLengthDataNote?.includes("tahmini uzunluk kullanılmıyor"), "Betta için yayımlanmayan santimetre eşiği açıkça belirtilmeli");
+assert(verifiedBetta?.tankLengthDataNote === undefined && verifiedBetta?.additionalSourceUrls?.includes("https://www.seriouslyfish.com/species/betta-splendens/"), "Betta uzunluğu Seriously Fish tabanından gelir; eski uzunluk notu kalmamalı");
 const cikletistLabyrinthInventory = [["Gurami"], ...cikletistBettaInventory];
 assert.equal(cikletistLabyrinthInventory.length, 15, "Cikletist Labirentli Balıklar kategorisindeki 15 canlı başlığının tamamı denetlenmeli");
 for (const [retailName, expectedId] of cikletistLabyrinthInventory) {
@@ -5374,7 +5378,7 @@ assert(["seriouslyfish.com","fishkeeper.co.uk","fishbase.se"].every((host) => ve
 // akvaryum verdiğinde o uzunluk, Seriously Fish'in yayımlamadığı ölçüde kayıttaki kaynaklı değer. Sıra: boy, hacim, uzunluk, en az grup, sıcaklık, pH.
 const sourcedSpeciesBatch1 = {
   "angelfish":[15,200,100,2,[24,30],[6,7.4]],
-  "ramirezi":[7,54,60,2,[27,30],[4,7]],
+  "ramirezi":[4.2,54,60,2,[27,30],[4,7]],
   "green-neon-tetra":[2.5,41,45,8,[24,27],[3,6.5]],
   "silver-tip-tetra":[5,68,60,6,[23,28],[6,8]],
   "apisto-hongsloi":[6,41,45,1,[23,29],[5.5,7]],
@@ -5458,9 +5462,9 @@ const sourcedSpeciesBatch2 = {
   "red-tailed-black-shark":[13,243,120,1,[20,26],[6,8]],
   "rainbow-shark":[15,243,120,1,[20,26],[6.5,8]],
   "chinese-algae-eater":[28,304,150,1,[22,26],[6,8]],
-  "blue-panaque-l239":[15,72,80,1,[26,30],[5.5,7.5]],
+  "blue-panaque-l239":[12,72,80,1,[26,30],[5.5,7.5]],
   "three-beacon-pleco-l091":[24.7,243,120,1,[24,27],[6,7.6]],
-  "orange-tiger-pleco-l243":[20,108,120,1,[25,29],[5.5,7.5]],
+  "orange-tiger-pleco-l243":[20,108,150,1,[25,29],[5.5,7.5]],
   "red-fin-thresher-pleco-l116":[40,243,120,1,[25,28],[6.4,7.2]],
   "three-ray-bristlenose-lda72":[12,68,75,1,[24,30],[6.6,7.6]],
   "high-fin-green-phantom-l200a":[15.1,243,120,1,[26,30],[5.5,7.5]],
@@ -5608,7 +5612,7 @@ const sourcedSpeciesBatch3 = {
   "royal-pleco-l190":[50,500,150,1,[23,29],[6.5,7.5]],
   "mega-clown-pleco-l340":[10,80,80,1,[25,29],[6,7.2]],
   "vampire-pleco-l240":[25,375,150,1,[26,29],[6,7]],
-  "brokenline-royal-pleco-l191":[50,600,180,1,[24,29],[6.5,7.5]],
+  "brokenline-royal-pleco-l191":[50,1000,180,1,[24,29],[6.5,7.5]],
   "black-spotted-flyer-pleco-l244":[13,255,122,1,[25,29],[6,7]],
   "blue-spotted-bristlenose-l059a":[18.5,80,100,1,[25,28],[6,7]],
   "anthrax-flyer-pleco-l235":[20,255,122,1,[25,29],[6,7.2]],
@@ -5853,7 +5857,7 @@ assert(koiCarp, "Koi, Japon balığından ayrı bir biyolojik profil taşımalı
 assert.equal(koiCarp.scientificName, "Cyprinus carpio", "Koi doğru bilimsel kimlikle tutulmalı");
 assert.equal(koiCarp.minVolumeL, 4500, "Koi için OATA uzman havuzu alt sınırı korunmalı");
 assert.equal(koiCarp.minTankLengthCm, 300, "Koi için doğrulanan yaklaşık üç metrelik yüzme alanı korunmalı");
-assert.equal(koiCarp.minGroup, 3, "Koi sosyal grup ihtiyacı korunmalı");
+assert.equal(koiCarp.minGroup, 5, "Koi en az beşli grup (FishBase \"5 or more\", Fishipedia \"au moins 5/6\") taşımalı");
 assert(koiCarp.speciesOnly && koiCarp.husbandryCaution?.includes("akvaryum değil"), "Koi akvaryum canlısı gibi önerilmemeli");
 
 const cikletistCatfishListings = [
@@ -5933,8 +5937,8 @@ for (const waterType of ["freshwater", "saltwater", "brackish"]) {
 for (const [id, scientificName, volume, length, group, temperature, ph, verified = "2026-08-28"] of [
   ["blue-phantom-pleco-l128", "Hemiancistrus sp. L128", 162, 120, 1, [27,30], [6,7.5]],
   ["orinoco-angel-pleco-l201", "Hypancistrus sp. L201", 115, 80, 1, [25,29], [5.8,7]],
-  ["butterfly-pleco-l052", "Dekeyseria picta", 150, 80, 1, [25,29], [5.8,7]],
-  ["cucuta-bristlenose-l149", "Ancistrus sp. L149", 76, 60, 1, [23,28], [6.5,7.8]],
+  ["butterfly-pleco-l052", "Dekeyseria picta", 108, 120, 1, [25,29], [5.8,7]],
+  ["cucuta-bristlenose-l149", "Ancistrus sp. L149", 80, 60, 1, [23,28], [6.5,7.8]],
   // 2026-11-12: Seriously Fish 180 × 60 cm taban, ~648 L (docs/CATALOG_LOG.md, "2026-11-12 En az hacim ve uzunluk").
   ["hujeta-gar", "Ctenolucius hujeta", 648, 180, 5, [22,25], [5.5,7.5], "2026-11-12"],
 ]) {
@@ -5989,7 +5993,7 @@ for (const [id, scientificName, sourcePath, adultSizeCm, verifiedAt] of [
   assert(profile, `${id} kesin bilimsel/L-numarası profili katalogda bulunmalı`);
   assert.deepEqual(
     [profile.scientificName,profile.adultSizeCm,profile.minVolumeL,profile.minTankLengthCm,profile.temperature,profile.ph],
-    [scientificName,adultSizeCm,120,100,[25,29],[6,8]],
+    [scientificName,adultSizeCm,243,120,[25,29],[6,8]],
     `${id} uzman kaynaktaki kimlik ve bakım eşiklerini taşımalı`,
   );
   assert(profile.sourceUrl?.includes(sourcePath), `${id} doğrudan uzman tür kaynağına bağlanmalı`);
@@ -6439,7 +6443,7 @@ for (const [retailName, expectedId] of cikletistAmericanTetraListings) {
 }
 assert.equal(speciesForLivestock({commonName:"BLUE KING TETRA",category:"fish",quantity:1}), undefined, "Blue King adı Inpaichthys kerri ve Boehlkea fredcochui arasında belirsizken tahminle bağlanmamalı");
 const cochusBlueTetra = speciesForLivestock({commonName:"Cochu'nun mavi tetrası",scientificName:"Boehlkea fredcochui",category:"fish",quantity:6});
-assert.deepEqual([cochusBlueTetra?.id,cochusBlueTetra?.adultSizeCm,cochusBlueTetra?.minVolumeL,cochusBlueTetra?.minTankLengthCm,cochusBlueTetra?.minGroup,cochusBlueTetra?.temperature,cochusBlueTetra?.ph,cochusBlueTetra?.flow],["cochus-blue-tetra",5.4,60,60,6,[22,26],[6,6.5],"medium"],"Boehlkea fredcochui kaynaklı boy, sürü, akvaryum ve su eşiklerini taşımalı");
+assert.deepEqual([cochusBlueTetra?.id,cochusBlueTetra?.adultSizeCm,cochusBlueTetra?.minVolumeL,cochusBlueTetra?.minTankLengthCm,cochusBlueTetra?.minGroup,cochusBlueTetra?.temperature,cochusBlueTetra?.ph,cochusBlueTetra?.flow],["cochus-blue-tetra",5.4,100,60,6,[22,26],[6,6.5],"medium"],"Boehlkea fredcochui kaynaklı boy, sürü, akvaryum ve su eşiklerini taşımalı");
 assert(cochusBlueTetra?.sourceUrl?.includes("fishbase.se/summary/Boehlkea-fredcochui"),"Boehlkea fredcochui FishBase kimlik ve ekoloji kaynağına bağlanmalı");
 assert(cochusBlueTetra?.additionalSourceUrls?.some((url)=>url.includes("aquainfo.nl/en/article/boehlkea-fredcochui")),"Boehlkea fredcochui ayrıntılı bakım kaynağına bağlanmalı");
 const bluePeruTetra = speciesForLivestock({commonName:"Mavi Peru tetrası",scientificName:"Knodus borki",category:"fish",quantity:8});
@@ -6510,7 +6514,7 @@ for (const [id, scientificName, size, volume, length, group, temperature, ph, ex
   ["phoenix-rasbora", "Boraras merah", 2, 41, 45, 10, [20,28], [4,6.5], "2026-10-02"],
   ["green-fire-tetra", "Aphyocharax rathbuni", 4.5, 54, 60, 6, [20, 26], [6.5, 7.5], "2026-10-02"],
   ["red-neon-blue-eye", "Pseudomugil luminatus", 3, 60, 60, 10, [20,28], [6.5,8], "2026-10-02"],
-  ["ninja-woodcat", "Tatia musaica", 7, 56, 60, 5, [25,26], [6,7.2], "2026-10-02"],
+  ["ninja-woodcat", "Tatia musaica", 7, 54, 60, 5, [25,26], [6,7.2], "2026-10-02"],
   ["endlicheri-bichir", "Polypterus endlicherii", 75, 2268, 210, 1, [22,27], [6,8], "2026-10-30"],
   ["monoculus-peacock-bass", "Cichla monoculus", 80, 1200, 200, 1, [25,31], [5.5,6.5], "2026-10-02"],
 ]) {
@@ -6805,7 +6809,7 @@ assert(pandaCory?.husbandryCaution?.includes("bıyıklara zarar") && pandaCory?.
 const molly = speciesCatalog.find((item) => item.id === "molly");
 assert.deepEqual(
   [molly?.scientificName,molly?.adultSizeCm,molly?.minVolumeL,molly?.minTankLengthCm,molly?.minGroup,molly?.temperature,molly?.ph,molly?.flow],
-  ["Poecilia sphenops",7.5,45,60,3,[20,28],[7,8],undefined],
+  ["Poecilia sphenops",8,81,90,3,[20,28],[7,8],undefined],
   "Moli kaynaklı boy, alan, sosyal yapı ve su eşiklerini taşımalı; akıntı tahmin edilmemeli",
 );
 assert.deepEqual(molly?.waterTypes, ["freshwater","brackish"], "Moli FishBase doğal tatlı ve acı su kapsamını taşımalı");
@@ -6814,7 +6818,7 @@ assert(molly?.husbandryCaution?.includes("Poecilia mexicana") && molly?.husbandr
 const platy = speciesCatalog.find((item) => item.id === "platy");
 assert.deepEqual(
   [platy?.scientificName,platy?.adultSizeCm,platy?.minVolumeL,platy?.minTankLengthCm,platy?.minGroup,platy?.temperature,platy?.ph,platy?.flow],
-  ["Xiphophorus maculatus",6,45,60,3,[20,25],[7,8],"low"],
+  ["Xiphophorus maculatus",6,80,80,3,[20,25],[7,8],"low"],
   "Plati kaynaklı boy, alan, sosyal yapı ve su eşiklerini taşımalı",
 );
 assert.equal(platy?.verifiedAt, rev14(platy?.id, "2026-10-03"), "Plati güncel doğrulama tarihini taşımalı");
@@ -6822,7 +6826,7 @@ assert(platy?.husbandryCaution?.includes("melez") && platy?.husbandryCaution?.in
 const swordtail = speciesCatalog.find((item) => item.id === "swordtail");
 assert.deepEqual(
   [swordtail?.scientificName,swordtail?.adultSizeCm,swordtail?.minVolumeL,swordtail?.minTankLengthCm,swordtail?.minGroup,swordtail?.temperature,swordtail?.ph,swordtail?.flow],
-  ["Xiphophorus hellerii",16,80,91,3,[22,27],[7,8],"high"],
+  ["Xiphophorus hellerii",16,120,120,3,[22,27],[7,8],"high"],
   "Kılıçkuyruk kaynaklı boy, alan, sosyal yapı, su ve akıntı eşiklerini taşımalı",
 );
 assert.equal(swordtail?.verifiedAt, rev14(swordtail?.id, "2026-10-03"), "Kılıçkuyruk güncel doğrulama tarihini taşımalı");
@@ -8233,7 +8237,7 @@ assert.equal(speciesCatalog.find((item) => item.id === "electric-blue-hap")?.pre
 for (const [id, minVolumeL, minTankLengthCm, minGroup] of [
   ["green-terror", 304, 150, 1],
   ["firemouth-cichlid", 108, 120, 2],
-  ["redhead-tapajos", 280, 120, 6],
+  ["redhead-tapajos", 300, 120, 6],
 ]) {
   const profile = speciesCatalog.find((item) => item.id === id);
   assert(profile, `${id} Yeni Dünya cichlid kataloğunda bulunmalı`);
@@ -8941,7 +8945,7 @@ for (const [id, minVolumeL, minTankLengthCm, addedSources] of [
   ["pictus-catfish", 350, 150, ["https://www.fishi-pedia.com/fishes/pimelodus-pictus"]],
   ["glass-catfish", 250, 100, ["https://www.fishi-pedia.com/fishes/kryptopterus-vitreolus"]],
   ["petricola-catfish", 81, 90, ["https://www.seriouslyfish.com/species/synodontis-petricola"]],
-  ["clown-pleco", 80, 60, ["https://www.suedamerikafans.de/en/wels-datenbank/welsart/?art=252"]],
+  ["clown-pleco", 80, 60, ["https://www.suedamerikafans.de/en/wels-datenbank/welsart/?art=252", "https://ornamentalfish.org/what-we-do/advice-information/care-sheets/caresheets-tropical-freshwater-fish/how-to-look-after-freshwater-catfish/"]],
   ["zebra-pleco-l046", 80, 60, ["https://www.fishipedia.fr/fr/poissons/hypancistrus-zebra", "https://www.seriouslyfish.com/species/hypancistrus-zebra"]],
   ["red-whiptail-catfish", 68, 75, ["https://www.seriouslyfish.com/species/rineloricaria-sp"]],
   ["tinfoil-barb", 1000, 210, ["https://www.fishi-pedia.com/fishes/barbonymus-schwanenfeldii", "https://www.seriouslyfish.com/species/barbonymus-schwanefeldii"]],
@@ -8970,7 +8974,7 @@ for (const [id, minVolumeL, minTankLengthCm, addedSources] of [
   for (const url of addedSources) assert(profile.additionalSourceUrls?.includes(url) || profile.sourceUrl === url, `${id} değeri belirleyen ${url} kaynağını taşımalı`);
   assert.equal(profile.verifiedAt, rev14(profile?.id, "2026-11-12"), `${id} kaynağın okunduğu günü taşımalı`);
 }
-for (const [id, minVolumeL, minTankLengthCm] of [["jaguar-cichlid", 680, 182], ["skunk-cory", 75, 60], ["green-laser-cory-cw009", 100, 80], ["delhezi-bichir", 648, 180]]) {
+for (const [id, minVolumeL, minTankLengthCm] of [["jaguar-cichlid", 680, 182], ["skunk-cory", 80, 60], ["green-laser-cory-cw009", 100, 80], ["delhezi-bichir", 648, 180]]) {
   const profile = speciesCatalog.find((item) => item.id === id);
   assert.deepEqual([profile?.minVolumeL, profile?.minTankLengthCm], [minVolumeL, minTankLengthCm], `${id} kaynak bulunamadığı ya da kaynakla aynı olduğu için değişmemeli`);
 }
@@ -9004,7 +9008,7 @@ for (const [id, minVolumeL, minTankLengthCm] of [["jaguar-cichlid", 680, 182], [
   ["lake-tebera-rainbowfish", "Melanotaenia herbertaxelrodi", 9, 81, 90, 6, [20, 26], [7, 8], "low", false, false, "https://www.seriouslyfish.com/species/melanotaenia-herbertaxelrodi/"],
   ["black-kuhli-loach", "Pangio oblonga", 8, 54, 60, 5, [23, 26], [5, 7], "low", false, false, "https://www.seriouslyfish.com/species/pangio-oblonga/"],
   ["flying-fox", "Epalzeorhynchos kalopterum", 16, 300, 120, 1, [24, 26], [6.2, 7], "medium", false, false, "https://www.seriouslyfish.com/species/epalzeorhynchos-kalopterum/"],
-  ["colombian-ramshorn-snail", "Marisa cornuarietis", 6, 20, null, 1, [18, 28], [7.2, 8], null, false, false, "https://www.fishkeeper.co.uk/fish/freshwater/miscellaneous/colombian-giant-ramshorn-snail-"],
+  ["colombian-ramshorn-snail", "Marisa cornuarietis", 6, 50, null, 1, [18, 28], [7.2, 8], null, false, false, "https://www.fishkeeper.co.uk/fish/freshwater/miscellaneous/colombian-giant-ramshorn-snail-"],
   ["zebra-apple-snail", "Asolene spixi", 4, 60, null, 1, [18, 26], [6.5, 8], null, false, false, "https://www.wirbellose.de/artendatenbank/asolene-spixi-zebra-apfelschnecke/"],
   ];
   assert.equal(missingSpecies.length, 25, "Paketin 25 canlısı sabitlenmeli");
@@ -9138,5 +9142,69 @@ for (const [id, minVolumeL, minTankLengthCm] of [["jaguar-cichlid", 680, 182], [
   assert(!equipmentCatalog.some((item) => item.brand === "Lifetech" && item.model === "225"), "Jebo 225 Mini, Lifetech Jebo Mini 420'nin kopyası olarak açılmamalı");
   assert.deepEqual([get("venusaqua-uv1500f-07v")?.ratedFlowLph, get("venusaqua-uv1500f-07v")?.integratedUvcW], [1500, 7], "Venusaqua UV1500F-07V debisi ve UV lambası");
   for (const model of ["2004F", "VS-210F", "VS-410F", "601T"]) assert(!equipmentCatalog.some((item) => item.brand === "Venusaqua" && item.model === model), `Venusaqua ${model} çelişkili değerleri yüzünden eklenmemeli`);
+}
+// Veri sprinti tur 2 ve kaynak kontrolü (2026-11-14; docs/CATALOG_LOG.md): doğrulanan yeni değerler ile kaynak kapsamı
+// yetersiz olduğu için korunan eski değerler. Bağlantının bulunması tek başına sayının doğrulandığı anlamına gelmez.
+{
+  const tur2 = [
+  ["guppy", {"minVolumeL": 60}, ["https://www.fishi-pedia.com/fishes/poecilia-reticulata", "https://www.seriouslyfish.com/species/poecilia-reticulata/", "https://www.practicalfishkeeping.co.uk/features/guppy-care-guide-how-to-keep-healthy-long-lived-guppies/"]],
+  ["molly", {"minVolumeL": 81, "minTankLengthCm": 90}, ["https://www.fishi-pedia.com/fishes/poecilia-sphenops", "https://www.seriouslyfish.com/species/poecilia-sphenops/"]],
+  ["platy", {"minVolumeL": 80, "minTankLengthCm": 80}, ["https://www.fishipedia.es/pez/xiphophorus-maculatus", "https://www.fishi-pedia.com/fishes/xiphophorus-maculatus", "https://www.seriouslyfish.com/species/xiphophorus-maculatus/"]],
+  ["swordtail", {"minVolumeL": 120, "minTankLengthCm": 120}, ["https://www.fishi-pedia.com/fishes/xiphophorus-hellerii", "https://www.seriouslyfish.com/species/xiphophorus-hellerii/"]],
+  ["betta", {"minVolumeL": 41, "minTankLengthCm": 45}, ["https://www.seriouslyfish.com/species/betta-splendens/"]],
+  ["koi-carp", {"minGroup": 5}, ["https://www.fishipedia.fr/fr/poissons/cyprinus-rubrofuscus-koi"]],
+  ["bluefin-notho", {"minVolumeL": 45, "minTankLengthCm": 50}, ["https://www.seriouslyfish.com/species/nothobranchius-rachovii/"]],
+  ["butterfly-pleco-l052", {"minVolumeL": 108, "minTankLengthCm": 120}, ["https://www.seriouslyfish.com/species/dekeyseria-picta/"]],
+  ["orange-seam-pleco-l106", {"minTankLengthCm": 120}, ["https://www.seriouslyfish.com/species/hemiancistrus-guahiborum/"]],
+  ["ucayali-flathead-pleco", {"minVolumeL": 243, "minTankLengthCm": 120}, ["https://www.seriouslyfish.com/species/peckoltichthys-bachi"]],
+  ["red-neon-blue-eye", {}, ["https://www.fishi-pedia.com/fishes/pseudomugil-luminatus"]],
+  ["mega-clown-pleco-l340", {}, ["https://www.fishipedia.fr/fr/poissons/hypancistrus-sp-l340"]],
+  ["blue-spotted-bristlenose-l059a", {"minVolumeL": 80}, ["https://www.fishi-pedia.com/fishes/ancistrus-hoplogenys"]],
+  ["brokenline-royal-pleco-l191", {"minVolumeL": 1000}, ["https://www.fishi-pedia.com/fishes/panaque-l-191"]],
+  ["royal-pleco-l190", {"minVolumeL": 500}, ["https://www.fishi-pedia.com/fishes/panaque-nigrolineatus"]],
+  ["rainbow-shiner", {"minVolumeL": 120}, ["https://www.fishi-pedia.com/fishes/notropis-chrosomus"]],
+  ["cochus-blue-tetra", {"minVolumeL": 100}, ["https://www.fishi-pedia.com/fishes/boehlkea-fredcochui"]],
+  ["normans-lampeye", {"minVolumeL": 50}, ["https://www.fishipedia.fr/fr/poissons/poropanchax-normani"]],
+  ["ninja-woodcat", {"minVolumeL": 54}, ["https://www.fishi-pedia.com/fishes/tatia-musaica"]],
+  ["snakeskin-gourami", {}, ["https://www.seriouslyfish.com/species/trichopodus-pectoralis/"]],
+  ["colombian-ramshorn-snail", {"minVolumeL": 50}, ["https://www.fishipedia.fr/fr/mollusques/marisa-cornuarietis"]],
+  ["cucuta-bristlenose-l149", {"minVolumeL": 80}, ["https://ornamentalfish.org/what-we-do/advice-information/care-sheets/caresheets-tropical-freshwater-fish/how-to-look-after-freshwater-catfish/"]],
+  ["skunk-cory", {"minVolumeL": 80}, ["https://ornamentalfish.org/what-we-do/advice-information/care-sheets/caresheets-tropical-freshwater-fish/how-to-look-after-freshwater-catfish/"]],
+  ["clown-pleco", {}, ["https://ornamentalfish.org/what-we-do/advice-information/care-sheets/caresheets-tropical-freshwater-fish/how-to-look-after-freshwater-catfish/"]],
+  ["redhead-tapajos", {"minVolumeL": 300}, ["https://ornamentalfish.org/what-we-do/advice-information/care-sheets/caresheets-tropical-freshwater-fish/how-to-look-after-american-cichlids/"]],
+  ["nerite-snail", {"minVolumeL": 20}, []],
+  ["ramshorn-snail", {"minVolumeL": 20}, []],
+  ["ghost-shrimp", {"minVolumeL": 25}, []],
+  ["sun-nerite-snail", {"minVolumeL": 20}, ["https://ornamentalfish.org/what-we-do/advice-information/care-sheets/caresheets-tropical-freshwater-invertebrates/how-to-look-after-freshwater-shrimp-and-snails/"]],
+  ["tiger-nerite-snail", {"minVolumeL": 20}, ["https://ornamentalfish.org/what-we-do/advice-information/care-sheets/caresheets-tropical-freshwater-invertebrates/how-to-look-after-freshwater-shrimp-and-snails/"]],
+  ["mini-tiger-nerite-snail", {"minVolumeL": 20}, ["https://ornamentalfish.org/what-we-do/advice-information/care-sheets/caresheets-tropical-freshwater-invertebrates/how-to-look-after-freshwater-shrimp-and-snails/"]],
+  ["mini-nerite-snail", {"minVolumeL": 20}, ["https://ornamentalfish.org/what-we-do/advice-information/care-sheets/caresheets-tropical-freshwater-invertebrates/how-to-look-after-freshwater-shrimp-and-snails/"]],
+  ["batik-nerite-snail", {"minVolumeL": 20}, ["https://ornamentalfish.org/what-we-do/advice-information/care-sheets/caresheets-tropical-freshwater-invertebrates/how-to-look-after-freshwater-shrimp-and-snails/"]],
+  ["batman-nerite-snail", {"minVolumeL": 20}, ["https://ornamentalfish.org/what-we-do/advice-information/care-sheets/caresheets-tropical-freshwater-invertebrates/how-to-look-after-freshwater-shrimp-and-snails/"]],
+  ["turbo-snail", {"minVolumeL": 25}, ["https://ornamentalfish.org/what-we-do/advice-information/care-sheets/caresheets-tropical-freshwater-invertebrates/how-to-look-after-freshwater-shrimp-and-snails/"]],
+  ["red-clawed-crayfish", {"minTankLengthCm": 100}, ["https://www.wirbellose.de/artendatenbank/cherax-quadricarinatus-australischer-flusskrebs/"]],
+  ["ramirezi", {"adultSizeCm": 4.2}, []],
+  ["kubotai-rasbora", {"adultSizeCm": 2}, []],
+  ["odessa-barb", {"adultSizeCm": 4.6}, []],
+  ["blue-panaque-l239", {"adultSizeCm": 12}, ["https://www.suedamerikafans.de/en/wels-datenbank/welsart/?art=330"]],
+  ["apisto-cacatuoides", {"adultSizeCm": 7.5}, []],
+  ["apisto-agassizii", {"adultSizeCm": 7.5}, []],
+  ["orange-tiger-pleco-l243", {"minTankLengthCm": 150}, []],
+  ["apple-snail", {"minVolumeL": 40}, ["https://ornamentalfish.org/what-we-do/advice-information/care-sheets/caresheets-tropical-freshwater-invertebrates/how-to-look-after-freshwater-shrimp-and-snails/"]],
+  ];
+  for (const [id, fields, sources] of tur2) {
+    const profile = speciesCatalog.find((item) => item.id === id);
+    assert(profile, `${id} katalogda bulunmalı`);
+    for (const [field, value] of Object.entries(fields)) assert.deepEqual(profile[field], value, `${id} ${field} tur 2 kontrol sonucunu taşımalı`);
+    for (const url of sources) assert(profile.sourceUrl === url || profile.additionalSourceUrls?.includes(url), `${id} ${url} kaynağını taşımalı`);
+    assert.equal(profile.verifiedAt, "2026-11-14", `${id} kaynağın okunduğu günü taşımalı`);
+    if (["cucuta-bristlenose-l149", "skunk-cory", "clown-pleco", "redhead-tapajos"].includes(id)) assert(profile.husbandryCaution?.includes("genel rehber"), `${id} hacmin genel rehberden geldiğini yazmalı`);
+  }
+  // Büyük küçülme olduğu için uygulanmayan hacimler (lider kararı bekliyor; docs/CATALOG_SOURCE_GAPS.md): kayıttaki değer kalır.
+  for (const [id, minVolumeL] of [["orange-seam-pleco-l106", 180], ["snakeskin-gourami", 300], ["delhezi-bichir", 648], ["manacapuru-bristlenose-l148", 120]]) {
+    assert.equal(speciesCatalog.find((item) => item.id === id)?.minVolumeL, minVolumeL, `${id} hacmi lider kararına kadar değişmemeli`);
+  }
+  // PRL karides: kaynakların ortak aralığı Lukhaup'un Taiwan Bee tutma aralığıyla tek noktaya (22 °C) iniyor; kural gelene kadar 18–22 °C kalır.
+  assert.deepEqual(speciesCatalog.find((item) => item.id === "prl-shrimp")?.temperature, [18, 22], "PRL karides sıcaklığı kural gelene kadar değişmemeli");
 }
 console.log(`Katalog akışı: ${equipmentCategories.length} ekipman kategorisi, ${livestockCategories.length} canlı sınıfı ve ${careProductCatalog.length} bakım ürünü başarıyla doğrulandı.`);
