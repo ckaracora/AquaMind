@@ -1,9 +1,12 @@
 "use client";
 
 import { FormEvent, useEffect, useId, useMemo, useRef, useState, type ReactNode } from "react";
-import { AlertTriangle, Check, Search, ShieldAlert, X } from "lucide-react";
+import { AlertTriangle, Check, ChevronRight, Search, ShieldAlert, Sparkles, X } from "lucide-react";
 import { engineMessagesFor, engineTextFormat } from "@aquamind/localization/engine";
+import { AquariumFitDialog } from "@/components/aquarium-fit";
+import { DidYouMeanButtons } from "@/components/did-you-mean";
 import { ModalDialog } from "@/components/modal-dialog";
+import { SpeciesCardButton, SpeciesCardDialog } from "@/components/species-card";
 import { speciesById, speciesCatalog, speciesForLivestock, speciesForCategoryAndWaterType, speciesGroup, speciesGroupsForCategoryAndWaterType, speciesWaterTypes } from "@/data/catalog-species";
 import type { SpeciesProfile, SpeciesSearchName } from "@/data/catalog-species";
 import type { UnresolvedSpeciesListing } from "@/data/catalog-species-unresolved";
@@ -161,6 +164,21 @@ export function pickLivestockSuggestion(state: LivestockFormState, profile: Spec
 
 export const showAllLivestockSuggestions = (state: LivestockFormState): LivestockFormState => ({ ...state, showAllSuggestions: true });
 
+/**
+ * "Bu akvaryuma ne uyar?" listesinden (veri sprinti F) ya da sağlık sayfasının "Ekle" bağlantısından seçilen tür: arama silinir, sınıf ve grup
+ * türünkine geçer, tür seçilir; adet türün en az grup sayısı olur (elle yazıldıysa ya da tür zaten seçiliyse korunur). Öneri sayılmaz.
+ */
+export function pickLivestockFromFit(state: LivestockFormState, profile: SpeciesProfile): LivestockFormState {
+  return { ...state, query: "", category: profile.category, group: speciesGroup(profile), selected: profile.id, quantity: quantityFor(state, profile), fromSuggestion: false, showAllSuggestions: false };
+}
+
+/** Pencere bir türle açılır (sağlık sayfasındaki "Bu akvaryuma ne uyar?" listesinin "Ekle" bağlantısı); tür bu su türüne uymuyorsa boş açılır. */
+export function livestockFormStartWith(initialCategory: Livestock["category"], waterType: AquariumType, speciesId?: string): LivestockFormState {
+  const start = livestockFormStart(initialCategory, waterType);
+  const profile = speciesById(speciesId);
+  return profile && speciesWaterTypes(profile).includes(waterType) ? pickLivestockFromFit(start, profile) : start;
+}
+
 function Highlighted({ text, query }: { text: string; query: string }): ReactNode {
   const range = matchRange(text, query);
   if (!range) return text;
@@ -215,26 +233,26 @@ export function OtherWaterNotice({ match, aquariumType, suggestions, query, sele
 
 /**
  * "Bunu mu demek istedin?" düğmeleri (2026-11-14 sprinti; liste src/data/search-suggestions.ts). Tür kendiliğinden seçilmez; kullanıcı
- * düğmeye basınca seçilir, kartta öneriden seçildiği yazar. Ad arayüz dilinde gösterilir.
+ * düğmeye basınca seçilir, kartta öneriden seçildiği yazar. Ad arayüz dilinde gösterilir. Ad çok türe gidiyorsa ilk altısı görünür, fazlası
+ * "Tümünü göster" ile açılır (src/components/did-you-mean.tsx).
  */
 export function DidYouMean({ suggestions, selectedId, pick }: { suggestions: SpeciesProfile[]; selectedId?: string; pick: (profile: SpeciesProfile) => void }) {
-  const { t, catalogText } = useI18n();
-  const f = t.livestock.form;
-  return <div className="grid gap-2 sm:col-span-2">{suggestions.map((item) => {
-    const pressed = item.id === selectedId;
-    return <button key={item.id} type="button" aria-pressed={pressed} onClick={() => pick(item)} className="flex min-h-11 w-full items-center justify-between gap-3 rounded-xl border border-aqua/30 bg-aqua/[.06] px-3 py-2.5 text-left transition-colors hover:bg-aqua/[.11] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-aqua aria-pressed:border-aqua aria-pressed:bg-aqua/[.15]">
-      <span className="grid min-w-0 gap-0.5"><span className="text-sm font-bold leading-snug">{f.didYouMean(catalogText(item.commonName) ?? item.commonName)}</span><span className="text-[11px] sm:text-[10px] italic text-[#71858d]">{item.scientificName}</span></span>
-      {pressed && <span className="inline-flex shrink-0 items-center gap-1 rounded-full bg-aqua px-2 py-1 text-xs font-extrabold text-ink"><Check size={12} strokeWidth={3.5} aria-hidden="true" />{f.otherWaterSuggestionChosen}</span>}
-    </button>;
-  })}</div>;
+  const { catalogText } = useI18n();
+  const items = suggestions.map((item) => ({ id: item.id, name: catalogText(item.commonName) ?? item.commonName, scientificName: item.scientificName }));
+  return <DidYouMeanButtons items={items} selectedId={selectedId} className="sm:col-span-2" pick={(id) => { const profile = suggestions.find((item) => item.id === id); if (profile) pick(profile); }} />;
 }
 
-/** Seçili türün kartı. `searchedFor` verilirse tür öneriden seçilmiştir; kartın altında kullanıcının aradığı adla yazar. */
+/**
+ * Seçili türün kartı. `searchedFor` verilirse tür öneriden seçilmiştir; kartın altında kullanıcının aradığı adla yazar. "Tür kartı" düğmesi
+ * türün davranış, bakım ve kaynak bilgisini ayrı pencerede açar (veri sprinti F, src/components/species-card.tsx).
+ */
 export function SelectedSpeciesCard({ profile, searchedFor }: { profile: SpeciesProfile; searchedFor?: string }) {
   const fmt = useDisplayFormat();
   const { t, catalogText } = useI18n();
   const f = t.livestock.form;
-  return <div className="rounded-xl border border-aqua/15 bg-aqua/[.05] p-4 sm:col-span-2"><div className="flex justify-between"><div><p className="text-sm font-extrabold">{catalogText(profile.commonName) ?? profile.commonName}</p><p className="mt-1 text-[11px] sm:text-[10px] italic text-[#71858d]">{profile.scientificName}</p></div><span className="rounded-full bg-emerald-400/10 px-2 py-1 text-[11px] sm:text-[8px] font-bold text-emerald-400">{f.inCatalog}</span></div><div className="mt-3 grid grid-cols-3 gap-2 text-[11px] sm:text-[9px]"><span>{f.adultSize} <b>{profile.adultSizeCm} cm</b></span><span>{f.minVolume} <b>{fmt.volume(profile.minVolumeL)}</b></span><span>{f.minGroup} <b>{profile.minGroup}+</b></span></div>{searchedFor !== undefined && <p className="mt-3 flex items-start gap-1.5 border-t border-aqua/15 pt-2.5 text-[11px] sm:text-[10px] font-semibold leading-normal text-aqua"><Check size={13} strokeWidth={3} aria-hidden="true" className="mt-0.5 shrink-0" /><span>{f.chosenFromSuggestion(searchedFor)}</span></p>}</div>;
+  const [cardOpen, setCardOpen] = useState(false);
+  const name = catalogText(profile.commonName) ?? profile.commonName;
+  return <div className="rounded-xl border border-aqua/15 bg-aqua/[.05] p-4 sm:col-span-2"><div className="flex justify-between gap-3"><div className="min-w-0"><p className="text-sm font-extrabold">{name}</p><p className="mt-1 text-[11px] sm:text-[10px] italic text-[#71858d]">{profile.scientificName}</p></div><span className="h-fit shrink-0 rounded-full bg-emerald-400/10 px-2 py-1 text-[11px] sm:text-[8px] font-bold text-emerald-400">{f.inCatalog}</span></div><div className="mt-3 grid grid-cols-3 gap-2 text-[11px] sm:text-[9px]"><span>{f.adultSize} <b>{profile.adultSizeCm} cm</b></span><span>{f.minVolume} <b>{fmt.volume(profile.minVolumeL)}</b></span><span>{f.minGroup} <b>{profile.minGroup}+</b></span></div><div className="mt-3"><SpeciesCardButton name={name} onClick={() => setCardOpen(true)} /></div>{searchedFor !== undefined && <p className="mt-3 flex items-start gap-1.5 border-t border-aqua/15 pt-2.5 text-[11px] sm:text-[10px] font-semibold leading-normal text-aqua"><Check size={13} strokeWidth={3} aria-hidden="true" className="mt-0.5 shrink-0" /><span>{f.chosenFromSuggestion(searchedFor)}</span></p>}{cardOpen && <SpeciesCardDialog profile={profile} close={() => setCardOpen(false)} />}</div>;
 }
 
 /** Motor gibi, aynı katalog türünün eski kayıtlarını da yeni adetle birlikte sayar. */
@@ -249,7 +267,7 @@ const NO_DEVICES: Equipment[] = [];
  * Canlı seçme penceresi. `animals`, `devices` ve `latest` bu akvaryumun kayıtlarıdır: seçilen canlının onlarla birlikte yeni getirdiği
  * avlanma ve uyumsuzluk uyarıları eklemeden önce gösterilir (src/lib/selection-warnings.ts). Verilmezse akvaryum boş sayılır.
  */
-export function CatalogLivestockForm({ aquarium, initialCategory, close, submit, animals = NO_ANIMALS, devices = NO_DEVICES, latest }: { aquarium: Aquarium; initialCategory: Livestock["category"]; close: () => void; submit: (e: FormEvent<HTMLFormElement>) => void; animals?: Livestock[]; devices?: Equipment[]; latest?: WaterParameters }) {
+export function CatalogLivestockForm({ aquarium, initialCategory, close, submit, animals = NO_ANIMALS, devices = NO_DEVICES, latest, initialSpeciesId }: { aquarium: Aquarium; initialCategory: Livestock["category"]; close: () => void; submit: (e: FormEvent<HTMLFormElement>) => void; animals?: Livestock[]; devices?: Equipment[]; latest?: WaterParameters; initialSpeciesId?: string }) {
   // Katalogdaki hacim referansları ayarlardaki birimde (litre/galon) yazılır.
   const fmt = useDisplayFormat();
   const { t, locale, catalogText } = useI18n();
@@ -266,7 +284,9 @@ export function CatalogLivestockForm({ aquarium, initialCategory, close, submit,
   const searchContext: LivestockSearchContext = { waterType: aquarium.type, translatedName, otherNames };
   const compatibleSpecies = speciesCatalog.filter((item) => speciesWaterTypes(item).includes(aquarium.type));
   const categories = allCategories.filter((key) => compatibleSpecies.some((item) => item.category === key));
-  const [form, setForm] = useState(() => livestockFormStart(initialCategory, aquarium.type));
+  const [form, setForm] = useState(() => livestockFormStartWith(initialCategory, aquarium.type, initialSpeciesId));
+  // "Bu akvaryuma ne uyar?" penceresi (veri sprinti F); listeden seçilen tür bu pencerede seçilir.
+  const [fitOpen, setFitOpen] = useState(false);
   const { category, group, query, selected, quantity } = form;
   // Cinsiyet seçimi denetimli alandır; kayda formdan, seçme anındaki analize aday canlıyla gider.
   const [gender, setGender] = useState<NonNullable<Livestock["gender"]>>("unknown");
@@ -278,7 +298,8 @@ export function CatalogLivestockForm({ aquarium, initialCategory, close, submit,
   const groupItems = allGroupItems.filter((item) => item.id === selected || speciesNameMatches(item, query, translatedName, otherNames));
   const profile = speciesById(selected);
   const search = livestockSearch(query, category, searchContext);
-  // "Bunu mu demek istedin?" (2026-11-14 sprinti): katalogda hiç eşleşme yoksa ve ad bir öneri terimiyse en çok üç düğme; tür seçilmez.
+  // "Bunu mu demek istedin?" (2026-11-14 sprinti): katalogda hiç eşleşme yoksa ve ad bir öneri terimiyse terimin bütün türleri (ilk altısı
+  // görünür, fazlası "Tümünü göster"); tür seçilmez.
   const didYouMean = search.kind === "none" ? searchSuggestionsFor(query, aquarium.type, searchSuggestions) : [];
   const unresolvedMatch = search.kind === "unresolved" ? search.listing : undefined;
   // Aranan ad bu akvaryum türünde tam ad değil ama başka su türündeki doğrulanmış bir türün tam adıysa tür seçilmez; türün bu akvaryum
@@ -318,9 +339,10 @@ export function CatalogLivestockForm({ aquarium, initialCategory, close, submit,
         {aquarium.type !== "freshwater" && <p role="note" className="rounded-xl border border-white/[.08] bg-white/[.025] p-3 text-[11px] sm:text-[10px] leading-relaxed text-[#91a3aa] sm:col-span-2">{t.livestock.form.limitedCoverage(aquarium.type)}</p>}
         {/* Arama ilk adımdır ve bütün sınıflarda arar; sınıf ve grup göz atmak içindir (2026-11-14 sprinti). */}
         <label className="relative text-xs font-bold text-[#91a3aa] sm:col-span-2">{t.livestock.form.search}<Search size={15} className="pointer-events-none absolute left-3 top-[42px] text-[#586e77]" /><input type="search" value={query} onChange={(e) => { const next = e.target.value; setForm((current) => changeLivestockQuery(current, next, searchContext)); }} onKeyDown={(e) => { if (e.key === "Enter") e.preventDefault(); }} enterKeyHint="search" placeholder={t.livestock.form.searchPlaceholder} className={`${field} pl-9`} /><span className="mt-1 block text-[11px] sm:text-[10px] font-normal text-[#647981]">{t.livestock.form.searchAllHint}</span></label>
-        {didYouMean.length > 0 && <DidYouMean suggestions={didYouMean} selectedId={hasSelectedProfile ? selected : undefined} pick={(item) => setForm((current) => pickLivestockSuggestion(current, item))} />}
+        {didYouMean.length > 0 && <DidYouMean key={normalizedQuery} suggestions={didYouMean} selectedId={hasSelectedProfile ? selected : undefined} pick={(item) => setForm((current) => pickLivestockSuggestion(current, item))} />}
         {unresolvedMatch && <div className="rounded-xl border border-amber-300/20 bg-amber-300/[.07] p-4 sm:col-span-2"><div className="flex items-start justify-between gap-3"><div><p className="text-[11px] sm:text-[10px] font-extrabold text-amber-300">{t.livestock.form.unresolvedTitle}</p><p className="mt-1 text-sm font-bold text-amber-50">{catalogText(unresolvedMatch.name) ?? unresolvedMatch.name}</p></div><span className="rounded-full bg-amber-300/10 px-2 py-1 text-[11px] sm:text-[8px] font-bold text-amber-200">{t.livestock.form.unresolvedBadge}</span></div>{unresolvedReason && <p className="mt-2 text-[11px] sm:text-[10px] leading-relaxed text-amber-100/65">{unresolvedReason}</p>}<p className="mt-2 text-[11px] sm:text-[9px] font-semibold text-amber-200/70">{t.livestock.form.unresolvedBlocked}</p><a href={unresolvedMatch.sourceUrl} target="_blank" rel="noreferrer" className="-mb-[15.25px] -mt-[3.25px] inline-flex min-h-11 items-center text-[11px] sm:text-[9px] font-bold text-aqua hover:underline">{t.livestock.form.unresolvedSource}</a></div>}
         {otherWaterMatch && <OtherWaterNotice match={otherWaterMatch.profile} aquariumType={aquarium.type} suggestions={otherWaterMatch.suggestions} query={normalizedQuery} selectedId={hasSelectedProfile ? selected : undefined} announced={chosenFromSuggestion && profile ? speciesName(profile) : undefined} showAll={form.showAllSuggestions} pick={(item) => setForm((current) => pickLivestockSuggestion(current, item))} showAllSuggestions={() => setForm(showAllLivestockSuggestions)} />}
+        <button type="button" onClick={() => setFitOpen(true)} className="flex min-h-11 w-full items-center gap-3 rounded-xl border border-aqua/20 bg-aqua/[.04] px-3 py-2.5 text-left hover:border-aqua/40 sm:col-span-2"><Sparkles size={16} aria-hidden="true" className="shrink-0 text-aqua" /><span className="min-w-0 flex-1"><span className="block text-xs font-extrabold text-aqua">{t.livestock.fit.open}</span><span className="block text-[11px] text-[#71858d] sm:text-[10px]">{t.livestock.fit.openDetail}</span></span><ChevronRight size={14} aria-hidden="true" className="shrink-0 text-[#586e77]" /></button>
         <p className="-mb-2 text-[11px] sm:text-[10px] font-bold text-[#647981] sm:col-span-2">{t.livestock.form.browseTitle}</p>
         <label className="text-xs font-bold text-[#91a3aa]">{t.livestock.form.category}<select value={category} onChange={(e) => setForm(changeLivestockCategory(e.target.value as Livestock["category"], aquarium.type))} className={field}>{categories.map((key) => <option key={key} value={key}>{t.livestock.categories[key]}</option>)}</select></label>
         <label className="text-xs font-bold text-[#91a3aa]">{t.livestock.form.group}<select value={group} onChange={(e) => { const next = e.target.value as SpeciesGroupKey; setForm((current) => changeLivestockGroup(current, next, aquarium.type)); }} className={field}>{groups.map((item) => <option key={item} value={item}>{t.livestock.speciesGroups[item]}</option>)}</select></label>
@@ -343,5 +365,6 @@ export function CatalogLivestockForm({ aquarium, initialCategory, close, submit,
       </div>
       <div className="mt-7 flex justify-end gap-2"><button type="button" onClick={close} className="min-h-11 min-w-11 rounded-xl border border-white/[.08] px-5 py-3 text-xs font-bold text-[#91a3aa] sm:min-h-0 sm:min-w-0">{t.common.cancel}</button><button disabled={!hasSelectedProfile || Boolean(unresolvedMatch)} className="min-h-11 min-w-11 rounded-xl bg-aqua px-5 py-3 text-xs font-extrabold text-ink disabled:opacity-40 sm:min-h-0 sm:min-w-0">{t.livestock.form.submit}</button></div>
     </form>
+    {fitOpen && <AquariumFitDialog aquarium={aquarium} animals={animals} devices={devices} latest={latest} close={() => setFitOpen(false)} pick={(item) => { setForm((current) => pickLivestockFromFit(current, item)); setFitOpen(false); }} />}
   </ModalDialog>;
 }

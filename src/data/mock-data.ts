@@ -41,6 +41,9 @@ export const equipment: Equipment[] = [
   { id: "e1", aquariumId: "aqua-1", category: "filter", brand: "Oase", model: "BioMaster² 350", installedAt: "2024-03-12", specifications: "1100 L/saat", catalogId:"oase-biomaster2-350" },
   { id: "e2", aquariumId: "aqua-1", category: "lighting", brand: "Chihiros", model: "WRGB II 90", installedAt: "2024-03-12", specifications: "100 W", catalogId:"chihiros-wrgb2-90" },
   { id: "e3", aquariumId: "aqua-1", category: "co2", brand: "ISTA", model: "2L Set", installedAt: "2024-03-18" },
+  // Isıtıcı (veri sprinti F, 2026-11-14): örnekteki tropikal canlılar (cüce vatozun kaynaktaki en düşük sıcaklığı 23 °C) ısıtıcı ister. Katalogdaki
+  // Eheim Thermocontrol 125 W, üreticisine göre 150–200 L akvaryum içindir; örneğin net hacmi 180 L (W/L bandı da içinde: 0,69 W/L).
+  { id: "e4", aquariumId: "aqua-1", category: "heater", brand: "Eheim", model: "Thermocontrol 125 W", installedAt: "2024-03-12", specifications: "125 W", catalogId:"eheim-thermo-125" },
 ];
 
 // Demo kayıtların başka dildeki metinleri (karar 0021, 5. paket). Demo kayıtlar yalnız ekranda gösterilir, depoya yazılmaz; dil değişince

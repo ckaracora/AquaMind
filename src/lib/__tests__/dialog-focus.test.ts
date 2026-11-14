@@ -92,7 +92,9 @@ describe("açılan pencereler", () => {
       "src/app/equipment/page.tsx", "src/app/maintenance/page.tsx", "src/app/settings/page.tsx", "src/app/water/page.tsx", "src/components/catalog-livestock-form.tsx",
       // 2026-11-14 sprinti: ortak silme onayı ve canlı düzenleme penceresi.
       "src/components/confirm-dialog.tsx", "src/components/livestock-edit-dialog.tsx", "src/components/plant-catalog.tsx",
-    ]);
+      // Veri sprinti F: "Bu akvaryuma ne uyar?" ve tür kartı.
+      "src/components/aquarium-fit.tsx", "src/components/species-card.tsx",
+    ].sort());
     for (const { file, text } of users) {
       const dialogs = count(text, "<ModalDialog ");
       expect(count(text, "labelledBy={titleId}"), file).toBe(dialogs);
