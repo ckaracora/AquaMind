@@ -3,8 +3,8 @@
 // metinleri yalnız o dil seçilince yüklenen kendi ayrı parçasında olmalı; hiçbir sayfanın ilk yüklemesinde bulunmamalı. Türkçe kullanan
 // kimse onları indirmez. `next build` sonrasında çalışır (`pnpm verify`): derleme manifestindeki her sayfanın ilk yükleme dosyalarında her
 // dilin dosyalarına özgü işaret cümleleri aranır. İşaretler kaynak dosyalarda bulunmalı (dosya değişince betik de güncellenir).
-// Ekipman (7. paket) ve bakım ürünü (8. paket) kataloglarının çevirisi dil paketinden de ayrı, katalog ve dil başına kendi parçasındadır;
-// yalnız o kataloğu gösteren ekranlar yükler.
+// Ekipman (7. paket) ve bakım ürünü (8. paket) kataloglarının ve tür bakım bilgisinin (veri sprinti E3) çevirisi dil paketinden de ayrı,
+// katalog ve dil başına kendi parçasındadır; yalnız o kataloğu gösteren ekranlar (bakım bilgisinde tür kartı) yükler.
 "use strict";
 
 const fs = require("node:fs");
@@ -40,6 +40,11 @@ const SEGMENT_MARKERS = {
   "bakım ürünü": {
     en: ["en-catalog-care.ts", "Archived Novo"],
     es: ["es-catalog-care.ts", "paquete de recarga"],
+  },
+  // Tür bakım bilgisi (veri sprinti E3, 2026-11-14): yalnız tür kartı yükler (src/lib/use-species-care-text.ts).
+  "tür bakım bilgisi": {
+    en: ["en-catalog-species-care.ts", "Mature females are larger and appear fuller."],
+    es: ["es-catalog-species-care.ts", "La hembra madura es más grande y se ve más llena."],
   },
 };
 const segmentMarkers = Object.entries(SEGMENT_MARKERS).flatMap(([catalog, locales]) => Object.entries(locales).map(([locale, [file, marker]]) => ({ catalog, locale, file, marker })));
