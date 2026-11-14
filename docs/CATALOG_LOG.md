@@ -4569,3 +4569,229 @@ Güncel alt adım: JBL filtre medyası, bakteri başlangıcı, sorun giderici/pH
   - **Satış ve eş adlar:** Atakan'ın iki kayıtlı ürün sayfası açıldı; Dracaena Sanderiana Green satış adı ve Spathiphyllum wallisii tür adı kayıtlarla eşleşiyor. Atakan ve Bettamarketim kabul edilen mağazalar. Bettamarketim'in kayıtlı Myriophyllum ürün adresi web aracında ve doğrudan HTTP isteğinde açılamadı; satış sayfasının içeriği bu turda bağımsız doğrulanamadı. Bu erişim sorunu kaydın yanlış olduğuna kanıt sayılmadı; mevcut bağlantı korundu. Fishkeeper'ın Dracaena variegatus sayfası D. sanderiana Gold/White eşleştirmesini açıklamıyor; bu iki formun kimlik sorusu açık kaldı.
   - **Kabul kontrolleri:** node scripts/test-catalog-flow.cjs geçti (çıkış 0: 7 ekipman kategorisi, 4 canlı sınıfı, 1893 bakım ürünü); node scripts/audit-catalog.cjs geçti (çıkış 0). corepack pnpm vitest run src/lib/__tests__/plant-catalog.test.ts, yapılandırma yüklenirken externalize-deps / spawn EPERM ile durdu (çıkış 1); testler başlamadı, Vitest başarılı sayılmadı. Ek olarak Node ile 146 kaynaklı kaydın beklenen JSON ile tam eşitliği, katalog bütünlüğü ve üç yeni bitkinin ad eşleşmesi doğrulandı; bu kontrol Vitest'in yerine geçmez. git diff --check geçti; beş dosyada CRLF korundu.
   - **Son kapıya kalan:** DATA_COVERAGE hâlâ 149 bitki ve 42 İngilizce ad gösteriyor; katalog 152 bitki ve 49 İngilizce ad içeriyor. Belge yenilemesi ve çalışabilen ortamda hedefli Vitest son kapıda yapılmalı. Tam proje testleri çalıştırılmadı. PROJECT_STATUS, DATA_COVERAGE, altın fikstür, arayüz ve motor değiştirilmedi; commit/push yapılmadı. Eski kullanıcı kayıtlarına ve tarihsel verilere dokunulmadı.
+
+## Tür bakım bilgisi (veri sprinti E3, 2026-11-14)
+
+- `src/data/species-care.ts`: 420 tür kaydı (437 türden); beslenme 396, cinsiyet 350, üreme 385, ömür 91, zorluk 41, yüzme bölgesi 33, sertlik 388. Kaynak yazmayan alan boş bırakıldı.
+- Metin çevirileri: `packages/localization/translations/{en,es}-species-care.json` (860 metin), tablolar `*-catalog-species-care.ts`, yükleyici `@aquamind/localization/species-care`.
+- Kontrol: 40 rastgele türde 165 alan kaynak sayfalarıyla karşılaştırıldı: 161 uyumlu, 4 kısmen (3'ü metinde, 1'i kanıt alıntısında düzeltildi), 0 uyumsuz.
+- Ekran henüz bağlı değil; bağlanınca `scripts/check-locale-bundle.cjs`'e `en-catalog-species-care.ts` / `es-catalog-species-care.ts` işaretleri eklenmelidir.
+
+## 2026-11-14 Katalog denetimi: 437 tatlı su ve acı su canlısının değerleri, kaynak temizliği (Claude, veri sprinti E1)
+
+Ürün sahibinin 2026-11-14 isteği (veri 9 sprinti; karar 0039'daki dondurma bu iş için kalkar). 12 okuyucu 437 kaydın kaynak sayfalarını okudu; okuyucu çıktısı yalnız aday listesi sayıldı (bağımsız denetimde akvaryum, boy, sıcaklık ve grup alanlarında okuma hataları bulundu). Sayfalar 2026-11-14'te (UTC) yeniden indirildi (1.043 sayfa; 995'i açıldı, 42'si 404, 5 fishbase.org adresi fishbase.se'den okundu) ve ikinci okuma yapıldı.
+
+- **İkinci okuma:** Seriously Fish (hızlı bilgi kutusu ve "Aquarium size"/"Water conditions" bölümleri), Fishkeeper ("Maximum Size", "Temperature", "Water Parameters") ve FishBase ("Max length" satırının en büyük değeri, dişi dahil; "minimum aquarium size") değerleri betikle doğrudan sayfadan okundu. Practical Fishkeeping, Fishipedia, ScotCat ve wirbellose.de değerleri okuyucudan alındı ve sayfa metninde alıntı ya da sayı aranarak doğrulandı; doğrulanamayan, doğal ortam ("Natural environment", "milieu naturel"), üreme ya da "ideal/preferred" bağlamındaki okuyucu değerleri kullanılmadı (187 alan). Kayda bağlı olmayan ve kimliği tutmayan sayfa kullanılmadı (ör. Çin kelebek loachu için Sewellia sp. SEW02 sayfası).
+- **Kurallar (`docs/DATA_SOURCES.md`):** sıcaklık ve pH kabul edilen kaynakların tutma aralıklarının ortak aralığı (FishBase doğal kayıtları ve OATA'nın genel kartı hariç); boy kaynakların büyüğü, FishBase bakım kaynaklarını yarıdan fazla aşarsa bakım kaynağının büyüğü (yeni kural); hacim ve uzunluk kaynakların büyüğü, taban varsa U × G × G, üç boyut varsa çarpım, grubu kapsamayan ölçü kullanılmaz; grup türe adanmış yazının sayısı (öncelik SF, FK, PFK). Bu turda yazılan teknik yöntemler: Fishipedia doğal ortam bloğu ve şablon kuşkulu pH 7,2–8 / 6,8–7,2 ortak aralığa girmez; kaynak grup aralığı veriyorsa ("at least 8–10") ve kayıttaki değer içindeyse korunur.
+- **Koruma kuralları (uygulanmayanlar):** kaynak değeri kayıttan küçükse ve eski değer kayda bağlı kabul edilen bir sayfada yazıyorsa (90 alan) ya da gevşeyen sıcaklık/pH ucu bağlı bir sayfada aralık olarak yazıyorsa (78 alan) eski değer korundu; kayıt notu eski değeri gerekçesiyle yazıyorsa ve o gerekçenin kaynağı bu turda okunmadıysa değer korundu (elle inceleme, 45 alan: ör. Endler 24–28 °C, Ninja woodcat Welsfans 7 cm, Common vatoz karar 0014 aralığı, Threadfin acara tek birey 250 L, Monoculus Fishipedia aralığı). Omurgasız ve amfibilerde Ekim kayıtları kaynak kaynak verilmiş kararlara dayandığı ve okuyucular bütün kaynakları okumadığı için 9 alan uygulanmadı (Amano pH 6–7,5 → 6–8; elma salyangozu 22–28 → 15–28 °C; dört rili karides 18–25 → 18–28 °C; kardinal Sulawesi karidesi boy 2,5 → 2; Tay mikro yengeç 22–26 → 22–25 °C; cüce kerevit boy 4 → 3).
+- **Lider kararı bekleyen (uygulanmadı):** boyu %35'ten fazla değişecek 21 alan, hacmi ya da uzunluğu %30'dan fazla küçülecek 10 alan, ortak aralığı boş ya da çok dar 6 sıcaklık/pH alanı ve Seriously Fish'in olağan dışı pH'ı: `ramirezi` boy 7 → 4,2; `jonklaas-lipstick-goby` hacim 120 → 54, uzunluk 100 → 60 (Seriously Fish ticarette bu adla satılanın *S. exallisquamulus* olduğunu yazıyor: kimlik sorusu); `kubotai-rasbora` boy 3 → 2; `somphongs-dwarf-rasbora` boy 2 → 3; `cherryspot-rasbora` hacim 60 → 41; `rosy-barb` boy 10 → 14; `odessa-barb` boy 7 → 4,6; `five-banded-barb` ve `six-banded-barb` °C (FK 25–28, SF 21/20–26: ortak 25–26); `melon-barb` hacim 150 → 81 (kaydın uzunluk ve grubu da bekletildi); `apisto-cacatuoides` boy 8 → 5; `apisto-agassizii` boy 9 → 5, pH 5–7 → 3–4 (SF kutusu 3,0–4,0); `texas-cichlid` pH (SF 6–7,5, FK 7,5–8,5: kesişim yok); `jaguar-cichlid` boy 45 → 61, hacim 680 → 205, uzunluk 182 → 120 (SF ölçüsü 30 cm üstü için "MUCH larger" diyor); `owroewefi-guianacara` boy 15 → 10,7; `silver-maskaheros` hacim 700 → 205; `black-tiger-dario` boy 2 → 3,5; `betta-imbellis` uzunluk 90 → 45; `glass-catfish` boy 7 → 14 (Fishipedia büyük olasılıkla *K. bicirrhis*); `blue-panaque-l239` boy 15 → 8,1; `orange-tiger-pleco-l243` boy 20 → 12; `red-tailed-snakehead` boy 20 → 32,9; `emperor-snakehead` pH (kayıt 4–6, SF 6–8); `half-banded-spiny-eel` boy 20 → 28,6; `monoculus-peacock-bass` pH (kayıt 5,5–6,5, SF 6,5–7,5); `elephantnose-fish` boy 25 → 35; `koi-carp` boy 75 → 129 (FishBase yabani sazan); `pea-puffer` boy 2,5 → 3,5, hacim 20 → 13; `regani-julie` boy 13 → 30 (SF "akvaryumda nadiren 15 cm üstü"); `masked-julie` uzunluk 90 → 60; `cardinal-sulawesi-shrimp` °C (PFK 27–28); `malaysian-trumpet-snail` boy 3 → 6,5 (doğadaki boy); `african-dwarf-frog` boy 7 → 5.
+- **Kaynak temizliği:** rakip uygulama ve içerik sitelerine giden 30 bağlantı 28 kayıttan çıkarıldı (tankbud.com 21, aquairi.app 4, guidarium.com 3, app-aquatic.com 2). Değeri yalnız bunlara dayanan alan Sparkling Limia'nın sıcaklık ve pH'ıydı (TankBud); Fishkeeper'ın değerleriyle değişti. Ana kaynağı kabul listesinde olmayan 11 kaydın ana kaynağı kabul edilen kaynağa çevrildi, eski adres ek kaynakta kaldı (rakipler hariç): `rubicundus-lipstick-goby`, `jonklaas-lipstick-goby`, `red-tailed-snakehead`, `kners-yellow-flagtail`, `selheims-freshwater-sole` → FishBase; `blood-parrot-cichlid` → Practical Fishkeeping; `saulosi-cichlid` → Fishkeeper; `black-devil-snail` → Practical Fishkeeping; `pagoda-snail` → wirbellose.de; `ghost-shrimp` (app-aquatic.com idi) ve `ramshorn-snail` → OATA karides ve salyangoz kartı (genel rehber; kartın 10 L'si kayıttaki hacimden küçük, değer korundu). `tropheus-kiriza`, `cucuta-bristlenose-l149`, `manacapuru-bristlenose-l148` ve aquarubi.com'a dayanan sekiz salyangoz açık listede (`docs/CATALOG_SOURCE_GAPS.md`). Değeri belirleyen ve kayda bağlı olmayan 26 kabul edilen sayfa ek kaynağa eklendi.
+- **Hacmi kaynaksız kayıtlar:** 69 tatlı su kaydından 5'inin hacmi bu turda türe özgü kaynaktan geldi (`red-tailed-rasbora` 68, `somphongs-dwarf-rasbora` 54, `six-banded-barb` 72, `apisto-erythrura` 100 L Fishipedia, `golden-king-tiger-pleco-l333` 243); 54 kayıt açık listede. OATA grup kartları yalnız alt sınır verdiği için hacim olarak uygulanmadı.
+- **Notlar:** değişen sayıyı yazan 9 bakım notu üç dilde güncellendi (`swordtail`, `least-killifish`, `wrestling-halfbeak`, `sparkling-limia`, `buenos-aires-tetra`, `green-fire-tetra`, `giant-danio`, `apisto-erythrura`, `green-spotted-puffer`); uzunluk aldığı için iki kaydın uzunluk notu çıkarıldı (`humpback-limia`, `tire-track-eel`).
+- **Doğrulama tarihi:** ana kaynağı bu turda açılan ve bütün alanları kaynakla uyumlu (ya da bu turda düzeltilmiş) 243 kayıtta `verifiedAt` 2026-11-14 oldu; çözülmemiş alanı (doğrulanamayan okuma, lider kararı, elle korunan) olan 181, ana kaynağı kabul listesinde olmayan 10, genel rehbere dayanan 2 ve ana kaynağı açılamayan 1 kayıtta değişmedi.
+- **Altın fikstür (motor değişmedi, fikstür yeniden üretilmedi):** aynı motorla bu turdan önceki ve sonraki katalog karşılaştırıldı: 1.132 vakadan 241'inin çıktısı değişti, 3'ünün hükmü değişti: `seed:mock-data` iyi 95 → dikkat 74 (cüce vatozun alt sıcaklığı 21 → 23 °C, örnek akvaryumda ısıtıcı kayıtlı değil), `pair:wrestling-halfbeak+xray-tetra` ve `pair:rainbow-snakehead+ramirezi` tehlike → dikkat (boy küçüldüğü için avlanma uyarısı düştü). En sık değişen uyarı "ısıtıcı kayıtlı değil" (+32).
+- **Değişiklik tablosu** (181 alan, 125 kayıt; "eski → yeni (değeri belirleyen kaynak)"; SF Seriously Fish, FK Fishkeeper, PFK Practical Fishkeeping, FB FishBase, FP Fishipedia, SC ScotCat):
+
+| Kimlik | Değişiklik |
+|---|---|
+| `african-butterfly-fish` | pH 6–7.5 → 6–7 (FK/SF) |
+| `ancistrus` | °C 21–26 → 23–26 (FK/PFK/SF) |
+| `andrao-snakehead` | °C 12–26 → 14–28 (SF); pH 6–7 → 6–8 (SF); boy 10 → 11 (SF) |
+| `apisto-baenschi` | °C 23–28 → 22–26 (FK); pH 5–7 → 4–6.5 (FK) |
+| `apisto-cacatuoides` | pH 5.5–7.5 → 5–6 (SF) |
+| `apisto-erythrura` | hacim 60 → 100 (FP) |
+| `apisto-hongsloi` | boy 7 → 6 (SF) |
+| `apisto-macmasteri` | pH 5.5–7 → 5.5–6.5 (FK/SF) |
+| `apisto-nijsseni` | boy 8.5 → 8 (FK) |
+| `apisto-panduro` | pH 5–6.5 → 4.5–6.5 (FK/SF) |
+| `baenschi-peacock` | boy 12 → 13 (FB) |
+| `barred-shovelnose-catfish` | boy 104 → 105 (FB) |
+| `betta-imbellis` | °C 24–30 → 24–28 (FK/SF) |
+| `black-phantom-tetra` | pH 6–7.5 → 6–7 (FK/SF) |
+| `black-ruby-barb` | °C 18–26 → 20–26 (FK/SF) |
+| `black-sharkminnow` | °C 24–27 → 24–26 (PFK/SF) |
+| `black-venezuela-cory` | °C 21–27 → 22–27 (FK/SF) |
+| `blackbelt-cichlid` | °C 22–27 → 24–27 (FK/SF); pH 6–8 → 6.5–7.5 (FK) |
+| `blood-parrot-cichlid` | °C 22–28 → 24–28 (PFK); pH 6.5–8 → 7–8 (PFK) |
+| `blue-emperor-tetra` | boy 3.5 → 4 (FK) |
+| `bolivian-ram` | °C 23–28 → 24–28 (FK/SF) |
+| `buenos-aires-tetra` | boy 13.2 → 6 (SF, FB kuralı) |
+| `butterfly-goodeid` | boy 9 → 12 (FB) |
+| `butterfly-loach-beaufortia` | boy 7.5 → 8 (FB) |
+| `celebes-halfbeak` | boy 10 → 9 (FK); grup 5 → 6 (FK) |
+| `celebes-rainbowfish` | pH 7–8 → 7–7.5 (FK/SF) |
+| `cherryspot-rasbora` | uzunluk 60 → 45 (SF) |
+| `clown-killifish` | boy 3.5 → 4 (FB) |
+| `cobalt-zebra-cichlid` | pH 7.5–8.5 → 7.6–8.5 (FK/SF); boy 12.5 → 13.5 (SF) |
+| `colombian-tetra` | °C 20–28 → 24–27 (FK); pH 5–7.5 → 5.5–7 (FK) |
+| `colombian-zebra-pleco-l129` | boy 12 → 10 (SC) |
+| `convict-cichlid` | boy 12 → 15 (SF) |
+| `croaking-gourami` | boy 7 → 8 (FB) |
+| `demasoni-cichlid` | pH 7.5–8.5 → 7.6–8.5 (FK/SF); boy 8 → 10 (FP) |
+| `dojo-loach` | °C 17.8–23.3 → 18–23 (SF) |
+| `duckbill-catfish-sorubim-lima` | °C 23–30 → 23.3–30 (SF) |
+| `elephantnose-fish` | °C 22–28 → 23–28 (FK/SF) |
+| `emerald-cory` | grup 5 → 6 (SF) |
+| `emperor-snakehead` | °C 20–25 → 22–25 (SF) |
+| `fahaka-puffer` | pH 7–8 → 7–7.5 (FK/SF) |
+| `firemouth-cichlid` | boy 15 → 17 (FB) |
+| `five-banded-barb` | pH 5–7.5 → 5–7 (SF); boy 5 → 5.5 (SF) |
+| `flame-tetra` | boy 2.5 → 2.6 (FB) |
+| `flameback-bleeding-heart-tetra` | °C 20–28 → 24–27 (FK); pH 4–7 → 5.5–6.8 (FK) |
+| `frontosa` | boy 35 → 33 (FB) |
+| `galaxy-rasbora` | boy 2.5 → 2.1 (SF) |
+| `gardneri-killifish` | boy 8 → 6.5 (FB) |
+| `gertrudae-rainbowfish` | boy 4 → 3.8 (SF) |
+| `giant-danio` | boy 10 → 8 (SF, FB kuralı) |
+| `glowlight-danio` | boy 3 → 3.1 (FB) |
+| `gold-barb` | boy 7.5 → 7.6 (FB) |
+| `golden-king-tiger-pleco-l333` | °C 25–29 → 26–29 (FK/SF); hacim 180 → 243 (SF); uzunluk 100 → 120 (SF) |
+| `goldfish` | °C 4–25 → 10–25 (FK); pH 6–8 → 7–8 (FK); boy 25 → 20 (FK, FB kuralı) |
+| `green-fire-tetra` | boy 7.1 → 4.5 (SF, FB kuralı) |
+| `green-spotted-puffer` | uzunluk 80 → 120 (SF) |
+| `hengeli-rasbora` | boy 3.5 → 3 (SF) |
+| `high-fin-green-phantom-l200a` | boy 20 → 15.1 (SF) |
+| `humpback-limia` | °C 22–26 → 24–26 (FK/SF); uzunluk yok → 45 (SF) |
+| `jaguar-cichlid` | °C 23–26 → 24–26 (FK/SF) |
+| `jonklaas-lipstick-goby` | °C 20–28 → 22–28 (SF); pH 6–7.5 → 6.5–7.5 (SF); boy 5.5 → 5.2 (SF) |
+| `keyhole-cichlid` | boy 12 → 11 (SF) |
+| `kissing-gourami` | boy 25 → 30 (FB) |
+| `kribensis` | boy 10 → 11 (FB); hacim 84 → 71 (SF) |
+| `kuhli-loach` | boy 10 → 12 (FB) |
+| `lambchop-rasbora` | boy 3.5 → 3 (SF) |
+| `least-killifish` | boy 3.6 → 2 (SF, FB kuralı) |
+| `leleupi-cichlid` | boy 10 → 12 (FP) |
+| `lujans-pleco-l127` | boy 16 → 12 (SC) |
+| `marliers-julie` | boy 13 → 15 (SF) |
+| `melon-barb` | pH 5.5–7 → 6–7 (FK/SF) |
+| `multifasciatus-shelldweller` | boy 4 → 5 (FP) |
+| `northern-purple-spotted-gudgeon` | boy 17 → 20 (FB) |
+| `orange-venezuela-cory` | °C 21–27 → 21–25 (FK/SF); pH 6–8 → 6.8–7.8 (FK) |
+| `orinoco-wood-pleco-lda38` | boy 30 → 25.6 (FB) |
+| `oscar` | °C 20–28 → 23–27 (FK) |
+| `otocinclus` | boy 4 → 3.5 (SF) |
+| `pantano-cichlid` | boy 45 → 42.5 (SF) |
+| `paradise-fish` | boy 10 → 8 (SF) |
+| `peacock-gudgeon` | pH 6–7.2 → 6.5–7.2 (FK/SF) |
+| `peacock-snakehead` | boy 25 → 30 (FB); hacim 200 → 300 (FP); uzunluk 100 → 140 (FP) |
+| `pearl-cichlid` | °C 20–28 → 18–26 (FK/SF); pH 6–8 → 6–7.2 (FK/SF) |
+| `penguin-tetra` | boy 6 → 7 (FP) |
+| `peppered-cory` | °C 15–25 → 22–25 (FK/SF); pH 6–8 → 6–7 (SF); boy 6 → 7 (SF) |
+| `petricola-catfish` | pH 7.8–8.8 → 7.8–8.5 (FK/SF) |
+| `platy` | °C 17–27 → 20–25 (FK) |
+| `rainbow-snakehead` | boy 20 → 17 (SF) |
+| `red-rainbowfish` | °C 22–28 → 24–28 (FK/SF); pH 6–7.5 → 7–7.5 (FK/SF) |
+| `red-tailed-black-shark` | boy 15 → 13 (FB) |
+| `red-tailed-goodeid` | pH 6–8 → 6.5–8 (FK/SF) |
+| `red-tailed-rasbora` | hacim 75 → 68 (SF); uzunluk 75 → 60 (SF); grup 6 → 8 (SF) |
+| `red-zebra-mbuna` | pH 7.5–8.5 → 7.6–8.5 (FK/SF); boy 12.5 → 13.5 (SF) |
+| `redfin-borleyi` | °C 22–26 → 25–29 (SF); boy 16 → 20 (SF) |
+| `redline-rasbora` | °C 23–28 → 23–26 (FK/SF) |
+| `rope-fish` | °C 23–30 → 23–28 (FK/SF); pH 6–7.5 → 6.8–7.5 (FK/SF) |
+| `rummy-nose` | pH 5.5–7 → 6–6.8 (FP); uzunluk 90 → 100 (FP) |
+| `sajica-cichlid` | pH 6.5–7.5 → 7–7.5 (FK); boy 12 → 12.5 (FK) |
+| `salvini-cichlid` | °C 22–27 → 22–26 (FK/SF) |
+| `saulosi-cichlid` | °C 24–28 → 24–26 (FK); boy 9 → 10 (FK) |
+| `severum` | °C 22–29 → 22.2–28.9 (SF) |
+| `siamese-algae-eater` | °C 20–26 → 24–26 (FK/SF) |
+| `silver-maskaheros` | °C 24–28 → 26–29 (FK/SF); pH 7–8.5 → 6.5–7.8 (FK); boy 27 → 30 (FK) |
+| `six-banded-barb` | boy 5 → 5.5 (SF); hacim 70 → 72 (SF); uzunluk 60 → 80 (SF) |
+| `somphongs-dwarf-rasbora` | hacim 30 → 54 (SF); uzunluk 40 → 60 (SF) |
+| `southern-purple-spotted-gudgeon` | °C 16–24 → 16–22 (FK/SF) |
+| `sparkling-limia` | °C 22–28 → 24–30 (FK); pH 7.2–8.5 → 7.5–8.5 (FK); boy 10 → 6 (FK, FB kuralı) |
+| `spotted-silver-dollar` | pH 5.5–7.5 → 6–7 (SF) |
+| `sterbai-cory` | boy 7 → 6.8 (FB) |
+| `strawberry-rasbora` | boy 1.8 → 2 (SF) |
+| `sulphur-head-hap` | °C 24–27 → 24–28 (SF); pH 7.5–8.5 → 7.6–8.5 (SF) |
+| `super-vc10-milomo` | °C 24–28 → 24–26 (FK/SF); pH 7.6–8.8 → 7.6–8.5 (FK/SF) |
+| `swordtail` | boy 14 → 16 (FB) |
+| `texas-cichlid` | °C 20–28 → 23–28 (FK); boy 30 → 35 (FK) |
+| `three-beacon-pleco-l091` | boy 25 → 24.7 (FB) |
+| `three-lined-cory` | °C 16–26 → 24–26 (FK/FP); boy 6 → 6.1 (FB) |
+| `tinfoil-barb` | boy 35 → 35.5 (SF) |
+| `tire-track-eel` | pH 6.5–7.5 → 6.5–7 (FK/SF); boy 90 → 91 (SF); uzunluk yok → 120 (SF) |
+| `tropheus-duboisi` | °C 24–28 → 24–27 (FK/SF); pH 7.8–9 → 8–9 (FK/SF); grup 10 → 15 (SF) |
+| `uaru-cichlid` | °C 26–30 → 27–30 (FK/SF); pH 5.5–6.5 → 6–6.5 (FK/SF) |
+| `vampire-pleco-l240` | boy 30 → 25 (FK) |
+| `white-cheek-goby` | °C 18–24 → 15–25 (PFK/SF); pH 7–8 → 7–7.5 (PFK/SF); boy 6 → 5 (SF); hacim 60 → 54 (SF) |
+| `white-spotted-doras` | boy 16 → 15 (SF) |
+| `winemillers-eartheater` | pH 4–7 → 5–7 (FK/SF) |
+| `wrestling-halfbeak` | °C 24–28 → 24–27 (PFK/SF); pH 6.5–8 → 6.5–7.5 (PFK/SF); boy 16.1 → 5.5 (SF, FB kuralı) |
+| `yellow-lab` | boy 12 → 10 (SF); hacim 182 → 154 (SF) |
+| `zebra-loach` | boy 10 → 9 (SF) |
+
+- Ayrıntılı kanıt (her değişiklikte kaynak adresi, alıntı ve ikinci okuma sonucu) çalışma klasöründeki `degisiklikler.json` dosyasındadır; uygulayan betik satır sonlarını korur.
+
+## 2026-11-14 Davranış kayıtları: 40 risk kaydı, 154 barışçıl kayıt (Claude, veri sprinti E2)
+
+- Girdi: iki bağımsız okuma (Claude okuyucuları ve Gemini), 437 tatlı su ve acı su canlısı. İki okuma aynı konuda anlaşınca alıntı kaynak sayfasında yeniden arandı; anlaşmadıklarında ya da yalnız birinde varsa kaynak sayfası açılıp karar verildi. Sayfalar E1'in indirdiği önbellekten okundu.
+- Var olan kayıtlar silinmedi ve değiştirilmedi; yalnız eksik işaretler eklendi (`src/data/species-behavior.ts`, `verifiedAt: 2026-11-14`). Kaynak listesine docs/DATA_SOURCES.md'de kabul edilen Fishipedia, wirbellose.de ve ScotCat eklendi.
+- Risk kayıtları (40):
+  - Yüzgeç ısırır (1): yeşil benekli balon (SF).
+  - Karides yer (4): katil salyangoz (FK, yalnız küçük karides), Tayland mikro yengeci (FK, yalnız yavru), beyaz yanak goby (SF, Caridina/Neocaridina), elektrik mavi kerevit (Fishipedia; wirbellose.de yetişkin cüce karidesle genelde sorun yok der, koşulda yazılı).
+  - Salyangoz yer (3): katil salyangoz (FK, wirbellose.de), yeşil benekli balon (SF), Tayland mikro yengeci (FK, yalnız yavru).
+  - Küçük balık yer (2): elektrik mavi kerevit (Fishipedia, wirbellose.de: fırsatçı), peacock gudgeon (FK: çok küçük balık ve yavru).
+  - Balık avcısı değil (3): keyhole ciklet (SF: birkaç mm), Parkinson ve kırmızı gökkuşağı balığı (FK: ağzı dar).
+  - Aynı tür saldırganlığı (27; 1'i çelişkili): `all` — anthrax flyer L235 (ScotCat), Assam yılanbaş, çizgili ve kaplan kürek burun, mavi acara, elektrik mavi kerevit, yeşil benekli balon, ocellaris peacock bass, inci ciklet, kırmızı kıskaçlı kerevit, kırmızı gözlü balon, salvini, Texas; `males` — Panda apisto, imbellis beta, black tiger dario, blue orchid peacock, bluefin notho, kelebek goodeid, Celebes halfbeak, eyebiter, cüce puffer (rakip erkekler ölümüne dövüşür), redhump eartheater, saulosi, sülfür kafa hap, sarı prenses; `conflict` — Meksika cüce kereviti (wirbellose.de saldırgan, Fishipedia barışçıl).
+- Barışçıl (`peaceful`, 154): kaynağın açıkça barışçıl ya da topluluk akvaryumuna uygun dediği, hiçbir risk kaydı, avcı ve tür akvaryumu işareti olmayan türler. Koşul metni yok (ekranda gösterilmez). 41 aday reddedildi (benzer biçimli türlere bölgecilik, çelişkili yüzgeç ısırma kaydı, alıntının tank arkadaşını anlatması, "uzun yüzgeçli balık olmayan topluluk" gibi örtük riskler; ramirezi: SF genel topluluğa önermiyor).
+- Eklenmeyenler: zararsız erkek atışmaları ve sürü içi hiyerarşi (tetralar, rasboralar), erkeklerin dişileri kovalaması (moli, limia; lepistes ve plati düzeniyle aynı), kaynağın grup önerdiği türler (Tropheus: grup eksikliğini zaten "grup küçük" uyarısı söylüyor), dişinin yumurta sonrası saldırganlığı, ilk okumanın kurbanı avcı sandığı satırlar (amano, kristal karides, endler, elma ve nerit salyangozu), ilk okumanın yüzgeci ısırılan sandığı ısırıcılar (melon barb, serpae, kelebek goodeid, flameback), koi'nin üreme saldırganlığı.
+- Tek tutulması gereken türler E1'e öneri olarak yazıldı (`S\sprint\e2-e1.json`): elektrik mavi kerevit (kesin) ve green terror (orta, lider kararı); 58 zayıf aday "uygulama" notuyla. Yeni açık avcı önerisi yok.
+- Çeviri: 22 yeni koşul metni `packages/localization/translations/{en,es}-species.json`, tablolar betikle yeniden üretildi.
+- Kayıtsız kalan 105 tatlı su ve acı su canlısının 81'inde avcı, tür akvaryumu ya da topluluk notu var; 24'ünde hiçbir işaret yok (kaynak davranış yazmıyor ya da yalnız örtük ifade): ramirezi, galaxy ve zümrüt cüce rasbora, dev danio, inci danio, kırmızı çizgili killi, çikolata gurami, panda loach, royal farlowella, common vatoz, hillstream loach, rainbow shiner, hayalet karides, mavi kaplan karides, boru salyangozu, Malezya borazan, black devil, turbo salyangozu ve altı nerit varyetesi (sun, tiger, mini tiger, mini, batik, batman).
+
+## 2026-11-14 Eksik popüler canlılar, gündelik adlar ve bitki satış adları (Claude, veri sprinti E4)
+
+Ürün sahibinin 2026-11-14 isteği (veri 9 sprinti; "popüler olan kaçmasın"). Adaylar lider listesinden ve üç yapay zekânın popüler listelerinin birleşik ölçümünden (`S\sprint\populer\olcum-1-uclu.json`, en az iki listede geçen bulunmayan maddeler). Sayfalar 2026-11-14'te (UTC) açılarak okundu.
+
+- **Eklenen canlılar (3):**
+
+| Kimlik | Bilimsel ad | Ana kaynak | Boy | Hacim (L) | Uzunluk (cm) | Grup | Sıcaklık | pH | Akıntı |
+|---|---|---|---|---|---|---|---|---|---|
+| `leopard-sailfin-pleco` | *Pterygoplichthys gibbiceps* | Fishkeeper | 60 | 500 | 200 | 1 | 25–27 | 6,5–7 | orta |
+| `physa-snail` | *Physella acuta* | wirbellose.de | 1,2 | 10 (OATA genel rehber) | not | 1 | 0–26 | 6,5–8 (OATA genel rehber) | — |
+| `red-swamp-crayfish` | *Procambarus clarkii* | wirbellose.de | 12 | 100 | not | 1 | 5–30 | 7–8 (OATA genel rehber) | — |
+
+  - **Leopar yelken vatoz:** Fishkeeper "Leopard Sailfin Plec" (50 cm, 23–27 °C, pH 6,5–7,8; "rather territorial with its own kind and similarly sized Loricariid species"), Welsfans L165 sayfası (`art=255`; yaklaşık 60 cm, 200 cm akvaryum, 25–30 °C, pH 4,0–8,0), ScotCat (50 cm, 25–30 °C, pH 5,0–7,0), Fishipedia öneri alanı (500 L, 23–27 °C), FishBase (50 cm TL). Seriously Fish'te sayfa yok (404). Boy kaynakların büyüğü (Welsfans 60 cm; FishBase kuralı uygulanmadı, FishBase daha küçük). Sıcaklık ve pH ortak aralık; Fishipedia'nın öneri pH'ı 6,8–7,2 şablon kuşkulu ve doğal ortam pH'ından (6,5–7,8) farklı, ortak aralığa girmedi; "at least 0 individuals" cümlesi şablon, grup sayılmadı. Grup 1 (Fishkeeper: birden fazlası için çok geniş akvaryum). Akıntı orta (Fishkeeper "areas of brisk water movement along with some quieter resting spots"). Atık katsayısı karar 0031'in 25 cm üstü ortancası (4). Eş adlar Fishkeeper ("Gibbiceps Plec", "L165"), ScotCat ("Sailfin Pleco", "Gibby") ve eş bilimsel adlar; Fishkeeper "L083" de yazıyor ama Welsfans L83'ü "cf. gibbiceps, türün tanımına uymuyor" diye ayırıyor, L083 bağlanmadı. Türkçe ad Fishkeeper adının Türkçesi; kabul edilen mağazalarda satış başlığı yok.
+  - **Physa salyangozu:** Fishkeeper ve Practical Fishkeeping'de tür sayfası yok (Fishkeeper'ın "Pond Snails" sayfası İngiltere gölet salyangozlarını anlatıyor, kullanılmadı); wirbellose.de bütün alanlar için (omurgasız sırası). wirbellose.de 12 mm, 0–26 °C, pH "unwichtig" (sayı yok), akvaryum "ab einem Wasserglas" (sayı yok). pH ve en az hacim OATA'nın karides ve salyangoz kartından genel rehber olarak alındı (resmî genel bakım bilgisi kuralı, 2026-11-14; `docs/DATA_SOURCES.md`); notta "genel rehber" yazılı. "Physa acuta" eş adı GBIF'in eş ad listesinden (5189806). Atık katsayısı salyangoz ortancası (0,4).
+  - **Kırmızı bataklık kereviti:** wirbellose.de 120 mm, 5–30 °C ("an europäische Winter adaptiert"), "100 Liter für 2 Tiere"; pH vermiyor. Fishipedia'nın kabuklular sayfası yalnız doğal ortam değeri veriyor (−4–30 °C, pH 7–8), kullanılmadı; İngilizce adı ("red swamp crayfish") oradan. pH OATA'nın kerevit ve tatlı su yengeçleri kartından genel rehber olarak alındı (pH 7,0–8,0); kartın 22–27 °C'si türe özgü aralığın yerine geçmedi (türe özgü kaynak önce gelir). Grup 1 (OATA: "Crayfish are not social and should be kept alone unless kept in a very large aquarium"); 100 L iki hayvanı kapsadığı için tek hayvan için de kullanıldı. Kaynaklar balıklarla tutulma konusunda ayrışıyor (wirbellose.de: küçük balıklarla ve kayabalıklarıyla olur, canlı balık avlamaz, kendi türünü yer; OATA genel kartı: fırsatçıdır, küçük ve yavaş balıkları avlayabilir, ayrı akvaryum önerilir); avcı ya da tür akvaryumu niteliği konmadı, fark uyum notunda. İstilacı tür uyarısı notun başında (wirbellose.de: AB'de ticareti ve üretimi yasak, doğaya bırakmak yasak, kerevit vebası taşıyıcısı); hayvanlar için ayrı istilacı etiket düzeni yok, metin "Türkiye'de yasak" anlamına gelmiyor. EUR-Lex'in konsolide metni bu turda betikle açılmadı (tarayıcı denetimi sayfası döndü), AB listesine doğrudan bağlanmadı. Satış adları Betta Marketim'in başlıklarından ("Beyaz Amerika Kereviti 1 Adet (Procambarus Clarkii White)", "Mavi Amerika Kereviti 1 Adet (Procambarus Clarkii White)", "Chost Amerika Kereviti 1 Adet (Procambarus Clarkii )", "Kırmızı Amerika Kereviti 1 Adet Straforlu Gönderim"; açıklama "Bilimsel Adı : Procambarus Clarkii"). Atakan'ın "Kırmızı Amerikan Kereviti 12-15 Cm" başlığı ve açıklaması türü yazmıyor, bağlanmadı; Çikletist'in çözülmemiş "Amerikan Kereviti" satış adı değişmedi. Atık katsayısı tatlı su "öbür" sınıfının bugünkü ortancası (1,4; karar 0031'in 0,45'i deniz kayıtlarıyla birlikte hesaplanmıştı).
+  - Davranış kaydı önerileri E2'ye (`S\sprint\e4-davranis.json`): leopar yelken vatoz `conspecificAggression` (all), Physa `peaceful`, kırmızı bataklık kereviti `conspecificAggression` (all); kerevitte `eatsSmallFish` kaynak çelişkisi yüzünden önerilmedi (lider kararı).
+- **Eklenmeyenler:** *Lemna minor* (su mercimeği) ve *Hydrocotyle leucocephala* (Brezilya sarmaşığı): Fishkeeper bitki bilgi bankasında, Tropica'nın ürünlerinde, Practical Fishkeeping'in tür kutularında ve aramasında sayfa yok; UF/IFAS dizininde sayfa yok (404), AB listesinde ve PFK'nin kaçınılacak bitkiler listesinde yok. Karar 0026'ya göre etiketsiz ve değersiz bitki girmez (2026-11-12 kararıyla aynı). İkisi de kabul edilen mağazalarda satılıyor (Betta Marketim "Su Mercimeği Lemna Minor", Atakan "Lemna Minor Mercimek"; Aquarubi ve Atakan *H. leucocephala*).
+- **Bitki satış adları (kabul edilen mağaza başlıkları, sayfalar açıldı):** `limnobium-laevigatum` eş adı "Amazon Frogbit" (Atakan "Amazon Frogbit Su Üstü Canlı Bitki 1 Kök" ve "Limnobium Laevigatum (Amazon Frogbit) In Vitro Su Üstü Canlı Bitki"; iki adres `shopUrls`'e eklendi). `vallisneria-americana-var-gigantea` Türkçe satış adı "Dev Saz" (Atakan "Vallisneria Gigantea Dev Saz Saksı Canlı Bitki", Betta Marketim "Vallisneria gigantea (Dev Saz) 1 kök 30-50 cm"; iki adres `shopUrls`'e eklendi). Atakan'ın "Nymphaea Lotus Zenkeri - Nilüfer" sayfasının açıklaması "Nymphaea Rubra Bulb" diye başladığı için "Nilüfer" bağlanmadı. "Amazon Hançeri" başlığı türü söylemiyor (2026-11-12 kararı). "java yosunu", "java eğreltisi", "kriptokorin", "amazon kılıcı", "valisneria", "su yoncası", "mikro kılıç" kabul edilen mağazaların hiçbir ürün başlığında geçmiyor; bitki eş adı olamadı.
+- **Gündelik ad önerileri (`src/data/search-suggestions.ts`): eklenmedi.** Kural: en az iki ayrı siteden kanıt ve tek türe (ya da açıkça listelenen türlere) gitmesi. Taranan kanıt kaynakları: altı kabul edilen mağazanın 37.247 ürün adresi (adres ürün başlığından üretiliyor), mağazalardaki 43 canlı ürün sayfasının başlık ve açıklaması, FishBase'in 20 popüler türün ortak ad listesi (Türkçe ad yalnız japon balığında var: "Kirmizi balik", "Kırmızı havuz balığı"; ikisi de bulunmayan adlar listesinde değil). Öncelikli adların (kan papağanı, balon moli, öpücük balığı, siyah tetra, kaplan barb, palyaço botia, pleko, kosa, red cherry, mavi karides, ıstakoz, aksolotl, japon karides, benekli kosa, paslı ciklet, kara hayalet, denisoni barb, yelken vatoz…) hiçbiri iki ayrı kabul edilen sitede tek türe giden bir başlıkta geçmiyor: ör. "Balon Molly" yalnız Atakan'da (ve türü yazmıyor); "Denisoni Barb" yalnız Atakan'da (Çikletist adresi "denisoni"); "papağan" adreslerinin hepsi kuş kafesi ya da yem; "Altın Elma Salyangozu" iki mağazada var ama açıklama "golden apple snail" diyor, tür (Pomacea diffusa ya da P. canaliculata) belli değil. Dış arama (DuckDuckGo) betikle denendi, istekler engellendi; başka Türkçe site kanıt sayılmadı. Lider kararı gerekir: kanıt için kabul edilen mağazalar dışındaki Türk mağaza ve ansiklopedi sayfaları sayılacak mı, ya da adlar ürün sahibiyle Chrome oturumunda mı doğrulanacak.
+- **Arama ölçümü** (`node S\sprint\populer\olc.cjs <depo> olcum-2-e4`, en az iki yapay zekânın saydığı 128 popüler çekirdek madde, en yaygın adla bulunan): önce 98 (balık 62/78, omurgasız 11/16, bitki 25/34), sonra 102 (62/78, 13/16, 27/34), %79,7. Hedef (%96) karşılanmadı; kalan 26 maddenin en yaygın adı kabul edilen kaynaklarda kanıtlanamayan gündelik ad ya da kaynağı olmayan bitki.
+- **Çeviri:** 11 yeni metin (3 ad, 3 uyum notu, 3 bakım notu, 2 uzunluk notu) `packages/localization/translations/{en,es}-species.json`; İngilizce adlar Fishkeeper ("Leopard Sailfin Pleco"; Common Pleco emsaliyle ABD yazımı) ve Fishipedia ("Red swamp crayfish"), Physa için çeviri ("Physa snail"). Tablolar betikle yeniden üretildi.
+- **Testler:** `node scripts/catalog-translations.cjs --check`, `node scripts/test-catalog-flow.cjs` (salyangoz 21 → 22, dip balığı 78 → 79, kerevit 4 → 5; yeni kayıtları, genel rehber notunu, istilacı uyarısını, satış adlarını, bağlanmayan başlığı, eklenmeyen iki bitkiyi ve bitki satış adlarını sabitleyen blok), `node scripts/audit-catalog.cjs`, `corepack pnpm exec tsc --noEmit` geçti. Vitest (15 dosya, 199 test): catalog-lookup, catalog-slice, catalog-texts, catalog-translations (EN, ES), latam-spanish, livestock-search, livestock-search-all, livestock-text, plant-catalog, plant-selection, plant-warnings, species-behavior, species-care, us-english geçti. `plant-catalog.test.ts`'te Türkçe satış adı listesine "Dev Saz" eklendi; `plant-catalog.expected.json`'da iki kaydın eş adları, Türkçe satış adı ve mağaza adresleri güncellendi.
+- **Altın fikstür:** yeniden üretilmedi. Vakalar tür kataloğundan kurulduğu için üç yeni tür vakası ve kayan tür çiftleri bekleniyor; son kapıda üretilip karşılaştırılmalı. Bitki değişiklikleri fikstürü etkilemez.
+- **Açık:** `species-care.ts` (E3) yeni üç türü içermiyor; Venusaqua, Jebo ve Dolphin marka adlarının aranması (aşağıdaki ekipman bölümü).
+
+## 2026-11-14 Atman, Hailea, Hydor, Jebo ve Venusaqua: kabul edilen mağaza sayfalarından ekipman (Claude, veri sprinti E4)
+
+- Kapsam: katalogda olmayan Atman, Hailea, Hydor ve Venusaqua markaları ile katalogda `Lifetech` markasında duran Jebo'nun eksik modelleri; filtre, ısıtıcı, hava motoru ve (kategori zaten olduğu için) UV. Kafa motorları, dalga motorları, yedek parça, akvaryum seti, CO₂ ve aksesuar alınmadı. 111 kayıt (Atman 14, Hailea 23, Hydor 17, Lifetech/Jebo 3, Venusaqua 54), `src/data/catalog-equipment-hardware.ts` (`e4ShopEquipment`). `verifiedAt` 2026-11-14.
+- Kim, ne zaman, nasıl okudu: Claude, 2026-11-14 (UTC); ürün adresleri mağazaların site haritalarından alındı, sayfalar indirilip başlık, açıklama ve teknik tablo okundu (ikas sitelerinde `__NEXT_DATA__`, Akvaryum Express'te açıklama sekmesi). Çikletist Pet Shop dışarıdan 403 verdiği için kullanılmadı.
+- Kural (karar 0019, 3. madde; `docs/DATA_SOURCES.md`, "Ekipman değerleri için özel kural" ve "Çelişki ve eksiklik"): değer tam modelin kendi ürün sayfasında yazmalı; kabul edilen mağazalar ya da aynı sayfanın başlığı ile açıklaması bir alanı farklı yazıyorsa o alan kullanılmadı ve fark açıklamada yazılı. Sayfadaki tabloda birden çok model varsa yalnız kaydın modelinin sütunu alındı (Atman AT-3335 S … AT-3338 S, Hydor Hydrokable). Hava debisi L/dakika yazıldıysa ×60 ile L/saate çevrildi; çok çıkışlıda çıkışlar toplandı. Değeri olmayan ya da yalnız gücü kalan filtre ve hava motoru eklenmedi.
+- Çekilen alanlar: Atman HF-0800 debisi (başlık 900, açıklama 930 L/saat); Hailea ACO-9630 debisi ve gücü (Aquarubi 1200 L/saat ve 10,5 W, Malawi İzmir 16 L/dakika ve 15 W; kayıt hacimle ve kapasite notuyla); HL-BT200 hacmi (50 / 60 L), HL-BT400 hacmi (50–110 / 100 L), HL-BT700 debisi (690 / 690–700 L/saat), RP-400 hacmi (50–100 / 100–200 L).
+- Hydor Ario serisi: mağaza "l/h" değeri yazıyor ama ürünü hava taşı gerektirmeyen bir havalandırıcı olarak anlatıyor; değerin hava debisi olduğu açık değil. Kayıtlar debisiz ve kapasite notuyla girdi; sünger filtreyi çalıştırmaz.
+- Eklenmeyen modeller (değer yok, yalnız güç ya da çelişkili): Atman kafa motorları, AT-A serisi, AT-F104/F201/F202, EF-2/3/4, Champion, BP-500; Hailea MV-100, MV-400, HX kafa motorları (debi bütün modellerde çelişkili); Hydor Pico Evolution; Venusaqua 2004F, VS-210F, VS-410F, 601T, APW-250/350/450, AP-Z3, AP-Z5 ve kafa motorları.
+- Jebo: Jebo Mini 420 Atakan'da "Ürün Kodu: 995-00225"; Betta Marketim'in "Jebo 225 Mini" sayfası aynı ürün, yeni kayıt açılmadı. Yeni Jebo kayıtları (625, UV-H24, UV-PL H55) katalogdaki düzene uyarak `Lifetech` markasında.
+- Hydor ve Ferplast: Hydor Hydrokable 15/25/75/100 W ve Theo 150 W'nin hacimleri Ferplast'ın aynı adlı kayıtlarıyla birebir aynı; mağaza Hydor markasıyla sattığı için ayrı marka kaydı açıldı, birleştirme yapılmadı.
+- Dolphin: Betta Marketim Dophin ürünlerini adreste ve açıklamada "Dolphin" diye yazıyor (marka alanı "Dophin"; C700–C1600 musluğu, LED 455/655/955, PS2012, C-1000 dış filtre). Katalogdaki Dophin kayıtları değişmedi.
+- Çeviri (İngilizce ve İspanyolca, Claude): 24 yeni parça; tablolar `node scripts/catalog-translations.cjs` ile üretildi, `--check` geçti.
+- Test: `scripts/test-catalog-flow.cjs` — ürün sayfası adında rakam olmayan `https://bettamarketim.com.tr/hydor-crystal-mini-ic-filtre` istisna listesine eklendi; yeni kayıtların örnek beklentileri (111 kayıt, yalnız kabul edilen mağazalar, tablo sütunu, çekilen alanlar, L/dakika çevirisi, hava motoruna bağlı filtreler, Jebo düzeni, eklenmeyen Venusaqua modelleri).
+- Altın fikstür değişmedi: vaka adları aynı (yeni kayıtlar fikstürün kimliğe göre sıralı ilk 60 filtresinde, 30 ısıtıcısında ve 10 hava motorunda değil).
+- Kontrol: iki kayıt (Atman AT-3337 S, Hydor Crystal 3) ürün sayfasında ikinci kez okundu, değerler aynı. Karşı firma kontrolü yapılmadı.
+- Açık: arama marka adlarını eş adla eşlemiyor ("Dolphin" → Dophin, "Jebo" → Lifetech, "Venus Aqua" → Venusaqua; `src/lib/equipment-model-search.ts`). `src/data/catalog-coverage.ts` `requiredBrands` listesine yeni markalar eklenebilir. Mevcut Lifetech kayıtlarında mağaza sayfalarıyla farklar görüldü (Mini 420 hacmi 60–200 / 60–250 L, UV-H11 debisi Atakan 600 / Betta Marketim 550 L/saat, 839 hacmi 250–700 / kayıt 400–600 L); değiştirilmedi.
+
+## 2026-11-14 Gündelik ad önerileri (Claude, veri sprinti E5)
+
+- Kural (Burak: "gündelik adlar veri değil, öneridir; en az iki ayrı Türkçe kaynakta geçmeli"; lider kararı: kabul listesi şartı yok): herhangi iki bağımsız Türkçe site sayılır; aynı şirketin siteleri tek sayılır. Alt alan adları birleşir (blog.tetra.net = tetra.net, mail.akvaryum.com = akvaryum.com); akvaryum.market, evcilhayvan.market ve bitki.market aynı adlandırma ve alt bilgi düzenini taşıdığı için koruyucu olarak tek sayıldı (`SAME_OWNER_SITES`). Alıntı terimi içermeli ve sayfada kelimesi kelimesine geçmeli.
+- Yöntem: altı araştırma ajanı (Claude Sonnet, WebSearch ve WebFetch) 45 ad için aday sayfa buldu; her aday sayfa ayrıca indirilip terimin bitişik geçtiği yer betikle arandı ve alıntı sayfa metninden alındı (`S\sprint\e5\dogrula.py`, `alinti.py`, `uret.py`; boşluklar tek boşluğa indirildi). Arama motorunu betikle tarama yapılmadı.
+- `src/data/search-suggestions.ts`: 21 canlı terimi (Siyah tetra, Sarı labidochromis, Paslı ciklet, Kaplan barb, Balon moli, Aksolotl, Red cherry, Kırmızı kiraz karides, Mavi karides → 4 mavi Neocaridina, ıstakoz ve Tatlı su ıstakozu → katalogdaki 5 tatlı su kereviti, Papağan balığı, Papağan ciklet, Kırmızı papağan, Komando çöpçü → Corydoras paleatus, Kırmızı gözlü tetra, Astronot balığı, Oscar balığı, Kırmızı kuyruklu köpekbalığı → Epalzeorhynchos bicolor, Plati balığı, Koi balığı) ve 7 bitki terimi (Java eğreltisi → 4 Microsorum pteropus kaydı, Java yosunu, Kriptokorin → 13 Cryptocoryne kaydı, Amazon kılıcı, Yosun topu, Su yoncası → Marsilea minuta ve M. hirsuta, Noel yosunu). Her terimde 2–3 bağımsız site.
+- Eklenmeyenler (ikinci bağımsız Türkçe site bulunamadı ya da ad başka türe gidiyor): öpücük balığı, bamboo karides, aksolot, palyaço botia, denisoni barb (birer site); cony, benekli kosa, kosa, kordoras, sterbai corydoras (bu sırayla), zebra çöpçü, peacock ciklet, jewel ciklet, kırmızı karınlı ciklet, kırmızı kuyruk yayın, kara hayalet, gümüş moli/molly, papağan (tek başına), kan papağanı, japon karides(i), pleko, mikro kılıç (Türkçe sayfada Lilaeopsis için "Brezilya mikro kılıçları"), valisneria, kabomba, bakopa, elodeya (Türkçe siteler Latince yazımı kullanıyor). "Su yoncası" Türkçe sayfalarda Hydrocotyle tripartita'ya değil Marsilea'ya gidiyor; öyle bağlandı.
+- Kod: öneriler bütün türleri verir, ilk 6'sı görünür, fazlası "Tümünü göster" (`src/components/did-you-mean.tsx`, canlı ve bitki aynı); bitki ekleme penceresi aramada sonuç yoksa öneri gösterir (`src/lib/plant-search.ts`). Ekipman model aramasında marka eş yazımları: Dolphin → Dophin, Jebo → Lifetech, Venus Aqua → Venusaqua (`BRAND_SEARCH_ALIASES`, yalnız arama hoşgörüsü; kayıt markası değişmez).
+- Ölçüm (`S\sprint\populer\olc.cjs`, en az iki yapay zekânın saydığı 128 çekirdek madde, en yaygın adla bulunan): 102/128 (%79,7) → 108/128 (%84,4); balık 62 → 65, omurgasız 13 → 13, bitki 27 → 30. Ölçü betiği bitki önerilerini de sayacak ve öneriyi yalnız satırın türüne gidiyorsa sayacak biçimde genişletildi (eski hâli `olc-e4-yedek.cjs`). %96 hedefi tutmadı: kalan 20 maddenin en yaygın adı (yapay zekâ listelerindeki ad) iki bağımsız Türkçe sitede bulunamadı.
+
+## 2026-11-14 Son kapı lider kararları: yeni türlerin davranışı, tür akvaryumu ve "tek ya da çift" türleri (Claude, veri sprinti son kapı 2)
+
+- Yeni üç türün davranış kaydı (`src/data/species-behavior.ts`, E4'ün kaynak sayfası açılarak okunmuş önerileri): leopar yelken vatoz `conspecificAggression: all` (Fishkeeper: kendi türüne ve benzer boydaki vatozlara bölgeci, birden fazlası için çok geniş akvaryum; ScotCat ek kaynak); Physa salyangozu `peaceful` (wirbellose.de "Verhalten: Friedlich."); kırmızı bataklık kereviti `conspecificAggression: all` (wirbellose.de: kendi türünü avlar, yavrular birbirini yer; OATA kerevit genel rehberi: tek tutulmalı). Kerevitte `eatsSmallFish` eklenmedi: türe özgü kaynak (wirbellose.de) canlı balık avlamadığını yazıyor, OATA'nın genel rehberi aksini; çelişki topluluk notunda yazılı. İki yeni koşul metni EN/ES çeviri tablolarına eklendi.
+- Elektrik mavi kerevit (*Procambarus alleni*) `speciesOnly: true`: Fishipedia "Nous conseillons une maintenance en aquarium spécifique car elle s'attaquera aux autres crustacés et aux poissons." (E2 önerisi, güç "kesin"). Green terror önerisi uygulanmadı (alıntı doğrulanamadı).
+- Kaynağın "tek ya da çift" dediği altı tür (mavi acara, Assam yılanbaş, ocellaris peacock bass, inci ciklet, Texas ciklet, Anthrax Flyer vatoz L235) için `minGroup` 1 → 2 denendi ve UYGULANMADI. Karar 0040'ın tek çift düzeni yalnız `minGroup >= 2` ile çalışıyor; `minGroup` 2 olunca kaynağın kabul ettiği tek birey sarı "grup sayısı düşük (en az 2)" alıyor ve `scripts/test-health.cjs`'in kaynaklı denetimi ("Cichla ocellaris tek tutulabilir (Seriously Fish, Fishkeeper); tek birey grup uyarısı almamalı") kırılıyor. Kaynaklar en az iki demiyor (mavi acarada SF'nin "çift için 6 genç alın" önerisi, `docs/DATA_SOURCES.md` grup kuralına göre en az grup sayılmaz); `minGroup` 2 yazmak kaynakta olmayan bir değer olur ve kullanıcıyı ikinci iri, saldırgan balığı almaya iter. Bu yüzden veri değişmedi: bu türlerde çift hâlâ kırmızı "tek tutulmalı" alır. Çözüm motor işi (ör. `conspecificAggression: all` kaydına "çift kabul" işareti; karar 0040 açık işleri); lider kararı bekliyor.

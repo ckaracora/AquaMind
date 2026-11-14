@@ -43,6 +43,10 @@ Bu liste otomatik doğruluk garantisi değildir. Her bağlantı doğru marka, mo
 - Fit çevirisi (2026-11-13, teknik yöntem, Claude): kaynak akvaryum ölçüsünü fit olarak yazıyorsa ("N ft", "5'") 1 ft = 30 cm alınır (4 ft = 120 cm, 5 ft = 150 cm, 6 ft = 180 cm); taban ölçüsünden hacim aynı çevrilmiş ölçülerle hesaplanır. Katalogdaki eski kayıtlar karışıktı (5 ft hem 150 hem 152 cm, 6 ft 180, 182 ve 183 cm); 2026-11-13 veri doldurma 1'den itibaren bu düzen kullanılır (`docs/CATALOG_LOG.md`, "2026-11-12 En az hacim ve uzunluk", karar 3).
 - Atık katsayısı (`wasteFactor`, 2026-11-13, teknik yöntem, Claude): kaynaklı değildir, model değeridir (karar 0009). Yeni tatlı su kayıtlarında karar 0031'deki ortanca kullanılır: balıkta aynı boy aralığındaki bugünkü kayıtların ortancası, omurgasızda kategorinin ortancası. Bu, aşağıdaki "Deniz canlıları" bölümündeki 0031 kuralının tatlı suya genişletilmesidir; ilk uygulama 2026-11-13, 25 yeni kayıt (`docs/CATALOG_LOG.md`, "2026-11-12 Eksik yaygın canlılar ve bitkiler").
 - Tatlı su adıyla satılan acı su veya deniz canlısı, salinite gereksinimi uygulamanın sağlık analizinde modellenmeden sıradan tatlı su profiline bağlanmaz.
+- Resmî genel bakım bilgisi (ürün sahibi kararı, 2026-11-14): "Veterinerler, artık kim bakıyorsa, onların resmî genel bilgileri bizim için geçerlidir, özellikle tek görüşte birleşilenler." Resmî veteriner ve hayvan refahı kurumlarının genel bakım bilgisi (ör. OATA bakım kartları, RSPCA, veteriner birlikleri, üniversite ve devlet rehberleri) kabul edilen kaynaktır; kurumların birleştiği görüş önceliklidir. Türe özgü kabul edilen kaynak varsa o önce gelir. Genel rehberden alınan değer kayıt notunda ve katalog günlüğünde "genel rehber" diye belirtilir. Genel rehberin grup için verdiği alt sınır (ör. OATA'nın küçük kedi balıkları için 80 L'si) iri bir türün kayıttaki değerini düşürmek için kullanılmaz.
+- FishBase boy farkı (2026-11-14, lider kararı, teknik yöntem): boyda kaynakların büyüğü alınır; ancak FishBase'in en büyük boyu bakım kaynaklarının (Seriously Fish, Fishkeeper, Practical Fishkeeping) en büyüğünü yarıdan fazla aşıyorsa (1,5 katından büyükse) bakım kaynağının en büyüğü alınır ve fark katalog günlüğüne yazılır. Örnek: güreşçi yarımgaga, FishBase 16,1 cm TL, Seriously Fish 5,5 cm → 5,5 cm. Bakım kaynağı yoksa FishBase'in boyu kullanılır.
+- Fishipedia alanları (2026-11-14, teknik yöntem): Fishipedia sayfasındaki "Natural environment characteristics" (Fransızca "Caractéristiques du milieu naturel", İtalyanca "Caratteristiche dell'habitat naturale") bloğu ve "naturellement / lives naturally" diye yazılan değerler doğal ortamın değeridir; FishBase'in doğal kayıtları gibi sıcaklık ve pH ortak aralığına girmez. Akvaryum değeri yalnız öneri bloğundan ("Our recommendations", "Raccomandazioni generali", "Nos recommandations") alınır. Öneri bloğunun birçok türde aynı yazdığı pH 7,2–8 ve 6,8–7,2 şablon kuşkuludur (Tanganyika türlerinde öbür kaynakların pH 8–9'uyla kesişmiyor); ortak aralığa girmez.
+- Grup sayısı aralığı (2026-11-14, teknik yöntem): kaynak en az grubu aralıkla yazıyorsa ("at least 8–10") ve kayıttaki değer bu aralığın içindeyse kayıttaki değer korunur; altındaysa aralığın alt ucu alınır. "Çift oluşsun diye 6 genç balık alın", "isterseniz grup", "en iyi grup halinde" gibi öneriler en az grup sayılmaz.
 
 ## Omurgasızlar (karides, salyangoz) için uzman kaynaklar
 
@@ -200,6 +204,15 @@ Kullanılmayanlar:
 - Doğrulanamayan fakülte sayfaları (İstanbul Üniversitesi-Cerrahpaşa: güvenlik doğrulaması; Fırat, Ondokuz Mayıs, Selçuk, Bursa Uludağ: bağlantı kurulamadı). Ankara Üniversitesi Veteriner Fakültesi'nde su ürünleri hastalıkları anabilim dalı yok; akuatik deney hayvanları araştırma merkezi bir hizmet birimi değildir.
 
 Kaynaklar üç ayda bir, katalogla birlikte yeniden açılır (karar 0020).
+
+## Tür bakım bilgisi alanları (`src/data/species-care.ts`, veri sprinti E3)
+
+Beslenme, cinsiyet ayrımı, üreme, ömür, zorluk, yüzme bölgesi ve su sertliği yalnız kaynak sayfada açıkça yazıyorsa kaydedilir; kaynak yazmıyorsa alan yoktur (genel bilgiyle doldurulmaz). Alan başına kaynak adresi `sources` içindedir.
+- Metin alanları (beslenme, cinsiyet, üreme): okuyucu özeti alıntıyla karşılaştırılır, alıntının desteklemediği ifade çıkarılır; en çok 2 kısa, betimleyici cümle; kesin olmayan alıntı kesin yazılmaz.
+- Zorluk: Seriously Fish'in "Difficulty: N of 8" göstergesi ve yalın "Easy/Moderate/Difficult" zorluk sayılmaz; yalnız açık ifade ("easy to keep", "not recommended for beginners", "advanced aquarists only", "hardy" gibi).
+- Ömür: yalnız sayı yazıyorsa; "en az", "en çok", "yaklaşık", "kayıtlı en yüksek" ayrımı `qualifier` ile tutulur.
+- Yüzme bölgesi: akvaryumdaki davranış; doğadaki derinlik, "açık alan" ve "pelajik" gibi ifadeler alınmaz.
+- Sertlik: dGH; KH, doğal yaşam alanı değeri, üreme suyu ve FishBase "dH range" alınmaz. "up to X" / "below X" için alt sınır yoktur (`null`, 0 yazılmaz). Birden çok kaynak varsa Seriously Fish, Practical Fishkeeping, OATA, wirbellose.de, Fishipedia, Scotcat, Fishkeeper sırasıyla ilki kullanılır. Yalnız kaydedilir, uyumluluk hesabına girmez.
 
 ## Zorunlu kayıt alanları
 
