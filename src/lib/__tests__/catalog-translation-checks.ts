@@ -7,7 +7,7 @@ import { speciesCatalog } from "@/data/catalog-species";
 
 export interface TranslationEntry { key: string; fields: string[]; tr: string; method?: "a" | "k" | "t"; source?: string; [locale: string]: unknown }
 
-export function readTranslations(locale: string, catalog: "species" | "equipment" | "care" = "species"): TranslationEntry[] {
+export function readTranslations(locale: string, catalog: "species" | "equipment" | "care" | "species-care" = "species"): TranslationEntry[] {
   return JSON.parse(readFileSync(fileURLToPath(new URL(`../../../packages/localization/translations/${locale}-${catalog}.json`, import.meta.url)), "utf8")) as TranslationEntry[];
 }
 

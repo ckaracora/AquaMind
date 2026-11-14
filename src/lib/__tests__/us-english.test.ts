@@ -59,7 +59,7 @@ describe("İngilizce metinler Amerikan yazımıyla", () => {
     expect(entries.flatMap((entry) => britishWords(entry.en).map((word) => `${entry.key}: ${word}`))).toEqual([]);
   });
 
-  it.each(["equipment", "care"])("%s katalog çevirisi İngiliz yazımı içermez; büyük harfle yazılmış ürün adları (Aquatube GREY) taranmaz", (catalog) => {
+  it.each(["equipment", "care", "species-care"])("%s katalog çevirisi İngiliz yazımı içermez; büyük harfle yazılmış ürün adları (Aquatube GREY) taranmaz", (catalog) => {
     const entries = JSON.parse(readFileSync(`packages/localization/translations/en-${catalog}.json`, "utf8")) as Array<{ key: string; en: string }>;
     expect(entries.flatMap((entry) => britishWords(entry.en.replace(/\b\p{Lu}{2,}\b/gu, "")).map((word) => `${entry.key}: ${word}`))).toEqual([]);
   });

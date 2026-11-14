@@ -41,6 +41,9 @@ export const equipment: Equipment[] = [
   { id: "e1", aquariumId: "aqua-1", category: "filter", brand: "Oase", model: "BioMaster² 350", installedAt: "2024-03-12", specifications: "1100 L/saat", catalogId:"oase-biomaster2-350" },
   { id: "e2", aquariumId: "aqua-1", category: "lighting", brand: "Chihiros", model: "WRGB II 90", installedAt: "2024-03-12", specifications: "100 W", catalogId:"chihiros-wrgb2-90" },
   { id: "e3", aquariumId: "aqua-1", category: "co2", brand: "ISTA", model: "2L Set", installedAt: "2024-03-18" },
+  // Isıtıcı (veri sprinti F, 2026-11-14): örnekteki tropikal canlılar (cüce vatozun kaynaktaki en düşük sıcaklığı 23 °C) ısıtıcı ister. Katalogdaki
+  // Eheim Thermocontrol 125 W, üreticisine göre 150–200 L akvaryum içindir; örneğin net hacmi 180 L (W/L bandı da içinde: 0,69 W/L).
+  { id: "e4", aquariumId: "aqua-1", category: "heater", brand: "Eheim", model: "Thermocontrol 125 W", installedAt: "2024-03-12", specifications: "125 W", catalogId:"eheim-thermo-125" },
 ];
 
 // Demo kayıtların başka dildeki metinleri (karar 0021, 5. paket). Demo kayıtlar yalnız ekranda gösterilir, depoya yazılmaz; dil değişince
@@ -64,13 +67,40 @@ const demoTexts: Record<Exclude<Locale, "tr">, Record<DemoCollection, Record<str
   },
 };
 
+// Örnek akvaryumun tarihleri bugüne göre (2026-11-14 sprinti): yukarıdaki tarihler 2026-08-18 gününe göre yazılmıştır; ekranda bu gün
+// bugünmüş gibi kaydırılır. Ölçümler son haftalarda (1, 8 ve 15 gün önce), bakımlar yakında (1, 5 ve 8 gün sonra) görünür. Kaydırma yalnız
+// tarayıcıda, sağlayıcının depodan yüklediği anda yapılır (sunucuda çizilen ilk görünüm sabit tarihlerle kalır, ikisi karışmaz).
+const DEMO_ANCHOR_DAY = "2026-08-18";
+const DAY_MS = 86_400_000;
+/** Bugünün yerel günü ile `DEMO_ANCHOR_DAY` arasındaki gün farkı. */
+function demoDayShift(now: Date): number {
+  const [year, month, day] = DEMO_ANCHOR_DAY.split("-").map(Number);
+  const anchor = new Date(year, month - 1, day);
+  const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+  return Math.round((today.getTime() - anchor.getTime()) / DAY_MS);
+}
+const shiftIso = (value: string, days: number) => new Date(new Date(value).getTime() + days * DAY_MS).toISOString();
+
+/** Örnek ölçümler ve bakım görevleri, tarihleri bugüne göre kaydırılmış. */
+export function demoRowsForToday(now: Date): { waterReadings: WaterParameters[]; maintenanceTasks: MaintenanceTask[] } {
+  const days = demoDayShift(now);
+  return {
+    waterReadings: waterReadings.map((row) => ({ ...row, measuredAt: shiftIso(row.measuredAt, days) })),
+    maintenanceTasks: maintenanceTasks.map((row) => ({ ...row, dueAt: shiftIso(row.dueAt, days) })),
+  };
+}
+
+/** Tarih alanları satırda kalır (bugüne göre kaydırılmış olabilir); dil değişince yalnız metinler değişir. */
+const DATE_FIELDS = ["dueAt", "completedAt", "measuredAt"] as const;
+const datesOf = (row: Record<string, unknown>) => Object.fromEntries(DATE_FIELDS.filter((key) => key in row).map((key) => [key, row[key]]));
+
 /** Demo satırlarını seçili dilin metinleriyle verir; demo olmayan satır olduğu gibi kalır. Değişiklik yoksa aynı dizi döner. */
 export function localizeDemoRows<T extends { id: string }>(collection: DemoCollection, rows: T[], locale: Locale): T[] {
   let changed = false;
   const next = rows.map((row) => {
     const seed = demoSeeds[collection].find((item) => item.id === row.id) as T | undefined;
     if (!seed) return row;
-    const localized = { ...seed, ...(locale === "tr" ? {} : demoTexts[locale][collection][row.id]) } as T;
+    const localized = { ...seed, ...datesOf(row as Record<string, unknown>), ...(locale === "tr" ? {} : demoTexts[locale][collection][row.id]) } as T;
     const keys = new Set([...Object.keys(localized), ...Object.keys(row)]);
     if ([...keys].every((key) => (localized as Record<string, unknown>)[key] === (row as Record<string, unknown>)[key])) return row;
     changed = true;

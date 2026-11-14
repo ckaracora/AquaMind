@@ -26,6 +26,10 @@
       "types": "./src/care.ts",
       "default": "./src/care.ts"
     },
+    "./species-care": {
+      "types": "./src/species-care.ts",
+      "default": "./src/species-care.ts"
+    },
     "./equipment": {
       "types": "./src/equipment.ts",
       "default": "./src/equipment.ts"

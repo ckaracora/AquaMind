@@ -1,6 +1,6 @@
 # AquaMind proje durumu
 
-Son güncelleme: 2026-11-13
+Son güncelleme: 2026-11-14
 
 ## Doğrulanmış temel
 
@@ -2288,6 +2288,60 @@ Son güncelleme: 2026-11-13
   - Atakan'ın "Dracaena Sanderiana Gold/White" ve "Dracaena Red" ürünleri katalogdaki bitkilere bağlanmadı.
   - Çikletist'in "Dracaena deremensis" ürününün ürün adresi yok.
   - Veri doldurma 1'in açık işleri (yukarıda) geçerli. Dal henüz push edilmedi, PR açılmadı.
+
+## Veri 9 sprinti 1: motor 1.18.0, arama ve kolay düzeltmeler (`codex/nine-1`, 2026-11-14)
+
+- Birleştirme kaydı: PR #97 (veri doldurma 2) `3fbe16d` olarak 2026-11-13 07:01:37Z'de `main`'e birleşti. `main` 3fbe16d: CI `pnpm verify` başarılı, Vercel üretim dağıtımı 7759351959 başarılı. Bu dal 3fbe16d üstünde.
+- Motor 1.18.0, kural seti 1.15.0 (karar 0043, `docs/DECISIONS/0043-eksik-degerlendirme-ve-hukum-kurallari.md`). İstek: Burak'ın 2026-11-14 onayı ("tamam başla"; beş hüküm kuralı, eksik değerlendirmede neyin değerlendirilemediği yazılır).
+  - "Tek tutulmalı" türden birden çok birey kesin tehlike ("uygun değil"); "erkekler kavga eder" canlı riski (en çok "dikkat").
+  - Net hacim gerekenin yarısından küçükse yeni kırmızı `spaceTooSmall` (kesin tehlike), her kategoride; metin iki hacmi ve gerekiyorsa iki uzunluğu söyler.
+  - Sonuca `incomplete` ve `unevaluated` alanları eklendi (tanınmayan ya da doğrulanmamış canlı, davranış bilgisi yok, tanınmayan cihaz, kapasite bilgisi eksik, su ölçümü yok). Sağlık sayfasında "Değerlendirilemeyenler" kartı, "Eksik değerlendirildi" rozeti, göstergelerde "Uygun / Sınırda / Yetersiz", "Hesaba giren kayıtlar: 2/2". Durum ve puan bu alanlarla değişmez.
+  - `eatsSnails` ve `eatsShrimp` her kategoride uyarır.
+  - 28 senaryo: F09, F13, F14, F16, F17, F20 hükmü değişti; F27 "iyi" + eksik; öbür 21 aynı.
+- Arama ve kolay düzeltmeler:
+  - Canlı araması bütün sınıflarda ve türün İngilizce ve İspanyolca katalog adlarında (derlemede üretilen durağan ad dizini `/catalog-data/species-search-names`, yaklaşık 23 kB); bitki araması İngilizce ortak adla.
+  - Canlı penceresi boş açılır, adet türün en az grup sayısı; "Bunu mu demek istedin?" öneri dosyası (`src/data/search-suggestions.ts`, boş; bütünlük denetimi testte).
+  - Canlı kaydını düzenleme; akvaryum sayfasındaki ekleme düğmeleri pencereyi doğrudan açar.
+  - Su grafiği girilmeyen değeri uydurmuyor; tekrarlayan bakım tekrarlıyor; silmelerde ortak onay penceresi (`window.confirm` kalktı).
+  - Örnek akvaryumun tarihleri bugüne göre; "Yakında" ve boş öğeler kalktı (AquaMatch menüsü dahil); su ölçümü penceresinde açık adlar; tuzlu ve acı su kapsam notu; ekipmanda marka seçmeden model arama; yeni akvaryum formunda ölçüler boş; uygulama simgesi (`src/app/icon.svg`).
+- Son kapıda düzeltilen kırmızılar: `scripts/test-catalog-flow.cjs` hâlâ AquaMatch menü öğesini bekliyordu (menüden kaldırılmasına göre güncellendi); üretim derlemesi kırıldı, çünkü ad dizinini üreten sunucu yolu React kancası içeren modülü içe aktarıyordu (saf kurucu `src/lib/species-search-names-index.ts`'e ayrıldı).
+- Altın fikstür motor 1.18.0 ile ayrı commit'te yeniden üretildi; eski ve yeni vaka vaka karşılaştırıldı: 1132 vaka, sayı değişmedi; 663 vakaya yalnız `unevaluated` eklendi, bunların 15'inde ayrıca kırmızı alan uyarısının yerine `spaceTooSmall` geldi. Hükmü değişen 2 vaka, ikisi "dikkat" → "uygun değil": `pair:giant-gourami+giant-sailfin-molly` 69 → 49, `pair:redhead-tapajos+redhook-myleus` 66 → 49. Beklenen dışında fark yok.
+- Son kapı: `pnpm verify` yeşil: tip denetimi, katalog akışı (1893 bakım ürünü), 114 sağlık senaryosu ve 18 biçimleme kontrolü, hesaplayıcılar, katalog denetimi, 73 Vitest dosyasında 948 test, üretim derlemesi (162 sayfa), dil paketi sınırı.
+- Commit'ler: motor, arama ve kolay düzeltmeler, altın fikstür ve bu durum kaydı ayrı; aynı dalda, tek PR. Yalnız son hâl yeşil; motor commit'i tek başına yeşil değil (sağlık sayfasının yeni metinleri ortak dil dosyalarında, arama commit'inde).
+- Açık işler:
+  - Karşı firma kontrolü (puanlama motoru riskli iş) commit'ten sonra yapılacak.
+  - "Erkekler kavga eder" cinsiyet alanını okumuyor; cinsiyete göre uyarı yok.
+  - Sarı "alan sınırda" (`spaceLimited`) metni akvaryumun hacmini yazmıyor.
+  - İngilizce ve İspanyolcada sayfa önce Türkçe açılıyor; İngilizce tarih ve İspanyolca sayı biçimi.
+  - Canlı penceresinde elle canlı ekleme yok (tuzlu ve acı su notu buna göre yazıldı; lider kararı).
+  - Ekran tarayıcıda görülmedi (yeni kart, pencere düzeni, simgenin 404'ü giderdiği).
+  - Dal henüz push edilmedi, PR açılmadı.
+
+## Veri 9 sprinti 2: motor kontrol düzeltmeleri, veri (E1–E5), tür kartı ve "ne uyar" (`codex/nine-1`, 2026-11-14)
+
+- İstek: Burak'ın 2026-11-14 kararları (veriyi 7'den 9 bandına; tatlı su; uydurma yok; resmî veteriner ve hayvan refahı kurumlarının genel bilgisi kaynak; gündelik adlar veri değil öneri; sertlik kaydedilir, hesaba girmez). Veri dondurma (karar 0039) bu iş için kalktı.
+- Motor 1.18.0 kontrol düzeltmeleri (karşı firma kontrolü: Gemini Argon; ayrıntı karar 0043 "Kontrol turu düzeltmeleri"): risk listesi boşken yeşil "Belirgin bir risk görünmüyor" yalnız hüküm "iyi" ve değerlendirilemeyen kalem yokken (`healthAdviceView`); hiçbir canlı hesaba girmeyince canlıya bağlı göstergeler nötr "Değerlendirilemedi"; canlısız akvaryumda da "Değerlendirilemeyenler" kartı; hava motorsuz doğrulanmış sünger filtre "kapasite bilgisi eksik"e girmiyor; `spaceTooSmall` uzunluk 0'ı yazmıyor; yalnız aynı tür saldırganlığı kaydı "davranışı biliniyor" sayılmıyor; boşluklu marka/model; ana sayfa cümlesi "ya da doğrulanmadı". Puan, durum ve uyarılar değişmedi.
+- E1 katalog değerleri: 437 tatlı ve acı su kaydı ikinci okumayla (1.043 sayfa yeniden indirildi) yeniden hesaplandı; 125 kayıtta 181 alan değişti; rakip sitelere 30 bağlantı çıkarıldı, 11 ana kaynak kabul edilen kaynağa çevrildi; 243 kaydın doğrulama tarihi 2026-11-14; 54 kaynaksız hacim `docs/CATALOG_SOURCE_GAPS.md`'de. Kurallar `docs/DATA_SOURCES.md`'de (resmî genel bilgi, FishBase boy farkı, Fishipedia doğal ortam, grup aralığı).
+- E2 davranış: 194 kayıt (40 risk ya da "avcı değil", 154 `peaceful`); hiçbir işareti olmayan tür 121 → 24. Son kapıda yeni üç türün kaydı eklendi (leopar yelken vatoz ve kırmızı bataklık kereviti `conspecificAggression: all`, Physa `peaceful`) ve elektrik mavi kerevite `speciesOnly` (Fishipedia).
+- E3 tür bakım bilgisi: `src/data/species-care.ts` (420 türde en az bir alan: beslenme 396, cinsiyet ayrımı 350, üreme 385, ömür 91, zorluk 41, yüzme bölgesi 33, sertlik 385; birimsiz üç Fishipedia sertliği çıkarıldı), 860 metin EN/ES; yalnız bilgi, motor kullanmaz.
+- E4–E5: üç yeni canlı (leopar yelken vatoz *Pterygoplichthys gibbiceps*, Physa salyangozu *Physella acuta*, kırmızı bataklık kereviti *Procambarus clarkii*, istilacı uyarısıyla), iki bitki satış adı, 111 ekipman (Atman 14, Hailea 23, Hydor 17, Lifetech/Jebo 3, Venusaqua 54), 28 gündelik ad önerisi (21 canlı, 7 bitki; her biri iki bağımsız Türkçe siteden alıntılı), öneri sınırı ilk 6 + "Tümünü göster", bitkide öneri, ekipman marka eş yazımı (Dolphin, Jebo, Venus Aqua). Çekirdek 128 popüler maddede en yaygın adla bulma %76,6 → %84,4 (hedef %96 tutmadı).
+- Yeni ekranlar: tür kartı (katalog değerleri, davranış, bakım bilgisi, kaynaklar) ve "Bu akvaryuma ne uyar?" (canlı penceresi ve sağlık sayfası; yeni uyarı getirmeyen, davranışı belgeli türler). Örnek akvaryuma Eheim Thermocontrol 125 W eklendi (iyi 98).
+- Veri kapsamı (`docs/DATA_COVERAGE.md`, 2026-11-14): canlılar 471 kayıt, ekipman 3646 kayıt (hesap değeri %90,6).
+- Son kapı lider kararlarından uygulanmayan: kaynağın "tek ya da çift" dediği altı tür (mavi acara, Assam yılanbaş, ocellaris peacock bass, inci ciklet, Texas, L235) için `minGroup` 2. Tek bireye sarı "grup sayısı düşük" getiriyor, kaynaklı `test-health` denetimini kırıyor ve kaynakta olmayan bir değer olurdu; veri değişmedi (`docs/CATALOG_LOG.md`, son kapı bölümü).
+- Altın fikstür ayrı commit'te yeniden üretildi; eski ve yeni betikle karşılaştırıldı: 1132 → 1138 vaka (+6: üç yeni türün `species-fit` ve `species-tight` vakaları). Aynı adlı 1085 vakada hükmü değişen yok; 257 vakada uyarı ya da puan, 15 vakada yalnız `unevaluated` değişti; örnek akvaryum iyi 95 → iyi 98 (ısıtıcı). Tür sırası kaydığı için 47 ikili vakanın adı değişti; eski adlı ikililer bugünkü kodla ayrıca hesaplandı: hükmü değişen 2, ikisi E1'in boy düzeltmesinden ("uygun değil" → "dikkat", avlanma düştü): `pair:rainbow-snakehead+ramirezi` ve `pair:wrestling-halfbeak+xray-tetra` (49 → 74). Beklenmeyen hüküm değişimi yok. İkili kayması "akıntı ihtiyaçları farklı" ölçüt kodunu fikstürden düşürdüğü için `engine-text.test.ts`'e stub senaryo eklendi.
+- Son kapı: `pnpm verify` yeşil: tip denetimi, katalog akışı (1893 bakım ürünü), 114 sağlık senaryosu ve 18 biçimleme kontrolü, hesaplayıcılar, katalog denetimi, 77 Vitest dosyasında 1014 test, üretim derlemesi (162 sayfa), dil paketi sınırı (tür bakım bilgisi EN 65 kB, ES 77 kB ayrı parçada). İlk koşuda tek kırmızı `engine-text.test.ts` (yukarıdaki kod) idi.
+- Commit'ler: motor kontrol düzeltmeleri, E1, E2, E3, E4–E5, ekranlar, fikstür ve bu durum kaydı ayrı; yalnız son hâl yeşil (ortak dil dosyaları `tr/en/es.ts` ekran commit'inde, sağlık sayfası motor düzeltme commit'inde, `catalog-species-expanded.ts`, `scripts/test-catalog-flow.cjs`, `docs/CATALOG_LOG.md` ve tür çeviri tabloları E1 commit'inde).
+- Açık işler:
+  - "Tek ya da çift" türlerinde çift kırmızı "tek tutulmalı" alıyor: motor işi ("çift kabul" işareti), lider ya da Burak kararı.
+  - E1'in bekletilen 37 büyük ya da çelişkili farkı (`docs/CATALOG_LOG.md`): Burak/Canberk'le.
+  - Gündelik adlar: dürüst kanıtla bulunamayan 20 çekirdek ad için Burak'la Chrome oturumu.
+  - *Lemna minor* ve *Hydrocotyle leucocephala*: kabul edilen kaynakta değer ya da istilacı etiketi yok, eklenmedi.
+  - Harem türleri (erkek başına birkaç dişi) "erkekler kavga eder" ile en çok "dikkat"; cinsiyet okunmuyor.
+  - Kırmızı karınlı pirana, threadfin acara, aksolotl davranışı; demasoni ve maingano `males` → `all`?
+  - Jonklaas lipstick goby kimliği; L148/L149/Kiriza kaynağı.
+  - Tür kartı ve "ne uyar" penceresi tarayıcıda görülmedi (375 px, iç içe pencerede odak ve Esc).
+  - Karşı firma kontrolü veri için (111 ekipman, 3 canlı, E1 örneği) yapılmadı.
+  - Dal henüz push edilmedi, PR açılmadı.
 
 ## Uyumluluk denetimi (2026-09-24)
 

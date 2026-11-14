@@ -31,6 +31,9 @@ const TABLES = [
   { locale: "es", source: "translations/es-equipment.json", target: "src/messages/es-catalog-equipment.ts", name: "esCatalogEquipment", ...EQUIPMENT },
   { locale: "en", source: "translations/en-care.json", target: "src/messages/en-catalog-care.ts", name: "enCatalogCare", ...CARE },
   { locale: "es", source: "translations/es-care.json", target: "src/messages/es-catalog-care.ts", name: "esCatalogCare", ...CARE },
+  // Tür bakım bilgisi (veri sprinti E3): beslenme, cinsiyet ayrımı ve üreme metinleri; anahtar Türkçe metin, tablo `src/species-care.ts` ile ayrı parça yüklenir.
+  { locale: "en", source: "translations/en-species-care.json", target: "src/messages/en-catalog-species-care.ts", name: "enCatalogSpeciesCare", ...SPECIES },
+  { locale: "es", source: "translations/es-species-care.json", target: "src/messages/es-catalog-species-care.ts", name: "esCatalogSpeciesCare", ...SPECIES },
 ];
 
 function render({ locale, source, name, type, from }, entries) {

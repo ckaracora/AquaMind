@@ -87,6 +87,7 @@ describe("bitki kataloğu bütünlüğü", () => {
       "pistia-stratiotes": ["Su marulu"],
       "cabomba-piauhyensis": ["Kırmızı Cabomba"],
       "pontederia-crassipes": ["Su Sümbülü"],
+      "vallisneria-americana-var-gigantea": ["Dev Saz"],
     });
   });
 
@@ -544,7 +545,8 @@ describe("bitki kataloğu modülü", () => {
 
   it("uygulama kodu kataloğu yalnız kancadaki ayrı parça olarak yükler; öbür dosyalar ondan yalnız tür alır", () => {
     const users = appFiles().map(({ file, text }) => ({ file, ...catalogUses(file, text) })).filter(({ value, dynamic, typeOnly }) => value.length || dynamic || typeOnly);
-    expect(users.map(({ file }) => file).sort()).toEqual(["src/components/plant-catalog.tsx", "src/lib/plant-names.ts", "src/lib/use-plant-catalog.ts"]);
+    // src/lib/plant-search.ts (2026-11-14 sprinti, İngilizce adla arama) yalnız tür alır.
+    expect(users.map(({ file }) => file).sort()).toEqual(["src/components/plant-catalog.tsx", "src/lib/plant-names.ts", "src/lib/plant-search.ts", "src/lib/use-plant-catalog.ts"]);
     expect(users.flatMap(({ file, value }) => value.map((use) => `${file}: ${use}`))).toEqual([]);
     expect(users.filter(({ dynamic }) => dynamic).map(({ file }) => file)).toEqual(["src/lib/use-plant-catalog.ts"]);
   });

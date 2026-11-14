@@ -88,5 +88,15 @@
 // (`MARINE_SPECIFIC_GRAVITY_DANGER_LIMITS`). Ötesi kesin tehlike kalır. Hedefler, uyarı kodları ve metinleri değişmez. Kesin tehlike sınırı
 // değiştiği, yeni sabit geldiği için kural seti 1.14.0. Sonuç nesnesinin biçimi değişmez. Denetim sonrası: karşılaştırma kayan nokta
 // artığını 1e-9 payla yutar (hesapla gelen 1,0270000000000001 sınırın kendisi); ekranda ölçüm aştığı sınırla aynı yazılmaz (dil dosyaları).
-export const ENGINE_VERSION = "1.17.0";
-export const RULESET_VERSION = "1.14.0";
+//
+// 1.18.0: hüküm kuralları ve "eksik değerlendirildi" (bkz. docs/DECISIONS/0043-eksik-degerlendirme-ve-hukum-kurallari.md; ürün sahibinin onayı
+// 2026-11-14, "tamam başla"). "Tek tutulmalı" türden (kaynağın çift önerdiği türde tek çift hariç) birden çok birey kesin tehlikedir (kırmızı,
+// tür uyumu cezası 60); "erkekler kavga eder" sarı kalır ama canlı riski sınıfına girer (en çok "dikkat"). Net hacim, kayıtlı adet için gereken
+// en az hacmin yarısından küçükse yeni `spaceTooSmall` uyarısı kesin tehlikedir (her kategoride; metin iki hacmi birlikte söyler). "Karides yer"
+// ve "salyangoz yer" kaydı her kategoriden canlıda uyarır; canlı kendi türünü av saymaz. Sonuç nesnesine iki isteğe bağlı alan gelir:
+// `unevaluated` (değerlendirilemeyenler: tanınmayan ya da doğrulanmamış canlı, davranış bilgisi olmayan tür, tanınmayan ya da kapasitesi
+// bilinmeyen cihaz, su ölçümü yok) ve `incomplete` (tanınmayan ya da doğrulanmamış canlı var). Durum ve puan bu iki alandan etkilenmez.
+// Davranış girdisine `peaceful` ve `notPiscivorous` notları gelir; uyarı üretmez, yalnız "biliniyor" sayılır. Yeni oran sabiti
+// (`SEVERE_VOLUME_RATIO`), uyarı seviyesi, kesin tehlike koşulu ve ceza değiştiği için kural seti 1.15.0.
+export const ENGINE_VERSION = "1.18.0";
+export const RULESET_VERSION = "1.15.0";

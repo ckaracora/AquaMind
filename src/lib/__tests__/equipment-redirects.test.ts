@@ -7,6 +7,7 @@ import {
 } from "@/data/catalog-equipment";
 import { speciesById } from "@/data/catalog-species";
 import { loadCatalogSlice, type FetchCatalogJson } from "@/lib/catalog-slice";
+import { visibleEquipmentModels } from "@/lib/equipment-model-search";
 import { analyzeAquarium } from "@/lib/health-analysis";
 import { createHealthAnalyzer } from "@/lib/health-analysis-core";
 import type { Aquarium, Equipment, Livestock } from "@/types/aquarium";
@@ -66,13 +67,20 @@ describe("JBL PROTEMP S: eski kimlik ve eş ad yönlendirmesi", () => {
   // Ekipman ekleme penceresi (src/app/equipment/page.tsx) listeyi ve seçimi aynı aramayla süzer; yalnız `item.model`'e bakan eski
   // arama "S 101" ya da "ProTemp S 100" yazınca boş liste veriyordu.
   it("ekleme penceresi model listesini ve seçimi eş adlara bakan aramayla süzer", () => {
+    // 2026-11-14 sprinti: liste ve seçim aynı işlevden gelir (src/lib/equipment-model-search.ts); işlev eş adlara bakan aramayı kullanır,
+    // marka seçilmeden bütün markalarda arar.
     const page = readFileSync("src/app/equipment/page.tsx", "utf8");
-    expect(page).toMatch(/import \{[^}]*\bequipmentMatchesModelQuery\b[^}]*\} from "@\/data\/catalog-equipment"/);
-    expect(page).toContain("const visibleModels = models.filter(item => equipmentMatchesModelQuery(item, modelQuery));");
+    const search = readFileSync("src/lib/equipment-model-search.ts", "utf8");
+    expect(search).toMatch(/import \{[^}]*\bequipmentMatchesModelQuery\b[^}]*\} from "@\/data\/catalog-equipment"/);
+    expect(page).toContain("const visibleModels = visibleEquipmentModels(selectedCategory, brand, modelQuery);");
     // 2026-11-12 (kullanılabilirlik turu): arama tek modele inerse o seçilir, birden çok model kalırsa seçim kullanıcıya bırakılır.
-    expect(page).toContain("const matches = models.filter(item => equipmentMatchesModelQuery(item, next));");
-    expect(page).toContain("setSelected(next.trim() && matches.length === 1 ? matches[0].id : \"\")");
+    expect(page).toContain("const matches = visibleEquipmentModels(selectedCategory, brand, next);");
+    expect(page).toContain("const only = next.trim() && matches.length === 1 ? matches[0] : undefined; setSelected(only?.id ?? \"\");");
     expect(page).not.toMatch(/item\.model\.toLocaleLowerCase\("tr-TR"\)\.includes/);
+    for (const [query, id] of [["S 101", "jbl-protemp-s-101"], ["ProTemp S 100", "jbl-protemp-s-101"]] as const) {
+      expect(visibleEquipmentModels("heater", "JBL", query).map((item) => item.id), query).toEqual([id]);
+      expect(visibleEquipmentModels("heater", "", query).map((item) => item.id), `markasız: ${query}`).toContain(id);
+    }
     // Pencerenin JBL ısıtıcı listesinde eski ve öbür ülke adları kanonik kaydı seçer.
     const models = equipmentForBrandInCategory("heater", "JBL");
     for (const [query, id] of [["S 101", "jbl-protemp-s-101"], ["ProTemp S 100", "jbl-protemp-s-101"], ["S 201", "jbl-protemp-s-201"], ["PROTEMP S25", "jbl-protemp-s-26"]] as const) {

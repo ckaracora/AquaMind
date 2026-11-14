@@ -73,6 +73,27 @@ describe("seçme anındaki uyarılar", () => {
     for (const code of ["predation", "speciesOnly", "temperatureConflict", "phConflict", "flowConflict", "conspecificMales", "conspecificAll", "shrimpUnverified", "spaceSevere", "ammoniaToxic", "ammoniaWorstCase", "nitriteHigh"]) expect(SELECTION_WARNING_CODES.has(code), code).toBe(true);
   });
 
+  it("kod listesinde tekrar yok: canlı riski sınıfındaki kodlar ikinci kez yazılmaz (kontrol turu, motor 1.18.0)", () => {
+    const source = readFileSync("src/lib/selection-warnings.ts", "utf8");
+    const listed = [...(/SELECTION_WARNING_CODES[^=]*= new Set\(\[([\s\S]*?)\]\);/.exec(source)?.[1] ?? "").matchAll(/"([A-Za-z]+)"/g)].map((match) => match[1]);
+    expect(listed.filter((code) => code !== "spaceLimited" && code !== "groupLow" && LIVESTOCK_RISK_WARNING_CODES.has(code))).toEqual([]);
+  });
+
+  it("motor 1.18.0: akvaryum gerekenin yarısından küçükse ve 'tek tutulmalı' türden ikinci birey seçilince kırmızı uyarı çıkar", () => {
+    const small: Aquarium = { ...aquarium, lengthCm: 60, widthCm: 30, heightCm: 30, netVolumeLiters: 54 };
+    expect(newWarningsForCandidate(fullCatalogLookup, small, [], [], undefined, { ...angel, id: "candidate" })).toContainEqual(expect.objectContaining({ code: "spaceTooSmall", level: "danger" }));
+    const big: Aquarium = { ...aquarium, lengthCm: 120, widthCm: 45, heightCm: 50, netVolumeLiters: 250 };
+    const shark = animal("l-shark", "red-tailed-black-shark", "Kırmızı kuyruklu köpekbalığı", 1);
+    expect(newWarningsForCandidate(fullCatalogLookup, big, [shark], [], undefined, { ...shark, id: "candidate" })).toContainEqual(expect.objectContaining({ code: "conspecificAll", level: "danger" }));
+  });
+
+  it("motor 1.18.0: balık olmayan canlının 'salyangoz yer' kaydı da seçme anında uyarır", () => {
+    const record = { flag: "eatsSnails" as const, confidence: "explicit" as const, evidence: "e", source: "OATA" as const, sourceUrl: "https://example.org", verifiedAt: "2026-11-14" };
+    const lookup = { ...fullCatalogLookup, behaviorFor: (id: string) => (id === "assassin-snail" ? [record] : fullCatalogLookup.behaviorFor(id)) };
+    const snail = (id: string, catalogId: string, quantity: number): Livestock => ({ ...animal(id, catalogId, catalogId, quantity), category: "snail" });
+    expect(codes(newWarningsForCandidate(lookup, aquarium, [snail("l-ramshorn", "ramshorn-snail", 5)], [], undefined, snail("candidate", "assassin-snail", 3)))).toContain("snailEaten");
+  });
+
   it("canlılar sayfası pencereye akvaryumun canlılarını, ekipmanını ve son ölçümünü verir; pencere tam katalog modülünü içe aktarmaz", () => {
     const pageSource = readFileSync("src/app/livestock/page.tsx", "utf8");
     expect(pageSource).toContain("animals={aquariumAnimals} devices={aquariumDevices} latest={latest}");

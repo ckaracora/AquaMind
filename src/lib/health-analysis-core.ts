@@ -31,13 +31,15 @@ export function withBehaviorRecords(profile: SpeciesProfile | undefined, records
   if (!profile || !records) return profile;
   const pick = (flag: BehaviorFlag) => records.find((record) => record.flag === flag && record.confidence === "explicit") ?? records.find((record) => record.flag === flag);
   const behavior: SpeciesBehaviorInput = {};
-  for (const flag of ["finNipper", "finNipTarget", "eatsShrimp", "shrimpSafe", "eatsSnails", "eatsSmallFish"] as const) {
+  // `peaceful` ve `notPiscivorous` (motor 1.18.0, karar 0043) uyarı üretmez; motor türü "davranışı biliniyor" sayar.
+  for (const flag of ["finNipper", "finNipTarget", "eatsShrimp", "shrimpSafe", "eatsSnails", "eatsSmallFish", "peaceful"] as const) {
     const record = pick(flag);
     if (record) behavior[flag] = noteFrom(record);
   }
   const aggression = pick("conspecificAggression");
   if (aggression?.value) behavior.conspecificAggression = { ...noteFrom(aggression), value: aggression.value };
   const notPiscivorous = records.find((record) => record.flag === "notPiscivorous" && record.confidence === "explicit");
+  if (notPiscivorous) behavior.notPiscivorous = noteFrom(notPiscivorous);
   if (notPiscivorous?.maxPreyCm !== undefined && !behavior.eatsSmallFish?.source) behavior.eatsSmallFish = { ...noteFrom(notPiscivorous), maxPreyCm: notPiscivorous.maxPreyCm };
   return { ...profile, ...(notPiscivorous ? { predatory: false } : {}), behavior };
 }

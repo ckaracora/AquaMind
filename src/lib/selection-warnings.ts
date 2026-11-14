@@ -16,7 +16,7 @@ import type { Aquarium, Equipment, Livestock, WaterParameters } from "@/types/aq
  */
 export const SELECTION_WARNING_CODES: ReadonlySet<string> = new Set([
   ...[...LIVESTOCK_RISK_WARNING_CODES].filter((code) => code !== "spaceLimited" && code !== "groupLow"),
-  "predation", "speciesOnly", "temperatureConflict", "phConflict", "flowConflict", "conspecificMales", "conspecificAll", "shrimpUnverified", "spaceSevere",
+  "predation", "speciesOnly", "temperatureConflict", "phConflict", "flowConflict", "shrimpUnverified", "spaceSevere",
   "ammoniaToxic", "ammoniaWorstCase", "nitriteHigh",
 ]);
 

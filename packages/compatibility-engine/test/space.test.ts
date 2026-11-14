@@ -91,8 +91,9 @@ describe("alan: kaynak ve İsviçre sınırının altı tehlikedir", () => {
     expect(warning.message).toContain("kaynak tank uzunluğu yayımlamıyor");
   });
 
-  it("balık olmayan canlıda tehlikeye çıkmaz", () => {
-    expect(spaceWarnings(analyze(tank(30, 20, 20, 30), [animal("crayfish", "other")], []))[0].level).toBe("warning");
+  // 1.18.0 (karar 0043): hacim gerekenin yarısından küçükse her kategoride kesin tehlike; bu yüzden hacim yarının üstünde tutulur.
+  it("balık olmayan canlıda İsviçre ölçü kuralıyla tehlikeye çıkmaz", () => {
+    expect(spaceWarnings(analyze(tank(30, 20, 20, 150), [animal("crayfish", "other")], []))[0].level).toBe("warning");
   });
 
   it("girilmemiş (0) ölçü denetlenmez", () => {

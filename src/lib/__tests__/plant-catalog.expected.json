@@ -980,7 +980,11 @@
   "aliases": [
    "Vallisneria gigantea",
    "Vallisneria 'Gigantea'",
-   "Vallisneria australis gigantea"
+   "Vallisneria australis gigantea",
+   "Dev Saz"
+  ],
+  "turkishAliases": [
+   "Dev Saz"
   ],
   "light": [
    "high",
@@ -1005,7 +1009,9 @@
    "https://tropica.com/en/plants/plantdetails/Vallisneria'Gigantea'(054)/4501"
   ],
   "shopUrls": [
-   "https://aquarubi.com/stoffels-vallisneria-australis-gigantea"
+   "https://aquarubi.com/stoffels-vallisneria-australis-gigantea",
+   "https://atakanpetshop.com/vallisneria-gigantea-dev-saz-saksi-canli-bitki",
+   "https://bettamarketim.com.tr/vallisneria-gigantea-dev-saz-1-kok-30-50-cm"
   ],
   "verifiedAt": "2026-10-25"
  },
@@ -3028,7 +3034,8 @@
   "id": "limnobium-laevigatum",
   "scientificName": "Limnobium laevigatum",
   "aliases": [
-   "Limnobium laevigatum (Frogbit)"
+   "Limnobium laevigatum (Frogbit)",
+   "Amazon Frogbit"
   ],
   "light": [
    "low",
@@ -3045,7 +3052,9 @@
   ],
   "sourceUrl": "https://tropica.com/en/plants/plantdetails/Limnobiumlaevigatum(063TC)/4761",
   "shopUrls": [
-   "https://aquarubi.com/limnobium-laevigatum-frogbit"
+   "https://aquarubi.com/limnobium-laevigatum-frogbit",
+   "https://atakanpetshop.com/limnobium-laevigatum-amazon-frogbit-in-vitro-su-ustu-canli-bitki",
+   "https://atakanpetshop.com/amazon-frogbit-su-ustu-canli-bitki-1-kok-2312473"
   ],
   "verifiedAt": "2026-10-25"
  },

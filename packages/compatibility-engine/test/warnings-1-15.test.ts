@@ -94,10 +94,11 @@ describe("canlı riski uyarısı genel puanı en fazla 74 yapar (karar 0040)", (
     expect(result).toMatchObject({ score: 74, status: "warning" });
   });
 
-  it("sınıf 18 koddur: yenme ve yaralanma, alan, kalabalık ve grup, aralık dışı su değeri", () => {
+  // 1.18.0 (karar 0043): aynı tür saldırganlığı (iki kod) ve gerekenin yarısından küçük akvaryum sınıfa girdi; 18 koddan 21 koda.
+  it("sınıf 21 koddur: yenme ve yaralanma, aynı tür saldırganlığı, alan, kalabalık ve grup, aralık dışı su değeri", () => {
     expect([...LIVESTOCK_RISK_WARNING_CODES].sort()).toEqual([
-      "ammoniaDetected", "coldwaterWithTropical", "finNip", "groupLow", "highLoad", "marineKh", "marineNitrate", "marinePh", "marineSpecificGravity",
-      "nitrateHigh", "nitriteDetected", "shrimpEaten", "smallFishPredation", "snailEaten", "spaceLimited", "spaceNarrow", "speciesPhOutOfRange",
+      "ammoniaDetected", "coldwaterWithTropical", "conspecificAll", "conspecificMales", "finNip", "groupLow", "highLoad", "marineKh", "marineNitrate", "marinePh", "marineSpecificGravity",
+      "nitrateHigh", "nitriteDetected", "shrimpEaten", "smallFishPredation", "snailEaten", "spaceLimited", "spaceNarrow", "spaceTooSmall", "speciesPhOutOfRange",
       "speciesTemperatureOutOfRange",
     ]);
   });
@@ -134,7 +135,7 @@ describe("canlı riski uyarısı genel puanı en fazla 74 yapar (karar 0040)", (
 describe("bilgi notları, koşullu notlar ve ekipman uyumu genel puanı değiştirmez (karar 0040)", () => {
   const infoCases: { label: string; expected: string[]; animals: Livestock[]; filter?: string }[] = [
     { label: "bakım, topluluk ve tank uzunluğu notu", expected: ["husbandryCaution", "communityCaution", "tankLengthNote"], animals: [animal("cautious", 1), animal("calm", 1)] },
-    { label: "erkekler kavga eder (cinsiyete bağlı)", expected: ["conspecificMales"], animals: [animal("fighter", 2)] },
+    // 1.18.0 (karar 0043): "erkekler kavga eder" canlı riski sınıfına girdi (warnings-1-18.test.ts).
     { label: "karides uyumu doğrulanmadı", expected: ["shrimpUnverified"], animals: [animal("calm", 1), animal("dwarfShrimp", 10)] },
     { label: "sıcaklıklar tek değerde uyuşuyor", expected: ["temperatureRangeNarrow"], animals: [animal("point", 1), animal("calm", 1)] },
     { label: "akıntı ihtiyaçları farklı", expected: ["flowConflict"], animals: [animal("lowFlow", 1), animal("highFlow", 1)] },
@@ -210,6 +211,7 @@ describe("'tek tutulmalı' kaynağın önerdiği çift ya da grupta çıkmaz (ka
   it("uyarı çıkmayınca tür uyumu cezası da yazılmaz", () => {
     const pair = run(animal("pairLoner", 2));
     expect(pair.metrics.find((item) => item.key === "compatibility")).toMatchObject({ score: 100, detailCode: "compatible" });
-    expect(run(animal("pairLoner", 3)).metrics.find((item) => item.key === "compatibility")).toMatchObject({ score: 70, detailCode: "conspecific" });
+    // 1.18.0 (karar 0043): fazlası kesin tehlikedir; tür uyumu cezası tür akvaryumuyla aynı (60).
+    expect(run(animal("pairLoner", 3)).metrics.find((item) => item.key === "compatibility")).toMatchObject({ score: 40, detailCode: "conspecific" });
   });
 });

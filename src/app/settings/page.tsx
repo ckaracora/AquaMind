@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useId, useMemo, useRef, useState } from "react";
-import { AlertTriangle, Check, Database, Download, Globe2, HardDrive, Moon, Ruler, ShieldCheck, Trash2, Upload, X } from "lucide-react";
+import { AlertTriangle, Check, Database, Download, HardDrive, Moon, Ruler, ShieldCheck, Trash2, Upload, X } from "lucide-react";
 import type { Preferences } from "@aquamind/domain";
 import { LOCALE_NAMES, SUPPORTED_LOCALES, isLocale } from "@aquamind/localization";
 import { AppShell } from "@/components/app-shell";
@@ -110,7 +110,7 @@ export default function SettingsPage(){
    <p className="text-[11px] sm:text-[9px] text-[#586e77]">{t.settings.recovery.contentHidden}</p>
   </div></Section>}
   <div className="flex flex-col items-center justify-between gap-3 rounded-2xl border border-white/[.06] bg-white/[.02] p-4 sm:flex-row"><div className="flex items-center gap-3"><ShieldCheck size={18} className="text-emerald-400"/><div><p className="text-xs font-bold">{t.settings.storedLocally}</p><p className="mt-1 text-[11px] text-[#647981] sm:text-[9px]">{t.settings.cloudLater}</p>{saveFailed&&<p className="mt-2 text-[11px] sm:text-[10px] font-bold text-amber-300">{t.settings.saveFailed}</p>}</div></div><button onClick={save} className="flex min-h-11 w-full items-center justify-center gap-2 rounded-xl bg-aqua px-5 py-3 text-xs font-extrabold text-ink sm:min-h-0 sm:w-auto">{saved?<><Check size={16}/>{t.settings.saved}</>:t.settings.save}</button></div>
-  <div className="flex items-center justify-center gap-2 py-3 text-[11px] sm:text-[9px] text-[#40545d]"><Globe2 size={12}/>{t.settings.footer}</div></div></div>
+  </div></div>
   {pendingBackup&&<ModalDialog close={()=>setPendingBackup(null)} labelledBy={titleId} describedBy={descriptionId} width="max-w-md">
    <div className="flex items-start justify-between gap-3"><h2 id={titleId} className="text-lg font-extrabold">{d.restoreDialog.title}</h2><button type="button" onClick={()=>setPendingBackup(null)} aria-label={t.common.close} className="grid size-11 shrink-0 place-items-center rounded-xl bg-white/[.04] text-[#71858d] sm:size-9"><X size={17}/></button></div>
    <p id={descriptionId} className="mt-2 text-sm text-[#91a3aa]">{d.restoreDialog.backupDate(fmt.date(pendingBackup.summary.exportedAt,{day:"numeric",month:"long",year:"numeric"}))}</p>

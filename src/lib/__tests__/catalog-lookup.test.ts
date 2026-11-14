@@ -200,6 +200,8 @@ describe("katalog modülleri", () => {
       "src/data/catalog-buckets.ts", "src/data/catalog-shared.ts", "src/app/page.tsx", "src/app/aquariums/[id]/health/page.tsx",
       // Sağlık sayfası etiket değeri bekleyen cihazları bu modülle bulur (docs/DECISIONS/0017-elle-girilen-ekipman-degerleri.md).
       "src/lib/user-equipment-value.ts",
+      // "Bu akvaryuma ne uyar?" ve tür kartı (veri sprinti F): sağlık sayfası içe aktarır; veriyi pencere açılınca `import()` ile yükler.
+      "src/components/aquarium-fit.tsx", "src/components/species-card.tsx", "src/lib/aquarium-fit.ts", "src/lib/species-card.ts", "src/lib/use-species-care-text.ts",
     ];
     const dataModules = /from "(@\/data\/(catalog|catalog-species|catalog-equipment|catalog-species-expanded|catalog-equipment-[a-z]+|catalog-bucket-builders|species-behavior)|@\/lib\/health-analysis|\.\/(catalog|catalog-species|catalog-equipment|catalog-species-expanded|catalog-equipment-[a-z]+|catalog-bucket-builders|species-behavior))"/;
     const offenders = dataFree.flatMap((file) => readFileSync(file, "utf8").split("\n")

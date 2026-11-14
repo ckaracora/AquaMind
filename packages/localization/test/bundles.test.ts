@@ -33,7 +33,7 @@ const BUNDLES = {
   en: { messages: en, engine: enEngine, diseases: enDiseases, plantWarnings: enPlantWarnings, privacy: enPrivacy, catalogSpecies: enCatalogSpecies },
   es: { messages: es, engine: esEngine, diseases: esDiseases, plantWarnings: esPlantWarnings, privacy: esPrivacy, catalogSpecies: esCatalogSpecies },
 };
-const FILES = ["bundle", "catalog-care", "catalog-equipment", "catalog-species", "diseases", "engine", "plant-warnings", "privacy"];
+const FILES = ["bundle", "catalog-care", "catalog-equipment", "catalog-species", "catalog-species-care", "diseases", "engine", "plant-warnings", "privacy"];
 const EQUIPMENT = { en: enCatalogEquipment, es: esCatalogEquipment };
 const CARE = { en: enCatalogCare, es: esCatalogCare };
 
@@ -102,11 +102,12 @@ describe("dil paketi yüklenince", () => {
 });
 
 describe("paketin sınırı", () => {
-  const entries = ["index.ts", "engine.ts", "catalog.ts", "diseases.ts", "plant-warnings.ts", "privacy.ts", "catalog-segments.ts", "equipment.ts", "care.ts", "bundles.ts", "locales.ts", "format.ts", "units.ts", "engine-format.ts"];
+  const entries = ["index.ts", "engine.ts", "catalog.ts", "diseases.ts", "plant-warnings.ts", "privacy.ts", "catalog-segments.ts", "equipment.ts", "care.ts", "species-care.ts", "bundles.ts", "locales.ts", "format.ts", "units.ts", "engine-format.ts"];
   const DYNAMIC: Record<string, string[]> = {
     "bundles.ts": OTHER.map((locale) => `./messages/${locale}-bundle`),
     "equipment.ts": OTHER.map((locale) => `./messages/${locale}-catalog-equipment`),
     "care.ts": OTHER.map((locale) => `./messages/${locale}-catalog-care`),
+    "species-care.ts": OTHER.map((locale) => `./messages/${locale}-catalog-species-care`),
   };
 
   it("hiçbir giriş başka dilin dosyasını durağan olarak içe aktarmaz; paketleri `loadLocaleBundle`, ekipman ve bakım çevirisini `loadEquipmentTexts`, `loadCareTexts` ayrı parça olarak yükler", () => {
@@ -134,7 +135,7 @@ describe("paketin sınırı", () => {
       const source = readFileSync(decodeURIComponent(file.replace(/^\/([A-Za-z]:)/, "$1")), "utf8");
       const specifiers = [...source.matchAll(/(?:from|import)\s*\(?\s*["']([^"']+)["']/g)].map((match) => match[1]);
       return specifiers.filter((specifier) => otherLanguageFile.test(specifier)).map((specifier) => `${file}: ${specifier}`);
-    }).filter((line) => !/packages\/localization\/src\/(?:bundles\.ts|equipment\.ts|care\.ts|messages\/(?:en|es)-bundle\.ts):/.test(line));
+    }).filter((line) => !/packages\/localization\/src\/(?:bundles\.ts|equipment\.ts|care\.ts|species-care\.ts|messages\/(?:en|es)-bundle\.ts):/.test(line));
     expect(offenders).toEqual([]);
     const pkg = JSON.parse(readFileSync(new URL("../package.json", import.meta.url), "utf8")) as { exports: Record<string, unknown> };
     expect(JSON.stringify(pkg.exports)).not.toMatch(/messages\/(?:en|es)|(?:en|es)-bundle/);
