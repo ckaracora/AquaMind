@@ -564,6 +564,7 @@ export const es: Messages = {
       height: "Altura",
       growth: "Crecimiento",
       missing: "No está en la fuente",
+      notPublished: { temperature: "La fuente no la publica", ph: "La fuente no lo publica" },
       levels: { low: "baja", medium: "media", high: "alta" },
       growthRates: { "very-slow": "Muy lento", slow: "Lento", medium: "Medio", fast: "Rápido", "very-fast": "Muy rápido" },
       heightUpTo: (cm: string) => `hasta ${cm} cm`,

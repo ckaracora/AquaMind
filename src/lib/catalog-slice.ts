@@ -2,13 +2,14 @@
 // Katalog verisi içermez: kayıtlar derleme anında üretilen parçalardan (src/app/catalog-data/**) istenir. Eşleme kuralları katalog
 // modüllerindeki `speciesForLivestock` ve `profileForEquipment` ile aynıdır:
 // - katalog kimliği varsa ve katalogda bulunuyorsa o kayıt;
-// - yoksa canlıda bilimsel ad ya da ortak ad/eş ad eşleşmesi (ikisi de varsa katalogda önce gelen), ekipmanda marka + model.
+// - yoksa canlıda bilimsel ad ya da ortak ad/eş ad eşleşmesi (iki ad çelişiyorsa ya da bilimsel ad tanınmıyorsa çözülmez; kural
+//   `speciesIdForNames`, 2026-11-14), ekipmanda marka + model.
 // Ekipmanda birleştirilip kaldırılan eski kimlik (`formerIds`) ve eş ad (`aliases`) parçalara yazılır (src/data/catalog-bucket-builders.ts): eski
 // kimlik kendi parçasında birleştirildiği kaydın profiliyle, eş ad marka/model dizininde o kaydın kimliğiyle durur. Yükleyici bunları ayrıca
 // çözmez; kullanıcı kaydı değişmeden okuma anında birleştirilen kayıtla hesaplanır (2026-11-11, JBL PROTEMP S).
 import { catalogBucketOf, catalogBucketPath, type CatalogBucketKind, type EquipmentBucket, type EquipmentModelBucket, type SpeciesBucket, type SpeciesNameBucket } from "@/data/catalog-buckets";
 import type { EquipmentProfile } from "@/data/catalog-equipment";
-import { brandModelKey, normalize } from "@/data/catalog-shared";
+import { brandModelKey, normalize, speciesIdForNames, speciesNameKeys } from "@/data/catalog-shared";
 import type { SpeciesProfile } from "@/data/catalog-species";
 import type { BehaviorRecord } from "@/data/species-behavior";
 import type { CatalogLookup } from "@/lib/health-analysis-core";
@@ -74,14 +75,24 @@ export async function loadCatalogSlice(animals: Livestock[], equipment: Equipmen
   const speciesById = (id: string) => { requireLoaded("species", id); return species.get(id); };
   const equipmentById = (id: string) => { requireLoaded("equipment", id); return devices.get(id); };
   const speciesKeys = (item: Livestock) => [normalize(item.scientificName), normalize(item.commonName)] as const;
+  // Ad kuralı yalnız bilimsel adayın adlarını, bilimsel aday yoksa ortak ad adayının adlarını okur.
+  // İki farklı aday bulunduğunda ortak ad adayının profilini ayrıca indirmek gerekmez.
+  const nameCandidateIds = (item: Livestock) => speciesKeys(item).map((key, index) => {
+    if (!key) return undefined;
+    requireLoaded("speciesNames", key);
+    return (index === 0 ? scientificIndex : nameIndex).get(key)?.[0];
+  });
   const fallbackSpeciesId = (item: Livestock) => {
     const [scientificName, commonName] = speciesKeys(item);
-    const matches = [scientificName, commonName].map((key, index) => {
-      if (key === undefined) return undefined;
-      requireLoaded("speciesNames", key);
-      return (index === 0 ? scientificIndex : nameIndex).get(key);
-    }).filter(isDefined);
-    return matches.length ? matches.reduce((first, match) => (match[1] < first[1] ? match : first))[0] : undefined;
+    const [scientificCandidate, commonCandidate] = nameCandidateIds(item);
+    const candidate = (id: string | undefined) => {
+      const profile = id === undefined ? undefined : speciesById(id)?.profile;
+      return profile && id !== undefined ? { id, names: speciesNameKeys(profile) } : undefined;
+    };
+    const scientific = candidate(scientificCandidate);
+    const common = commonCandidate === undefined ? undefined : scientific
+      ? { id: commonCandidate, names: [] } : candidate(commonCandidate);
+    return speciesIdForNames(scientificName, commonName, scientific, common);
   };
   const equipmentKey = (item: Equipment) => {
     const brand = normalize(item.brand), model = normalize(item.model);
@@ -99,9 +110,9 @@ export async function loadCatalogSlice(animals: Livestock[], equipment: Equipmen
   // 2. Kimliği olmayan ya da katalogda bulunmayanlar için ad ve model dizinleri.
   const unmatchedAnimals = animals.filter((item) => item.catalogId === undefined || !species.has(item.catalogId));
   const unmatchedEquipment = equipment.filter((item) => item.catalogId === undefined || !devices.has(item.catalogId));
-  await Promise.all([loadNames(unmatchedAnimals.flatMap(speciesKeys).filter(isDefined)), loadModels(unmatchedEquipment.map(equipmentKey).filter(isDefined))]);
+  await Promise.all([loadNames(unmatchedAnimals.flatMap(speciesKeys).filter((key): key is string => Boolean(key))), loadModels(unmatchedEquipment.map(equipmentKey).filter(isDefined))]);
   // 3. Dizinden bulunan kayıtlar.
-  await Promise.all([loadSpecies(unmatchedAnimals.map(fallbackSpeciesId).filter(isDefined)), loadEquipment(unmatchedEquipment.map(fallbackEquipmentId).filter(isDefined))]);
+  await Promise.all([loadSpecies(unmatchedAnimals.map((item) => nameCandidateIds(item).find(isDefined)).filter(isDefined)), loadEquipment(unmatchedEquipment.map(fallbackEquipmentId).filter(isDefined))]);
 
   return {
     speciesForLivestock(item) {

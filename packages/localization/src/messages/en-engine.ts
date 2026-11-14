@@ -44,6 +44,8 @@ const outsideRange = (p: EngineTextParams) =>
       : `below the source range for ${nameList(list(p, "below"))}.`;
 const marineTarget = (p: EngineTextParams) => (str(p, "profile") === "fishOnly" ? "fish-only aquarium" : "aquarium with invertebrates");
 const marineRange = (p: EngineTextParams, f: EngineTextFormat) => `${f.measurement(num(p, "min"), 3)}–${f.measurement(num(p, "max"), 3)}`;
+/** The group of species that should not be mixed (engine 1.19.0, decision 0044). */
+const groupName = (group: string) => ({ clownfish: "clownfish" } as Record<string, string>)[group] ?? "related";
 
 export const enEngine: EngineMessages = {
   metricLabels: {
@@ -65,6 +67,7 @@ export const enEngine: EngineMessages = {
     groupOk: fixed("Group needs are met"),
     habitat: fixed("Habitat does not match the aquarium type"),
     speciesOnly: fixed("An animal is recommended for a species aquarium"),
+    incompatibleGroup: fixed("Species that should not be mixed are present"),
     predation: fixed("Small animals are at risk of predation"),
     waterRanges: fixed("Water parameter ranges do not overlap"),
     smallFishPredation: fixed("Small fish may be eaten"),
@@ -330,13 +333,18 @@ export const enEngine: EngineMessages = {
       title: (p) => `A species aquarium is recommended for ${str(p, "name")}`,
       message: fixed("Because of its aggression and special feeding behavior, this species is not considered safe with other animals."),
     },
+    incompatibleGroup: {
+      title: (p) => `Different ${groupName(str(p, "group"))} species together`,
+      message: (p) =>
+        `According to the sources, ${nameList(list(p, "fish"))} fight each other; different ${groupName(str(p, "group"))} species should not be kept in the same aquarium. Source: ${list(p, "sources").join(", ")}.`,
+    },
     communityCaution: {
       title: (p) => `${str(p, "name")}: choose tankmates with care`,
       message: catalogNote,
     },
     smallFishPredation: {
       title: (p) => `${str(p, "prey")}: may be eaten`,
-      message: (p) => `${str(p, "hunter")} can eat small fish that fit in its mouth; at its adult size, ${str(p, "prey")} is within this risk. Do not keep these two species in the same aquarium.${sourceNote(p)}`,
+      message: (p) => `${str(p, "hunter")} can eat small fish that fit in its mouth; at its adult size, ${str(p, "prey")} is within this risk. If they are kept together, ${str(p, "prey")} may be eaten; it is safer to avoid this pairing.${sourceNote(p)}`,
     },
     finNip: {
       title: (p) => `${str(p, "target")}: risk of fin nipping`,
@@ -352,6 +360,11 @@ export const enEngine: EngineMessages = {
       title: (p) => `${str(p, "name")}: should be kept alone`,
       message: (p) => `According to the source, this species is aggressive toward its own kind and should usually be kept alone.${sourceNote(p)}`,
     },
+    conspecificPair: {
+      title: (p) => `${str(p, "name")}: only a compatible pair can live together`,
+      message: (p) =>
+        `According to the source, this species is aggressive toward its own kind; it can be kept alone or as a compatible pair. The 2 recorded individuals can live together only if they are a compatible, bonded pair; two individuals put together at random may fight.${sourceNote(p)}`,
+    },
     shrimpEaten: {
       title: fixed("Shrimp may be eaten"),
       message: (p) =>
@@ -366,9 +379,11 @@ export const enEngine: EngineMessages = {
       },
     },
     shrimpUnverified: {
-      title: fixed("Shrimp compatibility not confirmed"),
+      title: (p) => (flag(p, "conflict") ? `${list(p, "fish")[0]}: sources conflict on shrimp compatibility` : "Shrimp compatibility not confirmed"),
       message: (p) =>
-        `No "safe with shrimp" information was found in the sources for ${nameList(list(p, "fish"))}. OATA recommends not keeping shrimp with fish that can fit them in their mouths; the young of ${nameList(list(p, "shrimp"))} and freshly molted shrimp are especially at risk.`,
+        flag(p, "conflict")
+          ? `Sources conflict on whether ${list(p, "fish")[0]} is compatible with shrimp; safe cohabitation could not be confirmed. OATA recommends not keeping shrimp with fish that can fit them in their mouths; the young of ${nameList(list(p, "shrimp"))} and freshly molted shrimp are especially at risk.${sourceNote(p)}`
+          : `No "safe with shrimp" information was found in the sources for ${nameList(list(p, "fish"))}. OATA recommends not keeping shrimp with fish that can fit them in their mouths; the young of ${nameList(list(p, "shrimp"))} and freshly molted shrimp are especially at risk.`,
     },
     husbandryCaution: {
       title: (p) => `${str(p, "name")}: special care needs`,
@@ -397,7 +412,7 @@ export const enEngine: EngineMessages = {
         `Sources say ${str(p, "name")} needs at least ${f.volume(num(p, "volume"))} for the ${f.number(num(p, "count"))} recorded ${plural(num(p, "count"), "animal", "animals")}; the aquarium's net volume is ${f.volume(num(p, "aquariumVolume"))}, less than half of that.${flag(p, "lengthShort") ? ` Sources also call for a length of at least ${f.length(num(p, "length"))}; the aquarium is ${f.length(num(p, "tankLength"))} long.` : ""} This species shouldn't be kept in this aquarium.`,
     },
     spaceSevere: {
-      title: (p) => `${str(p, "name")}: aquarium too small`,
+      title: (p) => `${str(p, "name")}: aquarium too short or too shallow`,
       message: (p, f) =>
         `${spaceReference(p, f)} The aquarium is also below the AquaMind limit adapted from the length (3×) and water depth (1× body length) limits in the size rule of the Swiss Animal Welfare Ordinance. The ordinance uses body length without the tail fin; AquaMind is stricter and uses the catalog's adult size of ${f.length(num(p, "size"))} (total length for most species): length at least ${f.length(num(p, "minLength"))}, water depth at least ${f.length(num(p, "minDepth"))}.`,
     },
@@ -408,7 +423,10 @@ export const enEngine: EngineMessages = {
   unevaluated: {
     unknownAnimal: (p, f) => `${str(p, "name")} (${animals(p, f)}) isn't in the catalog; its needs and compatibility weren't taken into account.`,
     unverifiedAnimal: (p, f) => `The catalog record for ${str(p, "name")} (${animals(p, f)}) hasn't been verified yet; its needs and compatibility weren't taken into account.`,
-    behaviorUnknown: (p) => `Sources don't say how ${str(p, "name")} gets along with other animals.`,
+    behaviorUnknown: (p) =>
+      flag(p, "conflict")
+        ? `Sources conflict on how ${str(p, "name")} gets along with other animals; compatibility could not be confirmed.`
+        : `Sources don't say how ${str(p, "name")} gets along with other animals.`,
     unknownEquipment: (p) =>
       `${str(p, "name") ? `${str(p, "name")} (${deviceKind(str(p, "category"))})` : `An unnamed ${deviceKind(str(p, "category"))}`} isn't in the catalog; it wasn't included in the ${deviceCalculation(str(p, "category"))} calculation.`,
     equipmentNoCapacity: (p) =>

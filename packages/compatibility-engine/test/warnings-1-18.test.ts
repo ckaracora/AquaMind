@@ -62,8 +62,14 @@ const warningOf = (result: HealthAnalysis, code: string) => result.warnings.find
 const unevaluatedCodes = (result: HealthAnalysis) => (result.unevaluated ?? []).map((item) => item.code);
 
 describe("sürüm (karar 0043)", () => {
-  it("motor 1.18.0, kural seti 1.15.0", () => {
-    expect([ENGINE_VERSION, RULESET_VERSION]).toEqual(["1.18.0", "1.15.0"]);
+  // 1.19.0'dan beri (karar 0044) sürümün tam değeri warnings-1-19.test.ts içinde sınanır; burada en az 1.18.0 / 1.15.0 olması.
+  it("motor en az 1.18.0, kural seti en az 1.15.0", () => {
+    const atLeast = (version: string, minimum: string) => {
+      const [a, b] = [version, minimum].map((value) => value.split(".").map(Number));
+      return a[0] !== b[0] ? a[0] > b[0] : a[1] !== b[1] ? a[1] > b[1] : a[2] >= b[2];
+    };
+    expect(atLeast(ENGINE_VERSION, "1.18.0")).toBe(true);
+    expect(atLeast(RULESET_VERSION, "1.15.0")).toBe(true);
   });
 });
 
@@ -198,7 +204,8 @@ describe("4. davranış bilgisi yok", () => {
 
   it("barışçıl, 'balık avcısı değil' ve topluluk notu 'biliniyor' sayılır; yalnız çelişkili kayıt sayılmaz", () => {
     const result = analyze(tank(200), [animal("calm", 6), animal("notHunter", 6), animal("noted", 6), animal("disputed", 6)], equipped(), reading());
-    expect(result.unevaluated).toEqual([{ code: "behaviorUnknown", params: { name: "Tartışmalı tür" } }]);
+    // 1.19.0 (karar 0044): yalnız çelişkili kayıt "kaynaklar çelişiyor" değişkenini taşır.
+    expect(result.unevaluated).toEqual([{ code: "behaviorUnknown", params: { name: "Tartışmalı tür", conflict: true } }]);
   });
 
   it("akvaryumda tek tür varken listeye girmez", () => {

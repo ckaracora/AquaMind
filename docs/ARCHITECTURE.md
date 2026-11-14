@@ -59,6 +59,8 @@ Sayfa hızı (2026-10-07, `docs/DECISIONS/0015-katalog-modulleri-ve-sayfa-hizi.m
 
 Ekipmanda eski kimlik ve eş ad (2026-11-11, `docs/DECISIONS/0038-ekipman-eski-kimlik-ve-es-ad.md`): birleştirilip katalogdan kaldırılan kaydın kimliği (`formerIds`) ve aynı ürünün öbür adları (`aliases`) kanonik katalog kaydında durur; kimlik ve marka/model dizinleri, tarayıcının katalog parçaları ve ekipman ekleme penceresinin model araması bunları okuma anında kanonik kayda bağlar, kullanıcı verisi yazılmaz (`assertEquipmentRedirects` denetler).
 
+Kontrol turu 2 (2026-11-14): kimliği bulunmayan canlıda ad dizinleri birlikte okunur; ad tutarlılığını kontrol etmek için yalnız bilimsel adayın profili, bilimsel aday yoksa ortak ad adayının profili indirilir. İkinci adayın kimliği karşılaştırma için yeterlidir; ayrıca profil parçası istenmez. Boş adlar ağ isteği üretmez. Tam katalogla sonuç eşitliği ve istek sınırı `src/lib/__tests__/engine-identity-checks.ts` içinde, `node scripts/test-catalog-flow.cjs` ile de doğrulanır. Kullanıcı kayıtları yeniden yazılmaz.
+
 Kural: paketler uygulamaya (`src/`) bağımlı olamaz. Uygulama paketlere bağımlıdır. Katalog bugün `src/data` içinde olduğu için motor kataloğa değil, uyarlayıcının verdiği çözümleyiciye bağlıdır.
 
 ### Tarayıcı deposu (yerel kullanıcı verisi)

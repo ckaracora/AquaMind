@@ -5,7 +5,7 @@ import { createAnalyzer, type BehaviorNote, type SpeciesBehaviorInput } from "@a
 import type { EquipmentProfile } from "@/data/catalog-equipment";
 import { isVerifiedEquipmentProfile, isVerifiedSpeciesProfile } from "@/data/catalog-shared";
 import type { SpeciesProfile } from "@/data/catalog-species";
-import type { BehaviorFlag, BehaviorRecord } from "@/data/species-behavior";
+import type { BehaviorRecord } from "@/data/species-behavior";
 import type { Equipment, Livestock } from "@/types/aquarium";
 
 export interface CatalogLookup {
@@ -29,7 +29,7 @@ const noteFrom = (record: BehaviorRecord): BehaviorNote => ({
  */
 export function withBehaviorRecords(profile: SpeciesProfile | undefined, records: BehaviorRecord[] | undefined): (SpeciesProfile & { behavior?: SpeciesBehaviorInput }) | undefined {
   if (!profile || !records) return profile;
-  const pick = (flag: BehaviorFlag) => records.find((record) => record.flag === flag && record.confidence === "explicit") ?? records.find((record) => record.flag === flag);
+  const pick = (flag: BehaviorRecord["flag"]) => records.find((record) => record.flag === flag && record.confidence === "explicit") ?? records.find((record) => record.flag === flag);
   const behavior: SpeciesBehaviorInput = {};
   // `peaceful` ve `notPiscivorous` (motor 1.18.0, karar 0043) uyarı üretmez; motor türü "davranışı biliniyor" sayar.
   for (const flag of ["finNipper", "finNipTarget", "eatsShrimp", "shrimpSafe", "eatsSnails", "eatsSmallFish", "peaceful"] as const) {
@@ -37,11 +37,16 @@ export function withBehaviorRecords(profile: SpeciesProfile | undefined, records
     if (record) behavior[flag] = noteFrom(record);
   }
   const aggression = pick("conspecificAggression");
-  if (aggression?.value) behavior.conspecificAggression = { ...noteFrom(aggression), value: aggression.value };
-  const notPiscivorous = records.find((record) => record.flag === "notPiscivorous" && record.confidence === "explicit");
+  // `pairAccepted` (motor 1.19.0, karar 0044): kaynak türü "tek ya da uyumlu bir çift" olarak kabul ediyor.
+  if (aggression?.value) behavior.conspecificAggression = { ...noteFrom(aggression), value: aggression.value, ...(aggression.pairAccepted ? { pairAccepted: true as const } : {}) };
+  // `incompatibleGroup` (motor 1.19.0, karar 0044): kaynak türü başka türlerle karıştırılmaması gereken bir gruba koyuyor (ör. palyaço balıkları).
+  const group = pick("incompatibleGroup");
+  if (group?.group) behavior.incompatibleGroup = { ...noteFrom(group), group: group.group };
+  const notPiscivorous = pick("notPiscivorous");
+  const explicitlyNotPiscivorous = notPiscivorous?.confidence === "explicit" ? notPiscivorous : undefined;
   if (notPiscivorous) behavior.notPiscivorous = noteFrom(notPiscivorous);
-  if (notPiscivorous?.maxPreyCm !== undefined && !behavior.eatsSmallFish?.source) behavior.eatsSmallFish = { ...noteFrom(notPiscivorous), maxPreyCm: notPiscivorous.maxPreyCm };
-  return { ...profile, ...(notPiscivorous ? { predatory: false } : {}), behavior };
+  if (explicitlyNotPiscivorous?.maxPreyCm !== undefined && !behavior.eatsSmallFish?.source) behavior.eatsSmallFish = { ...noteFrom(explicitlyNotPiscivorous), maxPreyCm: explicitlyNotPiscivorous.maxPreyCm };
+  return { ...profile, ...(explicitlyNotPiscivorous ? { predatory: false } : {}), behavior };
 }
 
 export function createHealthAnalyzer(lookup: CatalogLookup) {

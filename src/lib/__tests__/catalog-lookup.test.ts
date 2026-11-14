@@ -46,6 +46,24 @@ describe("katalog arama dizinleri", () => {
     for (const item of cases) expect(speciesForLivestock(item)?.id, `${item.commonName} / ${item.scientificName}`).toBe(referenceSpeciesForLivestock(item)?.id);
   }, 60_000);
 
+  // Kural 3 (2026-11-14, docs/DECISIONS/0044 ek): kimliği katalogda olmayan kaydın iki adı çelişiyorsa ya da bilimsel adı tanınmıyorsa kayıt
+  // çözülmez; motor onu tanınmayan canlı sayar ve analizi eksik işaretler. Tutarlı eski kayıt ve geçerli kimlik değişmez.
+  it("çelişkili ya da tanınmayan bilimsel adlı kayıt çözülmez; tutarlı eski kayıt ve geçerli kimlik eşleşir", () => {
+    expect(speciesForLivestock(livestock("Neon tetra", "Poecilia reticulata"))).toBeUndefined();
+    expect(speciesForLivestock(livestock("Neon tetra", "Poecilia reticulata", "yok-boyle"))).toBeUndefined();
+    expect(speciesForLivestock(livestock("Lepistes", "Poecilia fantasia"))).toBeUndefined();
+    expect(speciesForLivestock(livestock("Lepistes", "Poecilia fantasia", "yok-boyle"))).toBeUndefined();
+    expect(speciesForLivestock(livestock("Lepistes", "Poecilia reticulata"))?.id).toBe("guppy");
+    expect(speciesForLivestock(livestock("Lepistes", "Poecilia reticulata", "yok-boyle"))?.id).toBe("guppy");
+    expect(speciesForLivestock(livestock("Guppy", "Poecilia reticulata"))?.id).toBe("guppy");
+    // Kullanıcının kendi verdiği ad hiçbir türün adı değil: bilimsel ad kazanır. Tanınmayan bilimsel ad ortak adın türünün eski adıysa eşleşir.
+    expect(speciesForLivestock(livestock("Benim balığım", "Poecilia reticulata"))?.id).toBe("guppy");
+    expect(speciesForLivestock(livestock("Midas ciklet", "Cichlasoma citrinellum"))?.id).toBe("midas-cichlid");
+    expect(speciesForLivestock(livestock("Lepistes", undefined, "yok-boyle"))?.id).toBe("guppy");
+    expect(speciesForLivestock(livestock("", "Poecilia reticulata", "yok-boyle"))?.id).toBe("guppy");
+    expect(speciesForLivestock(livestock("Neon tetra", "Poecilia reticulata", "guppy"))?.id).toBe("guppy");
+  });
+
   it("katalog araması eski aramayla aynı sonucu verir", () => {
     const queries = [...new Set(names.filter((_, index) => index % 7 === 0).flatMap((name) => [name, name.toUpperCase(), name.slice(0, 3), name.slice(-4)])), "", " "];
     const combos = [["fish", "freshwater"], ["fish", "brackish"], ["fish", "saltwater"], ["shrimp", "freshwater"], ["snail", "freshwater"], ["other", "saltwater"]] as const;

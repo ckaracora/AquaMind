@@ -98,5 +98,14 @@
 // bilinmeyen cihaz, su ölçümü yok) ve `incomplete` (tanınmayan ya da doğrulanmamış canlı var). Durum ve puan bu iki alandan etkilenmez.
 // Davranış girdisine `peaceful` ve `notPiscivorous` notları gelir; uyarı üretmez, yalnız "biliniyor" sayılır. Yeni oran sabiti
 // (`SEVERE_VOLUME_RATIO`), uyarı seviyesi, kesin tehlike koşulu ve ceza değiştiği için kural seti 1.15.0.
-export const ENGINE_VERSION = "1.18.0";
-export const RULESET_VERSION = "1.15.0";
+//
+// 1.19.0: hüküm açıkları (bkz. docs/DECISIONS/0044-palyaco-cift-ve-celiski-metinleri.md; ürün sahibinin onayı 2026-11-14). Kaynağın birbirine
+// karıştırılmamasını yazdığı farklı türler (davranış girdisinde `incompatibleGroup`; bugün yalnız palyaço balıkları) bir aradaysa kesin tehlike
+// (`incompatibleGroup`, tür uyumu cezası 60); aynı türün kendi bireyleri bu kurala girmez. Kaynağın "tek ya da uyumlu çift" dediği "tek tutulmalı"
+// türde (`pairAccepted`) tam iki birey kırmızı değil, sarı `conspecificPair` uyarısıdır (ceza 30, en çok "dikkat"); üç ve üstü kırmızı kalır.
+// Çelişkili kaynak "bulunamadı" diye anlatılmaz: karides uyumu ve davranışı bilinmeyen türde `conflict: true` değişkeniyle ayrı metin; puan ve
+// seviye değişmez. `spaceSevere` başlığı "akvaryumun uzunluğu ya da derinliği yetersiz" olur (`spaceTooSmall` "akvaryum çok küçük" kalır);
+// fırsatçı avcının küçük balık uyarısı sarı hükümle uyumlu, riski anlatan dile geçer. Hüküm sınırları değişmez. Yeni kesin tehlike koşulu,
+// uyarı kodları ve istisna geldiği için kural seti 1.16.0.
+export const ENGINE_VERSION = "1.19.0";
+export const RULESET_VERSION = "1.16.0";

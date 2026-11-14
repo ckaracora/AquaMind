@@ -139,7 +139,8 @@ describe("denetim senaryoları: davranış", () => {
   it("Melek balığı ile neon tetra: küçük balık avlama uyarısı", () => {
     const result = analyzeAquarium(tank(100, 200), [fish("angelfish", 2), fish("neon-tetra", 15)], [device("jbl-e902"), device("eheim-thermo-150")], water({ temperature: 26 }));
     const warning = result.warnings.find((item) => item.title === "Neon tetra: avlanabilir");
-    expect(warning?.message).toContain("Bu iki türü aynı akvaryumda tutmayın.");
+    // 1.19.0 (karar 0044): sarı hükümle uyumlu, riski anlatan dil.
+    expect(warning?.message).toContain("Birlikte tutulurlarsa Neon tetra yenebilir; bu eşleşmeden kaçınmak daha güvenlidir.");
     expect(warning?.message).toContain("Kaynak: Seriously Fish.");
     // Veri testi B16: kaynaklar "uygun değil" ya da "dikkat" bekliyor; 1.14.0'da 93 "uygun" çıkıyordu.
     expect(result.status).toBe("warning");
@@ -162,7 +163,7 @@ describe("denetim senaryoları: davranış", () => {
 });
 
 describe("denetim senaryoları: alan uyarısının şiddeti (kural seti 1.6.0)", () => {
-  const spaceWarning = (result: ReturnType<typeof analyzeAquarium>, id: string) => result.warnings.find((warning) => warning.title.startsWith(`${speciesById(id)!.commonName}: `) && /(alan sınırda|akvaryum çok küçük)$/.test(warning.title));
+  const spaceWarning = (result: ReturnType<typeof analyzeAquarium>, id: string) => result.warnings.find((warning) => warning.title.startsWith(`${speciesById(id)!.commonName}: `) && /(alan sınırda|akvaryum çok küçük|akvaryumun uzunluğu ya da derinliği yetersiz)$/.test(warning.title));
 
   it("60 L'deki astronot: kaynağın ve İsviçre ölçü sınırının altında, alan uyarısı tehlike; genel durum en fazla dikkat", () => {
     const result = analyzeAquarium(tank(60, 60), [fish("oscar", 1)], [device("jbl-cristalprofi-i60"), device("eheim-thermo-50")], water());
