@@ -1,6 +1,6 @@
 # AquaMind proje durumu
 
-Son güncelleme: 2026-11-13
+Son güncelleme: 2026-11-14
 
 ## Doğrulanmış temel
 
@@ -2288,6 +2288,34 @@ Son güncelleme: 2026-11-13
   - Atakan'ın "Dracaena Sanderiana Gold/White" ve "Dracaena Red" ürünleri katalogdaki bitkilere bağlanmadı.
   - Çikletist'in "Dracaena deremensis" ürününün ürün adresi yok.
   - Veri doldurma 1'in açık işleri (yukarıda) geçerli. Dal henüz push edilmedi, PR açılmadı.
+
+## Veri 9 sprinti 1: motor 1.18.0, arama ve kolay düzeltmeler (`codex/nine-1`, 2026-11-14)
+
+- Birleştirme kaydı: PR #97 (veri doldurma 2) `3fbe16d` olarak 2026-11-13 07:01:37Z'de `main`'e birleşti. `main` 3fbe16d: CI `pnpm verify` başarılı, Vercel üretim dağıtımı 7759351959 başarılı. Bu dal 3fbe16d üstünde.
+- Motor 1.18.0, kural seti 1.15.0 (karar 0043, `docs/DECISIONS/0043-eksik-degerlendirme-ve-hukum-kurallari.md`). İstek: Burak'ın 2026-11-14 onayı ("tamam başla"; beş hüküm kuralı, eksik değerlendirmede neyin değerlendirilemediği yazılır).
+  - "Tek tutulmalı" türden birden çok birey kesin tehlike ("uygun değil"); "erkekler kavga eder" canlı riski (en çok "dikkat").
+  - Net hacim gerekenin yarısından küçükse yeni kırmızı `spaceTooSmall` (kesin tehlike), her kategoride; metin iki hacmi ve gerekiyorsa iki uzunluğu söyler.
+  - Sonuca `incomplete` ve `unevaluated` alanları eklendi (tanınmayan ya da doğrulanmamış canlı, davranış bilgisi yok, tanınmayan cihaz, kapasite bilgisi eksik, su ölçümü yok). Sağlık sayfasında "Değerlendirilemeyenler" kartı, "Eksik değerlendirildi" rozeti, göstergelerde "Uygun / Sınırda / Yetersiz", "Hesaba giren kayıtlar: 2/2". Durum ve puan bu alanlarla değişmez.
+  - `eatsSnails` ve `eatsShrimp` her kategoride uyarır.
+  - 28 senaryo: F09, F13, F14, F16, F17, F20 hükmü değişti; F27 "iyi" + eksik; öbür 21 aynı.
+- Arama ve kolay düzeltmeler:
+  - Canlı araması bütün sınıflarda ve türün İngilizce ve İspanyolca katalog adlarında (derlemede üretilen durağan ad dizini `/catalog-data/species-search-names`, yaklaşık 23 kB); bitki araması İngilizce ortak adla.
+  - Canlı penceresi boş açılır, adet türün en az grup sayısı; "Bunu mu demek istedin?" öneri dosyası (`src/data/search-suggestions.ts`, boş; bütünlük denetimi testte).
+  - Canlı kaydını düzenleme; akvaryum sayfasındaki ekleme düğmeleri pencereyi doğrudan açar.
+  - Su grafiği girilmeyen değeri uydurmuyor; tekrarlayan bakım tekrarlıyor; silmelerde ortak onay penceresi (`window.confirm` kalktı).
+  - Örnek akvaryumun tarihleri bugüne göre; "Yakında" ve boş öğeler kalktı (AquaMatch menüsü dahil); su ölçümü penceresinde açık adlar; tuzlu ve acı su kapsam notu; ekipmanda marka seçmeden model arama; yeni akvaryum formunda ölçüler boş; uygulama simgesi (`src/app/icon.svg`).
+- Son kapıda düzeltilen kırmızılar: `scripts/test-catalog-flow.cjs` hâlâ AquaMatch menü öğesini bekliyordu (menüden kaldırılmasına göre güncellendi); üretim derlemesi kırıldı, çünkü ad dizinini üreten sunucu yolu React kancası içeren modülü içe aktarıyordu (saf kurucu `src/lib/species-search-names-index.ts`'e ayrıldı).
+- Altın fikstür motor 1.18.0 ile ayrı commit'te yeniden üretildi; eski ve yeni vaka vaka karşılaştırıldı: 1132 vaka, sayı değişmedi; 663 vakaya yalnız `unevaluated` eklendi, bunların 15'inde ayrıca kırmızı alan uyarısının yerine `spaceTooSmall` geldi. Hükmü değişen 2 vaka, ikisi "dikkat" → "uygun değil": `pair:giant-gourami+giant-sailfin-molly` 69 → 49, `pair:redhead-tapajos+redhook-myleus` 66 → 49. Beklenen dışında fark yok.
+- Son kapı: `pnpm verify` yeşil: tip denetimi, katalog akışı (1893 bakım ürünü), 114 sağlık senaryosu ve 18 biçimleme kontrolü, hesaplayıcılar, katalog denetimi, 73 Vitest dosyasında 948 test, üretim derlemesi (162 sayfa), dil paketi sınırı.
+- Commit'ler: motor, arama ve kolay düzeltmeler, altın fikstür ve bu durum kaydı ayrı; aynı dalda, tek PR. Yalnız son hâl yeşil; motor commit'i tek başına yeşil değil (sağlık sayfasının yeni metinleri ortak dil dosyalarında, arama commit'inde).
+- Açık işler:
+  - Karşı firma kontrolü (puanlama motoru riskli iş) commit'ten sonra yapılacak.
+  - "Erkekler kavga eder" cinsiyet alanını okumuyor; cinsiyete göre uyarı yok.
+  - Sarı "alan sınırda" (`spaceLimited`) metni akvaryumun hacmini yazmıyor.
+  - İngilizce ve İspanyolcada sayfa önce Türkçe açılıyor; İngilizce tarih ve İspanyolca sayı biçimi.
+  - Canlı penceresinde elle canlı ekleme yok (tuzlu ve acı su notu buna göre yazıldı; lider kararı).
+  - Ekran tarayıcıda görülmedi (yeni kart, pencere düzeni, simgenin 404'ü giderdiği).
+  - Dal henüz push edilmedi, PR açılmadı.
 
 ## Uyumluluk denetimi (2026-09-24)
 
