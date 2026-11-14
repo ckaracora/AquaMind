@@ -127,6 +127,18 @@ describe("ekipmanda markasız model araması", () => {
     // Model seçilince marka kendiliğinden gelir.
     expect(read("src/app/equipment/page.tsx")).toContain("if (chosen && chosen.brand !== brand) setBrand(chosen.brand)");
   });
+
+  it("marka eş yazımları yalnız arama hoşgörüsüdür: Dolphin → Dophin, Jebo → Lifetech, Venus Aqua → Venusaqua (E5)", () => {
+    expect(visibleEquipmentModels("filter", "", "Dolphin C-500").map((item) => item.id)).toContain("dophin-c500");
+    expect(visibleEquipmentModels("filter", "", "jebo 635").map((item) => item.id)).toContain("lifetech-635");
+    expect(visibleEquipmentModels("filter", "", "Venus  Aqua 2001F").map((item) => item.id)).toContain("venusaqua-2001f");
+    // Eş yazım tek başına yazılınca o markanın bütün modelleri gelir; marka değişmez.
+    const venus = visibleEquipmentModels("filter", "", "venus aqua");
+    expect(venus.length).toBeGreaterThan(1);
+    expect(venus.every((item) => item.brand === "Venusaqua")).toBe(true);
+    expect(visibleEquipmentModels("filter", "Dophin", "dolphin c-700").map((item) => item.id)).toContain("dophin-c700");
+    expect(visibleEquipmentModels("filter", "", "dolphin 635")).toEqual([]);
+  });
 });
 
 describe("boş ve yakında öğeler kaldırıldı; yeni formlar", () => {

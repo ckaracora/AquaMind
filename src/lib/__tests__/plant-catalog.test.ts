@@ -87,6 +87,7 @@ describe("bitki kataloğu bütünlüğü", () => {
       "pistia-stratiotes": ["Su marulu"],
       "cabomba-piauhyensis": ["Kırmızı Cabomba"],
       "pontederia-crassipes": ["Su Sümbülü"],
+      "vallisneria-americana-var-gigantea": ["Dev Saz"],
     });
   });
 

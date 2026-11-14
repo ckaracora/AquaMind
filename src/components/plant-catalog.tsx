@@ -6,7 +6,9 @@ import { ModalDialog } from "@/components/modal-dialog";
 import type { Locale } from "@aquamind/localization";
 import type { PlantInvasiveListing, PlantProfile, PlantSearchResult } from "@/data/catalog-plants";
 import { localIsoDate } from "@/lib/local-date";
-import { withEnglishPlantMatches } from "@/lib/plant-search";
+import { DidYouMeanButtons } from "@/components/did-you-mean";
+import { plantSearchSuggestions } from "@/data/search-suggestions";
+import { plantSuggestionsFor, withEnglishPlantMatches } from "@/lib/plant-search";
 import type { usePlantCatalog } from "@/lib/use-plant-catalog";
 import { useDisplayFormat } from "@/lib/use-display-format";
 import { useI18n } from "@/providers/i18n-provider";
@@ -217,6 +219,9 @@ export function PlantForm({ aquariumId, aquariumName, catalog, close, save }: { 
   const [selected, setSelected] = useState<PlantSearchResult>();
   // İngilizce ortak ad her dilde aranır; ekranda ad arayüz dilinde kalır (src/lib/plant-search.ts).
   const results = catalog.catalog && query.trim() ? withEnglishPlantMatches(catalog.catalog.searchPlants(query, locale), catalog.catalog.searchPlants(query, "en"), locale) : [];
+  // "Bunu mu demek istedin?" (2026-11-14 sprinti): aramada sonuç yoksa ve ad bir öneri terimiyse (ör. "kriptokorin") terimin bitkileri
+  // düğme olur; bitki kendiliğinden seçilmez. Kayıt adı bilimsel addır.
+  const suggestions = catalog.catalog && query.trim() && !results.length ? plantSuggestionsFor(query, plantSearchSuggestions, catalog.catalog.plantById) : [];
   function submit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
     const plant = plantFromForm(new FormData(e.currentTarget), { aquariumId, manual, selected: selected?.item });
@@ -236,7 +241,7 @@ export function PlantForm({ aquariumId, aquariumName, catalog, close, save }: { 
   } else {
     body = <div className="grid gap-4">
       <label className="text-xs font-bold text-[#91a3aa]">{c.searchLabel}<span className="relative block"><Search size={15} className="pointer-events-none absolute left-3 top-[1.15rem] text-[#586e77]"/><input type="search" value={query} onChange={(e) => setQuery(e.target.value)} onKeyDown={(e) => { if (e.key === "Enter") e.preventDefault(); }} enterKeyHint="search" placeholder={c.searchPlaceholder} disabled={!catalog.catalog} className={`${field} pl-9`}/></span><span className="mt-1 block text-[11px] sm:text-[10px] font-normal text-[#647981]">{c.searchHint}</span></label>
-      {catalog.catalog ? (query.trim() ? <PlantSearchResults results={results} select={setSelected}/> : null) : catalog.failed
+      {catalog.catalog ? (query.trim() ? (suggestions.length ? <DidYouMeanButtons key={query.trim()} items={suggestions.map((item) => ({ id: item.id, name: item.scientificName, scientificName: plantOtherNames(item, locale).join(" · ") }))} pick={(id) => { const item = suggestions.find((plant) => plant.id === id); if (item) setSelected({ item, matchedName: item.scientificName }); }}/> : <PlantSearchResults results={results} select={setSelected}/>) : null) : catalog.failed
         ? <div className="flex flex-wrap items-center gap-3 rounded-xl bg-red-400/[.06] p-4 text-[11px] sm:text-[10px] text-red-200"><span>{c.failed}</span><button type="button" onClick={catalog.retry} className="min-h-11 min-w-11 rounded-xl border border-red-300/20 px-3 font-bold sm:min-h-0 sm:min-w-0 sm:py-2">{c.retry}</button></div>
         : <p className="flex items-center gap-2 rounded-xl bg-white/[.025] p-4 text-[11px] sm:text-[10px] text-[#91a3aa]"><Leaf size={14} className="text-emerald-400"/>{c.loading}</p>}
       <button type="button" onClick={() => setManual(true)} className="min-h-11 min-w-11 justify-self-start rounded-xl text-xs font-bold text-aqua sm:min-h-0 sm:min-w-0">{c.manual}</button>

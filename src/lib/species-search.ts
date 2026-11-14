@@ -10,7 +10,7 @@
 import type { AquariumType, Livestock } from "@/types/aquarium";
 import { speciesCatalog, speciesWaterTypes, type SpeciesProfile, type SpeciesSearchName } from "@/data/catalog-species";
 import { unresolvedSpeciesListings, type UnresolvedSpeciesListing } from "@/data/catalog-species-unresolved";
-import type { SearchSuggestion } from "@/data/search-suggestions";
+import { suggestionEvidenceProblems, type SearchSuggestion } from "@/data/search-suggestions";
 
 /**
  * Türün başka dillerdeki katalog adları (İngilizce ve İspanyolca çeviri tablolarındaki tür adı; 2026-11-14 sprinti). Arayüz dili ne olursa
@@ -173,12 +173,13 @@ export function matchRange(text: string, query: string): [number, number] | unde
   return at < 0 ? undefined : [origin[at], origin[at + target.length - 1] + 1];
 }
 
-/** "Bunu mu demek istedin?" düğmelerinin en çok sayısı. */
-export const DID_YOU_MEAN_LIMIT = 3;
+/** "Bunu mu demek istedin?" düğmelerinden ilk görünenlerin sayısı (src/data/search-suggestions.ts). */
+export { DID_YOU_MEAN_LIMIT } from "@/data/search-suggestions";
 
 /**
  * "Bunu mu demek istedin?" (2026-11-14 sprinti): aranan metin bir öneri teriminin kendisiyse (harf, aksan, tire ve boşluk katlanmış) terimin
- * bu su türüne uyan türleri, en çok üç. Pencere bunu yalnız katalogda hiç eşleşme yokken gösterir; tür kendiliğinden seçilmez.
+ * bu su türüne uyan bütün türleri, öneri sırasıyla. Pencere bunu yalnız katalogda hiç eşleşme yokken gösterir, ilk `DID_YOU_MEAN_LIMIT`
+ * tanesi görünür; tür kendiliğinden seçilmez.
  */
 export function searchSuggestionsFor(query: string, waterType: AquariumType, suggestions: readonly SearchSuggestion[]): SpeciesProfile[] {
   const key = searchKey(query);
@@ -191,13 +192,14 @@ export function searchSuggestionsFor(query: string, waterType: AquariumType, sug
       if (profile && speciesWaterTypes(profile).includes(waterType) && !found.includes(profile)) found.push(profile);
     }
   }
-  return found.slice(0, DID_YOU_MEAN_LIMIT);
+  return found;
 }
 
 /**
- * Öneri listesinin bütünlüğü (src/data/search-suggestions.ts). Her kimlik katalogda olmalı; her kayıtta en az iki ayrı siteden kanıt (adres ve
- * alıntı) bulunmalı; terim hiçbir katalog türünün ya da çözülmemiş satış adının tam adıyla çakışmamalı (öneri yalnız eşleşme yokken çıkar);
- * terim 1–3 türe gider ve bir kez yazılır; tarih YYYY-AA-GG. Sorun yoksa boş liste döner.
+ * Öneri listesinin bütünlüğü (src/data/search-suggestions.ts). Her kimlik katalogda olmalı; her kayıtta en az iki bağımsız siteden kanıt
+ * (adres ve terimi içeren alıntı; aynı şirketin siteleri tek sayılır, `suggestionEvidenceProblems`) bulunmalı; terim hiçbir katalog türünün
+ * ya da çözülmemiş satış adının tam adıyla çakışmamalı (öneri yalnız eşleşme yokken çıkar); terim en az bir türe gider (ad birden çok türe
+ * gidiyorsa hepsi yazılır), aynı tür iki kez yazılmaz ve terim bir kez yazılır; tarih YYYY-AA-GG. Sorun yoksa boş liste döner.
  */
 export function searchSuggestionProblems(suggestions: readonly SearchSuggestion[]): string[] {
   const problems: string[] = [];
@@ -212,17 +214,10 @@ export function searchSuggestionProblems(suggestions: readonly SearchSuggestion[
     if (terms.has(key)) problems.push(`${term}: terim iki kez yazılmış`);
     terms.add(key);
     if (names.has(key)) problems.push(`${term}: katalogdaki ya da satış adı listesindeki bir adla aynı`);
-    if (!speciesIds.length || speciesIds.length > DID_YOU_MEAN_LIMIT) problems.push(`${term}: 1–${DID_YOU_MEAN_LIMIT} tür olmalı (${speciesIds.length})`);
+    if (!speciesIds.length) problems.push(`${term}: en az bir tür olmalı`);
+    if (new Set(speciesIds).size !== speciesIds.length) problems.push(`${term}: aynı tür iki kez yazılmış`);
     for (const id of speciesIds) if (!ids.has(id)) problems.push(`${term}: katalogda olmayan kimlik ${id}`);
-    const hosts = new Set<string>();
-    for (const { url, quote } of evidence) {
-      let host = "";
-      try { host = new URL(url).hostname.replace(/^www\./, ""); } catch { problems.push(`${term}: geçersiz adres ${url}`); }
-      if (!quote.trim()) problems.push(`${term}: alıntısı boş kanıt (${url})`);
-      if (host) hosts.add(host);
-    }
-    if (hosts.size < 2) problems.push(`${term}: en az iki ayrı siteden kanıt gerekir (${hosts.size})`);
-    if (!/^\d{4}-\d{2}-\d{2}$/.test(addedAt)) problems.push(`${term}: eklenme tarihi YYYY-AA-GG olmalı (${addedAt})`);
+    problems.push(...suggestionEvidenceProblems(term, evidence, addedAt, foldWords));
   }
   return problems;
 }

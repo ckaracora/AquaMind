@@ -3,11 +3,11 @@ import { renderToStaticMarkup } from "react-dom/server";
 import { describe, expect, it, vi } from "vitest";
 import { loadLocaleBundle, localeBundle, messagesFor, type Locale } from "@aquamind/localization";
 import { catalogTranslator } from "@aquamind/localization/catalog";
-import { searchPlants } from "@/data/catalog-plants";
-import { speciesById, speciesCatalog, type SpeciesProfile } from "@/data/catalog-species";
+import { plantById, plantCatalog, searchPlants } from "@/data/catalog-plants";
+import { speciesById, speciesCatalog, speciesWaterTypes, type SpeciesProfile } from "@/data/catalog-species";
 import { unresolvedSpeciesListings } from "@/data/catalog-species-unresolved";
-import { searchSuggestions, type SearchSuggestion } from "@/data/search-suggestions";
-import { withEnglishPlantMatches } from "@/lib/plant-search";
+import { DID_YOU_MEAN_LIMIT, evidenceSite, plantSearchSuggestions, searchSuggestions, type SearchSuggestion } from "@/data/search-suggestions";
+import { plantSearchSuggestionProblems, plantSuggestionsFor, withEnglishPlantMatches } from "@/lib/plant-search";
 import { searchSuggestionProblems, searchSuggestionsFor } from "@/lib/species-search";
 import { buildSpeciesSearchNames, otherNamesFrom } from "@/lib/species-search-names";
 import type { Livestock } from "@/types/aquarium";
@@ -103,10 +103,10 @@ describe("boş açılış ve adet", () => {
 
 describe("Bunu mu demek istedin?", () => {
   const sample: SearchSuggestion[] = [
-    { term: "Qwxz pırıltı balığı", speciesIds: ["neon-tetra", "guppy"], evidence: [{ url: "https://a.example/x", quote: "x" }, { url: "https://b.example/y", quote: "y" }], addedAt: "2026-11-14" },
+    { term: "Qwxz pırıltı balığı", speciesIds: ["neon-tetra", "guppy"], evidence: [{ url: "https://a.example/x", quote: "bir qwxz pırıltı balığı" }, { url: "https://b.example/y", quote: "Qwxz Pırıltı Balığı" }], addedAt: "2026-11-14" },
   ];
 
-  it("terim katlanarak eşleşir, en çok üç tür; tür kendiliğinden seçilmez, düğmeye basınca seçilir", () => {
+  it("terim katlanarak eşleşir; tür kendiliğinden seçilmez, düğmeye basınca seçilir", () => {
     expect(searchSuggestionsFor("qwxz-PIRILTI  baligi", "freshwater", sample).map((item) => item.id)).toEqual(["neon-tetra", "guppy"]);
     expect(searchSuggestionsFor("qwxz piriltı", "freshwater", sample)).toEqual([]);
     expect(searchSuggestionsFor("Qwxz pırıltı balığı", "saltwater", sample)).toEqual([]);
@@ -118,18 +118,75 @@ describe("Bunu mu demek istedin?", () => {
     expect(html).toMatch(/^<div[^>]*><button type="button" aria-pressed="false" class="[^"]*\bmin-h-11\b/);
   });
 
-  it("öneri listesinin bütünlüğü: kimlik katalogda, iki ayrı siteden kanıt, terim katalog adıyla çakışmaz", () => {
+  it("ad çok türe gidiyorsa hepsi gelir; ilk altısı görünür, fazlası \"Tümünü göster\" ile açılır", () => {
+    expect(DID_YOU_MEAN_LIMIT).toBe(6);
+    const many = ["neon-tetra", "guppy", "cherry-shrimp", "molly", "platy", "oscar", "koi-carp", "tiger-barb"];
+    const wide: SearchSuggestion[] = [{ ...sample[0], speciesIds: many }];
+    expect(searchSuggestionsFor("Qwxz pırıltı balığı", "freshwater", wide).map((item) => item.id)).toEqual(many);
+    const html = renderToStaticMarkup(createElement(DidYouMean, { suggestions: many.map(species), pick: () => {} }));
+    expect(html.match(/aria-pressed=/g)).toHaveLength(DID_YOU_MEAN_LIMIT);
+    expect(html).toContain(t.livestock.form.otherWaterSuggestionsShowAll(many.length));
+    const few = renderToStaticMarkup(createElement(DidYouMean, { suggestions: many.slice(0, 6).map(species), pick: () => {} }));
+    expect(few).not.toContain(t.livestock.form.otherWaterSuggestionsShowAll(6));
+    // Gerçek liste: "Istakoz" katalogdaki bütün tatlı su kerevitlerine gider.
+    expect(searchSuggestionsFor("istakoz", "freshwater", searchSuggestions).length).toBeGreaterThan(3);
+  });
+
+  it("listedeki her terim pencerede gerçekten öneri olarak çıkar: katalogda eşleşme yok, terimin türleri bu su türünde var", () => {
+    for (const { term, speciesIds } of searchSuggestions) {
+      for (const water of ["freshwater", "brackish", "saltwater"] as const) {
+        const own = speciesIds.filter((id) => speciesWaterTypes(species(id)).includes(water));
+        if (!own.length) continue;
+        for (const category of ["fish", "shrimp", "snail", "other"] as const) expect(livestockSearch(term, category, { ...context(), waterType: water }).kind, `${term} ${water} ${category}`).toBe("none");
+        expect(searchSuggestionsFor(term, water, searchSuggestions).map((item) => item.id), term).toEqual(own);
+      }
+    }
+  });
+
+  it("öneri listesinin bütünlüğü: kimlik katalogda, iki bağımsız siteden terimi içeren kanıt, terim katalog adıyla çakışmaz", () => {
     expect(searchSuggestionProblems(searchSuggestions)).toEqual([]);
     expect(searchSuggestionProblems(sample)).toEqual([]);
     const bad: SearchSuggestion[] = [
-      { term: "Lepistes", speciesIds: ["guppy"], evidence: [{ url: "https://a.example/x", quote: "x" }, { url: "https://b.example/y", quote: "y" }], addedAt: "2026-11-14" },
-      { term: "Yok böyle", speciesIds: ["olmayan-tur"], evidence: [{ url: "https://a.example/x", quote: "x" }, { url: "https://www.a.example/z", quote: "z" }], addedAt: "14.11.2026" },
+      { term: "Lepistes", speciesIds: ["guppy"], evidence: [{ url: "https://a.example/x", quote: "lepistes" }, { url: "https://b.example/y", quote: "Lepistes" }], addedAt: "2026-11-14" },
+      { term: "Yok böyle", speciesIds: ["olmayan-tur"], evidence: [{ url: "https://a.example/x", quote: "yok böyle" }, { url: "https://www.a.example/z", quote: "Yok böyle" }], addedAt: "14.11.2026" },
+      { term: "Qwxz aynı şirket", speciesIds: ["guppy", "guppy"], evidence: [{ url: "https://www.akvaryum.market/a", quote: "qwxz aynı şirket" }, { url: "https://bitki.market/b", quote: "Qwxz aynı şirket" }, { url: "https://blog.akvaryum.market/c", quote: "qwxz aynı şirket" }], addedAt: "2026-11-14" },
+      { term: "Qwxz alıntısız", speciesIds: [], evidence: [{ url: "https://a.example/x", quote: "başka bir şey" }, { url: "https://b.example/y", quote: "qwxz alıntısız" }], addedAt: "2026-11-14" },
     ];
     const problems = searchSuggestionProblems(bad).join("\n");
     expect(problems).toContain("Lepistes: katalogdaki");
     expect(problems).toContain("olmayan kimlik olmayan-tur");
     expect(problems).toContain("Yok böyle: en az iki ayrı siteden kanıt");
     expect(problems).toContain("YYYY-AA-GG");
+    // Aynı şirketin siteleri (alt alan adı ya da kardeş site) tek sayılır; aynı tür iki kez yazılamaz.
+    expect(problems).toContain("Qwxz aynı şirket: en az iki ayrı siteden kanıt gerekir (1)");
+    expect(problems).toContain("Qwxz aynı şirket: aynı tür iki kez");
+    expect(problems).toContain("Qwxz alıntısız: alıntı terimi içermiyor (https://a.example/x)");
+    expect(problems).toContain("Qwxz alıntısız: en az bir tür");
+    expect(evidenceSite("https://mail.akvaryum.com/Forum/x")).toBe("akvaryum.com");
+    expect(evidenceSite("https://blog.tetra.net/tr-tr/x")).toBe("tetra.net");
+    expect(evidenceSite("https://www.emamapet.com.tr/blog")).toBe("emamapet.com.tr");
+    expect(evidenceSite("https://evcilhayvan.market/x")).toBe("akvaryum.market");
+  });
+});
+
+describe("bitki aramasında \"Bunu mu demek istedin?\"", () => {
+  it("terim katlanarak eşleşir ve terimin bütün bitkilerini verir; listedeki her terimde aramada sonuç yoktur", () => {
+    expect(plantSuggestionsFor("KRIPTOKORIN", plantSearchSuggestions, plantById).map((item) => item.id)).toEqual(plantSearchSuggestions.find((item) => item.term === "Kriptokorin")!.plantIds);
+    expect(plantSuggestionsFor("java eğreltisi", plantSearchSuggestions, plantById)[0]).toMatchObject({ id: "microsorum-pteropus" });
+    expect(plantSuggestionsFor("java", plantSearchSuggestions, plantById)).toEqual([]);
+    for (const { term } of plantSearchSuggestions) {
+      for (const locale of ["tr", "en", "es"] as const) expect(withEnglishPlantMatches(searchPlants(term, locale), searchPlants(term, "en"), locale), `${term} ${locale}`).toEqual([]);
+    }
+  });
+
+  it("bitki öneri listesinin bütünlüğü canlıdakiyle aynı kuralla", () => {
+    expect(plantSearchSuggestionProblems(plantSearchSuggestions, plantCatalog)).toEqual([]);
+    const problems = plantSearchSuggestionProblems([
+      { term: "Microsorum pteropus", plantIds: ["microsorum-pteropus", "olmayan-bitki"], evidence: [{ url: "https://a.example/x", quote: "Microsorum pteropus" }], addedAt: "2026-11-14" },
+    ], plantCatalog).join("\n");
+    expect(problems).toContain("katalogdaki bir bitki adıyla aynı");
+    expect(problems).toContain("olmayan kimlik olmayan-bitki");
+    expect(problems).toContain("en az iki ayrı siteden kanıt gerekir (1)");
   });
 });
 
