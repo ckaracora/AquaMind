@@ -21,30 +21,30 @@ Katalogların her bilgisinin yüzde kaçının dolu olduğu ve kaynağının tü
 ## Güncel durum
 
 <!-- kapsam:başla -->
-Ölçüm tarihi: 2026-11-13
+Ölçüm tarihi: 2026-11-14
 
-### Canlılar (468 kayıt)
-
-| Bilgi | Dolu | Oran |
-|---|---|---|
-| Kendi kaynak sayfası var (otomatik bağlantı değil) | 468/468 | %100 |
-| Yalnız otomatik kaynak bağlantısı | 0/468 | %0 |
-| En az tank uzunluğu | 426/468 | %91 |
-| Akıntı | 403/468 | %86,1 |
-| Davranış ya da bakım notu | 362/468 | %77,4 |
-| Eş ad ya da satış adı | 420/468 | %89,7 |
-| Son 92 günde doğrulanmış | 468/468 | %100 |
-
-### Ekipman (3535 kayıt)
+### Canlılar (471 kayıt)
 
 | Bilgi | Dolu | Oran |
 |---|---|---|
-| Kaynak sayfası | 3535/3535 | %100 |
-| Doğrulanmamışlar listesinde değil | 3414/3535 | %96,6 |
-| Hesap değeri (filtre, ısıtıcı, hava motoru) | 1123/1249 | %89,9 |
-| Güç (W) | 1691/3535 | %47,8 |
-| Önerilen hacim | 717/3535 | %20,3 |
-| Son 92 günde doğrulanmış | 3535/3535 | %100 |
+| Kendi kaynak sayfası var (otomatik bağlantı değil) | 471/471 | %100 |
+| Yalnız otomatik kaynak bağlantısı | 0/471 | %0 |
+| En az tank uzunluğu | 429/471 | %91,1 |
+| Akıntı | 404/471 | %85,8 |
+| Davranış ya da bakım notu | 366/471 | %77,7 |
+| Eş ad ya da satış adı | 423/471 | %89,8 |
+| Son 92 günde doğrulanmış | 471/471 | %100 |
+
+### Ekipman (3646 kayıt)
+
+| Bilgi | Dolu | Oran |
+|---|---|---|
+| Kaynak sayfası | 3646/3646 | %100 |
+| Doğrulanmamışlar listesinde değil | 3525/3646 | %96,7 |
+| Hesap değeri (filtre, ısıtıcı, hava motoru) | 1227/1354 | %90,6 |
+| Güç (W) | 1796/3646 | %49,3 |
+| Önerilen hacim | 755/3646 | %20,7 |
+| Son 92 günde doğrulanmış | 3646/3646 | %100 |
 
 ### Bakım ürünleri (1893 kayıt)
 
@@ -75,6 +75,7 @@ Katalogların her bilgisinin yüzde kaçının dolu olduğu ve kaynağının tü
 
 ## Geçmiş
 
+- 2026-11-14 (veri sprinti; ürün sahibinin açık isteği, karar 0039 bu iş için kalktı): E1 katalog denetimi (125 kayıtta 181 alan, 243 kaydın doğrulama tarihi 2026-11-14), E4 üç yeni canlı (leopar yelken vatoz, Physa salyangozu, kırmızı bataklık kereviti), iki bitki satış adı ve 111 ekipman (Atman, Hailea, Hydor, Lifetech/Jebo, Venusaqua; `docs/CATALOG_LOG.md`, aynı günün bölümleri). Canlılar 468 → 471 kayıt: en az tank uzunluğu %91 → %91,1 (426 → 429), akıntı %86,1 → %85,8 (403 → 404), davranış ya da bakım notu %77,4 → %77,7 (362 → 366), eş ad ya da satış adı %89,7 → %89,8 (420 → 423). Ekipman 3535 → 3646 kayıt: doğrulanmamışlar listesinde değil %96,6 → %96,7 (3414 → 3525), hesap değeri %89,9 → %90,6 (1123/1249 → 1227/1354), güç %47,8 → %49,3 (1691 → 1796), önerilen hacim %20,3 → %20,7 (717 → 755). Bakım ürünleri ve bitki satırları değişmedi. Ölçüm tarihi 2026-11-14; "son 92 günde doğrulanmış" satırları %100 kaldı. Davranış kayıtları (E2) ve tür bakım bilgisi (E3, `src/data/species-care.ts`) bu tabloda ölçülmüyor.
 - 2026-11-13 (veri doldurma 2, veri aşaması; ürün sahibinin açık isteği "Evet, ekle", karar 0039 2. madde): 3 yeni bitki (Dracaena sanderiana ve Spathiphyllum wallisii "su bitkisi değil", Myriophyllum spicatum istilacı uyarı kaydı) ve dünkü 5 bitkiye İngilizce ortak ad (`docs/CATALOG_LOG.md`). Bitkiler 149 → 152 kayıt: ışık %95,3 → %94,7 (142 → 144), CO₂ %82,6 → %80,9, büyüme hızı %86,6 → %86,2 (129 → 131), boy %96,6 → %96,1 (144 → 146), sıcaklık %53,7 → %53,9 (80 → 82), pH %51,7 → %52 (77 → 79), yerleşim %50,3 → %49,3, bütün değerler dolu %24,8 → %24,3 (37), istilacı etiketi %6 → %6,6 (9 → 10), su bitkisi değil etiketi 1 → 3, İngilizce ortak ad 42 → 49, yalnız uyarı kaydı 5 → 6. Canlılar, ekipman ve bakım ürünleri değişmedi. "Son 92 günde doğrulanmış" %100 kaldı.
 - 2026-11-12/13 (veri doldurma 1, veri aşaması; ürün sahibinin açık isteği, karar 0039 2. madde): 57 kayda 99 eş ad, 56 tatlı su kaydında en az hacim ve uzunluk, 25 yeni canlı ve 8 yeni bitki (`docs/CATALOG_LOG.md`, "2026-11-12 Arama adları paketi", "2026-11-12 En az hacim ve uzunluk" ve "2026-11-12 Eksik yaygın canlılar ve bitkiler" bölümleri). Canlılar 443 → 468 kayıt: en az tank uzunluğu %91 (403 → 426), akıntı %89,8 → %86,1 (398 → 403), davranış ya da bakım notu %76,1 → %77,4 (337 → 362), eş ad ya da satış adı %86,5 → %89,7 (383 → 420). Bitkiler 141 → 149 kayıt: ışık %96,5 → %95,3 (136 → 142), CO₂ %84,4 → %82,6 (119 → 123), büyüme hızı %87,2 → %86,6 (123 → 129), boy %97,9 → %96,6 (138 → 144), sıcaklık %53,2 → %53,7 (75 → 80), pH %51,1 → %51,7 (72 → 77), yerleşim %51,1 → %50,3 (72 → 75), bütün değerler dolu %25,5 → %24,8 (36 → 37), istilacı tür etiketi %5 → %6 (7 → 9), İngilizce ortak ad %29,8 → %28,2 (42/149), yalnız uyarı kaydı %2,1 → %3,4 (3 → 5). Ekipman ve bakım ürünleri değişmedi. Ölçüm tarihi 2026-11-13; "son 92 günde doğrulanmış" satırları %100 kaldı.
 - 2026-11-12 (Canberk'in dalından paket A, veri aşaması; ürün sahibinin isteği): 11 ekipmanın kaynağı üreticiye ya da Türkiye distribütörüne bağlandı, değerleri o sayfadan geldi (Sobo SB-860A, SB-848, WP-4001; SunSun 502, 503; Dophin AP1302, 980F, FB1000 F, FB3000 F, FB4000 F, CF-300; `docs/CATALOG_LOG.md`, aynı günün bölümü). Sobo SB-848, WP-4001 ve SunSun 502, 503 doğrulanamayanlar listesinden çıktı. Değişen oranlar: doğrulanmamışlar listesinde değil %96,5 → %96,6 (3410 → 3414/3535), hesap değeri %89,4 → %89,9 (1117 → 1123/1249), güç %47,6 → %47,8 (1682 → 1691/3535), önerilen hacim %20,1 → %20,3 (712 → 717/3535). Ölçüm tarihi 2026-11-12; "son 92 günde doğrulanmış" satırları %100 kaldı.

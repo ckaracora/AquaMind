@@ -2317,6 +2317,32 @@ Son güncelleme: 2026-11-14
   - Ekran tarayıcıda görülmedi (yeni kart, pencere düzeni, simgenin 404'ü giderdiği).
   - Dal henüz push edilmedi, PR açılmadı.
 
+## Veri 9 sprinti 2: motor kontrol düzeltmeleri, veri (E1–E5), tür kartı ve "ne uyar" (`codex/nine-1`, 2026-11-14)
+
+- İstek: Burak'ın 2026-11-14 kararları (veriyi 7'den 9 bandına; tatlı su; uydurma yok; resmî veteriner ve hayvan refahı kurumlarının genel bilgisi kaynak; gündelik adlar veri değil öneri; sertlik kaydedilir, hesaba girmez). Veri dondurma (karar 0039) bu iş için kalktı.
+- Motor 1.18.0 kontrol düzeltmeleri (karşı firma kontrolü: Gemini Argon; ayrıntı karar 0043 "Kontrol turu düzeltmeleri"): risk listesi boşken yeşil "Belirgin bir risk görünmüyor" yalnız hüküm "iyi" ve değerlendirilemeyen kalem yokken (`healthAdviceView`); hiçbir canlı hesaba girmeyince canlıya bağlı göstergeler nötr "Değerlendirilemedi"; canlısız akvaryumda da "Değerlendirilemeyenler" kartı; hava motorsuz doğrulanmış sünger filtre "kapasite bilgisi eksik"e girmiyor; `spaceTooSmall` uzunluk 0'ı yazmıyor; yalnız aynı tür saldırganlığı kaydı "davranışı biliniyor" sayılmıyor; boşluklu marka/model; ana sayfa cümlesi "ya da doğrulanmadı". Puan, durum ve uyarılar değişmedi.
+- E1 katalog değerleri: 437 tatlı ve acı su kaydı ikinci okumayla (1.043 sayfa yeniden indirildi) yeniden hesaplandı; 125 kayıtta 181 alan değişti; rakip sitelere 30 bağlantı çıkarıldı, 11 ana kaynak kabul edilen kaynağa çevrildi; 243 kaydın doğrulama tarihi 2026-11-14; 54 kaynaksız hacim `docs/CATALOG_SOURCE_GAPS.md`'de. Kurallar `docs/DATA_SOURCES.md`'de (resmî genel bilgi, FishBase boy farkı, Fishipedia doğal ortam, grup aralığı).
+- E2 davranış: 194 kayıt (40 risk ya da "avcı değil", 154 `peaceful`); hiçbir işareti olmayan tür 121 → 24. Son kapıda yeni üç türün kaydı eklendi (leopar yelken vatoz ve kırmızı bataklık kereviti `conspecificAggression: all`, Physa `peaceful`) ve elektrik mavi kerevite `speciesOnly` (Fishipedia).
+- E3 tür bakım bilgisi: `src/data/species-care.ts` (420 türde en az bir alan: beslenme 396, cinsiyet ayrımı 350, üreme 385, ömür 91, zorluk 41, yüzme bölgesi 33, sertlik 385; birimsiz üç Fishipedia sertliği çıkarıldı), 860 metin EN/ES; yalnız bilgi, motor kullanmaz.
+- E4–E5: üç yeni canlı (leopar yelken vatoz *Pterygoplichthys gibbiceps*, Physa salyangozu *Physella acuta*, kırmızı bataklık kereviti *Procambarus clarkii*, istilacı uyarısıyla), iki bitki satış adı, 111 ekipman (Atman 14, Hailea 23, Hydor 17, Lifetech/Jebo 3, Venusaqua 54), 28 gündelik ad önerisi (21 canlı, 7 bitki; her biri iki bağımsız Türkçe siteden alıntılı), öneri sınırı ilk 6 + "Tümünü göster", bitkide öneri, ekipman marka eş yazımı (Dolphin, Jebo, Venus Aqua). Çekirdek 128 popüler maddede en yaygın adla bulma %76,6 → %84,4 (hedef %96 tutmadı).
+- Yeni ekranlar: tür kartı (katalog değerleri, davranış, bakım bilgisi, kaynaklar) ve "Bu akvaryuma ne uyar?" (canlı penceresi ve sağlık sayfası; yeni uyarı getirmeyen, davranışı belgeli türler). Örnek akvaryuma Eheim Thermocontrol 125 W eklendi (iyi 98).
+- Veri kapsamı (`docs/DATA_COVERAGE.md`, 2026-11-14): canlılar 471 kayıt, ekipman 3646 kayıt (hesap değeri %90,6).
+- Son kapı lider kararlarından uygulanmayan: kaynağın "tek ya da çift" dediği altı tür (mavi acara, Assam yılanbaş, ocellaris peacock bass, inci ciklet, Texas, L235) için `minGroup` 2. Tek bireye sarı "grup sayısı düşük" getiriyor, kaynaklı `test-health` denetimini kırıyor ve kaynakta olmayan bir değer olurdu; veri değişmedi (`docs/CATALOG_LOG.md`, son kapı bölümü).
+- Altın fikstür ayrı commit'te yeniden üretildi; eski ve yeni betikle karşılaştırıldı: 1132 → 1138 vaka (+6: üç yeni türün `species-fit` ve `species-tight` vakaları). Aynı adlı 1085 vakada hükmü değişen yok; 257 vakada uyarı ya da puan, 15 vakada yalnız `unevaluated` değişti; örnek akvaryum iyi 95 → iyi 98 (ısıtıcı). Tür sırası kaydığı için 47 ikili vakanın adı değişti; eski adlı ikililer bugünkü kodla ayrıca hesaplandı: hükmü değişen 2, ikisi E1'in boy düzeltmesinden ("uygun değil" → "dikkat", avlanma düştü): `pair:rainbow-snakehead+ramirezi` ve `pair:wrestling-halfbeak+xray-tetra` (49 → 74). Beklenmeyen hüküm değişimi yok. İkili kayması "akıntı ihtiyaçları farklı" ölçüt kodunu fikstürden düşürdüğü için `engine-text.test.ts`'e stub senaryo eklendi.
+- Son kapı: `pnpm verify` yeşil: tip denetimi, katalog akışı (1893 bakım ürünü), 114 sağlık senaryosu ve 18 biçimleme kontrolü, hesaplayıcılar, katalog denetimi, 77 Vitest dosyasında 1014 test, üretim derlemesi (162 sayfa), dil paketi sınırı (tür bakım bilgisi EN 65 kB, ES 77 kB ayrı parçada). İlk koşuda tek kırmızı `engine-text.test.ts` (yukarıdaki kod) idi.
+- Commit'ler: motor kontrol düzeltmeleri, E1, E2, E3, E4–E5, ekranlar, fikstür ve bu durum kaydı ayrı; yalnız son hâl yeşil (ortak dil dosyaları `tr/en/es.ts` ekran commit'inde, sağlık sayfası motor düzeltme commit'inde, `catalog-species-expanded.ts`, `scripts/test-catalog-flow.cjs`, `docs/CATALOG_LOG.md` ve tür çeviri tabloları E1 commit'inde).
+- Açık işler:
+  - "Tek ya da çift" türlerinde çift kırmızı "tek tutulmalı" alıyor: motor işi ("çift kabul" işareti), lider ya da Burak kararı.
+  - E1'in bekletilen 37 büyük ya da çelişkili farkı (`docs/CATALOG_LOG.md`): Burak/Canberk'le.
+  - Gündelik adlar: dürüst kanıtla bulunamayan 20 çekirdek ad için Burak'la Chrome oturumu.
+  - *Lemna minor* ve *Hydrocotyle leucocephala*: kabul edilen kaynakta değer ya da istilacı etiketi yok, eklenmedi.
+  - Harem türleri (erkek başına birkaç dişi) "erkekler kavga eder" ile en çok "dikkat"; cinsiyet okunmuyor.
+  - Kırmızı karınlı pirana, threadfin acara, aksolotl davranışı; demasoni ve maingano `males` → `all`?
+  - Jonklaas lipstick goby kimliği; L148/L149/Kiriza kaynağı.
+  - Tür kartı ve "ne uyar" penceresi tarayıcıda görülmedi (375 px, iç içe pencerede odak ve Esc).
+  - Karşı firma kontrolü veri için (111 ekipman, 3 canlı, E1 örneği) yapılmadı.
+  - Dal henüz push edilmedi, PR açılmadı.
+
 ## Uyumluluk denetimi (2026-09-24)
 
 - Yöntem: motor kodu satır satır okundu; akvaryumculukta cevabı bilinen 11 senaryo hem `main` hem katalog dalında çalıştırıldı; katalog otomatik tutarlılık kontrollerinden geçirildi; 189 balık türünün sıcaklık, pH ve boy değerleri FishBase kayıtlarıyla karşılaştırıldı. Denetim sırasında dosya değiştirilmedi
