@@ -6,12 +6,19 @@ import type { Aquarium, Livestock } from "@/types/aquarium";
 
 // Kaynaklı davranış verisinin bütünlüğü ve motora bağlanması (docs/DECISIONS/0010-davranis-uyarilari.md).
 
-const flags = ["finNipper", "finNipTarget", "eatsShrimp", "shrimpSafe", "eatsSnails", "eatsSmallFish", "notPiscivorous", "conspecificAggression"];
+const flags = ["finNipper", "finNipTarget", "eatsShrimp", "shrimpSafe", "eatsSnails", "eatsSmallFish", "notPiscivorous", "conspecificAggression", "peaceful"];
 const hosts: Record<string, string> = {
   "seriouslyfish.com": "Seriously Fish",
   "fishkeeper.co.uk": "Fishkeeper",
   "practicalfishkeeping.co.uk": "Practical Fishkeeping",
   "ornamentalfish.org": "OATA",
+  // Veri sprinti E2 (2026-11-14): docs/DATA_SOURCES.md'de kabul edilen öbür kaynaklar.
+  "fishi-pedia.com": "Fishipedia",
+  "fishipedia.fr": "Fishipedia",
+  "fishipedia.it": "Fishipedia",
+  "fishipedia.es": "Fishipedia",
+  "wirbellose.de": "wirbellose.de",
+  "scotcat.com": "ScotCat",
 };
 const entries = Object.entries(speciesBehavior).flatMap(([id, records]) => records.map((record) => ({ id, record })));
 
@@ -80,8 +87,9 @@ describe("withBehavior", () => {
   });
 
   it("davranış kaydı olmayan türü değiştirmez", () => {
-    const profile = speciesById("corydoras-panda");
-    expect(speciesBehavior["corydoras-panda"]).toBeUndefined();
+    // Panda çöpçü 2026-11-14'te `peaceful` kaydı aldı; boru salyangozu için okunan kaynaklar davranış yazmıyor, kayıt yok.
+    const profile = speciesById("ramshorn-snail");
+    expect(speciesBehavior["ramshorn-snail"]).toBeUndefined();
     expect(withBehavior(profile)).toBe(profile);
     expect(withBehavior(undefined)).toBeUndefined();
   });
@@ -178,7 +186,8 @@ describe("salyangoz uyarısı (gerçek katalog, kural seti 1.7.0)", () => {
 
 describe("karides uyarısının kapsamı (gerçek katalog, karar 0041)", () => {
   // Kaynağı riski küçük karidesle ya da yavruyla sınırlayan "karides yer" kayıtları (2026-11-12'de kaynak sayfaları yeniden okundu).
-  const SMALL_ONLY = ["banggai-cardinalfish", "clown-killifish", "croaking-gourami", "guppy", "kuhli-loach", "ocellaris-clownfish", "pea-puffer", "red-lip-goby-exallisquamulus", "sparkling-gourami", "white-cloud"];
+  // 2026-11-14 (E2): katil salyangoz ve Tayland mikro yengeci; kaynak riski küçük ya da yavru karidesle sınırlıyor.
+  const SMALL_ONLY = ["assassin-snail", "banggai-cardinalfish", "clown-killifish", "croaking-gourami", "guppy", "kuhli-loach", "ocellaris-clownfish", "pea-puffer", "red-lip-goby-exallisquamulus", "sparkling-gourami", "thai-micro-crab", "white-cloud"];
   const tank = (type: Aquarium["type"]): Aquarium => ({ id: "t", name: "T", type, lengthCm: 120, widthCm: 50, heightCm: 50, netVolumeLiters: 300, setupDate: "2026-01-01" });
   const animal = (id: string, quantity: number): Livestock => {
     const profile = speciesById(id)!;
@@ -188,7 +197,7 @@ describe("karides uyarısının kapsamı (gerçek katalog, karar 0041)", () => {
   const sea = { id: "w", aquariumId: "t", measuredAt: "2026-11-12", temperature: 25, ph: 8.1, specificGravity: 1.025, kh: 9, ammonia: 0, nitrite: 0, nitrate: 8 };
   const shrimpWarning = (result: ReturnType<typeof analyzeAquarium>) => result.warnings.find((warning) => warning.code === "shrimpEaten");
 
-  it("smallShrimpOnly yalnız bu 10 açık kaynaklı 'karides yer' kaydında", () => {
+  it("smallShrimpOnly yalnız bu 12 açık kaynaklı 'karides yer' kaydında", () => {
     const marked = entries.filter(({ record }) => record.smallShrimpOnly !== undefined);
     for (const { id, record } of marked) {
       expect(record.flag, id).toBe("eatsShrimp");
@@ -213,5 +222,56 @@ describe("karides uyarısının kapsamı (gerçek katalog, karar 0041)", () => {
   it("denizde: ocellaris temizlikçi karidesle uyarı almaz, sarı lapin alır", () => {
     expect(shrimpWarning(analyzeAquarium(tank("saltwater"), [animal("ocellaris-clownfish", 2), animal("cleaner-shrimp", 1)], [], sea))).toBeUndefined();
     expect(shrimpWarning(analyzeAquarium(tank("saltwater"), [animal("yellow-wrasse", 1), animal("cleaner-shrimp", 1)], [], sea))).toBeDefined();
+  });
+});
+
+// Veri sprinti E2 (2026-11-14, docs/CATALOG_LOG.md): iki bağımsız okuma, kaynak sayfası yeniden açılarak doğrulanan risk kayıtları ve `peaceful`.
+describe("E2 davranış kayıtları (gerçek katalog)", () => {
+  const tank: Aquarium = { id: "t", name: "T", type: "freshwater", lengthCm: 100, widthCm: 40, heightCm: 50, netVolumeLiters: 200, setupDate: "2026-01-01" };
+  const animal = (id: string, quantity: number): Livestock => {
+    const profile = speciesById(id)!;
+    return { id: `${id}-${quantity}`, aquariumId: "t", catalogId: id, commonName: profile.commonName, scientificName: profile.scientificName, category: profile.category, quantity, addedAt: "2026-01-01" };
+  };
+  const water = { id: "w", aquariumId: "t", measuredAt: "2026-11-14", temperature: 24, ph: 7.4, ammonia: 0, nitrite: 0, nitrate: 10 };
+  const codes = (result: ReturnType<typeof analyzeAquarium>) => result.warnings.map((warning) => warning.code);
+
+  it("peaceful kaydının koşul metni yok ve aynı türde risk kaydıyla birlikte bulunmaz", () => {
+    const risk = new Set(["finNipper", "eatsShrimp", "eatsSnails", "eatsSmallFish", "conspecificAggression"]);
+    for (const [id, records] of Object.entries(speciesBehavior)) {
+      const peaceful = records.find((record) => record.flag === "peaceful");
+      if (!peaceful) continue;
+      expect(peaceful.condition, id).toBeUndefined();
+      expect(records.filter((record) => risk.has(record.flag)).map((record) => record.flag), id).toEqual([]);
+      expect(speciesById(id)?.predatory, id).not.toBe(true);
+    }
+  });
+
+  it("katil salyangoz: boru salyangozu ve neritle 'salyangozlar yenebilir', yalnız küçük karideste karides uyarısı (senaryo F08)", () => {
+    const snails = analyzeAquarium(tank, [animal("assassin-snail", 3), animal("ramshorn-snail", 5), animal("nerite-snail", 2)], [], water);
+    expect(codes(snails)).toContain("snailEaten");
+    expect(withBehavior(speciesById("assassin-snail"))?.behavior?.eatsShrimp).toMatchObject({ source: "Fishkeeper", smallShrimpOnly: true });
+    expect(codes(analyzeAquarium(tank, [animal("assassin-snail", 3), animal("cherry-shrimp", 10)], [], water))).toContain("shrimpEaten");
+  });
+
+  it("mavi kerevit neonla kırmızı 'avlanabilir' (senaryo F05); kesin tehlike değil", () => {
+    const result = analyzeAquarium(tank, [animal("electric-blue-crayfish", 1), animal("neon-tetra", 10)], [], water);
+    expect(result.warnings.find((warning) => warning.code === "smallFishPredation")).toMatchObject({ level: "danger" });
+    expect(withBehavior(speciesById("electric-blue-crayfish"))?.behavior?.eatsSmallFish).toMatchObject({ source: "Fishipedia" });
+  });
+
+  it("sarı prenses grubu: 'erkekler kavga eder' (senaryo F01); cüce puffer erkekleri ölümüne dövüşebilir", () => {
+    expect(codes(analyzeAquarium(tank, [animal("yellow-lab", 6)], [], { ...water, ph: 7.8 }))).toContain("conspecificMales");
+    expect(withBehavior(speciesById("pea-puffer"))?.behavior?.conspecificAggression).toMatchObject({ value: "males", source: "Seriously Fish" });
+  });
+
+  it("barışçıl kayıt uyarı üretmez; amano karides davranışı biliniyor sayılır (senaryo F28)", () => {
+    expect(withBehavior(speciesById("amano-shrimp"))?.behavior?.peaceful).toMatchObject({ source: "wirbellose.de" });
+    const result = analyzeAquarium(tank, [animal("cardinal-tetra", 12), animal("amano-shrimp", 5)], [], water);
+    expect((result.unevaluated ?? []).filter((item) => item.code === "behaviorUnknown").map((item) => item.params?.name)).not.toContain(speciesById("amano-shrimp")!.commonName);
+  });
+
+  it("Meksika cüce kereviti: kaynaklar çelişiyor, uyarı üretmez", () => {
+    expect(speciesBehavior["mexican-dwarf-crayfish"]?.find((record) => record.flag === "conspecificAggression")).toMatchObject({ confidence: "conflict" });
+    expect(codes(analyzeAquarium(tank, [animal("mexican-dwarf-crayfish", 4)], [], water))).not.toContain("conspecificAll");
   });
 });
