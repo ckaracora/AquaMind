@@ -35,6 +35,12 @@ const spaceReference = (p: EngineTextParams, f: EngineTextFormat) =>
   flag(p, "hasLength")
     ? `Kayıtlı adet için minimum ${f.volume(num(p, "volume"))} ve ${f.length(num(p, "length"))} uzunluk referansı kullanıldı.`
     : `Kayıtlı adet için minimum ${f.volume(num(p, "volume"))} referansı kullanıldı; kaynak tank uzunluğu yayımlamıyor.`;
+/**
+ * Motor 1.20.0 (karar 0045): alan uyarısı ikinci kademe (çapraz kontrollü hobi kaynakları) değerinden doğuyorsa (`secondary`) metnin sonundaki
+ * not; motorun `SECONDARY_SPACE_NOTE` metniyle aynı.
+ */
+const secondarySpaceNote = (p: EngineTextParams) =>
+  flag(p, "secondary") ? ' Bu türün hacim ya da uzunluk değeri kabul ettiğimiz kaynaklarda yok; birkaç hobi kaynağının ortak değeridir. Bu yüzden bu uyarı sonucu en fazla "Dikkat" yapar.' : "";
 const fixed = (text: string): Text => () => text;
 /** Değerlendirilemeyen cihazın türü ve girmediği hesap (motor 1.18.0); motor yalnız filtre, ısıtıcı ve hava motorunu listeler. */
 const deviceKind = (category: string) => ({ filter: "filtre", heater: "ısıtıcı", air_pump: "hava motoru" } as Record<string, string>)[category] ?? "cihaz";
@@ -411,24 +417,24 @@ export const trEngine = {
     },
     spaceLimited: {
       title: (p) => `${str(p, "name")}: alan sınırda`,
-      message: spaceReference,
+      message: (p, f) => `${spaceReference(p, f)}${secondarySpaceNote(p)}`,
     },
     spaceNarrow: {
       title: (p) => `${str(p, "name")}: akvaryum bu tür için dar`,
       message: (p, f) =>
-        `${spaceReference(p, f)} Akvaryumun genişliği (${f.length(num(p, "width"))}), katalogdaki ${f.length(num(p, "size"))} yetişkin boyun iki katından az. AquaMind bu öneriyi İsviçre Hayvan Koruma Yönetmeliği'nin ölçü kuralından (genişlik 2× vücut boyu) uyarlar; yönetmelik kuyruk yüzgeci hariç boyu, AquaMind çoğu türde toplam boyu kullanır. Genişliği en az ${f.length(num(p, "minWidth"))} olan bir akvaryum daha uygundur.`,
+        `${spaceReference(p, f)} Akvaryumun genişliği (${f.length(num(p, "width"))}), katalogdaki ${f.length(num(p, "size"))} yetişkin boyun iki katından az. AquaMind bu öneriyi İsviçre Hayvan Koruma Yönetmeliği'nin ölçü kuralından (genişlik 2× vücut boyu) uyarlar; yönetmelik kuyruk yüzgeci hariç boyu, AquaMind çoğu türde toplam boyu kullanır. Genişliği en az ${f.length(num(p, "minWidth"))} olan bir akvaryum daha uygundur.${secondarySpaceNote(p)}`,
     },
     /** Motor 1.18.0 (karar 0043): net hacim, kayıtlı adet için gereken en az hacmin yarısından küçük (kesin tehlike). */
     spaceTooSmall: {
       title: (p) => `${str(p, "name")}: akvaryum çok küçük`,
       message: (p, f) =>
-        `Kaynağa göre ${str(p, "name")} için kayıtlı ${f.number(num(p, "count"))} bireyle en az ${f.volume(num(p, "volume"))} gerekir; akvaryumun net hacmi ${f.volume(num(p, "aquariumVolume"))}, gerekenin yarısından da az.${flag(p, "lengthShort") ? ` Kaynak en az ${f.length(num(p, "length"))} uzunluk da istiyor; akvaryumun uzunluğu ${f.length(num(p, "tankLength"))}.` : ""} Bu tür bu akvaryumda tutulmamalı.`,
+        `${flag(p, "secondary") ? "Birkaç hobi kaynağına göre" : "Kaynağa göre"} ${str(p, "name")} için kayıtlı ${f.number(num(p, "count"))} bireyle en az ${f.volume(num(p, "volume"))} gerekir; akvaryumun net hacmi ${f.volume(num(p, "aquariumVolume"))}, gerekenin yarısından da az.${flag(p, "lengthShort") ? ` ${flag(p, "lengthSecondary") ? "Birkaç hobi kaynağı" : "Kaynak"} en az ${f.length(num(p, "length"))} uzunluk da istiyor; akvaryumun uzunluğu ${f.length(num(p, "tankLength"))}.` : ""}${flag(p, "secondary") ? ` Bu tür için daha büyük bir akvaryum gerekir.${secondarySpaceNote(p)}` : " Bu tür bu akvaryumda tutulmamalı."}`,
     },
     /** 1.19.0 (karar 0044): başlık `spaceTooSmall` ile ayrıldı; hüküm etkisi (en çok "dikkat") değişmedi. */
     spaceSevere: {
       title: (p) => `${str(p, "name")}: akvaryumun uzunluğu ya da derinliği yetersiz`,
       message: (p, f) =>
-        `${spaceReference(p, f)} Akvaryum ayrıca İsviçre Hayvan Koruma Yönetmeliği'nin ölçü kuralındaki uzunluk (3×) ve su derinliği (1× vücut boyu) sınırlarından uyarlanan AquaMind sınırının altında. Yönetmelik kuyruk yüzgeci hariç boyu kullanır; AquaMind daha sıkı davranıp katalogdaki ${f.length(num(p, "size"))} yetişkin boyu (çoğu türde toplam boy) kullanır: uzunluk en az ${f.length(num(p, "minLength"))}, su derinliği en az ${f.length(num(p, "minDepth"))}.`,
+        `${spaceReference(p, f)} Akvaryum ayrıca İsviçre Hayvan Koruma Yönetmeliği'nin ölçü kuralındaki uzunluk (3×) ve su derinliği (1× vücut boyu) sınırlarından uyarlanan AquaMind sınırının altında. Yönetmelik kuyruk yüzgeci hariç boyu kullanır; AquaMind daha sıkı davranıp katalogdaki ${f.length(num(p, "size"))} yetişkin boyu (çoğu türde toplam boy) kullanır: uzunluk en az ${f.length(num(p, "minLength"))}, su derinliği en az ${f.length(num(p, "minDepth"))}.${secondarySpaceNote(p)}`,
     },
   } satisfies Record<string, { title: Text; message: Text }>,
   /**

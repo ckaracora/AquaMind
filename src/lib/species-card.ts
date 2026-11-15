@@ -10,7 +10,8 @@ import type { SpeciesCare } from "@/data/species-care";
  * notudur (katalog çevirmeninden geçer; çevirisi yoksa ekran göstermez). `conflict`: kaynaklar çelişiyor, motor bunu uyarıya çevirmez.
  */
 export type BehaviorLineKind = Exclude<BehaviorFlag, "conspecificAggression"> | "eatsShrimpSmall" | "conspecificMales" | "conspecificAll" | "predatory" | "speciesOnly";
-export interface BehaviorLine { kind: BehaviorLineKind; conflict: boolean; condition?: string; source?: string; sourceUrl?: string }
+/** `secondaryUrls` (karar 0045): kayıt ikinci kademedir (çapraz kontrollü hobi kaynakları); ekran kaynağın yanında kısa bilgi ve bu adresleri gösterir. */
+export interface BehaviorLine { kind: BehaviorLineKind; conflict: boolean; condition?: string; source?: string; sourceUrl?: string; secondaryUrls?: string[] }
 
 /** Ekrandaki sıra: önce risk anlatanlar, sonra güven verenler, en sonda "barışçıl". */
 const FLAG_ORDER: BehaviorFlag[] = ["eatsSmallFish", "conspecificAggression", "finNipper", "finNipTarget", "eatsShrimp", "eatsSnails", "notPiscivorous", "shrimpSafe", "peaceful"];
@@ -35,7 +36,8 @@ export function behaviorSummary(profile: SpeciesProfile, records: readonly Behav
     if (flag === "conspecificAggression" && !record.value) continue;
     const kind: BehaviorLineKind = flag === "conspecificAggression" ? (record.value === "all" ? "conspecificAll" : "conspecificMales")
       : flag === "eatsShrimp" && record.smallShrimpOnly ? "eatsShrimpSmall" : flag as BehaviorLineKind;
-    lines.push({ kind, conflict: record.confidence === "conflict", ...(record.condition ? { condition: record.condition } : {}), source: record.source, sourceUrl: record.sourceUrl });
+    lines.push({ kind, conflict: record.confidence === "conflict", ...(record.condition ? { condition: record.condition } : {}), source: record.source, sourceUrl: record.sourceUrl,
+      ...(record.tier === "secondary" ? { secondaryUrls: [record.sourceUrl, ...record.additionalSourceUrls] } : {}) });
   }
   return { lines, unknown: lines.length === 0 && !profile.communityCaution };
 }
@@ -61,12 +63,13 @@ export function sourceNameFromUrl(url: string): string {
 }
 
 /**
- * Kartın kaynak listesi: katalog kaydının kaynakları, davranış kayıtlarının ve bakım bilgisinin kaynak sayfaları; her adres bir kez, ilk geçtiği
+ * Kartın kaynak listesi: katalog kaydının kaynakları (0045'ten beri ikinci kademe değerlerin hobi kaynakları dahil), davranış kayıtlarının ve bakım
+ * bilgisinin kaynak sayfaları; her adres bir kez, ilk geçtiği
  * sırayla. `verifiedAt` en yeni doğrulama tarihidir (katalog, davranış ve bakım kayıtları arasında).
  */
 export function cardSources(profile: SpeciesProfile, records: readonly BehaviorRecord[] | undefined, care: SpeciesCare | undefined): { sources: { name: string; url: string }[]; verifiedAt?: string } {
   const urls = [
-    ...(profile.sourceUrl ? [profile.sourceUrl] : []), ...(profile.additionalSourceUrls ?? []),
+    ...(profile.sourceUrl ? [profile.sourceUrl] : []), ...(profile.additionalSourceUrls ?? []), ...Object.values(profile.secondarySources ?? {}).flat(),
     ...(records ?? []).flatMap((record) => [record.sourceUrl, ...(record.additionalSourceUrls ?? [])]),
     ...Object.values(care?.sources ?? {}),
   ].filter((url): url is string => typeof url === "string" && /^https:\/\//.test(url));

@@ -94,6 +94,11 @@ export const tr = {
     cancel: "Vazgeç",
     retry: "Yeniden dene",
     loading: "Yükleniyor…",
+    /**
+     * İkinci kademe (çapraz kontrollü) değerin yanındaki kısa bilgi (karar 0045): kabul edilen kaynaklar yazmıyor, değer birkaç bağımsız hobi
+     * kaynağının ortak değeri. Tür kartında ve bitki kartında; dokununca kaynak listesi açılır.
+     */
+    secondarySource: "Birkaç hobi kaynağının ortak değeri",
     aquariumNotFound: "Akvaryum bulunamadı.",
     all: "Tümü",
     close: "Kapat",

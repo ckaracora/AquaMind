@@ -249,10 +249,12 @@ describe("değer kuralı", () => {
     expect(fk.filter((item) => !item.co2)).toHaveLength(20);
     // Tropica sıcaklık ve pH vermez: Tropica'ya dayanan kayıtta yalnız Fishkeeper'daki türün formuysa (10 kayıt) ya da Practical Fishkeeping'de
     // kutusu varsa (4. paket, aşağıda) yazılır.
+    // İkinci kademe değerler (karar 0045) kabul edilen kaynaktan gelmediği için bu sayıma girmez; onları secondary-sources.test.ts denetler.
     const tropica = sourced.filter((item) => !fromFishkeeper(item));
-    expect(tropica.filter((item) => item.temperature || item.ph).map((item) => item.id)).toEqual(tropica.filter((item) => item.additionalSourceUrls?.some((url) => FISHKEEPER.test(url)) || hasPfk(item)).map((item) => item.id));
+    const primaryValue = (item: PlantProfile, field: "temperature" | "ph") => Boolean(item[field]) && !item.secondarySources?.[field];
+    expect(tropica.filter((item) => primaryValue(item, "temperature") || primaryValue(item, "ph")).map((item) => item.id)).toEqual(tropica.filter((item) => item.additionalSourceUrls?.some((url) => FISHKEEPER.test(url)) || hasPfk(item)).map((item) => item.id));
     expect(tropica.filter((item) => item.additionalSourceUrls?.some((url) => FISHKEEPER.test(url)))).toHaveLength(10);
-    expect(tropica.filter((item) => item.temperature)).toHaveLength(23);
+    expect(tropica.filter((item) => primaryValue(item, "temperature"))).toHaveLength(23);
     // Tropica sayfasının alanları boşsa değer yazılmaz ('Needle Leaf': yalnız açıklamadaki boy ve yerleşim).
     const needle = plantById("sagittaria-subulata-needle-leaf");
     expect(needle).toMatchObject({ heightCm: 30, placements: ["background"] });

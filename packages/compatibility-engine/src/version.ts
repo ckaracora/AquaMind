@@ -107,5 +107,13 @@
 // seviye değişmez. `spaceSevere` başlığı "akvaryumun uzunluğu ya da derinliği yetersiz" olur (`spaceTooSmall` "akvaryum çok küçük" kalır);
 // fırsatçı avcının küçük balık uyarısı sarı hükümle uyumlu, riski anlatan dile geçer. Hüküm sınırları değişmez. Yeni kesin tehlike koşulu,
 // uyarı kodları ve istisna geldiği için kural seti 1.16.0.
-export const ENGINE_VERSION = "1.19.0";
-export const RULESET_VERSION = "1.16.0";
+//
+// 1.20.0: ikinci kaynak kademesi (bkz. docs/DECISIONS/0045-ikinci-kademe-kaynaklar.md; ürün sahibinin kararı 2026-11-14 22:30). Kabul edilen
+// kaynakların yazmadığı canlı hacmi ya da tank uzunluğu, en az üç bağımsız hobi kaynağıyla çapraz kontrol edilerek doldurulabilir; profilde
+// `secondarySources` alanıyla işaretlenir. Alan uyarısı yalnız bu değerlerden doğuyorsa tek başına "uygun değil" demez: `spaceTooSmall` (yalnız
+// hacim ikinci kademedeyse) kesin tehlike değil, sarıdır; `spaceSevere` (eksik ölçülerin hepsi ikinci kademedeyse) sarıdır ve yüzme alanı ölçütünü
+// kırmızıya çekmez. Uyarılar canlı riski sınıfında kalır (genel en çok 74); metin `secondary: true` değişkeniyle değerin hobi kaynaklarına
+// dayandığını söyler. Bitki ve davranışta ikinci kademe değer normal kullanılır. İşaretsiz kayıtta sonuç değişmez (altın fikstür aynı). Uyarı
+// seviyesi ve kesin tehlike koşulu değiştiği için kural seti 1.17.0.
+export const ENGINE_VERSION = "1.20.0";
+export const RULESET_VERSION = "1.17.0";

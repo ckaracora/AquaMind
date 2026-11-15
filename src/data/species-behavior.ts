@@ -27,7 +27,21 @@ export type GroupBehaviorFlag = "incompatibleGroup";
 /** Gruplar. `clownfish`: kaynak (Fishkeeper) türü başka palyaço türleriyle karıştırmamayı yazıyor. */
 export type IncompatibleGroup = "clownfish";
 
-export interface BehaviorRecord {
+/** Kabul edilen davranış kaynakları (docs/DATA_SOURCES.md); ikinci kademe olmayan kaydın `source` alanı bunlardan biridir. */
+export type AcceptedBehaviorSource = "Seriously Fish" | "Fishkeeper" | "Practical Fishkeeping" | "OATA" | "Fishipedia" | "wirbellose.de" | "ScotCat";
+
+/**
+ * Davranış kaydı. İkinci kademe kayıt (docs/DECISIONS/0045-ikinci-kademe-kaynaklar.md): kabul edilen kaynaklar bu davranışı yazmıyor; en az üç bağımsız
+ * hobi kaynağı çapraz kontrol edildi, en az ikisi aynı riski açık bir cümleyle yazıyor ve hiçbiri çelişmiyor (çelişki varsa `confidence: "conflict"`).
+ * `tier: "secondary"` taşır; `source` ilk hobi kaynağının adı, `sourceUrl` ve `additionalSourceUrls` üç kaynağın adresleri, `evidence` alıntılar.
+ * Motor bu kaydı normal kullanır; tür kartı kaynağın yanında "Birkaç hobi kaynağının ortak değeri" yazar.
+ */
+export type BehaviorRecord = BehaviorRecordFields & (
+  | { tier?: undefined; source: AcceptedBehaviorSource; additionalSourceUrls?: string[] }
+  | { tier: "secondary"; source: string; additionalSourceUrls: string[] }
+);
+
+interface BehaviorRecordFields {
   flag: BehaviorFlag | GroupBehaviorFlag;
   /** Yalnızca conspecificAggression için: erkekler kavga eder ya da tür tek tutulmalıdır. */
   value?: "males" | "all";
@@ -41,9 +55,7 @@ export interface BehaviorRecord {
   confidence: "explicit" | "conflict";
   condition?: string;
   evidence: string;
-  source: "Seriously Fish" | "Fishkeeper" | "Practical Fishkeeping" | "OATA" | "Fishipedia" | "wirbellose.de" | "ScotCat";
   sourceUrl: string;
-  additionalSourceUrls?: string[];
   /** Yalnızca notPiscivorous: kaynağın açıkça verdiği en büyük av boyu (cm); bu boy ve altındaki balıklar yine avlanabilir. Kaynak sayı vermiyorsa (ör. "birkaç milimetre") alan yoktur. */
   maxPreyCm?: number;
   /**

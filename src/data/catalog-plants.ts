@@ -68,7 +68,16 @@ export interface PlantProfile {
   /** Bitkinin satıldığını gösteren kabul edilen Türk mağazası ürün sayfaları. */
   shopUrls: string[];
   verifiedAt: string;
+  /**
+   * İkinci kademe (çapraz kontrollü) değerler (docs/DECISIONS/0045-ikinci-kademe-kaynaklar.md): kabul edilen kaynakların yazmadığı sıcaklık ya da pH,
+   * en az iki bağımsız hobi kaynağının ortak aralığıyla doldurulduysa alanın adı ve o kaynakların adresleri. Adresler `additionalSourceUrls`'e
+   * yazılmaz; kanıt docs/CATALOG_LOG.md'dedir. Bitki uyarıları bu değerleri normal kullanır; ekranda değerin yanında hobi kaynağı notu çıkar.
+   */
+  secondarySources?: Partial<Record<SecondaryPlantField, string[]>>;
 }
+
+/** İkinci kademeden gelebilen bitki alanları. */
+export type SecondaryPlantField = "temperature" | "ph";
 
 const sourcedPlants: PlantProfile[] = [
   { id:"bolbitis-heudelotii", scientificName:"Bolbitis heudelotii", commonNameEn:"African Water Fern", aliases:["Bolbitis heudelotii 'Baby Leaf'"], light:["medium","medium"], co2:"medium", growth:["slow","slow"], heightCm:40, temperature:[22,28], ph:[5,7], placements:["onRoot","onRock"], sourceUrl:"https://www.fishkeeper.co.uk/fish/plant/aquarium-plants/bolbitis-heudelotii-", additionalSourceUrls:["https://tropica.com/en/plants/plantdetails/Bolbitisheudelotii(006)/4406"], shopUrls:["https://aquarubi.com/bolbitis-heudelotii-saksi","https://aquarubi.com/bolbitis-heudelotii-baby-leaf","https://aquarubi.com/tropica-bolbitis-heudelotii-kutuk","https://aquarubi.com/stoffels-bolbitis-heudelotii","https://aquarubi.com/tropica-bolbitis-heudelotii-saksi"], verifiedAt:"2026-11-09" },

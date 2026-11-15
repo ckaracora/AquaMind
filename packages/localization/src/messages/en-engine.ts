@@ -31,6 +31,9 @@ const spaceReference = (p: EngineTextParams, f: EngineTextFormat) =>
   flag(p, "hasLength")
     ? `For the recorded number, a minimum of ${f.volume(num(p, "volume"))} and a length of ${f.length(num(p, "length"))} were used as the reference.`
     : `For the recorded number, a minimum of ${f.volume(num(p, "volume"))} was used as the reference; the source publishes no tank length.`;
+/** Engine 1.20.0 (decision 0045): note for a space warning based on second-tier (cross-checked hobby source) values. */
+const secondarySpaceNote = (p: EngineTextParams) =>
+  flag(p, "secondary") ? ` The sources we accept don't publish a volume or length for this species; this is the shared value from several hobby sources, so this warning makes the result "Caution" at most.` : "";
 const fixed = (text: string): Text => () => text;
 const deviceKind = (category: string) => ({ filter: "filter", heater: "heater", air_pump: "air pump" } as Record<string, string>)[category] ?? "device";
 const deviceCalculation = (category: string) => (category === "heater" ? "heater" : "filtration");
@@ -399,22 +402,22 @@ export const enEngine: EngineMessages = {
     },
     spaceLimited: {
       title: (p) => `${str(p, "name")}: space is borderline`,
-      message: spaceReference,
+      message: (p, f) => `${spaceReference(p, f)}${secondarySpaceNote(p)}`,
     },
     spaceNarrow: {
       title: (p) => `${str(p, "name")}: aquarium is narrow for this species`,
       message: (p, f) =>
-        `${spaceReference(p, f)} The aquarium's width (${f.length(num(p, "width"))}) is less than twice the catalog's adult size of ${f.length(num(p, "size"))}. AquaMind adapts this recommendation from the size rule of the Swiss Animal Welfare Ordinance (width 2× body length); the ordinance uses body length without the tail fin, while AquaMind uses total length for most species. An aquarium at least ${f.length(num(p, "minWidth"))} wide is more suitable.`,
+        `${spaceReference(p, f)} The aquarium's width (${f.length(num(p, "width"))}) is less than twice the catalog's adult size of ${f.length(num(p, "size"))}. AquaMind adapts this recommendation from the size rule of the Swiss Animal Welfare Ordinance (width 2× body length); the ordinance uses body length without the tail fin, while AquaMind uses total length for most species. An aquarium at least ${f.length(num(p, "minWidth"))} wide is more suitable.${secondarySpaceNote(p)}`,
     },
     spaceTooSmall: {
       title: (p) => `${str(p, "name")}: aquarium too small`,
       message: (p, f) =>
-        `Sources say ${str(p, "name")} needs at least ${f.volume(num(p, "volume"))} for the ${f.number(num(p, "count"))} recorded ${plural(num(p, "count"), "animal", "animals")}; the aquarium's net volume is ${f.volume(num(p, "aquariumVolume"))}, less than half of that.${flag(p, "lengthShort") ? ` Sources also call for a length of at least ${f.length(num(p, "length"))}; the aquarium is ${f.length(num(p, "tankLength"))} long.` : ""} This species shouldn't be kept in this aquarium.`,
+        `${flag(p, "secondary") ? "Several hobby sources say" : "Sources say"} ${str(p, "name")} needs at least ${f.volume(num(p, "volume"))} for the ${f.number(num(p, "count"))} recorded ${plural(num(p, "count"), "animal", "animals")}; the aquarium's net volume is ${f.volume(num(p, "aquariumVolume"))}, less than half of that.${flag(p, "lengthShort") ? ` ${flag(p, "lengthSecondary") ? "Several hobby sources" : "Sources"} also call for a length of at least ${f.length(num(p, "length"))}; the aquarium is ${f.length(num(p, "tankLength"))} long.` : ""}${flag(p, "secondary") ? ` This species needs a bigger aquarium.${secondarySpaceNote(p)}` : " This species shouldn't be kept in this aquarium."}`,
     },
     spaceSevere: {
       title: (p) => `${str(p, "name")}: aquarium too short or too shallow`,
       message: (p, f) =>
-        `${spaceReference(p, f)} The aquarium is also below the AquaMind limit adapted from the length (3×) and water depth (1× body length) limits in the size rule of the Swiss Animal Welfare Ordinance. The ordinance uses body length without the tail fin; AquaMind is stricter and uses the catalog's adult size of ${f.length(num(p, "size"))} (total length for most species): length at least ${f.length(num(p, "minLength"))}, water depth at least ${f.length(num(p, "minDepth"))}.`,
+        `${spaceReference(p, f)} The aquarium is also below the AquaMind limit adapted from the length (3×) and water depth (1× body length) limits in the size rule of the Swiss Animal Welfare Ordinance. The ordinance uses body length without the tail fin; AquaMind is stricter and uses the catalog's adult size of ${f.length(num(p, "size"))} (total length for most species): length at least ${f.length(num(p, "minLength"))}, water depth at least ${f.length(num(p, "minDepth"))}.${secondarySpaceNote(p)}`,
     },
   },
   unevaluatedTitle: "Not assessed",

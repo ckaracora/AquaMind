@@ -32,7 +32,8 @@ describe("davranış verisi", () => {
       expect(["explicit", "conflict"]).toContain(record.confidence);
       const url = new URL(record.sourceUrl);
       expect(url.protocol, `${id}: ${record.sourceUrl}`).toBe("https:");
-      expect(hosts[url.hostname.replace(/^www\./, "")], `${id}: ${record.sourceUrl}`).toBe(record.source);
+      // İkinci kademe kayıt (karar 0045) hobi kaynaklarına dayanır; kaynak kuralını secondary-sources.test.ts denetler.
+      if (record.tier !== "secondary") expect(hosts[url.hostname.replace(/^www\./, "")], `${id}: ${record.sourceUrl}`).toBe(record.source);
       for (const extra of record.additionalSourceUrls ?? []) expect(new URL(extra).protocol).toBe("https:");
       expect(record.verifiedAt).toMatch(/^\d{4}-\d{2}-\d{2}$/);
       expect(record.evidence.trim().length).toBeGreaterThan(0);

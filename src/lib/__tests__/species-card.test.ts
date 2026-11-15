@@ -11,7 +11,8 @@ import { tr } from "../../../packages/localization/src/messages/tr";
 // Tür kartı (veri sprinti F, 2026-11-14): katalog değerleri, davranış özeti, bakım bilgisi ve kaynaklar. Olmayan alan gösterilmez.
 
 const profile = (overrides: Partial<SpeciesProfile> = {}): SpeciesProfile => ({ id: "test-fish", commonName: "Deneme", scientificName: "Testus testus", category: "fish", adultSizeCm: 5, minVolumeL: 60, minGroup: 6, temperature: [22, 26], ph: [6, 7.5], wasteFactor: 1, ...overrides });
-const record = (flag: BehaviorRecord["flag"], overrides: Partial<BehaviorRecord> = {}): BehaviorRecord => ({ flag, confidence: "explicit", evidence: "kanıt", source: "Seriously Fish", sourceUrl: "https://www.seriouslyfish.com/species/test/", verifiedAt: "2026-11-14", ...overrides });
+// Kayıt tipi 0045'ten beri iki biçimlidir (kabul edilen kaynak ya da ikinci kademe); sınama kaydı birleştirilip tipe çevrilir.
+const record = (flag: BehaviorRecord["flag"], overrides: Partial<BehaviorRecord> = {}): BehaviorRecord => ({ flag, confidence: "explicit", evidence: "kanıt", source: "Seriously Fish", sourceUrl: "https://www.seriouslyfish.com/species/test/", verifiedAt: "2026-11-14", ...overrides }) as BehaviorRecord;
 
 describe("davranış özeti", () => {
   it("'barışçıl' kaydı 'Kaynağa göre barışçıl' satırıdır; kayıt yoksa 'Kaynaklar uyumunu yazmıyor'", () => {

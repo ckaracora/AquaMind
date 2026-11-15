@@ -366,3 +366,31 @@ describe("dile göre adlar (veri aşaması, karar 0036)", () => {
     expect(turkish).not.toContain("Rigid Hornwort");
   });
 });
+
+// İkinci kademe (karar 0045): kabul edilen kaynakların yazmadığı sıcaklık ya da pH birkaç hobi kaynağının ortak değeriyle doldurulduysa değerin
+// altında kısa bilgi ve açılır kaynak listesi; kaynak listesinde de hobi kaynakları. Sahte kayıtla (katalog verisi değil).
+describe("ikinci kademe bitki değerleri (karar 0045)", () => {
+  const hobby = ["https://hobby-one.example/plant", "https://www.hobby-two.example/plant"];
+  const secondary = { ...item("hygrophila-corymbosa-compact"), temperature: [20, 26] as [number, number], secondarySources: { temperature: hobby } };
+  it("üç dilde değerin yanında 'Birkaç hobi kaynağının ortak değeri'; yalnız işaretli alanda", async () => {
+    const { loadLocaleBundle } = await import("@aquamind/localization");
+    await loadLocaleBundle("en");
+    await loadLocaleBundle("es");
+    const facts = text(renderToStaticMarkup(createElement(PlantFacts, { item: secondary })));
+    expect(facts).toBe("Işık Düşük CO₂ Düşük Sıcaklık 20–26 °C Birkaç hobi kaynağının ortak değeri hobby-one.example hobby-two.example pH Kaynak yayımlamıyor Boy 15 cm'ye kadar Büyüme Orta");
+    for (const [locale, label] of [["en", "Shared value from several hobby sources"], ["es", "Valor común de varias fuentes de aficionados"]] as const) {
+      store.locale = locale;
+      try { expect(text(renderToStaticMarkup(createElement(PlantFacts, { item: secondary })))).toContain(label); } finally { store.locale = "tr"; }
+    }
+    expect(text(renderToStaticMarkup(createElement(PlantFacts, { item: item("hygrophila-corymbosa-compact") })))).not.toContain("hobi");
+  });
+  it("değer yoksa işaret gösterilmez; kaynak listesinde hobi kaynakları var; telefon genişliğinde taşmaz (kırılan bağlantı, daralan hücre)", () => {
+    const empty = { ...item("hygrophila-corymbosa-compact"), secondarySources: { ph: hobby } };
+    expect(text(renderToStaticMarkup(createElement(PlantFacts, { item: empty })))).not.toContain("hobi");
+    expect(text(renderToStaticMarkup(createElement(PlantSources, { item: secondary })))).toContain("hobby-one.example · www.hobby-two.example");
+    const html = render(createElement(PlantFacts, { item: secondary }));
+    expect(html).toContain("<details");
+    expect(html).toMatch(/class="min-w-0 rounded-xl/);
+    expect(html).toMatch(/class="break-all /);
+  });
+});

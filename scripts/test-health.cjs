@@ -1506,9 +1506,30 @@ for (const [id, name] of [["texas-cichlid", "Texas ciklet"], ["blue-acara", "Mav
   assert(!warning.message.includes("bulunamadı"), "Çelişkili kayıt 'kaynaklarda bulunamadı' metnine düşmemeli");
 }
 
+// Motor 1.20.0 (karar 0045): katalog kaydının hacmi ikinci kademeden (çapraz kontrollü hobi kaynakları) geliyorsa işaret uygulamanın uyarlayıcısından
+// (health-analysis-core) motora geçer; "gerekenin yarısından küçük" sarıdır, hüküm en çok "dikkat". Aynı kayıt işaretsizken "uygun değil" kalır.
+// Sahte işaret: katalog verisi değil.
+{
+  const { createHealthAnalyzer } = require("../src/lib/health-analysis-core.ts");
+  const neon = speciesById("neon-tetra");
+  const hobby = ["https://hobby-a.example/neon", "https://hobby-b.example/neon", "https://hobby-c.example/neon"];
+  const lookupWith = (profile) => ({ speciesForLivestock: () => profile, behaviorFor: () => undefined, profileForEquipment: () => undefined });
+  const tiny = aquarium({ lengthCm: 60, netVolumeLiters: 20 });
+  const school = [animal("neon-tetra", "Neon tetra", 8)];
+  const primary = createHealthAnalyzer(lookupWith(neon))(tiny, school, []);
+  assert.equal(primary.warnings.find((item) => item.code === "spaceTooSmall")?.level, "danger", "Kabul edilen kaynağın hacmiyle gerekenin yarısından küçük akvaryum kırmızı kalmalı");
+  assert.equal(primary.status, "danger", "Kabul edilen kaynağın hacmiyle hüküm 'uygun değil' kalmalı");
+  const secondary = createHealthAnalyzer(lookupWith({ ...neon, secondarySources: { minVolumeL: hobby } }))(tiny, school, []);
+  const warning = secondary.warnings.find((item) => item.code === "spaceTooSmall");
+  assert.equal(warning?.level, "warning", "İkinci kademe hacimle 'gerekenin yarısından küçük' sarı olmalı");
+  assert.equal(warning.params.secondary, true, "İkinci kademe hacmin işareti uyarlayıcıdan motora geçmeli");
+  assert(warning.message.startsWith("Birkaç hobi kaynağına göre Neon tetra"), "Metin değerin hobi kaynaklarına dayandığını söylemeli");
+  assert(secondary.score <= 74 && secondary.score >= 50, "İkinci kademe hacimle hüküm en çok 'dikkat' olmalı");
+}
+
 // 1.14.0 kontrolü: ölçüm ve sınır aynı hassasiyetle yazılmalı (TR/EN/ES).
 require("../packages/compatibility-engine/test/warning-format-checks.ts").assertWarningFormatting();
-console.log("Sağlık analizi: 119 senaryo başarıyla doğrulandı.");
+console.log("Sağlık analizi: 120 senaryo başarıyla doğrulandı.");
 console.log("Uyarı biçimlemesi: 3 dilde 18 sınır kontrolü başarıyla doğrulandı.");
 
 const review119 = require("../src/lib/__tests__/engine-identity-checks.ts");

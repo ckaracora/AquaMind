@@ -225,6 +225,19 @@ Beslenme, cinsiyet ayrımı, üreme, ömür, zorluk, yüzme bölgesi ve su sertl
 - `YYYY-MM-DD` biçiminde doğrulama tarihi (`verifiedAt`)
 - Yalnızca kaynakta açıkça yayımlanan teknik/bakım değerleri
 
+## İkinci kademe (çapraz kontrollü) kaynaklar
+
+Ürün sahibi kararı 2026-11-14 22:30 (`docs/DECISIONS/0045-ikinci-kademe-kaynaklar.md`): kabul edilen kaynaklarda bilgi yoksa boşluk birkaç bağımsız kaynakla çapraz kontrol edilerek doldurulur ve ekranda öyle olduğu açıkça yazılır. Uydurma yine yoktur: her değer gerçek, açılmış bir sayfadan gelir.
+
+- **Ne zaman:** yalnız boş alanda ya da kabul edilen kaynağı bağlı olmayan değerde. Kabul edilen kaynağın yazdığı değer ikinci kademeyle değiştirilmez. Alanlar: bitkide sıcaklık ve pH; canlıda en az hacim (`minVolumeL`) ve en az tank uzunluğu (`minTankLengthCm`); davranış kayıtları. Birey başına ek hacim, canlının sıcaklığı ve pH'ı, boyu, grubu bu yolla yazılmaz.
+- **Kabul ölçütü:** bitki sıcaklığı/pH'ı en az **2**, canlıda hacim, tank uzunluğu ve davranış en az **3** bağımsız kaynak. Aynı cümleyi ya da paragrafı taşıyan siteler tek kaynaktır (kopya); aynı şirketin siteleri (mağaza zinciri, yayın grubu) tek kaynaktır.
+- **Değer:** sıcaklık ve pH'ta kaynakların ortak aralığı; hacim ve uzunlukta kaynakların büyüğü (yukarıdaki genel kural). Ortak aralık boşsa ya da kaynaklar büyük ölçüde çelişiyorsa (ör. hacimde biri ötekinin 2 katından fazla) değer yoktur, boşluk kalır.
+- **Davranış:** üç kaynaktan en az ikisi aynı riski açık bir cümleyle yazmalı ("fin nipper", "eats shrimp", "peaceful community fish" gibi); hiçbiri çelişmemeli. Çelişki varsa kayıt `confidence: "conflict"` olur.
+- **Kullanılmaz:** satıcının kalıp değeri (çok farklı cinslere aynı aralığı yazan mağaza; ör. AquaFleur'ün 22–28 °C'si) ve ürün sayfasındaki türe özgü olmayan genel metin; yapay zekâyla üretilmiş görünen siteler (kaynak, yazar, tarih yok; aynı kalıp cümleler; bariz yanlışlar) ve içerik çiftlikleri; tek başına Wikipedia (dayandığı kaynağa bakılır, o kaynak listedeyse o sayılır); rakip uygulamaların veri sayfaları; doğal ortam ölçümü ve yetiştirme/üretim koşulu. Kabul edilen kaynaklar (yukarıdaki listeler) ikinci kademe sayılmaz: onlar değeri yazıyorsa değer zaten birinci kademedir.
+- **Kanıt:** her değer için kaynak adı, adres, sayfadan kısa alıntı (değerin yazdığı cümle) ve açılma tarihi `docs/CATALOG_LOG.md`'de durur. Katalogda kaynak adresleri bağlanır: canlı ve bitki kaydında `secondarySources` (alan adı → adresler; `additionalSourceUrls`'e yazılmaz), davranış kaydında `tier: "secondary"` ile `sourceUrl` ve `additionalSourceUrls`. Biçimi `src/lib/__tests__/secondary-sources.test.ts` denetler.
+- **Ekranda:** ikinci kademe değerin yanında kısa bilgi: "Birkaç hobi kaynağının ortak değeri" (en "Shared value from several hobby sources", es "Valor común de varias fuentes de aficionados"); dokununca kaynak listesi açılır. Tür kartında hacim, uzunluk ve davranış; bitki kartında sıcaklık ve pH.
+- **Hükme etkisi:** bitki ve davranış değeri normal kullanılır. Canlının hacmi ve tank uzunluğu tek başına "uygun değil" dedirtmez: alan uyarısı en fazla "dikkat" olur ve metni değerin hobi kaynaklarına dayandığını söyler (motor 1.20.0, `docs/COMPATIBILITY.md`).
+
 ## Çelişki ve eksiklik
 
 - İki kaynak çelişiyorsa fark kullanıcıdan saklanmaz.

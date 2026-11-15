@@ -19,7 +19,16 @@ export interface SpeciesProfile {
   sourceUrl?: string;
   additionalSourceUrls?: string[];
   verifiedAt?: string;
+  /**
+   * İkinci kademe (çapraz kontrollü) değerler (motor 1.20.0, docs/DECISIONS/0045-ikinci-kademe-kaynaklar.md): kabul edilen kaynakların yazmadığı
+   * hacim ya da tank uzunluğu, en az üç bağımsız hobi kaynağının ortak değeriyle doldurulduysa alanın adı ve o kaynakların adresleri. Adresler
+   * `additionalSourceUrls`'e yazılmaz; kanıt (alıntı, açılma tarihi) docs/CATALOG_LOG.md'dedir. Alan uyarısı bu değerden doğuyorsa en çok "dikkat" olur.
+   */
+  secondarySources?: Partial<Record<SecondarySpeciesField, string[]>>;
 }
+
+/** İkinci kademeden gelebilen canlı alanları (motorun `SecondarySpaceField` türüyle aynı; birey başına ek hacim, sıcaklık ve pH girmez). */
+export type SecondarySpeciesField = "minVolumeL" | "minTankLengthCm";
 
 const rawSpeciesCatalog: SpeciesProfile[] = [
   { id:"neon-tetra", commonName:"Neon tetra", scientificName:"Paracheirodon innesi", aliases:["Neon Tetra","Hyphessobrycon innesi","Cheirodon innesi"], category:"fish", group:"tetra", waterTypes:["freshwater"], adultSizeCm:3, minVolumeL:54, minTankLengthCm:60, minGroup:8, temperature:[21,25], ph:[4,7.5], wasteFactor:.7, communityCaution:"Barışçıl bir sürü balığıdır; benzer boydaki sakin türlerle tutulmalıdır. En az 8–10 bireylik karışık cinsiyetli grup güven ve doğal davranış sağlar; iri, avcı veya çok hareketli tank arkadaşlarıyla eşleştirilmemelidir.", husbandryCaution:"Seriously Fish 3 cm standart boy ve 60 × 30 cm taban/yaklaşık 54 litre; FishBase 2,5 cm standart boy yayımlar. Sağlık analizinde daha koruyucu 3 cm kullanılır. Loş ışık, ince kum, kök/dal, yaprak örtüsü ve kararlı temiz su uygundur. Seri üretim stoklarında deformasyon ve sağlık sorunları görülebildiğinden balıklar satın almadan önce gözlenmeli; sürüden ayrılma veya beyaz leke gösteren bireyler Neon Tetra Hastalığı ya da benzer belirtiler açısından karantinaya alınmalıdır. Kaynak genel bakım için tek bir akıntı sınıfı yayımlamadığından akıntı değeri tahmin edilmez.", sourceUrl:"https://www.seriouslyfish.com/species/paracheirodon-innesi/", additionalSourceUrls:["https://www.fishbase.se/summary/Paracheirodon-innesi.html"], verifiedAt:"2026-11-14" },
