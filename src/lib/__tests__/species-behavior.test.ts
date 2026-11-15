@@ -82,10 +82,11 @@ describe("davranış verisi", () => {
     const paired = entries.filter(({ record }) => record.pairAccepted !== undefined);
     for (const { id, record } of paired) expect(record, id).toMatchObject({ flag: "conspecificAggression", value: "all", confidence: "explicit", pairAccepted: true });
     // İkinci tur (2026-11-14): kalan "tek tutulmalı" kayıtlarından kaynağı çifti açıkça kabul eden 17 kayıt daha (toplam 23).
+    // Tur 3 A (2026-11-14): yeni "tek tutulmalı" kayıtlarından kaynağı (Fishkeeper) tek ya da uyumlu çifti yazan üçü (toplam 26).
     expect(paired.map(({ id }) => id).sort()).toEqual([
-      "andrao-snakehead", "anthrax-flyer-pleco-l235", "apisto-panduro", "assamese-snakehead", "bicolour-blenny", "blue-acara", "chinese-snakehead",
-      "green-terror", "jack-dempsey", "jewel-cichlid", "kribensis", "leleupi-cichlid", "marliers-julie", "masked-julie", "midas-cichlid",
-      "ocellaris-peacock-bass", "pearl-cichlid", "rainbow-snakehead", "regani-julie", "sajica-cichlid", "salvini-cichlid", "silver-maskaheros", "texas-cichlid",
+      "andrao-snakehead", "anthrax-flyer-pleco-l235", "apisto-panduro", "assamese-snakehead", "bicolour-blenny", "blackbelt-cichlid", "blue-acara", "chinese-snakehead",
+      "green-terror", "jack-dempsey", "jaguar-cichlid", "jewel-cichlid", "kribensis", "leleupi-cichlid", "marliers-julie", "masked-julie", "midas-cichlid",
+      "ocellaris-peacock-bass", "pearl-cichlid", "piquiti-peacock-bass", "rainbow-snakehead", "regani-julie", "sajica-cichlid", "salvini-cichlid", "silver-maskaheros", "texas-cichlid",
     ]);
     for (const { id, record } of paired) expect(record.verifiedAt, id).toBe("2026-11-14");
   });
@@ -300,5 +301,96 @@ describe("E2 davranış kayıtları (gerçek katalog)", () => {
   it("Meksika cüce kereviti: kaynaklar çelişiyor, uyarı üretmez", () => {
     expect(speciesBehavior["mexican-dwarf-crayfish"]?.find((record) => record.flag === "conspecificAggression")).toMatchObject({ confidence: "conflict" });
     expect(codes(analyzeAquarium(tank, [animal("mexican-dwarf-crayfish", 4)], [], water))).not.toContain("conspecificAll");
+  });
+});
+
+// Tur 3 A (2026-11-14, docs/CATALOG_LOG.md): bağımsız araştırmacının "ana kaynak" notlu satırları; kaynak sayfası yeniden açılarak doğrulanan kayıtlar.
+describe("Tur 3 A davranış kayıtları (gerçek katalog)", () => {
+  const tank: Aquarium = { id: "t", name: "T", type: "freshwater", lengthCm: 200, widthCm: 60, heightCm: 60, netVolumeLiters: 650, setupDate: "2026-01-01" };
+  const animal = (id: string, quantity: number): Livestock => {
+    const profile = speciesById(id)!;
+    return { id: `${id}-${quantity}`, aquariumId: "t", catalogId: id, commonName: profile.commonName, scientificName: profile.scientificName, category: profile.category, quantity, addedAt: "2026-01-01" };
+  };
+  const water = { id: "w", aquariumId: "t", measuredAt: "2026-11-14", temperature: 26, ph: 7, ammonia: 0, nitrite: 0, nitrate: 10 };
+  const codes = (result: ReturnType<typeof analyzeAquarium>) => result.warnings.map((warning) => warning.code);
+  const behaviorUnknown = (result: ReturnType<typeof analyzeAquarium>) => (result.unevaluated ?? []).filter((item) => item.code === "behaviorUnknown").map((item) => item.params?.name);
+
+  it("kaynağı tek tutmayı yazan L239 ve aksolotl: iki birey 'tek tutulmalı'; aksolotlun notu dış solungaçları anar", () => {
+    expect(codes(analyzeAquarium(tank, [animal("blue-panaque-l239", 2)], [], water))).toContain("conspecificAll");
+    expect(codes(analyzeAquarium(tank, [animal("blue-panaque-l239", 1)], [], water))).not.toContain("conspecificAll");
+    expect(speciesBehavior.axolotl?.find((record) => record.flag === "conspecificAggression")).toMatchObject({ value: "all", source: "Practical Fishkeeping" });
+    expect(speciesBehavior.axolotl?.find((record) => record.flag === "conspecificAggression")?.condition).toMatch(/dış solungaç/);
+  });
+
+  it("jaguar ciklet: kaynak tek ya da yerleşik çifti kabul ediyor; iki birey sarı, üç birey kırmızı", () => {
+    expect(codes(analyzeAquarium(tank, [animal("jaguar-cichlid", 2)], [], water))).toContain("conspecificPair");
+    expect(codes(analyzeAquarium(tank, [animal("jaguar-cichlid", 3)], [], water))).toContain("conspecificAll");
+  });
+
+  it("ördek gagalı yayın ve monoculus: kaynaklar çelişiyor, aynı tür uyarısı yok", () => {
+    for (const id of ["duckbill-catfish-sorubim-lima", "monoculus-peacock-bass"]) {
+      expect(speciesBehavior[id]?.find((record) => record.flag === "conspecificAggression"), id).toMatchObject({ confidence: "conflict" });
+      expect(codes(analyzeAquarium(tank, [animal(id, 2)], [], water)), id).not.toContain("conspecificAll");
+    }
+  });
+
+  it("barışçıl kayıtlı türler 'davranış bilgisi yok' maddesine girmez", () => {
+    const result = analyzeAquarium(tank, [animal("pearl-danio", 8), animal("black-ruby-barb", 8), animal("panda-garra", 4)], [], water);
+    for (const id of ["pearl-danio", "black-ruby-barb", "panda-garra"]) expect(behaviorUnknown(result), id).not.toContain(speciesById(id)!.commonName);
+  });
+
+  it("kalıp cümle ve başka türün sayfası kabul edilen kaynaklı kayıt açmadı", () => {
+    // Seriously Fish'in iki kardeş türde birebir aynı paragrafı (galaksi, zümrüt cüce rasbora), Tropheus sayfalarının ortak metni,
+    // Fishkeeper'ın Tatia/Microglanis ve L190/L191 kalıbı, kimliği belirsiz L240. İkinci kademe kayıt (karar 0045) ayrı kuralla gelebilir.
+    for (const id of ["galaxy-rasbora", "emerald-dwarf-rasbora", "tropheus-duboisi", "tropheus-moorii", "ninja-woodcat", "south-american-bumblebee-catfish", "royal-pleco-l190", "brokenline-royal-pleco-l191", "vampire-pleco-l240"]) {
+      expect((speciesBehavior[id] ?? []).filter((record) => record.tier !== "secondary"), id).toEqual([]);
+    }
+  });
+});
+
+// Tur 3 B (2026-11-15, docs/CATALOG_LOG.md, karar 0045): kabul edilen kaynakların yazmadığı davranış, en az üç bağımsız hobi kaynağıyla (ikinci kademe).
+describe("Tur 3 B ikinci kademe davranış kayıtları (gerçek katalog)", () => {
+  const tank: Aquarium = { id: "t", name: "T", type: "freshwater", lengthCm: 200, widthCm: 60, heightCm: 60, netVolumeLiters: 650, setupDate: "2026-01-01" };
+  const animal = (id: string, quantity: number): Livestock => {
+    const profile = speciesById(id)!;
+    return { id: `${id}-${quantity}`, aquariumId: "t", catalogId: id, commonName: profile.commonName, scientificName: profile.scientificName, category: profile.category, quantity, addedAt: "2026-01-01" };
+  };
+  const water = { id: "w", aquariumId: "t", measuredAt: "2026-11-15", temperature: 24, ph: 7, ammonia: 0, nitrite: 0, nitrate: 10 };
+  const codes = (result: ReturnType<typeof analyzeAquarium>) => result.warnings.map((warning) => warning.code);
+  const unknown = (result: ReturnType<typeof analyzeAquarium>) => (result.unevaluated ?? []).filter((item) => item.code === "behaviorUnknown");
+  const written = ["chocolate-gourami", "emerald-dwarf-rasbora", "galaxy-rasbora", "hillstream-loach", "rope-fish", "royal-farlowella"];
+
+  it("altı türün kaydı ikinci kademedir; bu türlerde kabul edilen kaynaklı davranış kaydı yok", () => {
+    for (const id of written) {
+      const records = speciesBehavior[id] ?? [];
+      expect(records.length, id).toBe(1);
+      expect(records[0], id).toMatchObject({ tier: "secondary", verifiedAt: "2026-11-15" });
+    }
+  });
+
+  it("dağ vatozu: erkekler kavga eder (sarı), not kalıcı hasarın nadir olduğunu söyler; tek birey uyarı almaz", () => {
+    const group = analyzeAquarium(tank, [animal("hillstream-loach", 4)], [], water);
+    expect(group.warnings.find((warning) => warning.code === "conspecificMales")).toMatchObject({ level: "warning" });
+    expect(speciesBehavior["hillstream-loach"]?.[0]?.condition).toBe("Alan çok dar değilse kalıcı hasar nadir.");
+    expect(codes(analyzeAquarium(tank, [animal("hillstream-loach", 1)], [], water))).not.toContain("conspecificMales");
+  });
+
+  it("galaksi rasbora: erkek saldırganlığında hobi kaynakları çelişiyor; uyarı yok, başka türlerle davranışı hâlâ bilinmiyor", () => {
+    const result = analyzeAquarium(tank, [animal("galaxy-rasbora", 20), animal("zebra-danio", 6)], [], water);
+    expect(speciesBehavior["galaxy-rasbora"]?.[0]).toMatchObject({ flag: "conspecificAggression", confidence: "conflict" });
+    expect(codes(result)).not.toContain("conspecificMales");
+    // Aynı tür saldırganlığı başka canlılarla uyumu söylemez (motor 1.18.0): tür "davranış bilgisi yok" maddesinde kalır.
+    expect(unknown(result).map((item) => item.params?.name)).toContain(speciesById("galaxy-rasbora")!.commonName);
+  });
+
+  it("barışçıl ikinci kademe kayıtlı türler 'davranış bilgisi yok' maddesine girmez", () => {
+    const result = analyzeAquarium(tank, [animal("chocolate-gourami", 6), animal("emerald-dwarf-rasbora", 20), animal("royal-farlowella", 1)], [], water);
+    for (const id of ["chocolate-gourami", "emerald-dwarf-rasbora", "royal-farlowella"]) expect(unknown(result).map((item) => item.params?.name), id).not.toContain(speciesById(id)!.commonName);
+  });
+
+  it("ölçüt tutmayan türlere kayıt açılmadı (satıcı, forum, açılamayan ya da http'si olmayan kaynak, kimlik belirsizliği)", () => {
+    for (const id of ["ramirezi", "flowerhorn", "cochus-blue-tetra", "senegal-bichir", "delhezi-bichir", "spotted-scat", "malaysian-trumpet-snail", "tiger-nerite-snail", "ghost-shrimp"]) {
+      expect(speciesBehavior[id], id).toBeUndefined();
+    }
   });
 });
