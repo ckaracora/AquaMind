@@ -82,11 +82,12 @@ const dennerleCurrentCo2Equipment: EquipmentProfile[] = [
     ["M400 Special Edition","Solenoid valfli, yeniden doldurulabilir CO₂ tüpüyle uyumlu"],
   ] as const).map(([model,detail])=>({
     id:`dennerle-carbo-power-${model.toLowerCase().replace(/[^a-z0-9]+/g,"-")}`,category:"co2" as const,brand:"Dennerle",model:`Carbo Power ${model}`,
-    specifications:`${detail} hassas CO₂ tam seti · 400 litreye kadar`,recommendedMaxL:400,
+    // 2026-11-15 tarih yenileme 2: Flex400 sayfası "CO2 technology set" ve tüplerin sete dahil olmadığını yazıyor ("neither included").
+    specifications:model.startsWith("Flex")?`${detail} hassas CO₂ teknik seti (tüp dahil değil) · 400 litreye kadar`:`${detail} hassas CO₂ tam seti · 400 litreye kadar`,recommendedMaxL:400,
     sourceUrl:`https://dennerle.com/en/products/carbo-power-${model.startsWith("E")?"e400":model.startsWith("Flex")?"flex400":"m400"}`,verifiedAt:"2026-08-27",
   })),
-  {id:"dennerle-carbo-night-flex400",category:"co2",brand:"Dennerle",model:"Carbo Night Flex400",specifications:"Entegre gece kapatma solenoidi bulunan, tek ve yeniden doldurulabilir tüplerle uyumlu CO₂ tam seti · 400 litreye kadar",recommendedMaxL:400,sourceUrl:"https://dennerle.com/en/products/carbo-night-flex400",verifiedAt:"2026-08-27"},
-  {id:"dennerle-carbo-start-flex200-special",category:"co2",brand:"Dennerle",model:"Carbo Start Flex200 Special Edition",specifications:"Solenoid valfli, tek ve yeniden doldurulabilir tüplerle uyumlu CO₂ tam seti · 200 litreye kadar",recommendedMaxL:200,sourceUrl:"https://dennerle.com/en/products/carbo-start-flex200",verifiedAt:"2026-08-27"},
+  {id:"dennerle-carbo-night-flex400",category:"co2",brand:"Dennerle",model:"Carbo Night Flex400",specifications:"Entegre gece kapatma solenoidi bulunan, tek ve yeniden doldurulabilir tüplerle uyumlu CO₂ teknik seti (tüp dahil değil) · 400 litreye kadar",recommendedMaxL:400,sourceUrl:"https://dennerle.com/en/products/carbo-night-flex400",verifiedAt:"2026-08-27"},
+  {id:"dennerle-carbo-start-flex200-special",category:"co2",brand:"Dennerle",model:"Carbo Start Flex200 Special Edition",specifications:"Solenoid valfli, tek ve yeniden doldurulabilir tüplerle uyumlu CO₂ teknik seti (tüp dahil değil) · 200 litreye kadar",recommendedMaxL:200,sourceUrl:"https://dennerle.com/en/products/carbo-start-flex200",verifiedAt:"2026-08-27"},
   {id:"dennerle-carbo-regulator-start",category:"co2",brand:"Dennerle",model:"Carbo Start Basınç Düşürücü",specifications:"İnce filtreli, aşırı basınç emniyetli ve otomatik basınç dengelemeli hassas basınç düşürücü",sourceUrl:"https://dennerle.com/en/products/druckminderer-start",verifiedAt:"2026-08-27"},
   {id:"dennerle-carbo-regulator-power",category:"co2",brand:"Dennerle",model:"Carbo Power Basınç Düşürücü",specifications:"Tüp ve çalışma basıncı manometreli, iğne valfli hassas basınç düşürücü",sourceUrl:"https://dennerle.com/en/products/druckminderer-power",verifiedAt:"2026-08-27"},
   {id:"dennerle-carbo-regulator-night",category:"co2",brand:"Dennerle",model:"CO₂ Basınç Düşürücü Night",specifications:"Elektrik kesildiğinde kapanan entegre 9 V solenoid valfli basınç düşürücü",sourceUrl:"https://dennerle.com/en/products/druckminderer-night",verifiedAt:"2026-08-27"},
@@ -204,7 +205,7 @@ const ferplastCurrentEquipment: EquipmentProfile[] = [
     specifications:"Tatlı/deniz akvaryumu ve aquaterraryumlar için ayarlanabilir dalgıç santrifüj pompa",
     adjustableFlow:true,sourceUrl:model===600?"https://www.ferplast.com/products/pico-600-eu":model<600?"https://www.ferplast.com/products/pico-250-eu":"https://www.ferplast.com/products/pico-750-eu",verifiedAt:"2026-08-27",
   })),
-  {id:"ferplast-pico-600-115",category:"other",brand:"Ferplast",model:"PICO 600.115",specifications:"Tatlı/deniz akvaryumu ve aquaterraryumlar için ayarlanabilir 115 V dalgıç santrifüj pompa",adjustableFlow:true,sourceUrl:"https://www.ferplast.com/products/pico-600-115-eu",verifiedAt:"2026-08-27"},
+  {id:"ferplast-pico-600-115",category:"other",brand:"Ferplast",model:"PICO 600.115",specifications:"Tatlı/deniz akvaryumu ve aquaterraryumlar için ayarlanabilir dalgıç santrifüj pompa · 600 L/saat · 115 cm basma yüksekliği · 7 W",adjustableFlow:true,sourceUrl:"https://www.ferplast.com/products/pico-600-115-eu",verifiedAt:"2026-08-27"},
   ...([900,1200] as const).map(model=>({
     id:`ferplast-blupower-${model}`,category:"other" as const,brand:"Ferplast",model:`BLUPOWER ${model}`,
     specifications:"Tatlı ve deniz akvaryumları için ayarlanabilir dalgıç santrifüj pompa",
@@ -283,7 +284,7 @@ boyuFilters.push(
   {id:"boyu-ef-05",category:"filter",brand:"Boyu",model:"EF-05",specifications:"Mini dış filtre · 150 L/saat · 5,5 W",ratedFlowLph:150,powerW:5.5,recommendedMinL:30,recommendedMaxL:60,sourceUrl:"https://atakanpetshop.com/boyu-ef-05-mini-dis-filtre-5-5w-150l-h",verifiedAt},
   {id:"boyu-wf-200",category:"filter",brand:"Boyu",model:"WF-200",specifications:"Ayarlanabilir iç filtre · 370 L/saat · 5 W",ratedFlowLph:370,powerW:5,recommendedMaxL:74,adjustableFlow:true,sourceUrl:"https://atakanpetshop.com/boyu-wf-200-ic-filtre-5w-370lh",verifiedAt},
   {id:"boyu-wf-2035",category:"filter",brand:"Boyu",model:"WF-2035",specifications:"Skimmerli askı filtre · 300 L/saat · 4,6 W",ratedFlowLph:300,powerW:4.6,sourceUrl:"https://bettamarketim.com.tr/boyu-wf-2035-selale-filtre-4-6w-300l-s-su-ustu-skimmerli-filtre-emis-singerli-kartuslu-sistem-sessiz",verifiedAt},
-  {id:"boyu-wf-2045",category:"filter",brand:"Boyu",model:"WF-2045",specifications:"Askı filtre · 500 L/saat · 6,5 W",ratedFlowLph:500,powerW:6.5,recommendedMinL:50,recommendedMaxL:100,sourceUrl:"https://atakanpetshop.com/boyu-wf-2045-selale-filtre-65w-500ls-wf-2045",verifiedAt},
+  {id:"boyu-wf-2045",category:"filter",brand:"Boyu",model:"WF-2045",specifications:"Askı filtre · 6,5 W · debi mağaza sayfasında çelişkili (500 ve 300 L/saat)",powerW:6.5,recommendedMinL:50,recommendedMaxL:100,sourceUrl:"https://atakanpetshop.com/boyu-wf-2045-selale-filtre-65w-500ls-wf-2045",verifiedAt},
   {id:"boyu-wf-600",category:"filter",brand:"Boyu",model:"WF-600",specifications:"Ayarlanabilir iç filtre · 650 L/saat · 9,5 W",ratedFlowLph:650,powerW:9.5,adjustableFlow:true,sourceUrl:"https://atakanpetshop.com/boyu-wf-600-ic-filtre-95w-650ls-wf-600",verifiedAt},
   {id:"boyu-dgn-460a",category:"filter",brand:"Boyu",model:"DGN-460A",specifications:"DC ayarlanabilir dış filtre · 300–1610 L/saat · 30 W",ratedFlowLph:1610,powerW:30,adjustableFlow:true,sourceUrl:"https://atakanpetshop.com/boyu-dgn-460a-dis-filtre-30w-1610ls-dgn-460a",verifiedAt:"2026-11-09"},
   {id:"boyu-wf-400",category:"filter",brand:"Boyu",model:"WF-400",specifications:"İç filtre · 400 L/saat · 7 W",ratedFlowLph:400,powerW:7,sourceUrl:"https://atakanpetshop.com/boyu-wf-400-ic-filtre-7w-400lh",verifiedAt:"2026-10-30"},
@@ -626,10 +627,16 @@ const jenecaOfficialAdditional:EquipmentProfile[]=[
   {id:"jeneca-cda-300l",category:"filter",brand:"Jeneca",model:"CDA-300L",specifications:"Çok işlevli iç filtre · 370 L/saat · 5,5 W",ratedFlowLph:370,powerW:5.5,sourceUrl:"https://www.aleas.cn/product/700.html",verifiedAt:jenecaRecheckVerifiedAt},
   {id:"jeneca-cda-500l",category:"filter",brand:"Jeneca",model:"CDA-500L",specifications:"Çok işlevli iç filtre · 500 L/saat · 7 W",ratedFlowLph:500,powerW:7,sourceUrl:"https://www.aleas.cn/product/700.html",verifiedAt:jenecaRecheckVerifiedAt},
   {id:"jeneca-cda-1000l",category:"filter",brand:"Jeneca",model:"CDA-1000L",specifications:"Çok işlevli iç filtre · 1000 L/saat · 15 W",ratedFlowLph:1000,powerW:15,sourceUrl:"https://www.aleas.cn/product/700.html",verifiedAt:jenecaRecheckVerifiedAt},
-  ...["CDA-200","CDA-300","CDA-500","CDA-1000","CDA-1500","CDA-2500","PB-260A","PB-360A","PB-460A","PB-560A"].map(model=>({
+  // 2026-11-15 tarih yenileme 2 (docs/CATALOG_LOG.md): üreticinin model sayfalarının tablosu okundu (CDA 690.html, PB 734.html); önceki metin
+  // "üretici teknik tablosu yayımlanmamış" ve kaynak katalog sayfası /product/20/ idi. Değerler: [model, W, en çok L/saat, en çok m basma yüksekliği].
+  ...([["CDA-200",3.5,280,"0,48"],["CDA-300",5.5,370,"0,7"],["CDA-500",7,500,"0,9"],["CDA-1000",15,1000,"1,4"],["CDA-1500",23,1500,"1,8"],["CDA-2500",40,2500,"2,3"],
+    ["PB-260A",3.5,250,"0,45"],["PB-360A",8,500,"0,8"],["PB-460A",15,1000,"1"],["PB-560A",25,1800,"1,3"]] as const).map(([model,powerW,ratedFlowLph,headM])=>({
     id:`jeneca-${model.toLowerCase()}`,category:"other" as const,brand:"Jeneca",model,
-    specifications:model.startsWith("PB-")?"İç sirkülasyon pompası · üretici teknik tablosu yayımlanmamış":"Dalgıç/devirdaim su pompası · üretici teknik tablosu yayımlanmamış",
-    sourceUrl:jenecaOfficialCatalogSource,verifiedAt,
+    specifications:model.startsWith("PB-")
+      ?`İç sirkülasyon pompası · ${String(powerW).replace(".",",")} W · en çok ${ratedFlowLph} L/saat · en çok ${headM} m basma yüksekliği · tatlı ve tuzlu su`
+      :`Dalgıç/devirdaim su pompası · ${String(powerW).replace(".",",")} W · en çok ${ratedFlowLph} L/saat · en çok ${headM} m basma yüksekliği`,
+    powerW,ratedFlowLph,
+    sourceUrl:model.startsWith("PB-")?"https://www.aleas.cn/product/734.html":"https://www.aleas.cn/product/690.html",verifiedAt,
   })),
   ...["GLS-21","GLS-21D","GLS-22","GLS-22D","GLS-31","GLS-31D","GLS-32","GLS-32D"].map(model=>({
     id:`jeneca-${model.toLowerCase()}`,category:"other" as const,brand:"Jeneca",model,
@@ -763,8 +770,16 @@ const jenecaOfficialPumpsAndWaveMakers:EquipmentProfile[]=[
 ];
 
 const jenecaOfficialExpandedHeaters:EquipmentProfile[]=[
-  ...[25,50,75,100,150,200,300].map((powerW):EquipmentProfile=>({id:`jeneca-al-3201-${powerW}w`,category:"heater",brand:"Jeneca",model:`AL-3201 ${powerW} W`,specifications:`2 mm kalınlaştırılmış kuvars camlı tatlı/tuzlu su ısıtıcısı · ${powerW} W · üretici hacim aralığı yayımlamamış`,powerW,sourceUrl:"https://www.aleas.cn/product/640.html",verifiedAt})),
-  ...["SX-366","SX-388"].flatMap(model=>[1000,1200,1500].map((powerW):EquipmentProfile=>({id:`jeneca-${model.toLowerCase()}-${powerW}w`,category:"heater",brand:"Jeneca",model:`${model} ${powerW} W`,specifications:`Harici dijital kontrol kutulu titanyum ısıtıcı · ${powerW} W · tatlı ve tuzlu su uyumlu · üretici hacim aralığı yayımlamamış`,powerW,sourceUrl:"https://www.aleas.cn/product/641.html",verifiedAt:"2026-08-30"}))),
+  // 2026-11-15 tarih yenileme 2 (docs/CATALOG_LOG.md): 640.html tablosunun "Tank capacity" sütunu okundu (50 W 20~30L, 75 W 20~40L, 100 W 30~50L,
+  // 200 W 50~100L, 300 W 100~200L); önceki metin "üretici hacim aralığı yayımlamamış" idi. 25 ve 150 W bu okumada çözülmedi.
+  ...[25,50,75,100,150,200,300].map((powerW):EquipmentProfile=>{
+    const tankL=({50:[20,30],75:[20,40],100:[30,50],200:[50,100],300:[100,200]} as Record<number,[number,number]>)[powerW];
+    return {id:`jeneca-al-3201-${powerW}w`,category:"heater",brand:"Jeneca",model:`AL-3201 ${powerW} W`,specifications:`2 mm kalınlaştırılmış kuvars camlı tatlı/tuzlu su ısıtıcısı · ${powerW} W · ${tankL?`${tankL[0]}–${tankL[1]} litre akvaryum için`:"üretici hacim aralığı yayımlamamış"}`,powerW,...(tankL?{recommendedMinL:tankL[0],recommendedMaxL:tankL[1]}:{}),sourceUrl:"https://www.aleas.cn/product/640.html",verifiedAt};
+  }),
+  ...["SX-388"].flatMap(model=>[1000,1200,1500].map((powerW):EquipmentProfile=>({id:`jeneca-${model.toLowerCase()}-${powerW}w`,category:"heater",brand:"Jeneca",model:`${model} ${powerW} W`,specifications:`Harici dijital kontrol kutulu titanyum ısıtıcı · ${powerW} W · tatlı ve tuzlu su uyumlu · üretici hacim aralığı yayımlamamış`,powerW,sourceUrl:"https://www.aleas.cn/product/641.html",verifiedAt:"2026-08-30"}))),
+  // 2026-11-15 tarih yenileme 2 (docs/CATALOG_LOG.md): SX-366 1000/1200/1500 W kayıtları kalıp hatasıydı; 641.html'de SX-366 tablosu yalnız 300, 500 ve
+  // 800 W, bu üç güç SX-388 tablosunda. Kullanıcı kayıtları bu kimliklere bağlı olabileceği için kayıtlar kalır, güç çekilir (AL-28 50/100 W düzeni).
+  ...[1000,1200,1500].map((powerW):EquipmentProfile=>({id:`jeneca-sx-366-${powerW}w`,category:"heater",brand:"Jeneca",model:`SX-366 ${powerW} W`,specifications:"Harici dijital kontrol kutulu titanyum ısıtıcı · tatlı ve tuzlu su uyumlu · üreticinin SX-366 tablosunda bu güç seçeneği yok",capacityDataNote:"Jeneca/ALEAS SX-366 tablosu yalnız 300, 500 ve 800 W seçeneklerini yayımlıyor; bu güç aynı sayfada SX-388 tablosunda. Güç doğrulanamadığı için otomatik ısıtıcı hesabında kullanılmaz.",sourceUrl:"https://www.aleas.cn/product/641.html",verifiedAt:"2026-08-30"})),
   {id:"jeneca-sx-265-500w",category:"heater",brand:"Jeneca",model:"SX-265 500 W",specifications:"Akvaryum ısıtıcısı · 500 W · üretici hacim aralığı yayımlamamış",powerW:500,sourceUrl:"https://www.aleas.cn/product/464.html",verifiedAt:jenecaRecheckVerifiedAt},
   ...([25,50,100,200,300] as const).map((powerW):EquipmentProfile=>({id:`jeneca-al-22-${powerW}w`,category:"heater",brand:"Jeneca",model:`AL-22 ${powerW} W`,specifications:`Patlamaya dayanıklı kuvars camlı termostatlı akvaryum ısıtıcısı · ${powerW} W · üretici hacim aralığı yayımlamamış`,powerW,sourceUrl:"https://www.aleas.cn/product/458.html",verifiedAt:jenecaRecheckVerifiedAt})),
   ...([300,500] as const).map((powerW):EquipmentProfile=>({id:`jeneca-al-28-${powerW}w`,category:"heater",brand:"Jeneca",model:`AL-28 ${powerW} W`,specifications:`Koruyucu kapaklı, patlamaya dayanıklı kuvars camlı termostatlı akvaryum ısıtıcısı · ${powerW} W · üretici hacim aralığı yayımlamamış`,powerW,sourceUrl:"https://www.aleas.cn/product/456.html",verifiedAt:jenecaRecheckVerifiedAt})),
@@ -778,7 +793,23 @@ const jenecaOfficialExpandedHeaters:EquipmentProfile[]=[
 ];
 
 const jenecaOfficialExpandedLighting:EquipmentProfile[]=[
-  ...["T8-LY","T8-YW","T8-JL","T8-BS","T12-LY","T12-JL","SZ-40D","SZ-50D","SZ-60D","X1","X3","X5","D3","D5","D7"].map((model):EquipmentProfile=>({id:`jeneca-light-${model.toLowerCase()}`,category:"lighting",brand:"Jeneca",model,specifications:"Üretici kataloğundaki akvaryum LED aydınlatması · güç/uzunluk varyant tablosu yayımlanmamış",sourceUrl:jenecaOfficialLightSource,verifiedAt})),
+  ...["SZ-40D","SZ-50D","SZ-60D"].map((model):EquipmentProfile=>({id:`jeneca-light-${model.toLowerCase()}`,category:"lighting",brand:"Jeneca",model,specifications:"Üretici kataloğundaki akvaryum LED aydınlatması · güç/uzunluk varyant tablosu yayımlanmamış",sourceUrl:jenecaOfficialLightSource,verifiedAt})),
+  // 2026-11-15 tarih yenileme 2 (docs/CATALOG_LOG.md): modellerin kendi sayfalarının tablosu ve resimleri okundu; önceki metin "güç/uzunluk varyant tablosu
+  // yayımlanmamış" ve kaynak liste sayfası /product/45/ idi. T8/T12 serileri tek kayıt olduğu için güç alanı yazılmadı; X5'in gücü sayfada çelişkili (karar 0019).
+  ...([
+    ["T8-LY","Arowana (ejder balığı) için özel LED aydınlatma (T8) · üretici tablosunda boy boy: T8-LY600–T8-LY1800, 530–1680 mm, 10–28 W",499,null],
+    ["T8-YW","Papağan balığı için özel LED aydınlatma (T8) · üretici tablosunda boy boy: T8-YW600–T8-YW1500, 520–1420 mm, 12,8–35,6 W",496,null],
+    ["T8-JL","Koi balığı için özel LED aydınlatma (T8) · üretici tablosunda boy boy: T8-JL600–T8-JL1800, 530–1680 mm, 8–28 W",497,null],
+    ["T8-BS","Renk değiştiren, anahtarlı LED aydınlatma (T8) · üretici tablosunda boy boy: T8-BS600–T8-BS1800, 530–1680 mm, 12–28 W",498,null],
+    ["T12-LY","Arowana (ejder balığı) için özel LED aydınlatma (T12, 4–8 sıra LED) · üretici tablosunda boy boy: T12-LY800–T12-LY1800, 720 mm'den başlayan boylar, 22–58 W",501,null],
+    ["T12-JL","Koi balığı için özel LED aydınlatma (T12, 4–8 sıra LED) · üretici tablosunda boy boy: T12-JL800–T12-JL1800, 720–1700 mm, 24–58 W",500,null],
+    ["X1","Klipsli akvaryum LED lambası (mavi ve beyaz ışık) · 4 W · DC 5 V · 20–35 cm akvaryum boyu için · cam kalınlığı en çok 5 mm",502,4],
+    ["X3","Klipsli akvaryum LED lambası (süper beyaz ışık) · 5 W · 15–40 cm akvaryum boyu için · cam kalınlığı en çok 5 mm",504,5],
+    ["X5","Klipsli akvaryum LED lambası · 20–50 cm akvaryum boyu için · güç üretici sayfasında çelişkili (8 W ve 10 W)",503,null],
+    ["D3","Yeşil ve beyaz LED'li akvaryum aydınlatması · 3,8 W · DC 12 V · 20–35 cm akvaryum boyu için · cam kalınlığı en çok 5 mm",506,3.8],
+    ["D5","Yeşil ve beyaz LED'li akvaryum aydınlatması · 7,5 W · DC 12 V · 30–40 cm akvaryum boyu için · cam kalınlığı en çok 5 mm",506,7.5],
+    ["D7","Yeşil ve beyaz LED'li akvaryum aydınlatması · 7,5 W · DC 12 V · 40–50 cm akvaryum boyu için · cam kalınlığı en çok 5 mm",506,7.5],
+  ] as const).map((entry):EquipmentProfile=>({id:`jeneca-light-${entry[0].toLowerCase()}`,category:"lighting",brand:"Jeneca",model:entry[0],specifications:entry[1],...(entry[3]!=null?{powerW:entry[3]}:{}),sourceUrl:`https://www.aleas.cn/product/${entry[2]}.html`,verifiedAt})),
 ];
 
 const jenecaOfficialAirStones:EquipmentProfile[]=[
@@ -786,7 +817,12 @@ const jenecaOfficialAirStones:EquipmentProfile[]=[
 ];
 
 const jenecaOfficialAccessories:EquipmentProfile[]=[
-  ...["AS-715","AS-615A","AS-666","AS-666B","AS-888","AS-999","AS-777","ST-03","ST-06","F-8805","AD-2T","AD-3T","AD-4T","AD-6T","AD-8T","F-15","F-21","F-29","F-35","CL-01","CL-02","CL-03","CL-04","SD-01","WGD-02","GLB-05","GLB-06","GLB-06B","GLB-07","CV-B","CV-C","CR-250","CR-500","CR-1000 SALT","AC-168","FN-030","FN-040","FN-050","FN-060","FN-080","FN-100","FN-120","Bio-S","Bio-L","BM-101","BM-102","BM-103","BM-104","JOINT-12","ACV-01","ACV-02","DF-1516","DF-1526","FH-S","FH-M","FH-D","AT-07","MM-30","MM-31","MM-32","MM-32D","DSQ-02","DSQ-03","SB-6717","AT-040","AT-050","AT-070","AT-080","AT-27W","AT-37W","AT-48W","AT-27Z","ST-37Z","AT-48Z","AS-59","AS-60","AS-53","AS-16","AS-23","AS-29","AS-555","AS-320","AS-323","AS-325","MB-S","MB-M","MB-L","FMB-03","FMB-06","FMB-09","CL-05","CL-06","CL-07","CL-08","FS-13","GLB-01","GLB-02","GLB-03","GLB-04"].map((model):EquipmentProfile=>({id:`jeneca-accessory-${model.toLowerCase().replace(/[^a-z0-9]+/g,"-")}`,category:"other",brand:"Jeneca",model,specifications:"Jeneca resmî katalogdaki akvaryum bakım/kurulum aksesuarı",sourceUrl:jenecaOfficialAccessorySource,verifiedAt:model === "AS-16" || model === "CL-05" ? "2026-11-09" : verifiedAt})),
+  ...["AS-715","AS-615A","AS-666","AS-666B","AS-888","AS-999","AS-777","ST-03","ST-06","F-8805","AD-2T","AD-3T","AD-4T","AD-6T","AD-8T","F-15","F-21","F-29","F-35","CL-01","CL-02","CL-03","CL-04","SD-01","WGD-02","GLB-05","GLB-06","GLB-06B","GLB-07","CV-B","CV-C","CR-250","CR-500","CR-1000 SALT","AC-168","FN-030","FN-040","FN-050","FN-060","FN-080","FN-100","FN-120","Bio-S","Bio-L","BM-101","BM-102","BM-103","BM-104","JOINT-12","ACV-01","ACV-02","DF-1516","DF-1526","FH-S","FH-M","FH-D","AT-07","MM-30","MM-31","MM-32","MM-32D","DSQ-02","DSQ-03","SB-6717","AT-040","AT-050","AT-070","AT-080","AT-27W","AT-37W","AT-48W","AT-27Z","ST-37Z","AT-48Z","AS-59","AS-60","AS-53","AS-16","AS-23","AS-29","AS-555","AS-320","AS-323","AS-325","MB-S","MB-M","MB-L","FMB-03","FMB-06","FMB-09","CL-05","CL-06","CL-07","CL-08","FS-13","GLB-01","GLB-02","GLB-03","GLB-04"].map((listed):EquipmentProfile=>{
+    // 2026-11-15 tarih yenileme 2: üreticinin listesi "Aquarium Tongs | AT-27Z/37Z/48Z" yazıyor; "ST-37Z" yazım hatasıydı. Kimlik kullanıcı kayıtları için
+    // aynı kalır, eski ad eş ad olarak aramada ve marka + model eşlemesinde kalır (karar 0038).
+    const model=listed==="ST-37Z"?"AT-37Z":listed;
+    return {id:`jeneca-accessory-${listed.toLowerCase().replace(/[^a-z0-9]+/g,"-")}`,category:"other",brand:"Jeneca",model,...(listed===model?{}:{aliases:[listed]}),specifications:"Jeneca resmî katalogdaki akvaryum bakım/kurulum aksesuarı",sourceUrl:jenecaOfficialAccessorySource,verifiedAt:model === "AS-16" || model === "CL-05" ? "2026-11-09" : verifiedAt};
+  }),
 ];
 
 const eurostarFilters: EquipmentProfile[] = [
@@ -808,8 +844,8 @@ const eurostarFilters: EquipmentProfile[] = [
   { id:"eurostar-cleaning-set-5", category:"other", brand:"Eurostar", model:"Akvaryum Temizlik Seti 5'li", specifications:"Jilet, sünger, tırmık, döner keçe ve kepçe başlıklı uzatılabilir bakım seti · 78 cm'ye kadar", sourceUrl:"https://atakanpetshop.com/eurostar-akvaryum-temizlik-seti-5-li", verifiedAt:"2026-08-25" },
   { id:"eurostar-glass-surface-intake-13", category:"other", brand:"Eurostar", model:"Cam Yüzey Emiş Borusu 13 mm", specifications:"Yüzey filmi ve su emişini birleştiren cam boru · 13 mm · 12/16 mm hortum uyumlu", sourceUrl:"https://atakanpetshop.com/eurostar-cam-yuzey-emis-borusu-13mm-452-yd-ymj13", verifiedAt:"2026-08-25" },
   { id:"eurostar-glass-surface-intake-17", category:"other", brand:"Eurostar", model:"Cam Yüzey Emiş Borusu 17 mm", specifications:"Yüzey filmi ve su emişini birleştiren cam boru · 17 mm · 16/22 mm hortum uyumlu", sourceUrl:"https://atakanpetshop.com/eurostar-cam-yuzey-emis-borusu-17mm-452-yd-ymj17", verifiedAt:"2026-08-25" },
-  { id:"eurostar-glass-intake-13", category:"other", brand:"Eurostar", model:"Cam Emiş Borusu 13 mm", specifications:"Dış filtreler için şeffaf cam emiş borusu · 13 mm · 12/16 mm hortum uyumlu", sourceUrl:"https://atakanpetshop.com/eurostar-cam-emis-borusu-13mm", verifiedAt:"2026-08-25" },
-  { id:"eurostar-glass-intake-17", category:"other", brand:"Eurostar", model:"Cam Emiş Borusu 17 mm", specifications:"Dış filtreler için şeffaf cam emiş borusu · 17 mm · 16/22 mm hortum uyumlu", sourceUrl:"https://atakanpetshop.com/eurostar-cam-emis-borusu-17mm", verifiedAt:"2026-08-25" },
+  { id:"eurostar-glass-intake-13", category:"other", brand:"Eurostar", model:"Cam Emiş Borusu 13 mm", specifications:"Dış filtreler için şeffaf cam emiş borusu · 13 mm", sourceUrl:"https://atakanpetshop.com/eurostar-cam-emis-borusu-13mm", verifiedAt:"2026-08-25" },
+  { id:"eurostar-glass-intake-17", category:"other", brand:"Eurostar", model:"Cam Emiş Borusu 17 mm", specifications:"Dış filtreler için şeffaf cam emiş borusu · 17 mm", sourceUrl:"https://atakanpetshop.com/eurostar-cam-emis-borusu-17mm", verifiedAt:"2026-08-25" },
   { id:"eurostar-digital-adhesive-thermometer", category:"other", brand:"Eurostar", model:"Dijital Yapışkan Termometre", specifications:"Akvaryum camının dış yüzeyinden sıcaklık takibi sağlayan yapışkan dijital termometre", sourceUrl:"https://atakanpetshop.com/eurostar-dijital-yapiskan-termometre", verifiedAt:"2026-08-25" },
   { id:"eurostar-glass-thermometer-yellow-thin", category:"other", brand:"Eurostar", model:"Cam Derece Sarı İnce", specifications:"İnce cam akvaryum termometresi · ürün kodu 452-1600 · barkod 8681144116004", sourceUrl:"https://atakanpetshop.com/eurostar-cam-derece-sari-ince-452-1600", verifiedAt:"2026-09-09" },
   { id:"eurostar-glass-thermometer-yellow-6", category:"other", brand:"Eurostar", model:"Sarı Cam Derece 6 cm", specifications:"Kompakt cam akvaryum termometresi · 6 cm · ürün kodu 452-YD-H060 · barkod 6500252930604", sourceUrl:"https://atakanpetshop.com/eurostar-sari-cam-derece-6cm-452-yd-h060", verifiedAt:"2026-09-09" },
@@ -829,7 +865,7 @@ const xlproFilters: EquipmentProfile[] = [
   {id:"xlpro-230-mini",category:"filter",brand:"XLPro",model:"MINI-230",specifications:"Mini dış filtre · 210 L/saat · 1,7 W",ratedFlowLph:210,powerW:1.7,sourceUrl:"https://www.dogasan.com.tr/xlpro-230-mini-selale-filtre-210-lt-h",verifiedAt},
   {id:"xlpro-mini-500",category:"filter",brand:"XLPro",model:"MINI-500",specifications:"Mini dış filtre · 510 L/saat · 6,9 W · 100 litreye kadar",ratedFlowLph:510,powerW:6.9,recommendedMaxL:100,sourceUrl:"https://atakanpetshop.com/xlpro-500-mini-dis-filtre-510l-s",verifiedAt:"2026-11-09"},
   {id:"xlpro-500at-mini",category:"filter",brand:"XLPro",model:"MINI-500AT",specifications:"Yüzey emicili mini dış filtre · 450 L/saat · 100 litreye kadar",ratedFlowLph:450,recommendedMaxL:100,sourceUrl:"https://akvaryumbalikavm.com.tr/xlpro-500at-mini-dis-filtre-450l-s",verifiedAt:"2026-08-26"},
-  {id:"xlpro-ex-1000",category:"filter",brand:"XLPro",model:"EX-1000",specifications:"Üç sepetli dış filtre · 1000 L/saat · 22 W · 200 litreye kadar",ratedFlowLph:1000,powerW:22,recommendedMaxL:200,sourceUrl:"https://atakanpetshop.com/xlpro-ex-1000-dis-filtre-1000lh-dolu-xpef001",verifiedAt:"2026-08-24"},
+  {id:"xlpro-ex-1000",category:"filter",brand:"XLPro",model:"EX-1000",specifications:"Dört sepetli dış filtre · 1000 L/saat · 22 W · 200 litreye kadar",ratedFlowLph:1000,powerW:22,recommendedMaxL:200,sourceUrl:"https://atakanpetshop.com/xlpro-ex-1000-dis-filtre-1000lh-dolu-xpef001",verifiedAt:"2026-08-24"},
   {id:"xlpro-ex-1200",category:"filter",brand:"XLPro",model:"EX-1200",specifications:"Dört sepetli dış filtre · 1200 L/saat · 28 W · 280 litreye kadar",ratedFlowLph:1200,powerW:28,recommendedMaxL:280,sourceUrl:"https://atakanpetshop.com/xlpro-ex-1200-dis-filtre-1200lh-dolu-xpef002",verifiedAt:"2026-08-24"},
   {id:"xlpro-ex-1500",category:"filter",brand:"XLPro",model:"EX-1500",specifications:"Beş sepetli dış filtre · 1500 L/saat · 36 W · 300 litreye kadar",ratedFlowLph:1500,powerW:36,recommendedMaxL:300,sourceUrl:"https://www.akvaryumexpress.com/xlpro-ex-1500-dis-filtre-1500l-h-dolu",verifiedAt:"2026-08-24"},
 ];
@@ -893,8 +929,8 @@ const dophinCurrentFilters:EquipmentProfile[]=[
   {id:"dophin-fb1000f",category:"filter",brand:"Dophin",model:"FB1000 F",specifications:"Dalga yapma işlevli kompakt iç filtre · 230 V / 50 Hz · 300 L/saat · 3,3 W · 50 litreye kadar · Atakan Petshop 50–70 litre yazıyor; üreticinin değeri kullanılır",ratedFlowLph:300,powerW:3.3,recommendedMaxL:50,sourceUrl:"https://www.qimeigroup.com/Products_detail/dophin-aquarium-internal-filter-fb4000.html",additionalSourceUrls:["https://atakanpetshop.com/dophin-fb1000-f-ic-filtre-300-l-s"],verifiedAt:"2026-11-12"},
   {id:"dophin-fb3000f",category:"filter",brand:"Dophin",model:"FB3000 F",specifications:"Dalga yapma işlevli kompakt iç filtre · 230 V / 50 Hz · 480 L/saat · 7,2 W · 110 litreye kadar · Atakan Petshop 500 L/saat ve 50–90 litre yazıyor; üreticinin değerleri kullanılır",ratedFlowLph:480,powerW:7.2,recommendedMaxL:110,sourceUrl:"https://www.qimeigroup.com/Products_detail/dophin-aquarium-internal-filter-fb4000.html",additionalSourceUrls:["https://atakanpetshop.com/dophin-fb3000-f-ic-filtre-500-l-s"],verifiedAt:"2026-11-12"},
   {id:"dophin-fb4000f",category:"filter",brand:"Dophin",model:"FB4000 F",specifications:"Dalga yapma işlevli kompakt iç filtre · 230 V / 50 Hz · 760 L/saat · 13,8 W · 140 litreye kadar · Atakan Petshop 600 L/saat, 13 W ve 80–150 litre yazıyor; üreticinin değerleri kullanılır",ratedFlowLph:760,powerW:13.8,recommendedMaxL:140,sourceUrl:"https://www.qimeigroup.com/Products_detail/dophin-aquarium-internal-filter-fb4000.html",additionalSourceUrls:["https://atakanpetshop.com/dophin-fb4000-f-ic-filtre-600-l-s"],verifiedAt:"2026-11-12"},
-  {id:"dophin-sf15",category:"filter",brand:"Dophin",model:"SF15",specifications:"Hava motoruyla çalışan biyolojik pipo filtre",requiresAirPump:true,sourceUrl:dophinRetailSource,verifiedAt},
-  {id:"dophin-sf33",category:"filter",brand:"Dophin",model:"SF33",specifications:"Hava motoruyla çalışan biyolojik pipo filtre",requiresAirPump:true,sourceUrl:dophinRetailSource,verifiedAt},
+  {id:"dophin-sf15",category:"filter",brand:"Dophin",model:"SF15",specifications:"Hava motoruyla çalışan pipo filtre",requiresAirPump:true,sourceUrl:dophinRetailSource,verifiedAt},
+  {id:"dophin-sf33",category:"filter",brand:"Dophin",model:"SF33",specifications:"Hava motoruyla çalışan pipo filtre",requiresAirPump:true,sourceUrl:dophinRetailSource,verifiedAt},
   {id:"dophin-cf300",category:"filter",brand:"Dophin",model:"CF-300",specifications:"Mini dış filtre · 410 L/saat · 6,7 W · 60–110 litre · Atakan Petshop ve Akvaryum Express 40 litreye kadar yazıyor; üreticinin değeri kullanılır",ratedFlowLph:410,powerW:6.7,recommendedMinL:60,recommendedMaxL:110,sourceUrl:"https://www.qimeigroup.com/Products_detail/dophin-external-canister-filter-cf300html",additionalSourceUrls:["https://atakanpetshop.com/dophin-cf-300-mini-dis-filtre","https://www.akvaryumexpress.com/dophin-cf300-mini-dis-filtre"],verifiedAt:"2026-11-12"},
   {id:"dophin-ap1302",category:"air_pump",brand:"Dophin",model:"AP1302",specifications:"Sessiz hava motoru · 230 V / 50 Hz · 2,0 L/dakika (120 L/saat) · 2,5 W · 120–200 litre",ratedFlowLph:120,powerW:2.5,recommendedMinL:120,recommendedMaxL:200,sourceUrl:"https://www.qimeigroup.com/Products_detail/dophin-aquarium-air-pump-ap1301.html",additionalSourceUrls:["https://atakanpetshop.com/dophin"],verifiedAt:"2026-11-12"},
 ];
@@ -957,14 +993,19 @@ rsFilters.push(
   {id:"rs-613",category:"filter",brand:"RS Electrical",model:"RS 613",specifications:"İç filtre · 450 L/saat · 5 W",ratedFlowLph:450,powerW:5,sourceUrl:"https://malawiizmir.com/rs-613-ic-filtre-5w-450-l-h",verifiedAt},
   {id:"rs-313-air",category:"air_pump",brand:"RS Electrical",model:"RS 313",specifications:"Tek çıkışlı şarjlı hava motoru · 1,5 L/dakika (90 L/saat) · 1 W · 40 litreye kadar",ratedFlowLph:90,powerW:1,recommendedMaxL:40,sourceUrl:"https://atakanpetshop.com/rs-313-tek-cikisli-sarjli-hava-motoru-1-5l-min-1w",verifiedAt:"2026-08-26"},
   {id:"rs-960-air",category:"air_pump",brand:"RS Electrical",model:"RS 960",specifications:"Tek çıkışlı pilli hava motoru · 2 L/dakika (120 L/saat) · 50 litreye kadar",ratedFlowLph:120,recommendedMaxL:50,sourceUrl:"https://atakanpetshop.com/rs-960-tek-cikisli-pilli-hava-motoru-sari-2l-min",verifiedAt:"2026-08-26"},
-  {id:"rs-1000-air",category:"air_pump",brand:"RS Electrical",model:"RS 1000",specifications:"Dört çıkışlı ayarlanabilir hava motoru · toplam 9 L/dakika (540 L/saat) · 8 W · 200 litreye kadar",ratedFlowLph:540,powerW:8,recommendedMaxL:200,adjustableFlow:true,sourceUrl:"https://atakanpetshop.com/rs-1000-4-cikisli-hava-motoru-9l-min-8w",verifiedAt:"2026-08-29"},
+  {id:"rs-1000-air",category:"air_pump",brand:"RS Electrical",model:"RS 1000",specifications:"Dört çıkışlı hava motoru · 8 W · 200 litreye kadar · debi sayfada belirsiz (9 L/dakika toplam ya da çıkış başına)",powerW:8,recommendedMaxL:200,capacityDataNote:"Atakan Petshop sayfası debiyi başlıkta 9 L/dakika, açıklamada her çıkış için 9 L/dakika yazıyor; toplam debi belirsiz olduğu için otomatik hesapta kullanılmaz.",sourceUrl:"https://atakanpetshop.com/rs-1000-4-cikisli-hava-motoru-9l-min-8w",verifiedAt:"2026-08-29"},
   {id:"rs-fu430k",category:"filter",brand:"RS Electrical",model:"FU430K",specifications:"Hava motoruyla çalışan biyolojik sünger filtre · 12 × 14 cm",requiresAirPump:true,sourceUrl:"https://atakanpetshop.com/rs-fu430k-biyolojik-sunger-filtre-12x14cm",verifiedAt:"2026-08-26"},
   {id:"rs-sf331",category:"other",brand:"RS Electrical",model:"SF331 Soğutucu Fan",specifications:"Akvaryum su yüzeyi için tekli soğutucu fan",sourceUrl:"https://atakanpetshop.com/rs-sf331-akvaryum-sogutucu-fan-tekli",verifiedAt:"2026-08-26"},
   {id:"rs-sf332",category:"other",brand:"RS Electrical",model:"SF332 Soğutucu Fan",specifications:"Akvaryum su yüzeyi için tekli soğutucu fan",sourceUrl:"https://atakanpetshop.com/rs-sf332-akvaryum-sogutucu-fan-tekli",verifiedAt:"2026-08-26"},
   {id:"rs-mt27",category:"other",brand:"RS Electrical",model:"MT27 Mıknatıslı Cam Sileceği",specifications:"Kaplumbağa şekilli mıknatıslı akvaryum cam sileceği",sourceUrl:"https://atakanpetshop.com/rs-mt27-kaplumbaga-sekilli-miknatisli-cam-silecegi",verifiedAt:"2026-08-26"},
   {id:"rs-s1",category:"other",brand:"RS Electrical",model:"S1 Pompalı Dip Sifonu",specifications:"Pompalı akvaryum dip sifonu · 17 cm",sourceUrl:"https://atakanpetshop.com/rs-s1-pompali-akvaryum-dip-sifonu-17cm",verifiedAt:"2026-08-26"},
   ...([25,50,100,200,300,500] as const).map(powerW=>({id:`rs-i399-${powerW}`,category:"heater" as const,brand:"RS Electrical",model:`I399 ${powerW} W Çelik Isıtıcı`,specifications:`20–32 °C ayarlanabilir paslanmaz çelik ısıtıcı · ${powerW} W · ${powerW} litreye kadar`,powerW,recommendedMaxL:powerW,sourceUrl:`https://atakanpetshop.com/rs-celik-akvaryum-isiticisi-${powerW}w`,verifiedAt:"2026-08-26"})),
-  ...([50,100,200,300] as const).map(powerW=>({id:`rs-758-${powerW}`,category:"heater" as const,brand:"RS Electrical",model:`758 ${powerW} W Cam Isıtıcı`,specifications:`18–32 °C ayarlanabilir kuvars cam ısıtıcı · ${powerW} W · ${powerW} litreye kadar`,powerW,recommendedMaxL:powerW,sourceUrl:`https://atakanpetshop.com/rs-cam-akvaryum-isiticisi-${powerW}w`,verifiedAt:"2026-08-26"})),
+  ...([50,100,200,300] as const).map(powerW=>({id:`rs-758-${powerW}`,category:"heater" as const,brand:"RS Electrical",model:`758 ${powerW} W Cam Isıtıcı`,
+    // 2026-11-15 tarih yenileme 2: 300 W sayfası başlık ve tabloda 300 W, açıklamada 200 W yazıyor (karar 0019); güç çekildi.
+    ...(powerW===300
+      ?{specifications:"18–32 °C ayarlanabilir kuvars cam ısıtıcı · güç mağaza sayfasında çelişkili (300 W ve 200 W) · 300 litreye kadar"}
+      :{specifications:`18–32 °C ayarlanabilir kuvars cam ısıtıcı · ${powerW} W · ${powerW} litreye kadar`,powerW}),
+    recommendedMaxL:powerW,sourceUrl:`https://atakanpetshop.com/rs-cam-akvaryum-isiticisi-${powerW}w`,verifiedAt:"2026-08-26"})),
 );
 
 const lifetechSource="https://atakanpetshop.com/lifetech";
@@ -1410,15 +1451,15 @@ const yikedaEquipment:EquipmentProfile[]=[
   {id:"yikeda-ykd6124-black",category:"lighting",brand:"Yikeda",model:"YKD-6124 Optik LED Siyah",specifications:"Optik lensli, 360° esnek kollu klipsli LED · 10,4 W · siyah gövde",powerW:10.4,sourceUrl:"https://atakanpetshop.com/yikeda-ykd-6124-optik-led-aydinlatma-10-4w-siyah",verifiedAt:"2026-08-26"},
   {id:"yikeda-ykd6126-white",category:"lighting",brand:"Yikeda",model:"YKD-6126 Optik LED Beyaz",specifications:"Optik lensli, 360° esnek kollu klipsli LED · 15,2 W · beyaz gövde",powerW:15.2,sourceUrl:"https://atakanpetshop.com/yikeda-ykd-6126-optik-led-aydinlatma-15-2w-beyaz",verifiedAt:"2026-08-26"},
   {id:"yikeda-ykd6126-black",category:"lighting",brand:"Yikeda",model:"YKD-6126 Optik LED Siyah",specifications:"Optik lensli, 360° esnek kollu klipsli LED · 15,2 W · siyah gövde",powerW:15.2,sourceUrl:"https://atakanpetshop.com/yikeda-ykd-6126-optik-led-aydinlatma-15-2w-siyah",verifiedAt:"2026-08-25"},
-  {id:"yikeda-sd1055",category:"lighting",brand:"Yikeda",model:"SD-1055 RGB",specifications:"RGB LED · 55 W · 4920 lm · 3 kademe dimmer",powerW:55,recommendedTankLengthCm:[90,110],sourceUrl:"https://atakanpetshop.com/yikeda-sd-1055-rgb-led-aydinlatma-55w-90-110-cm",verifiedAt:"2026-08-26"},
+  {id:"yikeda-sd1055",category:"lighting",brand:"Yikeda",model:"SD-1055 RGB",specifications:"RGB LED · 55 W · 4920 lm",powerW:55,recommendedTankLengthCm:[90,110],sourceUrl:"https://atakanpetshop.com/yikeda-sd-1055-rgb-led-aydinlatma-55w-90-110-cm",verifiedAt:"2026-08-26"},
   {id:"yikeda-dy10w",category:"lighting",brand:"Yikeda",model:"DY-10W",specifications:"Mavi-beyaz, 360° esnek kollu ayaklı LED · 10 W",powerW:10,sourceUrl:"https://atakanpetshop.com/yikeda-dy-10w-ayakli-led-aydinlatma-10w-mavi-beyaz",verifiedAt:"2026-08-26"},
   {id:"yikeda-xt4w",category:"lighting",brand:"Yikeda",model:"XT-4W",specifications:"Mavi-beyaz ayaklı nano LED · 4 W",powerW:4,sourceUrl:"https://atakanpetshop.com/yikeda-xt-4w-ayakli-led-aydinlatma-4w-mavi-beyaz",verifiedAt:"2026-08-26"},
   ...[85,100,120].map(powerW=>({id:`yikeda-smart-ufo-${powerW}`,category:"lighting" as const,brand:"Yikeda",model:`Smart UFO ${powerW} W`,specifications:`Tam spectrum UFO LED · ${powerW} W`,powerW,sourceUrl:"https://atakanpetshop.com/yikeda-smart-ufo-led-lamba-100w",verifiedAt:"2026-08-26"})),
-  {id:"yikeda-full-spectrum-rgb-30",category:"lighting",brand:"Yikeda",model:"SD-1030 RGB",specifications:"Üç kademeli dimmerli RGB LED · 30 W · 2460 lm · 48,8 cm gövde · 50–60 cm akvaryum",powerW:30,recommendedTankLengthCm:[50,60],sourceUrl:"https://atakanpetshop.com/yikeda-sd-1030-rgb-led-aydinlatma-30w-50-60-cm",verifiedAt:"2026-08-25"},
-  {id:"yikeda-full-spectrum-rgb-35",category:"lighting",brand:"Yikeda",model:"SD-1035 RGB",specifications:"Üç kademeli dimmerli RGB LED · 35 W · 2960 lm · 58,8 cm gövde · 60–70 cm akvaryum",powerW:35,recommendedTankLengthCm:[60,70],sourceUrl:"https://atakanpetshop.com/yikeda-sd-1035-rgb-led-aydinlatma-35w-60-70-cm",verifiedAt:"2026-08-26"},
-  {id:"yikeda-full-spectrum-rgb-40",category:"lighting",brand:"Yikeda",model:"SD-1040 RGB",specifications:"Üç kademeli dimmerli RGB LED · 40 W · 3460 lm · 68,8 cm gövde · 70–80 cm akvaryum",powerW:40,recommendedTankLengthCm:[70,80],sourceUrl:"https://atakanpetshop.com/yikeda-sd-1040-rgb-led-aydinlatma-40w-70-80-cm",verifiedAt:"2026-08-26"},
-  {id:"yikeda-full-spectrum-rgb-45",category:"lighting",brand:"Yikeda",model:"SD-1045 RGB",specifications:"Üç kademeli dimmerli RGB LED · 45 W · 3940 lm · 78,8 cm gövde · 80–90 cm akvaryum",powerW:45,recommendedTankLengthCm:[80,90],sourceUrl:"https://atakanpetshop.com/yikeda-sd-1045-rgb-led-aydinlatma-45w-80-90-cm",verifiedAt:"2026-08-26"},
-  {id:"yikeda-full-spectrum-rgb-65",category:"lighting",brand:"Yikeda",model:"SD-1065 RGB",specifications:"Üç kademeli dimmerli full spectrum RGB LED · 65 W · 118,8 cm gövde · 120–140 cm akvaryum",powerW:65,recommendedTankLengthCm:[120,140],sourceUrl:"https://atakanpetshop.com/yikeda-sd-1065-rgb-led-aydinlatma-65w-120-140-cm",verifiedAt:"2026-08-26"},
+  {id:"yikeda-full-spectrum-rgb-30",category:"lighting",brand:"Yikeda",model:"SD-1030 RGB",specifications:"RGB LED · 30 W · 2460 lm · 48,8 cm gövde · 50–60 cm akvaryum",powerW:30,recommendedTankLengthCm:[50,60],sourceUrl:"https://atakanpetshop.com/yikeda-sd-1030-rgb-led-aydinlatma-30w-50-60-cm",verifiedAt:"2026-08-25"},
+  {id:"yikeda-full-spectrum-rgb-35",category:"lighting",brand:"Yikeda",model:"SD-1035 RGB",specifications:"RGB LED · 35 W · 2960 lm · 58,8 cm gövde · 60–70 cm akvaryum",powerW:35,recommendedTankLengthCm:[60,70],sourceUrl:"https://atakanpetshop.com/yikeda-sd-1035-rgb-led-aydinlatma-35w-60-70-cm",verifiedAt:"2026-08-26"},
+  {id:"yikeda-full-spectrum-rgb-40",category:"lighting",brand:"Yikeda",model:"SD-1040 RGB",specifications:"RGB LED · 40 W · 3460 lm · 68,8 cm gövde · 70–80 cm akvaryum",powerW:40,recommendedTankLengthCm:[70,80],sourceUrl:"https://atakanpetshop.com/yikeda-sd-1040-rgb-led-aydinlatma-40w-70-80-cm",verifiedAt:"2026-08-26"},
+  {id:"yikeda-full-spectrum-rgb-45",category:"lighting",brand:"Yikeda",model:"SD-1045 RGB",specifications:"RGB LED · 45 W · 3940 lm · 78,8 cm gövde · 80–90 cm akvaryum",powerW:45,recommendedTankLengthCm:[80,90],sourceUrl:"https://atakanpetshop.com/yikeda-sd-1045-rgb-led-aydinlatma-45w-80-90-cm",verifiedAt:"2026-08-26"},
+  {id:"yikeda-full-spectrum-rgb-65",category:"lighting",brand:"Yikeda",model:"SD-1065 RGB",specifications:"Full spectrum RGB LED · 65 W · 118,8 cm gövde · 120–140 cm akvaryum",powerW:65,recommendedTankLengthCm:[120,140],sourceUrl:"https://atakanpetshop.com/yikeda-sd-1065-rgb-led-aydinlatma-65w-120-140-cm",verifiedAt:"2026-08-26"},
   {id:"yikeda-sd-t8-13",category:"lighting",brand:"Yikeda",model:"SD-T8-13 W",specifications:"Çift kanatlı, ayarlanabilir gövdeli LED · 13,6 W",powerW:13.6,sourceUrl:"https://www.karacaakvaryum.com/marka/yikeda/",verifiedAt:"2026-08-18"},
   {id:"yikeda-dy10-spot",category:"lighting",brand:"Yikeda",model:"DY-10 Spot",specifications:"Ayarlanabilir açılı cam lensli spot LED · 16,8 W",powerW:16.8,sourceUrl:"https://www.karacaakvaryum.com/marka/yikeda/",verifiedAt:"2026-08-18"},
   {id:"yikeda-mini-clip",category:"lighting",brand:"Yikeda",model:"Mini Klipsli LED",specifications:"Nano akvaryumlar için klipsli LED aydınlatma",sourceUrl:"https://aquarubi.com/yikeda",verifiedAt:"2026-08-18"},
@@ -1542,7 +1583,7 @@ const accessoryEquipment:EquipmentProfile[]=[
   ...[3,4,5,6].map(size=>({id:`liya-net-${size}`,category:"other" as const,brand:"Liya",model:`Balık Kepçesi ${size} inç`,specifications:`Balık yakalama kepçesi · ${size} inç`,sourceUrl:"https://www.akvaryumexpress.com/liya",verifiedAt})),
   {id:"liya-fn10",category:"other",brand:"Liya",model:"FN-10 Çelik Saplı Kepçe",specifications:"Çelik saplı akvaryum kepçesi · 120 cm",sourceUrl:"https://atakanpetshop.com/liya",verifiedAt:"2026-08-24"},
   {id:"liya-hose-brush-20",category:"other",brand:"Liya",model:"Hortum Temizleme Fırçası 20 cm",specifications:"Akvaryum hortumu temizleme fırçası · 20 cm",sourceUrl:"https://atakanpetshop.com/liya",verifiedAt:"2026-08-24"},
-  {id:"liya-hose-brush-160",category:"other",brand:"Liya",model:"Esnek Hortum Temizleme Harbisi 160 cm",specifications:"Uzun akvaryum ve dış filtre hortumları için çift uçlu esnek temizleme fırçası · 160 cm",sourceUrl:"https://atakanpetshop.com/liya",verifiedAt:"2026-08-24"},
+  {id:"liya-hose-brush-160",category:"other",brand:"Liya",model:"Esnek Hortum Temizleme Harbisi 160 cm",specifications:"Akvaryum hortum ve boruları için esnek temizleme fırçası · 160 cm",sourceUrl:"https://atakanpetshop.com/liya",verifiedAt:"2026-08-24"},
   {id:"liya-hose-bend-guard",category:"other",brand:"Liya",model:"LY-1822 Hortum Kırılma Önleyici",specifications:"Dış filtre hortumunun akvaryum kenarında bükülmesini ve debi kaybını önleyen kılavuz",sourceUrl:"https://atakanpetshop.com/liya-hortum-kirilma-onleyici",verifiedAt:"2026-08-24"},
   {id:"liya-feeding-ring-round",category:"other",brand:"Liya",model:"Yuvarlak Yem Toplama Aparatı",specifications:"Yüzen yemleri belirli bir alanda tutan yuvarlak yemleme halkası",sourceUrl:"https://atakanpetshop.com/liya",verifiedAt:"2026-08-24"},
   {id:"liya-breeder-4701b",category:"other",brand:"Liya",model:"4701B Küçük Tül Yavruluk",specifications:"Akvaryum içine asılan küçük tül yavruluk ve balık ayırma aparatı",sourceUrl:"https://atakanpetshop.com/liya",verifiedAt:"2026-08-24"},
@@ -1707,7 +1748,7 @@ armaturkEquipment.push(
   },
   {
     id:"armaturk-cooling-fan-1",category:"other",brand:"Armatürk",model:"1'li Akvaryum Soğutucu Fan",
-    specifications:"Otomatik dijital termostat · 1 fan · 0–30 °C ayar · 180° hareket · 9 mm'ye kadar cam · 14 × 12 × 4 cm",
+    specifications:"Otomatik dijital termostat · 1 fan · 0–30 °C ayar · 180° hareket · 10 mm'ye kadar cam · 13 × 13 × 4 cm",
     recommendedMaxL:50,sourceUrl:"https://www.armaturk.com.tr/1l-fanli-akvaryum-sogutucu-1li-fan-P477",verifiedAt:"2026-08-27",
   },
   {
@@ -1753,10 +1794,10 @@ armaturkEquipment.push(
 );
 
 const mecEquipment:EquipmentProfile[]=[
-  {id:"mec-heater-suction-cup",category:"other",brand:"Meç",model:"İsıtıcı Vantuzu",specifications:"İsıtıcı sabitleme vantuzu · tekli ve 10'lu paket"},
+  {id:"mec-heater-suction-cup",category:"other",brand:"Meç",model:"İsıtıcı Vantuzu",specifications:"İsıtıcı sabitleme vantuzu · 5'li paket · 3 cm çap"},
   {id:"mec-heater-suction-cup-black",category:"other",brand:"Meç",model:"Siyah Isıtıcı Vantuzu",specifications:"Siyah ısıtıcı sabitleme vantuzu · tekli"},
-  {id:"mec-airline-t-splitter",category:"other",brand:"Meç",model:"Hava Hortumu T Dağıtıcı",specifications:"Hava hortumu T bağlantısı · tekli ve 10'lu paket"},
-  {id:"mec-airline-valve",category:"other",brand:"Meç",model:"Hava Hortumu Musluğu",specifications:"Hava hortumu akış vanası · tekli ve 10'lu paket"},
+  {id:"mec-airline-t-splitter",category:"other",brand:"Meç",model:"Hava Hortumu T Dağıtıcı",specifications:"Hava hortumu T bağlantısı · 10'lu paket"},
+  {id:"mec-airline-valve",category:"other",brand:"Meç",model:"Hava Hortumu Musluğu",specifications:"Hava hortumu akış vanası · 10'lu paket"},
   {id:"mec-airline-suction-cup",category:"other",brand:"Meç",model:"Hava Hortumu Vantuzu",specifications:"Hava hortumu sabitleme vantuzu · 10'lu paket"},
   {id:"mec-brine-shrimp-net",category:"other",brand:"Meç",model:"Artemia Süzgeci 9 cm",specifications:"Artemia çıkartma süzgeci/kepçesi"},
 ].map((item):EquipmentProfile=>({...item,category:"other",sourceUrl:"https://atakanpetshop.com/mec",verifiedAt}));
@@ -1953,7 +1994,7 @@ const sunsunTurkeyCurrentExtras:EquipmentProfile[]=[
   {id:"sunsun-jvp102b",category:"other",brand:"SunSun",model:"JVP-102B",specifications:"Mıknatıslı dalga motoru · debi ve güç satıcı sayfasında yayımlanmamış",sourceUrl:"https://malawiizmir.com/sunsun-jvp-102-b-wave-maker-miknatisli",verifiedAt:sunsunTurkeyVerifiedAt},
   {id:"sunsun-jvp102a",category:"other",brand:"SunSun",model:"JVP-102A",specifications:"Sirkülasyon ve dalga motoru · 5000 L/saat · 12 W · tatlı suda 100–300 litre, deniz akvaryumunda 150–350 litre",ratedFlowLph:5000,powerW:12,sourceUrl:"https://malawiizmir.com/sunsun-jvp-102a-dalga-motoru-5000lt-h",verifiedAt:sunsunTurkeyVerifiedAt},
   {id:"sunsun-jvp201",category:"other",brand:"SunSun",model:"JVP-201",specifications:"Çift kafalı dalga motoru · 6000 L/saat · 12 W · 158 × 80 × 100 mm",ratedFlowLph:6000,powerW:12,sourceUrl:"https://malawiizmir.com/sunsun-jvp-201-dalga-motoru-6000lt-saat",verifiedAt:sunsunTurkeyVerifiedAt},
-  {id:"sunsun-jvp202a",category:"other",brand:"SunSun",model:"JVP-202A",specifications:"Çift kafalı dalga motoru · satıcı sayfasında debi ve güç yayımlanmamış",sourceUrl:"https://malawiizmir.com/sunsun-jvp-202-a-wave-maker",verifiedAt:sunsunTurkeyVerifiedAt},
+  {id:"sunsun-jvp202a",category:"other",brand:"SunSun",model:"JVP-202A",specifications:"Dalga motoru · satıcı sayfasında debi ve güç yayımlanmamış",sourceUrl:"https://malawiizmir.com/sunsun-jvp-202-a-wave-maker",verifiedAt:sunsunTurkeyVerifiedAt},
   {id:"sunsun-jvp402",category:"other",brand:"SunSun",model:"JVP-402",specifications:"Dalga motoru · satıcı sayfasında debi ve güç yayımlanmamış",sourceUrl:"https://malawiizmir.com/sunsun-jvp-402-wave-maker",verifiedAt:sunsunTurkeyVerifiedAt},
   {id:"sunsun-pg180",category:"air_pump",brand:"SunSun",model:"PG-180",specifications:"Blower hava motoru · 26 m³/saat (26.000 L/saat)",ratedFlowLph:26000,sourceUrl:"https://malawiizmir.com/sunsun-pg-180-blower-26-m3-h",verifiedAt:sunsunTurkeyVerifiedAt},
   {id:"sunsun-pg250",category:"air_pump",brand:"SunSun",model:"PG-250",specifications:"Blower hava motoru · 35 m³/saat (35.000 L/saat)",ratedFlowLph:35000,sourceUrl:"https://malawiizmir.com/sunsun-pg-250-blower-35-m3-h",verifiedAt:sunsunTurkeyVerifiedAt},
@@ -1963,11 +2004,16 @@ const resunKingSource="https://okosgazdi.hu/index.php/resun-king-fejszettes-vizp
 const resunWaterPumps:EquipmentProfile[]=[
   ["KING-1",380,5],["KING-1A",700,10],["KING-2",1000,20],["KING-3",2300,40],
   ["KING-5",6200,100],["KING-6",8200,150],
-].map(([model,ratedFlowLph,powerW])=>({
-  id:`resun-${String(model).toLowerCase()}`,category:"other",brand:"Resun",model:String(model),
+].map(([model,ratedFlowLph,powerW])=>
+  // 2026-11-15 tarih yenileme 2: okosgazdi.hu kabul edilen bir kaynak değil (DATA_SOURCES) ve sayfa KING-3/5/6 için artık başka debi ve güç yazıyor;
+  // bu üçünün değerleri çekildi (karar 0019; eski değerler bu tabloda belge olarak durur). Üreticide doğrulanırsa geri gelir.
+  ["KING-3","KING-5","KING-6"].includes(String(model))
+    ?{id:`resun-${String(model).toLowerCase()}`,category:"other" as const,brand:"Resun",model:String(model),specifications:"Dalgıç kafa/devirdaim pompası · debi ve güç doğrulanamadı",sourceUrl:resunKingSource,verifiedAt:"2026-08-18"}
+    :{
+  id:`resun-${String(model).toLowerCase()}`,category:"other" as const,brand:"Resun",model:String(model),
   specifications:`Dalgıç kafa/devirdaim pompası · ${ratedFlowLph} L/saat · ${powerW} W`,
   ratedFlowLph:Number(ratedFlowLph),powerW:Number(powerW),sourceUrl:resunKingSource,verifiedAt:"2026-08-18",
-}));
+});
 resunWaterPumps.push(
   {id:"resun-sp-5000",category:"other",brand:"Resun",model:"SP-5000",specifications:"Tatlı ve tuzlu su için seramik milli dalgıç devirdaim pompası · 2500 L/saat · 35 W · 2,2 m azami basma yüksekliği",ratedFlowLph:2500,powerW:35,sourceUrl:"https://www.smilepetshop.com/product/366/resun-sp-5000%E0%B8%9B%E0%B8%B1%E0%B9%8A%E0%B8%A1%E0%B8%99%E0%B9%89%E0%B8%B3%E0%B8%AA%E0%B8%B3%E0%B8%AB%E0%B8%A3%E0%B8%B1%E0%B8%9A%E0%B8%97%E0%B8%B3%E0%B8%A3%E0%B8%B0%E0%B8%9A%E0%B8%9A%E0%B8%81%E0%B8%A3%E0%B8%AD%E0%B8%87-%E0%B8%99%E0%B9%89%E0%B8%B3%E0%B8%9E%E0%B8%B8-%E0%B8%99%E0%B9%89%E0%B8%B3%E0%B8%95%E0%B8%81-%E0%B8%9B%E0%B8%A3%E0%B8%B0%E0%B8%81%E0%B8%B1%E0%B8%99%E0%B8%A8%E0%B8%B9%E0%B8%99%E0%B8%A2%E0%B9%8C-resun-%E0%B8%9B%E0%B8%A3%E0%B8%B0%E0%B9%80%E0%B8%97%E0%B8%A8%E0%B9%84%E0%B8%97%E0%B8%A2-%E0%B8%84%E0%B8%A7%E0%B8%B2%E0%B8%A1%E0%B9%81%E0%B8%A3%E0%B8%87-2500-l-hr",verifiedAt:"2026-08-25"},
   {id:"resun-sp-6000",category:"other",brand:"Resun",model:"SP-6000",specifications:"Tatlı ve tuzlu su için seramik milli dalgıç devirdaim pompası · 2800 L/saat · 40 W · 2,5 m azami basma yüksekliği",ratedFlowLph:2800,powerW:40,sourceUrl:"https://www.akouashop.com/pompes-d-aquarium/pompes-universelles-aquarium/resun-sp-6000-pompe-d-aquarium-universelle-avec-debit-fixe-de-2800-l-h.html",verifiedAt:"2026-08-25"},
@@ -2167,7 +2213,7 @@ const resunLpAdditional:EquipmentProfile[]=[
 const resunAutomaticFeeders:EquipmentProfile[]=[
   {id:"resun-af2003",category:"other",brand:"Resun",model:"AF2003",specifications:"Otomatik yemleme makinesi · granül, stick ve pul yemlerle uyumlu",sourceUrl:"https://atakanpetshop.com/resun-af2003-otomatik-yemleme-makinesi",verifiedAt:"2026-08-25"},
   {id:"resun-af2005",category:"other",brand:"Resun",model:"AF2005",specifications:"Otomatik yemleme makinesi · günde 4 öğüne kadar · 12/24 saat ayarı · 2 AA pil",sourceUrl:"https://atakanpetshop.com/resun-af2005-otomatik-yemleme-makinasi",verifiedAt:"2026-08-25"},
-  {id:"resun-af2005d",category:"other",brand:"Resun",model:"AF2005D",specifications:"Dijital otomatik yemleme makinesi · 2 öğüne kadar programlama · nem korumalı hazne",sourceUrl:"https://atakanpetshop.com/resun",verifiedAt:"2026-08-25"},
+  {id:"resun-af2005d",category:"other",brand:"Resun",model:"AF2005D",specifications:"Dijital göstergeli otomatik yemleme makinesi · 2 adet AA pille çalışır",sourceUrl:"https://atakanpetshop.com/resun",verifiedAt:"2026-08-25"},
   {id:"resun-af2009d",category:"other",brand:"Resun",model:"AF2009D",specifications:"Dijital otomatik yemleme makinesi · günde 4 öğüne kadar programlama · LCD ekran",sourceUrl:"https://atakanpetshop.com/resun-af2009d-otomatik-yemleme-makinesi",verifiedAt:"2026-08-25"},
   {id:"resun-af2020",category:"other",brand:"Resun",model:"AF2020",specifications:"Otomatik yemleme makinesi · 3 otomatik besleme seçeneği · manuel besleme · USB veya pil",sourceUrl:"https://www.akvaryumexpress.com/resun-af2020-otomatik-yemleme-makinasi",verifiedAt:"2026-08-25"},
 ];
@@ -2176,7 +2222,7 @@ const resunCurrentCareAccessories:EquipmentProfile[]=[
   {id:"resun-manuel-dip-sifonu",category:"other",brand:"Resun",model:"Manuel Dip Sifonu",specifications:"Elle çalışan akvaryum dip temizleme sifonu",sourceUrl:"https://malawiizmir.com/resun-manuel-dip-sifonu",verifiedAt:"2026-08-26"},
   {id:"resun-mb-s",category:"other",brand:"Resun",model:"MB-S Mıknatıslı Cam Sileceği",specifications:"Küçük boy mıknatıslı akvaryum cam temizleyici",sourceUrl:"https://malawiizmir.com/resun-miknatisli-cam-silecek-mb-s",verifiedAt:"2026-08-26"},
   {id:"resun-mb-l",category:"other",brand:"Resun",model:"MB-L Mıknatıslı Cam Sileceği",specifications:"Büyük boy mıknatıslı akvaryum cam temizleyici",sourceUrl:"https://malawiizmir.com/resun-miknatisli-silecek-mb-l-large",verifiedAt:"2026-08-26"},
-  {id:"resun-rst04",category:"other",brand:"Resun",model:"RST04 Cam Termometre",specifications:"Akvaryum camına takılan hassas cam termometre",sourceUrl:"https://malawiizmir.com/resun-rst04-akvaryum-cam-derece-hassas",verifiedAt:"2026-08-26"},
+  {id:"resun-rst04",category:"other",brand:"Resun",model:"RST04 Cam Termometre",specifications:"Hassas cam termometre",sourceUrl:"https://malawiizmir.com/resun-rst04-akvaryum-cam-derece-hassas",verifiedAt:"2026-08-26"},
 ];
 
 const eheimCurrentPumpsAndFeeding: EquipmentProfile[] = [

@@ -3,7 +3,9 @@ import { lightingCatalog } from "./catalog-equipment-lighting";
 import { specializedEquipmentCatalog } from "./catalog-equipment-specialized";
 import { hardwareEquipmentCatalog } from "./catalog-equipment-hardware";
 import { unverifiedEquipmentIds, withdrawUnverifiedEquipmentValues } from "./catalog-equipment-unverified";
-import { assertUniqueIds, brandModelKey, isVerifiedEquipmentProfile, normalize } from "./catalog-shared";
+import { reverifiedEquipmentDates } from "./catalog-reverified-equipment-dates";
+import { reverifiedEquipmentSources } from "./catalog-reverified-equipment-sources";
+import { applyReverifiedDates, applyReverifiedSources, assertUniqueIds, brandModelKey, isVerifiedEquipmentProfile, normalize } from "./catalog-shared";
 
 export interface EquipmentProfile {
   id: string; category: Equipment["category"]; brand: string; model: string; specifications: string;
@@ -64,8 +66,8 @@ export const equipmentCatalog: EquipmentProfile[] = [
   { id:"eheim-air-200", category:"air_pump", brand:"Eheim", model:"air200", specifications:"Ayarlanabilir çift çıkışlı hava motoru · 200 L/saat", ratedFlowLph:200, sourceUrl:"https://eheim.com/en_GB/aquatics/technology/air-pumps/air/air200", verifiedAt:"2026-08-17" },
   { id:"sobo-sb-860a", category:"air_pump", brand:"Sobo", model:"SB-860A", specifications:"Ayarlanabilir çift çıkışlı hava motoru · 2 × 6 L/dakika (720 L/saat toplam) · 10 W · Malawi İzmir 5 W yazıyor; Türkiye distribütörünün değeri kullanılır", ratedFlowLph:720, powerW:10, sourceUrl:"https://www.sobo.com.tr/sobo-sessiz-ayarlanabilir-cift-cikisli-ucgen-akvaryum-hava-motoru-sb-860a", additionalSourceUrls:["https://malawiizmir.com/sobo-sb-860a-cift-cikisli-hava-motoru","https://www.pets-lifestyle.com/products/sobo-sb-860-a-two-way-aquarium-air-pump"], verifiedAt:"2026-11-12" },
   { id:"resun-air-500", category:"air_pump", brand:"Resun", model:"AIR-500", specifications:"Tek çıkışlı hava motoru · 30 L/saat · 1,8 W · 30 litreye kadar", ratedFlowLph:30, powerW:1.8, recommendedMaxL:30, sourceUrl:"https://atakanpetshop.com/resun-hava-motoru-air500", verifiedAt:"2026-08-18" },
-  { id:"resun-air-1000", category:"air_pump", brand:"Resun", model:"AIR-1000", specifications:"Tek çıkışlı hava motoru · 60 L/saat · 2 W · 0,01 MPa", ratedFlowLph:60, powerW:2, sourceUrl:"https://malawiizmir.com/resun-air-1000-tek-ikisli-hava-motoru", verifiedAt:"2026-08-26" },
-  { id:"resun-air-2000", category:"air_pump", brand:"Resun", model:"AIR-2000", specifications:"Tek çıkışlı hava motoru · 140 L/saat · 3 W · 0,016 MPa", ratedFlowLph:140, powerW:3, sourceUrl:"https://malawiizmir.com/resun-air-2000-hava-pompasi-1-8-litre-dakika", verifiedAt:"2026-08-26" },
+  { id:"resun-air-1000", category:"air_pump", brand:"Resun", model:"AIR-1000", specifications:"Tek çıkışlı hava motoru · 2 W · 0,01 MPa · debi mağaza sayfasında çelişkili (60 L/saat ve 1,2 L/dakika)", powerW:2, capacityDataNote:"Malawi İzmir sayfası debiyi tabloda 60 L/saat, özelliklerde 1,2 L/dakika (72 L/saat) yazıyor; debi otomatik hesapta kullanılmaz.", sourceUrl:"https://malawiizmir.com/resun-air-1000-tek-ikisli-hava-motoru", verifiedAt:"2026-08-26" },
+  { id:"resun-air-2000", category:"air_pump", brand:"Resun", model:"AIR-2000", specifications:"Hava motoru · debi mağaza sayfasında çelişkili (138 L/saat ve 1,8 L/dakika); güç ve basınç sayfada yok", capacityDataNote:"Malawi İzmir sayfası debiyi açıklamada 138 L/saat, başlıkta 1,8 L/dakika yazıyor; güç yazmıyor. Değerler otomatik hesapta kullanılmaz.", sourceUrl:"https://malawiizmir.com/resun-air-2000-hava-pompasi-1-8-litre-dakika", verifiedAt:"2026-08-26" },
   { id:"resun-air-3000", category:"air_pump", brand:"Resun", model:"AIR-3000", specifications:"Çift çıkışlı hava motoru · toplam 360 L/saat (2 × 3 L/dakika) · 3,5 W · 0,014 MPa", ratedFlowLph:360, powerW:3.5, sourceUrl:"https://malawiizmir.com/resun-air-3000-hava-motoru-3-litre-dakika", verifiedAt:"2026-08-26" },
   { id:"resun-air-4000", category:"air_pump", brand:"Resun", model:"AIR-4000", specifications:"Ayarlanabilir çift çıkışlı hava motoru · 320 L/saat · 4 W", ratedFlowLph:320, powerW:4, sourceUrl:"https://www.rissee.com/en/productDetail.aspx?flowNo=5&typeID=24", verifiedAt:"2026-08-18" },
   { id:"resun-air-8000", category:"air_pump", brand:"Resun", model:"AIR-8000", specifications:"Ayarlanabilir dört çıkışlı hava motoru · 640 L/saat · 8 W", ratedFlowLph:640, powerW:8, sourceUrl:"https://www.rissee.com/en/productDetail.aspx?flowNo=5&typeID=24", verifiedAt:"2026-08-18" },
@@ -522,6 +524,13 @@ for(const item of equipmentCatalog){
 }
 // Değeri yalnızca kural dışı kaynaklarda yayımlanmış kayıtların değerleri hesaptan çekilir (docs/DECISIONS/0019-dogrulanamayan-ekipman-degerleri.md).
 const unknownUnverifiedIds = withdrawUnverifiedEquipmentValues(equipmentCatalog);
+// Yeniden okunurken kaynak adresi değişen kayıtlar (catalog-reverified-equipment-sources.ts): mağaza doğrulamasından sonra uygulanır.
+const unknownReverifiedSourceIds = applyReverifiedSources(equipmentCatalog, reverifiedEquipmentSources);
+if(unknownReverifiedSourceIds.length)throw new Error(`Kaynak adresi değişen ekipman katalogda yok: ${unknownReverifiedSourceIds.join(", ")}`);
+// Kaynağa karşı yeniden okunan kayıtların doğrulama günü (src/data/catalog-reverified.ts, adressiz kopyası); tarih yalnız ileri gider.
+// Tablodaki kimlik katalogda yoksa her ortamda hata verir.
+const unknownReverifiedIds = applyReverifiedDates(equipmentCatalog, reverifiedEquipmentDates);
+if(unknownReverifiedIds.length)throw new Error(`Yeniden doğrulama tablosundaki ekipman katalogda yok: ${unknownReverifiedIds.join(", ")}`);
 
 const hasCapacityData = (profile:EquipmentProfile) => {
   if(profile.category==="heater")return Boolean(profile.powerW||profile.recommendedMinL||profile.recommendedMaxL);

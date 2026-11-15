@@ -206,3 +206,71 @@ Tur 3'te iki bağımsız araştırmacı, davranış kaydı olmayan türleri kabu
 - **Motorun "davranış bilgisi yok" dediği 16 tür** (avcı, tür akvaryumu ya da topluluk notu da yok): `ramirezi`, `galaxy-rasbora` ve `hillstream-loach` (yalnız aynı tür kaydı var), `common-pleco`, `ghost-shrimp`, `blue-tiger-shrimp`, `ramshorn-snail`, `malaysian-trumpet-snail`, `black-devil-snail`, `sun-nerite-snail`, `turbo-snail`, `tiger-nerite-snail`, `mini-tiger-nerite-snail`, `mini-nerite-snail`, `batik-nerite-snail`, `batman-nerite-snail`.
 - **Bir adımla tamamlanabilecekler (lider kararı):** WetWebMedia (Neale Monks) yalnız http yayımlıyor; https adresi kabul edilirse ya da http adrese izin verilirse `senegal-bichir` ve `delhezi-bichir` küçük balık kaydı 3 kaynağa ulaşır (ikisi katalogda zaten avcı, motor sonucu değişmez). gensou.sg bu ortamdan 403 verdi; Burak Chrome'da açarsa `flowerhorn` ve `cochus-blue-tetra` yeniden değerlendirilebilir (site YZ/çiftlik şüpheli, önce o karar). Satıcı ürün sayfaları sayılsaydı `malaysian-trumpet-snail` ve `black-devil-snail` `peaceful` alırdı.
 - **Kimlik yüzünden kayıt açılamayanlar:** `Neritidae sp.` kayıtları (ticari ad türe bağlanmıyor), `serrata-dwarf-shrimp`, `ghost-shrimp`, `jonklaas-lipstick-goby`, `freshwater-bumblebee-goby`, `vampire-pleco-l240`.
+
+## Kaynak kabul listesinde değil, tarih yenilenmedi (2026-11-15, tarih yenileme 1)
+
+Bu kayıtların kaynak sayfası 2026-11-15'te okundu ve dolu bütün alanları sayfayla aynı çıktı. Yine de günleri değişmedi, çünkü kaynak `docs/DATA_SOURCES.md`'nin kabul ettiği bir site değil. Kabul edilenler: kabul edilen altı mağaza, üreticinin kendi sitesi, Türkiye distribütörü ve marka kataloğu. Lider kararı: "doğrulandı" demek için kaynak kabul edilmiş olmalı (`docs/CATALOG_LOG.md`, "2026-11-15 Tarih yenileme 1"). Değerlere dokunulmadı. Kayıt kabul edilen bir kaynakta doğrulanırsa kaynağı ona bağlanır ve günü yenilenir.
+
+- **ozelyem.com (10):** `nubios-cl02`, `nubios-cl03`, `nubios-cl04`, `nubios-hose-12-16-1m`, `nubios-hose-16-22-10m`, `nubios-hose-16-22-1m`, `nubios-hose-clear-12-16-1m`, `nubios-hose-clear-16-22-1m`, `nubios-siphon-large-valve`, `nubios-siphon-small`.
+- **bomhoca.com (18; Vietnam mağazası):** `lifetech-ap1000`, `lifetech-ap1200`, `lifetech-ap1300`, `lifetech-ap1550`, `lifetech-ap1600`, `lifetech-ap2000`, `lifetech-ap2500`, `lifetech-ap2500d`, `lifetech-ap3100`, `lifetech-ap3500`, `lifetech-ap4500`, `lifetech-ap4550`, `lifetech-ap5200`, `lifetech-ap5300`, `lifetech-ap5400`, `lifetech-ap5600`, `lifetech-ap5800`, `lifetech-ap6500`.
+- **sxi.com.tw (19; Netlea'nın üreticisi ya da distribütörü olduğu belgelerde yazmıyor):** `netlea-flower-prefilter`, `netlea-c2500s`, `netlea-c5000s`, `netlea-c9000s`, `netlea-v1500`, `netlea-v3000`, `netlea-v4000`, `netlea-at6s-iii-6105p`, `netlea-at6s-iii-6140p`, `netlea-at7s-ii-7160p`, `netlea-supreme-nitrifying-bacteria-bottle`, `netlea-supreme-nitrifying-bacteria-capsule`, `netlea-fiber-ball-1-l`, `netlea-fiber-ring-m-1-l`, `netlea-fiber-ring-s-1-l`, `netlea-fiber-triangle-1-l`, `netlea-microporous-fiber-ring-m-1-l`, `netlea-small-hollow-quartz-ball-s-1-l`, `netlea-technology-hollow-colored-ball-s-1-l`.
+- **chihiros.eu (5; Chihiros'un resmî sitesi olduğu belgelerde yazmıyor):** `chihiros-wrgb2-slim-30`, `chihiros-wrgb2-slim-45`, `chihiros-wrgb2-slim-60`, `chihiros-wrgb2-slim-90`, `chihiros-wrgb2-slim-120`.
+- **akvaryumbalikavm.com.tr (6):** `waterbear-wb-177`, `waterbear-wb-1771`, `waterbear-wb-277`, `waterbear-wb-2771`, `waterbear-wb-377`, `waterbear-wb-3771`.
+- **aquazonefish.vn (5):** `netlea-s1500`, `netlea-s1500-c`, `netlea-s3000`, `netlea-s4000`, `netlea-s5500`.
+- **paopaosz.com (4):** `netlea-at1e-130s`, `netlea-at1e-145s`, `netlea-at1e-160s`, `netlea-at1e-190s`.
+- **akvaryem.com.tr (3):** `ejet-102`, `ejet-j103`, `ejet-104`.
+- **okosgazdi.hu (3):** `resun-king-1`, `resun-king-1a`, `resun-king-2`.
+- **aquackakvaryum.com.tr (2):** `creaqua-co2-indicator-solution`, `creaqua-avant-guard-250-ml`.
+- **ecer.com (2):** `resun-sp-10000s`, `resun-sp-7800s`.
+- **karacaakvaryum.com (2):** `yikeda-dy10-spot`, `yikeda-sd-t8-13`.
+- **Tek kayıt:** `mec-pipo-5` (cukurovapet.com.tr), `ista-co2-3l-set` (fishyhub.com), `aquawing-aq3000m` (petfabrikasi.com), `shrimps-forever-shrimp-soil` (prizeaquatics.com).
+- **Değeri hesaptan çekili 26 ekipman** (karar 0019, `src/data/catalog-equipment-unverified.ts`): bunlar da okumada aynı çıktı ama tabloya alınmadı. Kaynakları akakce.com, daraz.com.bd, akvaryem.com.tr, canlipetshop.com ve öbür küçük mağazalar: `eurostar-ege-2200f`, `rs-118f`, `ejet-905f`, `ejet-907f`, `eurostar-ege-400`, `eurostar-ege-500`, `eurostar-ege-w550`, `rs-rs-04b`, `netlea-no2b-air-pump`, `netlea-no3b-air-pump`, `netlea-no2v-dc-canister`, `netlea-no2s-hang-on`, `aquawing-aq607f`, `aquawing-aq80f`, `haqos-hf-900`, `aquawing-aq160`, `xinyou-xy-2811`, `rs-rs604`, `haqos-ex-1500at`, `haqos-ex-1200at`, `netlea-2fl-complete`, `haqos-exp-500`, `nubios-nb-800f`, `eurostar-marmara-double`, `resun-lp300`, `netlea-aquatic-time-no1-canister`.
+
+## 2026-11-15 Tarih yenileme 2: açık kalanlar
+
+Ayrıntı ve yöntem: `docs/CATALOG_LOG.md` → "2026-11-15 Tarih yenileme 2". Bu kayıtların tarihi yenilenmedi, değerlerine dokunulmadı (aksi yazmıyorsa).
+
+### Açılmayan kaynaklar
+- **Chihiros mağazası kapandı (44 kayıt):** chihirosaquaticstudio.com ana sayfa, koleksiyon ve ürün adresleri 404 ve Shopify "This store is unavailable" döndürüyor (bot denetimi değil). `bbs.chihirosaquaticstudio.com` (1 kayıt, `chihiros-rgb-vivid-2-mate`) sertifika hatası verdi, geçilmedi. Aynı üreticinin başka bir sitesi kaynak olarak bağlanmadı; chihiros.eu'nun resmî site olduğu belgelerde yazmıyor.
+- **Seachem (103 kayıt):** seachem.com DNS'te çözülmüyor (tarayıcı ve curl).
+- **Resun (177 kayıt):** resun-china.com sertifika hatası (ERR_CERT_AUTHORITY_INVALID); uyarı geçilmedi.
+- **Cloudflare ya da bot denetimi (39 kayıt), site bırakıldı:**
+  - fluvalaquatics.com (10): `fluval-m50`, `fluval-m100`, `fluval-m150`, `fluval-m200`, `fluval-m300`, `fluval-nano-filter`, `fluval-u1`, `fluval-u2`, `fluval-u3`, `fluval-u4` (ilk sayfalardan sonra denetim çıktı).
+  - cikletistpetshop.com (17): `haqos-glass-cleaner-60`, `haqos-glass-cleaner-70`, `netlea-nl-5130p-at5-d02`, `netlea-at1-pro-70w`, `netlea-at1-pros-30w`, `netlea-at1-pros-50w`, `netlea-at3-pros-40w`, `netlea-at3-pros-65w`, `netlea-nl-595p-at5-d02`, `netlea-nl-6140p-at5-d04`, `nubios-shrimp-net-square-7`, `nubios-thermo-hygrometer-combo`, `nubios-desktop-faunus-3-7l`, `nubios-desktop-cube-5l`, `resun-uv07-11w`, `resun-uv07-24w`, `sobo-wp-377f`.
+  - ozumakvaryum.com.tr (5): `nubios-nb-1500f`, `nubios-nw-450f`, `nubios-nw-600f`, `nubios-nw-800f`, `nubios-nw-1500f`.
+  - backwateraquatics.com (6): `mufan-co2-splitter-2-way` … `-6-way`, `mufan-inline-diffuser-16-22`.
+  - m-once.com (1): `rs-rs800`.
+- **Trendyol (24 kayıt):** tarayıcı Polonya mağazasına yönlendiriyor, ürün sayfaları 404, marka sayfası boş. Trendyol kabul listesinde değil; değerler zaten çekili. Kayıtlar: `rs-rs605`, `mec-turbo-pipo` ve 22 Shark Bar / Shark FS ışığı.
+- **Öbürleri:** produto.mercadolivre.com.br hesap girişi istiyor (`resun-sf-400`); jbl.de tarayıcıda açılmadı, kılavuz PDF'inde debi ve hacim yok (JBL e402–e1902, partial); acvaristic.ro ürün sayfaları 429 (değerler `products.json`'dan okundu; site zaten kabul edilmedi).
+
+### Kabul edilmeyen kaynakta `same` çıkan, tabloya alınmayan kayıtlar (35)
+- creatureculture.co.nz (4): `nubios-my03`, `nubios-my05`, `nubios-my07`, `nubios-my10`.
+- aquarockscolorado.com (2): `netlea-g1-prefilter`, `netlea-g2-prefilter`.
+- aqualink-shop.com (1): `rs-rs760`. petzlifeworld.in (1): `mufan-g58-manual-regulator`. kaspi.kz (1): `rs-rs602`.
+- manuals.plus (3): `sobo-wp190f`, `sobo-wp290f`, `sobo-wp390f` (değerler çekili kalır; manuals.plus'taki değerler geri eklenmez).
+- tarapet.ae (3): `netlea-7s-90-cylinder`, `netlea-7s-110-cylinder`, `netlea-7s-150-cylinder`.
+- acvaristic.ro (14, MasterLine): `masterline-all-in-one-red`, `masterline-carbo`, `masterline-crystal-clear`, `masterline-gh-plus`, `masterline-iron`, `masterline-masterline-i`, `masterline-masterline-ii`, `masterline-potassium`, `masterline-root-caps`, `masterline-safe-water`, `masterline-dosing-pump`, `masterline-spring-cut-15`, `masterline-tweez-30`, `masterline-wave-19`. Markanın resmî sitesi olduğu (künye, şirket adı ya da üreticinin bağlantısı) belgelenirse `docs/DATA_SOURCES.md`'ye dayanağıyla eklenip tabloya alınabilir.
+- akvaryumbalikavm.com.tr (6, WaterBear): `waterbear-wb-4771`, `waterbear-wb-d303`, `waterbear-wb-d305`, `waterbear-wb-d307`, `waterbear-wb-z601`, `waterbear-wb-z602`.
+- Yalnız Prize Aquatics'te bulunan Shrimps Forever FLY ve TapFix: adres değişmedi, tarih yenilenmedi (lider kararı 4).
+
+### Belirsiz değerler (değer önerilmedi, değiştirilmedi)
+- **Dennerle Natural Gravel Mekong tane boyu:** sayfa başlığı "0.1-0.6 mm", ürün adı "0,1-1,4 mm" (karar 0019 çelişkisi; katalog 0,1–1,4 mm).
+- **Twinstar B Line Ver.3 120B akvaryum boyu:** başlık "120–130 cm", tablo "Up to 125cm" (katalog 120–125).
+- **CO2Art basınç:** değer önerilmedi (lider listesi; okumada çözülmedi).
+- **Creaqua Delta Marine 60:** mağaza 30 W ve 60–80 cm diyor; üretici sayfasının güç seçeneklerinde yalnız "15 watt" okunabildi. Kontrolcü tarayıcıda 60–80 cm seçeneğini seçip gücü okumalı.
+- **İmparator yılanbaş pH:** Fishipedia "4 - 6", Seriously Fish "6.0–8.0"; ortak aralık tek nokta (6,0). Belgede bu durum için kural yok; katalog [4, 6] kaldı.
+- **Jeneca X5 gücü:** üretici sayfası 8 W ve 10 W (karar 0019); güç alanı boş, açıklama çelişkiyi söylüyor.
+- **Ornate yılanbaş bakım metni:** "mevsime göre değişen akıntı ve sıcaklık" ve sarı dudaklı form / C. pulchra notu Fishipedia'da yok; kapak ve hava boşluğu iddiası ayrıca doğrulanmalı (akıntı düzeltildi).
+- **Kabul edilmeyen kaynağa dayanan canlı önerileri (lider kararı 2):** silver maskaheros sıcaklık/pH (ciklid.org), Guianacara pH ve uzunluk (akvaforum, aquainfo), L148 pH (l-welse), white-cheek goby pH ve grup. Değerler değişmedi.
+- **Resun KING-3/5/6:** değerler çekildi; Resun'un kendi sitesi (resun-china.com) açılınca yeniden okunmalı.
+
+### Canlılarda kaynakta artık yok (8 kayıt; değer değiştirilmedi, lider kararı 5)
+R-B okumasında kabul edilen kaynaklarda (Fishkeeper, Seriously Fish, Fishipedia) artık yer almayan değerler:
+- `apisto-panduro`: minVolumeL 75.
+- `betta-imbellis`: minVolumeL 120, minTankLengthCm 90, minGroup 4.
+- `jaguar-cichlid`: minVolumeL 680, minTankLengthCm 182 (bakım metnindeki 182 × 60 × 60 cm de).
+- `uaru-cichlid`: minVolumeL 450, minTankLengthCm 150, minGroup 4.
+- `cherryspot-rasbora`: minVolumeL 60.
+- `melon-barb`: minVolumeL 150.
+- `somphongs-dwarf-rasbora`: minGroup 10.
+- `peacock-snakehead`: minVolumeL 300, minTankLengthCm 140.

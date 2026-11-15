@@ -30,3 +30,51 @@ export function speciesIdForNames(scientificKey: string | undefined, commonKey: 
 }
 // Katalog kimliği olmayan ekipman marka ve model adıyla eşlenir; anahtar biçimlendirilmiş iki adı ayırıcıyla birleştirir.
 export const brandModelKey = (brand: string, model: string) => `${brand}\u0000${model}`;
+
+/** Yeniden doğrulama tablosunun adressiz kopyası (src/data/catalog-reverified.ts'ten üretilir): okuma günü ve o gün doğrulanan kimlikler. */
+export type ReverifiedDates = readonly (readonly [readAt: string, ids: readonly string[]])[];
+/**
+ * Yeniden okunan kayıtların `verifiedAt` alanını okuma gününe çeker (docs/DATA_SOURCES.md → "Yeniden doğrulama tablosu"). Tarih yalnız ileri
+ * gider: kaydın kendi günü daha yeniyse o kalır. Katalogda bulunmayan kimlikleri döndürür; katalog modülü bunlarda her ortamda hata verir.
+ */
+export function applyReverifiedDates<T extends { id: string; verifiedAt?: string }>(catalog: readonly T[], dates: ReverifiedDates): string[] {
+  const byId = new Map(catalog.map((item) => [item.id, item]));
+  const missingIds: string[] = [];
+  for (const [readAt, ids] of dates) {
+    for (const id of ids) {
+      const item = byId.get(id);
+      if (!item) missingIds.push(id);
+      else if ((item.verifiedAt ?? "") < readAt) item.verifiedAt = readAt;
+    }
+  }
+  return missingIds;
+}
+
+/**
+ * Kaynağa karşı yeniden okunurken adresi değişen kayıtlar (docs/DATA_SOURCES.md → "Yeniden doğrulama tablosu"): kayıt liste, kategori ya da
+ * başka boyun sayfasına bağlıydı, ya da eski adres artık açılmıyor veya başka sayfaya yönleniyor. `sourceUrl` modelin kendi sayfası olur; eski
+ * adres kaynak izi olarak `additionalSourceUrls`'e geçer (AGENTS.md, "Kaynak bilgisini kaybetme"), nedeni docs/CATALOG_LOG.md'de yazılır.
+ * `addSourceUrls` aynı okumada kullanılan ek kaynaktır.
+ */
+export type ReverifiedSources = Readonly<Record<string, { readonly sourceUrl?: string; readonly addSourceUrls?: readonly string[] }>>;
+/**
+ * Yeni kaynak adreslerini yazar; eski ana adresi ek kaynakların sonuna ekler, yeni ana adres ek kaynaklarda da geçiyorsa oradan çıkar.
+ * Katalogda bulunmayan kimlikleri döndürür.
+ */
+export function applyReverifiedSources<T extends { id: string; sourceUrl?: string; additionalSourceUrls?: string[] }>(catalog: readonly T[], sources: ReverifiedSources): string[] {
+  const byId = new Map(catalog.map((item) => [item.id, item]));
+  const missingIds: string[] = [];
+  for (const [id, { sourceUrl, addSourceUrls }] of Object.entries(sources)) {
+    const item = byId.get(id);
+    if (!item) {
+      missingIds.push(id);
+      continue;
+    }
+    const previousUrl = item.sourceUrl;
+    if (sourceUrl) item.sourceUrl = sourceUrl;
+    const additional = [...(item.additionalSourceUrls ?? []), ...(addSourceUrls ?? []), ...(previousUrl ? [previousUrl] : [])].filter((url, index, all) => url !== item.sourceUrl && all.indexOf(url) === index);
+    if (additional.length) item.additionalSourceUrls = additional;
+    else if ("additionalSourceUrls" in item) delete item.additionalSourceUrls;
+  }
+  return missingIds;
+}

@@ -5029,3 +5029,745 @@ Yazılan kayıtlar (6 kayıt, 6 tür; hepsi `tier: "secondary"`, `verifiedAt` 20
 Elenen siteler: gensou.sg (403; iki günde yayımlanmış çok sayıda tür rehberi, YZ/çiftlik şüphesi), Aqua-Fish.Net (kalıp; sayfa içi çelişkiler), WetWebMedia (yalnız http, https sertifikası alan adıyla uyuşmuyor; lider kararı), satıcı ürün sayfaları (Garnelio, Tropco, ton.fish, Aquatic Arts), içerik çiftliği ya da YZ şüphesi (Fish Laboratory, Tankarium, Fishkeeping World, TankFacts, AquaLibs, Bantam.Earth: MTS için "1.5 to 3 inches" ve "males and females even live separately", Atlarium, Everything Fishkeeping); forumlar en çok bir kaynak.
 
 Ölçüm: 61 türden davranış kaydı olmayan 61 → 55; motorun "davranış bilgisi yok" saydığı 19 → 16 (artık bilinen: çikolata gurami, zümrüt cüce danio, kraliyet farlowella; galaksi ve dağ vatozunda yalnız aynı tür kaydı olduğu için başka canlılarla davranış hâlâ bilinmiyor). Senaryolar F, G, H önce/sonra aynı. Altın (1138 vaka, fikstüre yazılmadı): bu parçanın etkisi 4 vaka, hükmü değişen yok; 3'ünde yeni `conspecificMales` (dağ vatozu; species-tight puanı 65 → 62), 1'inde "değerlendirilemeyenler" listesinden zümrüt cüce danio çıktı.
+
+## 2026-11-15 Tarih yenileme 1: kaynağa karşı yeniden okunan 1.075 kayıt (Claude)
+
+- **Gerekçe.** Karar 0039 3 aylık yenilemeyi yayından sonraya bırakıyordu; "bunların dışındaki her veri işi önce ürün sahibine sorulur". 2026-08-17 ile 2026-09-01 arasında doğrulanan kayıtlar 18 Kasım–3 Aralık arasında "son 92 günde doğrulanmış" sınırının dışına düşüyordu. Lider 2026-11-15'te "Tarih yenilemeye başlayayım mı?" diye sordu, ürün sahibi "devam et" dedi. Bu iş o isteğe dayanır; yeni kayıt açmaz, değer değiştirmez.
+- **Kapsam.** 18 Kasım'da düşen A bandı (1.097 kayıt; 2026-08-17) ve 19 Kasım–3 Aralık'ta düşen B bandı (1.430 kayıt; 08-18 … 09-01). Bu turda otomatik açılabilen siteler okundu (paket P1–P4, 1.637 kayıt: A 883, B 754). Otomatik açılmayan siteler (paket P5: A 214, B 676; Seachem DNS hatası, Ferplast/Dennerle/Chihiros/co2art 429, Resun sertifika uyarısı, Oase Vercel denetimi, Fluval ve Çikletist Cloudflare, Haqos bağlantı kesilmesi, Trendyol 404, jbl.de TLS hatası) bu turda okunmadı; günleri değişmedi.
+- **Yöntem.**
+  - Her kaydın kaynak sayfası (`sourceUrl`) 2026-11-15'te bir kez açıldı: curl ya da WebFetch, varsayılan kimlik, aynı siteye istekler arasında 1–2 sn. aleas.cn (Jeneca) curl'e 404 verdiği için uygulama içi tarayıcıda okundu; tablo resimleri ürün sayfasının Referer'ıyla alınıp okundu (resim indirme ürün sahibinin 2026-11-10 onayı). Bot engeli aşılmadı, tarayıcı kimliği taklit edilmedi.
+  - Kaydın dolu her alanı sayfaya karşı okundu: model, kategori, açıklama parçaları, debi, güç, önerilen hacim, hacim. Alan sonucu aynı, yazılı kural sonucu (ör. L/dakika ×60, US gal ×3,785, Dophin tablolarında 230 V/50 Hz sütunu) ya da farklı/yok. Kayıt sonucu `same` (dolu bütün alanlar aynı ya da kural sonucu), `partial`, `missing`, `different` ya da `unreachable`.
+  - Yalnız `same` kayıtların günü okuma gününe çekildi.
+  - Değeri kabul edilmeyen kaynak yüzünden hesaptan çekilen 26 ekipman kaydı (karar 0019) okumada `same` çıktı ama tabloya alınmadı (lider kararı): kaynakları kabul listesinde değil (akakce.com 2, akvaryem.com.tr 5, canlipetshop.com 3, aquazonefish.vn 2, aquazones.in 2, daraz.com.bd, smzdm.com, csl-fish.com.my ve 9 küçük mağaza birer kayıt); o kaynağı yeniden okumak kaydı doğrulamaz. Günleri değişmedi.
+  - Kaynağı `docs/DATA_SOURCES.md`'nin kabul etmediği bir site olan 83 kayıt (P2 3, P4 80; A 8, B 75) da okumada `same` çıktı ama tabloya alınmadı (lider kararı: "doğrulandı" demek için kaynak kabul edilmiş olmalı). Kabul edilenler: altı mağaza, üreticinin kendi sitesi, Türkiye distribütörü, marka kataloğu. Çıkanlar: sxi.com.tw 19, bomhoca.com 18, ozelyem.com 10, akvaryumbalikavm.com.tr 6, aquazonefish.vn 5, chihiros.eu 5 (resmî site olduğu belgelerde yazmıyor), paopaosz.com 4, akvaryem.com.tr 3, okosgazdi.hu 3, aquackakvaryum.com.tr 2, ecer.com 2, karacaakvaryum.com 2 ve dört site birer kayıt. Liste: `docs/CATALOG_SOURCE_GAPS.md`, "Kaynak kabul listesinde değil, tarih yenilenmedi". Değerlere dokunulmadı.
+  - Tabloda kalan siteler: kabul edilen mağazalar (Atakan, Akvaryum Express, Malawi İzmir, Aquarubi, Betta Marketim); belgelerde üretici ya da distribütör olarak yazılı siteler (aleas.cn ve rissee.com, `docs/DATA_SOURCES.md`; qimeigroup.com, sunsun-china.com, sobo.com.tr, sicce.com, armaturk.com.tr, bu dosya); markanın kendi sitesi (Sera, ADA, Tropical, ISTA, OrionLED, Aquael, Eheim, Tetra, Tropica, Creaqua, Netlea, Shrimps Forever); markanın başka sitede duran iki belgesi (Chihiros 2022 kataloğu, as-aquaristik.de; Twinstar B-Line belgesi, europeanaquaristics.com). Test (`catalog-reverified.test.ts`) tablodaki her adresin bu listede olduğunu denetler.
+  - Kaynağı kabul edilen mağazanın liste ya da marka sayfası olan 74 kayıtta (P3) liste kaydın modelini gösteriyor; açıklama listeden bağlı ürün sayfasından (aynı mağaza) okundu. Bu kayıtların kaynak adresi değişmedi; ürün sayfasına geçiş ikinci turun önerisidir.
+  - Gün `src/data/catalog-reverified.ts` tablosunda kayıt kimliğiyle ve okunan adresle tutulur. Katalog kurulurken tablonun adressiz kopyası uygulanır (`docs/DATA_SOURCES.md` → "Yeniden doğrulama tablosu"). Ortak sabitler (`const verifiedAt = "2026-08-17"` ve benzerleri) ve kalıp fonksiyonları değişmedi; tarih yalnız ileri gider.
+  - Önce ve sonra katalog dökümü (canlı, ekipman, bakım ürünü, bitki): 1.075 kaydın yalnız `verifiedAt`'ı değişti (hepsi 2026-11-15; eski günler 08-17 … 08-30); başka alan ve başka kayıt değişmedi.
+- **Paket başına sayılar** (okuma sonucu; tabloya giren son sütunda):
+
+| Paket | İçerik | Kayıt (A / B) | same (A / B) | partial | missing | different | unreachable | Tabloda (A / B) |
+|---|---|---|---|---|---|---|---|---|
+| P1 | Jeneca (aleas.cn) | 248 (237 / 11) | 199 (192 / 7) | 9 | 10 | 30 | 0 | 199 (192 / 7) |
+| P2 | Bakım üreticileri (Sera, ADA, Tropical, Tropica, Shrimps Forever, MasterLine, Prize), Türk üreticileri (OrionLED, Creaqua), Akvaryum Express, Aquacık, 16 canlı | 544 (376 / 168) | 344 (220 / 124) | 112 | 79 | 9 | 0 | 341 (218 / 123) |
+| P3 | ikas mağazaları (Atakan, Malawi İzmir, Aquarubi, Betta Marketim) | 328 (117 / 211) | 253 (96 / 157) | 41 | 26 | 8 | 0 | 253 (96 / 157) |
+| P4 | Çin ve Batılı üreticiler (Eheim, Dophin, Aquael, SunSun, Netlea, Tetra, ISTA, Sicce, Twinstar) ve öbür Türk ve yabancı mağazalar | 517 (153 / 364) | 388 (106 / 282) | 88 | 33 | 8 | 0 | 282 (95 / 187) |
+| Toplam | | 1.637 (883 / 754) | 1.184 (614 / 570) | 250 | 148 | 55 | 0 | 1.075 (601 / 474) |
+
+- **Tabloya giren kayıtlar:** ekipman 857 (P1 199, P2 164, P3 215, P4 279; 321 okuma satırı), bakım ürünü 218 (P2 177, P3 38, P4 3; 40 okuma satırı). Canlı ve bitki yok: P2'deki 16 canlının hiçbiri `same` çıkmadı.
+- **Yenilenmeyenlerin nedenleri** (günleri değişmedi):
+  - Değeri çekili 26 kayıt ve kaynağı kabul edilmeyen 83 kayıt: yukarıda.
+  - `different` 55: değer ya da açıklama sayfadakinden farklı. Kaynaklı düzeltme ayrı iştir (karar 0039, 1. madde; ikinci yazıcı ve kontrolcü). Başlıcaları: 27 Jeneca kaydında "üretici teknik tablosu/hacim aralığı yayımlanmamış" cümlesi eskidi (üretici artık tabloyu resim olarak yayımlıyor: CDA, PB, D, X, T8/T12, AL-3201); SX-366 1000/1200/1500 W (sayfa 300/500/800 W; büyük güçler SX-388 tablosunda); Resun King-3/5/6 debi ve güç; Armatürk 1/2/3'lü fan hacim ve ölçüleri; ISTA i148/i149 boyu (Small/Large yer değiştirmiş görünüyor); Atakan sayfalarında başlık ile açıklamanın çeliştiği Boyu WF-2045, RS-1000, Mufan 12/12 seti ve benzerleri (karar 0019 çelişki kuralı); Tropical Bio-Vit (sayfa "Bi-Vit") ve Spirulina Super Forte (sayfa "Super Spirulina Forte") adları; 7 canlıda boy, sıcaklık, pH, grup ya da tank uzunluğu farkı.
+  - `partial` 250: bazı alanlar sayfada yazmıyor. Kaynak bir liste ya da kategori sayfası ve değer vermiyor (Sera listelerinin kısa tanıtımı 39, Eheim kategori sayfaları, MasterLine ve Shrimps Forever ana sayfaları, Twinstar E-Line IV'ün yönlendiği E-Line V sayfası); açıklamadaki tek bir sıfat sayfada yok ("nano", "batan", "hava ile çalışır", "telefon kontrolü"); canlıların uzun bakım metinleri cümle cümle doğrulanmadı ve Fishkeeper sayfalarında artık tank ölçüsü satırı yok.
+  - `missing` 148: ürün ya da alan sayfada yok. Ürün mağazadan kalkmış ya da adres ana sayfaya yönleniyor (Akvaryum Express'te 5 ürün, Dophin PC serisi 404, Armatürk hortumları, Aquael Ultra Heater EN sayfası); kaynak aynı serinin başka boyunun sayfası (Atakan'da 21 kayıt: Boyu SF, Mufan sünger ve difüzörler, Liya havataşları, Yikeda UFO); genel listede model görünmüyor (Jeneca SZ-40/50/60D, MM-30/31/32/32D, AH-2000/3000DC; WaterBear, Xinyou, Sobo AQ-16/17/18H).
+  - `unreachable`: P1–P4'te yok. Açılmayan siteler P5'te; bu turda okunmadı.
+- **Kontrolcünün bakması istenen `same` kararları** (okuyucuların notu): Jeneca UV-02 ("HIGH QUALITY UV LAMP" ↔ "Dış UV filtre ünitesi"), SC Standard (ölçü model numarasından), CR-1000 SALT (liste "CR-250 500 1000 SALT"), "kategori sayfasında tablo yok" cümlesi kategori sayfasından doğrulanan AH/PF/DB/HM kayıtları; Eheim pickup 45/60/160'ta debi ayarının yalnız "çıkış aralığı"ndan okunması; Dophin ısıtıcılarında "cam" bilgisinin yalnız anahtar sözcükte olması. Kontrolde düşen kayıt tablodan çıkarılır, günü eski hâline döner.
+- **Kod.** Mağaza doğrulaması (`catalog-equipment-unverified.ts`, `shopVerifiedAt`) tarihi artık yalnız ileri götürür; bugünkü kayıtlarda sonuç değişmedi (mağaza doğrulamalı 75 kaydın hiçbiri tabloda değil ve kendi günü 2026-10-17'den yeni değil). Tablodaki kimlik katalogda yoksa ekipman kataloğu da her ortamda hata verir.
+- **Paket boyutu** (`next build`, ilk yük, gzip): tablosuz ekipman 325 kB, bakım ürünleri 245 kB. Adresli tablo ikisine de +13 kB ekliyordu (iki tablo aynı modülde olduğu için iki sayfaya da giriyordu); adressiz, türe göre ayrı kopyalarla ekipman 329 kB (+4), bakım ürünleri 247 kB (+2).
+- **Test.** `src/lib/__tests__/catalog-reverified.test.ts` (yeni): tablo uygulanmadan önceki katalogla karşılaştırma (yalnız tablodaki kayıtların yalnız günü değişir, eski günle okuma gününün geç olanı olur); adressiz kopya tabloyla aynı; kimlik kendi katalogunda var, bir kez geçiyor, başka katalogla çakışmıyor; değeri çekili ekipman tabloda yok; okuma günü takvimde ve gelecekte değil; adres kaydın kaynak adreslerinden biri; mağaza doğrulaması ile tablonun sırası sonucu değiştirmiyor. `scripts/test-catalog-flow.cjs`: eski günü sabitleyen 8 beklenti satırı (SunSun, Netlea ×2, Jeneca ısıtıcıları, Nubios, Mufan, Tropica ekipman ve bakım ürünleri) tablodaki kayıtlarda okuma gününü bekliyor (`rev15`); öbür kayıtların beklentisi değişmedi.
+- **Açık.** İkinci tur aynı tabloya ekleme yapacak: P1–P4'ün çözülen `partial` ve `missing` kayıtları, yeni adres önerileri ve P5'in uygulama içi tarayıcıyla açılan siteleri; her eklemeden sonra `node scripts/reverified-dates.cjs`. `docs/DATA_COVERAGE.md` yeniden ölçülmedi: ölçüm günü 2026-11-15'te bu kayıtların hepsi zaten 92 günün içindeydi, tablo değişmiyor.
+
+## 2026-11-15 Tarih yenileme 2: yeni kayıtlar, adres değişiklikleri, değer düzeltmeleri
+
+- **Gerekçe.** "2026-11-15 Tarih yenileme 1"in ikinci turu (Burak'ın "devam et" sözü). Okuma: R-A (P1 Jeneca arşivi ve P3 ikas mağazalarının ürün sayfaları, curl), R-B (P2 ve P4 çözümlemesi, curl), P5a ve P5b (otomatik açılmayan siteler, uygulama içi tarayıcı). Okuma günü hepsinde 2026-11-15. Alan alan kanıt ve sayfa parçaları depo dışındaki çalışma dosyalarında (kanit-R-A/R-B/P5a/P5b.jsonl); kontrolcü aynı adresleri açıp doğrulayabilir.
+- **Tabloya giren kayıtlar** (`src/data/catalog-reverified.ts`, "tarih yenileme 2" blokları): 735 satır kaydı; 74'ü 1. turda liste sayfasıyla tablodaydı, yeni ürün sayfasının satırına taşındı. Net yeni 661 kayıt; tablo artık ekipman 1.297, bakım ürünü 439.
+  - R-A: ekipman 68, bakım 33 (101; 99'u yeni adresle).
+  - P5a: ekipman 105, bakım 107 (Dennerle 164, CO2Art 29, Twinstar Kore mağazası 7, 2Hr Aquarist 12).
+  - P5b: ekipman 200, bakım 1 (Ferplast 136, Oase 25, Fluval 21, Haqos 19).
+  - R-B: ekipman 25, bakım 76 (Sera, Tropical, ADA, Tropica, Creaqua, Akvaryum Express, Shrimps Forever, Eheim, Aquael, ISTA, WaterBear).
+  - Düzeltilen kayıtlar: ekipman 83, bakım 37 (aşağıdaki liste; düzeltmeden sonra dolu bütün alanlar sayfayla aynı, kanıt aynı okuma).
+  - Canlı ve bitki: 0. Düzeltilen dört canlıda (jaguar, melon barb, Somphong rasbora, altı bantlı barb) ve ornate yılanbaşta başka alanlar kaynakta artık yok ya da metin iddiaları doğrulanmadı; tarihleri yenilenmedi, tür tablosu kurulmadı.
+- **Tabloya girmeyen `same` kayıtlar (37).** Kaynağı kabul listesinde olmayan 35: creatureculture.co.nz 4, aquarockscolorado.com 2, aqualink-shop.com 1, petzlifeworld.in 1, kaspi.kz 1, manuals.plus 3, tarapet.ae 3, acvaristic.ro 14 (MasterLine; markanın resmî sitesi olduğu belgelenmedi, lider kararı 1), akvaryumbalikavm.com.tr 6 (WaterBear). Değeri hesaptan çekili 2 (Haqos UV 9 W, Mini UV 5 W). Liste `docs/CATALOG_SOURCE_GAPS.md`'de.
+- **Kabul edilen kaynak (test).** `catalog-reverified.test.ts`'in kabul listesine markanın kendi sitesi olarak eklendi: dennerle.com, co2art.eu, twinstarstore.kr (Twinstar'ın Kore mağazası, CATALOG_LOG 2026-11-11), 2hraquarist.com, ferplast.com, fluvalaquatics.com, oase.com, haqos.com.
+- **Adres değişikliği (322 kayıt: ekipman 158, bakım 164).** Yeni dosyalar `src/data/catalog-reverified-equipment-sources.ts` ve `catalog-reverified-care-sources.ts`; katalog yüklenirken `applyReverifiedSources` (`catalog-shared.ts`) yazar (ekipmanda mağaza doğrulamasından sonra, tarih tablosundan önce). Kalıp fonksiyonlarındaki ortak kaynak sabitleri değişmedi; okunmayan kayıtlar eski adreste kalır. Satır sonundaki yorum eski adrestir; eski adresler aşağıdaki listede de durur (AGENTS.md, "Kaynak bilgisini kaybetme").
+  - Eski adres liste, kategori ya da marka sayfasıydı (Atakan Petshop ve Aquarubi marka sayfaları, 2Hr Aquarist `collections/all`, Oase aile sayfaları, ALEAS kategori sayfaları), başka boyun ya da modelin sayfasıydı (Boyu SF-103, Eurostar medium, Jeneca YL-7, Mufan 40 cm, Ferplast Blumodular 1, SunSun 603B vb.), 404 veriyordu (Fluval 07 serisi, Ferplast Aqamai beyaz) ya da yeni adrese yönleniyordu (Dennerle Almanca adresleri, Oase ürün sayfaları, Netlea C4000). Kontrolden sonra (aşağıda "Kontrol") eski adres yüklenirken `additionalSourceUrls`'e taşınır (AGENTS.md, "eski kaynak izi `additionalSourceUrls` içinde ... korunur"); 404 veren ya da yönlenen eski adres de taşınır (lider kararı).
+  - Haqos: https adresi bağlantıyı kesiyor, okuma http ile yapıldı; adres değişmedi (aynı sitenin aynı sayfası).
+  - Ek kaynak eklenenler: Creaqua Delta Marine 35 ve 40 (üretici sayfası `92-delta-marine.html`), ISTA I-514 ve I-672 (üretici kataloğu `ista-catalog1.pdf`). Fluval 207'nin ana adresi ek kaynaktaki 207 sayfası oldu; 107/307/407'nin değerleri yine bu sayfanın karşılaştırma tablosundan, tabloda bu adresle duruyor.
+- **Düzeltme kuralları.** Sayfa kendi içinde çelişiyorsa karar 0019 (değer çekilir, açıklama farkı söyler; kapasite notu yalnız kapasite verisi kalmayan filtre, ısıtıcı ve hava motorunda, katalog bütünlük kuralı). Kaynakta olmayan iddia açıklamadan çıkar. Değer tam modelin kendi sayfasından. Canlı boyunda kaynakların büyüğü, sıcaklık ve pH'ta kabul edilen kaynakların ortak aralığı, grupta aralığın alt ucu. Kimlik silinmedi: SX-366 1000/1200/1500 W kayıtları AL-28 50/100 W düzeniyle kaldı (güç çekildi, not yazıldı); ST-37Z'nin kimliği aynı kaldı, ad AT-37Z oldu, eski ad eş ad (karar 0038).
+- **Yazıcının uyarlamaları (öneriden farkı).**
+  - RS 758 300 W ve Boyu WF-2045: önerilen kapasite notu yazılmadı; kayıtta hacim sınırı kaldığı için bütünlük kuralı notu yasaklıyor. Çelişki teknik bilgi satırında.
+  - Resun AIR-1000, AIR-2000 ve RS 1000: debi birimleri "dakikada # litre" yerine "L/dakika" yazıldı (çeviri birim kuralı); anlam aynı.
+  - Shrimp King Protein: önerilen "yem çubuğu" sayfada yazmadığı için alınmadı; protein oranı çelişkisi açıklamaya yazıldı (%42,2 ve %48,1).
+  - Jeneca X5: güç önerilmedi (8 W / 10 W çelişkili); açıklama çelişkiyi söylüyor.
+  - Creaqua Bubblegun: "316L paslanmaz çelik" ayrı parça yazıldı (mevcut çeviri parçası).
+  - Ornate yılanbaş: yalnız akıntı uygulandı (medium → high, Fishipedia "COURANT Fort"); bakım metnindeki kaynakta olmayan iddialar ve kapak/hava boşluğu doğrulaması kontrolcüye ve lidere kaldı.
+  - Resun KING-3/5/6: kaynak okosgazdi.hu kabul edilen bir kaynak değil, sayfa şimdi başka değer yazıyor (2400 L/saat 35 W, 6000 L/saat 130 W, 8500 L/saat 230 W); lider kararı 3 gereği değerler çekildi, teknik bilgi satırı "debi ve güç doğrulanamadı" diyor. Kategori "other" olduğu için kapasite notu yazılamadı. Tabloya girmedi.
+  - Creaqua Cycle Booster: açıklama düzeltildi, kategori ("bacteria") sorusu açık; tabloya girmedi.
+- **Uygulanmayan öneriler (lider ya da kontrolcü kararı).** Eurostar Water Clarifier kategorisi; Nubios N-201 ad değişikliği; Aquawing AQ938/AQF380 ayar özelliği; Boyu EF-05 hacmi; Resun AIR-500 ve AIR-3000 güç/debi; Ejet 101 hava motoru özelliği; bakım ürünlerinde ad değişiklikleri (Tropical Bi-Vit, Super Spirulina Forte; Shrimps Forever paketleri, GH/KH+ Plus, GH+ Plus): bakım ürününde eş ad alanı olmadığı için kullanıcı kayıtlarının adla eşleşmesi kopabilir; ISTA I-148/I-149 boy takası (iki kayıt birbirinin adını alır, eş ad kuralı çakışır); Creaqua Sigma PW 7 W (kimlik doğrulanmadı); Armatürk fan 2 ve 3 (sayfa 1'li fanın cümlesini kullanıyor); WaterBear C3M ve MasterLine (kabul edilmeyen kaynak); ciklid.org, l-welse, akvaforum ve aquainfo'ya dayanan canlı önerileri (silver maskaheros, Guianacara, L148, white-cheek goby; lider kararı 2); Andrao yılanbaş metni.
+- **Altın fikstür.** 1.138 vakadan 9'u değişir; hepsi canlı düzeltmesinden: `species-tight:jaguar-cichlid` 61 → 60, `species-tight:melon-barb` 66 → 65, `species-fit:melon-barb`, `species-fit:jaguar-cichlid`, `species-tight:six-banded-barb`, `species-fit:somphongs-dwarf-rasbora`, `species-tight:somphongs-dwarf-rasbora`, `pair:jack-dempsey+jaguar-cichlid`, `pair:snow-white-shrimp+somphongs-dwarf-rasbora` (puan aynı, metrik ya da metin farkı). Ekipman düzeltmelerinin hiçbiri fikstürü değiştirmiyor. Fikstür yeniden üretilmedi (ayrı commit).
+- **Çeviri.** Değişen ve yeni metin parçalarının İngilizce ve İspanyolcası `packages/localization/translations/` kaynak dosyalarına yazıldı, eskiyen parçalar çıkarıldı; tablolar `node scripts/catalog-translations.cjs` ile üretildi ve CRLF'ye çevrildi.
+
+### Düzeltmeler (kayıt, adres; alan: eski → yeni; alıntı; kural)
+
+- `aquawing-aq01-glass-cleaner` (R-B, https://www.akvaryumexpress.com/aq01-aquawing-mknatisli-akvaryum-silecegi):
+  - specifications: "Küçük boy mıknatıslı akvaryum cam sileceği" → "4 mm cam kalınlığına kadar mıknatıslı akvaryum cam sileceği · 7 × 7 × 4 cm"; alıntı: 4 mm cam kalınlığına kadar uygundur. Ürün Ölçüleri: 7x7x4Cm; kural: değer tam modelin kendi ürün sayfasında yazmalı (karar 0019)
+- `aquawing-aqx1` (R-A, https://atakanpetshop.com/aquawing-aqx1-pilli-hava-motoru):
+  - specifications: "Pilli tek çıkışlı hava motoru · 2 L/dakika · manuel çalışma" → "Pilli tek çıkışlı hava motoru · 2 L/dakika · ayarlanabilir hava çıkışı"; alıntı: 'manuel çalışma' yazmıyor; sayfa 'Ayarlanabilir hava çıkışı' diyor; kural: kaynakta olmayan iddia çıkarılır (lider kararı 3'ün ekipman karşılığı; AGENTS.md 'uydurma yok')
+- `armaturk-cooling-fan-1` (R-B, https://www.armaturk.com.tr/1l-fanli-akvaryum-sogutucu-1li-fan-P477):
+  - specifications: "… 9 mm'ye kadar cam · 14 × 12 × 4 cm" → "… 10 mm'ye kadar cam · 13 × 13 × 4 cm"; alıntı: 10 mm kalınlığa kadar akvaryum camlarına uyumludur … Ürün Ölçüsü: 13 × 13 × 4 cm; kural: DATA_SOURCES kaynak önceliği: değer kaynağın kendi sayfasından; mağaza değeri farklıysa mağazanınki (kabul edilen mağaza değilse değer çekili kalır)
+- `boyu-wf-2045` (R-A, https://atakanpetshop.com/boyu-wf-2045-selale-filtre-65w-500ls-wf-2045):
+  - ratedFlowLph: "500" → "boş"; alıntı: başlık: 'Boyu WF-2045 Şelale Filtre 6,5W 500L/S'; açıklama: 'Saatte 300 litre su basma kapasitesiyle'; kural: karar 0019: sayfa aynı alanı kendi içinde farklı yazıyorsa değer alınmaz, çelişki notu yazılır
+  - specifications: "Askı filtre · 500 L/saat · 6,5 W" → "Askı filtre · 6,5 W · debi mağaza sayfasında çelişkili (500 ve 300 L/saat)"; alıntı: aynı alıntı; kural: karar 0019: sayfa aynı alanı kendi içinde farklı yazıyorsa değer alınmaz, çelişki notu yazılır
+  - capacityDataNote: "boş" → "Atakan Petshop sayfası başlıkta 500 L/saat, açıklamada saatte 300 litre yazıyor; debi doğrulanamadığı için otomatik hesapta kullanılmaz."; alıntı: aynı alıntı; kural: karar 0019: sayfa aynı alanı kendi içinde farklı yazıyorsa değer alınmaz, çelişki notu yazılır; altın fikstür etkilenebilir
+- `creaqua-active-carbon-250-ml` (R-B, https://www.creaqua.com.tr/en/filter-media/58-2463-carbon.html):
+  - description: "Organik kirletici, renk ve kokuyu adsorbe eden aktif karbon" → "Organik atıkları, ilaç kalıntılarını ve kloru tutan, buharla aktive edilmiş karbon"; alıntı: Creaqua CARBON is a macroporous and powerful adsorbent produced by steam activation. … volatile organic wastes, residues, drug residues and chlorine; kural: açıklama ürün sayfasındaki iddialarla sınırlı (karar 0019)
+- `creaqua-active-carbon-500-ml` (R-B, https://www.creaqua.com.tr/en/filter-media/58-2463-carbon.html):
+  - description: "Organik kirletici, renk ve kokuyu adsorbe eden aktif karbon" → "Organik atıkları, ilaç kalıntılarını ve kloru tutan, buharla aktive edilmiş karbon"; alıntı: Creaqua CARBON is a macroporous and powerful adsorbent produced by steam activation. … volatile organic wastes, residues, drug residues and chlorine; kural: açıklama ürün sayfasındaki iddialarla sınırlı (karar 0019)
+- `creaqua-alpha-rgbw-120` (R-B, https://www.creaqua.com.tr/en/aquarium-lightings/90-alpha-rgbw.html):
+  - specifications: "… · 148 W · 14904 lm · …" → "… · 148 W · 15000 lm · …"; alıntı: Luminous Flux 15000 lm (boy 120 - 150 cm); kural: üretici kendi içinde çelişirse güncel ürün sayfasıyla aynı olan değer (DATA_SOURCES, üretici sayfası kuralı)
+- `creaqua-alpha-rgbw-150` (R-B, https://www.creaqua.com.tr/en/aquarium-lightings/90-alpha-rgbw.html):
+  - specifications: "… · 185 W · 18630 lm · …" → "… · 185 W · 18750 lm · …"; alıntı: Luminous Flux 18750 lm (boy 150 - 175 cm); kural: üretici kendi içinde çelişirse güncel ürün sayfasıyla aynı olan değer (DATA_SOURCES, üretici sayfası kuralı)
+- `creaqua-alpha-rgbw-60` (R-B, https://www.creaqua.com.tr/en/aquarium-lightings/90-alpha-rgbw.html):
+  - specifications: "… · 74 W · 7452 lm · …" → "… · 74 W · 7500 lm · …"; alıntı: Luminous Flux 7500 lm (boy 60 - 85 cm); kural: üretici kendi içinde çelişirse güncel ürün sayfasıyla aynı olan değer (DATA_SOURCES, üretici sayfası kuralı)
+- `creaqua-alpha-rgbw-90` (R-B, https://www.creaqua.com.tr/en/aquarium-lightings/90-alpha-rgbw.html):
+  - specifications: "… · 111 W · 11178 lm · …" → "… · 111 W · 11250 lm · …"; alıntı: Luminous Flux 11250 lm (boy 90 - 115 cm); kural: üretici kendi içinde çelişirse güncel ürün sayfasıyla aynı olan değer (DATA_SOURCES, üretici sayfası kuralı)
+- `creaqua-bubblegun` (R-B, https://www.creaqua.com.tr/en/co2-system/12-bubblegun.html):
+  - specifications: "Bitkili akvaryum için seramik CO₂ difüzörü" → "Bitkili akvaryum için 316L paslanmaz çelik gövdeli, mikro gözenekli membranlı CO₂ difüzörü"; alıntı: Bubblegun is made of 316L quality stainless steel … With the new microporous membrane technology; kural: açıklama ürün sayfasındaki iddialarla sınırlı (karar 0019)
+- `creaqua-cycle-booster` (R-B, https://www.creaqua.com.tr/en/water-conditioners/80-cycle-booster.html):
+  - description: "Akvaryumun biyolojik döngüsünü destekleyen bakteri kültürü" → "Nitrifikasyon bakterilerini besleyerek biyolojik filtrasyonun kurulmasını hızlandıran ve yeni akvaryum sendromunu önleyen düzenleyici"; alıntı: Cycle Start selectively feeds only nitrifying bacteria and accelerates their growth. … It prevents “new tank syndrome”; kural: açıklama ürün sayfasıyla çelişmemeli (karar 0019); category "bacteria" de gözden geçirilmeli
+- `creaqua-delta-pw-11` (R-B, https://www.creaqua.com.tr/en/aquarium-lightings/32-delta-pw.html):
+  - specifications: "Bitkili akvaryum LED · 11 W" → "Hi-tech ve low-tech akvaryumlar için LED · 11 W"; alıntı: Delta PW ‘’Premium White’’ series provides balanced lighting for medium or high support (Hi-tech/Low-tech) tanks; kural: açıklama ürün sayfasındaki iddialarla sınırlı (karar 0019)
+- `creaqua-delta-pw-22` (R-B, https://www.creaqua.com.tr/en/aquarium-lightings/32-delta-pw.html):
+  - specifications: "Bitkili akvaryum LED · 22 W" → "Hi-tech ve low-tech akvaryumlar için LED · 22 W"; alıntı: Delta PW ‘’Premium White’’ series provides balanced lighting for medium or high support (Hi-tech/Low-tech) tanks; kural: açıklama ürün sayfasındaki iddialarla sınırlı (karar 0019)
+- `creaqua-delta-pw-33` (R-B, https://www.creaqua.com.tr/en/aquarium-lightings/32-delta-pw.html):
+  - recommendedTankLengthCm: "[90,120]" → "[90,115]"; alıntı: Size 90 - 115 cm … Energy Consumption 33 watt; kural: üretici sayfası mağazadan önce gelir (DATA_SOURCES kaynak önceliği)
+- `creaqua-delta-pw-44` (R-B, https://www.creaqua.com.tr/en/aquarium-lightings/32-delta-pw.html):
+  - specifications: "Bitkili akvaryum LED · 44 W" → "Hi-tech ve low-tech akvaryumlar için LED · 44 W"; alıntı: Delta PW ‘’Premium White’’ series provides balanced lighting for medium or high support (Hi-tech/Low-tech) tanks; kural: açıklama ürün sayfasındaki iddialarla sınırlı (karar 0019)
+- `creaqua-exalg-carbon-250-ml` (R-B, https://www.creaqua.com.tr/en/water-conditioners/20-2538-exalg-carbon.html):
+  - description: "Bitkili akvaryumlar için sıvı organik karbon desteği" → "Bitki büyümesini hızlandıran sıvı aktif karbon kaynağı"; alıntı: It is the active source of carbon that is effective in accelerating the growth of plants.; kural: açıklama ürün sayfasındaki iddialarla sınırlı (karar 0019)
+- `creaqua-plant-nutrition-micro-250-ml` (R-B, https://www.creaqua.com.tr/en/plant-nutrients/17-2541-micro-nutrients.html):
+  - description: "Bitkili akvaryumlar için konsantre mikro besin desteği" → "Bitkili akvaryumlar için kalsiyum, magnezyum, iz element, vitamin ve amino asit içeren mikro besin"; alıntı: It is a specially formulated source of calcium, magnesium, trace elements, vitamins and amino acids for a healthier development of aquarium plants.; kural: açıklama ürün sayfasındaki iddialarla sınırlı (karar 0019)
+- `creaqua-purifier-filter-pad` (R-B, https://www.creaqua.com.tr/en/filter-media/71-purifier-filter-pad.html):
+  - description: "Koku, renk ve organik kirleticileri tutmaya yardımcı arıtıcı filtre pedi" → "Organik atık ve tortuyu tutarak mekanik filtrasyonu güçlendiren, suyu kısa sürede berraklaştıran filtre pedi"; alıntı: Purifier Filter Pad strengthens mechanical filtration and provides clarity in a short time. … holding organic waste and sediments; kural: açıklama ürün sayfasındaki iddialarla sınırlı (karar 0019)
+- `dennerle-aqua-dest` (P5a, https://dennerle.com/en/products/aqua-dest):
+  - description: "CO₂ ve pH testlerinin hazırlanmasında kullanılan saflaştırılmış test suyu" → "pH elektrotlarını durulamak için damıtılmış su"; alıntı: For rinsing pH electrodes. Distilled water; kural: açıklama tam modelin kendi üretici sayfasındaki ifadeye dayanır (DATA_SOURCES, üretici kaynağı)
+- `dennerle-aqua-test` (P5a, https://dennerle.com/en/products/aqua-test):
+  - description: "Dennerle sürekli CO₂ testleri için test çözeltisi" → "Toplam sertlik, karbonat sertliği ve pH ölçen damla test seti (akvaryum, bahçe havuzu ve yüzme havuzu)"; alıntı: Test to determine total hardness, carbonate hardness and pH value; kural: açıklama üreticinin kendi ürün sayfasına dayanır
+- `dennerle-carbo-night-flex400` (P5a, https://dennerle.com/en/products/carbo-night-flex400):
+  - specifications: "Entegre gece kapatma solenoidi bulunan, tek ve yeniden doldurulabilir tüplerle uyumlu CO₂ tam seti · 400 litreye kadar" → "Entegre gece kapatma solenoidi bulunan, tek ve yeniden doldurulabilir tüplerle uyumlu CO₂ teknik seti (tüp dahil değil) · 400 litreye kadar"; alıntı: CO2 technology set for aquariums up to 400 liters ... (neither included); kural: açıklama üreticinin kendi ürün sayfasına dayanır; sette olmayan parça 'tam set' denmez
+- `dennerle-carbo-power-flex400` (P5a, https://dennerle.com/en/products/carbo-power-flex400):
+  - specifications: "Tek ve yeniden doldurulabilir CO₂ tüpleriyle uyumlu hassas CO₂ tam seti · 400 litreye kadar" → "Tek ve yeniden doldurulabilir CO₂ tüpleriyle uyumlu hassas CO₂ teknik seti (tüp dahil değil) · 400 litreye kadar"; alıntı: CO2 technology set for aquariums up to 400 liters ... (neither included); kural: açıklama üreticinin kendi ürün sayfasına dayanır; sette olmayan parça 'tam set' denmez
+- `dennerle-carbo-power-flex400-special-edition` (P5a, https://dennerle.com/en/products/carbo-power-flex400):
+  - specifications: "Solenoid valfli, tek ve yeniden doldurulabilir CO₂ tüpleriyle uyumlu hassas CO₂ tam seti · 400 litreye kadar" → "Solenoid valfli, tek ve yeniden doldurulabilir CO₂ tüpleriyle uyumlu hassas CO₂ teknik seti (tüp dahil değil) · 400 litreye kadar"; alıntı: CO2 technology set for aquariums up to 400 liters ... (neither included); kural: açıklama üreticinin kendi ürün sayfasına dayanır; sette olmayan parça 'tam set' denmez
+- `dennerle-carbo-start-flex200-special` (P5a, https://dennerle.com/en/products/carbo-start-flex200):
+  - specifications: "Solenoid valfli, tek ve yeniden doldurulabilir tüplerle uyumlu CO₂ tam seti · 200 litreye kadar" → "Solenoid valfli, tek ve yeniden doldurulabilir tüplerle uyumlu CO₂ teknik seti (tüp dahil değil) · 200 litreye kadar"; alıntı: CO2 technology set for aquariums up to 200 liters ... (neither included); kural: açıklama üreticinin kendi ürün sayfasına dayanır; sette olmayan parça 'tam set' denmez
+- `dennerle-scaper-s-flow-pad` (P5a, https://dennerle.com/en/products/scapers-flow-pad):
+  - description: "Scaper's Flow için yedek ince filtre pedi" → "Scaper's Flow için yedek aktif karbon pedi"; alıntı: Activated Carbon Pad for Scaper's Flow; kural: açıklama üreticinin kendi ürün sayfasına dayanır
+- `dennerle-shrimp-king-protein` (P5a, https://dennerle.com/en/products/shrimp-king-protein):
+  - description: "Artan protein gereksinimi dönemleri için yüzde 42,2 proteinli yem" → "Artan protein gereksinimi dönemleri (ör. yumurta oluşumu) için yüksek proteinli yem çubuğu"; alıntı: 'protein content 42.2%' / 'crude protein 48.1%'; kural: karar 0019: sayfa kendi içinde çelişirse değer alınmaz, iki alıntı verilir
+- `dophin-sf15` (R-A, https://atakanpetshop.com/dophin-sf15-pipo-filtre):
+  - specifications: "Hava motoruyla çalışan biyolojik pipo filtre" → "Hava motoruyla çalışan pipo filtre"; alıntı: Dophin SF15 Pipo Filtre ... Hava motoruna bağlanarak kullanılmaktadır.; kural: kaynakta olmayan iddia çıkarılır (lider kararı 3'ün ekipman karşılığı; AGENTS.md 'uydurma yok')
+- `dophin-sf33` (R-A, https://atakanpetshop.com/dophin-sf33-pipo-filtre):
+  - specifications: "Hava motoruyla çalışan biyolojik pipo filtre" → "Hava motoruyla çalışan pipo filtre"; alıntı: Dophin SF33 Pipo Filtre ... Hava motoruna bağlanarak kullanılmaktadır.; kural: kaynakta olmayan iddia çıkarılır (lider kararı 3'ün ekipman karşılığı; AGENTS.md 'uydurma yok')
+- `eurostar-filter-wool-100g` (R-A, https://atakanpetshop.com/eurostar-filter-wool-filtre-elyafi-100gr):
+  - description: "Mekanik filtrasyon için akvaryum filtre elyafı" → "İç filtre, dış filtre ve sump için akvaryum filtre elyafı"; alıntı: iç filtreler, dış filtreler ve sump sistemleri için uygun hazırlanmış filtre malzemesidir ... suyu filtrelemek ve bakteri tutuşunu kolaylaştırmak için; kural: kaynakta olmayan iddia çıkarılır (lider kararı 3'ün ekipman karşılığı; AGENTS.md 'uydurma yok')
+- `eurostar-glass-intake-13` (R-A, https://atakanpetshop.com/eurostar-cam-emis-borusu-13mm):
+  - specifications: "Dış filtreler için şeffaf cam emiş borusu · 13 mm · 12/16 mm hortum uyumlu" → "Dış filtreler için şeffaf cam emiş borusu · 13 mm"; alıntı: '12/16 mm hortum uyumlu' yazmıyor; sayfa '13 mm çapı ile birçok dış filtrenin standart hortum bağlantılarına uyum sağlar' diyor; kural: kaynakta olmayan iddia çıkarılır (lider kararı 3'ün ekipman karşılığı; AGENTS.md 'uydurma yok')
+- `eurostar-glass-intake-17` (R-A, https://atakanpetshop.com/eurostar-cam-emis-borusu-17mm):
+  - specifications: "Dış filtreler için şeffaf cam emiş borusu · 17 mm · 16/22 mm hortum uyumlu" → "Dış filtreler için şeffaf cam emiş borusu · 17 mm"; alıntı: '16/22 mm hortum uyumlu' yazmıyor; sayfa '17 mm çapı ile birçok dış filtrenin standart hortum bağlantılarına uyum sağlar' diyor; kural: kaynakta olmayan iddia çıkarılır (lider kararı 3'ün ekipman karşılığı; AGENTS.md 'uydurma yok')
+- `eurostar-micro-bio-pellets-1000ml` (R-A, https://atakanpetshop.com/eurostar-micro-bio-pellets-1000ml):
+  - description: "Nitrat ve fosfat kontrolünü destekleyen biyolojik filtre peleti" → "Nitrifikasyon bakterilerine yüzey sağlayan gözenekli biyolojik filtre peleti"; alıntı: Gözenekli ve yuvarlak yapısı sayesinde ... nitrifikasyon bakterilerinin yuvalanabilmeleri için çok geniş yüzey alanları sağlar; kural: kaynakta olmayan iddia çıkarılır (lider kararı 3'ün ekipman karşılığı; AGENTS.md 'uydurma yok')
+- `eurostar-super-premium-carbon-300ml` (R-A, https://atakanpetshop.com/eurostar-super-premium-carbon-300ml-filtre-malzemesi-452-1016):
+  - description: "Klor, ağır metal, koku ve organik kirleticileri adsorbe eden aktif karbon" → "Klor, koku, renk ve organik atıkları adsorbe eden aktif karbon"; alıntı: 'ağır metal' yazmıyor; kural: kaynakta olmayan iddia çıkarılır (lider kararı 3'ün ekipman karşılığı; AGENTS.md 'uydurma yok')
+- `eurostar-zyro-max-fix-xl-500ml` (R-A, https://atakanpetshop.com/eurostar-zyro-max-fix-xl-500ml-filtre-malzemesi-452-1022):
+  - description: "Büyük gözenekli XL seramik biyolojik filtre medyası" → "Yüksek gözenekli XL seramik biyolojik filtre medyası"; alıntı: 'büyük gözenekli' yazmıyor; sayfa 'yüksek gözenekli yapısı' diyor; kural: kaynakta olmayan iddia çıkarılır (lider kararı 3'ün ekipman karşılığı; AGENTS.md 'uydurma yok')
+- `ferplast-pico-600-115` (P5b, https://www.ferplast.com/products/pico-600-115-eu):
+  - specifications: "Tatlı/deniz akvaryumu ve aquaterraryumlar için ayarlanabilir 115 V dalgıç santrifüj pompa" → "Tatlı/deniz akvaryumu ve aquaterraryumlar için ayarlanabilir dalgıç santrifüj pompa · 600 L/saat · 115 cm basma yüksekliği · 7 W"; alıntı: Power 7W / Maximum pump flow rate 600 l/h, maximum head 115 cm; kural: Kaynakta olmayan iddia kaldırılır; '600.115' adındaki 115 sayfaya göre basma yüksekliğidir (115 cm), gerilim değil. Değer üreticinin kendi sayfasından alınır.
+- `ista-acrylic-bubble-counter` (R-A, https://aquarubi.com/ista-acrylic-co2-bubble-counter-damla-sayaci):
+  - specifications: "Kilitli hortum bağlantılı akrilik kabarcık sayacı" → "Akrilik gövdeli CO₂ kabarcık sayacı"; alıntı: Ista Acrylic Co2 Bubble Counter Damla Sayacı ... Akrilik gövdesi sayesinde kabarcıklar net şekilde görünür; kural: kaynakta olmayan iddia çıkarılır (lider kararı 3'ün ekipman karşılığı; AGENTS.md 'uydurma yok')
+- `ista-co2-indicator` (R-A, https://aquarubi.com/ista-co2-indicator-ve-test-sivisi):
+  - specifications: "Akvaryumdaki çözünmüş CO₂ seviyesini renk değişimiyle izleyen kalıcı gösterge ve test sıvısı" → "Akvaryumdaki çözünmüş CO₂ seviyesini renk değişimiyle izleyen gösterge ve test sıvısı · gösterge sıvısı yaklaşık 3 haftada bir yenilenir"; alıntı: Ortalama 3 hafta içinde gösterge özelliği azalabilir; sonrasında aynı işlem tekrarlanarak yenilenmesi önerilir; kural: kaynakta olmayan iddia çıkarılır (lider kararı 3'ün ekipman karşılığı; AGENTS.md 'uydurma yok')
+- `ista-mini-co2-regulator` (R-A, https://aquarubi.com/ista-tek-sayacli-co2-regulator):
+  - specifications: "Basınç göstergeli ve hassas akış ayar vidalı CO₂ regülatörü" → "Tek manometreli (0–150 psi), aç/kapa musluklu CO₂ regülatörü · 500 g–2 kg yeniden doldurulabilir tüplerle"; alıntı: aynı alıntı; 'Uyumluluk: 500 g – 2 kg yeniden doldurulabilir CO2 tüpleri'; kural: kaynakta olmayan iddia çıkarılır (lider kararı 3'ün ekipman karşılığı; AGENTS.md 'uydurma yok')
+- `jaguar-cichlid` (R-B, https://www.fishkeeper.co.uk/fish/freshwater/cichlids/jaguar-cichlid):
+  - adultSizeCm: "45" → "61"; alıntı: SF: "Max size 610 mm SL 24 in SL"; kural: boyda, hacimde ve uzunlukta kaynakların büyüğü (CATALOG_LOG 2026-11-14 E1)
+- `jeneca-accessory-st-37z` (R-A, https://www.aleas.cn/product/48/):
+  - model: "ST-37Z" → "AT-37Z"; alıntı: Aquarium Tongs | AT-27Z/37Z/48Z; kural: karar 0039/1: kaynaklı düzeltme; okuma alıntısıyla CATALOG_LOG'a yazılır, düzeltilen kayıt okuma gününü alır; katalogdaki seri 'AT-27Z, ST-37Z, AT-48Z' diye yazılmış; sitede ST-37Z yok, ST- öneki yaln
+- `jeneca-al-3201-100w` (R-A, https://www.aleas.cn/product/640.html):
+  - specifications: "2 mm kalınlaştırılmış kuvars camlı tatlı/tuzlu su ısıtıcısı · 100 W · üretici hacim aralığı yayımlamamış" → "2 mm kalınlaştırılmış kuvars camlı tatlı/tuzlu su ısıtıcısı · 100 W · 30–50 litre akvaryum için"; alıntı: Product parameters (Model | Length | Power | Tank capacity | Cable length): 100W | 24cm | 100W | 30~50L | 95cm; kural: karar 0039/1: kaynaklı düzeltme; okuma alıntısıyla CATALOG_LOG'a yazılır, düzeltilen kayıt okuma gününü alır
+  - recommendedMinL: "boş" → "30"; alıntı: 100W | 24cm | 100W | 30~50L | 95cm; kural: yeni alan; ısıtıcı hesabını etkileyebilir, altın fikstür gerekirse ayrı commit
+  - recommendedMaxL: "boş" → "50"; alıntı: 100W | 24cm | 100W | 30~50L | 95cm; kural: yeni alan; aynı not
+- `jeneca-al-3201-200w` (R-A, https://www.aleas.cn/product/640.html):
+  - specifications: "2 mm kalınlaştırılmış kuvars camlı tatlı/tuzlu su ısıtıcısı · 200 W · üretici hacim aralığı yayımlamamış" → "2 mm kalınlaştırılmış kuvars camlı tatlı/tuzlu su ısıtıcısı · 200 W · 50–100 litre akvaryum için"; alıntı: Product parameters (Model | Length | Power | Tank capacity | Cable length): 200W | 30cm | 200W | 50~100L | 95cm; kural: karar 0039/1: kaynaklı düzeltme; okuma alıntısıyla CATALOG_LOG'a yazılır, düzeltilen kayıt okuma gününü alır
+  - recommendedMinL: "boş" → "50"; alıntı: 200W | 30cm | 200W | 50~100L | 95cm; kural: yeni alan; ısıtıcı hesabını etkileyebilir, altın fikstür gerekirse ayrı commit
+  - recommendedMaxL: "boş" → "100"; alıntı: 200W | 30cm | 200W | 50~100L | 95cm; kural: yeni alan; aynı not
+- `jeneca-al-3201-300w` (R-A, https://www.aleas.cn/product/640.html):
+  - specifications: "2 mm kalınlaştırılmış kuvars camlı tatlı/tuzlu su ısıtıcısı · 300 W · üretici hacim aralığı yayımlamamış" → "2 mm kalınlaştırılmış kuvars camlı tatlı/tuzlu su ısıtıcısı · 300 W · 100–200 litre akvaryum için"; alıntı: Product parameters (Model | Length | Power | Tank capacity | Cable length): 300W | 33cm | 300W | 100~200L | 95cm; kural: karar 0039/1: kaynaklı düzeltme; okuma alıntısıyla CATALOG_LOG'a yazılır, düzeltilen kayıt okuma gününü alır
+  - recommendedMinL: "boş" → "100"; alıntı: 300W | 33cm | 300W | 100~200L | 95cm; kural: yeni alan; ısıtıcı hesabını etkileyebilir, altın fikstür gerekirse ayrı commit
+  - recommendedMaxL: "boş" → "200"; alıntı: 300W | 33cm | 300W | 100~200L | 95cm; kural: yeni alan; aynı not
+- `jeneca-al-3201-50w` (R-A, https://www.aleas.cn/product/640.html):
+  - specifications: "2 mm kalınlaştırılmış kuvars camlı tatlı/tuzlu su ısıtıcısı · 50 W · üretici hacim aralığı yayımlamamış" → "2 mm kalınlaştırılmış kuvars camlı tatlı/tuzlu su ısıtıcısı · 50 W · 20–30 litre akvaryum için"; alıntı: Product parameters (Model | Length | Power | Tank capacity | Cable length): 50W | 21cm | 50W | 20~30L | 95cm; kural: karar 0039/1: kaynaklı düzeltme; okuma alıntısıyla CATALOG_LOG'a yazılır, düzeltilen kayıt okuma gününü alır
+  - recommendedMinL: "boş" → "20"; alıntı: 50W | 21cm | 50W | 20~30L | 95cm; kural: yeni alan; ısıtıcı hesabını etkileyebilir, altın fikstür gerekirse ayrı commit
+  - recommendedMaxL: "boş" → "30"; alıntı: 50W | 21cm | 50W | 20~30L | 95cm; kural: yeni alan; aynı not
+- `jeneca-al-3201-75w` (R-A, https://www.aleas.cn/product/640.html):
+  - specifications: "2 mm kalınlaştırılmış kuvars camlı tatlı/tuzlu su ısıtıcısı · 75 W · üretici hacim aralığı yayımlamamış" → "2 mm kalınlaştırılmış kuvars camlı tatlı/tuzlu su ısıtıcısı · 75 W · 20–40 litre akvaryum için"; alıntı: Product parameters (Model | Length | Power | Tank capacity | Cable length): 75W | 21cm | 75W | 20~40L | 95cm; kural: karar 0039/1: kaynaklı düzeltme; okuma alıntısıyla CATALOG_LOG'a yazılır, düzeltilen kayıt okuma gününü alır
+  - recommendedMinL: "boş" → "20"; alıntı: 75W | 21cm | 75W | 20~40L | 95cm; kural: yeni alan; ısıtıcı hesabını etkileyebilir, altın fikstür gerekirse ayrı commit
+  - recommendedMaxL: "boş" → "40"; alıntı: 75W | 21cm | 75W | 20~40L | 95cm; kural: yeni alan; aynı not
+- `jeneca-cda-1000` (R-A, https://www.aleas.cn/product/20/):
+  - specifications: "Dalgıç/devirdaim su pompası · üretici teknik tablosu yayımlanmamış" → "Dalgıç/devirdaim su pompası · 15 W · en çok 1000 L/saat · en çok 1,4 m basma yüksekliği"; alıntı: CDA-1000 • Power: 15W • Qmax: 1000L/H • Hmax: 1.4m; kural: karar 0039/1: kaynaklı düzeltme; okuma alıntısıyla CATALOG_LOG'a yazılır, düzeltilen kayıt okuma gününü alır; 'tablo yayımlanmamış' cümlesi artık doğru değil
+  - powerW: "boş" → "15"; alıntı: CDA-1000 • Power: 15W • Qmax: 1000L/H • Hmax: 1.4m; kural: yeni alan; üretici tablosu (Power)
+  - ratedFlowLph: "boş" → "1000"; alıntı: CDA-1000 • Power: 15W • Qmax: 1000L/H • Hmax: 1.4m; kural: yeni alan; Qmax en büyük debidir, motorun debi kullanımı kontrolcüye sorulmalı
+  - sourceUrl: "https://www.aleas.cn/product/20/" → "https://www.aleas.cn/product/690.html"; alıntı: CDA Series Submersible Water Pump detay sayfası; kural: lider kararı 1: liste sayfası yerine ürünün kendi sayfası
+- `jeneca-cda-1500` (R-A, https://www.aleas.cn/product/20/):
+  - specifications: "Dalgıç/devirdaim su pompası · üretici teknik tablosu yayımlanmamış" → "Dalgıç/devirdaim su pompası · 23 W · en çok 1500 L/saat · en çok 1,8 m basma yüksekliği"; alıntı: CDA-1500 • Power: 23W • Qmax: 1500L/H • Hmax: 1.8m; kural: karar 0039/1: kaynaklı düzeltme; okuma alıntısıyla CATALOG_LOG'a yazılır, düzeltilen kayıt okuma gününü alır; 'tablo yayımlanmamış' cümlesi artık doğru değil
+  - powerW: "boş" → "23"; alıntı: CDA-1500 • Power: 23W • Qmax: 1500L/H • Hmax: 1.8m; kural: yeni alan; üretici tablosu (Power)
+  - ratedFlowLph: "boş" → "1500"; alıntı: CDA-1500 • Power: 23W • Qmax: 1500L/H • Hmax: 1.8m; kural: yeni alan; Qmax en büyük debidir, motorun debi kullanımı kontrolcüye sorulmalı
+  - sourceUrl: "https://www.aleas.cn/product/20/" → "https://www.aleas.cn/product/690.html"; alıntı: CDA Series Submersible Water Pump detay sayfası; kural: lider kararı 1: liste sayfası yerine ürünün kendi sayfası
+- `jeneca-cda-200` (R-A, https://www.aleas.cn/product/20/):
+  - specifications: "Dalgıç/devirdaim su pompası · üretici teknik tablosu yayımlanmamış" → "Dalgıç/devirdaim su pompası · 3,5 W · en çok 280 L/saat · en çok 0,48 m basma yüksekliği"; alıntı: CDA-200 • Power: 3.5W • Qmax: 280L/H • Hmax: 0.48m; kural: karar 0039/1: kaynaklı düzeltme; okuma alıntısıyla CATALOG_LOG'a yazılır, düzeltilen kayıt okuma gününü alır; 'tablo yayımlanmamış' cümlesi artık doğru değil
+  - powerW: "boş" → "3.5"; alıntı: CDA-200 • Power: 3.5W • Qmax: 280L/H • Hmax: 0.48m; kural: yeni alan; üretici tablosu (Power)
+  - ratedFlowLph: "boş" → "280"; alıntı: CDA-200 • Power: 3.5W • Qmax: 280L/H • Hmax: 0.48m; kural: yeni alan; Qmax en büyük debidir, motorun debi kullanımı kontrolcüye sorulmalı
+  - sourceUrl: "https://www.aleas.cn/product/20/" → "https://www.aleas.cn/product/690.html"; alıntı: CDA Series Submersible Water Pump detay sayfası; kural: lider kararı 1: liste sayfası yerine ürünün kendi sayfası
+- `jeneca-cda-2500` (R-A, https://www.aleas.cn/product/20/):
+  - specifications: "Dalgıç/devirdaim su pompası · üretici teknik tablosu yayımlanmamış" → "Dalgıç/devirdaim su pompası · 40 W · en çok 2500 L/saat · en çok 2,3 m basma yüksekliği"; alıntı: CDA-2500 • Power: 40W • Qmax: 2500L/H • Hmax: 2.3m; kural: karar 0039/1: kaynaklı düzeltme; okuma alıntısıyla CATALOG_LOG'a yazılır, düzeltilen kayıt okuma gününü alır; 'tablo yayımlanmamış' cümlesi artık doğru değil
+  - powerW: "boş" → "40"; alıntı: CDA-2500 • Power: 40W • Qmax: 2500L/H • Hmax: 2.3m; kural: yeni alan; üretici tablosu (Power)
+  - ratedFlowLph: "boş" → "2500"; alıntı: CDA-2500 • Power: 40W • Qmax: 2500L/H • Hmax: 2.3m; kural: yeni alan; Qmax en büyük debidir, motorun debi kullanımı kontrolcüye sorulmalı
+  - sourceUrl: "https://www.aleas.cn/product/20/" → "https://www.aleas.cn/product/690.html"; alıntı: CDA Series Submersible Water Pump detay sayfası; kural: lider kararı 1: liste sayfası yerine ürünün kendi sayfası
+- `jeneca-cda-300` (R-A, https://www.aleas.cn/product/20/):
+  - specifications: "Dalgıç/devirdaim su pompası · üretici teknik tablosu yayımlanmamış" → "Dalgıç/devirdaim su pompası · 5,5 W · en çok 370 L/saat · en çok 0,7 m basma yüksekliği"; alıntı: CDA-300 • Power: 5.5W • Qmax: 370L/H • Hmax: 0.7m; kural: karar 0039/1: kaynaklı düzeltme; okuma alıntısıyla CATALOG_LOG'a yazılır, düzeltilen kayıt okuma gününü alır; 'tablo yayımlanmamış' cümlesi artık doğru değil
+  - powerW: "boş" → "5.5"; alıntı: CDA-300 • Power: 5.5W • Qmax: 370L/H • Hmax: 0.7m; kural: yeni alan; üretici tablosu (Power)
+  - ratedFlowLph: "boş" → "370"; alıntı: CDA-300 • Power: 5.5W • Qmax: 370L/H • Hmax: 0.7m; kural: yeni alan; Qmax en büyük debidir, motorun debi kullanımı kontrolcüye sorulmalı
+  - sourceUrl: "https://www.aleas.cn/product/20/" → "https://www.aleas.cn/product/690.html"; alıntı: CDA Series Submersible Water Pump detay sayfası; kural: lider kararı 1: liste sayfası yerine ürünün kendi sayfası
+- `jeneca-cda-500` (R-A, https://www.aleas.cn/product/20/):
+  - specifications: "Dalgıç/devirdaim su pompası · üretici teknik tablosu yayımlanmamış" → "Dalgıç/devirdaim su pompası · 7 W · en çok 500 L/saat · en çok 0,9 m basma yüksekliği"; alıntı: CDA-500 • Power: 7W • Qmax: 500L/H • Hmax: 0.9m; kural: karar 0039/1: kaynaklı düzeltme; okuma alıntısıyla CATALOG_LOG'a yazılır, düzeltilen kayıt okuma gününü alır; 'tablo yayımlanmamış' cümlesi artık doğru değil
+  - powerW: "boş" → "7"; alıntı: CDA-500 • Power: 7W • Qmax: 500L/H • Hmax: 0.9m; kural: yeni alan; üretici tablosu (Power)
+  - ratedFlowLph: "boş" → "500"; alıntı: CDA-500 • Power: 7W • Qmax: 500L/H • Hmax: 0.9m; kural: yeni alan; Qmax en büyük debidir, motorun debi kullanımı kontrolcüye sorulmalı
+  - sourceUrl: "https://www.aleas.cn/product/20/" → "https://www.aleas.cn/product/690.html"; alıntı: CDA Series Submersible Water Pump detay sayfası; kural: lider kararı 1: liste sayfası yerine ürünün kendi sayfası
+- `jeneca-light-d3` (R-A, https://www.aleas.cn/product/45/):
+  - specifications: "Üretici kataloğundaki akvaryum LED aydınlatması · güç/uzunluk varyant tablosu yayımlanmamış" → "Yeşil ve beyaz LED'li akvaryum aydınlatması · 3,8 W · DC 12 V · 20–35 cm akvaryum boyu için · cam kalınlığı en çok 5 mm"; alıntı: Model: D-3 ... Working Voltage DC 12V ... LED Color Green&White Light Combination ... Power 3.8W ... Fit to Fish Tank Size Length 20-35cm; kural: karar 0039/1: kaynaklı düzeltme; okuma alıntısıyla CATALOG_LOG'a yazılır, düzeltilen kayıt okuma gününü alır
+  - powerW: "boş" → "3.8"; alıntı: Model: D-3 ... Working Voltage DC 12V ... LED Color Green&White Light Combination ... Power 3.8W ... Fit to Fish Tank Size Length 20-35cm; kural: yeni alan; üretici tablosu
+  - sourceUrl: "https://www.aleas.cn/product/45/" → "https://www.aleas.cn/product/506.html"; alıntı: AQUARIUM LIGHT D-3, D-5, D-7 detay sayfası; kural: lider kararı 1
+- `jeneca-light-d5` (R-A, https://www.aleas.cn/product/45/):
+  - specifications: "Üretici kataloğundaki akvaryum LED aydınlatması · güç/uzunluk varyant tablosu yayımlanmamış" → "Yeşil ve beyaz LED'li akvaryum aydınlatması · 7,5 W · DC 12 V · 30–40 cm akvaryum boyu için · cam kalınlığı en çok 5 mm"; alıntı: Model: D-5 ... Working Voltage DC 12V ... LED Color Green&White Light Combination ... Power 7.5W ... Fit to Fish Tank Size Length 30-40CM; kural: karar 0039/1: kaynaklı düzeltme; okuma alıntısıyla CATALOG_LOG'a yazılır, düzeltilen kayıt okuma gününü alır
+  - powerW: "boş" → "7.5"; alıntı: Model: D-5 ... Working Voltage DC 12V ... LED Color Green&White Light Combination ... Power 7.5W ... Fit to Fish Tank Size Length 30-40CM; kural: yeni alan; üretici tablosu
+  - sourceUrl: "https://www.aleas.cn/product/45/" → "https://www.aleas.cn/product/506.html"; alıntı: AQUARIUM LIGHT D-3, D-5, D-7 detay sayfası; kural: lider kararı 1
+- `jeneca-light-d7` (R-A, https://www.aleas.cn/product/45/):
+  - specifications: "Üretici kataloğundaki akvaryum LED aydınlatması · güç/uzunluk varyant tablosu yayımlanmamış" → "Yeşil ve beyaz LED'li akvaryum aydınlatması · 7,5 W · DC 12 V · 40–50 cm akvaryum boyu için · cam kalınlığı en çok 5 mm"; alıntı: Model: D-7 ... Working Voltage DC 12V ... LED Color Green&White Light Combination ... Power 7.5W ... Fit to Fish Tank Size Length 40-50CM; kural: karar 0039/1: kaynaklı düzeltme; okuma alıntısıyla CATALOG_LOG'a yazılır, düzeltilen kayıt okuma gününü alır
+  - powerW: "boş" → "7.5"; alıntı: Model: D-7 ... Working Voltage DC 12V ... LED Color Green&White Light Combination ... Power 7.5W ... Fit to Fish Tank Size Length 40-50CM; kural: yeni alan; üretici tablosu
+  - sourceUrl: "https://www.aleas.cn/product/45/" → "https://www.aleas.cn/product/506.html"; alıntı: AQUARIUM LIGHT D-3, D-5, D-7 detay sayfası; kural: lider kararı 1
+- `jeneca-light-t12-jl` (R-A, https://www.aleas.cn/product/45/):
+  - specifications: "Üretici kataloğundaki akvaryum LED aydınlatması · güç/uzunluk varyant tablosu yayımlanmamış" → "Koi balığı için özel LED aydınlatma (T12, 4–8 sıra LED) · üretici tablosunda boy boy: T12-JL800–T12-JL1800, 720–1700 mm, 24–58 W"; alıntı: T12-JL800 720mm 64 4 ROWS KOI FISH LIGHT 24W ... T12-JL1800 1700mm 160 8 ROWS 58W; kural: karar 0039/1: kaynaklı düzeltme; okuma alıntısıyla CATALOG_LOG'a yazılır, düzeltilen kayıt okuma gününü alır; katalog seriyi tek kayıt tutuyor, boy başına güç tek kayda yazılamaz, powerW eklenmez
+  - sourceUrl: "https://www.aleas.cn/product/45/" → "https://www.aleas.cn/product/500.html"; alıntı: 500.html detay sayfası (metin tablosu); kural: lider kararı 1
+- `jeneca-light-t12-ly` (R-A, https://www.aleas.cn/product/45/):
+  - specifications: "Üretici kataloğundaki akvaryum LED aydınlatması · güç/uzunluk varyant tablosu yayımlanmamış" → "Arowana (ejder balığı) için özel LED aydınlatma (T12, 4–8 sıra LED) · üretici tablosunda boy boy: T12-LY800–T12-LY1800, 720 mm'den başlayan boylar, 22–58 W"; alıntı: T12-LY800 720mm 120 4 ROWS DRAGONFISH LIGH 22W ... T12-LY1800 '17 0mm' 288 8 ROWS 58W; kural: karar 0039/1: kaynaklı düzeltme; okuma alıntısıyla CATALOG_LOG'a yazılır, düzeltilen kayıt okuma gününü alır; katalog seriyi tek kayıt tutuyor, boy başına güç tek kayda yazılamaz, powerW eklenmez; T12
+  - sourceUrl: "https://www.aleas.cn/product/45/" → "https://www.aleas.cn/product/501.html"; alıntı: 501.html detay sayfası (metin tablosu); kural: lider kararı 1
+- `jeneca-light-t8-bs` (R-A, https://www.aleas.cn/product/45/):
+  - specifications: "Üretici kataloğundaki akvaryum LED aydınlatması · güç/uzunluk varyant tablosu yayımlanmamış" → "Renk değiştiren, anahtarlı LED aydınlatma (T8) · üretici tablosunda boy boy: T8-BS600–T8-BS1800, 530–1680 mm, 12–28 W"; alıntı: T8-BS600 530mm 36 ALTERNATING LIGHT WITH SWITCH 12W ... T8-BS1800 1680mm 96 28W; kural: karar 0039/1: kaynaklı düzeltme; okuma alıntısıyla CATALOG_LOG'a yazılır, düzeltilen kayıt okuma gününü alır; katalog seriyi tek kayıt tutuyor, boy başına güç tek kayda yazılamaz, powerW eklenmez
+  - sourceUrl: "https://www.aleas.cn/product/45/" → "https://www.aleas.cn/product/498.html"; alıntı: 498.html detay sayfası (metin tablosu); kural: lider kararı 1
+- `jeneca-light-t8-jl` (R-A, https://www.aleas.cn/product/45/):
+  - specifications: "Üretici kataloğundaki akvaryum LED aydınlatması · güç/uzunluk varyant tablosu yayımlanmamış" → "Koi balığı için özel LED aydınlatma (T8) · üretici tablosunda boy boy: T8-JL600–T8-JL1800, 530–1680 mm, 8–28 W"; alıntı: T8-JL600 530mm 20 LIGHT FOR KOI FISH 8W ... T8-JL1800 1680mm 20 28W; kural: karar 0039/1: kaynaklı düzeltme; okuma alıntısıyla CATALOG_LOG'a yazılır, düzeltilen kayıt okuma gününü alır; katalog seriyi tek kayıt tutuyor, boy başına güç tek kayda yazılamaz, powerW eklenmez
+  - sourceUrl: "https://www.aleas.cn/product/45/" → "https://www.aleas.cn/product/497.html"; alıntı: 497.html detay sayfası (metin tablosu); kural: lider kararı 1
+- `jeneca-light-t8-ly` (R-A, https://www.aleas.cn/product/45/):
+  - specifications: "Üretici kataloğundaki akvaryum LED aydınlatması · güç/uzunluk varyant tablosu yayımlanmamış" → "Arowana (ejder balığı) için özel LED aydınlatma (T8) · üretici tablosunda boy boy: T8-LY600–T8-LY1800, 530–1680 mm, 10–28 W"; alıntı: 10W 530mm 40 DRAGONFISH LIGHT T8-LY600 ... 28W 1680mm 144 T8-LY1800; kural: karar 0039/1: kaynaklı düzeltme; okuma alıntısıyla CATALOG_LOG'a yazılır, düzeltilen kayıt okuma gününü alır; katalog seriyi tek kayıt tutuyor, boy başına güç tek kayda yazılamaz, powerW eklenmez
+  - sourceUrl: "https://www.aleas.cn/product/45/" → "https://www.aleas.cn/product/499.html"; alıntı: 499.html detay sayfası (metin tablosu); kural: lider kararı 1
+- `jeneca-light-t8-yw` (R-A, https://www.aleas.cn/product/45/):
+  - specifications: "Üretici kataloğundaki akvaryum LED aydınlatması · güç/uzunluk varyant tablosu yayımlanmamış" → "Papağan balığı için özel LED aydınlatma (T8) · üretici tablosunda boy boy: T8-YW600–T8-YW1500, 520–1420 mm, 12,8–35,6 W"; alıntı: 12.8W 520mm 28 LIGHT FOR PARROT FISH T8-YW600 ... 35.6W 1420mm 72 LIGHT FOR PARROT FISH T8-YW1500; kural: karar 0039/1: kaynaklı düzeltme; okuma alıntısıyla CATALOG_LOG'a yazılır, düzeltilen kayıt okuma gününü alır; katalog seriyi tek kayıt tutuyor, boy başına güç tek kayda yazılamaz, powerW eklenmez; T8-
+  - sourceUrl: "https://www.aleas.cn/product/45/" → "https://www.aleas.cn/product/496.html"; alıntı: 496.html detay sayfası (metin tablosu); kural: lider kararı 1
+- `jeneca-light-x1` (R-A, https://www.aleas.cn/product/45/):
+  - specifications: "Üretici kataloğundaki akvaryum LED aydınlatması · güç/uzunluk varyant tablosu yayımlanmamış" → "Klipsli akvaryum LED lambası (mavi ve beyaz ışık) · 4 W · DC 5 V · 20–35 cm akvaryum boyu için · cam kalınlığı en çok 5 mm"; alıntı: Item Name: Aquarium LED Clip Lamp (White) ... Beads Color: Blue and White Light ... Power: 4W ... Working Voltage: DC 5V ... For Fish Tank: Length 20-35cm; kural: karar 0039/1: kaynaklı düzeltme; okuma alıntısıyla CATALOG_LOG'a yazılır, düzeltilen kayıt okuma gününü alır
+  - powerW: "boş" → "4"; alıntı: Power: 4W (tablo) ve 功率 Power: 4W (X-1 özet resmi); kural: yeni alan
+  - sourceUrl: "https://www.aleas.cn/product/45/" → "https://www.aleas.cn/product/502.html"; alıntı: X-1 detay sayfası; kural: lider kararı 1
+- `jeneca-light-x3` (R-A, https://www.aleas.cn/product/45/):
+  - specifications: "Üretici kataloğundaki akvaryum LED aydınlatması · güç/uzunluk varyant tablosu yayımlanmamış" → "Klipsli akvaryum LED lambası (süper beyaz ışık) · 5 W · 15–40 cm akvaryum boyu için · cam kalınlığı en çok 5 mm"; alıntı: Model: X-3 ... Beads Color: Super White Light ... Power: 5W ... For Fish Tank: Length 15-40cm; kural: karar 0039/1: kaynaklı düzeltme; okuma alıntısıyla CATALOG_LOG'a yazılır, düzeltilen kayıt okuma gününü alır
+  - powerW: "boş" → "5"; alıntı: Model: X-3 • Power: 5W; kural: yeni alan
+  - sourceUrl: "https://www.aleas.cn/product/45/" → "https://www.aleas.cn/product/504.html"; alıntı: X-3 detay sayfası; kural: lider kararı 1
+- `jeneca-light-x5` (R-A, https://www.aleas.cn/product/45/):
+  - specifications: "Üretici kataloğundaki akvaryum LED aydınlatması · güç/uzunluk varyant tablosu yayımlanmamış" → "Klipsli akvaryum LED lambası · 20–50 cm akvaryum boyu için · güç üretici sayfasında çelişkili (8 W ve 10 W), otomatik hesapta kullanılmaz"; alıntı: tablo: 'Aquarium LED Clip Lamp ... Beads QTY.: 28pcs ... Power: 8W ... For Fish Tank: Length 20-50cm'; özet: 'X-5 • Input voltage: 220-240V 50/60Hz • Power: 10W • LED QTY: 24pcs'; kural: karar 0019: sayfa kendi içinde çelişirse değer alınmaz; powerW eklenmez
+  - sourceUrl: "https://www.aleas.cn/product/45/" → "https://www.aleas.cn/product/503.html"; alıntı: X-5 detay sayfası; kural: lider kararı 1
+- `jeneca-pb-260a` (R-A, https://www.aleas.cn/product/20/):
+  - specifications: "İç sirkülasyon pompası · üretici teknik tablosu yayımlanmamış" → "İç sirkülasyon pompası · 3,5 W · en çok 250 L/saat · en çok 0,45 m basma yüksekliği · tatlı ve tuzlu su"; alıntı: PB-260A 功率 Power: 3.5W 流量 Qmax: 250L/H 扬程 Hmax: 0.45m; metin: 'Suitable for salt and fresh water'; kural: karar 0039/1: kaynaklı düzeltme; okuma alıntısıyla CATALOG_LOG'a yazılır, düzeltilen kayıt okuma gününü alır
+  - powerW: "boş" → "3.5"; alıntı: PB-260A 功率 Power: 3.5W 流量 Qmax: 250L/H 扬程 Hmax: 0.45m; kural: yeni alan; üretici tablosu
+  - ratedFlowLph: "boş" → "250"; alıntı: PB-260A 功率 Power: 3.5W 流量 Qmax: 250L/H 扬程 Hmax: 0.45m; kural: yeni alan; Qmax
+  - sourceUrl: "https://www.aleas.cn/product/20/" → "https://www.aleas.cn/product/734.html"; alıntı: Internal Water Pump detay sayfası; kural: lider kararı 1
+- `jeneca-pb-360a` (R-A, https://www.aleas.cn/product/20/):
+  - specifications: "İç sirkülasyon pompası · üretici teknik tablosu yayımlanmamış" → "İç sirkülasyon pompası · 8 W · en çok 500 L/saat · en çok 0,8 m basma yüksekliği · tatlı ve tuzlu su"; alıntı: PB-360A 功率 Power: 8W 流量 Qmax: 500L/H 扬程 Hmax: 0.8m; metin: 'Suitable for salt and fresh water'; kural: karar 0039/1: kaynaklı düzeltme; okuma alıntısıyla CATALOG_LOG'a yazılır, düzeltilen kayıt okuma gününü alır
+  - powerW: "boş" → "8"; alıntı: PB-360A 功率 Power: 8W 流量 Qmax: 500L/H 扬程 Hmax: 0.8m; kural: yeni alan; üretici tablosu
+  - ratedFlowLph: "boş" → "500"; alıntı: PB-360A 功率 Power: 8W 流量 Qmax: 500L/H 扬程 Hmax: 0.8m; kural: yeni alan; Qmax
+  - sourceUrl: "https://www.aleas.cn/product/20/" → "https://www.aleas.cn/product/734.html"; alıntı: Internal Water Pump detay sayfası; kural: lider kararı 1
+- `jeneca-pb-460a` (R-A, https://www.aleas.cn/product/20/):
+  - specifications: "İç sirkülasyon pompası · üretici teknik tablosu yayımlanmamış" → "İç sirkülasyon pompası · 15 W · en çok 1000 L/saat · en çok 1 m basma yüksekliği · tatlı ve tuzlu su"; alıntı: PB-460A 功率 Power: 15W 流量 Qmax: 1000L/H 扬程 Hmax: 1m; metin: 'Suitable for salt and fresh water'; kural: karar 0039/1: kaynaklı düzeltme; okuma alıntısıyla CATALOG_LOG'a yazılır, düzeltilen kayıt okuma gününü alır
+  - powerW: "boş" → "15"; alıntı: PB-460A 功率 Power: 15W 流量 Qmax: 1000L/H 扬程 Hmax: 1m; kural: yeni alan; üretici tablosu
+  - ratedFlowLph: "boş" → "1000"; alıntı: PB-460A 功率 Power: 15W 流量 Qmax: 1000L/H 扬程 Hmax: 1m; kural: yeni alan; Qmax
+  - sourceUrl: "https://www.aleas.cn/product/20/" → "https://www.aleas.cn/product/734.html"; alıntı: Internal Water Pump detay sayfası; kural: lider kararı 1
+- `jeneca-pb-560a` (R-A, https://www.aleas.cn/product/20/):
+  - specifications: "İç sirkülasyon pompası · üretici teknik tablosu yayımlanmamış" → "İç sirkülasyon pompası · 25 W · en çok 1800 L/saat · en çok 1,3 m basma yüksekliği · tatlı ve tuzlu su"; alıntı: PB-560A 功率 Power: 25W 流量 Qmax: 1800L/H 扬程 Hmax: 1.3m; metin: 'Suitable for salt and fresh water'; kural: karar 0039/1: kaynaklı düzeltme; okuma alıntısıyla CATALOG_LOG'a yazılır, düzeltilen kayıt okuma gününü alır
+  - powerW: "boş" → "25"; alıntı: PB-560A 功率 Power: 25W 流量 Qmax: 1800L/H 扬程 Hmax: 1.3m; kural: yeni alan; üretici tablosu
+  - ratedFlowLph: "boş" → "1800"; alıntı: PB-560A 功率 Power: 25W 流量 Qmax: 1800L/H 扬程 Hmax: 1.3m; kural: yeni alan; Qmax
+  - sourceUrl: "https://www.aleas.cn/product/20/" → "https://www.aleas.cn/product/734.html"; alıntı: Internal Water Pump detay sayfası; kural: lider kararı 1
+- `jeneca-sx-366-1000w` (R-A, https://www.aleas.cn/product/641.html):
+  - model: "SX-366 1000 W" → "(kayıt kaldırılsın ya da SX-366'nın gerçek güçlerine çevrilsin)"; alıntı: SX-366 Jeneca Single Tube Heater — POWER 300W / 500W / 800W, SIZE 55x40x280mm; SX-388 Jeneca Double Tube Heater — 1000W / 1200W / 1500W, 74x34x288mm; kural: karar 0039/1 kaynaklı düzeltme. 1000/1200/1500 W yalnız SX-388 tablosunda; SX-388 kayıtları zaten var ve P1'de 'same'. Bu üç kayıt SX-388'in yinelenmesi
+  - powerW: "1000" → "boş"; alıntı: SX-366 tablosu: 300W, 500W, 800W; kural: bu güç SX-366'da yok
+- `jeneca-sx-366-1200w` (R-A, https://www.aleas.cn/product/641.html):
+  - model: "SX-366 1200 W" → "(kayıt kaldırılsın ya da SX-366'nın gerçek güçlerine çevrilsin)"; alıntı: SX-366 Jeneca Single Tube Heater — POWER 300W / 500W / 800W, SIZE 55x40x280mm; SX-388 Jeneca Double Tube Heater — 1000W / 1200W / 1500W, 74x34x288mm; kural: karar 0039/1 kaynaklı düzeltme. 1000/1200/1500 W yalnız SX-388 tablosunda; SX-388 kayıtları zaten var ve P1'de 'same'. Bu üç kayıt SX-388'in yinelenmesi
+  - powerW: "1200" → "boş"; alıntı: SX-366 tablosu: 300W, 500W, 800W; kural: bu güç SX-366'da yok
+- `jeneca-sx-366-1500w` (R-A, https://www.aleas.cn/product/641.html):
+  - model: "SX-366 1500 W" → "(kayıt kaldırılsın ya da SX-366'nın gerçek güçlerine çevrilsin)"; alıntı: SX-366 Jeneca Single Tube Heater — POWER 300W / 500W / 800W, SIZE 55x40x280mm; SX-388 Jeneca Double Tube Heater — 1000W / 1200W / 1500W, 74x34x288mm; kural: karar 0039/1 kaynaklı düzeltme. 1000/1200/1500 W yalnız SX-388 tablosunda; SX-388 kayıtları zaten var ve P1'de 'same'. Bu üç kayıt SX-388'in yinelenmesi
+  - powerW: "1500" → "boş"; alıntı: SX-366 tablosu: 300W, 500W, 800W; kural: bu güç SX-366'da yok
+- `liya-biological-ceramic-500g` (R-A, https://atakanpetshop.com/liya-biyolojik-seramik-filtre-malzemesi-500gr-ly205):
+  - description: "Faydalı bakteri kolonileri için gözenekli seramik biyolojik filtre medyası" → "Biyolojik seramik filtre malzemesi"; alıntı: Liya Biyolojik Seramik Filtre Malzemesi 500gr / Ürün Kodu: LY205; kural: kaynakta olmayan iddia çıkarılır (lider kararı 3'ün ekipman karşılığı; AGENTS.md 'uydurma yok')
+- `liya-hose-brush-160` (R-A, https://atakanpetshop.com/liya-esnek-hortum-temizleme-harbisi-160cm):
+  - specifications: "Uzun akvaryum ve dış filtre hortumları için çift uçlu esnek temizleme fırçası · 160 cm" → "Akvaryum hortum ve boruları için esnek temizleme fırçası · 160 cm"; alıntı: her türlü akvaryum hortum ve borularının temizlenmesinde uygun fırçadır ... 160 cm ölçülüdür; kural: kaynakta olmayan iddia çıkarılır (lider kararı 3'ün ekipman karşılığı; AGENTS.md 'uydurma yok')
+- `liya-ly202-active-carbon-500g` (R-A, https://atakanpetshop.com/liya-ly202-aktif-carbon-filtre-malzemesi-500gr-ly202):
+  - description: "Organik atık, renk ve kokunun giderilmesine yardımcı aktif karbon filtre medyası" → "Organik atık, renk, ilaç kalıntısı ve klorun giderilmesine yardımcı pelet aktif karbon filtre malzemesi"; alıntı: sudaki organik atıkları, ilaç kalıntılarını, kloru ve diğer zararlı kimyasalları etkili bir şekilde absorbe eder ... Suyunuzdaki renklenmeyi ve bulanıklığı ortadan kaldırarak; kural: kaynakta olmayan iddia çıkarılır (lider kararı 3'ün ekipman karşılığı; AGENTS.md 'uydurma yok')
+- `mec-airline-t-splitter` (R-A, https://atakanpetshop.com/mec-hava-hortumu-t-dagitici-10-adet-1):
+  - specifications: "Hava hortumu T bağlantısı · tekli ve 10'lu paket" → "Hava hortumu T bağlantısı · 10'lu paket"; alıntı: Meç Hava Hortumu T Dağıtıcı 10 Adet ... Standart hava hortumları ile uyumlu hava dağıtıcı T aparat; kural: kaynakta olmayan iddia çıkarılır (lider kararı 3'ün ekipman karşılığı; AGENTS.md 'uydurma yok')
+- `mec-airline-valve` (R-A, https://atakanpetshop.com/mec-hava-hortumu-muslugu-vana-10-adet):
+  - specifications: "Hava hortumu akış vanası · tekli ve 10'lu paket" → "Hava hortumu akış vanası · 10'lu paket"; alıntı: Meç Hava Hortumu Musluğu Vana 10 Adet ... Standart hava hortumlarının hepsiyle uyumlu vana; kural: kaynakta olmayan iddia çıkarılır (lider kararı 3'ün ekipman karşılığı; AGENTS.md 'uydurma yok')
+- `mec-heater-suction-cup` (R-A, https://atakanpetshop.com/mec-isitici-vantuzu-5-adet):
+  - specifications: "İsıtıcı sabitleme vantuzu · tekli ve 10'lu paket" → "İsıtıcı sabitleme vantuzu · 5'li paket · 3 cm çap"; alıntı: Meç Isıtıcı Vantuzu 5 Adet ... Ürün Kodu: GS-082 ... Akvaryum içerisinde ısıtıcı tutturabilmek için kullanılan vantuz modelindendir. / Çap. 3 cm; kural: karar 0039/1: kaynaklı düzeltme, alıntıyla CATALOG_LOG'a; 10'lu paket mağazada görünmedi, tekli paket ayrı ürün
+  - sourceUrl: "https://atakanpetshop.com/mec" → "https://atakanpetshop.com/mec-isitici-vantuzu-5-adet"; alıntı: ürünün kendi sayfası; kural: lider kararı 1 (liste sayfasından ürün sayfasına); düzeltme uygulanırsa
+- `melon-barb` (R-B, https://www.fishkeeper.co.uk/fish/freshwater/cyprinids/melon-barb):
+  - minGroup: "6" → "8"; alıntı: SF: "at least 8-10 specimens"; kural: grup aralığı kuralı: kayıt aralığın altındaysa alt uç (DATA_SOURCES)
+- `mufan-fogger` (R-A, https://atakanpetshop.com/sis-makinesi):
+  - specifications: "Paludaryum ve akvaryum üstü düzenlemelerde dekoratif sis oluşturan ultrasonik cihaz" → "Tatlı su akvaryumları için nemleme (sis) makinesi · 24 V · 19 W · saatte yaklaşık 350 ml su tüketir"; alıntı: Tatlı su akvaryumlarında kullanılmak üzere tasarlanmış nemleme makinesidir ... saatte yaklaşık 350ml su tüketir ... Gerilim: 24V * Akım: 1A * Güç: 19W; kural: kaynakta olmayan iddia çıkarılır (lider kararı 3'ün ekipman karşılığı; AGENTS.md 'uydurma yok')
+- `mufan-six-layer-filter-sponge-30-30` (R-A, https://atakanpetshop.com/mufan-6-katli-biyolojik-filtre-sungeri-30x30x18-cm):
+  - description: "Mekanik ve biyolojik filtrasyon için kesilerek kullanılabilen, yıkanabilir altı katmanlı filtre süngeri · 30 × 30 cm · satıcı başlığı ile seçenek alanındaki kalınlık değerleri çeliştiğinden kalınlık belirtilmedi" → "Mekanik ve biyolojik filtrasyon için yıkanabilir altı katmanlı filtre süngeri · 30 × 30 cm · satıcı başlığı ile seçenek alanındaki kalınlık değerleri çeliştiğinden kalınlık belirtilmedi"; alıntı: 'kesilerek kullanılabilen' yazmıyor; kalınlık çelişkisi kaydın notuyla uyumlu; kural: kaynakta olmayan iddia çıkarılır (lider kararı 3'ün ekipman karşılığı; AGENTS.md 'uydurma yok')
+- `mufan-six-layer-filter-sponge-30-40` (R-A, https://atakanpetshop.com/mufan-12-katli-biyolojik-filtre-sungeri-30x40x28-cm-2314218):
+  - description: "Mekanik ve biyolojik filtrasyon için kesilerek kullanılabilen, yıkanabilir altı katmanlı filtre süngeri · 30 × 40 cm · satıcı başlığı ile seçenek alanındaki kalınlık değerleri çeliştiğinden kalınlık belirtilmedi" → "Mekanik ve biyolojik filtrasyon için yıkanabilir altı katmanlı filtre süngeri · 30 × 40 cm · satıcı başlığı ile seçenek alanındaki kalınlık değerleri çeliştiğinden kalınlık belirtilmedi"; alıntı: sayfada kesme/kesilme geçmiyor; kural: kaynakta olmayan iddia çıkarılır (lider kararı 3'ün ekipman karşılığı; AGENTS.md 'uydurma yok')
+- `mufan-six-layer-filter-sponge-40-50` (R-A, https://atakanpetshop.com/mufan-12-katli-biyolojik-filtre-sungeri-40x50x28-cm-2314219):
+  - description: "Mekanik ve biyolojik filtrasyon için kesilerek kullanılabilen, yıkanabilir altı katmanlı filtre süngeri · 40 × 50 cm · satıcı başlığı ile seçenek alanındaki kalınlık değerleri çeliştiğinden kalınlık belirtilmedi" → "Mekanik ve biyolojik filtrasyon için yıkanabilir altı katmanlı filtre süngeri · 40 × 50 cm · satıcı başlığı ile seçenek alanındaki kalınlık değerleri çeliştiğinden kalınlık belirtilmedi"; alıntı: sayfada kesme/kesilme geçmiyor; kural: kaynakta olmayan iddia çıkarılır (lider kararı 3'ün ekipman karşılığı; AGENTS.md 'uydurma yok')
+- `mufan-six-layer-filter-sponge-40-60` (R-A, https://atakanpetshop.com/mufan-12-katli-biyolojik-filtre-sungeri-40x60x28-cm-2314220):
+  - description: "Mekanik ve biyolojik filtrasyon için kesilerek kullanılabilen, yıkanabilir altı katmanlı filtre süngeri · 40 × 60 cm · satıcı başlığı ile seçenek alanındaki kalınlık değerleri çeliştiğinden kalınlık belirtilmedi" → "Mekanik ve biyolojik filtrasyon için yıkanabilir altı katmanlı filtre süngeri · 40 × 60 cm · satıcı başlığı ile seçenek alanındaki kalınlık değerleri çeliştiğinden kalınlık belirtilmedi"; alıntı: sayfada kesme/kesilme geçmiyor; kural: kaynakta olmayan iddia çıkarılır (lider kararı 3'ün ekipman karşılığı; AGENTS.md 'uydurma yok')
+- `mufan-steel-inflow-outflow-12-12` (R-A, https://atakanpetshop.com/mufan-paslanmaz-celik-emis-12mm-basis-12mm-set-2314214):
+  - specifications: "Dış filtre için paslanmaz çelik emiş ve basış borusu seti · emiş 12 mm · basış 12 mm" → "Dış filtre için emiş ve basış borusu seti · başlıkta paslanmaz çelik, emiş 12 mm, basış 12 mm; açıklamada 16 mm bağlantı çapı ve krom kaplı yazıyor (sayfa çelişkili)"; alıntı: başlık: 'Mufan Paslanmaz Çelik Emiş 12mm Basış 12mm Set'; açıklama: '16mm bağlantı çapı ile birçok dış filtreye uyum sağlayan bu krom kaplı set'; kural: karar 0019: sayfa aynı alanı kendi içinde farklı yazıyorsa değer alınmaz, çelişki notu yazılır
+- `ornate-snakehead` (P5b, https://www.fishipedia.fr/fr/poissons/channa-ornatipinnis):
+  - flow (ve husbandryCaution): "medium" → "high"; alıntı: COURANT Fort; 'vit naturellement dans le courant ... filtration surdimensionnée (10 à 20 fois le volume du bac) afin de garantir un courant important'; kural: Tek kabul edilen kaynağın değeri birebir alınır. Ayrıca husbandryCaution'daki 'mevsime göre değişen akıntı ve sıcaklık' ve 'Sarı dudaklı bölgesel formlar ... Channa pulchra' iddiaları bu kaynakta yok.
+- `resun-af2005d` (R-A, https://atakanpetshop.com/resun-af2005d-digital-otomatik-yemleme-makinesi):
+  - specifications: "Dijital otomatik yemleme makinesi · 2 öğüne kadar programlama · nem korumalı hazne" → "Dijital göstergeli otomatik yemleme makinesi · 2 adet AA pille çalışır"; alıntı: dijital göstergeli otomatik yemleme makinesidir . / 2 adet AA 1,5 voltluk alkalin pil ile çalışır; kural: kaynakta olmayan iddia çıkarılır (lider kararı 3'ün ekipman karşılığı; AGENTS.md 'uydurma yok')
+- `resun-air-1000` (R-A, https://malawiizmir.com/resun-air-1000-tek-ikisli-hava-motoru):
+  - ratedFlowLph: "60" → "boş"; alıntı: teknik tablo 'Hava Akışı: 60 Litre/Saat (16 GPH)'; özellikler 'Yüksek Hava Akışı: Dakikada 1.2 litre hava akışı sağlayarak' (= 72 L/saat); kural: karar 0019: sayfa aynı alanı kendi içinde farklı yazıyorsa değer alınmaz, çelişki notu yazılır
+  - specifications: "Tek çıkışlı hava motoru · 60 L/saat · 2 W · 0,01 MPa" → "Tek çıkışlı hava motoru · 2 W · 0,01 MPa · debi mağaza sayfasında çelişkili (60 L/saat ve dakikada 1,2 litre)"; alıntı: aynı alıntı; kural: karar 0019: sayfa aynı alanı kendi içinde farklı yazıyorsa değer alınmaz, çelişki notu yazılır
+  - capacityDataNote: "boş" → "Malawi İzmir sayfası debiyi tabloda 60 L/saat, özelliklerde dakikada 1,2 litre (72 L/saat) yazıyor; debi otomatik hesapta kullanılmaz."; alıntı: aynı alıntı; kural: karar 0019: sayfa aynı alanı kendi içinde farklı yazıyorsa değer alınmaz, çelişki notu yazılır; altın fikstür etkilenebilir
+- `resun-air-2000` (R-A, https://malawiizmir.com/resun-air-2000-hava-pompasi-1-8-litre-dakika):
+  - ratedFlowLph: "140" → "boş"; alıntı: tablo 'Hava Akışı: 138 litre/saat'; açıklama 'dakikada 2,3 litre hava çıkışıyla saatte 138 litre'; başlık 'RESUN Air 2000 Hava Pompası 1.8 LiTRE / DAKiKA' (= 108 L/saat); kural: karar 0019: sayfa aynı alanı kendi içinde farklı yazıyorsa değer alınmaz, çelişki notu yazılır; 140 hiçbir yerde yok
+  - powerW: "3" → "boş"; alıntı: 'Motor Gücü: Ekonomik ve enerji tasarruflu' (watt yazmıyor); kural: kaynakta yok
+  - specifications: "Tek çıkışlı hava motoru · 140 L/saat · 3 W · 0,016 MPa" → "Hava motoru · debi mağaza sayfasında çelişkili (saatte 138 litre ve dakikada 1,8 litre); güç ve basınç sayfada yok"; alıntı: aynı alıntı; kural: karar 0019: sayfa aynı alanı kendi içinde farklı yazıyorsa değer alınmaz, çelişki notu yazılır; 0,016 MPa ve tek çıkış sayfada yok
+  - capacityDataNote: "boş" → "Malawi İzmir sayfası debiyi açıklamada saatte 138 litre, başlıkta dakikada 1,8 litre yazıyor; güç yazmıyor. Değerler otomatik hesapta kullanılmaz."; alıntı: aynı alıntı; kural: karar 0019: sayfa aynı alanı kendi içinde farklı yazıyorsa değer alınmaz, çelişki notu yazılır; altın fikstür etkilenebilir
+- `resun-king-3` (R-B, https://okosgazdi.hu/index.php/resun-king-fejszettes-vizpumpa-sorozat):
+  - ratedFlowLph, powerW: "2300 L/saat · 40 W" → "2400 L/saat · 35 W (üreticide doğrulanana kadar değer çekilmeli)"; alıntı: King-3 + fejszett 2400 l/h 35 w 2.4 m; kural: karar 0019: değer yalnız üretici, distribütör ya da kabul edilen mağazadan; okosgazdi bunlardan değil
+- `resun-king-5` (R-B, https://okosgazdi.hu/index.php/resun-king-fejszettes-vizpumpa-sorozat):
+  - ratedFlowLph, powerW: "6200 L/saat · 100 W" → "6000 L/saat · 130 W (üreticide doğrulanana kadar değer çekilmeli)"; alıntı: King-5 + fejszett 6000 l/h 130 w 4.0 m; kural: karar 0019: değer yalnız üretici, distribütör ya da kabul edilen mağazadan; okosgazdi bunlardan değil
+- `resun-king-6` (R-B, https://okosgazdi.hu/index.php/resun-king-fejszettes-vizpumpa-sorozat):
+  - ratedFlowLph, powerW: "8200 L/saat · 150 W" → "8500 L/saat · 230 W (üreticide doğrulanana kadar değer çekilmeli)"; alıntı: King-6 + fejszett 8500 l/h 230 w 5.5 m; kural: karar 0019: değer yalnız üretici, distribütör ya da kabul edilen mağazadan; okosgazdi bunlardan değil
+- `resun-rst04` (R-A, https://malawiizmir.com/resun-rst04-akvaryum-cam-derece-hassas):
+  - specifications: "Akvaryum camına takılan hassas cam termometre" → "Hassas cam termometre"; alıntı: 'akvaryum camına takılan' yazmıyor; sayfa yalnız 'Resun rst04 akvaryum cam derece hassas'; kural: kaynakta olmayan iddia çıkarılır (lider kararı 3'ün ekipman karşılığı; AGENTS.md 'uydurma yok')
+- `rs-1000-air` (R-A, https://atakanpetshop.com/rs-1000-4-cikisli-hava-motoru-9l-min-8w):
+  - ratedFlowLph: "540" → "boş"; alıntı: başlık 'RS 1000 4 Çıkışlı Hava Motoru 9L/Min 8W', tablo 'Debi 9L/M'; açıklama 'dört ayrı hava çıkışından her biri dakikada 9 litre hava debisi'; kural: karar 0019: sayfa aynı alanı kendi içinde farklı yazıyorsa değer alınmaz, çelişki notu yazılır (toplam mı çıkış başına mı belirsiz: 540 ya da 2160 L/saat)
+  - adjustableFlow: "true" → "boş"; alıntı: sayfada ayar özelliği yazmıyor; kural: kaynakta yok; alan kaldırılır ya da başka kabul edilen kaynak bulunur
+  - specifications: "Dört çıkışlı ayarlanabilir hava motoru · toplam 9 L/dakika (540 L/saat) · 8 W · 200 litreye kadar" → "Dört çıkışlı hava motoru · 8 W · 200 litreye kadar · debi sayfada belirsiz (9 L/dakika toplam ya da çıkış başına)"; alıntı: aynı alıntı; 'Uygun Akvaryum Hacmi 200 Litre / Güç Tüketimi 8 Watt'; kural: karar 0019: sayfa aynı alanı kendi içinde farklı yazıyorsa değer alınmaz, çelişki notu yazılır
+  - capacityDataNote: "boş" → "Atakan Petshop sayfası debiyi başlıkta 9 L/dakika, açıklamada her çıkış için dakikada 9 litre yazıyor; toplam debi belirsiz olduğu için otomatik hesapta kullanılmaz."; alıntı: aynı alıntı; kural: karar 0019: sayfa aynı alanı kendi içinde farklı yazıyorsa değer alınmaz, çelişki notu yazılır; altın fikstür etkilenebilir
+- `rs-758-300` (R-A, https://atakanpetshop.com/rs-cam-akvaryum-isiticisi-300w):
+  - powerW: "300" → "boş"; alıntı: başlık 'RS Cam Akvaryum Isıtıcısı 300W', seçenek '300W', tablo 'Güç Tüketimi 300 Watt', ikinci paragraf '3 00 watt'; açıklama 'büyük hacimli akvaryumlar için tasarlanmış, 200W gücü'; kural: karar 0019: sayfa aynı alanı kendi içinde farklı yazıyorsa değer alınmaz, çelişki notu yazılır (kontrolcü: başlık, seçenek, kod 775-758-300W, tablo ve ikinci paragraf 300 W; tek cümle 200 W. Kural kat
+  - capacityDataNote: "boş" → "Atakan Petshop sayfası gücü başlık ve tabloda 300 W, açıklamada 200 W yazıyor; güç çelişkili olduğu için otomatik ısıtıcı hesabında kullanılmaz."; alıntı: aynı alıntı; kural: karar 0019: sayfa aynı alanı kendi içinde farklı yazıyorsa değer alınmaz, çelişki notu yazılır; altın fikstür etkilenebilir
+- `sera-baktopur-direct` (R-B, https://www.sera.de/us/product/freshwater-aquarium/sera-baktopur-direct/):
+  - description: "Bakteriyel enfeksiyonlara karşı tablet tedavi" → "Tatlı ve deniz suyu balıklarında bakteriyel enfeksiyonlara karşı, ileri evrede de etkili tedavi"; alıntı: Water conditioner effective against bacterial infections of freshwater and marine fish – even in advanced stages.; kural: açıklama ürün sayfasındaki iddialarla sınırlı (karar 0019)
+- `sera-biopur` (R-B, https://www.sera.de/us/product/freshwater-aquarium/sera-biopur/):
+  - description: "Biyomekanik filtrasyon için seramik filtre medyası" → "Biyomekanik filtrasyon için kil tüp filtre medyası"; alıntı: Biomechanical filter medium … the clay tubes ensures optimal water flow; kural: açıklama ürün sayfasındaki iddialarla sınırlı (karar 0019)
+- `sera-blackwater-aquatan` (R-B, https://www.sera.de/us/product/freshwater-aquarium/sera-blackwater-aquatan/):
+  - description: "Tropik karasu etkisi ve hümik madde desteği sağlayan su düzenleyici" → "Musluk suyunu tropik karasu gibi koyu ve balık dostu suya çeviren, ağır metalleri bağlayan su düzenleyici"; alıntı: For a natural blackwater effect as in the tropics … Immediately binds heavy metals; kural: açıklama ürün sayfasındaki iddialarla sınırlı (karar 0019)
+- `sera-crab-loops` (R-B, https://www.sera.de/us/product/freshwater-aquarium/sera-crab-loops/):
+  - description: "Yengeç ve diğer kabuklular için temel halka yem" → "Tatlı ve deniz suyundaki yengeçler için temel batan halka yem"; alıntı: Crab Loops is the staple food without dyes and preservatives for all crabs in fresh and marine water.; kural: açıklama ürün sayfasındaki iddialarla sınırlı (karar 0019)
+- `sera-o-nip-stickies` (R-B, https://www.sera.de/us/product/freshwater-aquarium/sera-o-nip-stickies/):
+  - description: "Cama yapışan, hayvansal ve bitkisel bileşenli ödül tableti" → "Cama yapışan; kril, kan kurdu, Tubifex ve gammarus içeren ödül tableti"; alıntı: Adhesive tablets as a snack for ornamental fish … with krill , bloodworms, Tubifex and gammarus … sticks to the glass; kural: açıklama ürün sayfasındaki iddialarla sınırlı (karar 0019)
+- `sera-pleco-tabs-xl` (R-B, https://www.sera.de/us/product/freshwater-aquarium/sera-pleco-tabs-xl/):
+  - description: "Büyük yayın balıkları ve vatozlar için büyük batan tablet yem" → "Büyük yayın balıkları (ör. vatozlar) ve diğer dip balıkları için yaklaşık 3 cm, cama yapıştırılabilen tablet yem"; alıntı: tablets that retain their shape, with a size of approx. 3 cm (1.1 in) … sticks to the glass; kural: açıklama ürün sayfasındaki iddialarla sınırlı (karar 0019)
+- `sera-super-carbon` (R-B, https://www.sera.de/us/product/freshwater-aquarium/sera-super-carbon/):
+  - description: "Organik kirleticileri adsorbe eden aktif karbon" → "İlaç kalıntılarını, kirleticileri ve su renklenmesini gideren aktif karbon"; alıntı: Removes treatment remainders after having treated … Removes pollutants and tints; kural: açıklama ürün sayfasındaki iddialarla sınırlı (karar 0019)
+- `shrimps-forever-crystallize-crystal-water` (R-B, https://shrimpsforever.com/katkilar/crystallize-crystal-water-130ml):
+  - description: "Sudaki ince parçacıkları çöktürmeye yardımcı berraklaştırıcı" → "Mikro kirleticileri topaklayıp filtrede tutulmasını sağlayan berraklaştırıcı"; alıntı: Birbirlerine tutunan kirleticilerin boyutları büyüyerek filtrasyona takılır. Bu sayede kristal su görünümünü tekrar sağlanır.; kural: açıklama ürün sayfasındaki iddialarla sınırlı (karar 0019)
+- `shrimps-forever-liquid-gh` (R-B, https://shrimpsforever.com/katkilar/liquid-gh-130ml):
+  - description: "Caridina için KH yükseltmeden GH mineral desteği" → "Ozmos suyuna kalsiyum, magnezyum, potasyum ve sodyum katan sıvı GH mineral desteği"; alıntı: Kalsiyum, Magnezyum, Potasyum, Sodyum ve mikro mineralleri suyunuza katarak … 10 litre ozmos suyuna 5 ml liquid GH kullandığınızda gh değeri ~6; kural: açıklama ürün sayfasındaki iddialarla sınırlı (karar 0019)
+- `six-banded-barb` (R-B, https://www.fishkeeper.co.uk/fish/freshwater/cyprinids/six-banded-barb):
+  - temperature: "[25,28]" → "[25,26]"; alıntı: SF "20–26 °C"; FK "25-28°C"; kural: sıcaklık ve pH kabul edilen kaynakların ortak aralığı (E1)
+- `somphongs-dwarf-rasbora` (R-B, https://www.fishkeeper.co.uk/fish/freshwater/cyprinids/rasboras/somphong-s-dwarf-rasbora):
+  - adultSizeCm: "2" → "3"; alıntı: SF: "Max size 30 mm SL 1.2 in SL"; kural: boyda, hacimde ve uzunlukta kaynakların büyüğü (CATALOG_LOG 2026-11-14 E1)
+- `sunsun-jvp202a` (R-A, https://malawiizmir.com/sunsun-jvp-202-a-wave-maker):
+  - specifications: "Çift kafalı dalga motoru · satıcı sayfasında debi ve güç yayımlanmamış" → "Dalga motoru · satıcı sayfasında debi ve güç yayımlanmamış"; alıntı: 'çift kafalı' yazmıyor; sayfa yalnız 'SUNSUN JVP 202 A Wave Maker'; kural: kaynakta olmayan iddia çıkarılır (lider kararı 3'ün ekipman karşılığı; AGENTS.md 'uydurma yok')
+- `the-2hr-aquarist-apt-sky-plus` (P5a, https://www.2hraquarist.com/products/2hr-aquarist-apt-sky-plus):
+  - description: "GH ile birlikte iz element desteği sağlayan mineral karışımı" → "Ozmoz suyuna GH kazandıran, KH'yi yaklaşık 2 dKH'ye ve pH'ı 7,2–7,6'ya hafifçe yükselten kalsiyum-magnezyum mineral karışımı"; alıntı: Moderately raises KH to ~2 dKH and pH to 7.2~7.6; kural: açıklama üreticinin kendi ürün sayfasına dayanır
+- `tropical-3-algae-tablets-b` (R-B, https://tropical.pl/tropical/product/3-algae-tablets-b):
+  - description: "Dipten beslenen balıklar için üç alg içeren batan tablet yem" → "Otçul tatlı ve deniz suyu balıkları için üç alg içeren batan tablet yem"; alıntı: Przeznaczony do codziennego karmienia słodkowodnych i morskich ryb roślinożernych … W skład 3-Algae Tablets B wchodzą trzy glony; kural: açıklama ürün sayfasındaki iddialarla sınırlı (karar 0019)
+- `tropical-cichlid-color-xxl` (R-B, https://tropical.pl/tropical/product/cichlid-color):
+  - description: "Büyük cikletler için protein ve renk destekli yüzen çubuk yem" → "Hepçil ve etçil cikletler için yüksek proteinli, renk destekleyici temel yem"; alıntı: Cichlid Color to podstawowy pokarm z wysoką zawartością białka … zawiera wybarwiające karotenoidy; kural: açıklama ürün sayfasındaki iddialarla sınırlı (karar 0019)
+- `tropical-crusta-sticks` (R-B, https://tropical.pl/tropical/product/crusta-sticks):
+  - description: "Karides ve kerevitler için kalsiyum destekli batan çubuk yem" → "Karidesler ve diğer su kabukluları için kalsiyumu yüksek, hızlı batan çubuk yem"; alıntı: przeznaczony jest do karmienia wszystkich rodzajów krewetek karłowatych … oraz innych skorupiaków wodnych; kural: açıklama ürün sayfasındaki iddialarla sınırlı (karar 0019)
+- `tropical-ichtio-vit` (R-B, https://tropical.pl/tropical/product/ichtio-vit):
+  - description: "Genel akvaryumlardaki hepçil balıklar için günlük pul yem" → "Çok türlü akvaryumlardaki hepçil balıklar için günlük temel yem"; alıntı: Ichtio-Vit to uniwersalny pokarm … Można nim codziennie karmić większość popularnych gatunków ryb wszystkożernych.; kural: açıklama ürün sayfasındaki iddialarla sınırlı (karar 0019)
+- `tropical-malawi` (R-B, https://tropical.pl/tropical/product/malawi):
+  - description: "Mbuna ve diğer otçul Malawi cikletleri için bitkisel ağırlıklı pul yem" → "Malawi gölü mbuna cikletleri için bitkisel ağırlıklı pul yem"; alıntı: Malawi to wieloskładnikowy pokarm w formie płatków z dużym udziałem składników roślinnych … karmienia pyszczaków mbuna z jeziora Malawi; kural: açıklama ürün sayfasındaki iddialarla sınırlı (karar 0019)
+- `tropical-super-spirulina-forte-mini-granulat` (R-B, https://tropical.pl/tropical/product/super-spirulina-forte-mini-granulat):
+  - description: "Küçük balıklar için yüksek spirulina içerikli mini granül yem" → "Genç Afrika cikletleri dahil yosun yiyen balıklar için %36 spirulinalı mini granül yem"; alıntı: Pokarm z wysoką zawartością spiruliny (36%) w formie mini granulatu przeznaczony dla ryb glonożernych , w tym młodych pielęgnic afrykańskich; kural: açıklama ürün sayfasındaki iddialarla sınırlı (karar 0019)
+- `tropical-supervit-mini-granulat` (R-B, https://tropical.pl/tropical/product/supervit-mini-granulat):
+  - description: "Küçük balıklar ve yavrular için yavaş batan mini granül yem" → "Küçük hepçil ve etçil balıklar için yavaş batan mini granül yem"; alıntı: w formie drobnego, wolno tonącego granulatu do codziennego karmienia małych gatunków ryb wszystkożernych i mięsożernych; kural: açıklama ürün sayfasındaki iddialarla sınırlı (karar 0019)
+- `tropical-vitality-color-tablets` (R-B, https://tropical.pl/tropical/product/vitality-color-tablets):
+  - description: "Cama yapıştırılabilen renk ve kondisyon destekli tablet yem" → "Renk ve canlılık destekleyen yüksek proteinli tablet yem"; alıntı: Tablets Vitality & Color to wysokobiałkowy pokarm w postaci tabletek o działaniu wybarwiającym i witalizującym.; kural: açıklama ürün sayfasındaki iddialarla sınırlı (karar 0019)
+- `twinstar-e5-1200e` (P5a, https://twinstarstore.kr/products/twinstar-1200e-pro-ver-5-0-premium-aquarium-led-light-for-120cm-48-tank):
+  - specifications: "Altı renk tam spektrum LED · Bluetooth LightControl · 79 W · 4600 lm · 120 cm önerilen akvaryum" → "Altı renk tam spektrum LED · Bluetooth LightControl · 79 W · 5100 lm · 120–130 cm"; alıntı: / 120–130cm ... Power Consumption | 79 W | Light Output | 5,100 lm | Recommended Tank Width | Up to 130 cm | Light Source | RGB + 3 Plant-Grow LEDs / 6-Color LED System | Control | Bluetooth / LightControl Pro; kural: tam modelin kendi mağaza sayfasındaki teknik tablo değeri (DATA_SOURCES; twinstarstore.kr resmî mağaza)
+  - recommendedTankLengthCm: "[120,120]" → "[120,130]"; alıntı: for ... / 120–130cm Planted Tanks; Recommended Tank Width | Up to 130 cm; kural: tam modelin kendi mağaza sayfasındaki teknik tablo değeri (DATA_SOURCES; twinstarstore.kr resmî mağaza)
+- `twinstar-e5-200e` (P5a, https://twinstarstore.kr/products/twinstar-200e-pro-ver-5-0-premium-aquarium-led-light-for-20cm-8-tank):
+  - powerW: "13" → "14"; alıntı: Power Consumption | 14 W; kural: tam modelin kendi mağaza sayfasındaki teknik tablo değeri (DATA_SOURCES; twinstarstore.kr resmî mağaza)
+  - specifications: "Altı renk tam spektrum LED · Bluetooth LightControl · 13 W · 900 lm · 20–25 cm" → "Altı renk tam spektrum LED · Bluetooth LightControl · 14 W · 900 lm · 20–25 cm"; alıntı: / 20–25cm ... Power Consumption | 14 W | Light Output | 900 lm | Recommended Tank Width | Up to 25 cm | Light Source | RGB + 3 Plant-Grow LEDs / 6-Color LED System | Control | Bluetooth / LightControl Pro; kural: tam modelin kendi mağaza sayfasındaki teknik tablo değeri (DATA_SOURCES; twinstarstore.kr resmî mağaza)
+- `twinstar-e5-300e` (P5a, https://twinstarstore.kr/products/twinstar-300e-pro-ver-5-0-premium-aquarium-led-light-for-30cm-12-tank-%EC%82%AC%EB%B3%B8):
+  - powerW: "19" → "21"; alıntı: Power Consumption | 21 W; kural: tam modelin kendi mağaza sayfasındaki teknik tablo değeri (DATA_SOURCES; twinstarstore.kr resmî mağaza)
+  - specifications: "Altı renk tam spektrum LED · Bluetooth LightControl · 19 W · 1200 lm · 30–36 cm" → "Altı renk tam spektrum LED · Bluetooth LightControl · 21 W · 1350 lm · 30–36 cm"; alıntı: / 30–36cm ... Power Consumption | 21 W | Light Output | 1,350 lm | Recommended Tank Width | Up to 36 cm | Light Source | RGB + 3 Plant-Grow LEDs / 6-Color LED System | Control | Bluetooth / LightControl Pro; kural: tam modelin kendi mağaza sayfasındaki teknik tablo değeri (DATA_SOURCES; twinstarstore.kr resmî mağaza)
+- `twinstar-e5-450e` (P5a, https://twinstarstore.kr/products/twinstar-450e-pro-ver-5-0-premium-aquarium-led-light-for-45cm-18-tank):
+  - powerW: "31" → "33"; alıntı: Power Consumption | 33 W; kural: tam modelin kendi mağaza sayfasındaki teknik tablo değeri (DATA_SOURCES; twinstarstore.kr resmî mağaza)
+  - specifications: "Altı renk tam spektrum LED · Bluetooth LightControl · 31 W · 2100 lm · 45–50 cm" → "Altı renk tam spektrum LED · Bluetooth LightControl · 33 W · 2100 lm · 45–50 cm"; alıntı: / 45–50cm ... Power Consumption | 33 W | Light Output | 2,100 lm | Recommended Tank Width | Up to 50 cm | Light Source | RGB + 3 Plant-Grow LEDs / 6-Color LED System | Control | Bluetooth / LightControl Pro; kural: tam modelin kendi mağaza sayfasındaki teknik tablo değeri (DATA_SOURCES; twinstarstore.kr resmî mağaza)
+- `twinstar-e5-600e` (P5a, https://twinstarstore.kr/products/twinstar-600e-pro-ver-5-0-premium-aquarium-led-light-for-60cm-24-tank):
+  - powerW: "49" → "53"; alıntı: Power Consumption | 53 W; kural: tam modelin kendi mağaza sayfasındaki teknik tablo değeri (DATA_SOURCES; twinstarstore.kr resmî mağaza)
+  - specifications: "Altı renk tam spektrum LED · Bluetooth LightControl · 49 W · 3000 lm · 60–70 cm" → "Altı renk tam spektrum LED · Bluetooth LightControl · 53 W · 3400 lm · 60–70 cm"; alıntı: / 60–70cm ... Power Consumption | 53 W | Light Output | 3,400 lm | Recommended Tank Width | Up to 70 cm | Light Source | RGB + 3 Plant-Grow LEDs / 6-Color LED System | Control | Bluetooth / LightControl Pro; kural: tam modelin kendi mağaza sayfasındaki teknik tablo değeri (DATA_SOURCES; twinstarstore.kr resmî mağaza)
+- `twinstar-e5-750e` (P5a, https://twinstarstore.kr/products/twinstar-750e-pro-ver-5-0-premium-aquarium-led-light-for-75-80cm-30-32-tank):
+  - powerW: "60" → "63"; alıntı: Power Consumption | 63 W; kural: tam modelin kendi mağaza sayfasındaki teknik tablo değeri (DATA_SOURCES; twinstarstore.kr resmî mağaza)
+  - specifications: "Altı renk tam spektrum LED · Bluetooth LightControl · 60 W · 3700 lm · resmî sayfada akvaryum uzunluğu çelişkili olduğundan otomatik aralık kullanılmıyor" → "Altı renk tam spektrum LED · Bluetooth LightControl · 63 W · 4030 lm · 75–80 cm"; alıntı: / 75–80cm ... Power Consumption | 63 W | Light Output | 4,030 lm | Recommended Tank Width | Up to 80 cm | Light Source | RGB + 3 Plant-Grow LEDs / 6-Color LED System | Control | Bluetooth / LightControl Pro; kural: tam modelin kendi mağaza sayfasındaki teknik tablo değeri (DATA_SOURCES; twinstarstore.kr resmî mağaza)
+  - recommendedTankLengthCm: "boş" → "[75,80]"; alıntı: for 29–32" / 75–80cm Planted Tanks; Recommended Tank Width | Up to 80 cm; kural: önceki çelişki giderilmiş: başlık ve tablo aynı aralığı veriyor; tam modelin kendi mağaza sayfasındaki teknik tablo değeri (DATA_SOURCES; twinstarstore.kr resmî mağaza)
+- `twinstar-e5-900e` (P5a, https://twinstarstore.kr/products/twinstar-900e-pro-ver-5-0-premium-aquarium-led-light-for-90cm-36-tank):
+  - powerW: "69" → "68"; alıntı: Power Consumption | 68 W; kural: tam modelin kendi mağaza sayfasındaki teknik tablo değeri (DATA_SOURCES; twinstarstore.kr resmî mağaza)
+  - specifications: "Altı renk tam spektrum LED · Bluetooth LightControl · 69 W · 3700 lm · 90–100 cm" → "Altı renk tam spektrum LED · Bluetooth LightControl · 68 W · 4400 lm · 90–100 cm"; alıntı: / 90–100cm ... Power Consumption | 68 W | Light Output | 4,400 lm | Recommended Tank Width | Up to 100 cm | Light Source | RGB + 3 Plant-Grow LEDs / 6-Color LED System | Control | Bluetooth / LightControl Pro; kural: tam modelin kendi mağaza sayfasındaki teknik tablo değeri (DATA_SOURCES; twinstarstore.kr resmî mağaza)
+- `xlpro-ex-1000` (R-A, https://atakanpetshop.com/xlpro-ex-1000-dis-filtre-1000lh-dolu-xpef001):
+  - specifications: "Üç sepetli dış filtre · 1000 L/saat · 22 W · 200 litreye kadar" → "Dört sepetli dış filtre · 1000 L/saat · 22 W · 200 litreye kadar"; alıntı: Çok Katmanlı Filtrasyon : 4 ayrı filtre sepeti ile kapsamlı mekanik, biyolojik ve kimyasal temizlik.; kural: karar 0039/1: kaynaklı düzeltme, alıntıyla CATALOG_LOG'a; sayfa kendi içinde çelişmiyor, yalnız katalog farklı
+- `yikeda-full-spectrum-rgb-30` (R-A, https://atakanpetshop.com/yikeda-sd-1030-rgb-led-aydinlatma-30w-50-60-cm):
+  - specifications: "Üç kademeli dimmerli RGB LED · 30 W · 2460 lm · 48,8 cm gövde · 50–60 cm akvaryum" → "RGB LED · 30 W · 2460 lm · 48,8 cm gövde · 50–60 cm akvaryum"; alıntı: 'üç kademeli dimmer' sayfada yok (dimmer, kademe ve parlaklık ayarı geçmiyor); RGB, güç, lümen, gövde ve akvaryum boyu aynı; kural: kaynakta olmayan iddia çıkarılır (lider kararı 3'ün ekipman karşılığı; AGENTS.md 'uydurma yok')
+- `yikeda-full-spectrum-rgb-35` (R-A, https://atakanpetshop.com/yikeda-sd-1035-rgb-led-aydinlatma-35w-60-70-cm):
+  - specifications: "Üç kademeli dimmerli RGB LED · 35 W · 2960 lm · 58,8 cm gövde · 60–70 cm akvaryum" → "RGB LED · 35 W · 2960 lm · 58,8 cm gövde · 60–70 cm akvaryum"; alıntı: 'üç kademeli dimmer' sayfada yok (dimmer, kademe ve parlaklık ayarı geçmiyor); RGB, güç, lümen, gövde ve akvaryum boyu aynı; kural: kaynakta olmayan iddia çıkarılır (lider kararı 3'ün ekipman karşılığı; AGENTS.md 'uydurma yok')
+- `yikeda-full-spectrum-rgb-40` (R-A, https://atakanpetshop.com/yikeda-sd-1040-rgb-led-aydinlatma-40w-70-80-cm):
+  - specifications: "Üç kademeli dimmerli RGB LED · 40 W · 3460 lm · 68,8 cm gövde · 70–80 cm akvaryum" → "RGB LED · 40 W · 3460 lm · 68,8 cm gövde · 70–80 cm akvaryum"; alıntı: 'üç kademeli dimmer' sayfada yok (dimmer, kademe ve parlaklık ayarı geçmiyor); RGB, güç, lümen, gövde ve akvaryum boyu aynı; kural: kaynakta olmayan iddia çıkarılır (lider kararı 3'ün ekipman karşılığı; AGENTS.md 'uydurma yok')
+- `yikeda-full-spectrum-rgb-45` (R-A, https://atakanpetshop.com/yikeda-sd-1045-rgb-led-aydinlatma-45w-80-90-cm):
+  - specifications: "Üç kademeli dimmerli RGB LED · 45 W · 3940 lm · 78,8 cm gövde · 80–90 cm akvaryum" → "RGB LED · 45 W · 3940 lm · 78,8 cm gövde · 80–90 cm akvaryum"; alıntı: 'üç kademeli dimmer' sayfada yok (dimmer, kademe ve parlaklık ayarı geçmiyor); RGB, güç, lümen, gövde ve akvaryum boyu aynı; kural: kaynakta olmayan iddia çıkarılır (lider kararı 3'ün ekipman karşılığı; AGENTS.md 'uydurma yok')
+- `yikeda-full-spectrum-rgb-65` (R-A, https://atakanpetshop.com/yikeda-sd-1065-rgb-led-aydinlatma-65w-120-140-cm):
+  - specifications: "Üç kademeli dimmerli full spectrum RGB LED · 65 W · 118,8 cm gövde · 120–140 cm akvaryum" → "Full spectrum RGB LED · 65 W · 118,8 cm gövde · 120–140 cm akvaryum"; alıntı: 'üç kademeli dimmer' sayfada yok (dimmer, kademe ve parlaklık ayarı geçmiyor); RGB, güç, lümen, gövde ve akvaryum boyu aynı; kural: kaynakta olmayan iddia çıkarılır (lider kararı 3'ün ekipman karşılığı; AGENTS.md 'uydurma yok')
+- `yikeda-sd1055` (R-A, https://atakanpetshop.com/yikeda-sd-1055-rgb-led-aydinlatma-55w-90-110-cm):
+  - specifications: "RGB LED · 55 W · 4920 lm · 3 kademe dimmer" → "RGB LED · 55 W · 4920 lm"; alıntı: 'üç kademeli dimmer' sayfada yok (dimmer, kademe ve parlaklık ayarı geçmiyor); RGB, güç, lümen, gövde ve akvaryum boyu aynı; kural: kaynakta olmayan iddia çıkarılır (lider kararı 3'ün ekipman karşılığı; AGENTS.md 'uydurma yok')
+
+### Adres değişiklikleri (kayıt: eski adres → yeni adres)
+
+- `aquael-ultra-100`: https://www.aquael.com/products/aquaristics/aquarium-heaters/ultra-heater/ → https://www.aquael.com/us/products/aquaristics-us/aquarium-heaters-us/ultra-heater/ (R-B)
+- `aquael-ultra-75`: https://www.aquael.com/products/aquaristics/aquarium-heaters/ultra-heater/ → https://www.aquael.com/us/products/aquaristics-us/aquarium-heaters-us/ultra-heater/ (R-B)
+- `aquapro-bubble-counter`: https://atakanpetshop.com/aquapro → https://atakanpetshop.com/aquapro-bubble-counter-damla-sayaci-hortum-giris-cikisli (R-A)
+- `aquapro-co2-diffuser-large`: https://atakanpetshop.com/aquapro → https://atakanpetshop.com/aquapro-co2-difuzoru-large (R-A)
+- `aquapro-co2-diffuser-medium`: https://atakanpetshop.com/aquapro → https://atakanpetshop.com/aquapro-co2-difuzoru-medium (R-A)
+- `aquapro-co2-diffuser-small`: https://atakanpetshop.com/aquapro → https://atakanpetshop.com/aquapro-co2-difuzoru-small (R-A)
+- `aquapro-lily-flow-m-16`: https://atakanpetshop.com/aquapro → https://atakanpetshop.com/aquapro-lily-flow-m-16mm-6975017512188 (R-A)
+- `aquapro-lily-pipe-glass-16`: https://atakanpetshop.com/aquapro → https://atakanpetshop.com/aquapro-lily-pipe-glass-16mm-cam-emis-basis-takimi (R-A)
+- `aquapro-lily-pipe-glass-9`: https://atakanpetshop.com/aquapro → https://atakanpetshop.com/aquapro-lily-pipe-glass-9mm-cam-emis-basis-takimi (R-A)
+- `aquapro-metal-check-valve`: https://atakanpetshop.com/aquapro → https://atakanpetshop.com/aquapro-aluminyum-metal-akvaryum-co2-check-valve-46mm (R-A)
+- `aquapro-mini-pro-16-22`: https://atakanpetshop.com/aquapro → https://atakanpetshop.com/aquapro-mini-pro-paslanmaz-celik-emis-basis-takimi-1622mm (R-A)
+- `aquapro-pipe-brush-150`: https://atakanpetshop.com/aquapro → https://atakanpetshop.com/aquapro-pipe-brush-hortum-temizleme-fircasi-150-cm (R-A)
+- `aquapro-pipe-holder-l`: https://atakanpetshop.com/aquapro → https://atakanpetshop.com/aquapro-aluminyum-metal-pipe-holder-l-16-22mm-hortum-tutucu (R-A)
+- `aquapro-pipe-holder-s`: https://atakanpetshop.com/aquapro → https://atakanpetshop.com/aquapro-aluminyum-metal-pipe-holder-s-12-16mm-hortum-tutucu (R-A)
+- `aquapro-pipe-holder-xs`: https://atakanpetshop.com/aquapro → https://atakanpetshop.com/aquapro-pipe-holder-xs-hortum-tutucu (R-A)
+- `aquapro-smart-bubble-counter`: https://atakanpetshop.com/aquapro → https://atakanpetshop.com/aquapro-smart-bubble-counter-akilli-damla-sayaci-hortum-giris-cikisli (R-A)
+- `aquawing-aq01-glass-cleaner`: https://www.akvaryumexpress.com/yeni-urunler/sayfa/41 → https://www.akvaryumexpress.com/aq01-aquawing-mknatisli-akvaryum-silecegi (düzeltme)
+- `aquawing-aq02-glass-cleaner`: https://www.akvaryumexpress.com/akvaryum/sayfa/67 → https://www.akvaryumexpress.com/aquawing-aq02-miknatisli-akvaryum-silecegi (R-B)
+- `boyu-co-100`: https://atakanpetshop.com/boyu → https://atakanpetshop.com/boyu-co-100-co2-cam-difuzor (R-A)
+- `boyu-sf-02`: https://atakanpetshop.com/boyu → https://atakanpetshop.com/boyu-sf-02-biyolojik-sungerli-uretim-filtresi (R-A)
+- `boyu-sf-03`: https://atakanpetshop.com/boyu → https://atakanpetshop.com/boyu-sf-03-biyolojik-sungerli-uretim-filtresi (R-A)
+- `boyu-sf-100`: https://atakanpetshop.com/boyu-sf-103-uretim-filtresi-sf-103 → https://atakanpetshop.com/boyu-sf-100-uretim-filtresi-sf-100 (R-A)
+- `boyu-sf-101`: https://atakanpetshop.com/boyu-sf-103-uretim-filtresi-sf-103 → https://atakanpetshop.com/boyu-sf-101-uretim-filtresi-sf-101 (R-A)
+- `boyu-sf-102`: https://atakanpetshop.com/boyu-sf-103-uretim-filtresi-sf-103 → https://atakanpetshop.com/boyu-sf-102-uretim-filtresi-sf-102 (R-A)
+- `boyu-sf-104`: https://atakanpetshop.com/boyu-sf-103-uretim-filtresi-sf-103 → https://atakanpetshop.com/boyu-sf-104-uretim-filtresi-sf-104 (R-A)
+- `creaqua-alpha-rgbw-120`: https://www.creaqua.com.tr/en/blog/post/12/ → https://www.creaqua.com.tr/en/aquarium-lightings/90-alpha-rgbw.html (düzeltme)
+- `creaqua-alpha-rgbw-150`: https://www.creaqua.com.tr/en/blog/post/12/ → https://www.creaqua.com.tr/en/aquarium-lightings/90-alpha-rgbw.html (düzeltme)
+- `creaqua-alpha-rgbw-60`: https://www.creaqua.com.tr/en/blog/post/12/ → https://www.creaqua.com.tr/en/aquarium-lightings/90-alpha-rgbw.html (düzeltme)
+- `creaqua-alpha-rgbw-90`: https://www.creaqua.com.tr/en/blog/post/12/ → https://www.creaqua.com.tr/en/aquarium-lightings/90-alpha-rgbw.html (düzeltme)
+- `creaqua-bubblegun`: https://www.aquackakvaryum.com.tr/co2-malzemeleri → https://www.creaqua.com.tr/en/co2-system/12-bubblegun.html (düzeltme)
+- `creaqua-cocoon-counter`: https://www.aquackakvaryum.com.tr/co2-malzemeleri → https://www.creaqua.com.tr/en/co2-system/47-cocoon.html (R-B)
+- `creaqua-delta-marine-35`:  ek kaynak: https://www.creaqua.com.tr/tr/akvaryum-aydinlatmalari/92-delta-marine.html (R-A)
+- `creaqua-delta-marine-40`: https://atakanpetshop.com/creaqua?page=4 → https://atakanpetshop.com/creaqua-delta-marine-40-deniz-akvaryum-led-aydinlatma-15w-40-55-cm-2314357 ek kaynak: https://www.creaqua.com.tr/tr/akvaryum-aydinlatmalari/92-delta-marine.html (R-A)
+- `creaqua-delta-pw-11`: https://www.aquackakvaryum.com.tr/creaqua → https://www.creaqua.com.tr/en/aquarium-lightings/32-delta-pw.html (düzeltme)
+- `creaqua-delta-pw-22`: https://www.aquackakvaryum.com.tr/creaqua → https://www.creaqua.com.tr/en/aquarium-lightings/32-delta-pw.html (düzeltme)
+- `creaqua-delta-pw-33`: https://www.aquackakvaryum.com.tr/creaqua → https://www.creaqua.com.tr/en/aquarium-lightings/32-delta-pw.html (düzeltme)
+- `creaqua-delta-pw-44`: https://www.aquackakvaryum.com.tr/creaqua → https://www.creaqua.com.tr/en/aquarium-lightings/32-delta-pw.html (düzeltme)
+- `creaqua-diox-regulator`: https://atakanpetshop.com/bitki-ve-co2-ekipmanlari → https://atakanpetshop.com/creaqua-diox-profesyonel-selenoid-valfli-damla-sayacli-co2-regulatoru (R-A)
+- `creaqua-sigma-pw-11`: https://www.aquackakvaryum.com.tr/creaqua → https://www.creaqua.com.tr/en/aquarium-lightings/91-sigma-pw.html (R-B)
+- `creaqua-sigma-pw-16`: https://akvaryumbalikavm.com.tr/aydinlatma-sistemleri → https://www.creaqua.com.tr/en/aquarium-lightings/91-sigma-pw.html (R-B)
+- `creaqua-sigma-pw-22`: https://www.aquackakvaryum.com.tr/creaqua → https://www.creaqua.com.tr/en/aquarium-lightings/91-sigma-pw.html (R-B)
+- `dennerle-carbo-regulator-power`: https://dennerle.com/en/products/druckminderer-power → https://dennerle.com/en/products/pressure-reducer-power (P5a)
+- `dennerle-carbo-regulator-start`: https://dennerle.com/en/products/druckminderer-start → https://dennerle.com/en/products/pressure-reducer-start (P5a)
+- `dennerle-co2-bubble-counter-exact`: https://dennerle.com/en/products/co2-blasenzaehler → https://dennerle.com/en/products/co2-bubble-counter (P5a)
+- `dennerle-co2-check-valve`: https://dennerle.com/en/products/co2-ruecklaufsicherung → https://dennerle.com/en/products/co2-backflow-protection (P5a)
+- `dennerle-co2-refillable-cylinder-2000`: https://dennerle.com/en/products/co2-mehrwegflasche → https://dennerle.com/en/products/co2-reusable-bottle (P5a)
+- `dennerle-co2-refillable-cylinder-500`: https://dennerle.com/en/products/co2-mehrwegflasche → https://dennerle.com/en/products/co2-reusable-bottle (P5a)
+- `dennerle-co2-solenoid-valve`: https://dennerle.com/en/products/co2-magnetventil → https://dennerle.com/en/products/co2-magnetic-valve (P5a)
+- `dennerle-corner-filter-accessory-set-40-60`: https://dennerle.com/en/products/zubehorset-corner-filter-40-60 → https://dennerle.com/en/products/corner-filter-accessory-set (P5a)
+- `dennerle-gravel-cleaner`: https://dennerle.com/en/products/mulmsauger → https://dennerle.com/en/products/gravel-cleaner (P5a)
+- `dennerle-nano-feeding-tongs`: https://dennerle.com/en/products/nano-futterzange → https://dennerle.com/en/products/nano-feeding-tongs (P5a)
+- `dennerle-nano-gravel-cleaner`: https://dennerle.com/en/products/nano-mulmsauger → https://dennerle.com/en/products/nano-gravel-cleaner (P5a)
+- `dennerle-shrimp-net-large`: https://dennerle.com/en/products/shrimp-netz-gross → https://dennerle.com/en/products/shrimp-net-large (P5a)
+- `dennerle-shrimp-net-small`: https://dennerle.com/en/products/shrimp-netz-klein → https://dennerle.com/en/products/shrimp-net-small (P5a)
+- `dophin-sf15`: https://atakanpetshop.com/dophin → https://atakanpetshop.com/dophin-sf15-pipo-filtre (düzeltme)
+- `dophin-sf33`: https://atakanpetshop.com/dophin → https://atakanpetshop.com/dophin-sf33-pipo-filtre (düzeltme)
+- `eheim-aquaball-130`: https://eheim.com/en_GB/aquatics/technology/internal-filters/ → https://eheim.com/en_GB/aquatics/technology/internal-filters/aquaball/aquaball-130 (R-B)
+- `eheim-aquaball-180`: https://eheim.com/en_GB/aquatics/technology/internal-filters/ → https://eheim.com/en_GB/aquatics/technology/internal-filters/aquaball/aquaball-180 (R-B)
+- `eheim-aquaball-60`: https://eheim.com/en_GB/aquatics/technology/internal-filters/ → https://eheim.com/en_GB/aquatics/technology/internal-filters/aquaball/aquaball-60 (R-B)
+- `eheim-classic-150`: https://eheim.com/en_GB/aquatics/technology/external-filters/classic/ → https://eheim.com/en_GB/aquatics/technology/external-filters/classic/classic-250 (R-B)
+- `eheim-classic-1500`: https://eheim.com/en_GB/spare-parts/technology/external-filters/ → https://eheim.com/en_GB/aquatics/technology/external-filters/classic/classic-250 (R-B)
+- `eheim-classic-350`: https://eheim.com/en_GB/aquatics/technology/external-filters/classic/ → https://eheim.com/en_GB/aquatics/technology/external-filters/classic/eheim-classic-350 (R-B)
+- `eheim-classic-600`: https://eheim.com/en_GB/aquatics/technology/external-filters/classic/ → https://eheim.com/en_GB/aquatics/technology/external-filters/classic/eheim-classic-600 (R-B)
+- `eheim-pickup-200`: https://eheim.com/media/pdf/53/79/g0/EHEIM_Haendlerkatalog_GB.pdf → https://eheim.com/en_GB/aquatics/technology/internal-filters/pickup/pickup-200 (R-B)
+- `eheim-pro3-1200xl`: https://eheim.com/media/pdf/53/79/g0/EHEIM_Haendlerkatalog_GB.pdf → https://eheim.com/en_GB/aquatics/technology/external-filters/professionel-3/professionel-3-1200xl (R-B)
+- `eheim-pro4-250`: https://eheim.com/en_GB/aquatics/technology/thermo-aussenfilter/professionel-4/ → https://eheim.com/en_GB/aquatics/technology/external-filters/professionel-4/professionel-4plus-250 (R-B)
+- `eheim-pro4-350`: https://eheim.com/en_GB/aquatics/technology/thermo-aussenfilter/professionel-4/ → https://eheim.com/en_GB/aquatics/technology/external-filters/professionel-4/professionel-4plus-350 (R-B)
+- `eheim-pro4-600`: https://eheim.com/en_GB/aquatics/technology/thermo-aussenfilter/professionel-4/ → https://eheim.com/en_GB/aquatics/technology/external-filters/professionel-4/professionel-4plus-600 (R-B)
+- `eheim-thermo-150`: https://eheim.com/en_GB/aquatics/technology/aquarium-heaters/thermocontrol/ → https://eheim.com/en_GB/aquatics/technology/aquarium-heaters/thermocontrol/thermocontrol-150 (R-B)
+- `eheim-thermo-200`: https://eheim.com/en_GB/aquatics/technology/aquarium-heaters/thermocontrol/ → https://eheim.com/en_GB/aquatics/technology/aquarium-heaters/thermocontrol/thermocontrol-200 (R-B)
+- `eurostar-sponge-production-large`: https://atakanpetshop.com/eurostar-sunger-uretim-filtresi-medium → https://atakanpetshop.com/eurostar-sunger-uretim-filtresi-large (R-A)
+- `eurostar-sponge-production-small`: https://atakanpetshop.com/eurostar-sunger-uretim-filtresi-medium → https://atakanpetshop.com/eurostar-sunger-uretim-filtresi-small (R-A)
+- `ferplast-aqamai-fresh-s`: https://www.ferplast.com/products/aqamai-fresh-small-white-eu → https://www.ferplast.com/products/aqamai-fresh-small-black-eu (P5b)
+- `ferplast-blumodular-2`: https://www.ferplast.com/products/blumodular-1 → https://www.ferplast.com/products/blumodular-2 (P5b)
+- `ferplast-blumodular-3`: https://www.ferplast.com/products/blumodular-1 → https://www.ferplast.com/products/blumodular-3 (P5b)
+- `fluval-107`: https://fluvalaquatics.com/us/shop/product/07-series-performance-canister-filter-107-up-to-30-us-gal-130-l → https://fluvalaquatics.com/us/shop/product/107-canister-filter-10-30 (P5b)
+- `fluval-207`: https://fluvalaquatics.com/us/shop/product/07-series-performance-canister-filter-207-up-to-45-us-gal-220-l → https://fluvalaquatics.com/us/shop/product/207-canister-filter-20-45-us-gal-60-220-l (P5b)
+- `fluval-307`: https://fluvalaquatics.com/us/shop/product/07-series-performance-canister-filter-307-up-to-70-us-gal-330-l → https://fluvalaquatics.com/us/shop/product/307-canister-filter-40-70-us-gal-90-330-l (P5b)
+- `fluval-407`: https://fluvalaquatics.com/us/shop/product/07-series-performance-canister-filter-407-up-to-100-us-gal-500-l → https://fluvalaquatics.com/us/shop/product/407-canister-filter-50-100-us-gal-150-500-l (P5b)
+- `ista-2in1-bubble-counter`: https://aquarubi.com/ista → https://aquarubi.com/ista-2in1-co2-bubble-counter-damla-sayaci (R-A)
+- `ista-acrylic-bubble-counter`: https://aquarubi.com/ista → https://aquarubi.com/ista-acrylic-co2-bubble-counter-damla-sayaci (düzeltme)
+- `ista-bio-sponge-l`: https://aquarubi.com/ista → https://aquarubi.com/ista-bio-sponge-sunger-pipo-filtre-l-21x12cm (R-A)
+- `ista-bio-sponge-mini`: https://aquarubi.com/ista → https://aquarubi.com/ista-bio-sponge-mini-sunger-filtre (R-A)
+- `ista-bio-sponge-s-wide`: https://aquarubi.com/ista → https://aquarubi.com/ista-bio-sponge-sunger-pipo-filtre-genis-s-boy (R-A)
+- `ista-co2-indicator`: https://aquarubi.com/ista → https://aquarubi.com/ista-co2-indicator-ve-test-sivisi (düzeltme)
+- `ista-i514-95g-premium`:  ek kaynak: https://www.istaproducts.com/wp-content/uploads/2014/08/ista-catalog1.pdf (R-B)
+- `ista-i672-45g-set`:  ek kaynak: https://www.istaproducts.com/wp-content/uploads/2014/08/ista-catalog1.pdf (R-B)
+- `ista-mini-co2-regulator`: https://aquarubi.com/ista-co2-regulator-tek-sayacli → https://aquarubi.com/ista-tek-sayacli-co2-regulator (düzeltme)
+- `jeneca-accessory-mm-31`: https://www.aleas.cn/product/48/ → https://www.aleas.cn/product/45/ (R-A)
+- `jeneca-accessory-mm-32`: https://www.aleas.cn/product/48/ → https://www.aleas.cn/product/45/ (R-A)
+- `jeneca-accessory-mm-32d`: https://www.aleas.cn/product/48/ → https://www.aleas.cn/product/45/ (R-A)
+- `jeneca-yl-3`: https://atakanpetshop.com/jeneca-yl-7-fanus-tipi-selale-filtre-4w-300lh-6948344912563 → https://atakanpetshop.com/jeneca-yl-3-fanus-tipi-selale-filtre-4w-300lh-6948344912549 (R-A)
+- `jeneca-yl-5`: https://atakanpetshop.com/jeneca-yl-7-fanus-tipi-selale-filtre-4w-300lh-6948344912563 → https://atakanpetshop.com/jeneca-yl-5-fanus-tipi-selale-filtre-4w-300lh-6948344912556 (R-A)
+- `jingye-9100dx`: https://atakanpetshop.com/jingye → https://atakanpetshop.com/jingye-9100dx-sump-motoru-beyaz-6w-500ls (R-A)
+- `lifetech-uv-h11`: https://atakanpetshop.com/lifetech → https://atakanpetshop.com/jebo-uv-h11-ultraviole-filtre-11w (R-A)
+- `lifetech-uv-h13`: https://atakanpetshop.com/lifetech → https://atakanpetshop.com/jebo-uv-h13-ultraviole-filtre-13w (R-A)
+- `lifetech-uv-h18`: https://atakanpetshop.com/lifetech → https://atakanpetshop.com/jebo-uv-h18-ultraviole-filtre-18w (R-A)
+- `lifetech-uv-h36`: https://atakanpetshop.com/lifetech → https://atakanpetshop.com/jebo-uv-h36-ultraviole-filtre-36w (R-A)
+- `lifetech-uv-h5`: https://atakanpetshop.com/lifetech → https://atakanpetshop.com/jebo-uv-h5-ultraviole-filtre-5w (R-A)
+- `liya-breeder-4701b`: https://atakanpetshop.com/liya → https://atakanpetshop.com/liya-4701b-kucuk-tul-yavruluk (R-A)
+- `liya-feeding-ring-round`: https://atakanpetshop.com/liya → https://atakanpetshop.com/liya-yem-toplama-aparati-yuvarlak (R-A)
+- `liya-fn10`: https://atakanpetshop.com/liya → https://atakanpetshop.com/liya-fn-10-celik-sapli-akvaryum-kepcesi-120-cm (R-A)
+- `liya-glass-divider-suction`: https://atakanpetshop.com/liya → https://atakanpetshop.com/liya-vantuzlu-cam-bolme-aparati-2li-paket-dx92 (R-A)
+- `liya-hose-brush-160`: https://atakanpetshop.com/liya → https://atakanpetshop.com/liya-esnek-hortum-temizleme-harbisi-160cm (düzeltme)
+- `liya-hose-brush-20`: https://atakanpetshop.com/liya → https://atakanpetshop.com/liya-hortum-temizleme-fircasi-20cm (R-A)
+- `liya-net-4`: https://www.akvaryumexpress.com/liya → https://www.akvaryumexpress.com/balik-yakalama-kepcesi-no-4 (R-B)
+- `liya-round-air-stone-10`: https://atakanpetshop.com/liya-yuvarlak-havatasi-75cm-ly28-3 → https://atakanpetshop.com/liya-yuvarlak-havatasi-10cm-ly28-4 (R-A)
+- `liya-round-air-stone-12-5`: https://atakanpetshop.com/liya-yuvarlak-havatasi-75cm-ly28-3 → https://atakanpetshop.com/liya-yuvarlak-havatasi-125cm-ly28-5 (R-A)
+- `mec-airline-suction-cup`: https://atakanpetshop.com/mec → https://atakanpetshop.com/mec-hava-hortumu-vantuz-10-adet (R-A)
+- `mec-airline-t-splitter`: https://atakanpetshop.com/mec → https://atakanpetshop.com/mec-hava-hortumu-t-dagitici-10-adet-1 (düzeltme)
+- `mec-airline-valve`: https://atakanpetshop.com/mec → https://atakanpetshop.com/mec-hava-hortumu-muslugu-vana-10-adet (düzeltme)
+- `mec-brine-shrimp-net`: https://atakanpetshop.com/mec → https://atakanpetshop.com/artemia-cikartma-suzgeci-kepcesi-9cm (R-A)
+- `mec-heater-suction-cup`: https://atakanpetshop.com/mec → https://atakanpetshop.com/mec-isitici-vantuzu-5-adet (düzeltme)
+- `mec-heater-suction-cup-black`: https://atakanpetshop.com/mec → https://atakanpetshop.com/mec-isitici-vantuzu-siyah-1-adet (R-A)
+- `mufan-fogger`: https://atakanpetshop.com/mufan → https://atakanpetshop.com/sis-makinesi (düzeltme)
+- `mufan-steel-co2-diffuser-25cm`: https://atakanpetshop.com/mufan-celik-co2-difuzoru-40cm → https://atakanpetshop.com/mufan-celik-co2-difuzoru-25cm (R-A)
+- `mufan-steel-co2-diffuser-30cm`: https://atakanpetshop.com/mufan-celik-co2-difuzoru-40cm → https://atakanpetshop.com/mufan-celik-co2-difuzoru-30cm (R-A)
+- `mufan-steel-co2-diffuser-35cm`: https://atakanpetshop.com/mufan-celik-co2-difuzoru-40cm → https://atakanpetshop.com/mufan-celik-co2-difuzoru-35cm (R-A)
+- `mufan-steel-inflow-outflow-16-12`: https://atakanpetshop.com/mufan-paslanmaz-celik-emis-12mm-basis-12mm-set-2314214 → https://atakanpetshop.com/mufan-paslanmaz-celik-emis-16mm-basis-12mm-set-2314216 (R-A)
+- `mufan-steel-inflow-outflow-16-16`: https://atakanpetshop.com/mufan-paslanmaz-celik-emis-12mm-basis-12mm-set-2314214 → https://atakanpetshop.com/mufan-paslanmaz-celik-emis-16mm-basis-16mm-set-2314215 (R-A)
+- `mufan-steel-skimmer-inflow-outflow-16-16`: https://atakanpetshop.com/mufan-paslanmaz-celik-emis-16mm-basis-12mm-set-yuzey-emisli-2314213 → https://atakanpetshop.com/mufan-paslanmaz-celik-emis-16mm-basis-16mm-set-yuzey-emisli-2314212 (R-A)
+- `netlea-c4000`: https://atakanpetshop.com/netlea-c4000-debi-ayarli-kafa-motoru-25w-4000lh-4-metre-6949625020212 → https://atakanpetshop.com/netlea-c4000-debi-ayarli-kafa-motoru-25w-4000l-h-4-metre-bluetooth-kontrollu (R-A)
+- `netlea-c6000`: https://atakanpetshop.com/netlea → https://atakanpetshop.com/netlea-c6000-debi-ayarli-kafa-motoru-40w-6000l-h-5-metre-bluetooth-kontrollu (R-A)
+- `netlea-sg2500`: https://atakanpetshop.com/netlea → https://atakanpetshop.com/netlea-sg2500-kafa-motoru-22w-2500ls-38m-bluetooth-kontrollu (R-A)
+- `netlea-sg5000`: https://atakanpetshop.com/netlea → https://atakanpetshop.com/netlea-sg5000-kafa-motoru-35w-5000ls-45m-bluetooth-kontrollu (R-A)
+- `oase-bioplus-200`: https://oase.com/gb-en/products-a-z/family/product/p/42241-bioplus-200-gb.html → https://www.oase.com/en-GB/aquarium/bioplus-200 (P5b)
+- `oase-biostyle-75`: https://oase.com/en/products-a-z/family/product/p/89600-biostyle-75-grey-gb.html → https://www.oase.com/en/aquarium/biostyle-75-grey-gb (P5b)
+- `oase-filtosmart-100`: https://oase.com/en/products-a-z/family/product/p/55159-filtosmart-100-us.html → https://www.oase.com/en/aquarium/filtosmart-100-us (P5b)
+- `oase-filtosmart-300`: https://oase.com/gb-en/products-a-z/family/product/p/42683-filtosmart-300-gb.html → https://www.oase.com/en-GB/aquarium/filtosmart-300 (P5b)
+- `oase-filtosmart-60`: https://www.oase.com/en/products-a-z/family/product/p/42663-filtosmart-60-int.html → https://www.oase.com/en/aquarium/filtosmart-60-int (P5b)
+- `oase-heatup-100`: https://www.oase.com/gb-en/products-a-z/family/f/heatup.1000203779.html → https://www.oase.com/en-GB/aquarium/heatup-100 (P5b)
+- `oase-heatup-150`: https://www.oase.com/gb-en/products-a-z/family/f/heatup.1000203779.html → https://www.oase.com/en-GB/aquarium/heatup-150 (P5b)
+- `oase-heatup-200`: https://www.oase.com/gb-en/products-a-z/family/f/heatup.1000203779.html → https://www.oase.com/en-GB/aquarium/heatup-200 (P5b)
+- `oase-heatup-25`: https://www.oase.com/gb-en/products-a-z/family/f/heatup.1000203779.html → https://www.oase.com/en-GB/aquarium/heatup-25 (P5b)
+- `oase-heatup-250`: https://www.oase.com/gb-en/products-a-z/family/f/heatup.1000203779.html → https://www.oase.com/en-GB/aquarium/heatup-250 (P5b)
+- `oase-heatup-300`: https://www.oase.com/gb-en/products-a-z/family/f/heatup.1000203779.html → https://www.oase.com/en-GB/aquarium/heatup-300 (P5b)
+- `oase-heatup-400`: https://www.oase.com/gb-en/products-a-z/family/f/heatup.1000203779.html → https://www.oase.com/en-GB/aquarium/heatup-400 (P5b)
+- `oase-heatup-50`: https://www.oase.com/gb-en/products-a-z/family/f/heatup.1000203779.html → https://www.oase.com/en-GB/aquarium/heatup-50 (P5b)
+- `oase-optimax-1000`: https://oase.com/en/products-a-z/family/f/optimax.1000927371.html → https://www.oase.com/en/aquarium/optimax-1000-int (P5b)
+- `oase-optimax-300`: https://oase.com/en/products-a-z/family/f/optimax.1000927371.html → https://www.oase.com/en/aquarium/optimax-300-int (P5b)
+- `oase-optimax-3000`: https://oase.com/en/products-a-z/family/f/optimax.1000927371.html → https://www.oase.com/en/aquarium/optimax-3000-int (P5b)
+- `oase-optimax-4000`: https://oase.com/en/products-a-z/family/f/optimax.1000927371.html → https://www.oase.com/en/aquarium/optimax-4000-int (P5b)
+- `oase-optimax-500`: https://oase.com/en/products-a-z/family/f/optimax.1000927371.html → https://www.oase.com/en/aquarium/optimax-500-int (P5b)
+- `oase-optimax-5000`: https://oase.com/en/products-a-z/family/f/optimax.1000927371.html → https://www.oase.com/en/aquarium/optimax-5000-int (P5b)
+- `oase-optimax-800`: https://oase.com/en/products-a-z/family/f/optimax.1000927371.html → https://www.oase.com/en/aquarium/optimax-800-int (P5b)
+- `oase-oxymax-100`: https://www.oase.com/en/products-a-z/family/f/oxymax.1000203579.html → https://www.oase.com/en/aquarium/oxymax-100-int (P5b)
+- `oase-oxymax-200`: https://www.oase.com/en/products-a-z/family/f/oxymax.1000203579.html → https://www.oase.com/en/aquarium/oxymax-200-int (P5b)
+- `oase-oxymax-400`: https://www.oase.com/en/products-a-z/family/f/oxymax.1000203579.html → https://www.oase.com/en/aquarium/oxymax-400-int (P5b)
+- `oase-streammax-classic-2000`: https://oase.com/en/products-a-z/family/f/streammax-classic.1000720598.html → https://www.oase.com/en/aquarium/streammax-classic-2000-int (P5b)
+- `oase-streammax-classic-4000`: https://oase.com/en/products-a-z/family/f/streammax-classic.1000720598.html → https://www.oase.com/en/aquarium/streammax-classic-4000-int (P5b)
+- `resun-af2005d`: https://atakanpetshop.com/resun → https://atakanpetshop.com/resun-af2005d-digital-otomatik-yemleme-makinesi (düzeltme)
+- `sobo-aq-7500`: https://www.akvaryumexpress.com/yeni-urunler/sayfa → https://www.akvaryumexpress.com/sobo-yeni-nesil-kafa-sump-motoru-100w-5000-lt-h-aq7500 (R-B)
+- `sobo-wp-500d`: https://atakanpetshop.com/sobo → https://atakanpetshop.com/sobo-wp-500d-alttan-emisli-sump-motoru-4500ls-55w (R-A)
+- `sobo-wp-700d`: https://atakanpetshop.com/sobo → https://atakanpetshop.com/sobo-wp-700d-alttan-emisli-sump-motoru-5500l-s-110w (R-A)
+- `sunsun-602b`: https://atakanpetshop.com/sunsun-603b-dis-filtre-400-lt-h-6w → https://atakanpetshop.com/sunsun-hw602b-dis-filtre-400l-h-6w (R-A)
+- `yikeda-mini-clip`: https://aquarubi.com/yikeda → https://aquarubi.com/yikeda-mini-klipsli-led-akvaryum-lambasi (R-A)
+- `yikeda-smart-ufo-120`: https://atakanpetshop.com/yikeda-smart-ufo-led-lamba-100w → https://atakanpetshop.com/yikeda-smart-ufo-led-lamba-120w (R-A)
+- `yikeda-smart-ufo-85`: https://atakanpetshop.com/yikeda-smart-ufo-led-lamba-100w → https://atakanpetshop.com/yikeda-smart-ufo-led-lamba-85w (R-A)
+- `ada-power-sand-basic-s`: https://www.adana.co.jp/en/contents/products/na_substrate/detail01.html/1000 → https://www.adana.co.jp/en/contents/products/na_substrate/detail01.html (R-B)
+- `aquamins-anti-algae-100-ml`: https://atakanpetshop.com/aquamins → https://atakanpetshop.com/aquamins-anti-algae-yosun-giderici-100ml (R-A)
+- `aquamins-anti-algae-250-ml`: https://atakanpetshop.com/aquamins → https://atakanpetshop.com/aquamins-anti-algae-yosun-giderici-250ml (R-A)
+- `aquamins-anti-algae-500-ml`: https://atakanpetshop.com/aquamins → https://atakanpetshop.com/aquamins-anti-algae-yosun-giderici-500ml (R-A)
+- `aquamins-anti-ammonia-100-ml`: https://atakanpetshop.com/aquamins → https://atakanpetshop.com/aquamins-anti-ammonia-amonyak-giderici-100ml (R-A)
+- `aquamins-aqua-nutrifish-100-ml`: https://atakanpetshop.com/aquamins → https://atakanpetshop.com/aquamins-aqua-nutrifish-su-duzenleyici-balik-ilaci-100ml (R-A)
+- `aquamins-aqua-nutrifish-30-ml`: https://atakanpetshop.com/aquamins → https://atakanpetshop.com/aquamins-aqua-nutrifish-su-duzenleyici-balik-ilaci-30ml (R-A)
+- `aquamins-bacteria-100-ml`: https://atakanpetshop.com/aquamins → https://atakanpetshop.com/aquamins-bacteria-bakteri-duzenleyicisi-100ml (R-A)
+- `aquamins-bacteria-250-ml`: https://atakanpetshop.com/aquamins → https://atakanpetshop.com/aquamins-bacteria-bakteri-duzenleyicisi-250ml (R-A)
+- `aquamins-beta-mineral-100-ml`: https://atakanpetshop.com/aquamins → https://atakanpetshop.com/aquamins-beta-mineral-duzenleyicisi-100ml (R-A)
+- `aquamins-beta-mineral-30-ml`: https://atakanpetshop.com/aquamins → https://atakanpetshop.com/aquamins-beta-mineral-duzenleyicisi-30ml (R-A)
+- `aquamins-california-black-sand-1-5-mm-10-kg`: https://atakanpetshop.com/aquamins → https://atakanpetshop.com/aquamins-california-black-sand-1-5mm-bitki-kumu-10kg (R-A)
+- `aquamins-california-black-sand-1-5-mm-20-kg`: https://atakanpetshop.com/aquamins → https://atakanpetshop.com/aquamins-california-black-sand-1-5mm-bitki-kumu-20kg (R-A)
+- `aquamins-california-black-sand-3-5-mm-10-kg`: https://atakanpetshop.com/aquamins → https://atakanpetshop.com/aquamins-california-black-sand-3-5mm-bitki-kumu-10kg (R-A)
+- `aquamins-california-black-sand-3-5-mm-20-kg`: https://atakanpetshop.com/aquamins → https://atakanpetshop.com/aquamins-california-black-sand-3-5mm-bitki-kumu-20kg (R-A)
+- `aquamins-h2o-100-ml`: https://atakanpetshop.com/aquamins → https://atakanpetshop.com/aquamins-h2o-su-duzenleyicisi-100ml (R-A)
+- `aquamins-h2o-250-ml`: https://atakanpetshop.com/aquamins → https://atakanpetshop.com/aquamins-h2o-su-duzenleyicisi-250ml (R-A)
+- `aquamins-ichthyo-100-ml`: https://atakanpetshop.com/aquamins → https://atakanpetshop.com/aquamins-ichthyo-balik-parazit-losyonu-100ml (R-A)
+- `aquamins-ichthyo-30-ml`: https://atakanpetshop.com/aquamins → https://atakanpetshop.com/aquamins-ichthyo-balik-parazit-losyonu-30ml (R-A)
+- `aquamins-lav-tas-i-kirig-i-0-5-1-5-cm-12-kg`: https://atakanpetshop.com/aquamins → https://atakanpetshop.com/aquamins-akvaryum-lav-tasi-kirigi-15mm-12kg (R-A)
+- `aquamins-lav-tas-i-kirig-i-0-5-cm-12-kg`: https://atakanpetshop.com/aquamins → https://atakanpetshop.com/aquamins-akvaryum-lav-tasi-kirigi-kumu-05mm-12kg (R-A)
+- `aquamins-minerals-plus-100-ml`: https://atakanpetshop.com/aquamins → https://atakanpetshop.com/aquamins-minerals-plus-mineral-duzenleyicisi-100ml (R-A)
+- `aquamins-plants-all-included-100-ml`: https://atakanpetshop.com/aquamins → https://atakanpetshop.com/aquamins-plants-all-included-mineral-duzenleyicisi-100ml (R-A)
+- `aquamins-plants-all-included-250-ml`: https://atakanpetshop.com/aquamins → https://atakanpetshop.com/aquamins-plants-all-included-mineral-duzenleyicisi-250ml (R-A)
+- `aquamins-potasflow-100-ml`: https://atakanpetshop.com/aquamins → https://atakanpetshop.com/aquamins-potasflow-bitki-gubresi-100ml (R-A)
+- `aquamins-productive-cleaner-100-ml`: https://atakanpetshop.com/aquamins → https://atakanpetshop.com/aquamins-productive-cleaner-su-duzenleyicisi-100ml (R-A)
+- `aquamins-productive-cleaner-250-ml`: https://atakanpetshop.com/aquamins → https://atakanpetshop.com/aquamins-productive-cleaner-su-berraklastirici-250ml (R-A)
+- `aquamins-silis-kumu-0-5-mm-10-kg`: https://atakanpetshop.com/aquamins → https://atakanpetshop.com/aquamins-akvaryum-silis-kumu-05mm-10kg (R-A)
+- `aquamins-silis-kumu-1-5-mm-10-kg`: https://atakanpetshop.com/aquamins → https://atakanpetshop.com/aquamins-akvaryum-silis-kumu-15mm-10kg (R-A)
+- `aquamins-white-sand-0-5-mm-10-kg`: https://atakanpetshop.com/aquamins → https://atakanpetshop.com/aquamins-white-sand-0-5mm-ciklet-kumu-10kg (R-A)
+- `aquamins-white-sand-0-5-mm-20-kg`: https://atakanpetshop.com/aquamins → https://atakanpetshop.com/aquamins-white-sand-0-5mm-ciklet-kumu-20kg (R-A)
+- `aquamins-white-sand-1-5-mm-10-kg`: https://atakanpetshop.com/aquamins → https://atakanpetshop.com/aquamins-white-sand-1-5mm-ciklet-kumu-10kg (R-A)
+- `aquamins-white-sand-1-5-mm-20-kg`: https://atakanpetshop.com/aquamins → https://atakanpetshop.com/aquamins-white-sand-1-5mm-ciklet-kumu-20kg (R-A)
+- `creaqua-active-carbon-250-ml`: https://www.aquackakvaryum.com.tr/creaqua/page-5 → https://www.creaqua.com.tr/en/filter-media/58-2463-carbon.html (düzeltme)
+- `creaqua-active-carbon-500-ml`: https://www.aquackakvaryum.com.tr/creaqua/page-5 → https://www.creaqua.com.tr/en/filter-media/58-2463-carbon.html (düzeltme)
+- `creaqua-cosmetics-beige-sand-3-l`: https://www.aquackakvaryum.com.tr/creaqua/page-5 → https://www.creaqua.com.tr/en/cosmetic-sands/30-2439-cosmetic-sand.html (R-B)
+- `creaqua-cosmetics-black-sand-3-l`: https://www.aquackakvaryum.com.tr/creaqua/page-5 → https://www.creaqua.com.tr/en/cosmetic-sands/30-2439-cosmetic-sand.html (R-B)
+- `creaqua-cosmetics-natural-sand-3-l`: https://www.aquackakvaryum.com.tr/creaqua/page-5 → https://www.creaqua.com.tr/en/cosmetic-sands/30-2439-cosmetic-sand.html (R-B)
+- `creaqua-cosmetics-river-sand-3-l`: https://www.aquackakvaryum.com.tr/creaqua/page-5 → https://www.creaqua.com.tr/en/home/44-river.html (R-B)
+- `creaqua-cosmetics-white-sand-3-l`: https://www.aquackakvaryum.com.tr/creaqua/page-5 → https://www.creaqua.com.tr/en/cosmetic-sands/30-2439-cosmetic-sand.html (R-B)
+- `creaqua-exalg-carbon-250-ml`: https://www.creaqua.com.tr/en/10-fertilizers-and-water-conditioners → https://www.creaqua.com.tr/en/water-conditioners/20-2538-exalg-carbon.html (düzeltme)
+- `creaqua-gh-plus-250-ml`: https://www.aquackakvaryum.com.tr/creaqua/page-5 → https://www.creaqua.com.tr/en/plant-nutrients/19-2539-creaqua-liquid-gh.html (R-B)
+- `creaqua-hivex`: https://www.aquackakvaryum.com.tr/creaqua/page-5 → https://www.creaqua.com.tr/en/filter-media/50-2471-hivex.html (R-B)
+- `creaqua-low-tech-250-ml`: https://www.creaqua.com.tr/en/10-fertilizers-and-water-conditioners → https://www.creaqua.com.tr/en/plant-nutrients/45-2466-low-tech.html (R-B)
+- `creaqua-plant-nutrition-micro-250-ml`: https://www.creaqua.com.tr/en/10-fertilizers-and-water-conditioners → https://www.creaqua.com.tr/en/plant-nutrients/17-2541-micro-nutrients.html (düzeltme)
+- `creaqua-purifier-filter-pad`: https://www.aquackakvaryum.com.tr/creaqua/page-5 → https://www.creaqua.com.tr/en/filter-media/71-purifier-filter-pad.html (düzeltme)
+- `creaqua-six-up-250-ml`: https://www.creaqua.com.tr/en/10-fertilizers-and-water-conditioners → https://www.creaqua.com.tr/en/plant-nutrients/68-2559-six-up.html (R-B)
+- `dennerle-kristall-quartz-gravel-dark-brown`: https://dennerle.com/en/products/kristall-quarzkies-dunkelbraun → https://dennerle.com/en/products/aquarium-gravel-dark-brown (P5a)
+- `dennerle-kristall-quartz-gravel-deer-brown`: https://dennerle.com/en/products/kristall-quarzkies-rehbraun → https://dennerle.com/en/products/aquarium-gravel-light-brown (P5a)
+- `dennerle-kristall-quartz-gravel-diamond-black`: https://dennerle.com/en/products/kristall-quarzkies-diamantschwarz → https://dennerle.com/en/products/aquarium-gravel-diamond-black (P5a)
+- `dennerle-kristall-quartz-gravel-natural-white`: https://dennerle.com/en/products/kristall-quarzkies-naturweiss → https://dennerle.com/en/products/aquarium-gravel-natural-white (P5a)
+- `dennerle-kristall-quartz-gravel-slate-grey`: https://dennerle.com/en/products/kristall-quarzkies-schiefergrau → https://dennerle.com/en/products/aquarium-gravel-slate-grey (P5a)
+- `dennerle-nano-algae-stop`: https://dennerle.com/en/products/nano-algenstop → https://dennerle.com/en/products/nano-algae-stop (P5a)
+- `dennerle-nano-bio-filter-granules`: https://dennerle.com/en/products/nano-biofiltergranulat → https://dennerle.com/en/products/nano-bio-filter-granules (P5a)
+- `dennerle-nano-shrimp-gravel`: https://dennerle.com/en/products/nano-garnelenkies → https://dennerle.com/en/products/nano-shrimp-gravel (P5a)
+- `dennerle-natural-gravel-bairaman-0-1-0-6-mm`: https://dennerle.com/en/products/naturkies-bairaman → https://dennerle.com/en/products/natural-gravel-bairaman (P5a)
+- `dennerle-natural-gravel-congo-10-30-mm`: https://dennerle.com/en/products/naturkies-kongo-10-30mm → https://dennerle.com/en/products/natural-gravel-kongo-10-30mm (P5a)
+- `dennerle-natural-gravel-congo-3-8-mm`: https://dennerle.com/en/products/naturkies-kongo-3-8mm → https://dennerle.com/en/products/natural-gravel-kongo-3-8mm (P5a)
+- `dennerle-natural-gravel-okavango-4-8-mm`: https://dennerle.com/en/products/naturkies-okavango-4-8mm → https://dennerle.com/en/products/natural-gravel-okavango-4-8mm (P5a)
+- `dennerle-natural-gravel-okavango-8-12-mm`: https://dennerle.com/en/products/naturkies-okavango-8-12mm → https://dennerle.com/en/products/natural-gravel-okavango-8-12mm (P5a)
+- `dennerle-natural-gravel-rio-branco-0-1-2-mm`: https://dennerle.com/en/products/naturkies-rio-branco → https://dennerle.com/en/products/natural-gravel-rio-branco (P5a)
+- `dennerle-natural-gravel-rio-xingu-2-22-mm`: https://dennerle.com/en/products/naturkies-rio-xingu → https://dennerle.com/en/products/natural-gravel-rio-xingu (P5a)
+- `dennerle-osmose-carbon-filter`: https://dennerle.com/en/products/osmose-kohlefilter → https://dennerle.com/en/products/osmosis-carbon-filter (P5a)
+- `dennerle-osmose-fine-filter`: https://dennerle.com/en/products/osmose-feinfilter → https://dennerle.com/en/products/osmosis-fine-filter (P5a)
+- `dennerle-ph-calibration-solution-4`: https://dennerle.com/en/products/ph-eichloesung-4 → https://dennerle.com/en/products/ph-4-solution (P5a)
+- `dennerle-ph-calibration-solution-7`: https://dennerle.com/en/products/ph-eichloesung-7 → https://dennerle.com/en/products/ph-7-solution (P5a)
+- `dennerle-scaper-s-flow-filter-sponge`: https://dennerle.com/en/products/scapers-flow-filter-schwamm → https://dennerle.com/en/products/scapers-flow-filter-sponge (P5a)
+- `eurostar-filter-wool-100g`: https://atakanpetshop.com/eurostar → https://atakanpetshop.com/eurostar-filter-wool-filtre-elyafi-100gr (düzeltme)
+- `eurostar-micro-bio-pellets-1000ml`: https://atakanpetshop.com/eurostar → https://atakanpetshop.com/eurostar-micro-bio-pellets-1000ml (düzeltme)
+- `liya-biological-ceramic-500g`: https://atakanpetshop.com/liya → https://atakanpetshop.com/liya-biyolojik-seramik-filtre-malzemesi-500gr-ly205 (düzeltme)
+- `liya-ly202-active-carbon-500g`: https://atakanpetshop.com/liya → https://atakanpetshop.com/liya-ly202-aktif-carbon-filtre-malzemesi-500gr-ly202 (düzeltme)
+- `liya-zeolite-500g`: https://atakanpetshop.com/liya → https://atakanpetshop.com/liya-zeolit-filtre-malzemesi-500gr-ly208 (R-A)
+- `mufan-six-layer-filter-sponge-30-40`: https://atakanpetshop.com/mufan-6-katli-biyolojik-filtre-sungeri-30x30x18-cm → https://atakanpetshop.com/mufan-12-katli-biyolojik-filtre-sungeri-30x40x28-cm-2314218 (düzeltme)
+- `mufan-six-layer-filter-sponge-40-50`: https://atakanpetshop.com/mufan-6-katli-biyolojik-filtre-sungeri-30x30x18-cm → https://atakanpetshop.com/mufan-12-katli-biyolojik-filtre-sungeri-40x50x28-cm-2314219 (düzeltme)
+- `mufan-six-layer-filter-sponge-40-60`: https://atakanpetshop.com/mufan-6-katli-biyolojik-filtre-sungeri-30x30x18-cm → https://atakanpetshop.com/mufan-12-katli-biyolojik-filtre-sungeri-40x60x28-cm-2314220 (düzeltme)
+- `sera-7in1-quick-test`: https://www.sera.de/us/freshwater-aquarium/Products/maintain-freshwater-aquariums/water-analysis/ → https://www.sera.de/us/product/freshwater-aquarium/sera-quick-test-1/ (R-B)
+- `sera-aquarium-gravel-floredepot-substrate`: https://www.sera.de/us/freshwater-aquarium/Products/maintain-freshwater-aquariums/bottom-ground/ → https://www.sera.de/us/product/freshwater-aquarium/sera-aquarium-gravel-floredepot-substrate/ (R-B)
+- `sera-aquarium-gravel-lava-substrate`: https://www.sera.de/us/freshwater-aquarium/Products/maintain-freshwater-aquariums/bottom-ground/ → https://www.sera.de/us/product/freshwater-aquarium/sera-aquarium-gravel-lava-substrate/ (R-B)
+- `sera-aquatan`: https://www.sera.de/us/freshwater-aquarium/products/ → https://www.sera.de/us/product/freshwater-aquarium/sera-aquatan/ (R-B)
+- `sera-arowana-pellets`: https://www.sera.de/us/freshwater-aquarium/products/ → https://www.sera.de/us/product/freshwater-aquarium/sera-arowana-pellets/ (R-B)
+- `sera-axolotl-wafers`: https://www.sera.de/us/freshwater-aquarium/products/ → https://www.sera.de/us/product/freshwater-aquarium/sera-axolotl-wafers/ (R-B)
+- `sera-baktopur-direct`: https://www.sera.de/us/freshwater-aquarium/Products/maintain-freshwater-aquariums/treat-diseases/ → https://www.sera.de/us/product/freshwater-aquarium/sera-baktopur-direct/ (düzeltme)
+- `sera-bio-nitrivec`: https://www.sera.de/us/freshwater-aquarium/products/ → https://www.sera.de/us/product/freshwater-aquarium/sera-bio-nitrivec/ (R-B)
+- `sera-biopur`: https://www.sera.de/us/freshwater-aquarium/Products/technical-products-for-freshwater-aquariums/filter-media/ → https://www.sera.de/us/product/freshwater-aquarium/sera-biopur/ (düzeltme)
+- `sera-blackwater-aquatan`: https://www.sera.de/us/freshwater-aquarium/Products/maintain-freshwater-aquariums/water-conditioning/ → https://www.sera.de/us/product/freshwater-aquarium/sera-blackwater-aquatan/ (düzeltme)
+- `sera-chlor-ex`: https://www.sera.de/us/freshwater-aquarium/Products/maintain-freshwater-aquariums/water-conditioning/ → https://www.sera.de/us/product/freshwater-aquarium/sera-chlorex/ (R-B)
+- `sera-cichlid-sticks`: https://www.sera.de/us/freshwater-aquarium/products/ → https://www.sera.de/us/product/freshwater-aquarium/sera-cichlid-sticks/ (R-B)
+- `sera-crab-loops`: https://www.sera.de/us/freshwater-aquarium/products/ → https://www.sera.de/us/product/freshwater-aquarium/sera-crab-loops/ (düzeltme)
+- `sera-daphnia-snack`: https://www.sera.de/us/freshwater-aquarium/products/ → https://www.sera.de/us/product/freshwater-aquarium/sera-daphnia-snack/ (R-B)
+- `sera-ectopur`: https://www.sera.de/us/freshwater-aquarium/Products/maintain-freshwater-aquariums/treat-diseases/ → https://www.sera.de/us/product/freshwater-aquarium/sera-ectopur/ (R-B)
+- `sera-flore-1-carbo`: https://www.sera.de/us/freshwater-aquarium/Products/maintain-freshwater-aquariums/plant-care/ → https://www.sera.de/us/product/freshwater-aquarium/sera-flore-1-carbo/ (R-B)
+- `sera-flore-3-vital`: https://www.sera.de/us/freshwater-aquarium/Products/maintain-freshwater-aquariums/plant-care/ → https://www.sera.de/us/product/freshwater-aquarium/sera-flore-3-vital/ (R-B)
+- `sera-flore-4-plant`: https://www.sera.de/us/freshwater-aquarium/Products/maintain-freshwater-aquariums/plant-care/ → https://www.sera.de/us/product/freshwater-aquarium/sera-flore-4-plant/ (R-B)
+- `sera-florena`: https://www.sera.de/us/freshwater-aquarium/Products/maintain-freshwater-aquariums/plant-care/ → https://www.sera.de/us/product/freshwater-aquarium/sera-florena/ (R-B)
+- `sera-florenette`: https://www.sera.de/us/freshwater-aquarium/Products/maintain-freshwater-aquariums/plant-care/ → https://www.sera.de/us/product/freshwater-aquarium/sera-florenette/ (R-B)
+- `sera-gh-test`: https://www.sera.de/us/freshwater-aquarium/Products/maintain-freshwater-aquariums/water-analysis/ → https://www.sera.de/us/product/freshwater-aquarium/sera-gh-test-1/ (R-B)
+- `sera-guppy-granules`: https://www.sera.de/us/freshwater-aquarium/products/ → https://www.sera.de/us/product/freshwater-aquarium/sera-guppy-granules/ (R-B)
+- `sera-holiday-tabs`: https://www.sera.de/us/freshwater-aquarium/products/ → https://www.sera.de/us/product/freshwater-aquarium/sera-holiday-tabs/ (R-B)
+- `sera-kh-ph-plus`: https://www.sera.de/us/freshwater-aquarium/products/ → https://www.sera.de/us/product/freshwater-aquarium/sera-khph-plus/ (R-B)
+- `sera-kh-test`: https://www.sera.de/us/freshwater-aquarium/Products/maintain-freshwater-aquariums/water-analysis/ → https://www.sera.de/us/product/freshwater-aquarium/sera-kh-test-1/ (R-B)
+- `sera-mineral-salt`: https://www.sera.de/us/freshwater-aquarium/products/ → https://www.sera.de/us/product/freshwater-aquarium/sera-mineral-salt/ (R-B)
+- `sera-nitrite-minus`: https://www.sera.de/us/freshwater-aquarium/Products/maintain-freshwater-aquariums/water-conditioning/ → https://www.sera.de/us/product/freshwater-aquarium/sera-nitrite-minus/ (R-B)
+- `sera-o-nip-stickies`: https://www.sera.de/us/freshwater-aquarium/products/ → https://www.sera.de/us/product/freshwater-aquarium/sera-o-nip-stickies/ (düzeltme)
+- `sera-o2-plus`: https://www.sera.de/us/freshwater-aquarium/Products/maintain-freshwater-aquariums/water-conditioning/ → https://www.sera.de/us/product/freshwater-aquarium/sera-o2-plus/ (R-B)
+- `sera-ph-kh-minus`: https://www.sera.de/us/freshwater-aquarium/products/ → https://www.sera.de/us/product/freshwater-aquarium/sera-phkh-minus/ (R-B)
+- `sera-ph-test`: https://www.sera.de/us/freshwater-aquarium/Products/maintain-freshwater-aquariums/water-analysis/ → https://www.sera.de/us/product/freshwater-aquarium/sera-ph-test-1/ (R-B)
+- `sera-phosvec-clear`: https://www.sera.de/us/freshwater-aquarium/products/ → https://www.sera.de/us/product/freshwater-aquarium/sera-phosvecclear/ (R-B)
+- `sera-pleco-chips`: https://www.sera.de/us/freshwater-aquarium/products/ → https://www.sera.de/us/product/freshwater-aquarium/sera-pleco-chips/ (R-B)
+- `sera-pleco-tabs-xl`: https://www.sera.de/us/freshwater-aquarium/products/ → https://www.sera.de/us/product/freshwater-aquarium/sera-pleco-tabs-xl/ (düzeltme)
+- `sera-shrimp-granules`: https://www.sera.de/us/freshwater-aquarium/products/ → https://www.sera.de/us/product/freshwater-aquarium/sera-shrimp-granules/ (R-B)
+- `sera-siporax-bio-active-professional`: https://www.sera.de/us/freshwater-aquarium/Products/technical-products-for-freshwater-aquariums/filter-media/ → https://www.sera.de/us/product/freshwater-aquarium/sera-siporax-bio-active-professional/ (R-B)
+- `sera-siporax-mini-professional`: https://www.sera.de/us/freshwater-aquarium/Products/technical-products-for-freshwater-aquariums/filter-media/ → https://www.sera.de/us/product/freshwater-aquarium/sera-siporax-mini-professional/ (R-B)
+- `sera-siporax-professional-15-mm`: https://www.sera.de/us/freshwater-aquarium/Products/technical-products-for-freshwater-aquariums/filter-media/ → https://www.sera.de/us/product/freshwater-aquarium/sera-siporax-professional-15-mm/ (R-B)
+- `sera-spirulina-tabs`: https://www.sera.de/us/freshwater-aquarium/products/ → https://www.sera.de/us/product/freshwater-aquarium/sera-spirulina-tabs/ (R-B)
+- `sera-super-carbon`: https://www.sera.de/us/freshwater-aquarium/Products/technical-products-for-freshwater-aquariums/filter-media/ → https://www.sera.de/us/product/freshwater-aquarium/sera-super-carbon/ (düzeltme)
+- `sera-super-peat`: https://www.sera.de/us/freshwater-aquarium/Products/maintain-freshwater-aquariums/water-conditioning/ → https://www.sera.de/us/product/freshwater-aquarium/sera-super-peat/ (R-B)
+- `sera-toxivec`: https://www.sera.de/us/freshwater-aquarium/products/ → https://www.sera.de/us/product/freshwater-aquarium/sera-toxivec/ (R-B)
+- `sera-viformo-pleco-tabs`: https://www.sera.de/us/freshwater-aquarium/products/ → https://www.sera.de/us/product/freshwater-aquarium/sera-viformo-pleco-tabs/ (R-B)
+- `shrimps-forever-algasol`: https://shrimpsforever.com/ → https://shrimpsforever.com/katkilar/algasol-organik-yosun-sokucu-130ml (R-B)
+- `shrimps-forever-barley-mix`: https://www.prizeaquatics.com/ → https://shrimpsforever.com/yemler/barley-mix-50gr (R-B)
+- `shrimps-forever-bean-pellet`: https://www.prizeaquatics.com/ → https://shrimpsforever.com/yemler/bean-pellet-50gr (R-B)
+- `shrimps-forever-bio-powder`: https://shrimpsforever.com/ → https://shrimpsforever.com/yemler/bio-powder-50gr (R-B)
+- `shrimps-forever-black-water`: https://shrimpsforever.com/ → https://shrimpsforever.com/katkilar/black-water-fulvic-acid-130ml (R-B)
+- `shrimps-forever-crystallize-crystal-water`: https://shrimpsforever.com/ → https://shrimpsforever.com/katkilar/crystallize-crystal-water-130ml (düzeltme)
+- `shrimps-forever-cycle-starter-pro-bacter`: https://shrimpsforever.com/ → https://shrimpsforever.com/katkilar/cycle-starter-pro-bacter-130ml (R-B)
+- `shrimps-forever-daily-feed`: https://shrimpsforever.com/ → https://shrimpsforever.com/yemler/daily-feed-30gr (R-B)
+- `shrimps-forever-glucazyme`: https://www.prizeaquatics.com/ → https://shrimpsforever.com/yemler/gluzayme-35gr (R-B)
+- `shrimps-forever-liquid-gh`: https://shrimpsforever.com/ → https://shrimpsforever.com/katkilar/liquid-gh-130ml (düzeltme)
+- `shrimps-forever-moringa`: https://www.prizeaquatics.com/ → https://shrimpsforever.com/yemler/shrimps-forever-moringa-30gr (R-B)
+- `shrimps-forever-mulberry`: https://www.prizeaquatics.com/ → https://shrimpsforever.com/yemler/mulberry-30gr (R-B)
+- `shrimps-forever-shrimp-sticks-algae`: https://www.prizeaquatics.com/ → https://shrimpsforever.com/yemler/shrimps-forever-shrimp-sticks-algea (R-B)
+- `shrimps-forever-shrimp-trace`: https://shrimpsforever.com/ → https://shrimpsforever.com/katkilar/shrimp-trace-130ml (R-B)
+- `shrimps-forever-snowflake`: https://www.prizeaquatics.com/ → https://shrimpsforever.com/yemler/shrimpsforever-snowflake-200gr (R-B)
+- `shrimps-forever-speed-growth`: https://www.prizeaquatics.com/ → https://shrimpsforever.com/yemler/speed-growth-40gr (R-B)
+- `shrimps-forever-spinach-shrimps-stick`: https://shrimpsforever.com/ → https://shrimpsforever.com/yemler/shrimps-forever-spinach-shrimps-stick (R-B)
+- `shrimps-forever-sulawesi-mineral-7-5`: https://shrimpsforever.com/ → https://shrimpsforever.com/salyangoz/sulawesi-7-5-90gr (R-B)
+- `shrimps-forever-vit-amine`: https://shrimpsforever.com/ → https://shrimpsforever.com/yemler/vit-amine-40gr (R-B)
+- `shrimps-forever-vitaplus`: https://shrimpsforever.com/ → https://shrimpsforever.com/yemler/vitaplus-40gr (R-B)
+- `shrimps-forever-walnut-shrimps-sticks`: https://www.prizeaquatics.com/ → https://shrimpsforever.com/yemler/shrimps-forever-walnut-shrimps-sticks (R-B)
+- `the-2hr-aquarist-apt-1-zero`: https://www.2hraquarist.com/collections/all → https://www.2hraquarist.com/products/apt1 (P5a)
+- `the-2hr-aquarist-apt-3-complete`: https://www.2hraquarist.com/collections/all → https://www.2hraquarist.com/products/apt3 (P5a)
+- `the-2hr-aquarist-apt-balance`: https://www.2hraquarist.com/collections/all → https://www.2hraquarist.com/products/2hr-aquarist-apt-balance (P5a)
+- `the-2hr-aquarist-apt-dew`: https://www.2hraquarist.com/collections/all → https://www.2hraquarist.com/products/2hr-aquarist-apt-dew (P5a)
+- `the-2hr-aquarist-apt-e`: https://www.2hraquarist.com/collections/all → https://www.2hraquarist.com/products/aptei (P5a)
+- `the-2hr-aquarist-apt-feast`: https://www.2hraquarist.com/collections/all → https://www.2hraquarist.com/products/apt-feast (P5a)
+- `the-2hr-aquarist-apt-fix`: https://www.2hraquarist.com/collections/all → https://www.2hraquarist.com/products/aptfix (P5a)
+- `the-2hr-aquarist-apt-fixlite`: https://www.2hraquarist.com/collections/all → https://www.2hraquarist.com/products/2hr-aquarist-fixlite (P5a)
+- `the-2hr-aquarist-apt-jazz`: https://www.2hraquarist.com/collections/all → https://www.2hraquarist.com/products/2hr-aquarist-apt-jazz (P5a)
+- `the-2hr-aquarist-apt-pure`: https://www.2hraquarist.com/collections/all → https://www.2hraquarist.com/products/aptpure (P5a)
+- `the-2hr-aquarist-apt-sky`: https://www.2hraquarist.com/collections/all → https://www.2hraquarist.com/products/2hr-aquarist-apt-sky (P5a)
+- `the-2hr-aquarist-apt-sky-plus`: https://www.2hraquarist.com/collections/all → https://www.2hraquarist.com/products/2hr-aquarist-apt-sky-plus (düzeltme)
+- `the-2hr-aquarist-apt-start`: https://www.2hraquarist.com/collections/all → https://www.2hraquarist.com/products/2hr-aquarist-apt-start (P5a)
+- `tropica-aquarium-soil`: https://tropica.com/en/plant-care/aquarium-soil/ → https://tropica.com/en/plant-care/aquarium-soil/aquarium-soil/ (R-B)
+- `tropical-3-algae-tablets-b`: https://tropical.pl/tropical/products_search → https://tropical.pl/tropical/product/3-algae-tablets-b (düzeltme)
+- `tropical-cichlid-color-xxl`: https://tropical.pl/tropical/products_search → https://tropical.pl/tropical/product/cichlid-color (düzeltme)
+- `tropical-crusta-sticks`: https://tropical.pl/tropical/products_search → https://tropical.pl/tropical/product/crusta-sticks (düzeltme)
+- `tropical-d-allio-plus`: https://tropical.pl/tropical/products_search → https://tropical.pl/tropical/product/d-allio-plus (R-B)
+- `tropical-ichtio-vit`: https://tropical.pl/tropical/products_search → https://tropical.pl/tropical/product/ichtio-vit (düzeltme)
+- `tropical-malawi`: https://tropical.pl/tropical/products_search → https://tropical.pl/tropical/product/malawi (düzeltme)
+- `tropical-mikro-vit-vegetable`: https://tropical.pl/tropical/products_search → https://tropical.pl/tropical/product/mikrovit-vegetable (R-B)
+- `tropical-super-spirulina-forte-mini-granulat`: https://tropical.pl/tropical/products_search → https://tropical.pl/tropical/product/super-spirulina-forte-mini-granulat (düzeltme)
+- `tropical-supervit-mini-granulat`: https://tropical.pl/tropical/products_search → https://tropical.pl/tropical/product/supervit-mini-granulat (düzeltme)
+- `tropical-vitality-color-tablets`: https://tropical.pl/tropical/products_search → https://tropical.pl/tropical/product/vitality-color-tablets (düzeltme)
+- `tropical-welsi-gran`: https://tropical.pl/tropical/products_search → https://tropical.pl/tropical/product/welsi-gran (R-B)
+
+### Kontrol (2026-11-15, sıfır bağlam, Claude)
+
+- **Örnek yeniden okuma:** 16 düzeltme (5'i canlı: jaguar, melon barb, altı bantlı barb, Somphong, ornate yılanbaş), 15 yeni tablo kaydı (P5a 5, P5b 5, R-B 4, R-A 1) ve 10 adres değişikliği kaynak sayfası yeniden açılarak okundu; hepsi doğru. Ornate yılanbaşın "Courant Fort"u Fishipedia'nın doğal ortam bloğunda, ama bakım metni "filtration surdimensionnée ... afin de garantir un courant important" diyor; akvaryum önerisi olarak kabul edildi.
+- **Tablodan çıkan kayıt:** `jeneca-uv-02`. Üreticinin resim tablosu UV-02'yi "HIGH QUALITY UV LAMP" (33 × 33 × 120 mm, XP-U dış filtrelerinin UV lambası) olarak gösteriyor; katalog "Dış UV filtre ünitesi" diyor. Değer değiştirilmedi, günü eski hâline döndü. Tablo: ekipman 1.296, bakım ürünü 439.
+- **Kabul listesi:** eklenen 8 sitenin hepsi markanın kendi sitesi (sayfa altlarında şirket adı: TWINSTAR Inc., CO2Art Technologies Limited, Zhongshan Hailong Electric Appliance Co. "our own brand HAQOS", The 2Hr Aquarist; Dennerle, Ferplast, Fluval, Oase üretici siteleri). Çıkan site yok; dayanaklar testte yazıldı.
+- **Sayım:** tablodaki her kaydın kanıtında aynı adresle `same` ya da uygulanmış bir düzeltme var (1.596 `same`, 120 düzeltme; 19 Haqos kaydı http ile okundu, https adresi TLS hatası veriyor, aynı sayfa). Kalkan kimlik yok.
+- **Eski kaynak adresi:** `applyReverifiedSources` artık eski `sourceUrl`'i `additionalSourceUrls`'in sonuna ekliyor (322 kayıt). Testler: işlevin birim testi (eski adres korunur, yinelenmez, yeni ana adres ek kaynaklardan çıkar, bilinmeyen kimlik döner) ve gerçek katalogda her taşınan kaydın eski adresini ek kaynakta taşıdığı; ek kaynak adresleri de HTTPS olmalı.
+- **Paket boyutu** (`next build`, ilk yük): ekipman 327 → 333 (tarih) → 336 kB (adres), toplam +9 kB; bakım ürünleri 246 → 249 → 251 kB, +5 kB. 10 kB sınırının altında; küçültme yapılmadı. `.next` silindi.
