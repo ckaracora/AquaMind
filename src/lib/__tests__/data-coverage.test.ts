@@ -116,6 +116,40 @@ describe("kapsam hesabı", () => {
     expect(rowOf({ ...empty, care }, "Bakım ürünleri", "Hacim (tank, set, teraryum)")).toMatchObject({ count: 1, total: 2 });
   });
 
+  it("ikinci kademe değer (karar 0045) ayrı sayılır; toplam ikisinin toplamıdır", () => {
+    const base = { sourceUrl: "https://tropica.com/x", verifiedAt: "2026-10-25" };
+    const plants = [
+      { id: "a", ...base, temperature: [20, 28], ph: [6, 7] },
+      { id: "b", ...base, temperature: [22, 26], ph: [6, 7.5], secondarySources: { temperature: ["https://h1.example/b", "https://h2.example/b"] } },
+      { id: "c", ...base },
+    ];
+    const input = { ...empty, plants };
+    expect(rowOf(input, "Bitkiler", "Sıcaklık (toplam)")).toMatchObject({ count: 2, total: 3 });
+    expect(rowOf(input, "Bitkiler", "Sıcaklık: kabul edilen kaynak")).toMatchObject({ count: 1 });
+    expect(rowOf(input, "Bitkiler", "Sıcaklık: ikinci kademe (birkaç hobi kaynağı)")).toMatchObject({ count: 1 });
+    expect(rowOf(input, "Bitkiler", "pH: kabul edilen kaynak")).toMatchObject({ count: 2 });
+    expect(rowOf(input, "Bitkiler", "pH: ikinci kademe (birkaç hobi kaynağı)")).toMatchObject({ count: 0 });
+    // Bugünkü katalogda toplam = kabul edilen + ikinci kademe.
+    for (const field of ["Sıcaklık", "pH"]) {
+      const count = (label: string) => rowOf(catalogs, "Bitkiler", label).count;
+      expect(count(`${field} (toplam)`)).toBe(count(`${field}: kabul edilen kaynak`) + count(`${field}: ikinci kademe (birkaç hobi kaynağı)`));
+    }
+    const species = [{ id: "s", scientificName: "S s", category: "fish", sourceUrl: "https://www.zoopet.com/x", verifiedAt: "2026-10-01", secondarySources: { minVolumeL: ["https://a.example", "https://b.example", "https://c.example"] } }];
+    expect(rowOf({ ...empty, species }, "Canlılar", "En az hacim: ikinci kademe (birkaç hobi kaynağı)")).toMatchObject({ count: 1, total: 1 });
+    expect(rowOf({ ...empty, species }, "Canlılar", "En az tank uzunluğu: ikinci kademe (birkaç hobi kaynağı)")).toMatchObject({ count: 0 });
+  });
+
+  it("kabul edilen bakım kaynağı bağlantısı: Fishkeeper ve ScotCat de sayılır, FishBase ve mağaza sayılmaz; yalnız tatlı su kayıtları", () => {
+    const species = [
+      { id: "fk", scientificName: "A a", category: "fish", sourceUrl: "https://www.fishkeeper.co.uk/fish/freshwater/x", verifiedAt: "2026-10-01" },
+      { id: "sc", scientificName: "B b", category: "fish", sourceUrl: "https://www.fishbase.se/summary/B-b.html", additionalSourceUrls: ["https://www.scotcat.com/factsheets/b.htm"], verifiedAt: "2026-10-01" },
+      { id: "fb", scientificName: "C c", category: "fish", sourceUrl: "https://www.fishbase.se/summary/C-c.html", verifiedAt: "2026-10-01" },
+      { id: "shop", scientificName: "D d", category: "fish", sourceUrl: "https://aquarubi.com/d", verifiedAt: "2026-10-01", waterTypes: ["freshwater", "brackish"] },
+      { id: "sea", scientificName: "E e", category: "fish", sourceUrl: "https://www.fishbase.se/summary/E-e.html", verifiedAt: "2026-10-01", waterTypes: ["marine"] },
+    ];
+    expect(rowOf({ ...empty, species }, "Canlılar", "Tatlı su: kabul edilen bakım kaynağına hiç bağlantısı yok")).toMatchObject({ count: 2, total: 4 });
+  });
+
   it("tablo yüzdeyi Türkçe ondalıkla yazar; kaydı olmayan satırda yüzde yerine çizgi", () => {
     const species = [1, 2, 3].map((n) => ({ id: String(n), scientificName: `S ${n}`, category: "fish", sourceUrl: "https://example.com", verifiedAt: "2026-10-01", flow: n === 1 ? "low" : undefined }));
     const markdown = coverageMarkdown(dataCoverage({ ...empty, species }, "2026-10-28"));

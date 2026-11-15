@@ -8,6 +8,7 @@ import { useEffect, useId, useState, type ReactNode } from "react";
 import { createPortal } from "react-dom";
 import { ExternalLink, Info, X } from "lucide-react";
 import { ModalDialog } from "@/components/modal-dialog";
+import { SecondarySourceNote } from "@/components/secondary-source-note";
 import type { SpeciesProfile } from "@/data/catalog-species";
 import type { BehaviorRecord } from "@/data/species-behavior";
 import type { SpeciesCare } from "@/data/species-care";
@@ -72,12 +73,14 @@ export function SpeciesCardContent({ profile, titleId, data, failed, retry, clos
   const care = data && hasCareInfo(data.care) ? data.care : undefined;
   const careTexts = care ? CARE_TEXT_FIELDS.map((field) => [field, care[field] ? careText(care[field]) : undefined] as const).filter((entry): entry is readonly [typeof entry[0], string] => entry[1] !== undefined) : [];
   const hardness = care?.hardnessDgh;
+  // İkinci kademe (karar 0045): kabul edilen kaynakların yazmadığı hacim ya da uzunluk birkaç hobi kaynağının ortak değeri; değerin yanında kısa bilgi.
+  const secondary = profile.secondarySources ?? {};
   return <>
     <div className="mb-4 flex justify-between gap-3"><div className="min-w-0"><p className="eyebrow text-aqua">{c.eyebrow}</p><h2 id={titleId} className="mt-1 text-xl font-extrabold">{name}</h2><p className="mt-1 text-[11px] italic text-[#71858d] sm:text-[10px]">{profile.scientificName}</p></div><button type="button" onClick={close} aria-label={t.common.close} className="grid size-11 shrink-0 place-items-center rounded-xl bg-white/[.04] text-[#71858d] sm:size-9"><X size={17} /></button></div>
     <section><h3 className="text-sm font-extrabold">{c.catalogTitle}</h3><dl className="mt-1 divide-y divide-white/[.05]">
       <Row label={c.adultSize}>{fmt.number(profile.adultSizeCm)} cm</Row>
-      <Row label={c.minVolume}>{fmt.volume(profile.minVolumeL)}{profile.additionalVolumePerAnimalL ? <span className="block text-[11px] text-[#91a3aa] sm:text-[10px]">{c.extraVolume(fmt.volume(profile.additionalVolumePerAnimalL))}</span> : null}</Row>
-      {profile.minTankLengthCm !== undefined && <Row label={c.minLength}>{fmt.number(profile.minTankLengthCm)} cm</Row>}
+      <Row label={c.minVolume}>{fmt.volume(profile.minVolumeL)}{profile.additionalVolumePerAnimalL ? <span className="block text-[11px] text-[#91a3aa] sm:text-[10px]">{c.extraVolume(fmt.volume(profile.additionalVolumePerAnimalL))}</span> : null}{secondary.minVolumeL?.length ? <SecondarySourceNote urls={secondary.minVolumeL} /> : null}</Row>
+      {profile.minTankLengthCm !== undefined && <Row label={c.minLength}>{fmt.number(profile.minTankLengthCm)} cm{secondary.minTankLengthCm?.length ? <SecondarySourceNote urls={secondary.minTankLengthCm} /> : null}</Row>}
       <Row label={c.minGroup}>{c.count(profile.minGroup)}</Row>
       <Row label={c.temperature}>{range(profile.temperature[0], profile.temperature[1], (value) => fmt.temperatureNumber(value))} {fmt.temperatureSymbol}</Row>
       {profile.ph && <Row label={c.ph}>{range(profile.ph[0], profile.ph[1], (value) => fmt.measurement(value))}</Row>}
@@ -87,7 +90,7 @@ export function SpeciesCardContent({ profile, titleId, data, failed, retry, clos
       {summary ? <>
         {summary.lines.length > 0 && <ul className="mt-2 space-y-2.5">{summary.lines.map((line, index) => {
           const condition = line.condition ? catalogText(line.condition) : undefined;
-          return <li key={`${line.kind}-${index}`} className="text-[13px] leading-relaxed sm:text-xs"><p className="font-bold text-[#d7e2e5]">{line.conflict && <span className="mr-1.5 rounded-full bg-amber-300/10 px-2 py-0.5 text-[11px] font-extrabold text-amber-300 sm:text-[10px]">{c.conflict}</span>}{c.behavior[line.kind]}</p>{condition && <p className="mt-0.5 text-[#91a3aa]">{condition}</p>}{line.source && <p className="mt-0.5 text-[11px] text-[#71858d] sm:text-[10px]">{c.source(line.source)}</p>}</li>;
+          return <li key={`${line.kind}-${index}`} className="text-[13px] leading-relaxed sm:text-xs"><p className="font-bold text-[#d7e2e5]">{line.conflict && <span className="mr-1.5 rounded-full bg-amber-300/10 px-2 py-0.5 text-[11px] font-extrabold text-amber-300 sm:text-[10px]">{c.conflict}</span>}{c.behavior[line.kind]}</p>{condition && <p className="mt-0.5 text-[#91a3aa]">{condition}</p>}{line.source && <p className="mt-0.5 text-[11px] text-[#71858d] sm:text-[10px]">{c.source(line.source)}</p>}{line.secondaryUrls && <SecondarySourceNote urls={line.secondaryUrls} />}</li>;
         })}</ul>}
         {summary.unknown && <div className="mt-2 flex gap-2.5 rounded-xl border border-sky-300/15 bg-sky-300/[.04] p-3"><Info size={15} aria-hidden="true" className="mt-0.5 shrink-0 text-sky-300" /><div><p className="text-[13px] font-bold sm:text-xs">{c.behaviorUnknown}</p><p className="mt-0.5 text-[11px] leading-relaxed text-[#91a3aa] sm:text-[10px]">{c.behaviorUnknownHelp}</p></div></div>}
       </> : <p className="mt-2 text-[13px] text-[#71858d] sm:text-xs">{failed ? c.loadFailed : c.loading}</p>}

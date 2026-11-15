@@ -16,7 +16,8 @@ import type { Aquarium, Equipment, Livestock, WaterParameters } from "@/types/aq
  */
 export const SELECTION_WARNING_CODES: ReadonlySet<string> = new Set([
   ...[...LIVESTOCK_RISK_WARNING_CODES].filter((code) => code !== "spaceLimited" && code !== "groupLow"),
-  "predation", "speciesOnly", "temperatureConflict", "phConflict", "flowConflict", "shrimpUnverified", "spaceSevere",
+  // `spaceSevere` 1.20.0'dan beri (karar 0045) canlı riski sınıfından gelir.
+  "predation", "speciesOnly", "temperatureConflict", "phConflict", "flowConflict", "shrimpUnverified",
   "ammoniaToxic", "ammoniaWorstCase", "nitriteHigh",
 ]);
 

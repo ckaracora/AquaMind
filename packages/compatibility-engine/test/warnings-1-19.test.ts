@@ -53,8 +53,11 @@ const codes = (result: HealthAnalysis) => result.warnings.map((warning) => warni
 const warningOf = (result: HealthAnalysis, code: string) => result.warnings.find((warning) => warning.code === code);
 
 describe("sürüm (karar 0044)", () => {
-  it("motor 1.19.0, kural seti 1.16.0", () => {
-    expect([ENGINE_VERSION, RULESET_VERSION]).toEqual(["1.19.0", "1.16.0"]);
+  it("motor 1.19.0, kural seti 1.16.0 ya da sonrası", () => {
+    // 1.20.0'dan beri (karar 0045) tam eşitlik yerine en az sürüm (öbür sürüm testleri gibi).
+    const atLeast = (version: string, minimum: string) => version.localeCompare(minimum, undefined, { numeric: true }) >= 0;
+    expect(atLeast(ENGINE_VERSION, "1.19.0")).toBe(true);
+    expect(atLeast(RULESET_VERSION, "1.16.0")).toBe(true);
   });
 
   it("yeni kodlar canlı riski sınıfında (en çok 'dikkat' tavanı ya da kesin tehlike)", () => {

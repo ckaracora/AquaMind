@@ -15,13 +15,15 @@ Katalogların her bilgisinin yüzde kaçının dolu olduğu ve kaynağının tü
 - **Son 92 günde doğrulanmış:** kaydın doğrulama tarihi ölçüm günü ya da ölçüm gününden en çok 92 gün önce (ölçüm gününden sonraki tarih sayılmaz). Kaynaklar 3 ayda bir yeniden araştırılır (karar 0020); bu oran düştükçe sıradaki araştırma turu yaklaşır.
 - Canlılarda sıcaklık, yetişkin boy ve en az hacim zorunludur, her kayıtta vardır; pH, su türü yalnız tuzlu su olan kayıtlar dışında zorunludur. Deniz canlılarının kaydında pH ve tuzluluk yoktur, çünkü bu değerler akvaryum düzeyindedir (karar 0029 ve 0030). Bu bilgiler tabloda gösterilmez.
 - **Kaynak sayfası (ekipman ve bakım ürünleri):** kayıtta bir kaynak bağlantısı var. Bağlantının kime ait olduğu bu sayıda ayrılmaz: üreticinin ve kabul edilen mağazaların sayfalarının yanında eski, artık kabul edilmeyen bağlantılar da dahildir (ör. doğrulanmamışlar listesindeki bazı kayıtlar). Sitelere göre dağılım ürün sahibinin veri sayfasında görünür. **Doğrulanmamışlar listesi** (`src/data/catalog-equipment-unverified.ts`): değeri kaynakta bulunamayıp hesaptan çekilen kayıtlar. **Hesap değeri:** motorun kapasite hesabında kullandığı alanlar (filtrede debi ya da önerilen hacim veya hava motoruyla çalışma, ısıtıcıda güç ya da önerilen hacim); edilgen parçalar sayılmaz.
+- **İkinci kademe (birkaç hobi kaynağı):** kabul edilen kaynakların yazmadığı değer, birkaç bağımsız hobi kaynağının çapraz kontrolüyle doldu (karar 0045, `docs/DATA_SOURCES.md` → "İkinci kademe"); kayıtta `secondarySources` taşır ve ekranda "Birkaç hobi kaynağının ortak değeri" yazar. Bitkide sıcaklık ve pH, canlıda en az hacim ve en az tank uzunluğu için ayrı satır vardır. İkinci kademe davranış kayıtları (`tier: "secondary"`, `src/data/species-behavior.ts`) bu tabloda ölçülmez.
+- **Tatlı su: kabul edilen bakım kaynağına hiç bağlantısı yok:** tatlı su kaydının (su türlerinden biri tatlı su) `sourceUrl` ve `additionalSourceUrls` alanlarında `docs/DATA_SOURCES.md`'nin canlı bakım değerleri için kabul ettiği hiçbir kaynağın adresi yok (Seriously Fish, Practical Fishkeeping, OATA, Fishipedia, Fishkeeper, ScotCat, Welsfans, Corydoras World, Goodeid Working Group, Parosphromenus Project, wirbellose.de, Meerwasser-Lexikon; liste `src/lib/data-coverage.ts` → `ACCEPTED_CARE_SOURCE`). FishBase sayılmaz (hacim yayımlamaz). Bağlantı, hacmin o sayfada yazdığını göstermez: kabul edilen bir kaynağa bağlı olup hacmi o kaynakta yazmayan kayıtlar da vardır. Hacmi gerçekten kaynaksız tatlı su kayıtlarının elle denetlenmiş listesi `docs/CATALOG_SOURCE_GAPS.md` → "Hacmi hâlâ kaynaksız tatlı su canlıları"dadır.
 - **Bakım ürünleri, hacim:** yalnız hacmi olan ürünlerde sayılır (tank, akvaryum seti, akvateraryum, teraryum).
-- **Bitkiler:** değer kuralı `docs/DATA_SOURCES.md` → "Bitkiler". Tropica sıcaklık ve pH yazmadığı için bu iki bilgi bitkilerin yaklaşık yarısında yok. "Bütün değerler dolu" ışık, CO₂, büyüme, boy, sıcaklık, pH ve yerleşimin hepsidir. "Yalnız uyarı kaydı", Fishkeeper'da ve Tropica'da sayfası olmayan, yalnız kaynaklı bir uyarısı (istilacı tür listesi ya da "su bitkisi değil") için katalogda olan bitkilerdir (karar 0026); bu kayıtların değeri yoktur ve değer satırlarının paydasına girer. "Su bitkisi değil etiketi" Practical Fishkeeping'in akvaryumda kaçınılacak ev bitkileri listesindeki bitkilerdir.
+- **Bitkiler:** değer kuralı `docs/DATA_SOURCES.md` → "Bitkiler". Tropica sıcaklık ve pH yazmadığı için bu iki bilgi kabul edilen kaynaklarda bitkilerin yaklaşık yarısında yok. Sıcaklık ve pH üç satırdır: toplam, kabul edilen kaynaktan gelen ve ikinci kademe (aşağıda); toplam öbür ikisinin toplamıdır. "Bütün değerler dolu" ışık, CO₂, büyüme, boy, sıcaklık, pH ve yerleşimin hepsidir. "Yalnız uyarı kaydı", Fishkeeper'da ve Tropica'da sayfası olmayan, yalnız kaynaklı bir uyarısı (istilacı tür listesi ya da "su bitkisi değil") için katalogda olan bitkilerdir (karar 0026); bu kayıtların değeri yoktur ve değer satırlarının paydasına girer. "Su bitkisi değil etiketi" Practical Fishkeeping'in akvaryumda kaçınılacak ev bitkileri listesindeki bitkilerdir.
 
 ## Güncel durum
 
 <!-- kapsam:başla -->
-Ölçüm tarihi: 2026-11-14
+Ölçüm tarihi: 2026-11-15
 
 ### Canlılar (471 kayıt)
 
@@ -29,7 +31,10 @@ Katalogların her bilgisinin yüzde kaçının dolu olduğu ve kaynağının tü
 |---|---|---|
 | Kendi kaynak sayfası var (otomatik bağlantı değil) | 471/471 | %100 |
 | Yalnız otomatik kaynak bağlantısı | 0/471 | %0 |
+| Tatlı su: kabul edilen bakım kaynağına hiç bağlantısı yok | 9/434 | %2,1 |
+| En az hacim: ikinci kademe (birkaç hobi kaynağı) | 0/471 | %0 |
 | En az tank uzunluğu | 430/471 | %91,3 |
+| En az tank uzunluğu: ikinci kademe (birkaç hobi kaynağı) | 0/471 | %0 |
 | Akıntı | 404/471 | %85,8 |
 | Davranış ya da bakım notu | 367/471 | %77,9 |
 | Eş ad ya da satış adı | 423/471 | %89,8 |
@@ -62,10 +67,14 @@ Katalogların her bilgisinin yüzde kaçının dolu olduğu ve kaynağının tü
 | CO₂ | 123/152 | %80,9 |
 | Büyüme hızı | 131/152 | %86,2 |
 | Boy | 146/152 | %96,1 |
-| Sıcaklık | 82/152 | %53,9 |
-| pH | 79/152 | %52 |
+| Sıcaklık (toplam) | 112/152 | %73,7 |
+| Sıcaklık: kabul edilen kaynak | 82/152 | %53,9 |
+| Sıcaklık: ikinci kademe (birkaç hobi kaynağı) | 30/152 | %19,7 |
+| pH (toplam) | 113/152 | %74,3 |
+| pH: kabul edilen kaynak | 79/152 | %52 |
+| pH: ikinci kademe (birkaç hobi kaynağı) | 34/152 | %22,4 |
 | Yerleşim | 75/152 | %49,3 |
-| Bütün değerler dolu | 37/152 | %24,3 |
+| Bütün değerler dolu | 48/152 | %31,6 |
 | İstilacı tür etiketi | 10/152 | %6,6 |
 | Su bitkisi değil etiketi | 3/152 | %2 |
 | İngilizce ortak ad (Fishkeeper) | 49/152 | %32,2 |
@@ -75,6 +84,7 @@ Katalogların her bilgisinin yüzde kaçının dolu olduğu ve kaynağının tü
 
 ## Geçmiş
 
+- 2026-11-15 (veri sprinti tur 3; ürün sahibinin açık isteği ve ikinci kademe kararı, karar 0045): 35 bitkiye birkaç hobi kaynağının ortak sıcaklık ya da pH değeri yazıldı (Flowgrow, B-Aqua, 2Hr Aquarist; `docs/CATALOG_LOG.md`, "2026-11-14 İkinci kademe değerler"). Bitkiler 152 kayıt: sıcaklık %53,9 → %73,7 (82 → 112; 82 kabul edilen kaynak + 30 ikinci kademe), pH %52 → %74,3 (79 → 113; 79 + 34), bütün değerler dolu %24,3 → %31,6 (37 → 48). Kabul edilen kaynaktan gelen sıcaklık ve pH değişmedi. Canlılara dört yeni satır eklendi: en az hacim ve en az tank uzunluğu için ikinci kademe (ikisi de 0: hiçbir alanda üç bağımsız hobi kaynağı çıkmadı) ve "Tatlı su: kabul edilen bakım kaynağına hiç bağlantısı yok" (9/434; Fishkeeper ve ScotCat de kabul edilen kaynak sayıldı, önceki dar ölçüm onları saymıyordu ve 27 buluyordu). Canlıların öbür satırları, ekipman ve bakım ürünleri değişmedi. Ölçüm tarihi 2026-11-15. Davranış kayıtları (tur 3 A'da 49 kabul edilen kaynaklı, tur 3 B'de 6 ikinci kademe kayıt) bu tabloda ölçülmüyor.
 - 2026-11-14 (veri sprinti tur 2; ürün sahibinin açık isteği): kaynaksız hacim taraması 44 kayıtta değişiklik önerdi, Codex kaynak kontrolü 16 kayıtta 17 değeri geri aldı; moli 45 → 81 L (Seriously Fish, kaynakların büyüğü) ve boy 7,5 → 8 cm (Seriously Fish 80 mm SL), ninja woodcat notu 54 L hesabıyla düzeldi (`docs/CATALOG_LOG.md`, aynı günün tur 2 bölümleri). Canlılar 471 kayıt: en az tank uzunluğu %91,1 → %91,3 (429 → 430; Beta 45 cm), davranış ya da bakım notu %77,7 → %77,9 (366 → 367). Bitkilerde sıcaklık ve pH yeniden tarandı, yeni değer yok (%53,9 ve %52 kaldı; ürün sahibinin kararı: boş kalır, kartta "Kaynak yayımlamıyor" yazar). Ekipman ve bakım ürünleri değişmedi. Ölçüm tarihi 2026-11-14.
 - 2026-11-14 (veri sprinti; ürün sahibinin açık isteği, karar 0039 bu iş için kalktı): E1 katalog denetimi (125 kayıtta 181 alan, 243 kaydın doğrulama tarihi 2026-11-14), E4 üç yeni canlı (leopar yelken vatoz, Physa salyangozu, kırmızı bataklık kereviti), iki bitki satış adı ve 111 ekipman (Atman, Hailea, Hydor, Lifetech/Jebo, Venusaqua; `docs/CATALOG_LOG.md`, aynı günün bölümleri). Canlılar 468 → 471 kayıt: en az tank uzunluğu %91 → %91,1 (426 → 429), akıntı %86,1 → %85,8 (403 → 404), davranış ya da bakım notu %77,4 → %77,7 (362 → 366), eş ad ya da satış adı %89,7 → %89,8 (420 → 423). Ekipman 3535 → 3646 kayıt: doğrulanmamışlar listesinde değil %96,6 → %96,7 (3414 → 3525), hesap değeri %89,9 → %90,6 (1123/1249 → 1227/1354), güç %47,8 → %49,3 (1691 → 1796), önerilen hacim %20,3 → %20,7 (717 → 755). Bakım ürünleri ve bitki satırları değişmedi. Ölçüm tarihi 2026-11-14; "son 92 günde doğrulanmış" satırları %100 kaldı. Davranış kayıtları (E2) ve tür bakım bilgisi (E3, `src/data/species-care.ts`) bu tabloda ölçülmüyor.
 - 2026-11-13 (veri doldurma 2, veri aşaması; ürün sahibinin açık isteği "Evet, ekle", karar 0039 2. madde): 3 yeni bitki (Dracaena sanderiana ve Spathiphyllum wallisii "su bitkisi değil", Myriophyllum spicatum istilacı uyarı kaydı) ve dünkü 5 bitkiye İngilizce ortak ad (`docs/CATALOG_LOG.md`). Bitkiler 149 → 152 kayıt: ışık %95,3 → %94,7 (142 → 144), CO₂ %82,6 → %80,9, büyüme hızı %86,6 → %86,2 (129 → 131), boy %96,6 → %96,1 (144 → 146), sıcaklık %53,7 → %53,9 (80 → 82), pH %51,7 → %52 (77 → 79), yerleşim %50,3 → %49,3, bütün değerler dolu %24,8 → %24,3 (37), istilacı etiketi %6 → %6,6 (9 → 10), su bitkisi değil etiketi 1 → 3, İngilizce ortak ad 42 → 49, yalnız uyarı kaydı 5 → 6. Canlılar, ekipman ve bakım ürünleri değişmedi. "Son 92 günde doğrulanmış" %100 kaldı.

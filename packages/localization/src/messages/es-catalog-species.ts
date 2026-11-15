@@ -1330,4 +1330,5 @@ export const esCatalogSpecies: CatalogTexts = {
   "4d27b0975145f4d1": "Con su propia especie y con otras carachas de tamaño similar (Loricariidae); si se mantiene más de uno, un acuario muy amplio con muchos escondites.",
   "47965d64b6a90e92": "Caza a los de su propia especie; las crías se comen entre sí. Mantenlo solo o en un acuario muy amplio con muchos escondites.",
   "09cc97e50260132f": "El volumen procede de la guía general de cuidados de OATA (guía general): al menos 80 litros para un grupo de Corydoras o de las especies de pleco más pequeñas.",
+  "135a99711f284a87": "Pueden morderse entre sí las branquias externas y las patas; si se mantienen juntos, necesitan individuos del mismo tamaño, espacio amplio y abundantes escondites.",
 };

@@ -32,6 +32,9 @@ const spaceReference = (p: EngineTextParams, f: EngineTextFormat) =>
   flag(p, "hasLength")
     ? `Para la cantidad registrada se tomó como referencia un mínimo de ${f.volume(num(p, "volume"))} y una longitud de ${f.length(num(p, "length"))}.`
     : `Para la cantidad registrada se tomó como referencia un mínimo de ${f.volume(num(p, "volume"))}; la fuente no publica una longitud de acuario.`;
+/** Motor 1.20.0 (decisión 0045): nota de una advertencia de espacio basada en valores de segundo nivel (fuentes de aficionados contrastadas). */
+const secondarySpaceNote = (p: EngineTextParams) =>
+  flag(p, "secondary") ? ' Las fuentes que aceptamos no publican un volumen ni un largo para esta especie; es el valor común de varias fuentes de aficionados, por eso esta advertencia deja el resultado en "Atención" como máximo.' : "";
 const fixed = (text: string): Text => () => text;
 const deviceKind = (category: string) => ({ filter: "filtro", heater: "calentador", air_pump: "bomba de aire" } as Record<string, string>)[category] ?? "equipo";
 const unnamedDevice = (category: string) => (category === "air_pump" ? "Una bomba de aire sin nombre" : `Un ${deviceKind(category)} sin nombre`);
@@ -401,22 +404,22 @@ export const esEngine: EngineMessages = {
     },
     spaceLimited: {
       title: (p) => `${str(p, "name")}: espacio al límite`,
-      message: spaceReference,
+      message: (p, f) => `${spaceReference(p, f)}${secondarySpaceNote(p)}`,
     },
     spaceNarrow: {
       title: (p) => `${str(p, "name")}: acuario estrecho para esta especie`,
       message: (p, f) =>
-        `${spaceReference(p, f)} El ancho del acuario (${f.length(num(p, "width"))}) es menor que el doble del tamaño adulto del catálogo, ${f.length(num(p, "size"))}. AquaMind adapta esta recomendación de la regla de dimensiones de la Ordenanza de Protección de los Animales de Suiza (ancho 2× la longitud del cuerpo); la ordenanza usa la longitud del cuerpo sin la aleta caudal, mientras que AquaMind usa la longitud total en la mayoría de las especies. Es más adecuado un acuario de al menos ${f.length(num(p, "minWidth"))} de ancho.`,
+        `${spaceReference(p, f)} El ancho del acuario (${f.length(num(p, "width"))}) es menor que el doble del tamaño adulto del catálogo, ${f.length(num(p, "size"))}. AquaMind adapta esta recomendación de la regla de dimensiones de la Ordenanza de Protección de los Animales de Suiza (ancho 2× la longitud del cuerpo); la ordenanza usa la longitud del cuerpo sin la aleta caudal, mientras que AquaMind usa la longitud total en la mayoría de las especies. Es más adecuado un acuario de al menos ${f.length(num(p, "minWidth"))} de ancho.${secondarySpaceNote(p)}`,
     },
     spaceTooSmall: {
       title: (p) => `${str(p, "name")}: acuario demasiado pequeño`,
       message: (p, f) =>
-        `Según las fuentes, ${str(p, "name")} necesita al menos ${f.volume(num(p, "volume"))} para ${num(p, "count") === 1 ? "el ejemplar registrado" : `los ${f.number(num(p, "count"))} ejemplares registrados`}; el volumen neto del acuario es de ${f.volume(num(p, "aquariumVolume"))}, menos de la mitad.${flag(p, "lengthShort") ? ` Las fuentes también piden un largo de al menos ${f.length(num(p, "length"))}; el acuario mide ${f.length(num(p, "tankLength"))} de largo.` : ""} Esta especie no debe mantenerse en este acuario.`,
+        `${flag(p, "secondary") ? "Según varias fuentes de aficionados" : "Según las fuentes"}, ${str(p, "name")} necesita al menos ${f.volume(num(p, "volume"))} para ${num(p, "count") === 1 ? "el ejemplar registrado" : `los ${f.number(num(p, "count"))} ejemplares registrados`}; el volumen neto del acuario es de ${f.volume(num(p, "aquariumVolume"))}, menos de la mitad.${flag(p, "lengthShort") ? ` ${flag(p, "lengthSecondary") ? "Varias fuentes de aficionados" : "Las fuentes"} también piden un largo de al menos ${f.length(num(p, "length"))}; el acuario mide ${f.length(num(p, "tankLength"))} de largo.` : ""}${flag(p, "secondary") ? ` Esta especie necesita un acuario más grande.${secondarySpaceNote(p)}` : " Esta especie no debe mantenerse en este acuario."}`,
     },
     spaceSevere: {
       title: (p) => `${str(p, "name")}: el acuario es demasiado corto o poco profundo`,
       message: (p, f) =>
-        `${spaceReference(p, f)} Además, el acuario está por debajo del límite de AquaMind adaptado de los límites de largo (3×) y de profundidad del agua (1× la longitud del cuerpo) de la regla de dimensiones de la Ordenanza de Protección de los Animales de Suiza. La ordenanza usa la longitud del cuerpo sin la aleta caudal; AquaMind aplica un criterio más estricto y usa el tamaño adulto del catálogo, ${f.length(num(p, "size"))} (longitud total en la mayoría de las especies): largo de al menos ${f.length(num(p, "minLength"))}, profundidad del agua de al menos ${f.length(num(p, "minDepth"))}.`,
+        `${spaceReference(p, f)} Además, el acuario está por debajo del límite de AquaMind adaptado de los límites de largo (3×) y de profundidad del agua (1× la longitud del cuerpo) de la regla de dimensiones de la Ordenanza de Protección de los Animales de Suiza. La ordenanza usa la longitud del cuerpo sin la aleta caudal; AquaMind aplica un criterio más estricto y usa el tamaño adulto del catálogo, ${f.length(num(p, "size"))} (longitud total en la mayoría de las especies): largo de al menos ${f.length(num(p, "minLength"))}, profundidad del agua de al menos ${f.length(num(p, "minDepth"))}.${secondarySpaceNote(p)}`,
     },
   },
   unevaluatedTitle: "Sin evaluar",

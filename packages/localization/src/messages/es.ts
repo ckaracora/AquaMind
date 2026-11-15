@@ -90,6 +90,7 @@ export const es: Messages = {
     cancel: "Cancelar",
     retry: "Reintentar",
     loading: "Cargando…",
+    secondarySource: "Valor común de varias fuentes de aficionados",
     aquariumNotFound: "No se encontró el acuario.",
     all: "Todos",
     close: "Cerrar",

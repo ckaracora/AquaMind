@@ -31,6 +31,12 @@ Bu liste otomatik doğruluk garantisi değildir. Her bağlantı doğru marka, mo
 - Resun'un üretici kaynakları `resun-china.com` ve `rissee.com`'dur (2026-11-10, veri testi). `rissee.com`, Resun ve Rissee markalarının sahibi ve üreticisi Raoping Xingcheng Aquarium Products Co., Ltd'nin (饶平县兴成机电水族用品有限公司) kendi sitesidir: "About us" sayfası şirketin 1989'da kurulmuş bir üretici olduğunu ve "Resun" ile "Rissee" markalarının şirketin markaları olduğunu yazıyor (Çince sayfa: 品牌"日生"、"优之星"); ürün menüsünde RESUN ve RISSEE ayrı başlıklardır. Dağıtıcı değil, üretici kaynağı sayılır.
 - Jeneca'nın üretici kaynağı `aleas.cn`'dir (İngilizce `www.aleas.cn`, Çince `gb.aleas.cn`; 2026-11-10, veri testi). Site 饶平县金利佳机电有限公司'nin (Jin Li Jia Electromechanical Co., Ltd) kendi sitesidir: İngilizce "About us" sayfası şirketin 2005'te kurulmuş bir üretici olduğunu, Çince "公司简介" sayfası şirketin markalarını "公司品牌JENECA, ALEAS" ve "金利佳旗下金利佳 JENECA、佳力仕 ALEAS两大品牌" diye yazıyor; ürün sayfaları "JENECA reserves the right to revise this product" diyor. Teknik tablo ürün sayfasının açıklamasındaki resimdeyse resim okunur; tabloda birden çok model varsa yalnız kaydın modelinin satırı kullanılır.
 
+## Bakım ürünleri (yem, su düzenleyici, ilaç ve benzeri)
+
+- Ürün sahibi kararı 2026-11-15 (veri sprinti tur 3; "stoksuz, eski ilanlı markalar eklenmesin"): bir bakım ürününün "Türkiye'de satılıyor" sayılması için kabul edilen mağazada canlı bir ilan gerekir. Stoku 0 olan, fiyatı belirgin biçimde eski olan ya da son kullanma tarihi geçmiş ürünü gösteren (ölü) ilan "Türkiye'de satılıyor" sayılmaz; o marka ya da ürün yalnız bu ilanlara dayanarak kataloğa eklenmez.
+- Bitkilerdeki "Stok durumu ölçüt değildir" kuralı (karar 0026, aşağıda "Bitkiler" → "Yalnız uyarı kaydı") bakım ürünlerine uygulanmaz. O kural, istilacı ya da su bitkisi olmayan bitkiler için kullanıcıyı uyarmaya yarar; bakım ürününde amaç kullanıcının bugün alabileceği ürünü göstermektir.
+- Uygulama (2026-11-15): API (Mars Fishcare) ve Easy-Life kabul edilen altı mağazanın hiçbirinde bulunmadı; Hikari'nin iki mağazadaki 86 ilanının hepsinde stok 0, fiyatlar çok eski ve 13 ilanda 2018–2020 son kullanma tarihi vardı. Üçü de eklenmedi (tarama: veri sprinti tur 3 marka araştırması; `PROJECT_STATUS.md`).
+
 ## Canlı verisi için özel kaynak kuralı
 
 - Yerel mağazalar yalnızca Türkiye'de kullanılan satış adını, varyeteyi ve güncel bulunabilirliği karşılaştırmak için kullanılabilir.
@@ -224,6 +230,19 @@ Beslenme, cinsiyet ayrımı, üreme, ömür, zorluk, yüzme bölgesi ve su sertl
 - Gerekiyorsa bağımsız çapraz doğrulama bağlantıları (`additionalSourceUrls`)
 - `YYYY-MM-DD` biçiminde doğrulama tarihi (`verifiedAt`)
 - Yalnızca kaynakta açıkça yayımlanan teknik/bakım değerleri
+
+## İkinci kademe (çapraz kontrollü) kaynaklar
+
+Ürün sahibi kararı 2026-11-14 22:30 (`docs/DECISIONS/0045-ikinci-kademe-kaynaklar.md`): kabul edilen kaynaklarda bilgi yoksa boşluk birkaç bağımsız kaynakla çapraz kontrol edilerek doldurulur ve ekranda öyle olduğu açıkça yazılır. Uydurma yine yoktur: her değer gerçek, açılmış bir sayfadan gelir.
+
+- **Ne zaman:** yalnız boş alanda ya da kabul edilen kaynağı bağlı olmayan değerde. Kabul edilen kaynağın yazdığı değer ikinci kademeyle değiştirilmez. Alanlar: bitkide sıcaklık ve pH; canlıda en az hacim (`minVolumeL`) ve en az tank uzunluğu (`minTankLengthCm`); davranış kayıtları. Birey başına ek hacim, canlının sıcaklığı ve pH'ı, boyu, grubu bu yolla yazılmaz.
+- **Kabul ölçütü:** bitki sıcaklığı/pH'ı en az **2**, canlıda hacim, tank uzunluğu ve davranış en az **3** bağımsız kaynak. Aynı cümleyi ya da paragrafı taşıyan siteler tek kaynaktır (kopya); aynı şirketin siteleri (mağaza zinciri, yayın grubu) tek kaynaktır.
+- **Değer:** sıcaklık ve pH'ta kaynakların ortak aralığı; hacim ve uzunlukta kaynakların büyüğü (yukarıdaki genel kural). Ortak aralık boşsa ya da kaynaklar büyük ölçüde çelişiyorsa (ör. hacimde biri ötekinin 2 katından fazla) değer yoktur, boşluk kalır.
+- **Davranış:** üç kaynaktan en az ikisi aynı riski açık bir cümleyle yazmalı ("fin nipper", "eats shrimp", "peaceful community fish" gibi); hiçbiri çelişmemeli. Çelişki varsa kayıt `confidence: "conflict"` olur.
+- **Kullanılmaz:** satıcının kalıp değeri (çok farklı cinslere aynı aralığı yazan mağaza; ör. AquaFleur'ün 22–28 °C'si) ve ürün sayfasındaki türe özgü olmayan genel metin; yapay zekâyla üretilmiş görünen siteler (kaynak, yazar, tarih yok; aynı kalıp cümleler; bariz yanlışlar) ve içerik çiftlikleri; tek başına Wikipedia (dayandığı kaynağa bakılır, o kaynak listedeyse o sayılır); rakip uygulamaların veri sayfaları; doğal ortam ölçümü ve yetiştirme/üretim koşulu. Kabul edilen kaynaklar (yukarıdaki listeler) ikinci kademe sayılmaz: onlar değeri yazıyorsa değer zaten birinci kademedir.
+- **Kanıt:** her değer için kaynak adı, adres, sayfadan kısa alıntı (değerin yazdığı cümle) ve açılma tarihi `docs/CATALOG_LOG.md`'de durur. Katalogda kaynak adresleri bağlanır: canlı ve bitki kaydında `secondarySources` (alan adı → adresler; `additionalSourceUrls`'e yazılmaz), davranış kaydında `tier: "secondary"` ile `sourceUrl` ve `additionalSourceUrls`. Biçimi `src/lib/__tests__/secondary-sources.test.ts` denetler.
+- **Ekranda:** ikinci kademe değerin yanında kısa bilgi: "Birkaç hobi kaynağının ortak değeri" (en "Shared value from several hobby sources", es "Valor común de varias fuentes de aficionados"); dokununca kaynak listesi açılır. Tür kartında hacim, uzunluk ve davranış; bitki kartında sıcaklık ve pH.
+- **Hükme etkisi:** bitki ve davranış değeri normal kullanılır. Canlının hacmi ve tank uzunluğu tek başına "uygun değil" dedirtmez: alan uyarısı en fazla "dikkat" olur ve metni değerin hobi kaynaklarına dayandığını söyler (motor 1.20.0, `docs/COMPATIBILITY.md`).
 
 ## Çelişki ve eksiklik
 

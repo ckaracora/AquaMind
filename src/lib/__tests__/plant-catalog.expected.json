@@ -337,13 +337,23 @@
    22,
    30
   ],
+  "ph": [
+   5.5,
+   7
+  ],
   "sourceUrl": "https://www.fishkeeper.co.uk/fish/Anubias-Heterophylla",
   "shopUrls": [
    "https://aquarubi.com/anubias-heterophylla-xl",
    "https://aquarubi.com/anubias-heterophylla-l",
    "https://aquarubi.com/anubias-heterophylla-supernova"
   ],
-  "verifiedAt": "2026-10-25"
+  "verifiedAt": "2026-10-25",
+  "secondarySources": {
+   "ph": [
+    "https://www.flowgrow.de/db/aquaticplants/anubias-heterophylla",
+    "https://www.b-aqua.com/pages/PlantsFiche.aspx?id=1028"
+   ]
+  }
  },
  {
   "id": "aponogeton-boivinianus",
@@ -1917,6 +1927,14 @@
    "medium"
   ],
   "heightCm": 10,
+  "temperature": [
+   15,
+   30
+  ],
+  "ph": [
+   5,
+   7
+  ],
   "placements": [
    "foreground"
   ],
@@ -1927,7 +1945,17 @@
    "https://aquarubi.com/stoffels-alternanthera-reineckii-mini-in-vitro",
    "https://aquarubi.com/tropica-alternanthera-reineckii-mini-in-vitro"
   ],
-  "verifiedAt": "2026-10-25"
+  "verifiedAt": "2026-10-25",
+  "secondarySources": {
+   "temperature": [
+    "https://www.flowgrow.de/db/aquaticplants/alternanthera-reineckii-mini",
+    "https://www.b-aqua.com/pages/PlantsFiche.aspx?id=1005"
+   ],
+   "ph": [
+    "https://www.flowgrow.de/db/aquaticplants/alternanthera-reineckii-mini",
+    "https://www.b-aqua.com/pages/PlantsFiche.aspx?id=1005"
+   ]
+  }
  },
  {
   "id": "alternanthera-reineckii-rosanervig",
@@ -1942,6 +1970,14 @@
    "medium"
   ],
   "heightCm": 20,
+  "temperature": [
+   15,
+   30
+  ],
+  "ph": [
+   5,
+   7
+  ],
   "placements": [
    "midground"
   ],
@@ -1949,7 +1985,17 @@
   "shopUrls": [
    "https://aquarubi.com/tropica-alternanthera-reineckii-rosanervig"
   ],
-  "verifiedAt": "2026-10-25"
+  "verifiedAt": "2026-10-25",
+  "secondarySources": {
+   "temperature": [
+    "https://www.flowgrow.de/db/aquaticplants/alternanthera-reineckii-rosanervig",
+    "https://www.b-aqua.com/pages/PlantsFiche.aspx?id=1005"
+   ],
+   "ph": [
+    "https://www.flowgrow.de/db/aquaticplants/alternanthera-reineckii-rosanervig",
+    "https://www.b-aqua.com/pages/PlantsFiche.aspx?id=1005"
+   ]
+  }
  },
  {
   "id": "anubias-barteri-coin-leaf",
@@ -2031,6 +2077,14 @@
    "slow"
   ],
   "heightCm": 15,
+  "temperature": [
+   15,
+   30
+  ],
+  "ph": [
+   5,
+   8
+  ],
   "sourceUrl": "https://tropica.com/en/plants/plantdetails/Anubiasbartericaladiifolia(101U)/4556",
   "additionalSourceUrls": [
    "https://tropica.com/en/plants/plantdetails/Anubiasbarterivar.caladiifolia(101UXL)/4557"
@@ -2038,7 +2092,17 @@
   "shopUrls": [
    "https://aquarubi.com/tropica-anubias-barteri-caladiifolia"
   ],
-  "verifiedAt": "2026-10-25"
+  "verifiedAt": "2026-10-25",
+  "secondarySources": {
+   "temperature": [
+    "https://www.flowgrow.de/db/aquaticplants/anubias-barteri-var-caladiifolia",
+    "https://www.b-aqua.com/pages/PlantsFiche.aspx?id=1019"
+   ],
+   "ph": [
+    "https://www.flowgrow.de/db/aquaticplants/anubias-barteri-var-caladiifolia",
+    "https://www.b-aqua.com/pages/PlantsFiche.aspx?id=1019"
+   ]
+  }
  },
  {
   "id": "anubias-gracilis",
@@ -2053,6 +2117,14 @@
    "slow"
   ],
   "heightCm": 20,
+  "temperature": [
+   20,
+   28
+  ],
+  "ph": [
+   6,
+   7
+  ],
   "placements": [
    "onRock",
    "onRoot"
@@ -2061,7 +2133,17 @@
   "shopUrls": [
    "https://aquarubi.com/tropica-anubias-gracilis"
   ],
-  "verifiedAt": "2026-10-25"
+  "verifiedAt": "2026-10-25",
+  "secondarySources": {
+   "temperature": [
+    "https://www.flowgrow.de/db/aquaticplants/anubias-gracilis",
+    "https://www.b-aqua.com/pages/PlantsFiche.aspx?id=1026"
+   ],
+   "ph": [
+    "https://www.flowgrow.de/db/aquaticplants/anubias-gracilis",
+    "https://www.b-aqua.com/pages/PlantsFiche.aspx?id=1026"
+   ]
+  }
  },
  {
   "id": "anubias-barteri-var-glabra",
@@ -2082,6 +2164,14 @@
    "slow"
   ],
   "heightCm": 20,
+  "temperature": [
+   15,
+   30
+  ],
+  "ph": [
+   5,
+   8
+  ],
   "sourceUrl": "https://tropica.com/en/plants/plantdetails/Anubiasbarterivar.glabra(101C)/4552",
   "shopUrls": [
    "https://aquarubi.com/anubias-barteri-var-glabra-lanceolata",
@@ -2091,7 +2181,17 @@
    "https://aquarubi.com/anubias-barteri-var-glabra-dragon-claw-mini-in-vitro",
    "https://aquarubi.com/tropica-anubias-barteri-var-angustifolia"
   ],
-  "verifiedAt": "2026-10-25"
+  "verifiedAt": "2026-10-25",
+  "secondarySources": {
+   "temperature": [
+    "https://www.flowgrow.de/db/aquaticplants/anubias-barteri-var-glabra",
+    "https://www.b-aqua.com/pages/PlantsFiche.aspx?id=1019"
+   ],
+   "ph": [
+    "https://www.flowgrow.de/db/aquaticplants/anubias-barteri-var-glabra",
+    "https://www.b-aqua.com/pages/PlantsFiche.aspx?id=1019"
+   ]
+  }
  },
  {
   "id": "anubias-barteri-var-nana-pinto",
@@ -2140,11 +2240,29 @@
   ],
   "co2": "medium",
   "heightCm": 30,
+  "temperature": [
+   15,
+   30
+  ],
+  "ph": [
+   5.5,
+   7.5
+  ],
   "sourceUrl": "https://tropica.com/en/plants/plantdetails/Bacopaaustralis(043A)/4466",
   "shopUrls": [
    "https://aquarubi.com/tropica-bacopa-australis"
   ],
-  "verifiedAt": "2026-11-09"
+  "verifiedAt": "2026-11-09",
+  "secondarySources": {
+   "temperature": [
+    "https://www.flowgrow.de/db/aquaticplants/bacopa-australis",
+    "https://www.b-aqua.com/pages/PlantsFiche.aspx?id=1069"
+   ],
+   "ph": [
+    "https://www.flowgrow.de/db/aquaticplants/bacopa-australis",
+    "https://www.b-aqua.com/pages/PlantsFiche.aspx?id=1069"
+   ]
+  }
  },
  {
   "id": "bacopa-monnieri-compact",
@@ -2197,6 +2315,14 @@
    "medium"
   ],
   "heightCm": 30,
+  "temperature": [
+   20,
+   30
+  ],
+  "ph": [
+   6,
+   7.5
+  ],
   "placements": [
    "midground",
    "background"
@@ -2207,7 +2333,17 @@
    "https://aquarubi.com/bacopa-salzmannii-purple-vitro",
    "https://aquarubi.com/stoffels-bacopa-salzmanii-purple"
   ],
-  "verifiedAt": "2026-10-25"
+  "verifiedAt": "2026-10-25",
+  "secondarySources": {
+   "temperature": [
+    "https://www.flowgrow.de/db/aquaticplants/bacopa-salzmannii",
+    "https://www.2hraquarist.com/blogs/freshwater-aquarium-plants-guide/how-to-grow-bacopa-caroliniana-b-salzmannii"
+   ],
+   "ph": [
+    "https://www.flowgrow.de/db/aquaticplants/bacopa-salzmannii",
+    "https://www.2hraquarist.com/blogs/freshwater-aquarium-plants-guide/how-to-grow-bacopa-caroliniana-b-salzmannii"
+   ]
+  }
  },
  {
   "id": "blyxa-japonica",
@@ -2222,11 +2358,29 @@
    "medium"
   ],
   "heightCm": 20,
+  "temperature": [
+   20,
+   30
+  ],
+  "ph": [
+   5,
+   6
+  ],
   "sourceUrl": "https://tropica.com/en/plants/plantdetails/Blyxajaponica(057TC)/22542",
   "shopUrls": [
    "https://aquarubi.com/tropica-blyxa-japonica-in-vitro"
   ],
-  "verifiedAt": "2026-10-25"
+  "verifiedAt": "2026-10-25",
+  "secondarySources": {
+   "temperature": [
+    "https://www.flowgrow.de/db/aquaticplants/blyxa-japonica",
+    "https://www.b-aqua.com/pages/PlantsFiche.aspx?id=1081"
+   ],
+   "ph": [
+    "https://www.flowgrow.de/db/aquaticplants/blyxa-japonica",
+    "https://www.b-aqua.com/pages/PlantsFiche.aspx?id=1081"
+   ]
+  }
  },
  {
   "id": "bucephalandra-diabolica-kedagang",
@@ -2244,6 +2398,14 @@
    "slow"
   ],
   "heightCm": 20,
+  "temperature": [
+   22,
+   26
+  ],
+  "ph": [
+   5.5,
+   7
+  ],
   "sourceUrl": "https://tropica.com/en/plants/plantdetails/Bucephalandradiabolica'Kedagang'(139B)/22543",
   "additionalSourceUrls": [
    "https://tropica.com/en/plants/plantdetails/Bucephalandradiabolica'Kedagang'(139BTC)/22544"
@@ -2253,7 +2415,17 @@
    "https://aquarubi.com/stoffels-bucephalandra-kedagang-in-vitro",
    "https://aquarubi.com/stoffels-bucephalandra-sp-kedagang-on-driftwood"
   ],
-  "verifiedAt": "2026-10-25"
+  "verifiedAt": "2026-10-25",
+  "secondarySources": {
+   "temperature": [
+    "https://www.flowgrow.de/db/aquaticplants/bucephalandra-sp-kedagang",
+    "https://www.b-aqua.com/pages/PlantsFiche.aspx?id=1640"
+   ],
+   "ph": [
+    "https://www.flowgrow.de/db/aquaticplants/bucephalandra-sp-kedagang",
+    "https://www.b-aqua.com/pages/PlantsFiche.aspx?id=1640"
+   ]
+  }
  },
  {
   "id": "bucephalandra-pygmaea-bukit-kelam",
@@ -2411,11 +2583,29 @@
    "slow"
   ],
   "heightCm": 35,
+  "temperature": [
+   20,
+   30
+  ],
+  "ph": [
+   5.5,
+   8
+  ],
   "sourceUrl": "https://tropica.com/en/plants/plantdetails/Cryptocorynewendtii'MiOya'(109DTC)/19540",
   "shopUrls": [
    "https://aquarubi.com/cryptocoryne-wendtii-mi-oya"
   ],
-  "verifiedAt": "2026-11-09"
+  "verifiedAt": "2026-11-09",
+  "secondarySources": {
+   "temperature": [
+    "https://www.flowgrow.de/db/aquaticplants/cryptocoryne-wendtii-mi-oya",
+    "https://www.b-aqua.com/pages/PlantsFiche.aspx?id=1163"
+   ],
+   "ph": [
+    "https://www.flowgrow.de/db/aquaticplants/cryptocoryne-wendtii-mi-oya",
+    "https://www.b-aqua.com/pages/PlantsFiche.aspx?id=1163"
+   ]
+  }
  },
  {
   "id": "cryptocoryne-wendtii-tropica",
@@ -2430,12 +2620,30 @@
    "medium"
   ],
   "heightCm": 20,
+  "temperature": [
+   20,
+   30
+  ],
+  "ph": [
+   5.5,
+   8
+  ],
   "sourceUrl": "https://tropica.com/en/plants/plantdetails/Cryptocorynewendtii'Tropica'(109E)/4564",
   "shopUrls": [
    "https://aquarubi.com/stoffels-cryptocoryne-wendtii-tropica",
    "https://aquarubi.com/tropica-cryptocoryne-wendtii"
   ],
-  "verifiedAt": "2026-10-25"
+  "verifiedAt": "2026-10-25",
+  "secondarySources": {
+   "temperature": [
+    "https://www.flowgrow.de/db/aquaticplants/cryptocoryne-wendtii-tropica",
+    "https://www.b-aqua.com/pages/PlantsFiche.aspx?id=1163"
+   ],
+   "ph": [
+    "https://www.flowgrow.de/db/aquaticplants/cryptocoryne-wendtii-tropica",
+    "https://www.b-aqua.com/pages/PlantsFiche.aspx?id=1163"
+   ]
+  }
  },
  {
   "id": "echinodorus-red-diamond",
@@ -2494,11 +2702,29 @@
    "medium"
   ],
   "heightCm": 40,
+  "temperature": [
+   20,
+   30
+  ],
+  "ph": [
+   5.5,
+   7
+  ],
   "sourceUrl": "https://tropica.com/en/plants/plantdetails/Echinodorus'Ros%C3%A9'(072B)/4516",
   "shopUrls": [
    "https://aquarubi.com/echinodorus-rose"
   ],
-  "verifiedAt": "2026-10-25"
+  "verifiedAt": "2026-10-25",
+  "secondarySources": {
+   "temperature": [
+    "https://www.flowgrow.de/db/aquaticplants/echinodorus-rose",
+    "https://www.b-aqua.com/pages/PlantsFiche.aspx?id=1627"
+   ],
+   "ph": [
+    "https://www.flowgrow.de/db/aquaticplants/echinodorus-rose",
+    "https://www.b-aqua.com/pages/PlantsFiche.aspx?id=1627"
+   ]
+  }
  },
  {
   "id": "eleocharis-acicularis",
@@ -2516,12 +2742,31 @@
    "medium"
   ],
   "heightCm": 15,
+  "temperature": [
+   15,
+   25
+  ],
+  "ph": [
+   5.5,
+   7.5
+  ],
   "sourceUrl": "https://tropica.com/en/plants/plantdetails/Eleocharisacicularis(133TC)/28401",
   "shopUrls": [
    "https://aquarubi.com/eleocharis-acicularis-mini",
    "https://aquarubi.com/stoffels-eleocharis-acicularis-saksi"
   ],
-  "verifiedAt": "2026-10-25"
+  "verifiedAt": "2026-10-25",
+  "secondarySources": {
+   "temperature": [
+    "https://www.flowgrow.de/db/aquaticplants/eleocharis-acicularis",
+    "https://www.b-aqua.com/pages/PlantsFiche.aspx?id=1218",
+    "https://www.2hraquarist.com/blogs/freshwater-aquarium-plants-guide/how-to-grow-dwarf-hairgrass"
+   ],
+   "ph": [
+    "https://www.flowgrow.de/db/aquaticplants/eleocharis-acicularis",
+    "https://www.b-aqua.com/pages/PlantsFiche.aspx?id=1218"
+   ]
+  }
  },
  {
   "id": "eleocharis-montevidensis",
@@ -2630,11 +2875,21 @@
    "medium"
   ],
   "heightCm": 20,
+  "ph": [
+   5,
+   7
+  ],
   "sourceUrl": "https://tropica.com/en/plants/plantdetails/Eriocaulonsp.'Vietnam'(091A)/29740",
   "shopUrls": [
    "https://aquarubi.com/eriocaulon-vietnam"
   ],
-  "verifiedAt": "2026-11-09"
+  "verifiedAt": "2026-11-09",
+  "secondarySources": {
+   "ph": [
+    "https://www.b-aqua.com/pages/PlantsFiche.aspx?id=1681",
+    "https://www.2hraquarist.com/blogs/freshwater-aquarium-plants-guide/how-to-grow-eriocaulon-vietnam"
+   ]
+  }
  },
  {
   "id": "fissidens-fontanus",
@@ -2702,6 +2957,14 @@
   ],
   "co2": "low",
   "heightCm": 15,
+  "temperature": [
+   18,
+   28
+  ],
+  "ph": [
+   6,
+   7.5
+  ],
   "sourceUrl": "https://tropica.com/en/plants/plantdetails/Helanthiumbolivianum'Quadricostatus'(068)/4511",
   "shopUrls": [
    "https://aquarubi.com/helanthium-bolivianum-quadricostatus",
@@ -2710,7 +2973,17 @@
    "https://aquarubi.com/echinodorus-madalengensis",
    "https://www.akvaryumexpress.com/echinodorus-magdalenensis-canli-bitki"
   ],
-  "verifiedAt": "2026-11-09"
+  "verifiedAt": "2026-11-09",
+  "secondarySources": {
+   "temperature": [
+    "https://www.flowgrow.de/db/aquaticplants/helanthium-bolivianum-quadricostatus",
+    "https://www.b-aqua.com/pages/PlantsFiche.aspx?id=1202"
+   ],
+   "ph": [
+    "https://www.flowgrow.de/db/aquaticplants/helanthium-bolivianum-quadricostatus",
+    "https://www.b-aqua.com/pages/PlantsFiche.aspx?id=1202"
+   ]
+  }
  },
  {
   "id": "helanthium-tenellum-green",
@@ -2856,12 +3129,31 @@
    "fast"
   ],
   "heightCm": 30,
+  "temperature": [
+   20,
+   30
+  ],
+  "ph": [
+   6,
+   7.5
+  ],
   "sourceUrl": "https://tropica.com/en/plants/plantdetails/Hygrophiladifformis(051BDT)/4485",
   "shopUrls": [
    "https://aquarubi.com/hygrophila-difformis-cinar",
    "https://aquarubi.com/hygrophila-difformis-variegated"
   ],
-  "verifiedAt": "2026-10-25"
+  "verifiedAt": "2026-10-25",
+  "secondarySources": {
+   "temperature": [
+    "https://www.flowgrow.de/db/aquaticplants/hygrophila-difformis",
+    "https://www.b-aqua.com/pages/PlantsFiche.aspx?id=1258",
+    "https://www.2hraquarist.com/blogs/freshwater-aquarium-plants-guide/hygrophila-difformis-wisteria"
+   ],
+   "ph": [
+    "https://www.flowgrow.de/db/aquaticplants/hygrophila-difformis",
+    "https://www.b-aqua.com/pages/PlantsFiche.aspx?id=1258"
+   ]
+  }
  },
  {
   "id": "hygrophila-lancea-araguaia",
@@ -2879,12 +3171,22 @@
    "medium"
   ],
   "heightCm": 20,
+  "temperature": [
+   20,
+   30
+  ],
   "sourceUrl": "https://tropica.com/en/plants/plantdetails/Hygrophilalancea'Araguaia'(051BTC)/4758",
   "shopUrls": [
    "https://aquarubi.com/tropica-hygrophila-lancea-araguaia",
    "https://aquarubi.com/hygrophila-araguaia"
   ],
-  "verifiedAt": "2026-11-09"
+  "verifiedAt": "2026-11-09",
+  "secondarySources": {
+   "temperature": [
+    "https://www.flowgrow.de/db/aquaticplants/hygrophila-lancea-araguaia",
+    "https://www.b-aqua.com/pages/PlantsFiche.aspx?id=1261"
+   ]
+  }
  },
  {
   "id": "hygrophila-odora",
@@ -2922,6 +3224,14 @@
    "medium"
   ],
   "heightCm": 40,
+  "temperature": [
+   18,
+   28
+  ],
+  "ph": [
+   6.5,
+   8
+  ],
   "placements": [
    "onRoot",
    "onRock"
@@ -2934,7 +3244,17 @@
    "https://aquarubi.com/tropica-hygrophila-pinnatifida",
    "https://aquarubi.com/tropica-hygrophila-pinnatifida-vitro"
   ],
-  "verifiedAt": "2026-10-25"
+  "verifiedAt": "2026-10-25",
+  "secondarySources": {
+   "temperature": [
+    "https://www.flowgrow.de/db/aquaticplants/hygrophila-pinnatifida",
+    "https://www.b-aqua.com/pages/PlantsFiche.aspx?id=1263"
+   ],
+   "ph": [
+    "https://www.flowgrow.de/db/aquaticplants/hygrophila-pinnatifida",
+    "https://www.b-aqua.com/pages/PlantsFiche.aspx?id=1263"
+   ]
+  }
  },
  {
   "id": "hygrophila-polysperma-rosanervig",
@@ -2997,12 +3317,30 @@
    "slow"
   ],
   "heightCm": 20,
+  "temperature": [
+   21,
+   28
+  ],
+  "ph": [
+   6.5,
+   7
+  ],
   "sourceUrl": "https://tropica.com/en/plants/plantdetails/Lagenandrameeboldii'Red'(103)/4759",
   "shopUrls": [
    "https://aquarubi.com/tropica-lagenandra-meeboldii-red",
    "https://aquarubi.com/lagenandra-meeboldi-red-saksi"
   ],
-  "verifiedAt": "2026-11-09"
+  "verifiedAt": "2026-11-09",
+  "secondarySources": {
+   "temperature": [
+    "https://www.flowgrow.de/db/aquaticplants/lagenandra-meeboldii-rot",
+    "https://www.b-aqua.com/pages/PlantsFiche.aspx?id=1275"
+   ],
+   "ph": [
+    "https://www.flowgrow.de/db/aquaticplants/lagenandra-meeboldii-rot",
+    "https://www.b-aqua.com/pages/PlantsFiche.aspx?id=1275"
+   ]
+  }
  },
  {
   "id": "leptodictyum-riparium",
@@ -3020,6 +3358,14 @@
    "medium"
   ],
   "heightCm": 10,
+  "temperature": [
+   4,
+   22
+  ],
+  "ph": [
+   5.5,
+   8
+  ],
   "placements": [
    "onRock",
    "onRoot"
@@ -3028,7 +3374,17 @@
   "shopUrls": [
    "https://aquarubi.com/stringy-moss-leptodictyum-riparium"
   ],
-  "verifiedAt": "2026-10-25"
+  "verifiedAt": "2026-10-25",
+  "secondarySources": {
+   "temperature": [
+    "https://www.flowgrow.de/db/aquaticplants/leptodictyum-riparium",
+    "https://www.b-aqua.com/pages/PlantsFiche.aspx?id=1572"
+   ],
+   "ph": [
+    "https://www.flowgrow.de/db/aquaticplants/leptodictyum-riparium",
+    "https://www.b-aqua.com/pages/PlantsFiche.aspx?id=1572"
+   ]
+  }
  },
  {
   "id": "limnobium-laevigatum",
@@ -3047,6 +3403,14 @@
    "medium"
   ],
   "heightCm": 5,
+  "temperature": [
+   15,
+   32
+  ],
+  "ph": [
+   6,
+   8
+  ],
   "placements": [
    "floating"
   ],
@@ -3056,7 +3420,17 @@
    "https://atakanpetshop.com/limnobium-laevigatum-amazon-frogbit-in-vitro-su-ustu-canli-bitki",
    "https://atakanpetshop.com/amazon-frogbit-su-ustu-canli-bitki-1-kok-2312473"
   ],
-  "verifiedAt": "2026-10-25"
+  "verifiedAt": "2026-10-25",
+  "secondarySources": {
+   "temperature": [
+    "https://www.flowgrow.de/db/aquaticplants/limnobium-laevigatum",
+    "https://www.b-aqua.com/pages/PlantsFiche.aspx?id=1291"
+   ],
+   "ph": [
+    "https://www.flowgrow.de/db/aquaticplants/limnobium-laevigatum",
+    "https://www.b-aqua.com/pages/PlantsFiche.aspx?id=1291"
+   ]
+  }
  },
  {
   "id": "limnophila-aquatica",
@@ -3067,11 +3441,29 @@
   ],
   "co2": "low",
   "heightCm": 50,
+  "temperature": [
+   20,
+   30
+  ],
+  "ph": [
+   6.5,
+   7
+  ],
   "sourceUrl": "https://tropica.com/en/plants/plantdetails/Limnophilaaquatica(046)/4471",
   "shopUrls": [
    "https://aquarubi.com/limnophila-aquatica"
   ],
-  "verifiedAt": "2026-10-25"
+  "verifiedAt": "2026-10-25",
+  "secondarySources": {
+   "temperature": [
+    "https://www.flowgrow.de/db/aquaticplants/limnophila-aquatica",
+    "https://www.b-aqua.com/pages/PlantsFiche.aspx?id=1294"
+   ],
+   "ph": [
+    "https://www.flowgrow.de/db/aquaticplants/limnophila-aquatica",
+    "https://www.b-aqua.com/pages/PlantsFiche.aspx?id=1294"
+   ]
+  }
  },
  {
   "id": "limnophila-hippuridoides",
@@ -3086,12 +3478,30 @@
    "medium"
   ],
   "heightCm": 50,
+  "temperature": [
+   19,
+   30
+  ],
+  "ph": [
+   6,
+   7.5
+  ],
   "sourceUrl": "https://tropica.com/en/plants/plantdetails/Limnophilahippuridoides(047C)/4474",
   "shopUrls": [
    "https://aquarubi.com/limnophila-hippuridoides",
    "https://aquarubi.com/limnophila-hippuridoides-t-c-cup"
   ],
-  "verifiedAt": "2026-10-25"
+  "verifiedAt": "2026-10-25",
+  "secondarySources": {
+   "temperature": [
+    "https://www.flowgrow.de/db/aquaticplants/limnophila-hippuridoides",
+    "https://www.b-aqua.com/pages/PlantsFiche.aspx?id=1498"
+   ],
+   "ph": [
+    "https://www.flowgrow.de/db/aquaticplants/limnophila-hippuridoides",
+    "https://www.b-aqua.com/pages/PlantsFiche.aspx?id=1498"
+   ]
+  }
  },
  {
   "id": "lindernia-rotundifolia-variegated",
@@ -3129,12 +3539,22 @@
    "slow"
   ],
   "heightCm": 5,
+  "ph": [
+   5,
+   6.5
+  ],
   "sourceUrl": "https://tropica.com/en/plants/plantdetails/Littorellauniflora(081TC)/18269",
   "shopUrls": [
    "https://aquarubi.com/tropica-littorella-uniflora",
    "https://aquarubi.com/litorella-uniflora"
   ],
-  "verifiedAt": "2026-10-25"
+  "verifiedAt": "2026-10-25",
+  "secondarySources": {
+   "ph": [
+    "https://www.flowgrow.de/db/aquaticplants/littorella-uniflora",
+    "https://www.b-aqua.com/pages/PlantsFiche.aspx?id=1303"
+   ]
+  }
  },
  {
   "id": "lobelia-cardinalis",
@@ -3385,6 +3805,10 @@
    "medium"
   ],
   "heightCm": 5,
+  "ph": [
+   5,
+   7
+  ],
   "placements": [
    "foreground"
   ],
@@ -3395,7 +3819,13 @@
    "https://aquarubi.com/micranthemum-monte-carlo-porsiyon-super-price",
    "https://aquarubi.com/micranthemum-monte-carlo-vitro"
   ],
-  "verifiedAt": "2026-10-25"
+  "verifiedAt": "2026-10-25",
+  "secondarySources": {
+   "ph": [
+    "https://www.flowgrow.de/db/aquaticplants/micranthemum-tweediei",
+    "https://www.2hraquarist.com/blogs/freshwater-aquarium-plants-guide/how-to-grow-micranthemum-tweediei-monte-carlo"
+   ]
+  }
  },
  {
   "id": "microsorum-pteropus-narrow",
@@ -3525,6 +3955,14 @@
   ],
   "co2": "medium",
   "heightCm": 60,
+  "temperature": [
+   21,
+   28
+  ],
+  "ph": [
+   6,
+   7
+  ],
   "placements": [
    "background"
   ],
@@ -3533,7 +3971,17 @@
    "https://aquarubi.com/myriophyllum-mattogrossense-green",
    "https://aquarubi.com/tropica-myriophyllum-mattogrossense"
   ],
-  "verifiedAt": "2026-10-25"
+  "verifiedAt": "2026-10-25",
+  "secondarySources": {
+   "temperature": [
+    "https://www.flowgrow.de/db/aquaticplants/myriophyllum-mattogrossense",
+    "https://www.b-aqua.com/pages/PlantsFiche.aspx?id=1337"
+   ],
+   "ph": [
+    "https://www.flowgrow.de/db/aquaticplants/myriophyllum-mattogrossense",
+    "https://www.b-aqua.com/pages/PlantsFiche.aspx?id=1337"
+   ]
+  }
  },
  {
   "id": "myriophyllum-guyana",
@@ -3570,6 +4018,14 @@
    "medium"
   ],
   "heightCm": 5,
+  "temperature": [
+   18,
+   30
+  ],
+  "ph": [
+   6.5,
+   7.5
+  ],
   "placements": [
    "floating"
   ],
@@ -3578,7 +4034,17 @@
    "https://aquarubi.com/phyllanthus-fluitans-red-root-floater-porsiyon",
    "https://aquarubi.com/phyllanthus-fluitans-red-root-floater-cup"
   ],
-  "verifiedAt": "2026-10-25"
+  "verifiedAt": "2026-10-25",
+  "secondarySources": {
+   "temperature": [
+    "https://www.flowgrow.de/db/aquaticplants/phyllanthus-fluitans",
+    "https://www.b-aqua.com/pages/PlantsFiche.aspx?id=1383"
+   ],
+   "ph": [
+    "https://www.flowgrow.de/db/aquaticplants/phyllanthus-fluitans",
+    "https://www.b-aqua.com/pages/PlantsFiche.aspx?id=1383"
+   ]
+  }
  },
  {
   "id": "pogostemon-deccanensis",
@@ -3596,6 +4062,14 @@
    "medium"
   ],
   "heightCm": 40,
+  "temperature": [
+   18,
+   30
+  ],
+  "ph": [
+   5.5,
+   7
+  ],
   "placements": [
    "background"
   ],
@@ -3609,7 +4083,17 @@
    "https://aquarubi.com/stoffels-pogostemon-erectus",
    "https://aquarubi.com/stoffels-pogostemon-erectus-in-vitro"
   ],
-  "verifiedAt": "2026-10-25"
+  "verifiedAt": "2026-10-25",
+  "secondarySources": {
+   "temperature": [
+    "https://www.flowgrow.de/db/aquaticplants/pogostemon-deccanensis",
+    "https://www.b-aqua.com/pages/PlantsFiche.aspx?id=1586"
+   ],
+   "ph": [
+    "https://www.flowgrow.de/db/aquaticplants/pogostemon-deccanensis",
+    "https://www.b-aqua.com/pages/PlantsFiche.aspx?id=1586"
+   ]
+  }
  },
  {
   "id": "pogostemon-helferi",
@@ -3668,12 +4152,30 @@
    "medium"
   ],
   "heightCm": 40,
+  "temperature": [
+   10,
+   26
+  ],
+  "ph": [
+   6.5,
+   7.5
+  ],
   "sourceUrl": "https://tropica.com/en/plants/plantdetails/Proserpinacapalustris'Cuba'(037CTC)/4766",
   "shopUrls": [
    "https://aquarubi.com/proserpinaca-palustris-cuba",
    "https://aquarubi.com/tropica-proserpinaca-palustris-cuba-in-vitro"
   ],
-  "verifiedAt": "2026-10-25"
+  "verifiedAt": "2026-10-25",
+  "secondarySources": {
+   "temperature": [
+    "https://www.flowgrow.de/db/aquaticplants/proserpinaca-palustris",
+    "https://www.b-aqua.com/pages/PlantsFiche.aspx?id=1406"
+   ],
+   "ph": [
+    "https://www.flowgrow.de/db/aquaticplants/proserpinaca-palustris",
+    "https://www.b-aqua.com/pages/PlantsFiche.aspx?id=1406"
+   ]
+  }
  },
  {
   "id": "ranunculus-inundatus",
@@ -3739,12 +4241,30 @@
    "slow"
   ],
   "heightCm": 20,
+  "temperature": [
+   18,
+   30
+  ],
+  "ph": [
+   5,
+   7
+  ],
   "sourceUrl": "https://tropica.com/en/plants/plantdetails/Rotalaindica'Bonsai'(033ETC)/4451",
   "shopUrls": [
    "https://aquarubi.com/tropica-rotala-bonsai",
    "https://aquarubi.com/rotala-bonsai"
   ],
-  "verifiedAt": "2026-10-25"
+  "verifiedAt": "2026-10-25",
+  "secondarySources": {
+   "temperature": [
+    "https://www.flowgrow.de/db/aquaticplants/rotala-indica",
+    "https://www.b-aqua.com/pages/PlantsFiche.aspx?id=1416"
+   ],
+   "ph": [
+    "https://www.flowgrow.de/db/aquaticplants/rotala-indica",
+    "https://www.b-aqua.com/pages/PlantsFiche.aspx?id=1416"
+   ]
+  }
  },
  {
   "id": "rotala-macrandra-japan",
@@ -3798,6 +4318,14 @@
    "medium"
   ],
   "heightCm": 30,
+  "temperature": [
+   20,
+   30
+  ],
+  "ph": [
+   6,
+   7.5
+  ],
   "invasiveListings": [
    {
     "list": "fisc-invasive",
@@ -3812,7 +4340,19 @@
    "https://aquarubi.com/rotala-rotundifolia-reddish-vietnam",
    "https://aquarubi.com/rotala-rotundifolia-colorata-vitro"
   ],
-  "verifiedAt": "2026-11-09"
+  "verifiedAt": "2026-11-09",
+  "secondarySources": {
+   "temperature": [
+    "https://www.flowgrow.de/db/aquaticplants/rotala-rotundifolia",
+    "https://www.b-aqua.com/pages/PlantsFiche.aspx?id=1418",
+    "https://www.2hraquarist.com/blogs/freshwater-aquarium-plants-guide/plant-guide-rotala_rotundifolia"
+   ],
+   "ph": [
+    "https://www.flowgrow.de/db/aquaticplants/rotala-rotundifolia",
+    "https://www.b-aqua.com/pages/PlantsFiche.aspx?id=1418",
+    "https://www.2hraquarist.com/blogs/freshwater-aquarium-plants-guide/plant-guide-rotala_rotundifolia"
+   ]
+  }
  },
  {
   "id": "rotala-rotundifolia-blood-red",
@@ -3908,6 +4448,14 @@
    "medium"
   ],
   "heightCm": 30,
+  "temperature": [
+   18,
+   28
+  ],
+  "ph": [
+   5,
+   7
+  ],
   "placements": [
    "background",
    "midground"
@@ -3917,7 +4465,17 @@
    "https://aquarubi.com/rotala-wallichii",
    "https://aquarubi.com/tropica-rotala-wallichii"
   ],
-  "verifiedAt": "2026-11-09"
+  "verifiedAt": "2026-11-09",
+  "secondarySources": {
+   "temperature": [
+    "https://www.flowgrow.de/db/aquaticplants/rotala-wallichii",
+    "https://www.b-aqua.com/pages/PlantsFiche.aspx?id=1419"
+   ],
+   "ph": [
+    "https://www.flowgrow.de/db/aquaticplants/rotala-wallichii",
+    "https://www.b-aqua.com/pages/PlantsFiche.aspx?id=1419"
+   ]
+  }
  },
  {
   "id": "sagittaria-subulata",
@@ -4082,6 +4640,14 @@
    "medium"
   ],
   "heightCm": 10,
+  "temperature": [
+   16,
+   28
+  ],
+  "ph": [
+   5,
+   7
+  ],
   "placements": [
    "foreground"
   ],
@@ -4091,7 +4657,17 @@
    "https://aquarubi.com/stoffels-utricularia-graminifolia-in-vitro",
    "https://aquarubi.com/tropica-utricularia-graminifolia"
   ],
-  "verifiedAt": "2026-10-25"
+  "verifiedAt": "2026-10-25",
+  "secondarySources": {
+   "temperature": [
+    "https://www.flowgrow.de/db/aquaticplants/utricularia-graminifolia",
+    "https://www.b-aqua.com/pages/PlantsFiche.aspx?id=1459"
+   ],
+   "ph": [
+    "https://www.flowgrow.de/db/aquaticplants/utricularia-graminifolia",
+    "https://www.b-aqua.com/pages/PlantsFiche.aspx?id=1459"
+   ]
+  }
  },
  {
   "id": "vesicularia-ferriei-weeping-moss",
@@ -4366,6 +4942,10 @@
    "medium"
   ],
   "heightCm": 10,
+  "ph": [
+   5,
+   7.5
+  ],
   "placements": [
    "foreground"
   ],
@@ -4373,7 +4953,13 @@
   "shopUrls": [
    "https://atakanpetshop.com/hydrocotyle-verticillata-saksi-canli-bitki"
   ],
-  "verifiedAt": "2026-11-12"
+  "verifiedAt": "2026-11-12",
+  "secondarySources": {
+   "ph": [
+    "https://www.flowgrow.de/db/aquaticplants/hydrocotyle-verticillata",
+    "https://www.b-aqua.com/pages/PlantsFiche.aspx?id=1252"
+   ]
+  }
  },
  {
   "id": "dracaena-sanderiana",

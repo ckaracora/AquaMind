@@ -108,18 +108,18 @@ describe("bitkinin bilgileri", () => {
       "Işık Düşük–yüksek CO₂ Düşük Sıcaklık 18–30 °C pH 5–9 Boy 40 cm'ye kadar Büyüme Çok hızlı");
     expect(text(renderToStaticMarkup(createElement(PlantFacts, { item: item("anubias-barteri-var-nana") })))).toContain("pH 5–8,5");
     // Tropica'ya dayanan kayıt: sıcaklık ve pH yok.
-    expect(text(renderToStaticMarkup(createElement(PlantFacts, { item: item("eleocharis-acicularis") })))).toBe(
+    expect(text(renderToStaticMarkup(createElement(PlantFacts, { item: item("hygrophila-corymbosa-compact") })))).toBe(
       "Işık Düşük CO₂ Düşük Sıcaklık Kaynak yayımlamıyor pH Kaynak yayımlamıyor Boy 15 cm'ye kadar Büyüme Orta");
     // Tropica'ya dayanan kayıt, sıcaklık ve pH Practical Fishkeeping'in tür kutusundan (4. paket).
     expect(text(renderToStaticMarkup(createElement(PlantFacts, { item: item("staurogyne-repens") })))).toBe(
       "Işık Düşük CO₂ Düşük Sıcaklık 20–28 °C pH 6–8 Boy 10 cm'ye kadar Büyüme Orta");
     expect(text(renderToStaticMarkup(createElement(PlantFacts, { item: item("anubias-heterophylla") })))).toBe(
-      "Işık Orta CO₂ Kaynakta yok Sıcaklık 22–30 °C pH Kaynak yayımlamıyor Boy 80 cm'ye kadar Büyüme Kaynakta yok");
+      "Işık Orta CO₂ Kaynakta yok Sıcaklık 22–30 °C pH 5,5–7 Birkaç hobi kaynağının ortak değeri flowgrow.de b-aqua.com Boy 80 cm'ye kadar Büyüme Kaynakta yok");
   });
 
   it("boş sıcaklık ve pH \"üretici yayımlamıyor\" yazar; yalnız uyarı kaydı \"Kaynakta yok\" kalır; üç dilde metin var", () => {
     const facts = (id: string) => text(renderToStaticMarkup(createElement(PlantFacts, { item: item(id) })));
-    expect(facts("eleocharis-acicularis")).toContain("Sıcaklık Kaynak yayımlamıyor pH Kaynak yayımlamıyor");
+    expect(facts("hygrophila-corymbosa-compact")).toContain("Sıcaklık Kaynak yayımlamıyor pH Kaynak yayımlamıyor");
     expect(facts("ophiopogon-japonicus")).toContain("Sıcaklık Kaynakta yok pH Kaynakta yok");
     expect(readFileSync("packages/localization/src/messages/en.ts", "utf8")).toContain('notPublished: { temperature: "Not published by the source", ph: "Not published by the source" }');
     expect(readFileSync("packages/localization/src/messages/es.ts", "utf8")).toContain('notPublished: { temperature: "La fuente no la publica", ph: "La fuente no lo publica" }');
@@ -171,7 +171,7 @@ describe("bitkinin bilgileri", () => {
     expect(text(render(createElement(PlantSources, { item: item("azolla-filiculoides") })))).toBe("Kaynak: legislation.gov.uk");
     // "Su bitkisi değil" etiketinin kaynağı, ana kaynaktan farklıysa da kaynak satırında bağlantılıdır.
     const pfk = ophiopogon.notAquatic!.sourceUrl;
-    const mixed = render(createElement(PlantSources, { item: { ...item("eleocharis-acicularis"), notAquatic: { sourceUrl: pfk } } }));
+    const mixed = render(createElement(PlantSources, { item: { ...item("hygrophila-corymbosa-compact"), notAquatic: { sourceUrl: pfk } } }));
     expect(text(mixed)).toBe("Kaynak: Tropica · Practical Fishkeeping");
     expect(mixed).toContain(`href="${pfk}"`);
     // Seçilince: not, değerler "Kaynakta yok", uyarı ve kaynak; kartta kısa bilgi ve kısa uyarı.
@@ -364,5 +364,33 @@ describe("dile göre adlar (veri aşaması, karar 0036)", () => {
     const turkish = text(render(createElement(PlantSearchResults, { results: [result], select: () => {} })));
     expect(turkish).toContain("Tilki kuyruğu");
     expect(turkish).not.toContain("Rigid Hornwort");
+  });
+});
+
+// İkinci kademe (karar 0045): kabul edilen kaynakların yazmadığı sıcaklık ya da pH birkaç hobi kaynağının ortak değeriyle doldurulduysa değerin
+// altında kısa bilgi ve açılır kaynak listesi; kaynak listesinde de hobi kaynakları. Sahte kayıtla (katalog verisi değil).
+describe("ikinci kademe bitki değerleri (karar 0045)", () => {
+  const hobby = ["https://hobby-one.example/plant", "https://www.hobby-two.example/plant"];
+  const secondary = { ...item("hygrophila-corymbosa-compact"), temperature: [20, 26] as [number, number], secondarySources: { temperature: hobby } };
+  it("üç dilde değerin yanında 'Birkaç hobi kaynağının ortak değeri'; yalnız işaretli alanda", async () => {
+    const { loadLocaleBundle } = await import("@aquamind/localization");
+    await loadLocaleBundle("en");
+    await loadLocaleBundle("es");
+    const facts = text(renderToStaticMarkup(createElement(PlantFacts, { item: secondary })));
+    expect(facts).toBe("Işık Düşük CO₂ Düşük Sıcaklık 20–26 °C Birkaç hobi kaynağının ortak değeri hobby-one.example hobby-two.example pH Kaynak yayımlamıyor Boy 15 cm'ye kadar Büyüme Orta");
+    for (const [locale, label] of [["en", "Shared value from several hobby sources"], ["es", "Valor común de varias fuentes de aficionados"]] as const) {
+      store.locale = locale;
+      try { expect(text(renderToStaticMarkup(createElement(PlantFacts, { item: secondary })))).toContain(label); } finally { store.locale = "tr"; }
+    }
+    expect(text(renderToStaticMarkup(createElement(PlantFacts, { item: item("hygrophila-corymbosa-compact") })))).not.toContain("hobi");
+  });
+  it("değer yoksa işaret gösterilmez; kaynak listesinde hobi kaynakları var; telefon genişliğinde taşmaz (kırılan bağlantı, daralan hücre)", () => {
+    const empty = { ...item("hygrophila-corymbosa-compact"), secondarySources: { ph: hobby } };
+    expect(text(renderToStaticMarkup(createElement(PlantFacts, { item: empty })))).not.toContain("hobi");
+    expect(text(renderToStaticMarkup(createElement(PlantSources, { item: secondary })))).toContain("hobby-one.example · www.hobby-two.example");
+    const html = render(createElement(PlantFacts, { item: secondary }));
+    expect(html).toContain("<details");
+    expect(html).toMatch(/class="min-w-0 rounded-xl/);
+    expect(html).toMatch(/class="break-all /);
   });
 });

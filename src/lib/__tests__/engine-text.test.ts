@@ -132,6 +132,9 @@ const species: Record<string, SpeciesProfileInput> = {
   pairStub: { id: "pairStub", commonName: "Çift tutulabilen tür", adultSizeCm: 8, minVolumeL: 60, minGroup: 1, temperature: [22, 27], ph: [6, 7.5], wasteFactor: 0.8, behavior: { conspecificAggression: { source: "Fishkeeper", value: "all", condition: "Tek ya da uyumlu bir çift", pairAccepted: true } } },
   conflictShrimp: { id: "conflictShrimp", commonName: "Çelişkili karides avcısı", adultSizeCm: 6, minVolumeL: 40, minGroup: 1, temperature: [22, 27], ph: [6, 7.5], wasteFactor: 0.5, behavior: { eatsShrimp: { source: "Practical Fishkeeping", condition: "Küçük karidesler", conflict: true } } },
   conflictBehavior: { id: "conflictBehavior", commonName: "Çelişkili davranışlı tür", adultSizeCm: 4, minVolumeL: 40, minGroup: 1, temperature: [22, 27], ph: [6, 7.5], wasteFactor: 0.5, behavior: { finNipper: { source: "Seriously Fish", conflict: true } } },
+  // Motor 1.20.0 (karar 0045): hacmi ya da uzunluğu ikinci kademeden (çapraz kontrollü hobi kaynakları) gelen türler.
+  secondaryVolume: { id: "secondaryVolume", commonName: "Hobi hacimli tür", adultSizeCm: 4, minVolumeL: 40, minTankLengthCm: 45, minGroup: 1, temperature: [22, 27], ph: [6, 7.5], wasteFactor: 0.5, secondarySources: { minVolumeL: ["https://a.example/1", "https://b.example/1", "https://c.example/1"] } },
+  secondaryLength: { id: "secondaryLength", commonName: "Hobi uzunluklu tür", adultSizeCm: 20, minVolumeL: 100, minTankLengthCm: 100, minGroup: 1, temperature: [22, 27], ph: [6, 7.5], wasteFactor: 1, secondarySources: { minTankLengthCm: ["https://a.example/2", "https://b.example/2", "https://c.example/2"] } },
 };
 const devices: Record<string, EquipmentProfileInput> = {
   skimmer: { id: "skimmer", category: "filter", brand: "Stub", model: "Skimmer", auxiliaryFiltration: true },
@@ -234,6 +237,14 @@ const scenarios: Array<[string, HealthAnalysis]> = [
   ["kaynağın kabul ettiği çift", analyze(tank(), [animal("pairStub", "fish", 2)], [])],
   ["kaynakları çelişen balık ve cüce karides", analyze(tank({ netVolumeLiters: 150 }), [animal("conflictShrimp"), animal("dwarfShrimp", "shrimp", 5)], [])],
   ["davranışı yalnız çelişkili kayıtla bilinen tür", analyze(tank(), [animal("plain"), animal("conflictBehavior")], [])],
+  // Motor 1.20.0 (karar 0045): ikinci kademe hacim gerekenin yarısından küçük (uzunluk da kısa), ikinci kademe uzunluk İsviçre sınırının altında,
+  // ikinci kademe hacim yalnız sınırda ve genişliği yetmeyen tür.
+  ["ikinci kademe hacim, gerekenin yarısından küçük", analyze(tank({ lengthCm: 40, netVolumeLiters: 15 }), [animal("secondaryVolume", "fish", 2)], [])],
+  ["ikinci kademe uzunluk, İsviçre sınırının altında", analyze(tank({ lengthCm: 50, widthCm: 50, heightCm: 50, netVolumeLiters: 150 }), [animal("secondaryLength")], [])],
+  ["ikinci kademe hacim, alan sınırda", analyze(tank({ netVolumeLiters: 30 }), [animal("secondaryVolume")], [])],
+  ["ikinci kademe uzunluk, akvaryum dar", analyze(tank({ lengthCm: 80, widthCm: 30, heightCm: 50, netVolumeLiters: 150 }), [animal("secondaryLength")], [])],
+  // Kontrol turu (2026-11-15): kabul edilen kaynağın hacmi yarısından küçük, ikinci kademe uzunluk da kısa (`lengthSecondary`).
+  ["kabul edilen hacim yarısından küçük, ikinci kademe uzunluk da kısa", analyze(tank({ lengthCm: 90, netVolumeLiters: 40 }), [animal("secondaryLength")], [])],
 ];
 const scenario = (name: string) => scenarios.find(([label]) => label === name)![1];
 const warningOf = (analysis: HealthAnalysis, code: string) => analysis.warnings.find((warning) => warning.code === code)!;
@@ -820,3 +831,54 @@ async function engineParamKeys(): Promise<{ keys: Set<string>; unresolved: strin
   visit(source);
   return { keys, unresolved };
 }
+
+// Motor 1.20.0 (karar 0045): ikinci kademe değerden doğan alan uyarısının metni üç dilde değerin hobi kaynaklarına dayandığını söyler.
+describe("ikinci kademe alan değerleri (karar 0045)", () => {
+  const enLiters = engineTextFormat(createDisplayFormat("en", { temperature: "celsius", volume: "liters", dateFormat: "day-first" }));
+  const esLiters = engineTextFormat(createDisplayFormat("es", { temperature: "celsius", volume: "liters", dateFormat: "day-first" }));
+  const cases = [
+    ["ikinci kademe hacim, gerekenin yarısından küçük", "spaceTooSmall"],
+    ["ikinci kademe uzunluk, İsviçre sınırının altında", "spaceSevere"],
+    ["ikinci kademe hacim, alan sınırda", "spaceLimited"],
+    ["ikinci kademe uzunluk, akvaryum dar", "spaceNarrow"],
+  ] as const;
+
+  it.each(cases)("%s: sarı, `secondary` değişkeni ve üç dilde hobi kaynağı notu", (name, code) => {
+    const warning = warningOf(scenario(name), code);
+    expect(warning).toMatchObject({ level: "warning", params: { secondary: true } });
+    expect(engineWarningText(tr, liters, warning).message).toMatch(/ Bu türün hacim ya da uzunluk değeri kabul ettiğimiz kaynaklarda yok; birkaç hobi kaynağının ortak değeridir\. Bu yüzden bu uyarı sonucu en fazla "Dikkat" yapar\.$/);
+    expect(engineWarningText(en, enLiters, warning).message).toMatch(/ this is the shared value from several hobby sources, so this warning makes the result "Caution" at most\.$/);
+    expect(engineWarningText(es, esLiters, warning).message).toMatch(/ es el valor común de varias fuentes de aficionados, por eso esta advertencia deja el resultado en "Atención" como máximo\.$/);
+  });
+
+  it("gerekenin yarısından küçük: 'tutulmamalı' yerine 'daha büyük akvaryum gerekir'", () => {
+    const warning = warningOf(scenario("ikinci kademe hacim, gerekenin yarısından küçük"), "spaceTooSmall");
+    expect(engineWarningText(tr, liters, warning).message).toMatch(/^Birkaç hobi kaynağına göre Hobi hacimli tür için kayıtlı 2 bireyle en az 40 L gerekir;.* Bu tür için daha büyük bir akvaryum gerekir\. /);
+    expect(engineWarningText(en, enLiters, warning).message).toMatch(/^Several hobby sources say Hobi hacimli tür needs at least 40 L .* This species needs a bigger aquarium\. /);
+    expect(engineWarningText(es, esLiters, warning).message).toMatch(/^Según varias fuentes de aficionados, Hobi hacimli tür necesita al menos 40 L .* Esta especie necesita un acuario más grande\. /);
+    for (const messages of [tr, en, es]) expect(engineWarningText(messages, liters, warning).message).not.toMatch(/tutulmamalı|shouldn't be kept|no debe mantenerse/);
+  });
+
+  it("uzunluk ikinci kademedeyse uzunluk cümlesi de hobi kaynaklarını söyler (`lengthSecondary`)", () => {
+    const warning = warningOf(scenario("ikinci kademe hacim, gerekenin yarısından küçük"), "spaceTooSmall");
+    expect(warning.params).toMatchObject({ lengthShort: true });
+    expect(warning.params.lengthSecondary).toBeUndefined();
+    expect(engineWarningText(tr, liters, warning).message).toContain(" Kaynak en az 45 cm uzunluk da istiyor;");
+    const lengthSecondary = warningOf(scenario("kabul edilen hacim yarısından küçük, ikinci kademe uzunluk da kısa"), "spaceTooSmall");
+    expect(lengthSecondary).toMatchObject({ level: "danger", params: { lengthShort: true, lengthSecondary: true } });
+    expect(lengthSecondary.params.secondary).toBeUndefined();
+    expect(engineWarningText(tr, liters, lengthSecondary).message).toBe(lengthSecondary.message);
+    expect(engineWarningText(tr, liters, lengthSecondary).message).toContain(" Birkaç hobi kaynağı en az 100 cm uzunluk da istiyor; akvaryumun uzunluğu 90 cm.");
+    expect(engineWarningText(en, enLiters, lengthSecondary).message).toContain(" Several hobby sources also call for a length of at least 100 cm; the aquarium is 90 cm long.");
+    expect(engineWarningText(es, esLiters, lengthSecondary).message).toContain(" Varias fuentes de aficionados también piden un largo de al menos 100 cm; el acuario mide 90 cm de largo.");
+  });
+
+  it("kabul edilen kaynağın değeriyle aynı uyarıların metni değişmez (not yok)", () => {
+    for (const [name, code] of [["gerekenin yarısından küçük akvaryum, uzunluk da kısa", "spaceTooSmall"], ["buçuklu boyda çok küçük akvaryum", "spaceSevere"]] as const) {
+      const warning = warningOf(scenario(name), code);
+      expect(warning.params.secondary, name).toBeUndefined();
+      expect(warning.level, name).toBe("danger");
+      for (const [messages, format] of [[tr, liters], [en, enLiters], [es, esLiters]] as const) expect(engineWarningText(messages, format, warning).message).not.toMatch(/hobi|hobby|aficionados/);
+    }
+  });
+});

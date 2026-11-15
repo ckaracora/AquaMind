@@ -1330,4 +1330,5 @@ export const enCatalogSpecies: CatalogTexts = {
   "4d27b0975145f4d1": "With its own kind and other similarly sized plecos (Loricariidae); if more than one is kept, a very spacious aquarium with many hiding places.",
   "47965d64b6a90e92": "It preys on its own kind; the young eat each other. Keep it singly or in a very spacious aquarium with plenty of hiding places.",
   "09cc97e50260132f": "The volume comes from OATA's general care guide (general guide): at least 80 liters for a group of Corydoras or of the smaller pleco species.",
+  "135a99711f284a87": "They may bite each other's external gills and feet; if kept together, they need individuals of the same size, ample space and plenty of hiding places.",
 };

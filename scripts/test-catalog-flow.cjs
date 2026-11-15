@@ -9046,7 +9046,8 @@ for (const [id, minVolumeL, minTankLengthCm] of [["jaguar-cichlid", 680, 182], [
   ["nymphaea-lotus-zenkeri", ["medium", "high"], "low", 80, [22, 30], [5, 8], [], "https://www.fishkeeper.co.uk/fish/plant/aquarium-plants/nymphaea-lotus-zenkeri"],
   ["heteranthera-zosterifolia", ["high", "high"], "medium", 50, [18, 30], [5.5, 8], [], "https://www.fishkeeper.co.uk/fish/plant/aquarium-plants/heteranthera-zosterifolia-"],
   ["cabomba-piauhyensis", ["high", "high"], null, 80, [18, 26], [6, 7], [], "https://www.fishkeeper.co.uk/fish/plant/aquarium-plants/cabomba-piauhyensis-"],
-  ["hydrocotyle-verticillata", ["high", "high"], "medium", 10, null, null, [], "https://tropica.com/en/plants/plantdetails/Hydrocotyleverticillata(039)/4457"],
+  // pH ikinci kademeden (karar 0045, 2026-11-14): Flowgrow ve B-Aqua'nın ortak aralığı; sıcaklık B-Aqua'da 0–25 °C kışlama aralığı olduğu için boş kaldı.
+  ["hydrocotyle-verticillata", ["high", "high"], "medium", 10, null, [5, 7.5], [], "https://tropica.com/en/plants/plantdetails/Hydrocotyleverticillata(039)/4457"],
   ["pontederia-crassipes", null, null, null, null, null, ["eu-union-list", "fisc-invasive"], "https://eur-lex.europa.eu/legal-content/EN/TXT/HTML/?uri=CELEX:02016R1141-20250807"],
   ["lagarosiphon-major", null, null, null, null, null, ["eu-union-list", "us-federal-noxious-weed"], "https://eur-lex.europa.eu/legal-content/EN/TXT/HTML/?uri=CELEX:02016R1141-20250807"],
   // Ürün sahibinin onayıyla eklenen üç bitki (2026-11-13): iki ev bitkisi ve FISC 2 istilacı uyarı kaydı.

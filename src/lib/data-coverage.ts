@@ -4,13 +4,13 @@
 
 /** Raporun okuduğu alanlar (kataloglardaki kayıt tiplerinin ilgili kısmı). */
 export interface CoverageInput {
-  species: { id: string; scientificName: string; category: string; sourceUrl?: string; verifiedAt?: string; minTankLengthCm?: number; flow?: string; communityCaution?: string; husbandryCaution?: string; predatory?: boolean; speciesOnly?: boolean; aliases?: string[] }[];
+  species: { id: string; scientificName: string; category: string; sourceUrl?: string; additionalSourceUrls?: string[]; verifiedAt?: string; minTankLengthCm?: number; flow?: string; communityCaution?: string; husbandryCaution?: string; predatory?: boolean; speciesOnly?: boolean; aliases?: string[]; waterTypes?: readonly string[]; secondarySources?: { minVolumeL?: string[]; minTankLengthCm?: string[] } }[];
   equipment: { id: string; category: string; brand: string; sourceUrl?: string; verifiedAt?: string; passiveComponent?: boolean; requiresAirPump?: boolean; ratedFlowLph?: number; powerW?: number; recommendedMinL?: number; recommendedMaxL?: number }[];
   unverifiedEquipmentIds: readonly string[];
   /** Kaynak bağlantısı bilimsel addan otomatik üretilen canlı kayıtları (`generatedSourceSpeciesIds`, src/data/catalog-species.ts). */
   generatedSourceSpeciesIds: readonly string[];
   care: { id: string; category: string; sourceUrl: string; verifiedAt: string; volumeL?: number }[];
-  plants: { id: string; sourceUrl: string; verifiedAt: string; commonNameEn?: string; light?: unknown; co2?: unknown; growth?: unknown; heightCm?: number; temperature?: unknown; ph?: unknown; placements?: unknown[]; invasiveListings?: unknown[]; notAquatic?: unknown; warningOnly?: boolean }[];
+  plants: { id: string; sourceUrl: string; verifiedAt: string; commonNameEn?: string; light?: unknown; co2?: unknown; growth?: unknown; heightCm?: number; temperature?: unknown; ph?: unknown; placements?: unknown[]; invasiveListings?: unknown[]; notAquatic?: unknown; warningOnly?: boolean; secondarySources?: { temperature?: string[]; ph?: string[] } }[];
 }
 
 export interface CoverageRow { label: string; count: number; total: number }
@@ -21,6 +21,19 @@ export interface CoverageReport { measuredOn: string; catalogs: CatalogCoverage[
 export const RECENT_DAYS = 92;
 
 const filled = (value: unknown) => value !== undefined && value !== null && value !== "" && !(Array.isArray(value) && value.length === 0);
+/**
+ * Canlı bakım değerleri için kabul edilen kaynakların alan adları (docs/DATA_SOURCES.md → "Canlı verisi için özel kaynak kuralı", "Omurgasızlar",
+ * "Amfibiler", "Deniz canlıları"): Seriously Fish, Practical Fishkeeping, OATA, Fishipedia, Fishkeeper, ScotCat, Welsfans, Corydoras World,
+ * Goodeid Working Group, Parosphromenus Project, wirbellose.de, Meerwasser-Lexikon. FishBase kimlik ve boy kaynağıdır, hacim yayımlamaz; sayılmaz.
+ * Bağlantı, hacmin o sayfada yazdığını tek başına göstermez (hacmi gerçekten kaynaksız kayıtların listesi docs/CATALOG_SOURCE_GAPS.md'de).
+ */
+export const ACCEPTED_CARE_SOURCE = /(^|\.)(seriouslyfish\.com|practicalfishkeeping\.co\.uk|ornamentalfish\.org|fishi-pedia\.com|fishipedia\.(fr|it|es|de|com)|fishkeeper\.co\.uk|scotcat\.com|welsfans\.de|corydorasworld\.com|goodeid\.org|goodeidworkinggroup\.com|parosphromenus-project\.org|wirbellose\.de|meerwasser-lexikon\.de)$/;
+const acceptedCareLinked = (item: { sourceUrl?: string; additionalSourceUrls?: string[] }) => [item.sourceUrl, ...(item.additionalSourceUrls ?? [])].some((url) => {
+  if (!url) return false;
+  try { return ACCEPTED_CARE_SOURCE.test(new URL(url).hostname.toLowerCase()); } catch { return false; }
+});
+/** İkinci kademe değer (karar 0045): alanın kaynağı kabul edilen kaynak değil, birkaç hobi kaynağının ortak değeri. */
+const secondary = (item: { secondarySources?: Record<string, string[] | undefined> }, field: string) => filled(item.secondarySources?.[field]);
 const row = <T,>(items: readonly T[], label: string, test: (item: T) => boolean): CoverageRow => ({ label, count: items.filter(test).length, total: items.length });
 /** Takvimde olan bir gün mü (`YYYY-MM-DD`; ör. 2026-02-31 değil). */
 export function isCalendarDate(value: string) {
@@ -50,13 +63,17 @@ export function dataCoverage(input: CoverageInput, measuredOn: string): Coverage
   const generatedSource = (item: { id: string }) => generated.has(item.id);
   const capacityEquipment = equipment.filter((item) => ["filter", "heater", "air_pump"].includes(item.category) && !item.passiveComponent);
   const volumeCare = care.filter((item) => ["tank", "aquarium_set", "aquaterrarium", "terrarium"].includes(item.category));
+  const freshwater = species.filter((item) => (item.waterTypes ?? ["freshwater"]).includes("freshwater"));
   return {
     measuredOn,
     catalogs: [
       { name: "Canlılar", total: species.length, rows: [
         row(species, "Kendi kaynak sayfası var (otomatik bağlantı değil)", (item) => filled(item.sourceUrl) && !generatedSource(item)),
         row(species, "Yalnız otomatik kaynak bağlantısı", generatedSource),
+        row(freshwater, "Tatlı su: kabul edilen bakım kaynağına hiç bağlantısı yok", (item) => !acceptedCareLinked(item)),
+        row(species, "En az hacim: ikinci kademe (birkaç hobi kaynağı)", (item) => secondary(item, "minVolumeL")),
         row(species, "En az tank uzunluğu", (item) => filled(item.minTankLengthCm)),
+        row(species, "En az tank uzunluğu: ikinci kademe (birkaç hobi kaynağı)", (item) => secondary(item, "minTankLengthCm")),
         row(species, "Akıntı", (item) => filled(item.flow)),
         row(species, "Davranış ya da bakım notu", (item) => filled(item.communityCaution) || filled(item.husbandryCaution) || Boolean(item.predatory) || Boolean(item.speciesOnly)),
         row(species, "Eş ad ya da satış adı", (item) => filled(item.aliases)),
@@ -82,8 +99,12 @@ export function dataCoverage(input: CoverageInput, measuredOn: string): Coverage
         row(plants, "CO₂", (item) => filled(item.co2)),
         row(plants, "Büyüme hızı", (item) => filled(item.growth)),
         row(plants, "Boy", (item) => filled(item.heightCm)),
-        row(plants, "Sıcaklık", (item) => filled(item.temperature)),
-        row(plants, "pH", (item) => filled(item.ph)),
+        row(plants, "Sıcaklık (toplam)", (item) => filled(item.temperature)),
+        row(plants, "Sıcaklık: kabul edilen kaynak", (item) => filled(item.temperature) && !secondary(item, "temperature")),
+        row(plants, "Sıcaklık: ikinci kademe (birkaç hobi kaynağı)", (item) => filled(item.temperature) && secondary(item, "temperature")),
+        row(plants, "pH (toplam)", (item) => filled(item.ph)),
+        row(plants, "pH: kabul edilen kaynak", (item) => filled(item.ph) && !secondary(item, "ph")),
+        row(plants, "pH: ikinci kademe (birkaç hobi kaynağı)", (item) => filled(item.ph) && secondary(item, "ph")),
         row(plants, "Yerleşim", (item) => filled(item.placements)),
         row(plants, "Bütün değerler dolu", (item) => [item.light, item.co2, item.growth, item.heightCm, item.temperature, item.ph, item.placements].every(filled)),
         row(plants, "İstilacı tür etiketi", (item) => filled(item.invasiveListings)),

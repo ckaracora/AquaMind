@@ -1,4 +1,5 @@
-// Veri kapsamı raporu (docs/DATA_COVERAGE.md). Katalogları TypeScript kaynağından okur ve src/lib/data-coverage.ts ile hesaplar.
+// Veri kapsamı raporu (docs/DATA_COVERAGE.md). Katalogları TypeScript kaynağından okur ve src/lib/data-coverage.ts ile hesaplar. İkinci kademe
+// değerler (karar 0045) tabloda ayrı satırdır; kabul edilen kaynak listesi src/lib/data-coverage.ts → ACCEPTED_CARE_SOURCE.
 // Kullanım:
 //   node scripts/data-coverage.cjs                 belgenin güncel tablosunu bugünün tarihiyle yazar (belgeye elle aktarılır)
 //   node scripts/data-coverage.cjs 2026-10-28      verilen ölçüm tarihiyle
@@ -54,12 +55,12 @@ const report = dataCoverage(input, measuredOn);
 console.log(coverageMarkdown(report));
 
 if (jsonPath) {
-  // Veri sayfası için katalog satırları: yalnız gösterilecek alanlar.
+  // Veri sayfası için katalog satırları: yalnız gösterilecek alanlar. `secondaryFields`: değeri ikinci kademe olan alanlar (karar 0045; birkaç hobi kaynağının ortak değeri).
   const rows = {
-    species: speciesCatalog.map(({ id, commonName, scientificName, category, temperature, ph, adultSizeCm, minVolumeL, sourceUrl, verifiedAt }) => ({ id, commonName, scientificName, category, temperature, ph, adultSizeCm, minVolumeL, sourceUrl, verifiedAt })),
+    species: speciesCatalog.map(({ id, commonName, scientificName, category, temperature, ph, adultSizeCm, minVolumeL, sourceUrl, verifiedAt, secondarySources }) => ({ id, commonName, scientificName, category, temperature, ph, adultSizeCm, minVolumeL, sourceUrl, verifiedAt, secondaryFields: Object.keys(secondarySources ?? {}) })),
     equipment: equipmentCatalog.map(({ id, category, brand, model, ratedFlowLph, powerW, recommendedMinL, recommendedMaxL, sourceUrl, verifiedAt }) => ({ id, category, brand, model, ratedFlowLph, powerW, recommendedMinL, recommendedMaxL, sourceUrl, verifiedAt, unverified: unverifiedEquipmentIds.includes(id) })),
     care: careProductCatalog.map(({ id, category, brand, model, volumeL, sourceUrl, verifiedAt }) => ({ id, category, brand, model, volumeL, sourceUrl, verifiedAt })),
-    plants: plantCatalog.map(({ id, scientificName, aliases, light, co2, growth, heightCm, temperature, ph, placements, invasiveListings, notAquatic, warningOnly, sourceUrl, verifiedAt }) => ({ id, scientificName, aliases, light, co2, growth, heightCm, temperature, ph, placements, invasive: Boolean(invasiveListings?.length), notAquatic: Boolean(notAquatic), warningOnly: Boolean(warningOnly), sourceUrl, verifiedAt })),
+    plants: plantCatalog.map(({ id, scientificName, aliases, light, co2, growth, heightCm, temperature, ph, placements, invasiveListings, notAquatic, warningOnly, sourceUrl, verifiedAt, secondarySources }) => ({ id, scientificName, aliases, light, co2, growth, heightCm, temperature, ph, placements, invasive: Boolean(invasiveListings?.length), notAquatic: Boolean(notAquatic), warningOnly: Boolean(warningOnly), sourceUrl, verifiedAt, secondaryFields: Object.keys(secondarySources ?? {}) })),
   };
   fs.writeFileSync(jsonPath, `${JSON.stringify({ report, rows })}\n`, "utf8");
 }

@@ -11,7 +11,8 @@ import { tr } from "../../../packages/localization/src/messages/tr";
 // Tür kartı (veri sprinti F, 2026-11-14): katalog değerleri, davranış özeti, bakım bilgisi ve kaynaklar. Olmayan alan gösterilmez.
 
 const profile = (overrides: Partial<SpeciesProfile> = {}): SpeciesProfile => ({ id: "test-fish", commonName: "Deneme", scientificName: "Testus testus", category: "fish", adultSizeCm: 5, minVolumeL: 60, minGroup: 6, temperature: [22, 26], ph: [6, 7.5], wasteFactor: 1, ...overrides });
-const record = (flag: BehaviorRecord["flag"], overrides: Partial<BehaviorRecord> = {}): BehaviorRecord => ({ flag, confidence: "explicit", evidence: "kanıt", source: "Seriously Fish", sourceUrl: "https://www.seriouslyfish.com/species/test/", verifiedAt: "2026-11-14", ...overrides });
+// Kayıt tipi 0045'ten beri iki biçimlidir (kabul edilen kaynak ya da ikinci kademe); sınama kaydı birleştirilip tipe çevrilir.
+const record = (flag: BehaviorRecord["flag"], overrides: Partial<BehaviorRecord> = {}): BehaviorRecord => ({ flag, confidence: "explicit", evidence: "kanıt", source: "Seriously Fish", sourceUrl: "https://www.seriouslyfish.com/species/test/", verifiedAt: "2026-11-14", ...overrides }) as BehaviorRecord;
 
 describe("davranış özeti", () => {
   it("'barışçıl' kaydı 'Kaynağa göre barışçıl' satırıdır; kayıt yoksa 'Kaynaklar uyumunu yazmıyor'", () => {
@@ -35,6 +36,23 @@ describe("davranış özeti", () => {
     expect(behaviorSummary(profile({ predatory: true }), []).lines.map((line) => line.kind)).toEqual(["predatory"]);
     expect(behaviorSummary(profile({ predatory: true }), [record("notPiscivorous")]).lines.map((line) => line.kind)).toEqual(["notPiscivorous"]);
     expect(behaviorSummary(profile({ speciesOnly: true }), []).lines.map((line) => line.kind)).toEqual(["speciesOnly"]);
+  });
+
+  it("avcı türde açık 'küçük balıkları yer' kaydı ayrı satır olmaz; koşulu ve kaynağı 'avcı' satırına geçer, çelişkili kayıt ayrı kalır", () => {
+    const merged = behaviorSummary(profile({ predatory: true }), [record("eatsSmallFish", { condition: "Çok daha küçük balıklar." }), record("peaceful")]).lines;
+    expect(merged.map((line) => line.kind)).toEqual(["predatory", "peaceful"]);
+    expect(merged[0]).toEqual({ kind: "predatory", conflict: false, condition: "Çok daha küçük balıklar.", source: "Seriously Fish", sourceUrl: "https://www.seriouslyfish.com/species/test/" });
+    const secondary = behaviorSummary(profile({ predatory: true }), [record("eatsSmallFish", { tier: "secondary", source: "Hobi", sourceUrl: "https://a.example/x", additionalSourceUrls: ["https://b.example/y"] })]).lines;
+    expect(secondary).toEqual([{ kind: "predatory", conflict: false, source: "Hobi", sourceUrl: "https://a.example/x", secondaryUrls: ["https://a.example/x", "https://b.example/y"] }]);
+    const conflict = behaviorSummary(profile({ predatory: true }), [record("eatsSmallFish", { confidence: "conflict" })]).lines;
+    expect(conflict.map((line) => [line.kind, line.conflict])).toEqual([["predatory", false], ["eatsSmallFish", true]]);
+    // Avcı olmayan türde kayıt kendi satırıdır.
+    expect(behaviorSummary(profile(), [record("eatsSmallFish")]).lines.map((line) => line.kind)).toEqual(["eatsSmallFish"]);
+    // Katalogda: avcı işaretli ve açık 'küçük balık' kayıtlı hiçbir türde iki satır yok.
+    for (const item of speciesCatalog.filter((entry) => entry.predatory)) {
+      const kinds = behaviorSummary(item, speciesBehavior[item.id]).lines.map((line) => line.kind);
+      if (kinds.includes("predatory")) expect(kinds.filter((kind) => kind === "eatsSmallFish").length === 0 || speciesBehavior[item.id]?.every((entry) => entry.flag !== "eatsSmallFish" || entry.confidence === "conflict"), item.id).toBe(true);
+    }
   });
 
   it("katalogdaki her türün her davranış satırının üç dilde metni var", () => {

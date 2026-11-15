@@ -44,7 +44,19 @@ export interface SpeciesProfileInput {
   husbandryCaution?: string;
   /** Kaynaklı davranış bilgisi (kural seti 1.4.0). Yoksa davranış uyarısı üretilmez; bu "sorun yok" anlamına gelmez. */
   behavior?: SpeciesBehaviorInput;
+  /**
+   * Motor 1.20.0 (karar 0045): ikinci kademe (çapraz kontrollü hobi kaynakları) alan değerleri. Anahtar alanın adıdır, değer o değerin kaynak
+   * adresleridir. Alan uyarısı yalnız bu değerlerden doğuyorsa tek başına "uygun değil" demez (en çok "dikkat") ve metni bunu söyler.
+   */
+  secondarySources?: SpeciesSecondarySources;
 }
+
+/** İkinci kademeden gelebilen canlı alan değerleri (karar 0045). Birey başına ek hacim ikinci kademeden yazılmaz. */
+export type SecondarySpaceField = "minVolumeL" | "minTankLengthCm";
+/** Alan adı → o değerin ikinci kademe kaynak adresleri (en az üç bağımsız kaynak; docs/DATA_SOURCES.md). */
+export type SpeciesSecondarySources = Partial<Record<SecondarySpaceField, readonly string[]>>;
+/** Canlının bu alan değeri ikinci kademeden mi geliyor? */
+export const isSecondarySpaceValue = (profile: Pick<SpeciesProfileInput, "secondarySources">, field: SecondarySpaceField) => Boolean(profile.secondarySources?.[field]?.length);
 
 /** Bir davranışın kaynağı. `conflict` ise kaynaklar çelişir ve kesin uyarı üretilmez. */
 export interface BehaviorNote {
@@ -211,11 +223,17 @@ const isTropical=(profile:SpeciesProfileInput)=>profile.group!=="coldwater"&&pro
 // hacminin bu oranından küçükse alan uyarısı kesin tehlikedir (hüküm "uygun değil"). Yeni bir kaynak eşiği değildir; ürün sahibinin kararıdır.
 const SEVERE_VOLUME_RATIO=.5;
 /**
- * Canlı riski sınıfındaki uyarı kodları (23). Uyarı seviyesindekilerde 74 tavanını bu küme koyar (`livestockRiskWarning`). 1.19.0'dan beri (karar 0044)
+ * Kural seti 1.17.0 (docs/DECISIONS/0045-ikinci-kademe-kaynaklar.md): alan uyarısı ikinci kademe (çapraz kontrollü hobi kaynakları) değerinden doğuyorsa
+ * metnin sonuna eklenen not. Dil dosyalarındaki karşılığı `secondarySpaceNote`.
+ */
+const SECONDARY_SPACE_NOTE=" Bu türün hacim ya da uzunluk değeri kabul ettiğimiz kaynaklarda yok; birkaç hobi kaynağının ortak değeridir. Bu yüzden bu uyarı sonucu en fazla \"Dikkat\" yapar.";
+/**
+ * Canlı riski sınıfındaki uyarı kodları (24). Uyarı seviyesindekilerde 74 tavanını bu küme koyar (`livestockRiskWarning`). 1.19.0'dan beri (karar 0044)
  * kaynağın kabul ettiği tek çift (`conspecificPair`, sarı) ve birbirine karıştırılmayan türler (`incompatibleGroup`, kesin tehlike) bu sınıftadır.
  * `smallFishPredation` 1.15.0'dan beri tehlike seviyesindedir (kesin tehlike değil); tavanını zaten `dangerWarning` koyar. 1.18.0'dan beri
  * (karar 0043) "erkekler kavga eder" (`conspecificMales`) bu sınıftadır; "tek tutulmalı" (`conspecificAll`) ve "akvaryum gerekenin yarısından
- * küçük" (`spaceTooSmall`) kesin tehlikedir. Kümedeki yerleri puanı değiştirmez; sınıfı eksiksiz tutar.
+ * küçük" (`spaceTooSmall`) kesin tehlikedir. Kümedeki yerleri puanı değiştirmez; sınıfı eksiksiz tutar. 1.20.0'dan beri (karar 0045) İsviçre ölçü
+ * sınırı uyarısı (`spaceSevere`) da sınıftadır: ikinci kademe uzunluktan doğduğunda sarıdır ve tavanını bu küme koyar.
  */
 export const LIVESTOCK_RISK_WARNING_CODES:ReadonlySet<string>=new Set([
  // yenme ve yaralanma
@@ -225,7 +243,7 @@ export const LIVESTOCK_RISK_WARNING_CODES:ReadonlySet<string>=new Set([
  // birbirine karıştırılmayan türler (1.19.0)
  "incompatibleGroup",
  // alan, kalabalık ve grup
- "spaceTooSmall","spaceLimited","spaceNarrow","highLoad","groupLow",
+ "spaceTooSmall","spaceSevere","spaceLimited","spaceNarrow","highLoad","groupLow",
  // aralık dışı su değeri
  "speciesTemperatureOutOfRange","speciesPhOutOfRange","coldwaterWithTropical","marineSpecificGravity","marinePh","marineKh","marineNitrate","ammoniaDetected","nitriteDetected","nitrateHigh",
 ]);
@@ -295,7 +313,15 @@ export function createAnalyzer(resolver:KnowledgeResolver):AnalyzeAquarium{
  // 1.18.0 (karar 0043): net hacim, kayıtlı adet için gereken en az hacmin yarısından küçükse (her kategoride) kesin tehlike. Bu uyarı aynı türün
  // İsviçre ölçü ve genişlik uyarısının yerine çıkar; metni akvaryumun ve türün istediği hacmi birlikte söyler.
  const tooSmallIssues=new Set(spaceIssues.filter(entry=>aquarium.netVolumeLiters<requiredVolume(entry)*SEVERE_VOLUME_RATIO));
- const severeSpaceCount=spaceIssues.filter(entry=>tooSmallIssues.has(entry)||severeSpaceIssues.has(entry)).length;
+ // 1.20.0 (karar 0045): ikinci kademe (çapraz kontrollü hobi kaynakları) hacim ya da uzunluk değeri tek başına "uygun değil" dedirtmez. Kabul edilen
+ // kaynağın değeriyle eksik kalan bir ölçü (`primaryShortfall`) yoksa alan uyarısı sarıdır; "gerekenin yarısından küçük" yalnız hacim ikinci
+ // kademedeyse sarıdır ve kesin tehlike değildir. Uyarı canlı riski sınıfında kaldığı için genel puan en çok 74 olur. İşaretsiz kayıtta sonuç değişmez.
+ const volumeShort=(entry:(typeof profiles)[number])=>aquarium.netVolumeLiters<requiredVolume(entry);
+ const lengthShortOf=(entry:(typeof profiles)[number])=>entry.profile!.minTankLengthCm!==undefined&&aquarium.lengthCm<entry.profile!.minTankLengthCm;
+ const primaryShortfall=(entry:(typeof profiles)[number])=>(volumeShort(entry)&&!isSecondarySpaceValue(entry.profile!,"minVolumeL"))||(lengthShortOf(entry)&&!isSecondarySpaceValue(entry.profile!,"minTankLengthCm"));
+ const hardTooSmallIssues=new Set([...tooSmallIssues].filter(entry=>!isSecondarySpaceValue(entry.profile!,"minVolumeL")));
+ const hardSpaceIssue=(entry:(typeof profiles)[number])=>hardTooSmallIssues.has(entry)||(severeSpaceIssues.has(entry)&&primaryShortfall(entry));
+ const severeSpaceCount=spaceIssues.filter(hardSpaceIssue).length;
  const spaceRatioScore=profiles.length?clamp(100-spaceIssues.length/profiles.length*80):100;
  const spaceScore=severeSpaceCount?Math.min(spaceRatioScore,SEVERE_SPACE_SCORE):spaceIssues.length?Math.max(spaceRatioScore,SPACE_WARNING_FLOOR):spaceRatioScore;
  const groupIssues=profiles.filter(({item,profile})=>item.quantity<profile!.minGroup); const socialRatioScore=profiles.length?clamp(100-groupIssues.length/profiles.length*65):100; const socialScore=groupIssues.length?Math.max(socialRatioScore,SOCIAL_WARNING_FLOOR):socialRatioScore;
@@ -536,10 +562,13 @@ export function createAnalyzer(resolver:KnowledgeResolver):AnalyzeAquarium{
  for(const {profile} of profiles.filter(({profile})=>profile!.tankLengthDataNote))warnings.push({level:"warning",title:`${profile!.commonName}: tank uzunluğu verisi sınırlı`,message:profile!.tankLengthDataNote!,code:"tankLengthNote",params:{name:profile!.commonName,text:profile!.tankLengthDataNote!}});
  for(const {item,profile} of groupIssues)warnings.push({level:"warning",title:`${profile!.commonName}: grup sayısı düşük`,message:`Kayıtlı adet ${item.quantity}; katalog önerisi en az ${profile!.minGroup}.`,code:"groupLow",params:{name:profile!.commonName,count:item.quantity,min:profile!.minGroup}});
  for(const entry of spaceIssues){const {profile}=entry;const volume=requiredVolume(entry);const reference=profile!.minTankLengthCm===undefined?`Kayıtlı adet için minimum ${volume} L referansı kullanıldı; kaynak tank uzunluğu yayımlamıyor.`:`Kayıtlı adet için minimum ${volume} L ve ${profile!.minTankLengthCm} cm uzunluk referansı kullanıldı.`;const size=profile!.adultSizeCm;const cm=(n:number)=>`${Math.round(n*10)/10} cm`;const spaceParams:EngineParams={name:profile!.commonName,volume,hasLength:profile!.minTankLengthCm!==undefined,length:profile!.minTankLengthCm??0};const lengthShort=aquarium.lengthCm>0&&profile!.minTankLengthCm!==undefined&&aquarium.lengthCm<profile!.minTankLengthCm;
-  warnings.push(tooSmallIssues.has(entry)?{level:"danger",title:`${profile!.commonName}: akvaryum çok küçük`,message:`Kaynağa göre ${profile!.commonName} için kayıtlı ${entry.item.quantity} bireyle en az ${volume} L gerekir; akvaryumun net hacmi ${aquarium.netVolumeLiters} L, gerekenin yarısından da az.${lengthShort?` Kaynak en az ${profile!.minTankLengthCm} cm uzunluk da istiyor; akvaryumun uzunluğu ${aquarium.lengthCm} cm.`:""} Bu tür bu akvaryumda tutulmamalı.`,code:"spaceTooSmall",params:{name:profile!.commonName,count:entry.item.quantity,volume,aquariumVolume:aquarium.netVolumeLiters,lengthShort,length:profile!.minTankLengthCm??0,tankLength:aquarium.lengthCm}}
-   :severeSpaceIssues.has(entry)?{level:"danger",title:`${profile!.commonName}: akvaryumun uzunluğu ya da derinliği yetersiz`,message:`${reference} Akvaryum ayrıca İsviçre Hayvan Koruma Yönetmeliği'nin ölçü kuralındaki uzunluk (3×) ve su derinliği (1× vücut boyu) sınırlarından uyarlanan AquaMind sınırının altında. Yönetmelik kuyruk yüzgeci hariç boyu kullanır; AquaMind daha sıkı davranıp katalogdaki ${cm(size)} yetişkin boyu (çoğu türde toplam boy) kullanır: uzunluk en az ${cm(size*SWISS_MIN_LENGTH_RATIO)}, su derinliği en az ${cm(size*SWISS_MIN_DEPTH_RATIO)}.`,code:"spaceSevere",params:{...spaceParams,size,minLength:size*SWISS_MIN_LENGTH_RATIO,minDepth:size*SWISS_MIN_DEPTH_RATIO}}
-   :narrowSpaceIssues.has(entry)?{level:"warning",title:`${profile!.commonName}: akvaryum bu tür için dar`,message:`${reference} Akvaryumun genişliği (${cm(aquarium.widthCm)}), katalogdaki ${cm(size)} yetişkin boyun iki katından az. AquaMind bu öneriyi İsviçre Hayvan Koruma Yönetmeliği'nin ölçü kuralından (genişlik 2× vücut boyu) uyarlar; yönetmelik kuyruk yüzgeci hariç boyu, AquaMind çoğu türde toplam boyu kullanır. Genişliği en az ${cm(size*SWISS_MIN_WIDTH_RATIO)} olan bir akvaryum daha uygundur.`,code:"spaceNarrow",params:{...spaceParams,size,width:aquarium.widthCm,minWidth:size*SWISS_MIN_WIDTH_RATIO}}
-   :{level:"warning",title:`${profile!.commonName}: alan sınırda`,message:reference,code:"spaceLimited",params:spaceParams});}
+  // 1.20.0 (karar 0045): uyarının dayandığı değer ikinci kademedeyse `secondary: true` ve metnin sonunda hobi kaynağı notu. "Gerekenin yarısından
+  // küçük" uyarısı yalnız hacme bakar; öbürleri, eksik kalan bütün ölçüler ikinci kademedeyse.
+  const secondary=tooSmallIssues.has(entry)?isSecondarySpaceValue(profile!,"minVolumeL"):!primaryShortfall(entry);const lengthSecondary=lengthShort&&isSecondarySpaceValue(profile!,"minTankLengthCm");const secondaryParams:EngineParams=secondary?{secondary:true}:{};const note=secondary?SECONDARY_SPACE_NOTE:"";const level=hardSpaceIssue(entry)?"danger" as const:"warning" as const;
+  warnings.push(tooSmallIssues.has(entry)?{level,title:`${profile!.commonName}: akvaryum çok küçük`,message:`${secondary?"Birkaç hobi kaynağına göre":"Kaynağa göre"} ${profile!.commonName} için kayıtlı ${entry.item.quantity} bireyle en az ${volume} L gerekir; akvaryumun net hacmi ${aquarium.netVolumeLiters} L, gerekenin yarısından da az.${lengthShort?` ${lengthSecondary?"Birkaç hobi kaynağı":"Kaynak"} en az ${profile!.minTankLengthCm} cm uzunluk da istiyor; akvaryumun uzunluğu ${aquarium.lengthCm} cm.`:""}${secondary?` Bu tür için daha büyük bir akvaryum gerekir.${note}`:" Bu tür bu akvaryumda tutulmamalı."}`,code:"spaceTooSmall",params:{name:profile!.commonName,count:entry.item.quantity,volume,aquariumVolume:aquarium.netVolumeLiters,lengthShort,length:profile!.minTankLengthCm??0,tankLength:aquarium.lengthCm,...secondaryParams,...(lengthSecondary?{lengthSecondary:true}:{})}}
+   :severeSpaceIssues.has(entry)?{level,title:`${profile!.commonName}: akvaryumun uzunluğu ya da derinliği yetersiz`,message:`${reference} Akvaryum ayrıca İsviçre Hayvan Koruma Yönetmeliği'nin ölçü kuralındaki uzunluk (3×) ve su derinliği (1× vücut boyu) sınırlarından uyarlanan AquaMind sınırının altında. Yönetmelik kuyruk yüzgeci hariç boyu kullanır; AquaMind daha sıkı davranıp katalogdaki ${cm(size)} yetişkin boyu (çoğu türde toplam boy) kullanır: uzunluk en az ${cm(size*SWISS_MIN_LENGTH_RATIO)}, su derinliği en az ${cm(size*SWISS_MIN_DEPTH_RATIO)}.${note}`,code:"spaceSevere",params:{...spaceParams,size,minLength:size*SWISS_MIN_LENGTH_RATIO,minDepth:size*SWISS_MIN_DEPTH_RATIO,...secondaryParams}}
+   :narrowSpaceIssues.has(entry)?{level:"warning",title:`${profile!.commonName}: akvaryum bu tür için dar`,message:`${reference} Akvaryumun genişliği (${cm(aquarium.widthCm)}), katalogdaki ${cm(size)} yetişkin boyun iki katından az. AquaMind bu öneriyi İsviçre Hayvan Koruma Yönetmeliği'nin ölçü kuralından (genişlik 2× vücut boyu) uyarlar; yönetmelik kuyruk yüzgeci hariç boyu, AquaMind çoğu türde toplam boyu kullanır. Genişliği en az ${cm(size*SWISS_MIN_WIDTH_RATIO)} olan bir akvaryum daha uygundur.${note}`,code:"spaceNarrow",params:{...spaceParams,size,width:aquarium.widthCm,minWidth:size*SWISS_MIN_WIDTH_RATIO,...secondaryParams}}
+   :{level:"warning",title:`${profile!.commonName}: alan sınırda`,message:`${reference}${note}`,code:"spaceLimited",params:{...spaceParams,...secondaryParams}});}
  // Kesin tehlikeler (yanlış su türü, kesişmeyen sıcaklık veya pH, avlanma, tür akvaryumu, tuzluluk, zehirli
  // amonyak veya nitrit) genel durumu "tehlike"ye çeker; sekiz ölçütün ortalaması bunları gizleyemez. Zehirli amonyak ve sınırı aşan nitrit
  // 1.16.0'dan beri (karar 0041) yalnız canlı kaydı olan akvaryumda kesin tehlikedir.
@@ -547,7 +576,8 @@ export function createAnalyzer(resolver:KnowledgeResolver):AnalyzeAquarium{
  // çekmez ama "iyi" görünmesini de engeller: genel puan en fazla "dikkat" olur.
  // 1.18.0 (karar 0043): "tek tutulmalı" türden birden çok birey ve gerekenin yarısından küçük akvaryum da kesin tehlikedir.
  // 1.19.0 (karar 0044): kaynağın birbirine karıştırılmamasını yazdığı farklı türler (ör. iki ayrı palyaço türü) de kesin tehlikedir.
- const criticalDanger=habitatIssues.length>0||temperatureConflict||phConflict||predationIssues.length>0||speciesOnlyIssues.length>0||conspecificAllIssues.length>0||incompatibleGroupIssues.length>0||tooSmallIssues.size>0||salinityIssues.length>0||marine?.rows.some(row=>row.parameter==="specificGravity"&&row.status==="danger")===true||(!noLivestock&&(ammonia?.level==="danger"||nitrite?.level==="danger"));
+ // 1.20.0 (karar 0045): hacmi ikinci kademeden gelen türde "gerekenin yarısından küçük" kesin tehlike değildir (`hardTooSmallIssues`).
+ const criticalDanger=habitatIssues.length>0||temperatureConflict||phConflict||predationIssues.length>0||speciesOnlyIssues.length>0||conspecificAllIssues.length>0||incompatibleGroupIssues.length>0||hardTooSmallIssues.size>0||salinityIssues.length>0||marine?.rows.some(row=>row.parameter==="specificGravity"&&row.status==="danger")===true||(!noLivestock&&(ammonia?.level==="danger"||nitrite?.level==="danger"));
  const dangerWarning=warnings.some(warning=>warning.level==="danger");
  // 1.14.0 (karar 0037): tehlikedeki bir ölçüt de genel puanı en fazla "dikkat" yapar. Veri güveni bu kurala girmez; canlısı olmayan
  // akvaryumda filtre ve ısıtıcı ölçütü de girmez.
