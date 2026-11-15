@@ -31,6 +31,12 @@ Bu liste otomatik doğruluk garantisi değildir. Her bağlantı doğru marka, mo
 - Resun'un üretici kaynakları `resun-china.com` ve `rissee.com`'dur (2026-11-10, veri testi). `rissee.com`, Resun ve Rissee markalarının sahibi ve üreticisi Raoping Xingcheng Aquarium Products Co., Ltd'nin (饶平县兴成机电水族用品有限公司) kendi sitesidir: "About us" sayfası şirketin 1989'da kurulmuş bir üretici olduğunu ve "Resun" ile "Rissee" markalarının şirketin markaları olduğunu yazıyor (Çince sayfa: 品牌"日生"、"优之星"); ürün menüsünde RESUN ve RISSEE ayrı başlıklardır. Dağıtıcı değil, üretici kaynağı sayılır.
 - Jeneca'nın üretici kaynağı `aleas.cn`'dir (İngilizce `www.aleas.cn`, Çince `gb.aleas.cn`; 2026-11-10, veri testi). Site 饶平县金利佳机电有限公司'nin (Jin Li Jia Electromechanical Co., Ltd) kendi sitesidir: İngilizce "About us" sayfası şirketin 2005'te kurulmuş bir üretici olduğunu, Çince "公司简介" sayfası şirketin markalarını "公司品牌JENECA, ALEAS" ve "金利佳旗下金利佳 JENECA、佳力仕 ALEAS两大品牌" diye yazıyor; ürün sayfaları "JENECA reserves the right to revise this product" diyor. Teknik tablo ürün sayfasının açıklamasındaki resimdeyse resim okunur; tabloda birden çok model varsa yalnız kaydın modelinin satırı kullanılır.
 
+## Bakım ürünleri (yem, su düzenleyici, ilaç ve benzeri)
+
+- Ürün sahibi kararı 2026-11-15 (veri sprinti tur 3; "stoksuz, eski ilanlı markalar eklenmesin"): bir bakım ürününün "Türkiye'de satılıyor" sayılması için kabul edilen mağazada canlı bir ilan gerekir. Stoku 0 olan, fiyatı belirgin biçimde eski olan ya da son kullanma tarihi geçmiş ürünü gösteren (ölü) ilan "Türkiye'de satılıyor" sayılmaz; o marka ya da ürün yalnız bu ilanlara dayanarak kataloğa eklenmez.
+- Bitkilerdeki "Stok durumu ölçüt değildir" kuralı (karar 0026, aşağıda "Bitkiler" → "Yalnız uyarı kaydı") bakım ürünlerine uygulanmaz. O kural, istilacı ya da su bitkisi olmayan bitkiler için kullanıcıyı uyarmaya yarar; bakım ürününde amaç kullanıcının bugün alabileceği ürünü göstermektir.
+- Uygulama (2026-11-15): API (Mars Fishcare) ve Easy-Life kabul edilen altı mağazanın hiçbirinde bulunmadı; Hikari'nin iki mağazadaki 86 ilanının hepsinde stok 0, fiyatlar çok eski ve 13 ilanda 2018–2020 son kullanma tarihi vardı. Üçü de eklenmedi (tarama: veri sprinti tur 3 marka araştırması; `PROJECT_STATUS.md`).
+
 ## Canlı verisi için özel kaynak kuralı
 
 - Yerel mağazalar yalnızca Türkiye'de kullanılan satış adını, varyeteyi ve güncel bulunabilirliği karşılaştırmak için kullanılabilir.
