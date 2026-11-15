@@ -19,7 +19,7 @@ const FLAG_ORDER: BehaviorFlag[] = ["eatsSmallFish", "conspecificAggression", "f
 /**
  * Davranış özeti. Her davranış bir kez yazılır: açık kayıt varsa o, yoksa çelişkili kayıt (motorun seçtiği kayıtla aynı, src/lib/health-analysis-core.ts).
  * Katalogdaki "avcı" ve "tür akvaryumu" işaretleri de satırdır; kaynak türün asıl avcı olmadığını açıkça yazıyorsa "avcı" satırı çıkmaz (motor
- * da bu durumda işareti kaldırır). Hiç satır yoksa `unknown` doğrudur: ekran "Kaynaklar uyumunu yazmıyor" der. Tank arkadaşı notu
+ * da bu durumda işareti kaldırır). Avcı türün açık "küçük balıkları yer" kaydı ayrı satır olmaz; koşulu ve kaynağı "avcı" satırına geçer. Hiç satır yoksa `unknown` doğrudur: ekran "Kaynaklar uyumunu yazmıyor" der. Tank arkadaşı notu
  * (`communityCaution`) ayrı gösterilir ve tek başına türü "davranışı bilinen" yapmaz; "Kaynaklar uyumunu yazmıyor" yalnız davranış kaydı da işaret de
  * not da yoksa yazılır.
  */
@@ -29,15 +29,21 @@ export function behaviorSummary(profile: SpeciesProfile, records: readonly Behav
   const notPiscivorous = list.some((record) => record.flag === "notPiscivorous" && record.confidence === "explicit");
   const lines: BehaviorLine[] = [];
   if (profile.speciesOnly) lines.push({ kind: "speciesOnly", conflict: false });
-  if (profile.predatory && !notPiscivorous) lines.push({ kind: "predatory", conflict: false });
+  const details = (record: BehaviorRecord) => ({ ...(record.condition ? { condition: record.condition } : {}), source: record.source, sourceUrl: record.sourceUrl,
+    ...(record.tier === "secondary" ? { secondaryUrls: [record.sourceUrl, ...record.additionalSourceUrls] } : {}) });
+  // Avcı türde kaynağın açık "küçük balıkları yer" kaydı aynı riski anlatır: iki satır yerine tek "Avcı tür" satırı, kaydın koşulu (ör. boy sınırı)
+  // ve kaynağıyla. Çelişkili kayıt ayrı satır kalır ("Kaynaklar çelişiyor" katalog işaretine yapıştırılmaz).
+  const predatoryLine = Boolean(profile.predatory && !notPiscivorous);
+  const smallFish = predatoryLine ? pick("eatsSmallFish") : undefined;
+  const mergedPredator = smallFish?.confidence === "explicit" ? smallFish : undefined;
+  if (predatoryLine) lines.push({ kind: "predatory", conflict: false, ...(mergedPredator ? details(mergedPredator) : {}) });
   for (const flag of FLAG_ORDER) {
     const record = pick(flag);
-    if (!record) continue;
+    if (!record || record === mergedPredator) continue;
     if (flag === "conspecificAggression" && !record.value) continue;
     const kind: BehaviorLineKind = flag === "conspecificAggression" ? (record.value === "all" ? "conspecificAll" : "conspecificMales")
       : flag === "eatsShrimp" && record.smallShrimpOnly ? "eatsShrimpSmall" : flag as BehaviorLineKind;
-    lines.push({ kind, conflict: record.confidence === "conflict", ...(record.condition ? { condition: record.condition } : {}), source: record.source, sourceUrl: record.sourceUrl,
-      ...(record.tier === "secondary" ? { secondaryUrls: [record.sourceUrl, ...record.additionalSourceUrls] } : {}) });
+    lines.push({ kind, conflict: record.confidence === "conflict", ...details(record) });
   }
   return { lines, unknown: lines.length === 0 && !profile.communityCaution };
 }

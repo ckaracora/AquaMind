@@ -38,6 +38,23 @@ describe("davranış özeti", () => {
     expect(behaviorSummary(profile({ speciesOnly: true }), []).lines.map((line) => line.kind)).toEqual(["speciesOnly"]);
   });
 
+  it("avcı türde açık 'küçük balıkları yer' kaydı ayrı satır olmaz; koşulu ve kaynağı 'avcı' satırına geçer, çelişkili kayıt ayrı kalır", () => {
+    const merged = behaviorSummary(profile({ predatory: true }), [record("eatsSmallFish", { condition: "Çok daha küçük balıklar." }), record("peaceful")]).lines;
+    expect(merged.map((line) => line.kind)).toEqual(["predatory", "peaceful"]);
+    expect(merged[0]).toEqual({ kind: "predatory", conflict: false, condition: "Çok daha küçük balıklar.", source: "Seriously Fish", sourceUrl: "https://www.seriouslyfish.com/species/test/" });
+    const secondary = behaviorSummary(profile({ predatory: true }), [record("eatsSmallFish", { tier: "secondary", source: "Hobi", sourceUrl: "https://a.example/x", additionalSourceUrls: ["https://b.example/y"] })]).lines;
+    expect(secondary).toEqual([{ kind: "predatory", conflict: false, source: "Hobi", sourceUrl: "https://a.example/x", secondaryUrls: ["https://a.example/x", "https://b.example/y"] }]);
+    const conflict = behaviorSummary(profile({ predatory: true }), [record("eatsSmallFish", { confidence: "conflict" })]).lines;
+    expect(conflict.map((line) => [line.kind, line.conflict])).toEqual([["predatory", false], ["eatsSmallFish", true]]);
+    // Avcı olmayan türde kayıt kendi satırıdır.
+    expect(behaviorSummary(profile(), [record("eatsSmallFish")]).lines.map((line) => line.kind)).toEqual(["eatsSmallFish"]);
+    // Katalogda: avcı işaretli ve açık 'küçük balık' kayıtlı hiçbir türde iki satır yok.
+    for (const item of speciesCatalog.filter((entry) => entry.predatory)) {
+      const kinds = behaviorSummary(item, speciesBehavior[item.id]).lines.map((line) => line.kind);
+      if (kinds.includes("predatory")) expect(kinds.filter((kind) => kind === "eatsSmallFish").length === 0 || speciesBehavior[item.id]?.every((entry) => entry.flag !== "eatsSmallFish" || entry.confidence === "conflict"), item.id).toBe(true);
+    }
+  });
+
   it("katalogdaki her türün her davranış satırının üç dilde metni var", () => {
     const kinds = new Set(speciesCatalog.flatMap((item) => behaviorSummary(item, speciesBehavior[item.id]).lines.map((line) => line.kind)));
     expect(kinds.size).toBeGreaterThan(8);

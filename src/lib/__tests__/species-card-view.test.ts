@@ -56,6 +56,16 @@ describe("tür kartı", () => {
     if (unknown) expect(render(unknown.id)).toContain("Kaynaklar uyumunu yazmıyor");
   });
 
+  it("avcı türde 'küçük balıkları yiyebilir' ayrı satır olmaz: tek 'Avcı tür' satırı kaynağın koşulu ve adıyla çizilir", () => {
+    const c = messagesFor("tr").livestock.card;
+    expect(speciesById("oscar")!.predatory).toBe(true);
+    const text = render("oscar");
+    expect(text.split(c.behavior.predatory).length - 1).toBe(1);
+    expect(text).not.toContain(c.behavior.eatsSmallFish);
+    expect(text).toContain("Çok daha küçük balıklar.");
+    expect(text).toContain(c.source("Seriously Fish"));
+  });
+
   it("olmayan alan çizilmez: bakım kaydı olmayan türde bakım bölümü, uzunluğu olmayan türde uzunluk satırı yok", () => {
     const c = messagesFor("tr").livestock.card;
     const withoutCare = Object.keys(speciesBehavior).find((id) => speciesById(id) && !speciesCare[id])!;
