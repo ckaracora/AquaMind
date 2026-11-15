@@ -248,7 +248,8 @@ function applyShopVerification(item: EquipmentProfile, verification: ShopVerific
   for (const field of valueFields) delete item[field];
   Object.assign(item, verification.values);
   item.sourceUrl = verification.sourceUrl;
-  item.verifiedAt = shopVerifiedAt;
+  // Tarih yalnız ileri gider: kayıt mağaza doğrulamasından sonra yeniden okunduysa (src/data/catalog-reverified.ts) o gün kalır.
+  if ((item.verifiedAt ?? "") < shopVerifiedAt) item.verifiedAt = shopVerifiedAt;
   item.specifications = verification.specifications;
   if (verification.note) item.capacityDataNote = verification.note;
 }

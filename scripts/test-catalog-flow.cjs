@@ -69,6 +69,13 @@ const reverified20261114 = new Set(["african-arowana", "african-butterfly-fish",
 // değişen kayıtlar da bu günü taşır.
 for (const id of ["guppy", "molly", "platy", "swordtail", "betta", "koi-carp", "bluefin-notho", "butterfly-pleco-l052", "orange-seam-pleco-l106", "ucayali-flathead-pleco", "red-neon-blue-eye", "mega-clown-pleco-l340", "blue-spotted-bristlenose-l059a", "brokenline-royal-pleco-l191", "royal-pleco-l190", "rainbow-shiner", "cochus-blue-tetra", "normans-lampeye", "ninja-woodcat", "snakeskin-gourami", "colombian-ramshorn-snail", "cucuta-bristlenose-l149", "skunk-cory", "clown-pleco", "redhead-tapajos", "nerite-snail", "ramshorn-snail", "ghost-shrimp", "sun-nerite-snail", "tiger-nerite-snail", "mini-tiger-nerite-snail", "mini-nerite-snail", "batik-nerite-snail", "batman-nerite-snail", "turbo-snail", "red-clawed-crayfish", "ramirezi", "kubotai-rasbora", "odessa-barb", "blue-panaque-l239", "apisto-cacatuoides", "apisto-agassizii", "orange-tiger-pleco-l243", "apple-snail"]) reverified20261114.add(id);
 const rev14 = (id, previous) => (reverified20261114.has(id) ? "2026-11-14" : previous);
+// 2026-11-15 tarih yenileme 1 (docs/CATALOG_LOG.md, "2026-11-15 Tarih yenileme 1"): kaynağı yeniden okunup dolu bütün alanları sayfayla aynı çıkan
+// kayıtlar yeniden doğrulama tablosundaki okuma gününü taşır (src/data/catalog-reverified.ts). Tarih yalnız ileri gider: eski beklenti daha
+// yeniyse o kalır. Tablonun kendisi src/lib/__tests__/catalog-reverified.test.ts'te denetlenir.
+const { reverifiedCare, reverifiedEquipment } = require(path.join(projectRoot, "src/data/catalog-reverified.ts"));
+const reverifiedOn = new Map();
+for (const [readAt, , ids] of [...reverifiedEquipment, ...reverifiedCare]) for (const id of ids) if (!(reverifiedOn.get(id) >= readAt)) reverifiedOn.set(id, readAt);
+const rev15 = (id, previous) => { const readAt = reverifiedOn.get(id); return readAt && readAt > previous ? readAt : previous; };
 const reverifiedAfterDataTest = new Map([["jbl-protemp-s-101", "2026-11-11"], ["calvus-cichlid", "2026-11-12"]]);
 // Codex denetimi: kalan bütün parçaları okuma alıntısıyla doğrulanan sadeleştirilmiş kayıt.
 dataTestVerifiedAt.set("jbl-novored-refill-750-ml", "2026-11-11");
@@ -426,7 +433,8 @@ assert(fluvalU1 && !/kademeli|aşamalı/.test(fluvalU1.specifications.replace("a
 // Fluval 07 serisi: ürün sayfasının karşılaştırma tablosu (207 sayfası, 2022-12 arşiv kopyası) pompa çıkışı 550/780/1150/1450 LPH ve 230–240 V gücü 10/10/15/20 W.
 const fluval07 = ["fluval-107","fluval-207","fluval-307","fluval-407"].map((id) => equipmentCatalog.find((item) => item.id === id));
 assert.deepEqual(fluval07.map((item) => [item?.ratedFlowLph,item?.powerW,item?.recommendedMinL,item?.recommendedMaxL]), [[550,10,40,130],[780,10,60,220],[1150,15,90,330],[1450,20,150,500]], "Fluval 07 serisi üreticinin debi, 230–240 V güç ve hacim değerlerini taşımalı");
-assert(fluval07.every((item) => item?.additionalSourceUrls?.some((url) => url.endsWith("207-canister-filter-20-45-us-gal-60-220-l"))), "Fluval 07 serisi değerlerinin okunduğu ürün sayfası ek kaynak olmalı");
+// 2026-11-15 tarih yenileme 2: eski 07 serisi adresleri 404; 207 sayfası 207'nin ana kaynağı, öbürlerinde ek kaynak.
+assert(fluval07.every((item) => [item?.sourceUrl, ...(item?.additionalSourceUrls ?? [])].some((url) => url?.endsWith("207-canister-filter-20-45-us-gal-60-220-l"))), "Fluval 07 serisi değerlerinin okunduğu ürün sayfası kaynak ya da ek kaynak olmalı");
 assert(fluval07.every((item) => item?.specifications.includes(`${item.ratedFlowLph} L/saat`) && item.specifications.includes(`${item.powerW} W`)), "Fluval 07 serisinin açıklamasındaki debi ve güç sayısal alanlarla aynı olmalı");
 // Plant 3.0 46 W: ürün sayfası "Aquarium Capacity" 91–115, "Size Range" 91–122 cm diyor; üreticinin Plant Spectrum kılavuzu (14522) 91–122 cm.
 const fluvalPlant3 = [22,32,46,59].map((powerW) => equipmentCatalog.find((item) => item.id === `fluval-plant-3-${powerW}w`));
@@ -2328,7 +2336,7 @@ for (const id of co2ArtCurrentIds) {
   const item = co2Art.find((entry) => entry.id === id);
   assert(item, `CO2Art güncel ürün kaydı eksik: ${id}`);
   assert(item.sourceUrl.startsWith("https://www.co2art.eu/products/"), `CO2Art ${id} doğrudan resmî ürün sayfasına bağlanmalı`);
-  assert.equal(item.verifiedAt, rev14(item?.id, "2026-08-27"), `CO2Art ${id} güncel doğrulama tarihini taşımalı`);
+  assert.equal(item.verifiedAt, rev15(item?.id, rev14(item?.id, "2026-08-27")), `CO2Art ${id} güncel doğrulama tarihini taşımalı`);
 }
 for (const id of ["co2art-flux-v2", "co2art-inline-atomizer", "co2art-io-diffuser"]) {
   const item = co2Art.find((entry) => entry.id === id);
@@ -2357,7 +2365,7 @@ for (const id of sunsunTurkeyExtraIds) {
   const item = sunsun.find((entry) => entry.id === id);
   assert(item, `SunSun Türkiye güncel ürün kaydı eksik: ${id}`);
   assert(item.sourceUrl.startsWith("https://"), `SunSun ${id} doğrulanabilir HTTPS kaynağına bağlanmalı`);
-  assert.equal(item.verifiedAt, expectedVerifiedAt(item.id, shopVerified(item) ? shopVerifiedAt : ["sunsun-502", "sunsun-503"].includes(id) ? "2026-11-12" : "2026-08-27"), `SunSun ${id} güncel doğrulama tarihini taşımalı`);
+  assert.equal(item.verifiedAt, rev15(item.id, expectedVerifiedAt(item.id, shopVerified(item) ? shopVerifiedAt : ["sunsun-502", "sunsun-503"].includes(id) ? "2026-11-12" : "2026-08-27")), `SunSun ${id} güncel doğrulama tarihini taşımalı`);
 }
 const sunsun604b = sunsun.find((item) => item.id === "sunsun-604b");
 assert.deepEqual([sunsun604b?.category, sunsun604b?.ratedFlowLph, sunsun604b?.powerW], ["filter", sourced(sunsun604b, "ratedFlowLph", 800), sourced(sunsun604b, "powerW", 14)], "SunSun 604B doğrulanmış 800 L/saat ve 14 W değerlerini taşımalı");
@@ -2397,7 +2405,7 @@ for (const id of dennerleCurrentIds) {
   const item = dennerleEquipment.find((entry) => entry.id === id);
   assert(item, `Dennerle güncel ekipman kaydı eksik: ${id}`);
   assert(item.sourceUrl.startsWith("https://dennerle.com/en/products/"), `Dennerle ${id} doğrudan resmî ürün sayfasına bağlanmalı`);
-  assert.equal(item.verifiedAt, expectedVerifiedAt(id, "2026-08-27"), `Dennerle ${id} güncel doğrulama tarihini taşımalı`);
+  assert.equal(item.verifiedAt, rev15(id, expectedVerifiedAt(id, "2026-08-27")), `Dennerle ${id} güncel doğrulama tarihini taşımalı`);
 }
 for (const id of [
   "dennerle-carbo-power-e400", "dennerle-carbo-power-e400-special-edition",
@@ -2741,7 +2749,8 @@ for (const [model, flow, power, maxL, sku] of [
 ]) {
   const item = equipmentCatalog.find((entry) => entry.brand === "Oase" && entry.model === model);
   assert.deepEqual([item?.ratedFlowLph, item?.powerW, item?.recommendedMaxL], [flow, power, maxL], `Oase ${model} resmî BioStyle aile verilerini taşımalı`);
-  assert.match(item?.sourceUrl || "", new RegExp(sku), `Oase ${model} başka bir modelin ürün sayfasına bağlanmamalı`);
+  // 2026-11-15 tarih yenileme 2: Oase yeni adres yapısına geçti; model sayfasının adresinde ürün numarası yerine model adı var.
+  assert.match(item?.sourceUrl || "", new RegExp(`${sku}|/${model.toLowerCase().replace(/ /g, "-")}-`), `Oase ${model} başka bir modelin ürün sayfasına bağlanmamalı`);
 }
 for (const [model, flow, power, heater, maxL] of [
   ["FiltoSmart 60", 300, 5, undefined, 60],
@@ -3012,7 +3021,7 @@ for (const model of ["AQAMAI FRESH S","AQAMAI FRESH M","AQAMAI REEF S","AQAMAI R
 }
 for (const [model, ratedFlowLph, powerW] of [["AIRFIZZ 50",50,2],["AIRFIZZ 100",100,3],["AIRFIZZ 200",200,4],["AIRFIZZ 400",400,5]]) {
   const item = ferplastEquipment.find((entry) => entry.model === model);
-  assert.deepEqual([item?.category,item?.ratedFlowLph,item?.powerW,item?.adjustableFlow,item?.verifiedAt], ["air_pump",ratedFlowLph,powerW,true,"2026-08-29"], `Ferplast ${model} resmî model bazlı debi, güç ve ayarlanabilir akış verilerini taşımalı`);
+  assert.deepEqual([item?.category,item?.ratedFlowLph,item?.powerW,item?.adjustableFlow,item?.verifiedAt], ["air_pump",ratedFlowLph,powerW,true,rev15(item?.id, "2026-08-29")], `Ferplast ${model} resmî model bazlı debi, güç ve ayarlanabilir akış verilerini taşımalı`);
 }
 for (const model of ["SELTZ L 700","PICO 600","BLUPOWER 1200","SELTZ D DC 4000","SELTZ D AC 12000","KORALIA NANO 2200","KORALIA EVO 5600","KORALIA G3 9000"]) {
   const item = ferplastEquipment.find((entry) => entry.model === model);
@@ -3025,9 +3034,10 @@ assert.match(ferplastBioflo?.specifications || "", /bağımsız pompası olmayan
 for (const model of ["CHEF PRO","EKOMIXO","MIXO","SMART WAVE","SMART LEVEL","SLIM SKIM NANO","PICO SKIM","BLUSKIMMER 550","E-SKIM DC 1000","SELTZ D SKIM DC 1000"]) {
   assert(ferplastEquipment.some((entry) => entry.model === model), `Ferplast resmî güncel ${model} ailesi katalogda bulunmalı`);
 }
-for (const item of [...ferplastEquipment.filter((entry) => entry.verifiedAt === rev14(entry?.id, "2026-08-27")), ...ferplastCare]) {
+// Tablo (2026-11-15) koleksiyon sayfasına bağlı Bluwave 01 ve 01 Bioflo'nun da gününü yeniledi; onlar bu ürün sayfası denetiminin dışında kalır.
+for (const item of [...ferplastEquipment.filter((entry) => !entry.sourceUrl?.startsWith("https://www.ferplast.com/collections/") && entry.verifiedAt === rev15(entry?.id, rev14(entry?.id, "2026-08-27"))), ...ferplastCare]) {
   assert.match(item.sourceUrl || "", /^https:\/\/www\.ferplast\.com\/products\//, `Ferplast ${item.model} doğrudan resmî HTTPS ürün kaynağı taşımalı`);
-  assert.equal(item.verifiedAt, rev14(item?.id, "2026-08-27"), `Ferplast ${item.model} güncel doğrulama tarihini taşımalı`);
+  assert.equal(item.verifiedAt, rev15(item?.id, rev14(item?.id, "2026-08-27")), `Ferplast ${item.model} güncel doğrulama tarihini taşımalı`);
 }
 
 const yikedaEquipment = equipmentCatalog.filter((entry) => entry.brand === "Yikeda");
@@ -3130,7 +3140,7 @@ for (const [model, category] of [["Aquatic Plant Soil", "substrate"], ["Aquatic 
   const item = netleaCare.find((entry) => entry.model === model);
   assert.equal(item?.category, category, `Netlea ${model} doğru bakım kategorisinde bulunmalı`);
   assert.match(item?.sourceUrl || "", /^https:\/\//, `Netlea ${model} doğrulanabilir HTTPS kaynağı taşımalı`);
-  assert.equal(item?.verifiedAt, rev14(item?.id, "2026-08-27"), `Netlea ${model} güncel doğrulama tarihini taşımalı`);
+  assert.equal(item?.verifiedAt, rev15(item?.id, rev14(item?.id, "2026-08-27")), `Netlea ${model} güncel doğrulama tarihini taşımalı`);
 }
 for (const [model, flow, power] of [["No.1 SF Stainless Canister Filter", 1098, 15], ["No.2 SF Stainless Canister Filter", 1499, 28], ["No.3 SF Stainless Canister Filter", 2699, 35], ["No.4 SF Stainless Canister Filter", 3157, 40]]) {
   const item = netleaEquipment.find((entry) => entry.model === model);
@@ -3142,7 +3152,7 @@ for (const [model, flow, power, pressure, battery] of [["No.2B Bluetooth Air Pum
   assert.deepEqual([item?.category, item?.ratedFlowLph, item?.powerW, item?.adjustableFlow], ["air_pump", sourced(item, "ratedFlowLph", flow), sourced(item, "powerW", power), true], `Netlea ${model} doğrulanmış hava debisi ve azami giriş gücüyle bulunmalı`);
   assert(isWithdrawn(item) ? /hava debisi doğrulanamadı/.test(item?.specifications ?? "") : item?.specifications.includes(pressure) && item?.specifications.includes(battery), `Netlea ${model} basınç ve batarya bilgisini taşımalı`);
   assert.equal(Boolean(item?.capacityDataNote), isWithdrawn(item), `Netlea ${model} doğrulanmış teknik veriye rağmen kapasite hesabından dışlanmamalı`);
-  assert.equal(item?.verifiedAt, rev14(item?.id, "2026-08-29"), `Netlea ${model} güncel doğrulama tarihini taşımalı`);
+  assert.equal(item?.verifiedAt, rev15(item?.id, rev14(item?.id, "2026-08-29")), `Netlea ${model} güncel doğrulama tarihini taşımalı`);
 }
 const netleaFlowerPrefilter = netleaEquipment.find((entry) => entry.model === "Flower Cartridge Prefilter 16/22");
 assert.deepEqual([netleaFlowerPrefilter?.category, netleaFlowerPrefilter?.ratedFlowLph], ["filter", undefined], "Netlea Flower Cartridge pasif ön filtre olarak kalmalı ve pompa debisi uydurulmamalı");
@@ -3186,7 +3196,8 @@ for (const [model, power, length] of [["Sigma PW 5,5 W", 5.5, [35, 55]], ["Sigma
   assert.equal(item?.powerW, power, `Creaqua ${model} güncel üretici gücünü taşımalı`);
   if (length) assert.deepEqual(item?.recommendedTankLengthCm, length, `Creaqua ${model} doğrulanmış akvaryum uzunluğunu taşımalı`);
 }
-for (const [model, power, lumen, length] of [["Alpha RGB+W 60", 74, "7452 lm", [60, 85]], ["Alpha RGB+W 90", 111, "11178 lm", [90, 115]], ["Alpha RGB+W 120", 148, "14904 lm", [120, 150]], ["Alpha RGB+W 150", 185, "18630 lm", [150, 175]]]) {
+// 2026-11-15 tarih yenileme 2: üreticinin ürün sayfası "Luminous Flux" 7500/11250/15000/18750 lm yazıyor (önceki değerler blog yazısındandı).
+for (const [model, power, lumen, length] of [["Alpha RGB+W 60", 74, "7500 lm", [60, 85]], ["Alpha RGB+W 90", 111, "11250 lm", [90, 115]], ["Alpha RGB+W 120", 148, "15000 lm", [120, 150]], ["Alpha RGB+W 150", 185, "18750 lm", [150, 175]]]) {
   const item = equipmentCatalog.find((entry) => entry.brand === "Creaqua" && entry.model === model);
   assert.deepEqual([item?.powerW, item?.recommendedTankLengthCm], [power, length], `Creaqua ${model} resmi güç ve uzunluk verilerini taşımalı`);
   assert(item?.specifications.includes(lumen), `Creaqua ${model} resmi ışık akısını göstermeli`);
@@ -3429,11 +3440,12 @@ for (const model of resunCurrentTurkeyModels) {
   const item = equipmentCatalog.find((entry) => entry.brand === "Resun" && entry.model === model);
   assert(item, `Resun güncel Türkiye portföyündeki ${model} katalogda bulunmalı`);
 }
-for (const [model, flow, power] of [["AIR-1000", 60, 2], ["AIR-2000", 140, 3], ["AIR-3000", 360, 3.5]]) {
+// 2026-11-15 tarih yenileme 2: AIR-1000 ve AIR-2000 sayfaları debiyi kendi içinde çelişkili yazıyor (karar 0019); AIR-2000 gücü yazmıyor.
+for (const [model, flow, power] of [["AIR-1000", undefined, 2], ["AIR-2000", undefined, undefined], ["AIR-3000", 360, 3.5]]) {
   const item = equipmentCatalog.find((entry) => entry.brand === "Resun" && entry.model === model);
   assert.deepEqual([item?.category, item?.ratedFlowLph, item?.powerW], ["air_pump", flow, power], `Resun ${model} güncel toplam hava debisini ve gücü taşımalı`);
   assert.equal(item?.sourceUrl, `https://malawiizmir.com/resun-air-${model.slice(4).toLowerCase()}-${model === "AIR-1000" ? "tek-ikisli-hava-motoru" : model === "AIR-2000" ? "hava-pompasi-1-8-litre-dakika" : "hava-motoru-3-litre-dakika"}`, `Resun ${model} doğrudan güncel ürün kaynağına bağlanmalı`);
-  assert.equal(item?.verifiedAt, rev14(item?.id, "2026-08-26"), `Resun ${model} güncel doğrulama tarihini taşımalı`);
+  assert.equal(item?.verifiedAt, rev15(item?.id, rev14(item?.id, "2026-08-26")), `Resun ${model} güncel doğrulama tarihini taşımalı`);
 }
 const resunCx400 = equipmentCatalog.find((entry) => entry.brand === "Resun" && entry.model === "CX-400 ClearMax");
 assert.deepEqual([resunCx400?.category, resunCx400?.ratedFlowLph, resunCx400?.powerW, resunCx400?.recommendedMinL, resunCx400?.recommendedMaxL], ["filter", 340, 5.5, 38, 57], "Resun CX-400 resmî tablodaki 220–240 V değerlerini taşımalı");
@@ -3638,12 +3650,15 @@ assert.deepEqual([rs313?.category, rs313?.ratedFlowLph, rs313?.powerW, rs313?.re
 const rs960 = equipmentCatalog.find((entry) => entry.id === "rs-960-air");
 assert.deepEqual([rs960?.category, rs960?.ratedFlowLph, rs960?.powerW, rs960?.recommendedMaxL], ["air_pump", 120, undefined, 50], "RS 960 doğrulanmış hava debisi ve hacim sınırını taşımalı, yayımlanmamış güç uydurulmamalı");
 const rs1000Air = equipmentCatalog.find((entry) => entry.id === "rs-1000-air");
-assert.deepEqual([rs1000Air?.category, rs1000Air?.ratedFlowLph, rs1000Air?.powerW, rs1000Air?.recommendedMaxL, rs1000Air?.adjustableFlow], ["air_pump", 540, 8, 200, true], "RS 1000 doğrulanmış toplam hava debisi, güç, hacim ve ayarlanabilir akış bilgisini taşımalı");
-for (const [prefix, powers] of [["I399", [25, 50, 100, 200, 300, 500]], ["758", [50, 100, 200, 300]]]) {
+// 2026-11-15 tarih yenileme 2: sayfa debiyi başlıkta 9 L/dakika, açıklamada çıkış başına 9 L/dakika yazıyor; toplam belirsiz, ayar özelliği yazmıyor.
+assert.deepEqual([rs1000Air?.category, rs1000Air?.ratedFlowLph, rs1000Air?.powerW, rs1000Air?.recommendedMaxL, rs1000Air?.adjustableFlow], ["air_pump", undefined, 8, 200, undefined], "RS 1000 belirsiz debiyi otomatik hesaba sokmamalı; güç ve hacim kalmalı");
+assert(rs1000Air?.capacityDataNote?.includes("belirsiz"), "RS 1000 debi belirsizliğini kullanıcıya göstermeli");
+// 2026-11-15 tarih yenileme 2: 758 300 W sayfası gücü 300 W ve 200 W diye çelişkili yazıyor (karar 0019); güç çekildi, hacim sınırı kaldı.
+for (const [prefix, powers] of [["I399", [25, 50, 100, 200, 300, 500]], ["758", [50, 100, 200, undefined]]]) {
   const heaters = equipmentCatalog.filter((entry) => entry.brand === "RS Electrical" && entry.category === "heater" && entry.model.startsWith(`${prefix} `));
-  assert.deepEqual(heaters.map((entry) => entry.powerW).sort((a, b) => a - b), powers, `RS Electrical ${prefix} ısıtıcı serisi eksiksiz olmalı`);
+  assert.deepEqual(heaters.map((entry) => entry.powerW).sort((a, b) => (a ?? Infinity) - (b ?? Infinity)), powers, `RS Electrical ${prefix} ısıtıcı serisi eksiksiz olmalı`);
   for (const heater of heaters) {
-    assert.equal(heater.recommendedMaxL, heater.powerW, `RS Electrical ${heater.model} yayımlanan hacim üst sınırını taşımalı`);
+    assert.equal(heater.recommendedMaxL, heater.powerW ?? Number(heater.model.split(" ")[1]), `RS Electrical ${heater.model} yayımlanan hacim üst sınırını taşımalı`);
     assert(heater.sourceUrl.startsWith("https://atakanpetshop.com/rs-"), `RS Electrical ${heater.model} doğrudan ürün kaynağına bağlanmalı`);
   }
 }
@@ -3948,7 +3963,7 @@ for (const model of ["AL-3201 25 W", "AL-3201 50 W", "AL-3201 75 W", "AL-3201 10
   assert.equal(jenecaProfiles.find((entry) => entry.model === model)?.category, "heater", `Jeneca ${model} resmî ısıtıcı portföyünde bulunmalı`);
 }
 for (const [model, power, minL, maxL] of [
-  ["SX-366 1000 W", 1000, undefined, undefined], ["SX-388 1500 W", 1500, undefined, undefined], ["SX-265 500 W", 500, undefined, undefined],
+  ["SX-388 1500 W", 1500, undefined, undefined], ["SX-265 500 W", 500, undefined, undefined],
   ["AL-22 25 W", 25, undefined, undefined], ["AL-28 500 W", 500, undefined, undefined],
   ["BX-22 25 W", 25, undefined, undefined], ["BX-22 300 W", 300, undefined, undefined],
   ["BX-28 500 W", 500, undefined, undefined], ["BX-29 200 W", 200, undefined, undefined], ["BX-29 500 W", 500, undefined, undefined],
@@ -3956,7 +3971,7 @@ for (const [model, power, minL, maxL] of [
   const item = jenecaProfiles.find((entry) => entry.model === model);
   assert.deepEqual([item?.powerW, item?.recommendedMinL, item?.recommendedMaxL], [power, minL, maxL], `Jeneca ${model} yalnızca kaynakta yayımlanan ısıtıcı değerlerini taşımalı`);
   assert.equal(item?.capacityDataNote, undefined, `Jeneca ${model} doğrulanmış güçle otomatik ısıtıcı hesabına katılmalı`);
-  assert.equal(item?.verifiedAt, rev14(item?.id, model.startsWith("SX-3") ? "2026-08-30" : "2026-10-09"), `Jeneca ${model} güncel doğrulama tarihini taşımalı`);
+  assert.equal(item?.verifiedAt, rev15(item?.id, rev14(item?.id, model.startsWith("SX-3") ? "2026-08-30" : "2026-10-09")), `Jeneca ${model} güncel doğrulama tarihini taşımalı`);
 }
 // 2026-10-09 kaynak yenilemesi (docs/CATALOG_LOG.md): üreticinin aleas.cn ürün sayfalarındaki tablolar.
 for (const [model, flow, power] of [["LT-600", 500, 7], ["XP-02", 150, 2.2], ["XP-006 Ultra", 300, 3.5], ["XP-007 Ultra", 500, 5.5], ["GD-17", 300, 5], ["XP-33 Pro", 1000, 10]]) {
@@ -4031,7 +4046,7 @@ for (const [model, page] of [
   const item = haqosProfiles.find((entry) => entry.model === model);
   assert.equal(item?.sourceUrl, `https://www.haqos.com/productshow-${page}.html`, `Haqos ${model} doğrudan resmî model sayfasına bağlanmalı`);
   const expectedVerifiedAt = ["EASY-1000AT", "Aqua Flow 250"].includes(model) ? "2026-09-25" : "2026-08-26";
-  assert.equal(item?.verifiedAt, rev14(item?.id, expectedVerifiedAt), `Haqos ${model} güncel doğrulama tarihini taşımalı`);
+  assert.equal(item?.verifiedAt, rev15(item?.id, rev14(item?.id, expectedVerifiedAt)), `Haqos ${model} güncel doğrulama tarihini taşımalı`);
 }
 for (const [model, page] of [
   ["WM-300", "45495755"], ["WM-200", "45495756"], ["WM-100", "45495758"],
@@ -4169,7 +4184,7 @@ for (const [model, sourceHost] of [
   ["Dijital Kombo Termometre-Higrometre", "cikletistpetshop.com"],
 ]) {
   const item = nubiosEquipment.find((entry) => entry.model === model);
-  assert.deepEqual([item?.category, item?.verifiedAt], ["other", "2026-08-27"], `Nubios ${model} güncel yerel portföy kaydı olarak bulunmalı`);
+  assert.deepEqual([item?.category, item?.verifiedAt], ["other", rev15(item?.id, "2026-08-27")], `Nubios ${model} güncel yerel portföy kaydı olarak bulunmalı`);
   assert(item?.sourceUrl.includes(sourceHost), `Nubios ${model} onaylı yerel ürün kaynağına bağlanmalı`);
   assert.equal(item?.ratedFlowLph, undefined, `Nubios ${model} için yayımlanmayan pompa debisi tahmin edilmemeli`);
 }
@@ -4204,7 +4219,7 @@ for (const model of currentMufanTurkeyModels) {
 for (const model of ["W21.8 CO₂ Regülatörü", "W21.8 Selenoid Valfli CO₂ Regülatörü", "Damla Sayaçlı Çift Göstergeli CO₂ Regülatörü", "Akrilik Boru Tutucu Aparat", "Akvaryum Tutucu Aparat", "Akvaryum Bitki Budama Seti 6'lı", "Refraktometre Tuz Ölçer"]) {
   const item = equipmentCatalog.find((entry) => entry.brand === "Mufan" && entry.model === model);
   assert(item?.sourceUrl.startsWith("https://atakanpetshop.com/mufan-"), `Mufan ${model} doğrudan yetkili satıcı ürün sayfasına bağlanmalı`);
-  assert.equal(item?.verifiedAt, rev14(item?.id, "2026-08-26"), `Mufan ${model} güncel doğrulama tarihini taşımalı`);
+  assert.equal(item?.verifiedAt, rev15(item?.id, rev14(item?.id, "2026-08-26")), `Mufan ${model} güncel doğrulama tarihini taşımalı`);
 }
 for (const model of currentMufanTurkeyModels.filter((model) => model.includes("Emiş") && model.includes("Basış"))) {
   assert.equal(equipmentCatalog.find((entry) => entry.brand === "Mufan" && entry.model === model)?.category, "other", `Mufan ${model} otomatik filtre kapasitesi hesabına karışmamalı`);
@@ -4219,7 +4234,7 @@ assert(
 const tropicaBio = tropicaEquipment.find((entry) => entry.model === "CO₂ System Bio");
 assert.equal(tropicaBio?.recommendedMaxL, 60, "Tropica CO₂ System Bio hacim sınırı 60 litre olmalı");
 assert.equal(tropicaBio?.sourceUrl, "https://tropica.com/en/plant-care.aspx", "Tropica CO₂ System Bio hacim sınırı resmî portföy sayfasına bağlanmalı");
-assert(tropicaEquipment.every((entry) => entry.verifiedAt === expectedVerifiedAt(entry.id, "2026-08-26")), "Tropica ekipman portföyünün güncel doğrulama tarihi bulunmalı");
+assert(tropicaEquipment.every((entry) => entry.verifiedAt === rev15(entry.id, expectedVerifiedAt(entry.id, "2026-08-26"))), "Tropica ekipman portföyünün güncel doğrulama tarihi bulunmalı");
 const tropicaCare = careProductCatalog.filter((entry) => entry.brand === "Tropica");
 assert.equal(tropicaCare.length, 8, "Tropica'nın resmî bitki bakım portföyü sekiz ürün ailesi içermeli");
 assert.equal(tropicaCare.filter((entry) => entry.category === "fertilizer").length, 4, "Tropica dört bitki besini ailesi içermeli");
@@ -4230,14 +4245,14 @@ for (const model of ["Premium Nutrition", "Specialised Nutrition", "Carbon Nutri
   assert(item, `Tropica güncel bakım ürünü eksik: ${model}`);
   assert(item.sourceUrl.startsWith("https://tropica.com/en/plant-care/"), `Tropica ${model} doğrudan resmî ürün kaynağına bağlanmalı`);
   assert.notEqual(item.sourceUrl, "https://tropica.com/en/plant-care/", `Tropica ${model} genel marka sayfasına bırakılmamalı`);
-  assert.equal(item.verifiedAt, rev14(item?.id, "2026-08-26"), `Tropica ${model} güncel doğrulama tarihini taşımalı`);
+  assert.equal(item.verifiedAt, rev15(item?.id, rev14(item?.id, "2026-08-26")), `Tropica ${model} güncel doğrulama tarihini taşımalı`);
 }
 
 const twinstarEquipment = equipmentCatalog.filter((entry) => entry.brand === "Twinstar");
 assert.equal(twinstarEquipment.length, 40, "Twinstar Ver.5 S/E, Ver.3 B, önceki nesil ışıklar ve iki NANO sterilizatörle 40 kayıt içermeli");
 assert.equal(twinstarEquipment.filter((entry) => entry.category === "lighting").length, 38, "Twinstar aydınlatma modelleri lighting kategorisinde bulunmalı");
 assert.equal(twinstarEquipment.filter((entry) => entry.category === "other").length, 2, "UV kullanmayan Twinstar NANO cihazları yanıltıcı UV kategorisine konmamalı");
-for (const [model,power,lumenText,min,max] of [["E-Line IV 200EA",13,"900 lm",20,25],["E-Line IV 750EA",60,"3700 lm",80,90],["E-Line IV 1200EA",79,"4600 lm",110,120],["B Line Ver.3 20B",10,"750 lm",20,25],["B Line Ver.3 75B",39,"3200 lm",75,85],["B Line Ver.3 120B",52,"4100 lm",120,125],["S Line Ver.5 600S",67,"4100 lm",60,70],["S Line Ver.5 1200S",127,"7600 lm",120,130],["E Line Ver.5 300E",19,"1200 lm",30,36],["E Line Ver.5 900E",69,"3700 lm",90,100]]) {
+for (const [model,power,lumenText,min,max] of [["E-Line IV 200EA",13,"900 lm",20,25],["E-Line IV 750EA",60,"3700 lm",80,90],["E-Line IV 1200EA",79,"4600 lm",110,120],["B Line Ver.3 20B",10,"750 lm",20,25],["B Line Ver.3 75B",39,"3200 lm",75,85],["B Line Ver.3 120B",52,"4100 lm",120,125],["S Line Ver.5 600S",67,"4100 lm",60,70],["S Line Ver.5 1200S",127,"7600 lm",120,130],["E Line Ver.5 300E",21,"1350 lm",30,36],["E Line Ver.5 900E",68,"4400 lm",90,100]]) {
   const item = twinstarEquipment.find((entry) => entry.model === model);
   assert.equal(item?.powerW, power, `Twinstar ${model} güncel resmî güç değerini taşımalı`);
   assert(item?.specifications.includes(lumenText), `Twinstar ${model} güncel resmî lümen değerini taşımalı`);
@@ -4253,8 +4268,13 @@ const twinstarNanoPlus = twinstarEquipment.find((entry) => entry.model === "NANO
 assert.deepEqual([twinstarNanoPlus?.recommendedMinL,twinstarNanoPlus?.recommendedMaxL],[50,250],"Twinstar NANO Plus resmî 50–250 L kapasitesini taşımalı");
 assert(twinstarEquipment.every((entry) => entry.sourceUrl?.startsWith("https://") && /^\d{4}-\d{2}-\d{2}$/.test(entry.verifiedAt ?? "")),"Tüm Twinstar kayıtları doğrulanabilir HTTPS kaynak ve tarih taşımalı");
 const twinstar750E = twinstarEquipment.find((entry) => entry.model === "E Line Ver.5 750E");
-assert.equal(twinstar750E?.recommendedTankLengthCm,undefined,"Twinstar 750E çelişkili resmî uzunlukla otomatik uygunluk kararı vermemeli");
-assert(twinstar750E?.specifications.includes("çelişkili"),"Twinstar 750E kaynak çelişkisi kullanıcıdan gizlenmemeli");
+// 2026-11-15 tarih yenileme 2: sayfanın başlığı ve tablosu artık aynı aralığı veriyor ("75–80cm", "Up to 80 cm"); önceki çelişki giderildi.
+assert.deepEqual([twinstar750E?.powerW,twinstar750E?.recommendedTankLengthCm],[63,[75,80]],"Twinstar 750E sayfanın güncel güç ve uzunluk değerini taşımalı");
+// SX-366 1000/1200/1500 W kalıp hatasıydı: üreticinin SX-366 tablosunda bu güçler yok, kayıtlar kullanıcı kayıtları için kalır, güç çekilir.
+for (const powerW of [1000,1200,1500]) {
+  const item = equipmentCatalog.find((entry) => entry.id === `jeneca-sx-366-${powerW}w`);
+  assert.deepEqual([item?.powerW, item?.capacityDataNote?.includes("SX-388")], [undefined, true], `Jeneca SX-366 ${powerW} W yayımlanmayan gücü taşımamalı`);
+}
 // Twinstar S Line V5 (2026-11-11 kardeş kayıtlar): üreticinin Kore mağazasındaki ürün sayfalarının teknik tablosu. 200S'in başlığı "20–30cm",
 // teknik tablosu "Up to 25 cm" yazıyor; kayıttaki 20–25 cm hiçbir yerde yazmıyordu ve uzunluk 750E'deki gibi kullanılmıyor.
 const twinstar200S = twinstarEquipment.find((entry) => entry.model === "S Line Ver.5 200S");
@@ -7486,7 +7506,8 @@ assert.equal(petricola?.predatory, true, "Petricola 3 cm altındaki canlılar i�
 assert.notEqual(speciesCatalog.find((item) => item.id === "five-banded-barb")?.scientificName, speciesCatalog.find((item) => item.id === "six-banded-barb")?.scientificName, "Piyasada Pentazona adıyla karışan iki barb ayrı biyolojik profil olmalı");
 assert.equal(speciesCatalog.filter((item) => speciesGroup(item) === "barb").length, 13, "Barb kataloğu doğrulanmış Sekiz Bantlı, Melon ve Mascara dahil 13 tür içermeli");
 for (const [id,size,volume,length,group,temperature,ph] of [
-  ["melon-barb",7.5,150,120,6,[22,26],[6,7]],
+  // 2026-11-15 tarih yenileme 2: Seriously Fish "at least 8-10 specimens"; grup aralığın alt ucu.
+  ["melon-barb",7.5,150,120,8,[22,26],[6,7]],
 ]) {
   const profile=speciesCatalog.find((item)=>item.id===id);
   assert.deepEqual(
@@ -8028,7 +8049,8 @@ assert.equal(masterLineCare.length, 18, "MasterLine güncel bakım ürünleri ek
 assert(masterLineCare.every((item) => item.sourceUrl === "https://www.acvaristic.ro/"), "MasterLine bakım ürünleri doğru akvaryum üreticisi kaynağına bağlanmalı");
 const aptCare = careProductCatalog.filter((item) => item.brand === "The 2Hr Aquarist");
 assert.equal(aptCare.length, 13, "The 2Hr Aquarist resmî APT serisi eksiksiz bulunmalı");
-assert(aptCare.every((item) => item.sourceUrl === "https://www.2hraquarist.com/collections/all"), "The 2Hr Aquarist ürünleri resmî tam ürün koleksiyonuna bağlanmalı");
+// 2026-11-15 tarih yenileme 2: koleksiyon sayfası ürün listelemiyor; yeniden okunan ürünler kendi sayfasına bağlandı.
+assert(aptCare.every((item) => item.sourceUrl === "https://www.2hraquarist.com/collections/all" || item.sourceUrl.startsWith("https://www.2hraquarist.com/products/")), "The 2Hr Aquarist ürünleri resmî ürün koleksiyonuna ya da kendi ürün sayfasına bağlanmalı");
 const aptCategory = (model) => aptCare.find((item) => item.model === model)?.category;
 assert.equal(aptCategory("APT Pure"), "water_conditioner", "APT Pure su düzenleyici kategorisinde bulunmalı");
 assert.equal(aptCategory("APT Sky"), "water_conditioner", "APT Sky mineral/su düzenleyici kategorisinde bulunmalı");
@@ -8137,7 +8159,7 @@ assert.equal(dennerleCare.filter((item) => item.category === "bacteria").length,
 assert.equal(dennerleCare.filter((item) => item.category === "treatment").length, 9, "Dennerle güncel canlı ve doğal su bakım serisi 9 aile içermeli");
 assert.equal(dennerleCare.filter((item) => item.category === "substrate").length, 20, "Dennerle güncel soil, kum, çakıl ve taban gübresi serisi 20 aile içermeli");
 assert(dennerleCare.every((item) => item.sourceUrl.startsWith("https://dennerle.com/en/products/")), "Dennerle bakım kayıtları genel site haritası yerine doğrudan resmî ürün sayfasına bağlanmalı");
-assert(dennerleCare.every((item) => item.verifiedAt === expectedVerifiedAt(item.id, "2026-08-27")), "Dennerle bakım kayıtları güncel doğrulama tarihini taşımalı");
+assert(dennerleCare.every((item) => item.verifiedAt === rev15(item.id, expectedVerifiedAt(item.id, "2026-08-27"))), "Dennerle bakım kayıtları güncel doğrulama tarihini taşımalı");
 assert.equal(dennerleCategory("Shrimp King Baby"), "food", "Shrimp King Baby yem kategorisinde bulunmalı");
 assert.equal(dennerleCategory("Cichlid Carny"), "food", "Cichlid Carny yem kategorisinde bulunmalı");
 assert.equal(dennerleCategory("Shrimp King Cambarellus"), "food", "Shrimp King Cambarellus yem kategorisinde bulunmalı");

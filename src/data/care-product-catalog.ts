@@ -1,3 +1,7 @@
+import { reverifiedCareDates } from "./catalog-reverified-care-dates";
+import { reverifiedCareSources } from "./catalog-reverified-care-sources";
+import { applyReverifiedDates, applyReverifiedSources } from "./catalog-shared";
+
 export type CareProductCategory = "food" | "fertilizer" | "water_conditioner" | "bacteria" | "test" | "filter_media" | "substrate" | "plant_seed" | "treatment" | "decoration" | "aquarium_set" | "aquaterrarium" | "terrarium" | "tank" | "cover" | "cabinet";
 
 export interface CareProductProfile {
@@ -234,26 +238,26 @@ export const careProductCatalog: CareProductProfile[] = [
     ["Vitality & Color Flakes","Renk ve kondisyon destekli pul yem"], ["Vitality & Color Granules","Renk ve kondisyon destekli granül yem"],
     ["Spirulina Super Forte","Yüksek spirulina içerikli bitkisel yem"], ["Cichlid Gran","Cichlidler için granül yem"],
     ["Supervit Granulat","Orta ve dip katmandan beslenen balıklar için batan çok bileşenli granül yem"],
-    ["Supervit Mini Granulat","Küçük balıklar ve yavrular için yavaş batan mini granül yem"],
+    ["Supervit Mini Granulat","Küçük hepçil ve etçil balıklar için yavaş batan mini granül yem"],
     ["Supervit Chips","Orta ve büyük boy balıklar için batan çok bileşenli cips yem"],
-    ["Vitality & Color Tablets","Cama yapıştırılabilen renk ve kondisyon destekli tablet yem"],
+    ["Vitality & Color Tablets","Renk ve canlılık destekleyen yüksek proteinli tablet yem"],
     ["Super Spirulina Forte Granulat","Yüksek spirulina içerikli bitkisel granül yem"],
-    ["Super Spirulina Forte Mini Granulat","Küçük balıklar için yüksek spirulina içerikli mini granül yem"],
+    ["Super Spirulina Forte Mini Granulat","Genç Afrika cikletleri dahil yosun yiyen balıklar için %36 spirulinalı mini granül yem"],
     ["Super Spirulina Forte Micro Granulat","Yavru ve nano balıklar için yüksek spirulina içerikli mikro granül yem"],
-    ["3-Algae Tablets B","Dipten beslenen balıklar için üç alg içeren batan tablet yem"],
+    ["3-Algae Tablets B","Otçul tatlı ve deniz suyu balıkları için üç alg içeren batan tablet yem"],
     ["D-Allio Plus","Sarımsak içeren, sindirim ve kondisyon destekli pul yem"],
-    ["Malawi","Mbuna ve diğer otçul Malawi cikletleri için bitkisel ağırlıklı pul yem"],
+    ["Malawi","Malawi gölü mbuna cikletleri için bitkisel ağırlıklı pul yem"],
     ["Tanganyika","Tanganika Gölü'nün etçil ve hepçil cikletleri için temel pul yem"],
     ["Tanganyika Chips","Tanganika cikletleri için batan cips yem"],
     ["Cichlid Spirulina Medium Sticks","Orta boy otçul cikletler için spirulinalı yüzen çubuk yem"],
-    ["Cichlid Color XXL","Büyük cikletler için protein ve renk destekli yüzen çubuk yem"],
+    ["Cichlid Color XXL","Hepçil ve etçil cikletler için yüksek proteinli, renk destekleyici temel yem"],
     ["Mini Wafers Mix","Küçük dip balıkları için kırmızı ve yeşil batan wafer karışımı"],
     ["Green Algae Wafers","Otçul Loricariidae türleri için spirulinalı batan wafer yem"],
     ["Pleco's Tablets","Büyük vatozlar için bitkisel batan tablet yem"],
     ["Welsi Gran","Corydoras, loach ve diğer dip balıkları için batan granül yem"],
     ["Carnivore","Etçil dip balıkları için yüksek proteinli batan granül yem"],
     ["Shrimp Sticks","Tatlı ve deniz suyu kabukluları için batan çubuk yem"],
-    ["Crusta Sticks","Karides ve kerevitler için kalsiyum destekli batan çubuk yem"],
+    ["Crusta Sticks","Karidesler ve diğer su kabukluları için kalsiyumu yüksek, hızlı batan çubuk yem"],
     ["Caridina Nano Sticks","Cüce karidesler için kalsiyum destekli mikro çubuk yem"],
     ["Mikro-Vit Basic","Akvaryum balığı yavruları için çok bileşenli temel mikro yem"],
     ["Mikro-Vit Hi-Protein","Yavrular için yumurta sarılı yüksek proteinli mikro yem"],
@@ -269,7 +273,7 @@ export const careProductCatalog: CareProductProfile[] = [
     ["Betta Granulat","Betta balıkları için kırmızı mikroalgli yüzen granül yem"],
     ["Guppy","Guppy ve diğer canlı doğuranlar için çok bileşenli pul yem"],
     ["Bio-Vit","Otçul ve hepçil balıklar için bitkisel günlük pul yem"],
-    ["Ichtio-Vit","Genel akvaryumlardaki hepçil balıklar için günlük pul yem"],
+    ["Ichtio-Vit","Çok türlü akvaryumlardaki hepçil balıklar için günlük temel yem"],
     ["Ovo-Vit","Yumurta sarısı kaynaklı protein ve lesitin içeren kondisyon pul yemi"],
     ["Tropical Flakes","Hepçil ve etçil balıklar için yüksek proteinli günlük pul yem"],
     ["Tropical Granulat","Hepçil ve etçil balıklar için yüksek proteinli günlük granül yem"],
@@ -297,7 +301,7 @@ export const careProductCatalog: CareProductProfile[] = [
     ["Immune Probiotic Granules XS","5 cm altındaki balıklar için probiyotik büyüme ve bağışıklık granülü"],
     ["Plankton Color Tabs","Dipten beslenen balıklar için planktonlu renk destek tableti"],
     ["Guppy Granules","Guppy ve diğer canlı doğuranlar için renk destekli temel granül"],
-    ["O-Nip Stickies","Cama yapışan, hayvansal ve bitkisel bileşenli ödül tableti"],
+    ["O-Nip Stickies","Cama yapışan; kril, kan kurdu, Tubifex ve gammarus içeren ödül tableti"],
     ["Daphnia Snack","Yüzde yüz doğal kurutulmuş su piresi ödül yemi"],
     ["Artemia FD Snack","Yüzde yüz dondurularak kurutulmuş Artemia ödül yemi"],
     ["Bloodworms FD Snack","Yüzde yüz dondurularak kurutulmuş kan kurdu ödül yemi"],
@@ -306,7 +310,7 @@ export const careProductCatalog: CareProductProfile[] = [
     ["GVG Mix Royal Flakes","Dondurularak kurutulmuş parçalar içeren temel pul yem"],
     ["Krill FD Snack","Yüzde yüz dondurularak kurutulmuş krill ödül yemi"],
     ["Pleco Chips","Ancistrus ve diğer vatozlar için temel batan cips yem"],
-    ["Pleco Tabs XL","Büyük yayın balıkları ve vatozlar için büyük batan tablet yem"],
+    ["Pleco Tabs XL","Büyük yayın balıkları (ör. vatozlar) ve diğer dip balıkları için yaklaşık 3 cm, cama yapıştırılabilen tablet yem"],
     ["Viformo Pleco Tabs","Yayın balıkları ve loach türleri için temel batan tablet yem"],
     ["Cichlid Sticks","Cikletler için yüzen temel çubuk yem"],
     ["Cichlid Carnivore Granules XL","Büyük etçil cikletler için temel granül yem"],
@@ -322,7 +326,7 @@ export const careProductCatalog: CareProductProfile[] = [
     ["Goldfish Granules","Büyük Japon balıkları için temel granül yem"],
     ["Goldfish Color Granules","Japon balıkları için renk destekli granül yem"],
     ["Shrimp Granules","Tatlı su karidesleri için temel batan granül yem"],
-    ["Crab Loops","Yengeç ve diğer kabuklular için temel halka yem"],
+    ["Crab Loops","Tatlı ve deniz suyundaki yengeçler için temel batan halka yem"],
     ["Vipan Baby Flakes","Yüzeyden beslenen yavru balıklar için mikro pul yem"],
     ["Vipagran Baby Granules","Orta su katmanından beslenen yavrular için mikro granül yem"],
     ["Micron Powder","Balık yavruları ve amfibi larvaları için toz büyütme yemi"],
@@ -343,7 +347,7 @@ export const careProductCatalog: CareProductProfile[] = [
     ["betta aquatan","Betta balıkları için mineral destekli musluk suyu düzenleyici"],
     ["shrimp mineral salt","Karidesler ve diğer omurgasızlar için mineral ve iz element karışımı"],
     ["Catappa Leaves","Doğal su düzenleme için tropik badem yaprakları"],
-    ["blackwater aquatan","Tropik karasu etkisi ve hümik madde desteği sağlayan su düzenleyici"],
+    ["blackwater aquatan","Musluk suyunu tropik karasu gibi koyu ve balık dostu suya çeviren, ağır metalleri bağlayan su düzenleyici"],
     ["Nitrite-minus","Acil nitrit yükselmesinde nitriti hızla düşürmeye yardımcı düzenleyici"],
     ["chlor-ex","Klor ve kloramini gideren su düzenleyici"],
     ["O2 plus","Düşük oksijen durumlarında oksijen desteği sağlayan bakım ürünü"],
@@ -373,11 +377,11 @@ export const careProductCatalog: CareProductProfile[] = [
     ["siporax bio active Professional","Bakteri kültürüyle etkinleştirilmiş biyolojik filtre medyası"],
     ["crystal clear Professional","İnce parçacıkları tutan yüksek performanslı mekanik medya"],
     ["Phosvec Granulat","Fosfatı kalıcı olarak bağlayan granül filtre medyası"],
-    ["biopur","Biyomekanik filtrasyon için seramik filtre medyası"],
+    ["biopur","Biyomekanik filtrasyon için kil tüp filtre medyası"],
     ["biofibres fine","Mekanik ön filtrasyon için ince filtre elyafı"],
     ["biofibres coarse","Mekanik ön filtrasyon için kalın filtre elyafı"],
     ["Silicate Clear","Silikatı kalıcı olarak bağlayan filtre medyası"],
-    ["super carbon","Organik kirleticileri adsorbe eden aktif karbon"],
+    ["super carbon","İlaç kalıntılarını, kirleticileri ve su renklenmesini gideren aktif karbon"],
     ["Filter Wool Fine","İnce mekanik filtrasyon elyafı"],
     ["Filter Wool Coarse","Kaba mekanik filtrasyon elyafı"],
     ["filter wool","İnce kir parçacıkları için mekanik ön filtre elyafı"],
@@ -396,7 +400,7 @@ export const careProductCatalog: CareProductProfile[] = [
     ["costapur","Beyaz benek ve diğer tek hücreli deri parazitlerine karşı tedavi"],
     ["mycopur","Mantar enfeksiyonlarına karşı tedavi"],
     ["baktopur","Ağız ve yüzgeç çürümesi gibi bakteriyel enfeksiyonlara karşı tedavi"],
-    ["baktopur direct","Bakteriyel enfeksiyonlara karşı tablet tedavi"],
+    ["baktopur direct","Tatlı ve deniz suyu balıklarında bakteriyel enfeksiyonlara karşı, ileri evrede de etkili tedavi"],
     ["bakto Tabs","Bakteriyel enfeksiyonlara karşı ilaçlı yem tableti"],
   ]),
   ...products("Sera","substrate","https://www.sera.de/us/freshwater-aquarium/Products/maintain-freshwater-aquariums/bottom-ground/",[
@@ -552,7 +556,7 @@ export const careProductCatalog: CareProductProfile[] = [
   ...products("The 2Hr Aquarist","water_conditioner",aptSource,[
     ["APT Pure","Klor ve kloramini gideren; ağır metal, amonyak, nitrit ve nitratı detoksifiye eden su düzenleyici"],
     ["APT Sky","KH ve pH değerini değiştirmeden GH yükselten kalsiyum-magnezyum mineral desteği"],
-    ["APT Sky Plus","GH ile birlikte iz element desteği sağlayan mineral karışımı"],
+    ["APT Sky Plus","Ozmoz suyuna GH kazandıran, KH'yi yaklaşık 2 dKH'ye ve pH'ı 7,2–7,6'ya hafifçe yükselten kalsiyum-magnezyum mineral karışımı"],
   ]),
   ...products("The 2Hr Aquarist","bacteria",aptSource,[
     ["APT Start","Yeni kurulum için taban besini ve başlangıç bakteri kültürü"],
@@ -581,10 +585,10 @@ export const careProductCatalog: CareProductProfile[] = [
     ["Live Water (PSB - Bacteria)","Fotosentetik bakterilerle mikrobiyal dengeyi destekleyen sıvı kültür"],
   ]),
   ...products("Shrimps Forever","water_conditioner",shrimpsForeverSource,[
-    ["Liquid GH+","Caridina için KH yükseltmeden GH mineral desteği"], ["GH/KH+ Mineral Powder","Neocaridina için GH ve KH mineral desteği"],
+    ["Liquid GH+","Ozmos suyuna kalsiyum, magnezyum, potasyum ve sodyum katan sıvı GH mineral desteği"], ["GH/KH+ Mineral Powder","Neocaridina için GH ve KH mineral desteği"],
     ["Sulawesi Mineral 7.5","Sulawesi karidesleri için osmos suyu mineral desteği"], ["Shrimp Trace","Karidesler için iz element desteği"],
     ["TapFix","Klor ve ağır metalleri bağlayan musluk suyu düzenleyici"],
-    ["Crystallize Crystal Water","Sudaki ince parçacıkları çöktürmeye yardımcı berraklaştırıcı"],
+    ["Crystallize Crystal Water","Mikro kirleticileri topaklayıp filtrede tutulmasını sağlayan berraklaştırıcı"],
     ["Black Water","Fulvik asit içeren karasu düzenleyicisi"],
     ["Powder GH+","KH değerini yükseltmeden GH mineral desteği sağlayan toz karışım"],
     ["Shrimp Mineral (Montmorillonite)","Montmorillonit esaslı mineral ve kabuk değişimi desteği"],
@@ -638,7 +642,7 @@ export const careProductCatalog: CareProductProfile[] = [
     ["shrimp-king-complete","Shrimp King Complete","Karidesler için günlük, suya dayanıklı tam yem çubuğu"],
     ["shrimp-king-dadap-leaves","Shrimp King Dadap Leaves","Karides ve kerevitler için doğal yaprak yemi"],
     ["shrimp-king-mineral","Shrimp King Mineral","Yüzde 7 kalsiyum ve yüzde 10 montmorillonit içeren mineral yem"],
-    ["shrimp-king-protein","Shrimp King Protein","Artan protein gereksinimi dönemleri için yüzde 42,2 proteinli yem"],
+    ["shrimp-king-protein","Shrimp King Protein","Artan protein gereksinimi dönemleri (ör. yumurta oluşumu) için yüksek proteinli yem · protein oranı üretici sayfasında çelişkili (%42,2 ve %48,1)"],
     ["shrimp-king-snailstixx","Shrimp King SnailStixx","Tatlı su salyangozları için kalsiyum destekli temel çubuk yem"],
     ["shrimp-king-snow-pops","Shrimp King Snow Pops","Organik soya kepeğinden üretilen dağılan karides yem çubuğu"],
     ["shrimp-king-yummy-gum","Shrimp King Yummy Gum","Taş, kök veya cama yapışabilen karides yem hamuru"],
@@ -666,8 +670,8 @@ export const careProductCatalog: CareProductProfile[] = [
     ["plant-system-v30","Plant System V30","Aylık kapsamlı bitki besini sağlayan sistem bileşeni"],
   ]),
   ...dennerleProducts("test",[
-    ["aqua-dest","Aqua Dest","CO₂ ve pH testlerinin hazırlanmasında kullanılan saflaştırılmış test suyu"],
-    ["aqua-test","Aqua Test","Dennerle sürekli CO₂ testleri için test çözeltisi"],
+    ["aqua-dest","Aqua Dest","pH elektrotlarını durulamak için damıtılmış su"],
+    ["aqua-test","Aqua Test","Toplam sertlik, karbonat sertliği ve pH ölçen damla test seti (akvaryum, bahçe havuzu ve yüzme havuzu)"],
     ["carbo-test-indicator","Carbo Test Indicator","CO₂ seviyesini renk değişimiyle gösteren indikatör çözeltisi"],
     ["carbo-test-precision","Carbo Test Precision","Small, Medium ve Large boy sürekli CO₂ ölçüm cihazı"],
     ["co2-langzeittest-correct","CO₂ Long-Term Test Correct","Akvaryumdaki CO₂ seviyesini sürekli izleyen test"],
@@ -688,7 +692,7 @@ export const careProductCatalog: CareProductProfile[] = [
     ["osmose-feinfilter","Osmose Fine Filter","Osmose Professional sistemi için ince ön filtre kartuşu"],
     ["osmose-kohlefilter","Osmose Carbon Filter","Osmose Professional sistemi için aktif karbon ön filtre kartuşu"],
     ["scapers-flow-filter-schwamm","Scaper's Flow Filter Sponge","Scaper's Flow için yedek mekanik filtre süngeri"],
-    ["scapers-flow-pad","Scaper's Flow Pad","Scaper's Flow için yedek ince filtre pedi"],
+    ["scapers-flow-pad","Scaper's Flow Pad","Scaper's Flow için yedek aktif karbon pedi"],
   ]),
   ...dennerleProducts("water_conditioner",[
     ["aqua-elixir","Aqua Elixir","Klor ve ağır metalleri nötralize eden genel su düzenleyici"],
@@ -906,12 +910,12 @@ export const careProductCatalog: CareProductProfile[] = [
   ...products("Creaqua","water_conditioner","https://www.creaqua.com.tr/tr/su-duezenleyiciler/77-just-clear.html",[["Just Clear 250 ml","Tatlı ve tuzlu su akvaryumları ile süs havuzlarında serbest partikülleri bağlayan konsantre berraklaştırıcı · 2,5 ml/50 L doz · 250 ml şişe 5000 L su için"]],"2026-09-14"),
   ...products("Creaqua","fertilizer","https://www.creaqua.com.tr/en/10-fertilizers-and-water-conditioners",[
     ["Plant Nutrition Macro 250 ml","Bitkili akvaryumlar için haftalık makro besin desteği"],
-    ["Plant Nutrition Micro 250 ml","Bitkili akvaryumlar için konsantre mikro besin desteği"],
+    ["Plant Nutrition Micro 250 ml","Bitkili akvaryumlar için kalsiyum, magnezyum, iz element, vitamin ve amino asit içeren mikro besin"],
     ["Plant Nutrition Nitrogen 250 ml","Azot eksikliğine yönelik bitki besini"],
     ["Plant Nutrition Phosphate 250 ml","Fosfor eksikliğine yönelik fosfat bitki besini"],
     ["Plant Nutrition Potassium 250 ml","Potasyum eksikliğine yönelik bitki besini"],
     ["Plant Nutrition Iron 250 ml","Demir eksikliğine yönelik bitki besini"],
-    ["EXALG Carbon 250 ml","Bitkili akvaryumlar için sıvı organik karbon desteği"],
+    ["EXALG Carbon 250 ml","Bitki büyümesini hızlandıran sıvı aktif karbon kaynağı"],
     ["Low Tech 250 ml","Düşük teknolojili bitkili akvaryumlar için birleşik besin desteği"],
     ["Six Up 250 ml","Bitkili akvaryumlar için çok bileşenli besin desteği"],
     ["Shallow Nutritions 100 ml","Sığ bitkili akvaryumlar için yoğunlaştırılmış besin desteği"],
@@ -921,13 +925,13 @@ export const careProductCatalog: CareProductProfile[] = [
     ["Avant Guard 250 ml","Musluk suyunu akvaryum kullanımına hazırlayan su düzenleyici"],
   ]),
   ...products("Creaqua","bacteria","https://www.aquackakvaryum.com.tr/creaqua/page-5",[
-    ["Cycle Booster","Akvaryumun biyolojik döngüsünü destekleyen bakteri kültürü"],
+    ["Cycle Booster","Nitrifikasyon bakterilerini besleyerek biyolojik filtrasyonun kurulmasını hızlandıran ve yeni akvaryum sendromunu önleyen düzenleyici"],
   ]),
   ...products("Creaqua","filter_media","https://www.aquackakvaryum.com.tr/creaqua/page-5",[
-    ["Active Carbon 250 ml","Organik kirletici, renk ve kokuyu adsorbe eden aktif karbon"],
-    ["Active Carbon 500 ml","Organik kirletici, renk ve kokuyu adsorbe eden aktif karbon"],
+    ["Active Carbon 250 ml","Organik atıkları, ilaç kalıntılarını ve kloru tutan, buharla aktive edilmiş karbon"],
+    ["Active Carbon 500 ml","Organik atıkları, ilaç kalıntılarını ve kloru tutan, buharla aktive edilmiş karbon"],
     ["Hivex","Faydalı bakteri kolonileri için gözenekli biyolojik filtre medyası"],
-    ["Purifier Filter Pad","Koku, renk ve organik kirleticileri tutmaya yardımcı arıtıcı filtre pedi"],
+    ["Purifier Filter Pad","Organik atık ve tortuyu tutarak mekanik filtrasyonu güçlendiren, suyu kısa sürede berraklaştıran filtre pedi"],
   ]),
   ...products("Creaqua","substrate","https://www.aquackakvaryum.com.tr/creaqua/page-5",[
     ["Cosmetics Beige Sand 3 L","Su değerlerini etkilemeyen bej kozmetik akvaryum kumu"],
@@ -940,11 +944,11 @@ export const careProductCatalog: CareProductProfile[] = [
   { id:"eurostar-zeo-carbon-fix-500ml", brand:"Eurostar", model:"Zeo Karbon Fix 500 ml", category:"filter_media", description:"Aktif karbon ve zeolit içeren kimyasal filtre medyası", sourceUrl:"https://atakanpetshop.com/eurostar-zeo-karbon-fix-500ml-filtre-malzemesi", verifiedAt },
   { id:"eurostar-lava-fix-500ml", brand:"Eurostar", model:"Lava Fix 500 ml", category:"filter_media", description:"Biyolojik filtrasyon için doğal volkanik lav taşı", sourceUrl:"https://atakanpetshop.com/eurostar-lava-fix-500ml-filtre-malzemesi-452-1018", verifiedAt },
   { id:"eurostar-bio-porous-ring-500ml", brand:"Eurostar", model:"Bio Porous Ring 500 ml", category:"filter_media", description:"Gözenekli seramik biyolojik filtre halkası", sourceUrl:"https://atakanpetshop.com/eurostar-bio-porous-ring-500ml-filtre-malzemesi-452-1017", verifiedAt },
-  { id:"eurostar-filter-wool-100g", brand:"Eurostar", model:"Filter Wool 100 g", category:"filter_media", description:"Mekanik filtrasyon için akvaryum filtre elyafı", sourceUrl:"https://atakanpetshop.com/eurostar", verifiedAt },
+  { id:"eurostar-filter-wool-100g", brand:"Eurostar", model:"Filter Wool 100 g", category:"filter_media", description:"İç filtre, dış filtre ve sump için akvaryum filtre elyafı", sourceUrl:"https://atakanpetshop.com/eurostar", verifiedAt },
   { id:"eurostar-zyro-max-fix-500ml", brand:"Eurostar", model:"Zyro Max Fix 500 ml", category:"filter_media", description:"Faydalı bakteri kolonileri için yüksek gözenekli seramik biyolojik filtre medyası", sourceUrl:"https://atakanpetshop.com/eurostar-zyro-max-fix-500ml-filtre-malzemesi-452-1021", verifiedAt:"2026-08-24" },
-  { id:"eurostar-zyro-max-fix-xl-500ml", brand:"Eurostar", model:"Zyro Max Fix XL 500 ml", category:"filter_media", description:"Büyük gözenekli XL seramik biyolojik filtre medyası", sourceUrl:"https://atakanpetshop.com/eurostar-zyro-max-fix-xl-500ml-filtre-malzemesi-452-1022", verifiedAt:"2026-08-25" },
+  { id:"eurostar-zyro-max-fix-xl-500ml", brand:"Eurostar", model:"Zyro Max Fix XL 500 ml", category:"filter_media", description:"Yüksek gözenekli XL seramik biyolojik filtre medyası", sourceUrl:"https://atakanpetshop.com/eurostar-zyro-max-fix-xl-500ml-filtre-malzemesi-452-1022", verifiedAt:"2026-08-25" },
   { id:"eurostar-hollow-bio-balls-1l", brand:"Eurostar", model:"Hollow Bio Balls 1 L", category:"filter_media", description:"pH üzerinde etkisiz biyokimyasal seramik biyolojik filtre medyası", sourceUrl:"https://atakanpetshop.com/eurostar-hollow-bio-balls-biolojik-filtre-malzemesi-1lt", verifiedAt:"2026-08-24" },
-  { id:"eurostar-super-premium-carbon-300ml", brand:"Eurostar", model:"Super Premium Carbon 300 ml", category:"filter_media", description:"Klor, ağır metal, koku ve organik kirleticileri adsorbe eden aktif karbon", sourceUrl:"https://atakanpetshop.com/eurostar-super-premium-carbon-300ml-filtre-malzemesi-452-1016", verifiedAt:"2026-08-24" },
+  { id:"eurostar-super-premium-carbon-300ml", brand:"Eurostar", model:"Super Premium Carbon 300 ml", category:"filter_media", description:"Klor, koku, renk ve organik atıkları adsorbe eden aktif karbon", sourceUrl:"https://atakanpetshop.com/eurostar-super-premium-carbon-300ml-filtre-malzemesi-452-1016", verifiedAt:"2026-08-24" },
   { id:"eurostar-aquaclay-500ml", brand:"Eurostar", model:"Aquaclay 500 ml", category:"filter_media", description:"Biyolojik filtrasyon için 8–16 mm gözenekli, katkısız ve fırınlanmış kil esaslı filtre medyası", sourceUrl:"https://www.akvaryumexpress.com/eurostar-aquaclay-biyolojik-filtre-malzemesi", verifiedAt:"2026-08-25" },
   { id:"eurostar-aquaclay-substrate-5l", brand:"Eurostar", model:"Aquaclay Bitki Kumu 5 L", category:"substrate", description:"Bitkili akvaryumlar için kil esaslı taban malzemesi · 5 L · ürün kodu 452-2001 · barkod 8681144120018", sourceUrl:"https://atakanpetshop.com/eurostar-aquaclay-bitki-kumu-5lt", verifiedAt:"2026-09-09" },
   { id:"eurostar-aquaclay-substrate-10l", brand:"Eurostar", model:"Aquaclay Bitki Kumu 10 L", category:"substrate", description:"Bitkili akvaryumlar için kil esaslı taban malzemesi · 10 L · ürün kodu 452-2009 · barkod 8681144120094", sourceUrl:"https://atakanpetshop.com/eurostar-aquaclay-bitki-kumu-10lt", verifiedAt:"2026-09-09" },
@@ -953,7 +957,7 @@ export const careProductCatalog: CareProductProfile[] = [
   { id:"eurostar-seed-hemianthus", brand:"Eurostar", model:"Bitki Tohumu Hemianthus Callitrichoides", category:"plant_seed", description:"Satıcının Hemianthus callitrichoides adıyla sunduğu bitki tohumu seçeneği · ürün kodu 452-1502 · barkod 8681144115021; paket içeriğinin bilimsel kimliği bağımsız olarak doğrulanmamıştır", sourceUrl:"https://atakanpetshop.com/eurostar-bitki-tohumu-hemianthus-callitrichoides", verifiedAt:"2026-09-09" },
   { id:"eurostar-water-clarifier-500ml", brand:"Eurostar", model:"Su Berraklaştırıcı 500 ml", category:"water_conditioner", description:"Askıdaki ince partiküllerin filtre tarafından tutulmasını destekleyen su berraklaştırıcı", sourceUrl:"https://atakanpetshop.com/eurostar", verifiedAt:"2026-08-24" },
   { id:"eurostar-ammonia-zeolite-500ml", brand:"Eurostar", model:"Amonyak Giderici Zeolit 500 ml", category:"filter_media", description:"Amonyak, nitrit ve ağır metal kontrolüne yardımcı doğal zeolit filtre medyası", sourceUrl:"https://www.akvaryumexpress.com/eurostar-amonyak-giderici-zeolite-filtre-malzemesi-500-ml", verifiedAt:"2026-08-25" },
-  { id:"eurostar-micro-bio-pellets-1000ml", brand:"Eurostar", model:"Micro Bio Pellets 1000 ml", category:"filter_media", description:"Nitrat ve fosfat kontrolünü destekleyen biyolojik filtre peleti", sourceUrl:"https://atakanpetshop.com/eurostar", verifiedAt:"2026-08-24" },
+  { id:"eurostar-micro-bio-pellets-1000ml", brand:"Eurostar", model:"Micro Bio Pellets 1000 ml", category:"filter_media", description:"Nitrifikasyon bakterilerine yüzey sağlayan gözenekli biyolojik filtre peleti", sourceUrl:"https://atakanpetshop.com/eurostar", verifiedAt:"2026-08-24" },
   { id:"eurostar-super-premium-carbon-1l", brand:"Eurostar", model:"Super Premium Carbon 1 L", category:"filter_media", description:"Tatlı su sistemlerinde organik kirletici, ilaç kalıntısı ve koku giderimi için granül aktif karbon · yaklaşık 450 g", sourceUrl:"https://www.akvaryumexpress.com/eurostar-super-premium-karbon-komur-filtre-malzemesi-1lt", verifiedAt:"2026-08-25" },
   { id:"eurostar-bio-filter-ring-white-500ml", brand:"Eurostar", model:"Bio Filter Ring Beyaz 500 ml", category:"filter_media", description:"Amonyak ve nitrit dönüşümünü destekleyen yüksek gözenekli beyaz seramik biyolojik filtre halkası", sourceUrl:"https://www.akvaryumexpress.com/eurostar-bio-filtre-ring-beyaz-500ml", verifiedAt:"2026-08-25" },
   { id:"eurostar-bio-filter-ring-brown-500ml", brand:"Eurostar", model:"Bio Filter Ring Kahverengi 500 ml", category:"filter_media", description:"Faydalı bakteri kolonizasyonu için kahverengi seramik biyolojik filtre halkası", sourceUrl:"https://www.akvaryumexpress.com/yeni-urunler/sayfa/3", verifiedAt:"2026-08-25" },
@@ -961,13 +965,13 @@ export const careProductCatalog: CareProductProfile[] = [
   { id:"eurostar-bio-glass-ring-500ml", brand:"Eurostar", model:"Bio Glass Ring 500 ml", category:"filter_media", description:"pH ve KH dengesini değiştirmeden biyolojik filtrasyon yüzeyi sağlayan gözenekli cam-seramik halka", sourceUrl:"https://www.akvaryumexpress.com/eurostar-seramik-500ml", verifiedAt:"2026-08-25" },
   { id:"nubios-seramik-halka-500g", brand:"Nubios", model:"Seramik Halka 500 g", category:"filter_media", description:"Biyolojik filtrasyon için gözenekli seramik halka", sourceUrl:"https://www.ozelyem.com/nubios", verifiedAt:"2026-08-24" },
   { id:"nubios-aktif-karbon-300g", brand:"Nubios", model:"Aktif Karbon 300 g", category:"filter_media", description:"Kimyasal filtrasyon için aktif karbon filtre medyası", sourceUrl:"https://www.ozelyem.com/nubios", verifiedAt:"2026-08-24" },
-  { id:"liya-ly202-active-carbon-500g", brand:"Liya", model:"LY202 Aktif Karbon 500 g", category:"filter_media", description:"Organik atık, renk ve kokunun giderilmesine yardımcı aktif karbon filtre medyası", sourceUrl:"https://atakanpetshop.com/liya", verifiedAt:"2026-08-24" },
-  { id:"liya-biological-ceramic-500g", brand:"Liya", model:"Biyolojik Seramik 500 g", category:"filter_media", description:"Faydalı bakteri kolonileri için gözenekli seramik biyolojik filtre medyası", sourceUrl:"https://atakanpetshop.com/liya", verifiedAt:"2026-08-24" },
+  { id:"liya-ly202-active-carbon-500g", brand:"Liya", model:"LY202 Aktif Karbon 500 g", category:"filter_media", description:"Organik atık, renk, ilaç kalıntısı ve klorun giderilmesine yardımcı pelet aktif karbon filtre malzemesi", sourceUrl:"https://atakanpetshop.com/liya", verifiedAt:"2026-08-24" },
+  { id:"liya-biological-ceramic-500g", brand:"Liya", model:"Biyolojik Seramik 500 g", category:"filter_media", description:"Biyolojik seramik filtre malzemesi", sourceUrl:"https://atakanpetshop.com/liya", verifiedAt:"2026-08-24" },
   { id:"liya-zeolite-500g", brand:"Liya", model:"Zeolit 500 g", category:"filter_media", description:"Amonyak kontrolüne yardımcı doğal zeolit filtre medyası", sourceUrl:"https://atakanpetshop.com/liya", verifiedAt:"2026-08-24" },
   ...["30 × 30 cm", "30 × 40 cm", "40 × 50 cm", "40 × 60 cm"].map((size):CareProductProfile=>({
     id:`mufan-six-layer-filter-sponge-${size.replace(/[^0-9]+/g,"-").replace(/(^-|-$)/g,"")}`,
     brand:"Mufan", model:`6 Katlı Biyolojik Filtre Süngeri ${size}`, category:"filter_media",
-    description:`Mekanik ve biyolojik filtrasyon için kesilerek kullanılabilen, yıkanabilir altı katmanlı filtre süngeri · ${size} · satıcı başlığı ile seçenek alanındaki kalınlık değerleri çeliştiğinden kalınlık belirtilmedi`,
+    description:`Mekanik ve biyolojik filtrasyon için yıkanabilir altı katmanlı filtre süngeri · ${size} · satıcı başlığı ile seçenek alanındaki kalınlık değerleri çeliştiğinden kalınlık belirtilmedi`,
     sourceUrl:"https://atakanpetshop.com/mufan-6-katli-biyolojik-filtre-sungeri-30x30x18-cm", verifiedAt:"2026-08-24",
   })),
   ...products("Aquael","filter_media","https://www.aquael.com/wp-content/uploads/2024/09/new_media_info_en_131452_131453_131454_131455_677.pdf",[
@@ -3929,6 +3933,13 @@ export const careProductCatalog: CareProductProfile[] = [
     sourceUrl:"https://www.ferplast.com/products/co2-energy-ingredients",verifiedAt:"2026-08-27",
   },
 ];
+
+// Yeniden okunurken kaynak adresi değişen kayıtlar (catalog-reverified-care-sources.ts).
+const unknownReverifiedCareSourceIds = applyReverifiedSources(careProductCatalog, reverifiedCareSources);
+if (unknownReverifiedCareSourceIds.length) throw new Error(`Kaynak adresi değişen bakım ürünü katalogda yok: ${unknownReverifiedCareSourceIds.join(", ")}`);
+// Kaynağa karşı yeniden okunan kayıtların doğrulama günü (src/data/catalog-reverified.ts, adressiz kopyası); tarih yalnız ileri gider.
+const unknownReverifiedCareIds = applyReverifiedDates(careProductCatalog, reverifiedCareDates);
+if (unknownReverifiedCareIds.length) throw new Error(`Yeniden doğrulama tablosundaki bakım ürünü katalogda yok: ${unknownReverifiedCareIds.join(", ")}`);
 
 const careCatalogIds = new Set<string>();
 for (const product of careProductCatalog) {
