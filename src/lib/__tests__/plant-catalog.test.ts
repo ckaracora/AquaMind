@@ -240,7 +240,9 @@ describe("değer kuralı", () => {
   it("kaynakta olmayan alan boş kalır", () => {
     const heterophylla = plantById("anubias-heterophylla");
     expect(heterophylla).toMatchObject({ temperature: [22, 30], light: ["medium", "medium"], heightCm: 80 });
-    expect(heterophylla?.ph).toBeUndefined();
+    // Fishkeeper pH yazmıyor; pH ikinci kademeden (karar 0045: Flowgrow ve B-Aqua'nın ortak aralığı, docs/CATALOG_LOG.md) ve öyle işaretli.
+    expect(heterophylla?.ph).toEqual([5.5, 7]);
+    expect(Object.keys(heterophylla?.secondarySources ?? {})).toEqual(["ph"]);
     expect(heterophylla?.growth).toBeUndefined();
     expect(heterophylla?.co2).toBeUndefined();
     // Fishkeeper'a dayanan kayıtta CO₂ yalnız Tropica'da aynı bitkinin sayfası varsa yazılır (20 kayıtta yok).
