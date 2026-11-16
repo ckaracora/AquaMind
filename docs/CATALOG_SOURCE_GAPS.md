@@ -274,3 +274,45 @@ R-B okumasında kabul edilen kaynaklarda (Fishkeeper, Seriously Fish, Fishipedia
 - `melon-barb`: minVolumeL 150.
 - `somphongs-dwarf-rasbora`: minGroup 10.
 - `peacock-snakehead`: minVolumeL 300, minTankLengthCm 140.
+
+## 2026-11-16 Tarih yenileme 2, C bandı: açık kalanlar
+
+Ayrıntı ve yöntem: `docs/CATALOG_LOG.md` → "2026-11-16 Tarih yenileme 2, C bandı". Bu kayıtların tarihi yenilenmedi, değerlerine dokunulmadı (aksi yazmıyorsa).
+
+### Canlılarda kaynakta artık yok (değer değiştirilmedi, lider kararı 3)
+- **Fishkeeper dışında bakım kaynağı olmayan 5 tür** (hacim ve uzunluk; Seriously Fish site haritası, Fishipedia ve Practical Fishkeeping araması 2026-11-16, bulunamadı; DATA_SOURCES "Akvaryum": kayıttaki değer korunur):
+  - `tropheus-kiriza`: 375 L / 150 cm. Yalnız cins düzeyinde PFK Tropheus yazısı "Tanks smaller than 120cm (48") are an absolute no go" (hacim yok, Kiriza adı geçmiyor).
+  - `parkinsons-rainbowfish`: 250 L / 120 cm.
+  - `south-american-bumblebee-catfish`: 112 L / 80 cm (PFK okur cevabı yalnız boy ve grup veriyor).
+  - `orinoco-angel-pleco-l201`: 115 L / 80 cm (SF'de yalnız başka tür H. inspector var).
+  - `african-dwarf-frog`: 50 L / 45 cm.
+- `rosy-tetra`: minGroup 8; Fishkeeper "6 would be the minimum recommended, 10+ would be better", Seriously Fish "at least 6, preferably 10 or more". 8 hiçbir kaynakta yok.
+- `goldfish`: 100 cm uzunluk OATA'da da Fishkeeper'da da yok.
+- `green-spotted-puffer`: 120 L kaynakta litre olarak yazmıyor; SG 1.010–1.018 kaynakta yok (Seriously Fish "around 1.005").
+- `jonklaas-lipstick-goby`: Seriously Fish adresi başka türün sayfası (S. exallisquamulus); 120 L, 100 cm ve 6'lı grup kaynakta yok.
+
+### Üreticinin güncel listesinde yok (muhtemelen üretimden kalktı; 33 JBL kaydı, lider kararı 4)
+Eski `products/detail/…` ve `products/group/…` adresleri genel ürün listesine (`?mod=productsv2`) yönleniyor; JBL'in güncel A–Z ürün sözlüğünde karşılıkları yok ya da yeni ayrı model (PROAQUATEST, PROCLEAN). Değerlere dokunulmadı, yeni adres önerilmedi.
+- `jbl-algol`, `jbl-autofood-black-archive`, `jbl-autofood-white-archive`, `jbl-proflora-m500-silver`.
+- Damla testleri (18): `jbl-co2-direct-test`, `jbl-co2-ph-permanent-test`, `jbl-cu-copper-test`, `jbl-fe-iron-test`, `jbl-gh-test`, `jbl-k-potassium-test`, `jbl-kh-test`, `jbl-mg-magnesium-test-freshwater`, `jbl-nh4-ammonium-test`, `jbl-no2-nitrite-test`, `jbl-no3-nitrate-test`, `jbl-o2-oxygen-test`, `jbl-oxygen-test-o2-new-formula`, `jbl-ph-test-3-0-10-0`, `jbl-ph-test-6-0-7-6`, `jbl-ph-test-7-4-9-0`, `jbl-po4-phosphate-test-sensitive`, `jbl-sio2-silicate-test`.
+- Test çantaları (6): `jbl-test-combi-set-marin`, `jbl-test-combi-set-plus-fe`, `jbl-test-combi-set-plus-nh4`, `jbl-testlab`, `jbl-testlab-marin`, `jbl-testlab-proscape`.
+- Su değişim setleri (5): `jbl-aqua-in-out-complete-set`, `jbl-aqua-in-out-extension`, `jbl-aquaex-set-10-35`, `jbl-aquaex-set-20-45`, `jbl-aquaex-set-45-70`.
+
+### Belirsiz değerler (değer önerilmedi, değiştirilmedi)
+- **Aquael Aqua 4 serisi (lider kararı 4):** ürün sayfasında yalnız Kids Oval ve Start 60/P dolu; 2024 katalog PDF'i farklı değerler yazıyor (Kids 1×7 W ve 50 W ısıtıcı, Start 75 W, Family 100 W ve FAN 2).
+  - `aquael-aqua-4-start-rectangular` (farklı): sayfa LEDDY TUBE SUNNY DAY&NIGHT 1×10 ve "FIX 1 PLUS" ısıtıcı hücresi (muhtemel yazım hatası) yazıyor; katalog RETROFIT 10 W ve FIX 50 W. Hacim ve ölçü aynı.
+  - `aquael-aqua-4-family-oval`, `aquael-aqua-4-start-oval`: bombeli sürüm sayfada yok. `aquael-aqua-4-family-rectangular`, `aquael-aqua-4-kids-rectangular`: satır var, değer hücreleri boş.
+- **JBL Food Clip:** güncel sayfa "Food Clip (2x)" ikili paket; katalog kaydı tekli ürün. Kimlik farklı, adres değişmedi (lider kararı 2).
+- **Aday adresli partial kayıtlar (lider kararı 3):** Jeneca GD-402/502/602/603 `adjustableFlow` (kaynak yalnız akış yönü ayarı diyor; aday `aleas.cn/product/692.html`), JBL PRONOVO AUTOFOOD MULTI 125 ml hazne ve 375 ml (aday `jbl.de/en-gb/productsv2/detail/25187093`; "USB-C" metni düzeltildi).
+
+### Sayfada bulunmayan değer ya da iddia (partial ve missing; değer korunur)
+- **Aquael:**
+  - Unifilter UV-C 500, 750 ve 1000: debi ve güç ürün sayfasında yok (tabloda yalnız ürün numarası); 1000'de ayarlanabilir debi de yazmıyor. UV-C 500'ün akvaryum aralığı 150–200 L'ye düzeltildi.
+  - UltraScape Set 60/90 Forest ve Snow: hacim ve modül dağılımı sayfada yok.
+  - UltraMax/MaxiKani süngerleri: PPI sayısı sayfada yok; açıklamadan çıkarıldı, model adında duruyor (ad değişikliği yapılmadı).
+  - WoolMax Pro (iki kayıt): "elyaf" tanımı sayfada yok. Multi Cartridge PhosMAX Basic ve ZeoMAX: "MultiKani için" uyumu bu sayfada yok. Kuvars kumu 1,6–4 mm 2 kg: "doğal" ve "tatlı su" iddiası üretici sayfalarında yok.
+  - Sayfada olmayan ürünler (missing): `aquael-hexa-60-cabinet` (yalnız HEXA 60 SIMPLE var), `aquael-multi-cartridge-carbomax`, `aquael-aqua-decoris-flora-1-5-kg` (yalnız 1,25 kg Grunt), `aquael-dolomite-gravel-2-4-mm-10-kg` (ürün sayfasında 10 kg yok; 2024 kataloğu listeliyor, Index 246274).
+- **OrionLED:** `orionled-shade-mirror-d-100-black` ve `-grey`: seçeneklerde D-100 yok, yalnız açıklama tablosunda bir satır.
+- **Jeneca (aleas):** XP-18 ve XP-19 hacim (48/54 L) kaynakta yok; DB-11 ve DB-21 Upgrade için ayrı satır yok; DC-001 değerleri yok.
+- **JBL:** PROFLORA m501, m503, m502, m2003, m500, u500, u500-3x kullanım uyarıları ("güneşten korunmalı" vb.) kaynakta yok; u95 ve u95-3x "5/8 inç UNF" yok; m602, m603, m1003 alt hacim sınırı yok; m2000 SILVER ölçü ve bağlantı yok; PRONOVO AUTOFOOD BLACK 125/375 ml yok. PROFLORA Bio80 eco, Bio80 ve Bio160: hortum 3 → 2 m düzeltildi; "vantuz ve hava taşı", "iki bio bileşeni", "cam-seramik difüzör", "toplam 80 gün" ve "iki refill" kaynakta (blog 127) yok, ana ürün sayfası kalktı.
+- **Canlılar (C1b, serbest metin iddiaları tek tek karşılaştırılmadı):** `true-julii-cory` (SF adresi `hoplisoma-julii`'ye yönleniyor), `rope-fish`, `silver-flagtail-prochilodus`: sayısal alanlar aynı. Düzeltilen dört canlı (`red-tailed-snakehead`, `clown-knifefish`, `tire-track-eel`, `texas-cichlid`) da bu yüzden tarih almadı. `clown-knifefish`'in Aqueon ek kaynağı (2.839 L) açılmadı.

@@ -23,7 +23,7 @@ Katalogların her bilgisinin yüzde kaçının dolu olduğu ve kaynağının tü
 ## Güncel durum
 
 <!-- kapsam:başla -->
-Ölçüm tarihi: 2026-11-15
+Ölçüm tarihi: 2026-11-16
 
 ### Canlılar (471 kayıt)
 
@@ -33,7 +33,7 @@ Katalogların her bilgisinin yüzde kaçının dolu olduğu ve kaynağının tü
 | Yalnız otomatik kaynak bağlantısı | 0/471 | %0 |
 | Tatlı su: kabul edilen bakım kaynağına hiç bağlantısı yok | 9/434 | %2,1 |
 | En az hacim: ikinci kademe (birkaç hobi kaynağı) | 0/471 | %0 |
-| En az tank uzunluğu | 430/471 | %91,3 |
+| En az tank uzunluğu | 431/471 | %91,5 |
 | En az tank uzunluğu: ikinci kademe (birkaç hobi kaynağı) | 0/471 | %0 |
 | Akıntı | 404/471 | %85,8 |
 | Davranış ya da bakım notu | 367/471 | %77,9 |
@@ -84,6 +84,7 @@ Katalogların her bilgisinin yüzde kaçının dolu olduğu ve kaynağının tü
 
 ## Geçmiş
 
+- 2026-11-16 (tarih yenileme 2, C bandı; ürün sahibinin isteği "tamam yap"): C bandında (doğrulama 2026-09-02..09-15) Aquael, Creaqua, OrionLED, Atakan, Betta Marketim, Oase, Jeneca ve JBL kayıtları kaynağa karşı yeniden okundu; 361 ekipman ve 387 bakım ürününün doğrulama tarihi okuma gününe (2026-11-16) geçti (`src/data/catalog-reverified.ts`), 19 kaydın kaynak adresi modelin kendi sayfasına taşındı, değer ve metin düzeltmeleri yapıldı (`docs/CATALOG_LOG.md`, "2026-11-16 Tarih yenileme 2, C bandı"). Kapsam oranları değişmedi (hesap değeri %90,3, güç %49,5, önerilen hacim %20,8; canlı düzeltmeleri dolu alanların değeridir). Ölçüm tarihi 2026-11-16; "son 92 günde doğrulanmış" satırları %100. Güncellik ileriye ölçüldü: 2026-11-18 ve 2026-12-01 değişmedi (C bandının 92 günü 2026-12-04'ten sonra doluyor); 2026-12-18'de ekipman %63,5 → %73,4 (2315 → 2676), bakım %67,7 → %88,2 (1282 → 1669), canlı %93,8 (442, değişmedi).
 - 2026-11-15 (tarih yenileme 1; ürün sahibinin isteği "devam et"): A ve B bantlarında 2.527 kayıt kaynağa karşı yeniden okundu; 1.296 ekipman ve 439 bakım ürününün doğrulama tarihi okuma gününe (2026-11-15) geçti (`src/data/catalog-reverified.ts`), 322 kaydın kaynak adresi modelin kendi sayfasına taşındı, değer ve metin düzeltmeleri yapıldı (`docs/CATALOG_LOG.md`, "2026-11-15 Tarih yenileme 1" ve "2" bölümleri). Ekipman: hesap değeri %90,6 → %90,3 (1227 → 1222/1354; karar 0019 ile çekilen debi ve güçler, Resun KING değerleri), güç %49,3 → %49,5 (1796 → 1803), önerilen hacim %20,7 → %20,8 (755 → 760). Canlılar, bakım ürünleri ve bitkilerin oranları değişmedi (canlı düzeltmeleri dolu alanların değeridir). Ölçüm tarihi 2026-11-15; "son 92 günde doğrulanmış" satırları %100. Güncellik ileriye ölçüldü: 2026-11-18'de ekipman %82,4 → %96,9 (3003 → 3532), bakım %76,4 → %92,7 (1446 → 1755), canlı %98,5 (464, değişmedi); 2026-12-01'de ekipman %47,8 → %83,4 (1743 → 3039), bakım %68 → %91,2 (1287 → 1726), canlı %96,4 (454, değişmedi).
 - 2026-11-15 (veri sprinti tur 3; ürün sahibinin açık isteği ve ikinci kademe kararı, karar 0045): 35 bitkiye birkaç hobi kaynağının ortak sıcaklık ya da pH değeri yazıldı (Flowgrow, B-Aqua, 2Hr Aquarist; `docs/CATALOG_LOG.md`, "2026-11-14 İkinci kademe değerler"). Bitkiler 152 kayıt: sıcaklık %53,9 → %73,7 (82 → 112; 82 kabul edilen kaynak + 30 ikinci kademe), pH %52 → %74,3 (79 → 113; 79 + 34), bütün değerler dolu %24,3 → %31,6 (37 → 48). Kabul edilen kaynaktan gelen sıcaklık ve pH değişmedi. Canlılara dört yeni satır eklendi: en az hacim ve en az tank uzunluğu için ikinci kademe (ikisi de 0: hiçbir alanda üç bağımsız hobi kaynağı çıkmadı) ve "Tatlı su: kabul edilen bakım kaynağına hiç bağlantısı yok" (9/434; Fishkeeper ve ScotCat de kabul edilen kaynak sayıldı, önceki dar ölçüm onları saymıyordu ve 27 buluyordu). Canlıların öbür satırları, ekipman ve bakım ürünleri değişmedi. Ölçüm tarihi 2026-11-15. Davranış kayıtları (tur 3 A'da 49 kabul edilen kaynaklı, tur 3 B'de 6 ikinci kademe kayıt) bu tabloda ölçülmüyor.
 - 2026-11-14 (veri sprinti tur 2; ürün sahibinin açık isteği): kaynaksız hacim taraması 44 kayıtta değişiklik önerdi, Codex kaynak kontrolü 16 kayıtta 17 değeri geri aldı; moli 45 → 81 L (Seriously Fish, kaynakların büyüğü) ve boy 7,5 → 8 cm (Seriously Fish 80 mm SL), ninja woodcat notu 54 L hesabıyla düzeldi (`docs/CATALOG_LOG.md`, aynı günün tur 2 bölümleri). Canlılar 471 kayıt: en az tank uzunluğu %91,1 → %91,3 (429 → 430; Beta 45 cm), davranış ya da bakım notu %77,7 → %77,9 (366 → 367). Bitkilerde sıcaklık ve pH yeniden tarandı, yeni değer yok (%53,9 ve %52 kaldı; ürün sahibinin kararı: boş kalır, kartta "Kaynak yayımlamıyor" yazar). Ekipman ve bakım ürünleri değişmedi. Ölçüm tarihi 2026-11-14.
