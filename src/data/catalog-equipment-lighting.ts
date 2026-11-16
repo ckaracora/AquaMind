@@ -72,8 +72,9 @@ const orionESeriesCatalog:EquipmentProfile[] = [
 
 const orionGroluxACatalog:EquipmentProfile[] = [
   [17,5.8,20,25],[28.5,11,30,45],[43,16,45,60],[57,22.5,60,75],
-  [72,27,75,90],[87,31.5,90,105],[100,36,105,115],[115,42,115,130],
-].map(([bodyLength,powerW,minLength,maxLength])=>({id:`orionled-grolux-a-${String(bodyLength).replace(".","-")}`,category:"lighting",brand:"OrionLED",model:`Grolux A ${String(bodyLength).replace(".5",",5")} cm`,specifications:`Dimmerli Grolux LED · ${powerW} W · ${minLength}–${maxLength} cm akvaryum`,powerW,recommendedTankLengthCm:[minLength,maxLength] as [number,number],sourceUrl:"https://orionled.com.tr/urun/orionled-grolux-serisi-a-akvaryum-led-aydinlatma/",verifiedAt:ORION_VERIFIED_AT}));
+  // 100 ve 115 cm: ürün tablosu (105–115, 115–130 cm) ile seçenek açıklaması (105–120, 120–135 cm) çelişiyor; ölçü çekildi (karar 0019, 2026-11-16).
+  [72,27,75,90],[87,31.5,90,105],[100,36,null,null],[115,42,null,null],
+].map(([bodyLength,powerW,minLength,maxLength])=>({id:`orionled-grolux-a-${String(bodyLength).replace(".","-")}`,category:"lighting",brand:"OrionLED",model:`Grolux A ${String(bodyLength).replace(".5",",5")} cm`,specifications:minLength === null ? `Dimmerli Grolux LED · ${powerW} W · ürün tablosu ile seçenek açıklaması uyumlu akvaryum uzunluğunu farklı yazdığı için ölçü kullanılmıyor` : `Dimmerli Grolux LED · ${powerW} W · ${minLength}–${maxLength} cm akvaryum`,powerW:powerW ?? undefined,recommendedTankLengthCm:minLength === null ? undefined : [minLength,maxLength] as [number,number],sourceUrl:"https://orionled.com.tr/urun/orionled-grolux-serisi-a-akvaryum-led-aydinlatma/",verifiedAt:ORION_VERIFIED_AT}));
 
 const orionGroluxT8Catalog:EquipmentProfile[] = [
   ["T8-35",28.5,5.5,40,50],["T8-45",43,7.5,50,60],["T8-60",57,11,65,80],
@@ -154,7 +155,7 @@ const orionAquaslimAccentCatalog:EquipmentProfile[] = [
   category:"lighting" as const,
   brand:"OrionLED",
   model:"Aquaslim "+family+" "+lengthCm,
-  specifications:family+" renk vurgulu kapalı kasa LED · "+lengthCm+" cm · resmî ürün sayfasında güç yayımlanmıyor",
+  specifications:family+" renk vurgulu ince kasa LED · "+lengthCm+" cm · resmî ürün sayfasında güç yayımlanmıyor",
   recommendedTankLengthCm:[lengthCm,lengthCm] as [number,number],
   sourceUrl,
   verifiedAt:ORION_VERIFIED_AT,
@@ -175,13 +176,15 @@ const orionAquaslimRoyalBlueCatalog:EquipmentProfile[] = [
 }));
 
 const orionShadeMirrorCatalog:EquipmentProfile[] = [
-  [35,35,45],[45,45,60],[60,60,75],[75,75,90],[90,90,100],[100,100,115],[115,null,null],
+  // D-35, D-60, D-75 ve D-90: açıklama tablosu (35–45, 60–75, 75–90, 90–100 cm) ile seçenek açıklaması (35–50, 90–110, 75–100, 100–120 cm)
+  // çelişiyor; ölçü çekildi (karar 0019, 2026-11-16).
+  [35,null,null],[45,45,60],[60,null,null],[75,null,null],[90,null,null],[100,100,115],[115,null,null],
 ].flatMap(([model,minLength,maxLength])=>["Gri","Siyah"].map(color=>({
   id:"orionled-shade-mirror-d-"+model+"-"+(color === "Gri" ? "grey" : "black"),
   category:"lighting" as const,
   brand:"OrionLED",
   model:"Shade Mirror D-"+model+" "+color,
-  specifications:"D-RGBW serisi aynalı gölgelik · "+color+(minLength === null ? " · mağaza D-115 seçeneği ile açıklamadaki D-120 tablosu çeliştiği için uyumluluk ölçüsü kullanılmıyor" : " · "+minLength+"–"+maxLength+" cm akvaryum"),
+  specifications:"D-RGBW serisi aynalı gölgelik · "+color+(minLength === null && model !== 115 ? " · açıklama tablosu ile seçenek açıklaması çeliştiği için uyumluluk ölçüsü kullanılmıyor" : minLength === null ? " · mağaza D-115 seçeneği ile açıklamadaki D-120 tablosu çeliştiği için uyumluluk ölçüsü kullanılmıyor" : " · "+minLength+"–"+maxLength+" cm akvaryum"),
   recommendedTankLengthCm:minLength === null ? undefined : [minLength,maxLength] as [number,number],
   sourceUrl:"https://orionled.com.tr/urun/d-serisi-shade-mirror-aynali-golgelik/",
   verifiedAt:ORION_VERIFIED_AT,
