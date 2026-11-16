@@ -45,7 +45,7 @@ Motor 1.18.0 için bağımsız hüküm analizi (Codex, 2026-11-14) dört açık 
 
 - `spaceSevere` başlığı "X: akvaryumun uzunluğu ya da derinliği yetersiz" oldu (İsviçre ölçü sınırı; en çok "dikkat"). `spaceTooSmall` "X: akvaryum çok küçük" kalır (hacim gerekenin yarısından az; "uygun değil").
 - `smallFishPredation` metninde "Bu iki türü aynı akvaryumda tutmayın." yerine sarı hükümle uyumlu, riski anlatan cümle: "Birlikte tutulurlarsa X yenebilir; bu eşleşmeden kaçınmak daha güvenlidir."
-- Hüküm sınırları değişmedi. Bütün kırmızıları "uygun değil" yapmak ayrı bir karar olur.
+- Hüküm sınırları değişmedi. Bütün kırmızıları "uygun değil" yapmak ayrı bir karar olur. Kapandı (2026-11-16, `docs/DECISIONS/0046-cinsiyet-toplam-alan-ve-av-hukmu.md`): avı kaynağın açıkça yazdığı av uyarısı "uygun değil"; yalnız %40 boy oranına dayanan av uyarısı ve ekipman kırmızıları "dikkat" kalır.
 
 ### Yapılmayanlar
 

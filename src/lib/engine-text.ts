@@ -22,8 +22,8 @@ export function own<T>(table: Record<string, T>, key: string): T | undefined {
  */
 export const SPECIES_NAME_PARAMS = ["name", "hunter", "prey", "predator", "nipper", "target"] as const;
 /** Tür adı listeleri. Motor 1.14.0 (karar 0037): ölçülen değerin aralığının üstünde (`above`) ve altında (`below`) kaldığı canlılar, soğuk
- * su türleri (`coldwater`) ve tropikal canlılar (`tropical`). */
-export const SPECIES_NAME_LIST_PARAMS = ["eaters", "shrimp", "snails", "fish", "noteNames", "above", "below", "coldwater", "tropical"] as const;
+ * su türleri (`coldwater`) ve tropikal canlılar (`tropical`). Motor 1.21.0 (karar 0046): toplam alan uyarısının türleri (`species`). */
+export const SPECIES_NAME_LIST_PARAMS = ["eaters", "shrimp", "snails", "fish", "noteNames", "above", "below", "coldwater", "tropical", "species"] as const;
 export const SPECIES_NOTE_PARAMS = ["text", "condition"] as const;
 export const SPECIES_NOTE_LIST_PARAMS = ["noteConditions"] as const;
 export const EQUIPMENT_NOTE_PARAMS = ["note"] as const;

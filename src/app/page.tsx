@@ -19,7 +19,7 @@ const summaryTones = { good: "text-[#71858d]", neutral: "text-[#71858d]", warnin
 
 export default function Dashboard() {
   const { aquariums, waterReadings, maintenanceTasks, livestock, plants, equipment } = useAquariums();
-  const { t } = useI18n();
+  const { t, catalogText } = useI18n();
   // Sıcaklık, hacim ve tarih ayarlardaki tercihe göre yazılır (docs/DECISIONS/0021-dil-altyapisi.md).
   const fmt = useDisplayFormat();
   const formatDay = (date: string) => fmt.date(date, { day: "numeric", month: "short" });
@@ -41,8 +41,9 @@ export default function Dashboard() {
   const aquariumReadings = waterReadings.filter((item) => item.aquariumId === aquarium.id);
   // Sağlık sayfasıyla aynı kural: en son ölçüm tarihe göre seçilir.
   const latest = latestReading(aquariumReadings);
-  const status = lookup ? dashboardStatus(lookup, aquarium, animals, devices, latest) : undefined;
-  const summary = status ? { text: t.healthSummary[status.summary.key], tone: status.summary.tone } : { text: statusLoadFailed ? t.dashboard.statusLoadFailed : t.dashboard.statusPending, tone: "neutral" as const };
+  const status = lookup ? dashboardStatus(lookup, aquarium, animals, devices, latest, catalogText) : undefined;
+  // Motor 1.21.0 (karar 0046): hesaba katılmayan canlılar adlarıyla yazılır.
+  const summary = status ? { text: status.uncounted.length ? `${t.healthSummary[status.summary.key]} ${t.dashboard.uncounted(status.uncounted.join(", "))}` : t.healthSummary[status.summary.key], tone: status.summary.tone } : { text: statusLoadFailed ? t.dashboard.statusLoadFailed : t.dashboard.statusPending, tone: "neutral" as const };
   const temperatureStatus = status?.temperature ?? pendingStatus;
   const phStatus = status?.ph ?? pendingStatus;
   const nitrate = status?.nitrate ?? pendingStatus;

@@ -16,11 +16,11 @@ const LEGACY_SCRIPT_TIMEOUT_MS = 120_000;
 
 describe("mevcut sağlık senaryoları (scripts/test-health.cjs)", () => {
   it(
-    "uyarlayıcı üzerinden 120 senaryoyu geçer",
+    "uyarlayıcı üzerinden 125 senaryoyu geçer",
     () => {
       const run = spawnSync(process.execPath, [script], { cwd: repoRoot, encoding: "utf8", timeout: LEGACY_SCRIPT_TIMEOUT_MS });
       expect(run.status, run.stderr).toBe(0);
-      expect(run.stdout).toContain("120 senaryo başarıyla doğrulandı");
+      expect(run.stdout).toContain("125 senaryo başarıyla doğrulandı");
     },
     LEGACY_SCRIPT_TIMEOUT_MS,
   );

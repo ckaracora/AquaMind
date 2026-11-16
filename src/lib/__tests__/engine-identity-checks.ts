@@ -60,15 +60,19 @@ export function assertEngine119Review() {
   const groupLoner = { ...stub("group", { conspecificAggression: { source: "Fishkeeper", value: "all" } }), minGroup: 6 };
   for (const count of [3, 6]) assert(!codes(run([groupLoner], [animal("group", count)])).includes("conspecificAll"), "Çift dışındaki eski grup hükmü korunur");
   // Katalogdaki 23 çift kaydının hepsi: en az grubu 1 ise iki sarı; 2 ve üstüyse iki uyarısız; grup sayısını aşan adet kırmızı.
+  // Motor 1.21.0 (karar 0046): kaynağın kabul ettiği büyük grubun (`groupFrom`) altındaki üç birey sarı "küçük grupta kavga eder" alır.
   for (const [id, records] of Object.entries(speciesBehavior)) {
-    if (!records.some((record) => record.pairAccepted)) continue;
+    const pairRecord = records.find((record) => record.pairAccepted);
+    if (!pairRecord) continue;
     const profile = speciesById(id)!;
     for (const quantity of [2, 3]) {
       const result = analyzeAquarium({ ...tank, type: profile.waterTypes?.[0] ?? "freshwater", netVolumeLiters: 12000, lengthCm: 600 }, [{ ...animal(id, quantity), category: profile.category }], []);
       const exempt = profile.minGroup >= 2 && quantity <= profile.minGroup;
-      const expected = exempt ? undefined : quantity === 2 ? "conspecificPair" : "conspecificAll";
-      assert.equal(codes(result).filter((code) => code === "conspecificPair" || code === "conspecificAll").join(), expected ?? "", id);
-      if (expected) assert(result.score <= (quantity === 2 ? 74 : 49), id);
+      const smallGroup: boolean = pairRecord.groupFrom !== undefined && quantity > 2 && quantity < pairRecord.groupFrom;
+      const expected: string | undefined = exempt ? undefined : quantity === 2 ? "conspecificPair" : smallGroup ? "conspecificSmallGroup" : "conspecificAll";
+      assert.equal(codes(result).filter((code) => code === "conspecificPair" || code === "conspecificAll" || code === "conspecificSmallGroup").join(), expected ?? "", id);
+      if (expected) assert(result.score <= (quantity === 2 || smallGroup ? 74 : 49), id);
+      if (smallGroup) assert(result.status === "warning", id);
     }
   }
   const mixed = run([a, b], [animal("a"), animal("a"), animal("b"), animal("b", 0)]);

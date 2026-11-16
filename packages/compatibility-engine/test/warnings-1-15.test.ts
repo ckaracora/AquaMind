@@ -97,10 +97,11 @@ describe("canlı riski uyarısı genel puanı en fazla 74 yapar (karar 0040)", (
   // 1.18.0 (karar 0043): aynı tür saldırganlığı (iki kod) ve gerekenin yarısından küçük akvaryum sınıfa girdi; 18 koddan 21 koda.
   // 1.19.0 (karar 0044): kaynağın kabul ettiği çift ve birbirine karıştırılmayan türler; 23 kod.
   // 1.20.0 (karar 0045): İsviçre ölçü sınırı uyarısı (`spaceSevere`); ikinci kademe uzunluktan doğduğunda sarıdır. 24 kod.
-  it("sınıf 24 koddur: yenme ve yaralanma, aynı tür saldırganlığı, alan, kalabalık ve grup, aralık dışı su değeri", () => {
+  // 1.21.0 (karar 0046): `conspecificSmallGroup` ve `spaceTotal` eklendi (26 kod).
+  it("sınıf 26 koddur: yenme ve yaralanma, aynı tür saldırganlığı, alan, kalabalık ve grup, aralık dışı su değeri", () => {
     expect([...LIVESTOCK_RISK_WARNING_CODES].sort()).toEqual([
-      "ammoniaDetected", "coldwaterWithTropical", "conspecificAll", "conspecificMales", "conspecificPair", "finNip", "groupLow", "highLoad", "incompatibleGroup", "marineKh", "marineNitrate", "marinePh", "marineSpecificGravity",
-      "nitrateHigh", "nitriteDetected", "shrimpEaten", "smallFishPredation", "snailEaten", "spaceLimited", "spaceNarrow", "spaceSevere", "spaceTooSmall", "speciesPhOutOfRange",
+      "ammoniaDetected", "coldwaterWithTropical", "conspecificAll", "conspecificMales", "conspecificPair", "conspecificSmallGroup", "finNip", "groupLow", "highLoad", "incompatibleGroup", "marineKh", "marineNitrate", "marinePh", "marineSpecificGravity",
+      "nitrateHigh", "nitriteDetected", "shrimpEaten", "smallFishPredation", "snailEaten", "spaceLimited", "spaceNarrow", "spaceSevere", "spaceTooSmall", "spaceTotal", "speciesPhOutOfRange",
       "speciesTemperatureOutOfRange",
     ]);
   });

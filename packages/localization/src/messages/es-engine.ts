@@ -50,7 +50,8 @@ const outsideRange = (p: EngineTextParams) =>
 const marineTarget = (p: EngineTextParams) => (str(p, "profile") === "fishOnly" ? "acuario solo con peces" : "acuario con invertebrados");
 const marineRange = (p: EngineTextParams, f: EngineTextFormat) => `${f.measurement(num(p, "min"), 3)}–${f.measurement(num(p, "max"), 3)}`;
 /** Grupo de especies que no deben mezclarse (motor 1.19.0, decisión 0044). */
-const groupName = (group: string) => ({ clownfish: "de pez payaso" } as Record<string, string>)[group] ?? "del mismo grupo";
+const groupName = (group: string) =>
+  ({ clownfish: "de pez payaso", hermitCrab: "de cangrejo ermitaño", grammaDottyback: "de grama y dottyback" } as Record<string, string>)[group] ?? "del mismo grupo";
 
 export const esEngine: EngineMessages = {
   metricLabels: {
@@ -68,6 +69,7 @@ export const esEngine: EngineMessages = {
     spaceSevere: (p, f) => `Acuario demasiado pequeño para ${f.number(num(p, "count"))} ${plural(num(p, "count"), "especie", "especies")}`,
     spaceLimited: (p, f) => `Espacio al límite para ${f.number(num(p, "count"))} ${plural(num(p, "count"), "especie", "especies")}`,
     spaceOk: fixed("Adecuado para las especies registradas"),
+    spaceTotal: fixed("El espacio total que necesitan las especies es excesivo para este acuario"),
     groupLow: (p, f) => `Tamaño de grupo bajo en ${f.number(num(p, "count"))} ${plural(num(p, "count"), "especie", "especies")}`,
     groupOk: fixed("Se cubren las necesidades de grupo"),
     habitat: fixed("El hábitat no coincide con el tipo de acuario"),
@@ -349,7 +351,12 @@ export const esEngine: EngineMessages = {
     },
     smallFishPredation: {
       title: (p) => `${str(p, "prey")}: puede ser presa`,
-      message: (p) => `${str(p, "hunter")} puede comer peces pequeños que le quepan en la boca; con su tamaño adulto, ${str(p, "prey")} corre este riesgo. Si conviven, ${str(p, "prey")} puede acabar siendo presa; es más seguro evitar esta combinación.${sourceNote(p)}`,
+      message: (p, f) =>
+        str(p, "explicit") === "named"
+          ? `La fuente menciona por su nombre a ${str(p, "prey")} entre los peces que ${str(p, "hunter")} puede comer. No mantengas estas dos especies en el mismo acuario.${sourceNote(p)}`
+          : str(p, "explicit") === "size"
+            ? `${str(p, "hunter")} puede comer peces pequeños; según la fuente, los peces de ${f.length(num(p, "maxPrey"))} o menos corren riesgo, y con su tamaño adulto ${str(p, "prey")} está dentro de ese límite. No mantengas estas dos especies en el mismo acuario.${sourceNote(p)}`
+            : `${str(p, "hunter")} puede comer peces pequeños que le quepan en la boca; con su tamaño adulto, ${str(p, "prey")} corre este riesgo. Si conviven, ${str(p, "prey")} puede acabar siendo presa; es más seguro evitar esta combinación.${sourceNote(p)}`,
     },
     finNip: {
       title: (p) => `${str(p, "target")}: riesgo de mordisqueo de aletas`,
@@ -359,7 +366,9 @@ export const esEngine: EngineMessages = {
     conspecificMales: {
       title: (p) => `${str(p, "name")}: los machos pelean`,
       message: (p, f) =>
-        `Según la fuente, los machos de esta especie pelean entre sí; si entre los ${f.number(num(p, "count"))} ${plural(num(p, "count"), "individuo registrado", "individuos registrados")} hay más de un macho, sepáralos.${sourceNote(p)}`,
+        p.males !== undefined
+          ? `Según la fuente, los machos de esta especie pelean entre sí; de los ${f.number(num(p, "count"))} individuos registrados, ${f.number(num(p, "males"))} se registraron como machos. Separa a los machos.${sourceNote(p)}`
+          : `Según la fuente, los machos de esta especie pelean entre sí; si entre los ${f.number(num(p, "count"))} ${plural(num(p, "count"), "individuo registrado", "individuos registrados")} hay más de un macho, sepáralos.${sourceNote(p)}`,
     },
     conspecificAll: {
       title: (p) => `${str(p, "name")}: debe mantenerse en solitario`,
@@ -369,6 +378,11 @@ export const esEngine: EngineMessages = {
       title: (p) => `${str(p, "name")}: solo una pareja compatible puede convivir`,
       message: (p) =>
         `Según la fuente, esta especie es agresiva con individuos de su misma especie; puede mantenerse en solitario o como una pareja compatible. Los 2 ejemplares registrados solo pueden convivir si forman una pareja compatible y ya emparejada; dos ejemplares reunidos al azar pueden pelear.${sourceNote(p)}`,
+    },
+    conspecificSmallGroup: {
+      title: (p) => `${str(p, "name")}: pelea en grupos pequeños`,
+      message: (p, f) =>
+        `Según la fuente, esta especie es agresiva con individuos de su misma especie; puede mantenerse ${flag(p, "pairAccepted") ? "en solitario, como una pareja compatible " : "en solitario "}o en un grupo de al menos ${f.number(num(p, "groupFrom"))}. Los ${f.number(num(p, "count"))} individuos registrados quedan entre esas opciones; las peleas son frecuentes en grupos pequeños.${sourceNote(p)}`,
     },
     shrimpEaten: {
       title: fixed("Los camarones pueden ser comidos"),
@@ -402,6 +416,11 @@ export const esEngine: EngineMessages = {
       title: (p) => `${str(p, "name")}: tamaño de grupo bajo`,
       message: (p, f) => `Cantidad registrada: ${f.number(num(p, "count"))}; el catálogo recomienda al menos ${f.number(num(p, "min"))}.`,
     },
+    spaceTotal: {
+      title: fixed("Necesidad de espacio total elevada"),
+      message: (p, f) =>
+        `Según las fuentes, la suma de los volúmenes mínimos que necesitan ${nameList(list(p, "species"))} con las cantidades registradas es ${f.volume(num(p, "total"))}; el volumen neto del acuario es ${f.volume(num(p, "aquariumVolume"))}, menos de la mitad de esa suma. Aunque cada especie quepa por sí sola, juntas quedan apiñadas. Considera tener menos especies o individuos, o un acuario más grande.`,
+    },
     spaceLimited: {
       title: (p) => `${str(p, "name")}: espacio al límite`,
       message: (p, f) => `${spaceReference(p, f)}${secondarySpaceNote(p)}`,
@@ -423,7 +442,7 @@ export const esEngine: EngineMessages = {
     },
   },
   unevaluatedTitle: "Sin evaluar",
-  unevaluatedIntro: "Este resultado no incluye lo siguiente; la puntuación se basa solo en lo que sabemos.",
+  unevaluatedIntro: "Este resultado no incluye lo siguiente; la evaluación se basa solo en lo que sabemos.",
   unevaluatedIntroNoLivestock: "Los registros de abajo no se tuvieron en cuenta.",
   unevaluated: {
     unknownAnimal: (p, f) => `${str(p, "name")} (${specimens(p, f)}) no está en el catálogo; no se tuvieron en cuenta sus necesidades ni su compatibilidad.`,

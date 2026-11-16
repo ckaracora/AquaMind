@@ -18,6 +18,7 @@ import { isVerifiedSpeciesProfile } from "@/data/catalog-shared";
 import type { SpeciesProfile } from "@/data/catalog-species";
 import type { BehaviorRecord } from "@/data/species-behavior";
 import { createHealthAnalyzer, type CatalogLookup } from "@/lib/health-analysis-core";
+import { uncountedAnimalNames } from "@/lib/health-warning-groups";
 import { SELECTION_WARNING_CODES } from "@/lib/selection-warnings";
 import type { Aquarium, Equipment, Livestock, WaterParameters } from "@/types/aquarium";
 
@@ -45,6 +46,11 @@ export interface FitResult {
   fits: FitEntry[];
   /** Yalnız ısıtıcı kayıtlı olmadığı için listeye girmeyen tropikal türler (dürüst not için sınıf başına sayı). */
   heaterOnly: Record<FitCategory, number>;
+  /**
+   * Motor 1.21.0 (docs/DECISIONS/0046-cinsiyet-toplam-alan-ve-av-hukmu.md): akvaryumda katalogda tanınmayan ya da doğrulanmamış canlılar (adlarıyla, Türkçe
+   * katalog adı ya da kullanıcının yazdığı ad). Liste onları hesaba katamaz; pencere bunu adlarıyla söyler.
+   */
+  uncounted: string[];
 }
 
 export interface FitInput {
@@ -68,7 +74,8 @@ export function fitCandidate(aquarium: Aquarium, profile: SpeciesProfile): Lives
 
 export function speciesFittingAquarium({ lookup, aquarium, animals, devices, latest, candidates }: FitInput): FitResult {
   const analyze = createHealthAnalyzer(lookup);
-  const before = new Set(analyze(aquarium, animals, devices, latest).warnings.map(warningKey));
+  const baseline = analyze(aquarium, animals, devices, latest);
+  const before = new Set(baseline.warnings.map(warningKey));
   const present = new Set(animals.map((item) => lookup.speciesForLivestock(item)?.id).filter((id): id is string => id !== undefined));
   const fits: FitEntry[] = [];
   const heaterOnly: Record<FitCategory, number> = { fish: 0, shrimp: 0, snail: 0 };
@@ -81,7 +88,7 @@ export function speciesFittingAquarium({ lookup, aquarium, animals, devices, lat
     if (!blocking.length) fits.push({ profile, quantity: candidate.quantity });
     else if (blocking.every((warning) => warning.code === "heaterMissing")) heaterOnly[profile.category] += 1;
   }
-  return { fits, heaterOnly };
+  return { fits, heaterOnly, uncounted: baseline.incomplete ? uncountedAnimalNames(baseline.unevaluated) : [] };
 }
 
 /**

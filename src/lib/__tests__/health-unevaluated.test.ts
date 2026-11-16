@@ -43,7 +43,8 @@ describe("kartın metinleri üç dilde", () => {
   });
 
   it("Türkçe: başlık, giriş ve maddeler (önce canlılar, sonra cihazlar, en sonda su ölçümü)", () => {
-    expect([engine.tr.unevaluatedTitle, engine.tr.unevaluatedIntro]).toEqual(["Değerlendirilemeyenler", "Bu sonuç aşağıdakileri kapsamıyor; puan yalnız bildiklerimize dayanıyor."]);
+    expect([engine.tr.unevaluatedTitle, engine.tr.unevaluatedIntro]).toEqual(["Değerlendirilemeyenler", "Bu sonuç aşağıdakileri kapsamıyor; değerlendirme yalnız bildiklerimize dayanıyor."]);
+    // Kontrol turu (motor 1.21.0, karar 0046): tanınmayan canlı varken puan gösterilmediği için giriş "puan" demez.
     expect(unevaluatedTexts(engine.tr, format("tr"), sample)).toEqual([
       "Balon moli (4 adet) katalogda yok; ihtiyaçları ve uyumu hesaba katılmadı.",
       "Neon tetra (1 adet) için katalog kaydı henüz doğrulanmadı; ihtiyaçları ve uyumu hesaba katılmadı.",
@@ -129,7 +130,8 @@ describe("sağlık sayfası", () => {
     expect(source).toContain("unevaluatedTexts(engineTexts,engineFormat,analysis.unevaluated,catalogText,equipmentText)");
     expect(source).toContain('const incompleteGood=analysis.status==="good"&&analysis.incomplete===true;');
     expect(source).toContain("const verdictLabel=incompleteGood?t.health.incomplete:t.health.overall[analysis.status];");
-    expect(source).toContain('<ScoreRing score={analysis.score} status={incompleteGood?"neutral":analysis.status}/>');
+    // Motor 1.21.0 (karar 0046): eksik değerlendirmede puan gösterilmez (src/lib/__tests__/trust-1-21.test.ts).
+    expect(source).toContain('<ScoreRing score={hideScore?undefined:analysis.score} status={incompleteGood?"neutral":analysis.status}/>');
     expect(source).toContain("{engineTexts.unevaluatedTitle}");
     // Kontrol turu: risk yok kutusunu, kartın görünürlüğünü ve nötr göstergeleri `healthAdviceView` belirler (aşağıdaki testler).
     expect(source).toContain("const advice=healthAdviceView(analysis,animals.length,awaiting.length);");

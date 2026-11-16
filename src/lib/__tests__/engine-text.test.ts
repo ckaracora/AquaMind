@@ -135,6 +135,12 @@ const species: Record<string, SpeciesProfileInput> = {
   // Motor 1.20.0 (karar 0045): hacmi ya da uzunluğu ikinci kademeden (çapraz kontrollü hobi kaynakları) gelen türler.
   secondaryVolume: { id: "secondaryVolume", commonName: "Hobi hacimli tür", adultSizeCm: 4, minVolumeL: 40, minTankLengthCm: 45, minGroup: 1, temperature: [22, 27], ph: [6, 7.5], wasteFactor: 0.5, secondarySources: { minVolumeL: ["https://a.example/1", "https://b.example/1", "https://c.example/1"] } },
   secondaryLength: { id: "secondaryLength", commonName: "Hobi uzunluklu tür", adultSizeCm: 20, minVolumeL: 100, minTankLengthCm: 100, minGroup: 1, temperature: [22, 27], ph: [6, 7.5], wasteFactor: 1, secondarySources: { minTankLengthCm: ["https://a.example/2", "https://b.example/2", "https://c.example/2"] } },
+  // Motor 1.21.0 (karar 0046): cinsiyet, kaynağın kabul ettiği büyük grup, adıyla ve sayısal boyla yazılan av, toplam alan.
+  maleStub: { id: "maleStub", commonName: "Erkekleri kavgacı tür", adultSizeCm: 6, minVolumeL: 40, minGroup: 1, temperature: [22, 27], ph: [6, 7.5], wasteFactor: 0.6, behavior: { conspecificAggression: { source: "Seriously Fish", value: "males" } } },
+  groupStub: { id: "groupStub", commonName: "Büyük grupta tutulan tür", adultSizeCm: 6, minVolumeL: 60, minGroup: 1, temperature: [22, 27], ph: [6, 7.5], wasteFactor: 0.6, behavior: { conspecificAggression: { source: "Fishkeeper", value: "all", pairAccepted: true, groupFrom: 9, condition: "Küçük gruplarda ölümler sık görülür" } } },
+  groupNoPairStub: { id: "groupNoPairStub", commonName: "Çifti kabul edilmeyen grup türü", adultSizeCm: 6, minVolumeL: 60, minGroup: 1, temperature: [22, 27], ph: [6, 7.5], wasteFactor: 0.6, behavior: { conspecificAggression: { source: "Fishkeeper", value: "all", groupFrom: 7 } } },
+  namedHunter: { id: "namedHunter", commonName: "Adıyla av sayan tür", adultSizeCm: 30, minVolumeL: 80, minGroup: 1, temperature: [22, 27], ph: [6, 7.5], wasteFactor: 0.5, behavior: { eatsSmallFish: { source: "Fishkeeper", preyIds: ["plain"] } } },
+  sizeHunter: { id: "sizeHunter", commonName: "Av boyu bilinen tür", adultSizeCm: 15, minVolumeL: 100, minGroup: 1, temperature: [22, 27], ph: [6, 7.5], wasteFactor: 1, behavior: { eatsSmallFish: { source: "Seriously Fish", maxPreyCm: 4.5 } } },
 };
 const devices: Record<string, EquipmentProfileInput> = {
   skimmer: { id: "skimmer", category: "filter", brand: "Stub", model: "Skimmer", auxiliaryFiltration: true },
@@ -245,6 +251,13 @@ const scenarios: Array<[string, HealthAnalysis]> = [
   ["ikinci kademe uzunluk, akvaryum dar", analyze(tank({ lengthCm: 80, widthCm: 30, heightCm: 50, netVolumeLiters: 150 }), [animal("secondaryLength")], [])],
   // Kontrol turu (2026-11-15): kabul edilen kaynağın hacmi yarısından küçük, ikinci kademe uzunluk da kısa (`lengthSecondary`).
   ["kabul edilen hacim yarısından küçük, ikinci kademe uzunluk da kısa", analyze(tank({ lengthCm: 90, netVolumeLiters: 40 }), [animal("secondaryLength")], [])],
+  // Motor 1.21.0 (karar 0046).
+  ["iki birey erkek diye girildi", analyze(tank(), [{ ...animal("maleStub", "fish", 2), gender: "male" }], [])],
+  ["kaynağın kabul ettiği büyük grubun altında", analyze(tank(), [animal("groupStub", "fish", 3)], [])],
+  ["çifti kabul edilmeyen tür büyük grubun altında", analyze(tank(), [animal("groupNoPairStub", "fish", 4)], [])],
+  ["kaynak avı adıyla sayıyor", analyze(tank(), [animal("namedHunter", "other"), animal("plain")], [])],
+  ["kaynak av boyunu sayıyla veriyor", analyze(tank(), [animal("sizeHunter"), animal("halfCm")], [])],
+  ["türlerin toplam alan ihtiyacı yüksek", analyze(tank({ netVolumeLiters: 55 }), [animal("plain"), animal("halfCm"), animal("tropicalStub")], [])],
 ];
 const scenario = (name: string) => scenarios.find(([label]) => label === name)![1];
 const warningOf = (analysis: HealthAnalysis, code: string) => analysis.warnings.find((warning) => warning.code === code)!;
@@ -264,8 +277,9 @@ describe("motor metinleri dil dosyasından (karar 0021, 3. paket)", () => {
     // 1.13.0: beş deniz suyu kodu (karar 0030). 1.14.0 (karar 0037): yedi yeni uyarı kodu; ölçüt kodlarından `communityCaution` çıktı,
     // `filterNotRecorded` ve `heaterNotRecorded` geldi. 1.16.0 (karar 0041): `cycleIncomplete`. 1.18.0 (karar 0043): `spaceTooSmall`.
     // 1.19.0 (karar 0044): `conspecificPair` ve `incompatibleGroup` (uyarı), `incompatibleGroup` (ölçüt).
-    expect(sourceWarningCodes.size).toBe(64);
-    expect(sourceDetailCodes.size).toBe(40);
+    // 1.21.0 (karar 0046): `conspecificSmallGroup` ve `spaceTotal` (uyarı), `spaceTotal` (ölçüt).
+    expect(sourceWarningCodes.size).toBe(66);
+    expect(sourceDetailCodes.size).toBe(41);
     expect(new Set(Object.keys(tr.warnings))).toEqual(sourceWarningCodes);
     expect(new Set(Object.keys(tr.metricDetails))).toEqual(sourceDetailCodes);
     expect(new Set(Object.keys(tr.metricLabels))).toEqual(new Set(fixture[0].result.metrics.map((metric) => metric.key)));
@@ -596,7 +610,8 @@ describe("motor metinleri dil dosyasından (karar 0021, 3. paket)", () => {
       "uyarı ammoniaToxic": "measurement(4):free measurement(3):limit",
       "uyarı ammoniaWorstCase": "measurement(3):total measurement(3):limit",
       "uyarı coldwaterWithTropical": "temperatureNumber:min temperature:max",
-      "uyarı conspecificMales": "number:count",
+      "uyarı conspecificMales": "number:count | number:count number:males",
+      "uyarı conspecificSmallGroup": "number:groupFrom number:count",
       "uyarı cycleIncomplete": "measurement(3):ammonia | measurement(3):ammonia measurement(3):nitrite | measurement(3):nitrite",
       "uyarı filterCapacityLow": "volume:volume volume:liters",
       "uyarı filterFlowInsufficient": "cycles:turnover",
@@ -618,8 +633,10 @@ describe("motor metinleri dil dosyasından (karar 0021, 3. paket)", () => {
       "uyarı nitriteDetected": "measurement(3):value",
       "uyarı nitriteHigh": "measurement(3):value measurement(3):limit",
       "uyarı salinityOutOfRange": "number:count",
+      "uyarı smallFishPredation": "length:maxPrey",
       "uyarı spaceLimited": "volume:volume | volume:volume length:length",
       "uyarı spaceNarrow": "volume:volume length:length length:width length:size length:minWidth | volume:volume length:width length:size length:minWidth",
+      "uyarı spaceTotal": "volume:total volume:aquariumVolume",
       "uyarı spaceTooSmall": "number:count volume:volume volume:aquariumVolume | number:count volume:volume volume:aquariumVolume length:length length:tankLength",
       "uyarı spaceSevere": "volume:volume length:length length:size length:minLength length:minDepth | volume:volume length:size length:minLength length:minDepth",
       "uyarı speciesPhOutOfRange": "measurement(2):value | measurement(2):value measurement(2):min measurement(2):max",
@@ -653,7 +670,8 @@ describe("katalogdan gelen değişkenlerin çevirisi (karar 0021, 4. paket)", ()
   // Katalogdan gelen Türkçe metin taşımayan metin değişkenleri: kaynak adları (özel ad), ekipman adı (marka ve model), dilden bağımsız
   // kodlar (akvaryum türü, deniz suyu profili ve yönü, geçersiz ölçüm alanları). Ekipmanın kapasite notu katalog metnidir (5. paket).
   // 1.19.0 (karar 0044): `group` birbirine karıştırılmayan türlerin dilden bağımsız grup kodudur (ör. "clownfish"); dil dosyası adını kendisi yazar.
-  const notSpeciesCatalog = new Set(["source", "sources", "names", "aquariumType", "profile", "direction", "fields", "group"]);
+  // 1.21.0 (karar 0046): `explicit` avın kaynakta nasıl yazıldığının dilden bağımsız kodudur ("named", "size").
+  const notSpeciesCatalog = new Set(["source", "sources", "names", "aquariumType", "profile", "direction", "fields", "group", "explicit"]);
   const speciesCatalog = new Set<string>([...SPECIES_CATALOG_PARAMS, ...SPECIES_CATALOG_LIST_PARAMS, ...EQUIPMENT_NOTE_PARAMS]);
   const analyses = [...fixture.map(({ name, result }) => [name, result] as const), ...scenarios];
 

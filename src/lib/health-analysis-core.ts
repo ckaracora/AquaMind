@@ -19,6 +19,8 @@ const noteFrom = (record: BehaviorRecord): BehaviorNote => ({
   ...(record.condition ? { condition: record.condition } : {}),
   ...(record.confidence === "conflict" ? { conflict: true } : {}),
   ...(record.smallShrimpOnly ? { smallShrimpOnly: true } : {}),
+  // Motor 1.21.0 (karar 0046): kaynağın adıyla saydığı av (yalnız eatsSmallFish kaydında bulunur).
+  ...(record.preyIds?.length ? { preyIds: record.preyIds } : {}),
 });
 
 /**
@@ -38,7 +40,8 @@ export function withBehaviorRecords(profile: SpeciesProfile | undefined, records
   }
   const aggression = pick("conspecificAggression");
   // `pairAccepted` (motor 1.19.0, karar 0044): kaynak türü "tek ya da uyumlu bir çift" olarak kabul ediyor.
-  if (aggression?.value) behavior.conspecificAggression = { ...noteFrom(aggression), value: aggression.value, ...(aggression.pairAccepted ? { pairAccepted: true as const } : {}) };
+  // `groupFrom` (motor 1.21.0, karar 0046): kaynağın kabul ettiği büyük grubun alt sınırı.
+  if (aggression?.value) behavior.conspecificAggression = { ...noteFrom(aggression), value: aggression.value, ...(aggression.pairAccepted ? { pairAccepted: true as const } : {}), ...(aggression.groupFrom !== undefined ? { groupFrom: aggression.groupFrom } : {}) };
   // `incompatibleGroup` (motor 1.19.0, karar 0044): kaynak türü başka türlerle karıştırılmaması gereken bir gruba koyuyor (ör. palyaço balıkları).
   const group = pick("incompatibleGroup");
   if (group?.group) behavior.incompatibleGroup = { ...noteFrom(group), group: group.group };

@@ -1527,9 +1527,54 @@ for (const [id, name] of [["texas-cichlid", "Texas ciklet"], ["blue-acara", "Mav
   assert(secondary.score <= 74 && secondary.score >= 50, "İkinci kademe hacimle hüküm en çok 'dikkat' olmalı");
 }
 
+// Motor 1.21.0 (karar 0046, güven turu): gerçek katalogla cinsiyet, toplam alan, av hükmü ve deniz canlılarının kaynaklı kayıtları.
+{
+  const tank60 = aquarium({ lengthCm: 60, widthCm: 30, heightCm: 35, netVolumeLiters: 60 });
+  const bettas = (gender) => analyzeAquarium(tank60, [{ ...animal("betta", "Beta balığı", 2), ...(gender ? { gender } : {}) }], []);
+  assert(!codesOf(bettas("female")).includes("conspecificMales"), "İki dişi beta 'erkekler kavga eder' uyarısı almamalı (kullanıcının girdiği cinsiyet)");
+  assert(codesOf(bettas("male")).includes("conspecificMales"), "İki erkek beta uyarı almalı");
+  assert(codesOf(bettas()).includes("conspecificMales"), "Cinsiyeti girilmemiş iki beta bugünkü gibi uyarı almalı");
+  const harem = analyzeAquarium(aquarium({ lengthCm: 100, widthCm: 40, heightCm: 50, netVolumeLiters: 200 }), [{ ...animal("yellow-lab", "Sarı prenses", 1), id: "m", gender: "male" }, { ...animal("yellow-lab", "Sarı prenses", 3), id: "f", gender: "female" }], []);
+  assert(!codesOf(harem).includes("conspecificMales"), "Bir erkek ve üç dişi sarı prenses 'erkekler kavga eder' almamalı");
+}
+{
+  const livebearers = [animal("guppy", "Lepistes", 6), animal("platy", "Plati", 6), animal("molly", "Moli", 4), animal("neon-tetra", "Neon tetra", 10)];
+  const crowded = analyzeAquarium(aquarium({ lengthCm: 100, widthCm: 30, heightCm: 35, netVolumeLiters: 90 }), livebearers, []);
+  assert.equal(crowded.warnings.find((item) => item.code === "spaceTotal")?.level, "warning", "90 L'de dört türün en az hacimleri toplamı (275 L) iki katı aşıyor; sarı toplam alan uyarısı çıkmalı");
+  assert(crowded.score <= 74, "Toplam alan uyarısı hüküm en çok 'dikkat'");
+  const nano = analyzeAquarium(aquarium({ lengthCm: 60, widthCm: 30, heightCm: 35, netVolumeLiters: 60 }), [animal("neon-tetra", "Neon tetra", 10), animal("otocinclus", "Otocinclus", 6), { ...animal("cherry-shrimp", "Kiraz karides", 10), category: "shrimp" }, { ...animal("amano-shrimp", "Amano karides", 5), category: "shrimp" }], []);
+  assert(!codesOf(nano).includes("spaceTotal"), "60 L'de neon, oto ve karidesler toplam alan uyarısı almamalı (karides toplama girmez, toplam iki katı aşmıyor)");
+}
+{
+  const goldfish = analyzeAquarium(aquarium({ lengthCm: 100, widthCm: 40, heightCm: 50, netVolumeLiters: 200 }), [animal("goldfish", "Japon balığı", 2), animal("neon-tetra", "Neon tetra", 10)], []);
+  const prey = goldfish.warnings.find((item) => item.code === "smallFishPredation");
+  assert.equal(prey?.level, "danger", "Japon balığı + neon: av uyarısı kırmızı kalmalı");
+  assert.notEqual(goldfish.status, "danger", "Av yalnız %40 boy oranına dayanıyorsa (kaynakta dayanağı yok) hüküm 'uygun değil' olmamalı");
+  const anemone = analyzeAquarium(saltwaterTank, [{ ...animal("bubble-tip-anemone", "Balon uçlu anemon", 1), category: "other" }, animal("firefish", "Ateş gobisi", 2)], []);
+  assert.equal(anemone.warnings.find((item) => item.code === "smallFishPredation")?.params.explicit, "named", "Fishkeeper ateş gobisini anemonun yiyebileceği balıklar arasında adıyla sayıyor");
+  assert.equal(anemone.status, "danger", "Balon uçlu anemon + ateş gobisi 'uygun değil' olmalı");
+  const clowns = analyzeAquarium(saltwaterTank, [{ ...animal("bubble-tip-anemone", "Balon uçlu anemon", 1), category: "other" }, animal("ocellaris-clownfish", "Ocellaris palyaço balığı", 2)], []);
+  assert(!codesOf(clowns).includes("smallFishPredation"), "Ocellaris ve balon uçlu anemon av uyarısı almamalı (kaynak palyaçoyu av saymıyor)");
+}
+{
+  const damsels = (count) => analyzeAquarium(saltwaterTank, [animal("yellowtail-damsel", "Sarı kuyruklu damsel", count)], []);
+  assert.equal(damsels(3).warnings.find((item) => item.code === "conspecificSmallGroup")?.level, "warning", "Üç sarı kuyruklu damsel 'küçük grupta kavga eder' almalı (Fishkeeper: tek, çift ya da 9+)");
+  assert(damsels(3).score <= 74 && damsels(3).status !== "danger", "Üç damsel en çok 'dikkat'");
+  assert(!codesOf(damsels(9)).some((code) => code.startsWith("conspecific")), "Dokuz damsel kaynağın kabul ettiği grup; uyarı almamalı");
+  assert(!codesOf(damsels(1)).some((code) => code.startsWith("conspecific")), "Tek damsel uyarı almamalı");
+}
+{
+  const crabs = analyzeAquarium(saltwaterTank, [{ ...animal("blue-legged-hermit-crab", "Mavi bacaklı keşiş yengeci", 1), category: "other" }, { ...animal("red-legged-hermit-crab", "Kırmızı bacaklı keşiş yengeci", 1), category: "other" }, { ...animal("marine-turbo-snail", "Deniz turbo salyangozu", 2), category: "snail" }], []);
+  assert.equal(crabs.warnings.find((item) => item.code === "incompatibleGroup")?.title, "Farklı keşiş yengeci türleri bir arada", "Fishkeeper: iki keşiş yengeci türü birlikte tutulmaz");
+  assert(codesOf(crabs).includes("snailEaten"), "Keşiş yengeçleri salyangoz yer (Fishkeeper)");
+  assert.equal(crabs.status, "danger", "İki keşiş yengeci türü 'uygun değil'");
+  const gramma = analyzeAquarium(saltwaterTank, [animal("royal-gramma", "Kraliyet gramması", 1), animal("orchid-dottyback", "Orkide dottyback", 1)], []);
+  assert.equal(gramma.status, "danger", "Kraliyet gramması ile dottyback birlikte tutulmaz (Fishkeeper)");
+}
+
 // 1.14.0 kontrolü: ölçüm ve sınır aynı hassasiyetle yazılmalı (TR/EN/ES).
 require("../packages/compatibility-engine/test/warning-format-checks.ts").assertWarningFormatting();
-console.log("Sağlık analizi: 120 senaryo başarıyla doğrulandı.");
+console.log("Sağlık analizi: 125 senaryo başarıyla doğrulandı.");
 console.log("Uyarı biçimlemesi: 3 dilde 18 sınır kontrolü başarıyla doğrulandı.");
 
 const review119 = require("../src/lib/__tests__/engine-identity-checks.ts");
