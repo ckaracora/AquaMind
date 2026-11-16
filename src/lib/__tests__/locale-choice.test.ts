@@ -1,11 +1,12 @@
 import { readFileSync } from "node:fs";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import { DEFAULT_PREFERENCES } from "@aquamind/domain";
-import { DEFAULT_LOCALE, SUPPORTED_LOCALES } from "@aquamind/localization";
+import { DEFAULT_LOCALE, SUPPORTED_LOCALES, type Locale } from "@aquamind/localization";
 import {
-  LOCALE_BOOT_SCRIPT, LOCALE_PENDING_ATTRIBUTE, LOCALE_REVEAL_TIMEOUT_MS, LOCALE_STORAGE_KEY, initialLocale, keepDocumentTitle, localeFromLanguages, regionalPreferences,
-  storeLocale, storedLocale,
+  LOCALE_BOOT_SCRIPT, LOCALE_PENDING_ATTRIBUTE, LOCALE_REVEAL_TIMEOUT_MS, LOCALE_STORAGE_KEY, initialLocale, keepDocumentTitle, localeFromLanguages, pageReady,
+  regionalPreferences, storeLocale, storedLocale,
 } from "@/lib/locale-choice";
+import { createLocaleRequester } from "@/lib/locale-requests";
 
 // Arayüz dilinin seçimi (docs/DECISIONS/0021-dil-altyapisi.md, 5. paket): bu cihazda seçilmiş dil, yoksa tarayıcının dili.
 
@@ -178,5 +179,39 @@ describe("açılış betiği", () => {
     const layout = readFileSync("src/app/layout.tsx", "utf8");
     expect(layout).toContain("<head><script dangerouslySetInnerHTML={{ __html: LOCALE_BOOT_SCRIPT }}/></head>");
     expect(layout).toContain("suppressHydrationWarning");
+  });
+});
+
+describe("gizlenen sayfanın gösterilmesi (sağlayıcı)", () => {
+  it("son istenen dil uygulanınca gösterilir; henüz istek yoksa açılışta istenen dile bakılır", () => {
+    expect(pageReady("tr", undefined, "tr")).toBe(true);
+    expect(pageReady("tr", undefined, "en")).toBe(false);
+    expect(pageReady("tr", "en", "en")).toBe(false);
+    expect(pageReady("en", "en", "en")).toBe(true);
+    // Ayarlar'dan sonra seçilen dil açılıştaki dilden önce gelir.
+    expect(pageReady("en", "es", "en")).toBe(false);
+    expect(pageReady("tr", "tr", "en")).toBe(true);
+  });
+
+  it.each([
+    ["en", true], ["en", false], ["es", true], ["es", false],
+  ] as Array<[Locale, boolean]>)("açılışta %s istenirken Türkçe içerik hiçbir anda gösterilmez (açılış isteği önce: %s)", async (wanted, requestFirst) => {
+    // Sağlayıcının iki açılış efekti: dil isteği ve gösterme denetimi. Sıraları değişse de sayfa yalnız istenen dil uygulanınca açılır.
+    let applied: Locale = DEFAULT_LOCALE;
+    const shown: Locale[] = [];
+    let finish!: () => void;
+    const requester = createLocaleRequester(() => new Promise<void>((resolve) => { finish = resolve; }), (next) => { applied = next; check(); });
+    const check = () => { if (pageReady(applied, requester.latest(), wanted)) shown.push(applied); };
+    let loading: Promise<void>;
+    if (requestFirst) { loading = requester.request(wanted, false); check(); } else { check(); loading = requester.request(wanted, false); }
+    expect(shown).toEqual([]);
+    finish();
+    await loading;
+    expect(shown).toEqual([wanted]);
+  });
+
+  it("sağlayıcı gösterme denetiminde açılışta istenen dili kullanır", () => {
+    const provider = readFileSync("src/providers/i18n-provider.tsx", "utf8");
+    expect(provider).toContain("if (pageReady(locale, requester.latest(), fixed ?? initialLocale())) revealPage();");
   });
 });
