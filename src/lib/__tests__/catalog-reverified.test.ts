@@ -47,6 +47,8 @@ const acceptedHosts: Record<string, string> = {
   "twinstarstore.kr": "TWINSTAR Official Store, TWINSTAR Inc. (sayfa altı; CATALOG_LOG, 2026-11-11)", "2hraquarist.com": "The 2Hr Aquarist (APT markasının sahibi)",
   "ferplast.com": "Ferplast Official", "fluvalaquatics.com": "Fluval (Rolf C. Hagen) resmî sitesi", "oase.com": "Oase GmbH'nin sitesi",
   "haqos.com": "Zhongshan Hailong Electric Appliance Co. (sayfa altı: \"our own brand HAQOS\")",
+  // 2026-11-16 tarih yenileme 2 (C bandı): markanın kendi sitesi (1. sıra, lider kararı).
+  "jbl.de": "JBL GmbH & Co. KG'nin kendi sitesi",
 };
 // Markanın kendi kataloğu ya da kılavuzu başka bir sitede (2. sıra, "marka kataloğu"): yalnız bu dosyalar, sitenin öbür sayfaları değil.
 const brandCatalogs = new Set([

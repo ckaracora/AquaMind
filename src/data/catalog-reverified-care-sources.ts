@@ -170,4 +170,18 @@ export const reverifiedCareSources: ReverifiedSources = {
   "tropical-supervit-mini-granulat": { sourceUrl: "https://tropical.pl/tropical/product/supervit-mini-granulat" }, // https://tropical.pl/tropical/products_search
   "tropical-vitality-color-tablets": { sourceUrl: "https://tropical.pl/tropical/product/vitality-color-tablets" }, // https://tropical.pl/tropical/products_search
   "tropical-welsi-gran": { sourceUrl: "https://tropical.pl/tropical/product/welsi-gran" }, // https://tropical.pl/tropical/products_search
+  // 2026-11-16 tarih yenileme 2, C bandı (docs/CATALOG_LOG.md, "2026-11-16 Tarih yenileme 2, C bandı"): kaynak katalog ya da bilgi PDF'i, liste sayfası
+  // ya da yönlenen eski adresti; okuma modelin kendi sayfasında yapıldı.
+  "aquael-h-e-l-p-advanced-soil-original-3-l": { sourceUrl: "https://www.aquael.com/products/aquaristics/substrates-gravels/h-e-l-p-advanced-soil/" }, // https://www.aquael.com/wp-content/uploads/2024/05/aquael-product-catalogue-2024_670.pdf
+  "aquael-h-e-l-p-advanced-soil-original-8-l": { sourceUrl: "https://www.aquael.com/products/aquaristics/substrates-gravels/h-e-l-p-advanced-soil/" }, // https://www.aquael.com/wp-content/uploads/2024/05/aquael-product-catalogue-2024_670.pdf
+  "aquael-h-e-l-p-advanced-soil-plants-3-l": { sourceUrl: "https://www.aquael.com/products/aquaristics/substrates-gravels/h-e-l-p-advanced-soil/" }, // https://www.aquael.com/wp-content/uploads/2024/05/aquael-product-catalogue-2024_670.pdf
+  "aquael-h-e-l-p-advanced-soil-plants-8-l": { sourceUrl: "https://www.aquael.com/products/aquaristics/substrates-gravels/h-e-l-p-advanced-soil/" }, // https://www.aquael.com/wp-content/uploads/2024/05/aquael-product-catalogue-2024_670.pdf
+  "aquael-h-e-l-p-advanced-soil-shrimp-3-l": { sourceUrl: "https://www.aquael.com/products/aquaristics/substrates-gravels/h-e-l-p-advanced-soil/" }, // https://www.aquael.com/wp-content/uploads/2024/05/aquael-product-catalogue-2024_670.pdf
+  "aquael-nanomax-bio-1-l": { sourceUrl: "https://www.aquael.com/products/aquaristics/aquaristics/nanomax-bio/" }, // https://www.aquael.com/wp-content/uploads/2024/09/new_media_info_en_131452_131453_131454_131455_677.pdf
+  "aquael-naturemax-bio-1-l": { sourceUrl: "https://www.aquael.com/products/aquaristics/aquaristics/naturemax-bio/" }, // https://www.aquael.com/wp-content/uploads/2024/09/new_media_info_en_131452_131453_131454_131455_677.pdf
+  "aquael-pearlmax-bio-1-l": { sourceUrl: "https://www.aquael.com/products/aquaristics/pond-filter-media/pearlmax-bio/" }, // https://www.aquael.com/wp-content/uploads/2024/09/new_media_info_en_131452_131453_131454_131455_677.pdf
+  "aquael-quartz-sand-0-1-0-3-mm-2-kg": { sourceUrl: "https://www.aquael.com/products/aquaristics/substrates-gravels/piaski-kwarcowe/" }, // https://www.aquael.com/wp-content/uploads/2024/05/aquael-product-catalogue-2024_670.pdf
+  "aquael-quartz-sand-0-4-1-2-mm-2-kg": { sourceUrl: "https://www.aquael.com/products/aquaristics/substrates-gravels/piaski-kwarcowe/" }, // https://www.aquael.com/wp-content/uploads/2024/05/aquael-product-catalogue-2024_670.pdf
+  "jbl-atvitol": { sourceUrl: "https://www.jbl.de/en-gb/productsv2/detail/25179137" }, // https://www.jbl.de/en/products/detail/2315/jbl-atvitol
+  "jbl-proaquatest-easy-7in1": { sourceUrl: "https://www.jbl.de/en-gb/productsv2/detail/25155919" }, // https://www.jbl.de/en/products/detail/8721/jbl-proaquatest-easy-7in1
 };

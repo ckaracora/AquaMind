@@ -164,4 +164,13 @@ export const reverifiedEquipmentSources: ReverifiedSources = {
   "yikeda-mini-clip": { sourceUrl: "https://aquarubi.com/yikeda-mini-klipsli-led-akvaryum-lambasi" }, // https://aquarubi.com/yikeda
   "yikeda-smart-ufo-120": { sourceUrl: "https://atakanpetshop.com/yikeda-smart-ufo-led-lamba-120w" }, // https://atakanpetshop.com/yikeda-smart-ufo-led-lamba-100w
   "yikeda-smart-ufo-85": { sourceUrl: "https://atakanpetshop.com/yikeda-smart-ufo-led-lamba-85w" }, // https://atakanpetshop.com/yikeda-smart-ufo-led-lamba-100w
+  // 2026-11-16 tarih yenileme 2, C bandı (docs/CATALOG_LOG.md, "2026-11-16 Tarih yenileme 2, C bandı"): kaynak katalog ya da bilgi PDF'i, liste sayfası
+  // ya da yönlenen eski adresti; okuma modelin kendi sayfasında yapıldı.
+  "jbl-clean-a": { sourceUrl: "https://www.jbl.de/en/download/10976/Ratgeber/JBL_ProScape_Equipment_for_professional_Aquascaping_en.pdf" }, // https://www.jbl.de/en/products/group/7993/accessories-cleaning
+  "jeneca-xp-605": { sourceUrl: "https://www.aleas.cn/product/732.html" }, // https://gb.aleas.cn/product/684.html
+  "oase-bioplus-thermo-100": { sourceUrl: "https://www.oase.com/en/aquarium/bioplus-thermo-100-gb" }, // https://www.oase.com/en/products-a-z/family/product/p/42243-bioplus-thermo-100-gb.html
+  "oase-bioplus-thermo-200": { sourceUrl: "https://www.oase.com/en/aquarium/bioplus-thermo-200-gb" }, // https://www.oase.com/en/products-a-z/family/product/p/42244-bioplus-thermo-200-gb.html
+  "oase-biostyle-115": { sourceUrl: "https://www.oase.com/en/aquarium/biostyle-115-grey-gb" }, // https://www.oase.com/en/products-a-z/family/product/p/89601-biostyle-115-grey-gb.html
+  "oase-biostyle-180": { sourceUrl: "https://www.oase.com/en/aquarium/biostyle-180-grey-gb" }, // https://www.oase.com/en/products-a-z/family/product/p/89602-biostyle-180-grey-gb.html
+  "oase-filtosmart-thermo-200": { sourceUrl: "https://www.oase.com/en-GB/aquarium/filtosmart-thermo-200" }, // https://www.oase.com/en-GB/pond-and-water-garden/filtosmart-thermo-200
 };
