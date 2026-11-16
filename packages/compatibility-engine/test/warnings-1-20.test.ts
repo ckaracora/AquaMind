@@ -52,8 +52,12 @@ const space = (result: HealthAnalysis) => result.metrics.find((metric) => metric
 const HOBBY_NOTE = " Bu türün hacim ya da uzunluk değeri kabul ettiğimiz kaynaklarda yok; birkaç hobi kaynağının ortak değeridir. Bu yüzden bu uyarı sonucu en fazla \"Dikkat\" yapar.";
 
 describe("sürüm (karar 0045)", () => {
-  it("motor 1.20.0, kural seti 1.17.0", () => {
-    expect([ENGINE_VERSION, RULESET_VERSION]).toEqual(["1.20.0", "1.17.0"]);
+  // 1.21.0'dan beri (karar 0046) tam değer warnings-1-21.test.ts içinde; burada "en az".
+  it("motor 1.20.0, kural seti 1.17.0 ya da sonrası", () => {
+    const parts = (version: string) => version.split(".").map(Number);
+    const atLeast = (version: string, minimum: string) => parts(version).reduce((result, value, index) => result ?? (value === parts(minimum)[index] ? undefined : value > parts(minimum)[index]), undefined as boolean | undefined) ?? true;
+    expect(atLeast(ENGINE_VERSION, "1.20.0")).toBe(true);
+    expect(atLeast(RULESET_VERSION, "1.17.0")).toBe(true);
   });
 
   it("alan uyarıları canlı riski sınıfında kalır (en çok 'dikkat' tavanı)", () => {

@@ -115,5 +115,13 @@
 // kırmızıya çekmez. Uyarılar canlı riski sınıfında kalır (genel en çok 74); metin `secondary: true` değişkeniyle değerin hobi kaynaklarına
 // dayandığını söyler. Bitki ve davranışta ikinci kademe değer normal kullanılır. İşaretsiz kayıtta sonuç değişmez (altın fikstür aynı). Uyarı
 // seviyesi ve kesin tehlike koşulu değiştiği için kural seti 1.17.0.
-export const ENGINE_VERSION = "1.20.0";
-export const RULESET_VERSION = "1.17.0";
+//
+// 1.21.0: güven turu (bkz. docs/DECISIONS/0046-cinsiyet-toplam-alan-ve-av-hukmu.md; ürün sahibinin onayı 2026-11-16). "Erkekler kavga eder" kullanıcının
+// girdiği cinsiyeti okur: olası erkek sayısı (dişi 0, karışık en çok adet − 1, bilinmeyen adet kadar) ikinin altındaysa uyarı yok. Türlerin (karides ve
+// salyangoz hariç) gereken en az hacimlerinin toplamı net hacmin iki katını aşarsa sarı `spaceTotal` (canlı riski, en çok "dikkat"). Fırsatçı avcının
+// küçük balık uyarısı, avı kaynak açıkça yazıyorsa (adıyla, `preyIds`, ya da sayısal av boyuyla, `maxPreyCm`) kesin tehlikedir ("uygun değil"); yalnız %40
+// boy oranına dayanan av uyarısı en çok "dikkat" kalır. "Tek tutulmalı" kaydında kaynağın kabul ettiği büyük grup (`groupFrom`) ve üstü uyarı almaz, çift
+// ile bu sayı arasındaki grup sarı `conspecificSmallGroup` alır. Birbirine karıştırılmayan gruplara keşiş yengeçleri ve gramma-dottyback eklendi. Yeni sabit
+// (`SPACE_TOTAL_RATIO`), uyarı kodları, kesin tehlike koşulu ve uyarı koşulu değiştiği için kural seti 1.18.0. Sonuç nesnesinin biçimi değişmez.
+export const ENGINE_VERSION = "1.21.0";
+export const RULESET_VERSION = "1.18.0";

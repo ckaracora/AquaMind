@@ -1330,4 +1330,9 @@ export const enCatalogSpecies: CatalogTexts = {
   "47965d64b6a90e92": "It preys on its own kind; the young eat each other. Keep it singly or in a very spacious aquarium with plenty of hiding places.",
   "09cc97e50260132f": "The volume comes from OATA's general care guide (general guide): at least 80 liters for a group of Corydoras or of the smaller pleco species.",
   "135a99711f284a87": "They may bite each other's external gills and feet; if kept together, they need individuals of the same size, ample space and plenty of hiding places.",
+  "797aefe54b008a9b": "A single fish, a known male-female pair, or an odd-numbered group of 9 or more added together as juveniles; deaths are common in small groups.",
+  "47e6f49c796d5cfa": "In a small aquarium, a single fish or a known pair; groups of 7 or more only in a spacious aquarium.",
+  "2ff8aa4e6e674518": "Snails, small polyps, and very small invertebrates are at risk; large individuals attack snails.",
+  "638d0b3bceb36321": "Small snails, small polyps, and very small invertebrates are at risk; large individuals attack snails.",
+  "dfed3c72c080c8bc": "It may occasionally eat aquarium fish; calm fish such as firefish and mandarins can get caught in its tentacles at night and be eaten.",
 };

@@ -58,12 +58,13 @@ describe("seçme anındaki uyarılar", () => {
     const male = (id: string): Livestock => ({ ...animal(id, "betta", "Beta balığı", 1), gender: "male" });
     const warnings = newWarningsForCandidate(fullCatalogLookup, aquarium, [male("l-erkek")], [], undefined, male("candidate"));
     expect(warnings).toEqual([expect.objectContaining({ code: "conspecificMales", level: "warning" })]);
-    expect(warnings[0].params).toMatchObject({ count: 2 });
-    // Motor cinsiyeti kullanmaz (karar 0040: "uygulama cinsiyeti bilmiyor"); uyarı kayıtlı toplam adetten çıkar. Pencere seçilen cinsiyeti
-    // yine de adaya verir: kayıt ile önizleme aynı canlıyı anlatır.
+    expect(warnings[0].params).toMatchObject({ count: 2, males: 2 });
+    // Motor 1.21.0'dan beri (karar 0046) kullanıcının girdiği cinsiyeti okur; pencere seçilen cinsiyeti adaya verir (kayıt ile önizleme aynı
+    // canlıyı anlatır). Erkek betanın yanına dişi seçilince uyarı yok.
     const form = readFileSync("src/components/catalog-livestock-form.tsx", "utf8");
     expect(form).toContain("quantity: candidateQuantity, gender, addedAt");
-    expect(form).toContain('<select name="gender" value={gender} onChange=');
+    expect(form).toContain("<GenderSelect field={field} value={gender} onChange={setGender} />");
+    expect(newWarningsForCandidate(fullCatalogLookup, aquarium, [male("l-erkek")], [], undefined, { ...male("candidate"), gender: "female" })).toEqual([]);
     // Tek erkekte uyarı yok.
     expect(newWarningsForCandidate(fullCatalogLookup, aquarium, [], [], undefined, male("candidate"))).toEqual([]);
   });

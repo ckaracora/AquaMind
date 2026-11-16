@@ -1330,4 +1330,9 @@ export const esCatalogSpecies: CatalogTexts = {
   "47965d64b6a90e92": "Caza a los de su propia especie; las crías se comen entre sí. Mantenlo solo o en un acuario muy amplio con muchos escondites.",
   "09cc97e50260132f": "El volumen procede de la guía general de cuidados de OATA (guía general): al menos 80 litros para un grupo de Corydoras o de las especies de pleco más pequeñas.",
   "135a99711f284a87": "Pueden morderse entre sí las branquias externas y las patas; si se mantienen juntos, necesitan individuos del mismo tamaño, espacio amplio y abundantes escondites.",
+  "797aefe54b008a9b": "Un solo ejemplar, una pareja conocida de macho y hembra o un grupo impar de 9 o más agregados juntos de jóvenes; en los grupos pequeños son frecuentes las muertes.",
+  "47e6f49c796d5cfa": "En un acuario pequeño, un solo ejemplar o una pareja conocida; grupos de 7 o más solo en un acuario amplio.",
+  "2ff8aa4e6e674518": "Los caracoles, los pólipos pequeños y los invertebrados muy pequeños corren riesgo; los ejemplares grandes atacan a los caracoles.",
+  "638d0b3bceb36321": "Los caracoles pequeños, los pólipos pequeños y los invertebrados muy pequeños corren riesgo; los ejemplares grandes atacan a los caracoles.",
+  "dfed3c72c080c8bc": "Puede comer peces del acuario de vez en cuando; peces tranquilos como el gobio de fuego y el mandarín pueden quedar atrapados en sus tentáculos durante la noche y ser devorados.",
 };

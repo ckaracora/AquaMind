@@ -53,6 +53,21 @@ export function unevaluatedTexts(messages: EngineMessages, format: EngineTextFor
 }
 
 /**
+ * Hesaba katılmayan canlıların adları (motor 1.21.0, docs/DECISIONS/0046-cinsiyet-toplam-alan-ve-av-hukmu.md): katalogda tanınmayan (kullanıcının yazdığı ad)
+ * ve kaydı doğrulanmamış (katalog adı, seçili dile çevrilir) canlılar, motorun sırasıyla. Bunlardan biri varken sağlık sayfası puanı göstermez, ana sayfa
+ * ve "Bu akvaryuma ne uyar?" penceresi adlarını yazar. Boş adlar atlanır.
+ */
+export function uncountedAnimalNames(items: readonly UnevaluatedItem[] | undefined, translate?: CatalogTranslator): string[] {
+  return (items ?? [])
+    .filter((item) => item.code === "unknownAnimal" || item.code === "unverifiedAnimal")
+    .map((item) => {
+      const name = String(item.params.name ?? "").trim();
+      return item.code === "unverifiedAnimal" && translate ? (translate(name) ?? name) : name;
+    })
+    .filter((name) => name !== "");
+}
+
+/**
  * Risk listesi boşken "Bulgular ve Öneriler" kartının kutusu (kontrol turu, motor 1.18.0). İlke: ekranın bir yeri "eksik" ya da "yetersiz"
  * derken başka yeri "sorun yok" diyemez.
  * - `clear`: yeşil "Belirgin bir risk görünmüyor"; yalnız hüküm "iyi" ve değerlendirilemeyen hiçbir şey yokken.

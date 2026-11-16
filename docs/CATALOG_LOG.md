@@ -5896,3 +5896,17 @@ Elenen siteler: gensou.sg (403; iki günde yayımlanmış çok sayıda tür rehb
 - `aquael-quartz-sand-0-4-1-2-mm-2-kg`: https://www.aquael.com/wp-content/uploads/2024/05/aquael-product-catalogue-2024_670.pdf → https://www.aquael.com/products/aquaristics/substrates-gravels/piaski-kwarcowe/
 - `jbl-atvitol`: https://www.jbl.de/en/products/detail/2315/jbl-atvitol → https://www.jbl.de/en-gb/productsv2/detail/25179137
 - `jbl-proaquatest-easy-7in1`: https://www.jbl.de/en/products/detail/8721/jbl-proaquatest-easy-7in1 → https://www.jbl.de/en-gb/productsv2/detail/25155919
+
+## 2026-11-16 Güven turu: deniz canlılarının kaynaklı davranış kayıtları (karar 0046, Claude)
+
+Gerekçe: güven turu ölçümünde 3 sarı kuyruklu damsel "İyi 99", iki keşiş yengeci türü ve anemon + ateş gobisi riskini yalnız kapalı bakım notunda gösteriyordu. Ürün sahibinin kararı (2026-11-16): kaynağı riski açıkça yazan türlere uyarı kaydı; iki yengeç için "birlikte tutulmaz" kuralı.
+
+Yöntem: notunda yeme, kavga ya da saldırı geçen ve davranış kaydı olmayan deniz canlılarının Fishkeeper sayfası 2026-11-16'da açıldı (11 sayfa); alıntı `evidence` alanında birebir, `verifiedAt` 2026-11-16. Yeni alanlar: `groupFrom` (kaynağın kabul ettiği büyük grubun alt sınırı) ve `preyIds` (kaynağın adıyla saydığı av).
+
+Yazılan kayıtlar (11 kayıt, 9 tür):
+- **`conspecificAggression: all`, `pairAccepted`, `groupFrom`:** `yellowtail-damsel` ve `azure-damsel` (9; FK "a single specimen, a known male-female pair, or a large sized odd-numbered shoal (9+)", "Small(er) groups are often known to suffer fatalities."), `blue-neon-goby` (7; FK "it will fight with members of its own kind, especially in smaller aquaria", "Large groups (7+) can be kept if the system is spacious").
+- **`eatsSnails`:** `blue-legged-hermit-crab` (FK "Snails & small polyps are at risk from these crabs"), `red-legged-hermit-crab` (FK "Small snails & small polyps are at risk from these crabs"); ikisinde de "Large specimens have been known to attack snails."
+- **`incompatibleGroup`:** `hermitCrab`: iki keşiş yengeci (FK "should never be kept alongside ... as they will fight"); `grammaDottyback`: `royal-gramma` (FK "should not include similar species such as other Grammas or Dottybacks") ve `orchid-dottyback` (FK "Do not keep with other members of the same genus or close relatives").
+- **`eatsSmallFish`:** `bubble-tip-anemone`, `preyIds: ["firefish"]` (FK "May occasionally eat aquarium fish."; "placid fish species (such as mandarins, firefish etc) ... will be consumed"; mandarin katalogda yok), `emerald-crab` (FK "They should not be trusted with very small fish though.").
+
+Eklenmeyenler: `yellow-tang` (saldırganlık küçük akvaryuma bağlı, kavga eden birey sayısı yazmıyor), `firefish` (kendi türüyle kavga açıkça yazılmıyor), damsel ve dottyback'in sakin balıkları taciz etmesi (motorda karşılığı yok), kurban tarafındaki karides ve salyangozlar. Koşul metinlerinin EN ve ES çevirisi `packages/localization/translations/{en,es}-species.json` (5 satır). Altın fikstür değişmedi (1.138 vaka).

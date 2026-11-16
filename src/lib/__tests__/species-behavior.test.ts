@@ -74,21 +74,49 @@ describe("davranış verisi", () => {
   it("1.19.0: palyaço grubu ve kaynağın kabul ettiği çift yalnız doğrulanan kayıtlarda", () => {
     const grouped = entries.filter(({ record }) => record.group !== undefined || record.flag === "incompatibleGroup");
     for (const { id, record } of grouped) {
-      expect(record, id).toMatchObject({ flag: "incompatibleGroup", group: "clownfish", confidence: "explicit", source: "Fishkeeper" });
+      expect(record, id).toMatchObject({ flag: "incompatibleGroup", confidence: "explicit", source: "Fishkeeper" });
       expect(record.condition, id).toBeUndefined();
-      expect(speciesById(id)?.scientificName, id).toMatch(/^Amphiprion /);
     }
-    expect(grouped.map(({ id }) => id).sort()).toEqual(["maroon-clownfish", "ocellaris-clownfish", "percula-clownfish", "pink-skunk-clownfish", "saddleback-clownfish", "tomato-clownfish"]);
+    const clowns = grouped.filter(({ record }) => record.group === "clownfish");
+    for (const { id } of clowns) expect(speciesById(id)?.scientificName, id).toMatch(/^Amphiprion /);
+    expect(clowns.map(({ id }) => id).sort()).toEqual(["maroon-clownfish", "ocellaris-clownfish", "percula-clownfish", "pink-skunk-clownfish", "saddleback-clownfish", "tomato-clownfish"]);
+    // Motor 1.21.0 (karar 0046): iki keşiş yengeci ("should never be kept alongside ... as they will fight") ve kraliyet gramması ile orkide dottyback.
+    expect(grouped.filter(({ record }) => record.group === "hermitCrab").map(({ id }) => id).sort()).toEqual(["blue-legged-hermit-crab", "red-legged-hermit-crab"]);
+    expect(grouped.filter(({ record }) => record.group === "grammaDottyback").map(({ id }) => id).sort()).toEqual(["orchid-dottyback", "royal-gramma"]);
+    expect(grouped.filter(({ record }) => !["clownfish", "hermitCrab", "grammaDottyback"].includes(record.group ?? ""))).toEqual([]);
     const paired = entries.filter(({ record }) => record.pairAccepted !== undefined);
     for (const { id, record } of paired) expect(record, id).toMatchObject({ flag: "conspecificAggression", value: "all", confidence: "explicit", pairAccepted: true });
     // İkinci tur (2026-11-14): kalan "tek tutulmalı" kayıtlarından kaynağı çifti açıkça kabul eden 17 kayıt daha (toplam 23).
     // Tur 3 A (2026-11-14): yeni "tek tutulmalı" kayıtlarından kaynağı (Fishkeeper) tek ya da uyumlu çifti yazan üçü (toplam 26).
+    // Güven turu (2026-11-16, karar 0046): iki damsel ve mavi neon gobi (Fishkeeper: tek, bilinen çift ya da büyük grup; toplam 29).
     expect(paired.map(({ id }) => id).sort()).toEqual([
-      "andrao-snakehead", "anthrax-flyer-pleco-l235", "apisto-panduro", "assamese-snakehead", "bicolour-blenny", "blackbelt-cichlid", "blue-acara", "chinese-snakehead",
+      "andrao-snakehead", "anthrax-flyer-pleco-l235", "apisto-panduro", "assamese-snakehead", "azure-damsel", "bicolour-blenny", "blackbelt-cichlid", "blue-acara", "blue-neon-goby", "chinese-snakehead",
       "green-terror", "jack-dempsey", "jaguar-cichlid", "jewel-cichlid", "kribensis", "leleupi-cichlid", "marliers-julie", "masked-julie", "midas-cichlid",
-      "ocellaris-peacock-bass", "pearl-cichlid", "piquiti-peacock-bass", "rainbow-snakehead", "regani-julie", "sajica-cichlid", "salvini-cichlid", "silver-maskaheros", "texas-cichlid",
+      "ocellaris-peacock-bass", "pearl-cichlid", "piquiti-peacock-bass", "rainbow-snakehead", "regani-julie", "sajica-cichlid", "salvini-cichlid", "silver-maskaheros", "texas-cichlid", "yellowtail-damsel",
     ]);
-    for (const { id, record } of paired) expect(record.verifiedAt, id).toBe("2026-11-14");
+    const trustRound = new Set(["azure-damsel", "blue-neon-goby", "yellowtail-damsel"]);
+    for (const { id, record } of paired) expect(record.verifiedAt, id).toBe(trustRound.has(id) ? "2026-11-16" : "2026-11-14");
+  });
+
+  // Motor 1.21.0 (karar 0046): kaynağın kabul ettiği büyük grup yalnız kaynağı sayıyla yazan üç deniz kaydında; adıyla sayılan av yalnız balon uçlu
+  // anemonda ve katalogda bulunan bir türü gösterir. Kanıt (sayfa ve birebir alıntı) güven turu çalışma dosyasında.
+  it("1.21.0: büyük grup ve adıyla sayılan av yalnız doğrulanan kayıtlarda", () => {
+    expect(entries.filter(({ record }) => record.groupFrom !== undefined).map(({ id, record }) => [id, record.flag, record.value, record.groupFrom, record.pairAccepted]).sort()).toEqual([
+      ["azure-damsel", "conspecificAggression", "all", 9, true], ["blue-neon-goby", "conspecificAggression", "all", 7, true], ["yellowtail-damsel", "conspecificAggression", "all", 9, true],
+    ]);
+    expect(entries.filter(({ record }) => record.preyIds !== undefined).map(({ id, record }) => [id, record.flag, record.preyIds])).toEqual([["bubble-tip-anemone", "eatsSmallFish", ["firefish"]]]);
+    for (const { record } of entries.filter(({ record }) => record.preyIds !== undefined)) for (const prey of record.preyIds!) expect(speciesById(prey)?.category, prey).toBe("fish");
+    const added = entries.filter(({ record }) => record.verifiedAt === "2026-11-16");
+    expect(added.map(({ id, record }) => `${id}:${record.flag}`).sort()).toEqual([
+      "azure-damsel:conspecificAggression", "blue-legged-hermit-crab:eatsSnails", "blue-legged-hermit-crab:incompatibleGroup", "blue-neon-goby:conspecificAggression",
+      "bubble-tip-anemone:eatsSmallFish", "emerald-crab:eatsSmallFish", "orchid-dottyback:incompatibleGroup", "red-legged-hermit-crab:eatsSnails", "red-legged-hermit-crab:incompatibleGroup",
+      "royal-gramma:incompatibleGroup", "yellowtail-damsel:conspecificAggression",
+    ]);
+    for (const { id, record } of added) {
+      expect(record, id).toMatchObject({ confidence: "explicit", source: "Fishkeeper" });
+      expect(record.sourceUrl, id).toMatch(/^https:\/\/www\.fishkeeper\.co\.uk\/fish\/marine\//);
+      expect(record.evidence, id).toMatch(/^Fishkeeper/);
+    }
   });
 });
 

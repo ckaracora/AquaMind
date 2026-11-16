@@ -153,6 +153,8 @@ export const tr = {
     incomplete: "Sağlık analizi eksik: bazı canlılar katalogda tanınmadı ya da kaydı doğrulanmadı, sonuç onları kapsamıyor.",
   },
   dashboard: {
+    /** Motor 1.21.0 (karar 0046): hesaba katılmayan canlıların adları, özet cümlesinin arkasında. */
+    uncounted: (names: string) => `Hesaba katılmayan canlılar: ${names}.`,
     welcomeTitle: "AquaMind’e hoş geldin",
     welcomeText: "Dashboard’u kullanmaya başlamak için ilk akvaryumunu oluştur.",
     createAquarium: "Akvaryum oluştur",
@@ -322,6 +324,9 @@ export const tr = {
     latestIncluded: "Son ölçüm analize dahil",
     awaitingReading: "Ölçüm bekleniyor",
     outOf100: "100 üzerinden",
+    /** Motor 1.21.0 (karar 0046): tanınmayan ya da doğrulanmamış canlı varken puan gösterilmez. */
+    noScore: "Puan yok",
+    uncountedAnimals: (names: string) => `Puan gösterilmiyor; şu canlılar hesaba katılamadı: ${names}.`,
     userProvided: "Senin girdiğin değere dayanıyor",
     diseaseGuide: "Hastalık belirtisi mi görüyorsun?",
     diseaseGuideDetail: "Güvenilir kaynaklar, ilk adımlar ve veteriner bulma",
@@ -475,7 +480,9 @@ export const tr = {
       minVolume: "Min:",
       minGroup: "Grup:",
       gender: "Cinsiyet",
-      genders: { unknown: "Bilinmiyor", mixed: "Karışık", male: "Erkek", female: "Dişi" },
+      /** Motor 1.21.0 (karar 0046): seçenek kaydın bütün bireylerini anlatır; sağlık analizi "erkekler kavga eder" uyarısında okur. */
+      genders: { unknown: "Bilinmiyor", mixed: "Karışık (erkek ve dişi)", male: "Hepsi erkek", female: "Hepsi dişi" },
+      genderHelp: "Bazı türlerde erkekler birbiriyle kavga eder. Biliyorsan seç; bilmiyorsan \"Bilinmiyor\" kalsın, analiz en kötü durumu varsayar. Erkek ve dişileri ayrı kayıt olarak da ekleyebilirsin (ör. 1 erkek, 3 dişi).",
       beforeSaving: "Kaydetmeden önce dikkat",
       volumeIssue: (volume: string) => `Ekledikten sonraki toplam adet için katalog referansı en az ${volume}.`,
       lengthIssue: (cm: number) => `Önerilen akvaryum uzunluğu en az ${cm} cm.`,
@@ -567,6 +574,8 @@ export const tr = {
       empty: "Bu sınıfta, bu akvaryuma yeni uyarı getirmeyen ve davranışı kaynakta yazan tür bulunamadı.",
       heaterNote: (count: number) => `Isıtıcı kayıtlı olmadığı için ${count} tropikal tür listelenmedi. Isıtıcın varsa ekipman sayfasından ekle.`,
       heaterLink: "Ekipmana git",
+      /** Motor 1.21.0 (karar 0046): akvaryumdaki tanınmayan ya da doğrulanmamış canlılar listeye katılamaz. */
+      uncounted: (names: string) => `Katalogda tanınmayan ya da doğrulanmamış canlılar hesaba katılmadı: ${names}.`,
       note: "Liste bir başlangıç noktasıdır: davranışı kaynakta yazmayan türler önerilmez. Eklediğin her tür Sağlık Analizi'nde bütün akvaryumla yeniden değerlendirilir.",
     },
   },

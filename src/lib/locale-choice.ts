@@ -92,6 +92,14 @@ export function keepDocumentTitle(doc: Pick<Document, "title" | "head">, wanted:
   return () => observer.disconnect();
 }
 
+/**
+ * Gizlenen sayfa gösterilebilir mi (`I18nProvider`): uygulanmış dil son istenen dil olmalı. Henüz istek yoksa açılışta istenen dile
+ * (`initialLocale`) bakılır; böylece sağlayıcının açılış isteği gösterme denetiminden sonra çalışsa bile sayfa Türkçe içerikle açılmaz.
+ */
+export function pageReady(applied: Locale, latest: Locale | undefined, wanted: Locale): boolean {
+  return applied === (latest ?? wanted);
+}
+
 /** Dil paketi beklenirken gizlenen sayfayı gösterir. */
 export function revealPage(): void {
   if (typeof document !== "undefined") document.documentElement.removeAttribute(LOCALE_PENDING_ATTRIBUTE);

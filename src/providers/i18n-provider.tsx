@@ -3,7 +3,7 @@
 import { createContext, useCallback, useContext, useEffect, useMemo, useRef, useState, type ReactNode } from "react";
 import { DEFAULT_LOCALE, loadLocaleBundle, localeBundle, messagesFor, type Locale, type Messages } from "@aquamind/localization";
 import { catalogTranslator, type CatalogTranslator } from "@aquamind/localization/catalog";
-import { initialLocale, keepDocumentTitle, revealPage, storeLocale } from "@/lib/locale-choice";
+import { initialLocale, keepDocumentTitle, pageReady, revealPage, storeLocale } from "@/lib/locale-choice";
 import { createLocaleRequester } from "@/lib/locale-requests";
 
 // Arayüz dili (docs/DECISIONS/0021-dil-altyapisi.md). Açılışta bu cihazda seçilmiş dil, yoksa tarayıcının dili kullanılır
@@ -52,11 +52,12 @@ export function I18nProvider({ locale: fixed, children }: { locale?: Locale; chi
     if (wanted !== DEFAULT_LOCALE) request(wanted, false).catch(() => {});
   }, [fixed, request]);
 
-  // Sayfa, son istenen dil uygulanınca gösterilir (açılışta Türkçe dışındaki dil için betik gizlemişti).
+  // Sayfa, son istenen dil uygulanınca gösterilir (açılışta Türkçe dışındaki dil için betik gizlemişti). Henüz istek yoksa açılışta
+  // istenen dile bakılır (`pageReady`): efektlerin sırası değişse de İngilizce/İspanyolca kullanıcı Türkçe içeriği görmez.
   useEffect(() => {
     document.documentElement.lang = locale;
-    if (locale === (requester.latest() ?? locale)) revealPage();
-  }, [locale, requester]);
+    if (pageReady(locale, requester.latest(), fixed ?? initialLocale())) revealPage();
+  }, [locale, requester, fixed]);
 
   // Sekme başlığı: sayfaların ortak başlığı sunucuda Türkçe yazılır. Next.js başlığı sayfa değişince ve sunucuda çizilen sayfalarda
   // (ör. sağlık analizi) üst bilgi akışla geldiğinde sonradan yeniden yazar; bu yüzden `<head>` izlenir ve başlık seçili dilde tutulur.

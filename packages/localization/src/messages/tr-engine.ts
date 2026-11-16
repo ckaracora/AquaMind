@@ -56,7 +56,8 @@ const outsideRange = (p: EngineTextParams) =>
 const marineTarget = (p: EngineTextParams) => (str(p, "profile") === "fishOnly" ? "yalnız balıklı akvaryum" : "omurgasızlı akvaryum");
 const marineRange = (p: EngineTextParams, f: EngineTextFormat) => `${f.measurement(num(p, "min"), 3)}–${f.measurement(num(p, "max"), 3)}`;
 /** Birbirine karıştırılmayan türlerin grubu (motor 1.19.0, karar 0044); motorun Türkçe adıyla aynı. */
-const groupName = (group: string) => ({ clownfish: "palyaço balığı" } as Record<string, string>)[group] ?? "aynı gruptan";
+const groupName = (group: string) =>
+  ({ clownfish: "palyaço balığı", hermitCrab: "keşiş yengeci", grammaDottyback: "gramma ve dottyback" } as Record<string, string>)[group] ?? "aynı gruptan";
 
 export const trEngine = {
   /** Ölçütlerin adları, motorun `key` alanına göre. */
@@ -76,6 +77,8 @@ export const trEngine = {
     spaceSevere: (p, f) => `${f.number(num(p, "count"))} tür için akvaryum çok küçük`,
     spaceLimited: (p, f) => `${f.number(num(p, "count"))} tür için alan sınırda`,
     spaceOk: fixed("Kayıtlı türler için uygun"),
+    /** Motor 1.21.0 (karar 0046): türlerin toplam alan ihtiyacı net hacmin iki katını aşıyor. */
+    spaceTotal: fixed("Türlerin toplam alan ihtiyacı akvaryum için fazla"),
     groupLow: (p, f) => `${f.number(num(p, "count"))} türün grup sayısı düşük`,
     groupOk: fixed("Grup ihtiyaçları uygun"),
     habitat: fixed("Akvaryum türüyle yaşam ortamı uyuşmuyor"),
@@ -360,7 +363,13 @@ export const trEngine = {
     },
     smallFishPredation: {
       title: (p) => `${str(p, "prey")}: avlanabilir`,
-      message: (p) => `${str(p, "hunter")} ağzına sığan küçük balıkları yiyebilir; ${str(p, "prey")} yetişkin boyuyla bu risk içinde. Birlikte tutulurlarsa ${str(p, "prey")} yenebilir; bu eşleşmeden kaçınmak daha güvenlidir.${sourceNote(p)}`,
+      // Motor 1.21.0 (karar 0046): kaynak avı adıyla (`named`) ya da sayısal av boyuyla (`size`) yazıyorsa kesin tehlike ve ayrı metin.
+      message: (p, f) =>
+        str(p, "explicit") === "named"
+          ? `Kaynak, ${str(p, "prey")} türünü ${str(p, "hunter")} tarafından yenebilecek balıklar arasında adıyla sayıyor. Bu iki türü aynı akvaryumda tutmayın.${sourceNote(p)}`
+          : str(p, "explicit") === "size"
+            ? `${str(p, "hunter")} küçük balıkları yiyebilir; kaynağa göre ${f.length(num(p, "maxPrey"))} ve altındaki balıklar risk altında, ${str(p, "prey")} yetişkin boyuyla bu sınırın içinde. Bu iki türü aynı akvaryumda tutmayın.${sourceNote(p)}`
+            : `${str(p, "hunter")} ağzına sığan küçük balıkları yiyebilir; ${str(p, "prey")} yetişkin boyuyla bu risk içinde. Birlikte tutulurlarsa ${str(p, "prey")} yenebilir; bu eşleşmeden kaçınmak daha güvenlidir.${sourceNote(p)}`,
     },
     finNip: {
       title: (p) => `${str(p, "target")}: yüzgeç ısırma riski`,
@@ -369,8 +378,11 @@ export const trEngine = {
     },
     conspecificMales: {
       title: (p) => `${str(p, "name")}: erkekler kavga eder`,
+      // Motor 1.21.0 (karar 0046): kullanıcı iki ve üstü bireyi erkek diye girdiyse (`males`).
       message: (p, f) =>
-        `Kaynağa göre bu türün erkekleri birbiriyle kavga eder; kayıtlı ${f.number(num(p, "count"))} bireyden birden fazlası erkekse ayırın.${sourceNote(p)}`,
+        p.males !== undefined
+          ? `Kaynağa göre bu türün erkekleri birbiriyle kavga eder; kayıtlı ${f.number(num(p, "count"))} bireyden ${f.number(num(p, "males"))} tanesi erkek olarak girildi. Erkekleri ayırın.${sourceNote(p)}`
+          : `Kaynağa göre bu türün erkekleri birbiriyle kavga eder; kayıtlı ${f.number(num(p, "count"))} bireyden birden fazlası erkekse ayırın.${sourceNote(p)}`,
     },
     conspecificAll: {
       title: (p) => `${str(p, "name")}: tek tutulmalı`,
@@ -381,6 +393,12 @@ export const trEngine = {
       title: (p) => `${str(p, "name")}: yalnız uyumlu bir çift birlikte yaşar`,
       message: (p) =>
         `Kaynağa göre bu tür kendi türüne saldırgandır; tek ya da uyumlu bir çift olarak tutulabilir. Kayıtlı 2 birey ancak uyumlu, eşleşmiş bir çiftse birlikte yaşayabilir; rastgele bir araya getirilen iki birey kavga edebilir.${sourceNote(p)}`,
+    },
+    /** Motor 1.21.0 (karar 0046): kaynağın kabul ettiği büyük grubun (`groupFrom`) altındaki grup (sarı). */
+    conspecificSmallGroup: {
+      title: (p) => `${str(p, "name")}: küçük grupta kavga eder`,
+      message: (p, f) =>
+        `Kaynağa göre bu tür kendi türüne saldırgandır; ${flag(p, "pairAccepted") ? "tek, uyumlu bir çift ya da " : "tek ya da "}en az ${f.number(num(p, "groupFrom"))} bireylik bir grup olarak tutulabilir. Kayıtlı ${f.number(num(p, "count"))} birey bunların arasında kalıyor; küçük gruplarda kavga sık görülür.${sourceNote(p)}`,
     },
     shrimpEaten: {
       title: fixed("Karidesler yenebilir"),
@@ -415,6 +433,12 @@ export const trEngine = {
       title: (p) => `${str(p, "name")}: grup sayısı düşük`,
       message: (p, f) => `Kayıtlı adet ${f.number(num(p, "count"))}; katalog önerisi en az ${f.number(num(p, "min"))}.`,
     },
+    /** Motor 1.21.0 (karar 0046): türlerin (karides ve salyangoz hariç) gereken en az hacimlerinin toplamı net hacmin iki katını aşıyor. */
+    spaceTotal: {
+      title: fixed("Türlerin toplam alan ihtiyacı yüksek"),
+      message: (p, f) =>
+        `Kaynaklara göre ${nameList(list(p, "species"))} için kayıtlı adetlerle gereken en az hacimlerin toplamı ${f.volume(num(p, "total"))}; akvaryumun net hacmi ${f.volume(num(p, "aquariumVolume"))}, bu toplamın yarısından da az. Her tür tek başına sığsa da birlikte kalabalık olur. Tür ya da birey sayısını azaltmayı ya da daha büyük bir akvaryumu düşünün.`,
+    },
     spaceLimited: {
       title: (p) => `${str(p, "name")}: alan sınırda`,
       message: (p, f) => `${spaceReference(p, f)}${secondarySpaceNote(p)}`,
@@ -442,7 +466,7 @@ export const trEngine = {
    * cümledir; kodlar motorun `UnevaluatedCode` türüyle aynıdır (src/lib/__tests__/health-unevaluated.test.ts).
    */
   unevaluatedTitle: "Değerlendirilemeyenler",
-  unevaluatedIntro: "Bu sonuç aşağıdakileri kapsamıyor; puan yalnız bildiklerimize dayanıyor.",
+  unevaluatedIntro: "Bu sonuç aşağıdakileri kapsamıyor; değerlendirme yalnız bildiklerimize dayanıyor.",
   /** Canlısız akvaryumda puan gösterilmez; kart yalnız hesaba katılmayan kayıtları söyler (kontrol turu). */
   unevaluatedIntroNoLivestock: "Aşağıdaki kayıtlar hesaba katılmadı.",
   unevaluated: {
