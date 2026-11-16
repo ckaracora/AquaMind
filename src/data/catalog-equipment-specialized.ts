@@ -295,17 +295,17 @@ const jblProfloraLegacyDiffuserCatalog: EquipmentProfile[] = [
 const jblProfloraLegacyBioCatalog: EquipmentProfile[] = [
   {
     id:"jbl-proflora-bio80-eco",category:"co2",brand:"JBL",model:"PROFLORA Bio80 eco",
-    specifications:"Arşiv Bio-CO₂ başlangıç seti · biyolojik fermantasyonla 40 gün CO₂ üretimi · 30–80 L · reaksiyon kabı, bio bileşeni, 3 m CO₂ hortumu, vantuz ve hava taşı; güncel PROFLORA CO₂ STARTER BIO SET ile karıştırılmamalı",
+    specifications:"Arşiv Bio-CO₂ başlangıç seti · biyolojik fermantasyonla 40 gün CO₂ üretimi · 30–80 L · reaksiyon kabı, bio bileşeni, 2 m CO₂ hortumu, vantuz ve hava taşı; güncel PROFLORA CO₂ STARTER BIO SET ile karıştırılmamalı",
     recommendedMinL:30,recommendedMaxL:80,sourceUrl:"https://www.jbl.de/en/products/detail/7571/jbl-proflora-bio80-eco",additionalSourceUrls:["https://www.jbl.de/en/products/group/1065/proflora-bio"],verifiedAt:"2026-09-15",
   },
   {
     id:"jbl-proflora-bio80",category:"co2",brand:"JBL",model:"PROFLORA Bio80",
-    specifications:"Arşiv Bio-CO₂ seti · biyolojik fermantasyonla 40 gün CO₂ üretimi · 30–80 L · reaksiyon kabı, iki bio bileşeni, cam-seramik difüzör, 3 m CO₂ hortumu ve geri akış valfi; güncel BASIC BIO SET ile karıştırılmamalı",
+    specifications:"Arşiv Bio-CO₂ seti · biyolojik fermantasyonla 40 gün CO₂ üretimi · 30–80 L · reaksiyon kabı, iki bio bileşeni, cam-seramik difüzör, 2 m CO₂ hortumu ve geri akış valfi; güncel BASIC BIO SET ile karıştırılmamalı",
     recommendedMinL:30,recommendedMaxL:80,sourceUrl:"https://www.jbl.de/en/products/detail/7572/jbl-proflora-bio80",additionalSourceUrls:["https://www.jbl.de/en/products/group/1065/proflora-bio"],verifiedAt:"2026-09-15",
   },
   {
     id:"jbl-proflora-bio160",category:"co2",brand:"JBL",model:"PROFLORA Bio160",
-    specifications:"Arşiv Bio-CO₂ seti · biyolojik fermantasyonla toplam 80 gün CO₂ üretimi · 50–160 L · termal kılıflı reaksiyon kabı, iki refill, uzatılabilir difüzör, 3 m CO₂ hortumu ve geri akış valfi; güncel ADVANCED BIO SET ile karıştırılmamalı",
+    specifications:"Arşiv Bio-CO₂ seti · biyolojik fermantasyonla toplam 80 gün CO₂ üretimi · 50–160 L · termal kılıflı reaksiyon kabı, iki refill, uzatılabilir difüzör, 2 m CO₂ hortumu ve geri akış valfi; güncel ADVANCED BIO SET ile karıştırılmamalı",
     recommendedMinL:50,recommendedMaxL:160,sourceUrl:"https://www.jbl.de/en/products/detail/7573/jbl-proflora-bio160",additionalSourceUrls:["https://www.jbl.de/en/products/group/1065/proflora-bio"],verifiedAt:"2026-09-15",
   },
   {
