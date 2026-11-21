@@ -48,7 +48,7 @@ vi.mock("@/providers/aquarium-provider", () => ({ useAquariums: () => store.data
 vi.mock("@/components/app-shell", () => ({ AppShell: ({ children }: { children: ReactNode }) => children }));
 vi.mock("@/components/page-header", () => ({ PageHeader: () => null }));
 const { PlantWarningsBody } = await import("@/components/plant-warnings");
-const { default: PlantsPage } = await import("@/app/plants/page");
+const { default: PlantsPage } = await import("@/app/(app)/plants/page");
 const { PlantInvasiveNotice } = await import("@/components/plant-catalog");
 const decode = (html: string) => html.replace(/&#x27;/g, "'").replace(/&quot;/g, "\"").replace(/&amp;/g, "&");
 const textOf = (html: string) => decode(html.replace(/<[^>]+>/g, " ")).replace(/\s+/g, " ").trim();
@@ -238,6 +238,6 @@ describe("bitki uyarılarının metinleri", () => {
     const component = readFileSync("src/components/plant-warnings.tsx", "utf8");
     expect(component).toContain('from "@aquamind/localization/plant-warnings"');
     expect(component).not.toMatch(/^import (?!type).*@\/data\//m);
-    expect(readFileSync("src/app/plants/page.tsx", "utf8")).not.toMatch(/from "@aquamind\/compatibility-engine"/);
+    expect(readFileSync("src/app/(app)/plants/page.tsx", "utf8")).not.toMatch(/from "@aquamind\/compatibility-engine"/);
   });
 });

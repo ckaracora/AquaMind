@@ -64,12 +64,12 @@ describe("JBL PROTEMP S: eski kimlik ve eş ad yönlendirmesi", () => {
     expect(equipmentMatchesModelQuery(plain, "60")).toBe(false);
   });
 
-  // Ekipman ekleme penceresi (src/app/equipment/page.tsx) listeyi ve seçimi aynı aramayla süzer; yalnız `item.model`'e bakan eski
+  // Ekipman ekleme penceresi (src/app/(app)/equipment/page.tsx) listeyi ve seçimi aynı aramayla süzer; yalnız `item.model`'e bakan eski
   // arama "S 101" ya da "ProTemp S 100" yazınca boş liste veriyordu.
   it("ekleme penceresi model listesini ve seçimi eş adlara bakan aramayla süzer", () => {
     // 2026-11-14 sprinti: liste ve seçim aynı işlevden gelir (src/lib/equipment-model-search.ts); işlev eş adlara bakan aramayı kullanır,
     // marka seçilmeden bütün markalarda arar.
-    const page = readFileSync("src/app/equipment/page.tsx", "utf8");
+    const page = readFileSync("src/app/(app)/equipment/page.tsx", "utf8");
     const search = readFileSync("src/lib/equipment-model-search.ts", "utf8");
     expect(search).toMatch(/import \{[^}]*\bequipmentMatchesModelQuery\b[^}]*\} from "@\/data\/catalog-equipment"/);
     expect(page).toContain("const visibleModels = visibleEquipmentModels(selectedCategory, brand, modelQuery);");

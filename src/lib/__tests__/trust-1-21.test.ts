@@ -62,7 +62,7 @@ describe("tanınmayan canlı varken puan gösterilmez", () => {
   });
 
   it("sağlık sayfası: eksik değerlendirmede halka boş, sayı yerine 'Puan yok' ve adlar; 'Dikkat' ve 'Uygun değil' rozeti kalır", () => {
-    const source = read("src/app/aquariums/[id]/health/page.tsx");
+    const source = read("src/app/(app)/aquariums/[id]/health/page.tsx");
     expect(source).toContain("const uncounted=analysis.incomplete?uncountedAnimalNames(analysis.unevaluated,catalogText):[]; const hideScore=analysis.incomplete===true;");
     expect(source).toContain("<ScoreRing score={hideScore?undefined:analysis.score}");
     expect(source).toContain("{hideScore&&<p className=\"mt-3 text-xs leading-relaxed text-sky-200\">{t.health.uncountedAnimals(uncounted.join(\", \"))}</p>}");
@@ -82,7 +82,7 @@ describe("tanınmayan canlı varken puan gösterilmez", () => {
     expect(dashboardStatus(lookup, tank, [known("guppy", 4)], []).uncounted).toEqual([]);
     expect(messagesFor("tr").dashboard.uncounted("Balon moli")).toBe("Hesaba katılmayan canlılar: Balon moli.");
     expect(messagesFor("es").dashboard.uncounted("Balon moli")).toBe("Animales no incluidos: Balon moli.");
-    expect(read("src/app/page.tsx")).toContain("t.dashboard.uncounted(status.uncounted.join(\", \"))");
+    expect(read("src/app/(app)/page.tsx")).toContain("t.dashboard.uncounted(status.uncounted.join(\", \"))");
   });
 
   it("'Bu akvaryuma ne uyar?': hesaba katılamayan canlılar adlarıyla yazılır", () => {

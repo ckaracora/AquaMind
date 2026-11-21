@@ -10,7 +10,7 @@ import { assertUniqueIds, normalize } from "./catalog-shared";
 /** Tropica'nın üç düzeyli ölçeği. CO₂ için orta 6–14 mg/L, yüksek yaklaşık 15–25 mg/L. */
 export type PlantNeedLevel = "low" | "medium" | "high";
 export type PlantGrowthRate = "very-slow" | "slow" | "medium" | "fast" | "very-fast";
-/** Bitki sayfasındaki konum anahtarları (`src/app/plants/page.tsx`). Yalnız kaynağın açıklaması yazıyorsa doldurulur. */
+/** Bitki sayfasındaki konum anahtarları (`src/app/(app)/plants/page.tsx`). Yalnız kaynağın açıklaması yazıyorsa doldurulur. */
 export type PlantPlacement = "foreground" | "midground" | "background" | "onRoot" | "onRock" | "floating";
 /**
  * İstilacı tür listeleri.

@@ -123,9 +123,60 @@ for (const [index, segment] of segments.entries()) {
   for (const other of segments.slice(index + 1)) if (other.file === segment.file) failures.push(`${segment.locale} ${segment.catalog} ve ${other.locale} ${other.catalog} çevirisi aynı parçada`);
 }
 
+// Herkese açık tür sayfaları (docs/DECISIONS/0047-herkese-acik-tur-sayfalari.md): sunucuda düz HTML olarak üretilir. İlk yükleme dosyalarında
+// katalog (canlı kaydı, davranış kaydı, bakım bilgisi) olmamalı; sayfaların kendi metinleri hiçbir tarayıcı parçasına girmemeli (yalnız sunucuda
+// okunur). Üretilen her HTML dosyasında dil, arama motoru izni (açma ayarı kapalıyken noindex), tek canonical ve üç dilin hreflang bağlantısı
+// olmalı; uygulama ekranlarının dil seçme betiği bulunmamalı.
+const PUBLIC_SEGMENTS = { tr: "tur", en: "species", es: "especies" };
+const CATALOG_MARKERS = [
+  ["src/data/catalog-species.ts", "Paracheirodon innesi"],
+  ["src/data/species-behavior.ts", "Zayıf kanıt; en çok uzun yüzgeçli erkek Betta ile ilgili bildiriliyor"],
+  ["src/data/species-care.ts", "Muhtemelen hepçildir; küçük omurgasızlar, kabuklular ve iplik yosunla beslenir."],
+];
+const PUBLIC_TEXT_MARKERS = [
+  ["packages/localization/src/messages/tr-public-pages.ts", "Hobi rehberliğidir; veteriner tavsiyesi değildir."],
+  ["packages/localization/src/messages/en-public-pages.ts", "Hobby guidance, not veterinary advice."],
+  ["packages/localization/src/messages/es-public-pages.ts", "Orientación para aficionados; no es consejo veterinario."],
+];
+for (const [file, marker] of [...CATALOG_MARKERS, ...PUBLIC_TEXT_MARKERS]) {
+  if (!fs.readFileSync(path.join(root, file), "utf8").includes(marker)) failures.push(`İşaret ${file} içinde yok: "${marker}" (betiği güncelle; herkese açık sayfalar)`);
+}
+const publicEntries = Object.entries(manifest.pages).filter(([page]) => page.startsWith("/(public)/"));
+// Dil başına bir kök yerleşim, bir dizin ve bir tür sayfası girişi.
+if (publicEntries.length !== Object.keys(PUBLIC_SEGMENTS).length * 3) failures.push(`Herkese açık sayfa girişi bekleniyordu (${Object.keys(PUBLIC_SEGMENTS).length * 3}); bulunan: ${publicEntries.length}`);
+const publicFirstLoad = new Set(publicEntries.flatMap(([, files]) => files).filter((file) => file.endsWith(".js")));
+for (const file of publicFirstLoad) {
+  const content = read(file);
+  for (const [, marker] of CATALOG_MARKERS) if (contains(content, marker)) failures.push(`Katalog herkese açık sayfanın ilk yüklemesinde: ${file} → "${marker}"`);
+}
+for (const [file, content] of contents) {
+  for (const [, marker] of PUBLIC_TEXT_MARKERS) if (contains(content, marker)) failures.push(`Herkese açık sayfa metni tarayıcı parçasında: ${path.relative(root, file)} → "${marker}"`);
+}
+const indexingOn = process.env.PUBLIC_PAGES_INDEXING === "on";
+const publicHtml = [];
+for (const [locale, segment] of Object.entries(PUBLIC_SEGMENTS)) {
+  const base = path.join(next, "server/app", locale);
+  const dir = path.join(base, segment);
+  const files = [path.join(base, `${segment}.html`), ...(fs.existsSync(dir) ? fs.readdirSync(dir).filter((name) => name.endsWith(".html")).map((name) => path.join(dir, name)) : [])];
+  if (files.length !== 31) failures.push(`${locale}: 30 tür ve bir dizin için 31 HTML bekleniyordu; bulunan: ${files.length}`);
+  for (const file of files) {
+    if (!fs.existsSync(file)) { failures.push(`Herkese açık sayfa üretilmemiş: ${path.relative(root, file)}`); continue; }
+    const html = fs.readFileSync(file, "utf8");
+    const name = path.relative(root, file);
+    publicHtml.push({ name, size: Buffer.byteLength(html) });
+    if (!html.includes(`<html lang="${locale}"`)) failures.push(`${name}: <html lang="${locale}"> yok`);
+    const robots = html.match(/<meta name="robots" content="([^"]*)"/g) ?? [];
+    if (robots.length !== 1 || robots[0].includes("noindex") === indexingOn) failures.push(`${name}: arama motoru izni beklenen gibi değil (${robots.join(" ") || "yok"}; açma ayarı ${indexingOn ? "açık" : "kapalı"})`);
+    if ((html.match(/<link rel="canonical"/g) ?? []).length !== 1) failures.push(`${name}: tek canonical bekleniyordu`);
+    for (const lang of [...Object.keys(PUBLIC_SEGMENTS), "x-default"]) if (!new RegExp(`<link\\b[^>]*rel="alternate"[^>]*href[Ll]ang="${lang}"`).test(html)) failures.push(`${name}: <link rel="alternate" hreflang="${lang}"> yok`);
+    if (html.includes("aquamind:locale:v1")) failures.push(`${name}: uygulama ekranlarının dil seçme betiği herkese açık sayfada`);
+  }
+}
+
 if (failures.length) {
   console.error(failures.join("\n"));
   process.exit(1);
 }
 const describe = (file) => `${path.relative(root, file)} (${Math.round(fs.statSync(file).size / 1024)} kB)`;
 console.log(`Dil paketi sınırı: ${firstLoad.size} ilk yükleme dosyasında başka dilin metni yok; ${Object.entries(found).map(([locale, file]) => `${locale} ${describe(file)}`).join(", ")}; katalog çevirileri ayrı parçalarda: ${segments.map(({ catalog, locale, file }) => `${catalog} ${locale} ${describe(file)}`).join(", ")}.`);
+console.log(`Herkese açık sayfalar: ${publicHtml.length} HTML dosyası (toplam ${Math.round(publicHtml.reduce((sum, file) => sum + file.size, 0) / 1024)} kB, en büyüğü ${Math.round(Math.max(...publicHtml.map((file) => file.size)) / 1024)} kB), ${publicFirstLoad.size} ilk yükleme dosyasında katalog yok, sayfa metinleri hiçbir tarayıcı parçasında yok; ${indexingOn ? "arama motorlarına açık" : "noindex (kapalı)"}, canonical ve hreflang tam.`);

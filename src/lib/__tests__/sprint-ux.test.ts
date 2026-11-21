@@ -40,11 +40,11 @@ describe("tekrarlayan bakım", () => {
   });
 
   it("silme ortak onay penceresiyle; sayfalarda window.confirm yok", () => {
-    for (const file of ["src/app/maintenance/page.tsx", "src/app/livestock/page.tsx", "src/app/equipment/page.tsx"]) {
+    for (const file of ["src/app/(app)/maintenance/page.tsx", "src/app/(app)/livestock/page.tsx", "src/app/(app)/equipment/page.tsx"]) {
       expect(read(file), file).not.toMatch(/\bconfirm\(t\./);
       expect(read(file), file).toContain("<ConfirmDialog");
     }
-    expect(read("src/app/maintenance/page.tsx")).toContain("removeMaintenanceTask(removing.id)");
+    expect(read("src/app/(app)/maintenance/page.tsx")).toContain("removeMaintenanceTask(removing.id)");
   });
 });
 
@@ -65,7 +65,7 @@ describe("su grafiği uydurma nokta çizmez", () => {
   });
 
   it("sayfada eski varsayılan değerler yok", () => {
-    const page = read("src/app/water/page.tsx");
+    const page = read("src/app/(app)/water/page.tsx");
     expect(page).not.toContain("r.ph ?? 7");
     expect(page).not.toContain("r.temperature ?? 25");
   });
@@ -96,7 +96,7 @@ describe("canlı kaydını düzenleme", () => {
     expect(editedLivestock(item, form({ quantity: "2.5", gender: "male", addedAt: "2026-02-03" }))).toBeUndefined();
     expect(editedLivestock(item, form({ quantity: "2", gender: "male", addedAt: "" }))).toBeUndefined();
     expect(editedLivestock(item, form({ quantity: "2", gender: "başka", addedAt: "2026-02-03" }))?.gender).toBe("unknown");
-    expect(read("src/app/livestock/page.tsx")).toContain("<LivestockEditDialog");
+    expect(read("src/app/(app)/livestock/page.tsx")).toContain("<LivestockEditDialog");
   });
 });
 
@@ -105,10 +105,10 @@ describe("akvaryum sayfasından ekleme penceresi doğrudan açılır", () => {
     expect(addRecordHref("/livestock", "a b")).toBe("/livestock?aquarium=a%20b&add=1");
     expect(addRequested("?aquarium=x&add=1")).toBe(true);
     expect(addRequested("?aquarium=x")).toBe(false);
-    const detail = read("src/app/aquariums/[id]/page.tsx");
+    const detail = read("src/app/(app)/aquariums/[id]/page.tsx");
     for (const path of ["/livestock", "/equipment", "/water", "/maintenance"]) expect(detail, path).toContain(`addRecordHref("${path}", id)`);
-    for (const page of ["src/app/livestock/page.tsx", "src/app/equipment/page.tsx", "src/app/plants/page.tsx"]) expect(read(page), page).toContain("addRequested(location.search)");
-    for (const page of ["src/app/water/page.tsx", "src/app/maintenance/page.tsx"]) expect(read(page), page).toContain("ADD_PARAM");
+    for (const page of ["src/app/(app)/livestock/page.tsx", "src/app/(app)/equipment/page.tsx", "src/app/(app)/plants/page.tsx"]) expect(read(page), page).toContain("addRequested(location.search)");
+    for (const page of ["src/app/(app)/water/page.tsx", "src/app/(app)/maintenance/page.tsx"]) expect(read(page), page).toContain("ADD_PARAM");
     expect(ADD_PARAM).toBe("add");
   });
 });
@@ -125,7 +125,7 @@ describe("ekipmanda markasız model araması", () => {
     expect(visibleEquipmentModels("lighting", "", "biomaster 350")).toEqual([]);
     expect(equipmentModelMatches(oase[0], "")).toBe(true);
     // Model seçilince marka kendiliğinden gelir.
-    expect(read("src/app/equipment/page.tsx")).toContain("if (chosen && chosen.brand !== brand) setBrand(chosen.brand)");
+    expect(read("src/app/(app)/equipment/page.tsx")).toContain("if (chosen && chosen.brand !== brand) setBrand(chosen.brand)");
   });
 
   it("marka eş yazımları yalnız arama hoşgörüsüdür: Dolphin → Dophin, Jebo → Lifetech, Venus Aqua → Venusaqua (E5)", () => {
@@ -144,14 +144,14 @@ describe("ekipmanda markasız model araması", () => {
 describe("boş ve yakında öğeler kaldırıldı; yeni formlar", () => {
   it("hesaplayıcılarda Yakında, menüde AquaMatch, misafir kutusu, slogan, sürüm satırı ve fotoğraf kartı yok", () => {
     expect(primaryNavigationItems.map((item) => item.key)).not.toContain("aquamatch");
-    expect(read("src/app/calculators/page.tsx")).not.toContain("ComingSoon");
+    expect(read("src/app/(app)/calculators/page.tsx")).not.toContain("ComingSoon");
     for (const file of ["src/components/sidebar.tsx", "src/components/mobile-nav.tsx"]) {
       expect(read(file), file).not.toContain("t.account");
       expect(read(file), file).not.toContain("tagline");
       expect(read(file), file).not.toContain("comingSoon");
     }
-    expect(read("src/app/settings/page.tsx")).not.toContain("settings.footer");
-    expect(read("src/app/aquariums/new/page.tsx")).not.toContain("photoTitle");
+    expect(read("src/app/(app)/settings/page.tsx")).not.toContain("settings.footer");
+    expect(read("src/app/(app)/aquariums/new/page.tsx")).not.toContain("photoTitle");
     for (const locale of ["tr", "en", "es"] as const) {
       const m = messagesFor(locale) as unknown as Record<string, Record<string, unknown>>;
       expect(m.account, locale).toBeUndefined();
@@ -162,13 +162,13 @@ describe("boş ve yakında öğeler kaldırıldı; yeni formlar", () => {
   });
 
   it("yeni akvaryum formunda ölçüler boş gelir", () => {
-    const page = read("src/app/aquariums/new/page.tsx");
+    const page = read("src/app/(app)/aquariums/new/page.tsx");
     expect(page).toContain('useState({ length: "", width: "", height: "" })');
     expect(page).not.toContain("length: 100, width: 40, height: 50");
   });
 
   it("su ölçümü penceresi: açık adlar, üstte tek satır, tatlı suda özgül ağırlık yok", () => {
-    const page = read("src/app/water/page.tsx");
+    const page = read("src/app/(app)/water/page.tsx");
     expect(page).toContain('key !== "specificGravity" || aquariumType !== "freshwater"');
     expect(page).toContain("{t.water.formHint}");
     expect(messagesFor("tr").water.formFields).toEqual({ gh: "Genel sertlik (GH)", kh: "Karbonat sertliği (KH)", ammonia: "Amonyak (NH₃/NH₄)", nitrite: "Nitrit (NO₂)", nitrate: "Nitrat (NO₃)", phosphate: "Fosfat (PO₄)", iron: "Demir (Fe)" });

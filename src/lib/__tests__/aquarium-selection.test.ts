@@ -41,7 +41,7 @@ vi.mock("@/lib/use-display-format", async () => {
 });
 vi.mock("@/components/app-shell", () => ({ AppShell: ({ children }: { children: ReactNode }) => children }));
 vi.mock("@/components/page-header", () => ({ PageHeader: () => null }));
-const { default: LivestockPage } = await import("@/app/livestock/page");
+const { default: LivestockPage } = await import("@/app/(app)/livestock/page");
 const { selectedAquarium } = await import("@/lib/aquarium-selection");
 
 const t = messagesFor("tr");

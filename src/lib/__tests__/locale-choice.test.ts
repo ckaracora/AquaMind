@@ -176,7 +176,7 @@ describe("açılış betiği", () => {
 
   it("sayfa gizliyken yalnız gövde gizlenir; düzen betiği `<head>` içinde çalıştırır", () => {
     expect(readFileSync("src/app/globals.css", "utf8")).toContain(`html[${LOCALE_PENDING_ATTRIBUTE}] body { visibility: hidden; }`);
-    const layout = readFileSync("src/app/layout.tsx", "utf8");
+    const layout = readFileSync("src/app/(app)/layout.tsx", "utf8");
     expect(layout).toContain("<head><script dangerouslySetInnerHTML={{ __html: LOCALE_BOOT_SCRIPT }}/></head>");
     expect(layout).toContain("suppressHydrationWarning");
   });

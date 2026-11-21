@@ -96,7 +96,7 @@ describe("seçme anındaki uyarılar", () => {
   });
 
   it("canlılar sayfası pencereye akvaryumun canlılarını, ekipmanını ve son ölçümünü verir; pencere tam katalog modülünü içe aktarmaz", () => {
-    const pageSource = readFileSync("src/app/livestock/page.tsx", "utf8");
+    const pageSource = readFileSync("src/app/(app)/livestock/page.tsx", "utf8");
     expect(pageSource).toContain("animals={aquariumAnimals} devices={aquariumDevices} latest={latest}");
     const form = readFileSync("src/components/catalog-livestock-form.tsx", "utf8");
     expect(form).toContain("newWarningsForCandidate(lookup, aquarium, animals, devices, latest, candidate)");

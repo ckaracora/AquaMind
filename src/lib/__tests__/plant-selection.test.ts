@@ -340,7 +340,7 @@ describe("dile göre adlar (veri aşaması, karar 0036)", () => {
     expect(plantShownName(record("Rigid Hornwort"), item("ceratophyllum-demersum"), "tr")).toBe("Rigid Hornwort");
     expect(plantShownName(record("Tilki kuyruğu"), undefined, "en")).toBe("Tilki kuyruğu");
     // Bitki sayfası kart başlığında, listedeki aramada ve uyarılarda bu adı kullanır (sayfa sunucu çıktısıyla sınanmadığı için kaynakta).
-    const page = readFileSync("src/app/plants/page.tsx", "utf8");
+    const page = readFileSync("src/app/(app)/plants/page.tsx", "utf8");
     expect(page).toContain("const name=plantShownName(plant,profile,locale);");
     expect(page).toContain('<h2 className="text-sm font-extrabold">{name}</h2>');
     expect(page).toContain("confirm(t.common.confirmRemove(name))");

@@ -21,7 +21,7 @@ const engine = { tr: engineMessagesFor("tr"), en: engineMessagesFor("en"), es: e
 const ui = { tr: messagesFor("tr"), en: messagesFor("en"), es: messagesFor("es") };
 const format = (locale: "tr" | "en" | "es") => engineTextFormat(createDisplayFormat(locale, { temperature: "celsius", volume: "liters", dateFormat: "day-first" }));
 const engineSource = readFileSync("packages/compatibility-engine/src/index.ts", "utf8");
-const page = () => readFileSync("src/app/aquariums/[id]/health/page.tsx", "utf8");
+const page = () => readFileSync("src/app/(app)/aquariums/[id]/health/page.tsx", "utf8");
 
 /** Motorun `UnevaluatedCode` türündeki kodlar. */
 const engineCodes = new Set([...(/export type UnevaluatedCode=([^;]+);/.exec(engineSource)?.[1] ?? "").matchAll(/"([A-Za-z]+)"/g)].map((match) => match[1]));

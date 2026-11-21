@@ -580,7 +580,7 @@ export const tr = {
     },
   },
   plants: {
-    /** Bitki konumları. Kayda Türkçe adıyla yazılır (src/app/plants/page.tsx); ekranda bu metinler gösterilir. */
+    /** Bitki konumları. Kayda Türkçe adıyla yazılır (src/app/(app)/plants/page.tsx); ekranda bu metinler gösterilir. */
     positions: {
       foreground: "Ön plan",
       midground: "Orta plan",

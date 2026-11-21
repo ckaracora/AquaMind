@@ -16,7 +16,7 @@ const tank = (id: string, name: string): Aquarium => ({ id, name, type: "freshwa
 const animal = (aquariumId: string, category: Livestock["category"], quantity = 1): Livestock => ({ id: `${aquariumId}-${category}-${quantity}`, aquariumId, commonName: category, category, quantity, addedAt: "2026-01-01" });
 
 // Sayfanın içeriği gerçek bileşen çıktısıyla sınanır: veri sağlayıcısı ve kabuk yerine sınama değerleri verilir. Adres (`search`) bileşene
-// doğrudan verilir; sayfa (src/app/diseases/page.tsx) yalnız tarayıcıdaki adresi okuyup bu bileşene geçirir.
+// doğrudan verilir; sayfa (src/app/(app)/diseases/page.tsx) yalnız tarayıcıdaki adresi okuyup bu bileşene geçirir.
 const store = vi.hoisted(() => ({ value: { aquariums: [] as Aquarium[], livestock: [] as Livestock[], hydrated: true }, locale: "tr" as Locale }));
 vi.mock("@/providers/aquarium-provider", () => ({ useAquariums: () => store.value }));
 vi.mock("@/providers/i18n-provider", async () => {
@@ -245,8 +245,8 @@ describe("sayfanın yeri", () => {
   it("yan menüde ve sağlık analizinde bağlantısı var", () => {
     expect(allNavigationItems.find((item) => item.key === "diseases")).toEqual({ key: "diseases", href: "/diseases" });
     expect(t.navigation.items.diseases).toBe("Hastalık ve Tedavi");
-    expect(existsSync("src/app/diseases/page.tsx")).toBe(true);
-    const health = readFileSync("src/app/aquariums/[id]/health/page.tsx", "utf8");
+    expect(existsSync("src/app/(app)/diseases/page.tsx")).toBe(true);
+    const health = readFileSync("src/app/(app)/aquariums/[id]/health/page.tsx", "utf8");
     expect(health).toContain("href={diseaseGuideHref(id)}");
     // Sağlık analizi bağlantıyı küçük yardımcıdan kurar; hastalık sayfasının kaynak listesini kendi paketine almaz.
     expect(health).toContain('from "@/lib/aquarium-links"');
@@ -254,7 +254,7 @@ describe("sayfanın yeri", () => {
   });
 
   it("sayfa tarayıcıdaki adresi içeriği çizen bileşene verir", () => {
-    const page = readFileSync("src/app/diseases/page.tsx", "utf8");
+    const page = readFileSync("src/app/(app)/diseases/page.tsx", "utf8");
     expect(page).toContain("setSearch(location.search)");
     expect(page).toContain("<DiseaseGuideView search={search}/>");
   });
@@ -269,6 +269,6 @@ describe("sayfanın yeri", () => {
     expect(requestedAquariumId(new URL(`https://aquamind.test${diseaseGuideHref(odd.id)}`).search, [odd])).toBe("custom&part");
     expect(requestedAquariumId("?aquarium=yok", [odd])).toBeUndefined();
     expect(requestedAquariumId("?tank=custom%26part", [odd])).toBeUndefined();
-    expect(readFileSync("src/app/water/page.tsx", "utf8")).toContain('searchParams.get("aquarium")');
+    expect(readFileSync("src/app/(app)/water/page.tsx", "utf8")).toContain('searchParams.get("aquarium")');
   });
 });

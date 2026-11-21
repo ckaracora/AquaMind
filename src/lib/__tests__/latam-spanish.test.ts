@@ -15,7 +15,7 @@ describe("İspanyolca metinler Latin Amerika ortak İspanyolcasıyla", () => {
   const files = readdirSync(MESSAGES).filter((name) => /^es(?:-[a-z-]+)?\.ts$/.test(name) && !name.startsWith("es-catalog-"));
 
   it("İspanyolca dosyalar var", () => {
-    expect(files.sort()).toEqual(["es-bundle.ts", "es-diseases.ts", "es-engine.ts", "es-plant-warnings.ts", "es-privacy.ts", "es.ts"]);
+    expect(files.sort()).toEqual(["es-bundle.ts", "es-diseases.ts", "es-engine.ts", "es-plant-warnings.ts", "es-privacy.ts", "es-public-pages.ts", "es.ts"]);
   });
 
   it.each(files)("%s İspanya'ya özgü kullanım içermez", (name) => {

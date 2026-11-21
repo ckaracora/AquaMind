@@ -215,7 +215,7 @@ describe("katalog modülleri", () => {
   it("parça yükleyen modüller katalog verisini değer olarak içe aktarmaz", () => {
     const dataFree = [
       "src/lib/catalog-slice.ts", "src/lib/health-analysis-core.ts", "src/lib/use-catalog-lookup.ts", "src/lib/dashboard-status.ts", "src/lib/water-status.ts",
-      "src/data/catalog-buckets.ts", "src/data/catalog-shared.ts", "src/app/page.tsx", "src/app/aquariums/[id]/health/page.tsx",
+      "src/data/catalog-buckets.ts", "src/data/catalog-shared.ts", "src/app/(app)/page.tsx", "src/app/(app)/aquariums/[id]/health/page.tsx",
       // Sağlık sayfası etiket değeri bekleyen cihazları bu modülle bulur (docs/DECISIONS/0017-elle-girilen-ekipman-degerleri.md).
       "src/lib/user-equipment-value.ts",
       // "Bu akvaryuma ne uyar?" ve tür kartı (veri sprinti F): sağlık sayfası içe aktarır; veriyi pencere açılınca `import()` ile yükler.

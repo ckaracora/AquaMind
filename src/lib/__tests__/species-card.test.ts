@@ -106,12 +106,12 @@ describe("bakım bilgisi", () => {
 
 describe("tür kartı ekranları", () => {
   it("kart canlı kartından, canlı seçme penceresindeki türden ve 'Bu akvaryuma ne uyar?' listesinden açılır", () => {
-    expect(readFileSync("src/app/livestock/page.tsx", "utf8")).toMatch(/<SpeciesCardDialog /);
+    expect(readFileSync("src/app/(app)/livestock/page.tsx", "utf8")).toMatch(/<SpeciesCardDialog /);
     const form = readFileSync("src/components/catalog-livestock-form.tsx", "utf8");
     expect(form).toMatch(/<SpeciesCardButton /);
     expect(form).toMatch(/<AquariumFitDialog /);
     expect(readFileSync("src/components/aquarium-fit.tsx", "utf8")).toMatch(/<SpeciesCardDialog /);
-    expect(readFileSync("src/app/aquariums/[id]/health/page.tsx", "utf8")).toMatch(/<AquariumFitDialog /);
+    expect(readFileSync("src/app/(app)/aquariums/[id]/health/page.tsx", "utf8")).toMatch(/<AquariumFitDialog /);
   });
 
   it("bakım bilgisi çevirileri dil paketinin sınır denetiminde ayrı parça olarak aranır", () => {
