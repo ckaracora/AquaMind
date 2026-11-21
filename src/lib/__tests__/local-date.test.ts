@@ -70,13 +70,13 @@ describe("ekranlardaki bugünün tarihi", () => {
   });
 
   it("yedek dosyasının adı yerel günü taşır", () => {
-    expect(readFileSync("src/app/settings/page.tsx", "utf8")).toContain("exportFileName(localIsoDate())");
+    expect(readFileSync("src/app/(app)/settings/page.tsx", "utf8")).toContain("exportFileName(localIsoDate())");
   });
 
   it("formlar varsayılan tarihi `localIsoDate` ile kurar", () => {
     expect(sources.filter(({ text }) => text.includes("defaultValue={localIsoDate()}")).map(({ file }) => file).sort()).toEqual([
-      "src/app/aquariums/new/page.tsx",
-      "src/app/equipment/page.tsx",
+      "src/app/(app)/aquariums/new/page.tsx",
+      "src/app/(app)/equipment/page.tsx",
       "src/components/catalog-livestock-form.tsx",
       // Bitki ekleme penceresi 2026-10-28'de bitki sayfasından ortak bileşene taşındı (docs/DECISIONS/0024-bitki-secme.md).
       "src/components/plant-catalog.tsx",

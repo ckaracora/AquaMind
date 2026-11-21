@@ -136,7 +136,7 @@ describe("örnek akvaryum", () => {
 describe("sayfa hızı (karar 0016)", () => {
   it("pencere kataloğu, davranış ve bakım dosyalarını yalnız açılınca yükler; sağlık sayfası bunları değer olarak içe aktarmaz", () => {
     const dataImport = /^\s*import [^;]*from "@\/(data\/(catalog-species|species-behavior|species-care|catalog-equipment)|lib\/health-analysis)"/m;
-    for (const file of ["src/components/aquarium-fit.tsx", "src/components/species-card.tsx", "src/lib/aquarium-fit.ts", "src/lib/species-card.ts", "src/app/aquariums/[id]/health/page.tsx"]) {
+    for (const file of ["src/components/aquarium-fit.tsx", "src/components/species-card.tsx", "src/lib/aquarium-fit.ts", "src/lib/species-card.ts", "src/app/(app)/aquariums/[id]/health/page.tsx"]) {
       const source = readFileSync(file, "utf8").split("\n").filter((line) => !/^\s*import type /.test(line)).join("\n");
       expect(dataImport.test(source), file).toBe(false);
     }

@@ -88,7 +88,7 @@ describe("bakım ürünü çevirisi", () => {
   });
 
   it("ürün kataloğu sayfası açıklamayı bakım çevirmeninden geçirir; arama çeviride de arar", () => {
-    const page = readFileSync("src/app/products/page.tsx", "utf8");
+    const page = readFileSync("src/app/(app)/products/page.tsx", "utf8");
     expect(page).toContain("const careText=useCareText();");
     expect(page).toContain("const shown=useMemo(()=>new Map(careProductCatalog.map(item=>[item.id,careText(item.description)])),[careText]);");
     expect(page).toContain("<ProductDescription text={shown.get(item.id)}/>");

@@ -86,10 +86,10 @@ vi.mock("@/components/plant-catalog", async (importOriginal) => {
     },
   };
 });
-const { default: EquipmentPage } = await import("@/app/equipment/page");
-const { default: PlantsPage } = await import("@/app/plants/page");
-const { default: WaterPage } = await import("@/app/water/page");
-const { default: MaintenancePage } = await import("@/app/maintenance/page");
+const { default: EquipmentPage } = await import("@/app/(app)/equipment/page");
+const { default: PlantsPage } = await import("@/app/(app)/plants/page");
+const { default: WaterPage } = await import("@/app/(app)/water/page");
+const { default: MaintenancePage } = await import("@/app/(app)/maintenance/page");
 
 const t = messagesFor("tr");
 const tank = (id: string, name: string, type: Aquarium["type"] = "freshwater"): Aquarium => ({ id, name, type, lengthCm: 60, widthCm: 30, heightCm: 35, netVolumeLiters: 54, setupDate: "2026-01-01" });

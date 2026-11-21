@@ -11,7 +11,7 @@ type Level = "danger" | "warning";
 const stub = (code: string, level: Level) => ({ code, level });
 const aquarium: Aquarium = { id: "a", name: "Deneme", type: "freshwater", lengthCm: 80, widthCm: 35, heightCm: 40, netVolumeLiters: 100, setupDate: "2026-11-12" };
 const animal = (id: string, catalogId: string, commonName: string, quantity: number): Livestock => ({ id, aquariumId: "a", catalogId, commonName, category: "fish", quantity, gender: "unknown", addedAt: "2026-11-12" });
-const page = () => readFileSync("src/app/aquariums/[id]/health/page.tsx", "utf8");
+const page = () => readFileSync("src/app/(app)/aquariums/[id]/health/page.tsx", "utf8");
 
 describe("uyarıların ciddiyet sırası", () => {
   it("tehlike önce, sonra uyarı; aynı seviyede motorun sırası korunur ve girdi değişmez", () => {

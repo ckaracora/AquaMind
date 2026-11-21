@@ -42,6 +42,10 @@
       "types": "./src/plant-warnings.ts",
       "default": "./src/plant-warnings.ts"
     },
+    "./public-pages": {
+      "types": "./src/public-pages.ts",
+      "default": "./src/public-pages.ts"
+    },
     "./privacy": {
       "types": "./src/privacy.ts",
       "default": "./src/privacy.ts"

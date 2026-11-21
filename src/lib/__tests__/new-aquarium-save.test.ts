@@ -9,7 +9,7 @@ await loadLocaleBundle("es");
 
 describe("yeni akvaryum kaydı", () => {
   it("kayıt başarısızsa görünür hata, başarılıysa akvaryumun kendi sayfası", () => {
-    const page = readFileSync("src/app/aquariums/new/page.tsx", "utf8");
+    const page = readFileSync("src/app/(app)/aquariums/new/page.tsx", "utf8");
     expect(page).toContain("if (!added) { setSaveFailed(true); return; }");
     expect(page).toContain('{saveFailed && <p role="alert"');
     expect(page).toContain("router.push(`/aquariums/${id}`)");

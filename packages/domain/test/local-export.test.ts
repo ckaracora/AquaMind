@@ -9,7 +9,7 @@ import {
 } from "@/data/mock-data";
 import { LOCAL_EXPORT_VERSION, localExportV1Schema } from "../src";
 
-// `src/app/settings/page.tsx` içindeki exportData ile aynı biçim: her
+// `src/app/(app)/settings/page.tsx` içindeki exportData ile aynı biçim: her
 // `aquamind:*` localStorage anahtarı olduğu gibi bir özellik olarak yazılır.
 function buildExportLikeSettingsPage() {
   return {

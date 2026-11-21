@@ -1054,11 +1054,11 @@ describe("telefondaki ölçü hesabı", () => {
     expect(sizeFloor(button("src/components/mobile-nav.tsx", "<button aria-label={t.navigation.closeMenu} className=\"grid size-11\"/>"))).toBe(44);
     expect(sizeFloor(button("src/components/mobile-nav.tsx", "<button aria-label=\"Menüyü kapat\" className=\"absolute inset-0\"/>"))).toBe(44);
     expect(sizeFloor(button("src/components/mobile-nav.tsx", "<button aria-label={t.navigation.mainMenu} className=\"absolute inset-0\"/>"))).toBe(44);
-    expect(sizeFloor(button("src/app/page.tsx", "<button aria-label={t.navigation.closeMenu} className=\"absolute inset-0\"/>"))).toBe(44);
-    expect(sizeFloor(button("src/app/plants/page.tsx", "<button aria-label=\"Ara\" className=\"grid size-9\"/>"))).toBe(44);
-    expect(sizeFloor(button("src/app/page.tsx", "<button aria-label=\"Sil\" className=\"grid size-9\"/>"))).toBe(44);
-    expect(sizeFloor(button("src/app/page.tsx", "<button aria-label=\"Ara\" className=\"grid size-9\"/>"))).toBe(44);
-    expect(sizeFloor(button("src/app/page.tsx", "<button className=\"grid size-9\"/>"))).toBe(44);
+    expect(sizeFloor(button("src/app/(app)/page.tsx", "<button aria-label={t.navigation.closeMenu} className=\"absolute inset-0\"/>"))).toBe(44);
+    expect(sizeFloor(button("src/app/(app)/plants/page.tsx", "<button aria-label=\"Ara\" className=\"grid size-9\"/>"))).toBe(44);
+    expect(sizeFloor(button("src/app/(app)/page.tsx", "<button aria-label=\"Sil\" className=\"grid size-9\"/>"))).toBe(44);
+    expect(sizeFloor(button("src/app/(app)/page.tsx", "<button aria-label=\"Ara\" className=\"grid size-9\"/>"))).toBe(44);
+    expect(sizeFloor(button("src/app/(app)/page.tsx", "<button className=\"grid size-9\"/>"))).toBe(44);
   });
 
   it("yalnızca telefonda geçerli sınıfları sayar: `sm:` ile verilen ölçü telefonda yoktur", () => {

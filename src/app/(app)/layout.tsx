@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import "./globals.css";
+import "../globals.css";
 import { DEFAULT_LOCALE, messagesFor } from "@aquamind/localization";
 import { AquariumProvider } from "@/providers/aquarium-provider";
 import { LOCALE_BOOT_SCRIPT } from "@/lib/locale-choice";
@@ -11,6 +11,8 @@ const messages = messagesFor(DEFAULT_LOCALE);
 export const metadata: Metadata = {
   title: messages.app.title,
   description: messages.app.description,
+  // Uygulama ekranları arama motorlarında çıkmaz (karar 0047); yalnız herkese açık tür sayfaları açma ayarıyla açılır.
+  robots: { index: false, follow: false },
 };
 
 // Sayfalar sunucuda varsayılan dilde (Türkçe) çizilir. Kullanıcının dili başkaysa `<head>` içindeki betik, React yüklenmeden `<html lang>`

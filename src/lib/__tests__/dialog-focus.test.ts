@@ -89,7 +89,7 @@ describe("açılan pencereler", () => {
   it("ortak pencereyi kullanan her form başlığını pencereye bağlar ve kapatma düğmesine ad verir", () => {
     const users = sources.filter(({ text }) => text.includes("<ModalDialog "));
     expect(users.map(({ file }) => file).sort()).toEqual([
-      "src/app/equipment/page.tsx", "src/app/maintenance/page.tsx", "src/app/settings/page.tsx", "src/app/water/page.tsx", "src/components/catalog-livestock-form.tsx",
+      "src/app/(app)/equipment/page.tsx", "src/app/(app)/maintenance/page.tsx", "src/app/(app)/settings/page.tsx", "src/app/(app)/water/page.tsx", "src/components/catalog-livestock-form.tsx",
       // 2026-11-14 sprinti: ortak silme onayı ve canlı düzenleme penceresi.
       "src/components/confirm-dialog.tsx", "src/components/livestock-edit-dialog.tsx", "src/components/plant-catalog.tsx",
       // Veri sprinti F: "Bu akvaryuma ne uyar?" ve tür kartı.
